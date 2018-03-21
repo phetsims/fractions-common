@@ -21,7 +21,8 @@ define( function( require ) {
    * @extends {Object}
    */
   function EqualityLabModel() {
-    ContainerSetModel.call( this, true, {
+    ContainerSetModel.call( this, {
+      representations: [ Representation.CIRCLE, Representation.HORIZONTAL_BAR, Representation.VERTICAL_BAR, Representation.BEAKER ],
       initialContainerCount: 4
     } );
 

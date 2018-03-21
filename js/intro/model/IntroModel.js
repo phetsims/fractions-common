@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var BooleanProperty = require( 'AXON/BooleanProperty' );
   var ContainerSetModel = require( 'FRACTIONS_COMMON/intro/model/ContainerSetModel' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -25,6 +26,9 @@ define( function( require ) {
 
     // @public {boolean} - Whether to allow the display of the fraction as a mixed number
     this.allowMixedNumbers = allowMixedNumbers;
+
+    // @public {Property.<boolean>} - Whether to show mixed numbers or not
+    this.showMixedNumbersProperty = new BooleanProperty( false );
   }
 
   fractionsCommon.register( 'IntroModel', IntroModel );

@@ -27,15 +27,20 @@ define( function( require ) {
   function ContainerSetModel( options ) {
 
     options = _.extend( {
+      representations: Representation.VALUES,
       initialNumerator: 0,
       initialDenominator: 1,
       initialContainerCount: 1
     }, options );
 
+    // @public {Array.<Representation>}
+    this.representations = options.representations;
+
     // @public {Property.<Representation>}
     this.representationProperty = new Property( Representation.CIRCLE );
 
-    // @public {Property.<number>} - If a fraction is N/D, the numerator is the N
+    // @public {Property.<number>} - If a fraction is N/D, the numerator is the N.
+    // NOTE: All internal changes to this property should be done through changeNumeratorManually.
     this.numeratorProperty = new NumberProperty( options.initialNumerator );
 
     // @public {Property.<number>} - If a fraction is N/D, the numerator is the D
@@ -47,8 +52,9 @@ define( function( require ) {
     // @public {ObservableArray.<Container>}
     this.containers = new ObservableArray();
 
-    // @private {boolean} - Sometimes we need to update the numerator from an internal source. When this happens,
-    //                      this flag will be set to true.
+    // @private {boolean} - Determines if the numerator has been changed indirectly (say, through interaction with a
+    // cell/piece) rather than direct interaction (manipulation of  the numerator spinner). All internal changes to
+    // the value associated with numeratorProperty should be done through the method 'changeNumeratorManually'
     this.changingInternally = false;
 
     // @public {ObservableArray.<Piece>} - Pieces that are not filled cells (animating or user controlled)

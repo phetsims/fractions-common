@@ -9,36 +9,30 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var ContainerSetScreenView = require( 'FRACTIONS_COMMON/intro/view/ContainerSetScreenView' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  var ScreenView = require( 'JOIST/ScreenView' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * @constructor
-   * @extends {ScreenView}
+   * @extends {ContainerSetScreenView}
    *
-   * @param {EqualityLabModel} model
+   * @param {IntroModel} model
    */
   function EqualityLabScreenView( model ) {
-    ScreenView.call( this );
+    ContainerSetScreenView.call( this, model );
 
-    // Reset All button
-    var resetAllButton = new ResetAllButton( {
-      listener: function() {
-        model.reset();
-      },
-      right: this.layoutBounds.maxX - 10,
-      bottom: this.layoutBounds.maxY - 10
-    } );
-    this.addChild( resetAllButton );
+    // layout
+    var margin = FractionsCommonConstants.PANEL_MARGIN;
+    this.resetAllButton.rightBottom = this.layoutBounds.rightBottom.plusXY( -margin, -margin );
+    this.representationPanel.leftTop = this.layoutBounds.leftTop.plusXY( margin, margin );
+    this.viewContainer.translation = new Vector2( this.representationPanel.centerX, this.representationPanel.bottom + 20 );
+    this.fractionWithSpinners.rightCenter = this.layoutBounds.rightCenter.plusXY( -margin, 0 );
   }
 
   fractionsCommon.register( 'EqualityLabScreenView', EqualityLabScreenView );
 
-  return inherit( ScreenView, EqualityLabScreenView, {
-    step: function( dt ) {
-
-    }
-  } );
+  return inherit( ContainerSetScreenView, EqualityLabScreenView );
 } );
