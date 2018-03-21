@@ -27,9 +27,8 @@ define( function( require ) {
    *
    * @param {NumberProperty} containerCountProperty
    * @param {Object} [options]
-   * TODO: ContainerCountSpinner
    */
-  function MaxSpinner( containerCountProperty, options ) {
+  function ContainerCountSpinner( containerCountProperty, options ) {
 
     options = _.extend( {
       font: new PhetFont( 24 ),
@@ -80,7 +79,7 @@ define( function( require ) {
     Node.call( this, options );
   }
 
-  fractionsCommon.register( 'MaxSpinner', MaxSpinner );
+  fractionsCommon.register( 'ContainerCountSpinner', ContainerCountSpinner );
 
-  return inherit( Node, MaxSpinner );
+  return inherit( Node, ContainerCountSpinner );
 } );

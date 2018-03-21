@@ -17,7 +17,7 @@ define( function( require ) {
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var MaxSpinner = require( 'FRACTIONS_COMMON/intro/view/MaxSpinner' );
+  var ContainerCountSpinner = require( 'FRACTIONS_COMMON/intro/view/ContainerCountSpinner' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -46,7 +46,7 @@ define( function( require ) {
     this.addChild( mixedFractionNode );
     model.showMixedNumbersProperty.linkAttribute( mixedFractionNode, 'visible' );
 
-    var maxPanel = new Panel( new AlignBox( new MaxSpinner( model.containerCountProperty, {
+    var maxPanel = new Panel( new AlignBox( new ContainerCountSpinner( model.containerCountProperty, {
       right: this.layoutBounds.right - 20,
       top: this.layoutBounds.top + 25
     } ), {
