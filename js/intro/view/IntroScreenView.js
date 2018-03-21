@@ -68,10 +68,9 @@ define( function( require ) {
     // layout
     var margin = FractionsCommonConstants.PANEL_MARGIN;
     this.resetAllButton.rightBottom = this.layoutBounds.rightBottom.plusXY( -margin, -margin );
-    // TODO: aligngroup for representation/max panel
     this.representationPanel.leftTop = this.layoutBounds.leftTop.plusXY( margin + model.allowMixedNumbers ? 100 : 0, margin );
     maxPanel.rightTop = this.layoutBounds.rightTop.plusXY( -margin, margin );
-    this.viewContainer.translation = new Vector2( this.representationPanel.centerX, this.representationPanel.bottom + 20 );
+    this.viewContainer.translation = new Vector2( this.representationPanel.centerX, this.representationPanel.bottom + 60 );
     // TODO: factor out bucket offset?
     this.bucketContainer.translation = new Vector2( this.representationPanel.centerX, this.layoutBounds.bottom - 120 );
     this.fractionWithSpinners.rightCenter = this.layoutBounds.rightCenter.plusXY( -margin, 0 );
