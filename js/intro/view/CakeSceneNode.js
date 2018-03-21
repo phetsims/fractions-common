@@ -1,7 +1,7 @@
 // Copyright 2017, University of Colorado Boulder
 
 /**
- * Scenery Node for the container set of cakes with a bucketNode
+ * TODO: Doc
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -12,25 +12,25 @@ define( function( require ) {
   var CakeContainerNode = require( 'FRACTIONS_COMMON/intro/view/CakeContainerNode' );
   var CakeNode = require( 'FRACTIONS_COMMON/intro/view/CakeNode' );
   var CakePieceNode = require( 'FRACTIONS_COMMON/intro/view/CakePieceNode' );
-  var CellSceneView = require( 'FRACTIONS_COMMON/intro/view/CellSceneView' );
+  var CellSceneNode = require( 'FRACTIONS_COMMON/intro/view/CellSceneNode' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
 
   /**
    * @constructor
-   * @extends {CellSceneView}
+   * @extends {CellSceneNode}
    *
-   * @param {IntroModel} model
+   * @param {ContainerSetScreenView} model
    * @param {Object} [options]
    */
-  function CakeView( model, options ) {
+  function CakeSceneNode( model, options ) {
 
-    CellSceneView.call( this, model, options );
+    CellSceneNode.call( this, model, options );
   }
 
-  fractionsCommon.register( 'CakeView', CakeView );
+  fractionsCommon.register( 'CakeSceneNode', CakeSceneNode );
 
-  return inherit( CellSceneView, CakeView, {
+  return inherit( CellSceneNode, CakeSceneNode, {
     /**
      * create a cake container that holds a cake plate and the cakeNodes
      * @param {Container} container

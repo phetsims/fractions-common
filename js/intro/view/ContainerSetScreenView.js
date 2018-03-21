@@ -9,16 +9,16 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var BeakerView = require( 'FRACTIONS_COMMON/intro/view/BeakerView' );
-  var CakeView = require( 'FRACTIONS_COMMON/intro/view/CakeView' );
-  var CircularView = require( 'FRACTIONS_COMMON/intro/view/CircularView' );
+  var BeakerSceneNode = require( 'FRACTIONS_COMMON/intro/view/BeakerSceneNode' );
+  var CakeSceneNode = require( 'FRACTIONS_COMMON/intro/view/CakeSceneNode' );
+  var CircularSceneNode = require( 'FRACTIONS_COMMON/intro/view/CircularSceneNode' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionWithSpinners = require( 'FRACTIONS_COMMON/intro/view/FractionWithSpinners' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var NumberLineView = require( 'FRACTIONS_COMMON/intro/view/NumberLineView' );
+  var NumberLineSceneNode = require( 'FRACTIONS_COMMON/intro/view/NumberLineSceneNode' );
   var NumberProperty = require( 'AXON/NumberProperty' );
-  var RectangularView = require( 'FRACTIONS_COMMON/intro/view/RectangularView' );
+  var RectangularSceneNode = require( 'FRACTIONS_COMMON/intro/view/RectangularSceneNode' );
   var Representation = require( 'FRACTIONS_COMMON/intro/model/Representation' );
   var RepresentationPanel = require( 'FRACTIONS_COMMON/intro/view/RepresentationPanel' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
@@ -62,27 +62,27 @@ define( function( require ) {
       // Should this be a switch statement? TODO: yes. cleanup
       self.currentView = null;
       if ( representation === Representation.CIRCLE ) {
-        self.currentView = new CircularView( model, {
+        self.currentView = new CircularSceneNode( model, {
           verticalOffset: 10
         } );
       }
       else if ( representation === Representation.VERTICAL_BAR ) {
-        self.currentView = new RectangularView( model, {
+        self.currentView = new RectangularSceneNode( model, {
           rectangleOrientation: 'vertical'
         } );
       }
       else if ( representation === Representation.HORIZONTAL_BAR ) {
-        self.currentView = new RectangularView( model, {
+        self.currentView = new RectangularSceneNode( model, {
           rectangleOrientation: 'horizontal',
           maxHorizontalContainers: 3,
           verticalOffset: 40
         } );
       }
       else if ( representation === Representation.BEAKER ) {
-        self.currentView = new BeakerView( model );
+        self.currentView = new BeakerSceneNode( model );
       }
       else if ( representation === Representation.CAKE ) {
-        self.currentView = new CakeView( model, {
+        self.currentView = new CakeSceneNode( model, {
           verticalOffset: 30,
           horizontalSpacing: -20
         } );
@@ -90,7 +90,7 @@ define( function( require ) {
       else if ( representation === Representation.NUMBER_LINE ) {
 
         // TODO: find a more general way to lay out the numberLine than reversing the action of the container
-        self.currentView = new NumberLineView(
+        self.currentView = new NumberLineSceneNode(
           model.numeratorProperty,
           model.denominatorProperty,
           model.containerCountProperty,

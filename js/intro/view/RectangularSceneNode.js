@@ -1,7 +1,7 @@
 // Copyright 2017, University of Colorado Boulder
 
 /**
- * Handles the creation of Rectangular pieces and containers
+ * TODO: Doc
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -9,7 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var CellSceneView = require( 'FRACTIONS_COMMON/intro/view/CellSceneView' );
+  var CellSceneNode = require( 'FRACTIONS_COMMON/intro/view/CellSceneNode' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
   var RectangleNode = require( 'FRACTIONS_COMMON/intro/view/RectangleNode' );
@@ -18,19 +18,19 @@ define( function( require ) {
 
   /**
    * @constructor
-   * @extends {CellSceneView}
+   * @extends {CellSceneNode}
    *
-   * @param {IntroModel} model
+   * @param {ContainerSetScreenView} model
    * @param {Object} [options]
    */
-  function RectangularView( model, options ) {
+  function RectangularSceneNode( model, options ) {
     this.options = options;
-    CellSceneView.call( this, model, options );
+    CellSceneNode.call( this, model, options );
   }
 
-  fractionsCommon.register( 'RectangularView', RectangularView );
+  fractionsCommon.register( 'RectangularSceneNode', RectangularSceneNode );
 
-  return inherit( CellSceneView, RectangularView, {
+  return inherit( CellSceneNode, RectangularSceneNode, {
 
     /**
      * Creates a Container Node with a specific callback function

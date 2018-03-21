@@ -39,17 +39,13 @@ define( function( require ) {
    * @param {Property.<number>} denominatorProperty
    * @param {Property.<number>} containerCountProperty - control the upper bound of the number line
    * @param {Property.<number>} multiplicationFactorProperty - ratio of the tick on the
-   *                                                            upper and lower side of the number line in order to
-   *                                                            increase  number of tick on the bottom of the number
-   *                                                            line to use in the equality tab.
+   *                                                           upper and lower side of the number line in order to
+   *                                                           increase  number of tick on the bottom of the number
+   *                                                           line to use in the equality tab.
    * @param {Object} [options]
    * @constructor
    */
-  function NumberLineView( numeratorProperty,
-                           denominatorProperty,
-                           containerCountProperty,
-                           multiplicationFactorProperty,
-                           options ) {
+  function NumberLineSceneNode( numeratorProperty, denominatorProperty, containerCountProperty, multiplicationFactorProperty, options ) {
 
     // plan to use the vertical option in the equality tab
     options = _.extend( {
@@ -242,15 +238,15 @@ define( function( require ) {
     Node.call( this, options );
 
     // @private called by dispose
-    this.disposeNumberLineView = function() {
+    this.disposeNumberLineSceneNode = function() {
       Property.unmultilink( updateTicksMultilink );
       Property.unmultilink( updateMarkerMultilink );
     };
   }
 
-  fractionsCommon.register( 'NumberLineView', NumberLineView );
+  fractionsCommon.register( 'NumberLineSceneNode', NumberLineSceneNode );
 
-  return inherit( Node, NumberLineView, {
+  return inherit( Node, NumberLineSceneNode, {
 
     /**
      * placeholder for step function
@@ -267,7 +263,7 @@ define( function( require ) {
      * @public
      */
     dispose: function() {
-      this.disposeNumberLineView();
+      this.disposeNumberLineSceneNode();
       Node.prototype.dispose.call( this );
 
     }

@@ -19,7 +19,7 @@ define( function( require ) {
    * @constructor
    * @extends {ContainerSetScreenView}
    *
-   * @param {IntroModel} model
+   * @param {EqualityLabModel} model
    */
   function EqualityLabScreenView( model ) {
     ContainerSetScreenView.call( this, model );

@@ -15,12 +15,20 @@ define( function( require ) {
   var FractionsCommonRadioButtonPanel = require( 'FRACTIONS_COMMON/common/view/FractionsCommonRadioButtonPanel' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var NumberLineIcon = require( 'FRACTIONS_COMMON/intro/view/NumberLineIcon' );
+  var Node = require( 'SCENERY/nodes/Node' );
+  var Path = require( 'SCENERY/nodes/Path' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Representation = require( 'FRACTIONS_COMMON/intro/model/Representation' );
+  var Shape = require( 'KITE/Shape' );
+  var Text = require( 'SCENERY/nodes/Text' );
 
   // images
   var cakeImage = require( 'image!FRACTIONS_COMMON/cake_1_1.png' );
+
+  // constants
+  var LINE_LENGTH = 55;
+  var TICK_HEIGHT = 20;
 
   /**
    * @constructor
@@ -59,7 +67,17 @@ define( function( require ) {
     icons[ Representation.CAKE ] = new Image( cakeImage, {
       maxHeight: 75
     } );
-    icons[ Representation.NUMBER_LINE ] = new NumberLineIcon();
+    icons[ Representation.NUMBER_LINE ] = new Node( {
+      children: [
+        new Path( new Shape().moveTo( 0, 0 ).verticalLineToRelative( TICK_HEIGHT )
+                                            .moveTo( LINE_LENGTH, 0 )
+                                            .verticalLineToRelative( TICK_HEIGHT )
+                                            .moveTo( 0, TICK_HEIGHT / 2 )
+                                            .horizontalLineToRelative( LINE_LENGTH ), { stroke: 'black' } ),
+        new Text( '0', { font: new PhetFont( 10 ), centerX: 0, top: TICK_HEIGHT } ),
+        new Text( '1', { font: new PhetFont( 10 ), centerX: LINE_LENGTH, top: TICK_HEIGHT } )
+      ]
+    } );
 
     FractionsCommonRadioButtonPanel.call( this, representationProperty, representations.map( function( representation ) {
       return {

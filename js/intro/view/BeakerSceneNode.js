@@ -1,7 +1,7 @@
 // Copyright 2017, University of Colorado Boulder
 
 /**
- * create a cell with listener for display on the screen inside the bucket and containers
+ * TODO: Doc
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -11,79 +11,66 @@ define( function( require ) {
   // modules
   var AlignBox = require( 'SCENERY/nodes/AlignBox' );
   var arrayRemove = require( 'PHET_CORE/arrayRemove' );
+  var BeakerContainerNode = require( 'FRACTIONS_COMMON/intro/view/BeakerContainerNode' );
+  var BeakerNode = require( 'FRACTIONS_COMMON/intro/view/BeakerNode' );
+  var BeakerPieceNode = require( 'FRACTIONS_COMMON/intro/view/BeakerPieceNode' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var BucketNode = require( 'FRACTIONS_COMMON/intro/view/BucketNode' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var IntroConstants = require( 'FRACTIONS_COMMON/intro/IntroConstants' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
 
   /**
    * @constructor
    * @extends {Node}
    *
-   * @param {IntroModel} model
-   * @param {Object} [options]
+   * @param {ContainerSetScreenView} model
    */
-  function CellSceneView( model, options ) {
-
-    options = _.extend( {
-      maxHorizontalContainers: IntroConstants.MAX_RANGE.max, //default max Range
-      horizontalSpacing: 10, // horizontal spacing between adjacent containers
-      verticalSpacing: 10, // vertical spacing  between containers
-      verticalOffset: 0
-    }, options );
-
-    // @private
-    this.options = options;
+  function BeakerSceneNode( model ) {
 
     // @private
     this.model = model;
 
-    // @private {VBox}
-    this.containerLayer = new VBox( {
-      spacing: options.verticalSpacing,
-
-      // left align containerHBoxes
-      align: 'left'
+    // @private {Node}
+    this.containerLayer = new HBox( {
+      spacing: 35
     } );
 
     // @private {Node}
     this.pieceLayer = new Node();
 
-    // @private {Array.<*>}
+    // @private {Array.<CircularContainerNode>}
     this.containerNodes = [];
 
     // @private {Array.<*>} TODO improve doc type
     this.pieceNodes = [];
-
-    //@private {Array.<HBox>}
-    this.containerHBoxes = [];
 
     // @private {function}
     this.addListener = this.addContainer.bind( this );
     this.removeListener = this.removeContainer.bind( this );
     this.pieceAddedListener = this.onPieceAdded.bind( this );
     this.pieceRemovedListener = this.onPieceRemoved.bind( this );
+    this.clearListener = this.onClearChange.bind( this );
 
     model.containers.addItemAddedListener( this.addListener );
     model.containers.addItemRemovedListener( this.removeListener );
     model.pieces.addItemAddedListener( this.pieceAddedListener );
     model.pieces.addItemRemovedListener( this.pieceRemovedListener );
+    model.denominatorProperty.lazyLink( this.clearListener );
+    model.containerCountProperty.lazyLink( this.clearListener );
 
     // Initial setup
     model.containers.forEach( this.addListener );
 
     // @private
-    this.bucketNode = new BucketNode( model.denominatorProperty, this.pieceLayer, this.onBucketDragStart.bind( this )
-      , this.createCellNode.bind( this ), model.representationProperty );
+    this.bucketNode = new BucketNode( model.denominatorProperty, this.pieceLayer, this.startBeakerDrag.bind( this ),
+      this.createBeakerNode.bind( this ), model.representationProperty );
 
     Node.call( this, {
       children: [
         new AlignBox( this.containerLayer, {
-          alignBounds: Bounds2.point( 0, options.verticalOffset ),
+          alignBounds: Bounds2.point( 0, 10 ),
 
           // aligns the containerNodes with respect to the top
           yAlign: 'top'
@@ -93,28 +80,30 @@ define( function( require ) {
     } );
   }
 
-  fractionsCommon.register( 'CellSceneView', CellSceneView );
+  fractionsCommon.register( 'BeakerSceneNode', BeakerSceneNode );
 
-  return inherit( Node, CellSceneView, {
+  return inherit( Node, BeakerSceneNode, {
     /**
      * Steps forward in time.
      *
-     * @param {number} dt - time step
+     * @param {number} dt - time step in seconds
      * @public
      */
     step: function( dt ) {
-      var self = this;
-
       _.each( this.pieceNodes.slice(), function( pieceNode ) {
-        pieceNode.step( dt );
-
-        if ( pieceNode.isUserControlled ) {
-          var closestCell = self.getClosestCell( pieceNode.getMidpoint() );
-          if ( closestCell ) {
-            pieceNode.orient( closestCell, dt );
-          }
+        if ( !pieceNode.isUserControlled ) {
+          pieceNode.step( dt );
         }
       } );
+    },
+
+    /**
+     * @private
+     */
+    onClearChange: function() {
+      this.pieceLayer.interruptSubtreeInput();
+      this.pieceLayer.removeAllChildren();
+      this.pieceNodes = [];
     },
 
     /**
@@ -160,6 +149,7 @@ define( function( require ) {
 
     /**
      * callback whenever a piece is added
+     *
      * @param {Piece} piece
      * @private
      */
@@ -168,26 +158,26 @@ define( function( require ) {
 
       //TODO: support on all
       if ( this.createPieceNode ) {
-        var pieceNode = this.createPieceNode( piece,
-          function() {
-            self.model.completePiece( piece );
-          },
-          function() {
-            var currentMidpoint = pieceNode.getMidpoint();
+        var pieceNode = this.createPieceNode( self.model.denominatorProperty.value, function() {
+          self.model.completePiece( piece );
+        }, function() {
+          var currentMidpoint = pieceNode.getMidpoint();
 
-            var closestCell = self.getClosestCell( currentMidpoint, 100 );
+          var closestCell = self.getClosestCell( currentMidpoint, 100 );
 
-            pieceNode.isUserControlled = false;
-            pieceNode.originProperty.value = currentMidpoint;
+          pieceNode.isUserControlled = false;
+          pieceNode.originProperty.value = currentMidpoint;
 
-            if ( closestCell ) {
-              pieceNode.destinationProperty.value = self.getCellMidpoint( closestCell );
-              self.model.targetPieceToCell( piece, closestCell );
-            }
-            else {
-              pieceNode.destinationProperty.value = self.bucketNode.position;
-            }
-          } );
+          if ( closestCell ) {
+            pieceNode.destinationProperty.value = self.getCellMidpoint( closestCell );
+            self.model.targetPieceToCell( piece, closestCell );
+          }
+          else {
+            pieceNode.destinationProperty.value = self.bucketNode.position;
+          }
+        } );
+
+        pieceNode.piece = piece;
 
         var originCell = piece.originCell;
         if ( originCell ) {
@@ -209,8 +199,20 @@ define( function( require ) {
         this.pieceLayer.addChild( pieceNode );
       }
       else {
-        this.model.completePiece( piece );
+        this.model.completePiece( piece ); // don't animate piece
       }
+    },
+
+    /**
+     * create a beaker piece node
+     * @param {number} denominator
+     * @param {Function} finishedAnimatingCallback
+     * @param {Function} droppedCallback
+     * @returns {BeakerPieceNode}
+     * @public
+     */
+    createPieceNode: function( denominator, finishedAnimatingCallback, droppedCallback ) {
+      return new BeakerPieceNode( denominator, finishedAnimatingCallback, droppedCallback );
     },
 
     /**
@@ -220,7 +222,7 @@ define( function( require ) {
      * @private
      */
     onPieceRemoved: function( piece ) {
-      //TODO: support on all
+
       if ( this.createPieceNode ) {
         var pieceNode = _.find( this.pieceNodes, function( pieceNode ) {
           return pieceNode.piece === piece;
@@ -231,79 +233,123 @@ define( function( require ) {
     },
 
     /**
-     * callback on start event when grabbing piece from bucketNode
+     * handles when a beaker piece is dropped
+     *
+     * @param {BeakerPieceNode} pieceNode
+     * @private
+     */
+    onBeakerDropped: function( pieceNode ) {
+      var self = this;
+
+      var closestContainer = null;
+      var closestDistance = 150;
+
+      _.each( this.containerNodes, function( containerNode ) {
+        var matrix = containerNode.getUniqueTrail().getMatrixTo( self.pieceLayer.getUniqueTrail() );
+        var position = matrix.timesVector2( containerNode.localBounds.center );
+        var distance = pieceNode.center.distance( position );
+        var container = containerNode.container;
+
+        if ( distance < closestDistance && container.getNextEmptyCell() ) {
+          closestContainer = containerNode.container;
+          closestDistance = distance;
+        }
+      } );
+
+      if ( closestContainer ) {
+        this.model.changeNumeratorManually( 1 );
+
+        closestContainer.getNextEmptyCell().fill();
+
+        pieceNode.destinationProperty.value = closestContainer.center;
+        arrayRemove( this.pieceNodes, pieceNode );
+        this.pieceLayer.removeChild( pieceNode );
+      }
+      else {
+        pieceNode.originProperty.value = pieceNode.center;
+        pieceNode.destinationProperty.value = this.bucketNode.position;
+        pieceNode.isUserControlled = false;
+      }
+    },
+
+    /**
+     * Called when a beaker piece or cell is dragged
+     *
      * @param {Event} event
      * @private
      */
-    onBucketDragStart: function( event ) {
+    startBeakerDrag: function( event ) {
+      var self = this;
       var piece = this.model.grabFromBucket();
-      var pieceNode = _.find( this.pieceNodes, function( pieceNode ) {
-        return pieceNode.piece === piece;
-      } );
+      var pieceNode = this.createPieceNode( this.model.denominatorProperty.value, function( pieceNode ) {
+        self.model.completePiece( pieceNode.piece );
+      }, this.onBeakerDropped.bind( this ) );
+      pieceNode.piece = piece;
 
-      pieceNode.originProperty.value = this.globalToLocalPoint( event.pointer.point );
+      this.pieceNodes.push( pieceNode );
+      this.pieceLayer.addChild( pieceNode );
+
       pieceNode.isUserControlled = true;
+      pieceNode.center = pieceNode.globalToParentPoint( event.pointer.point );
       pieceNode.dragListener.startDrag( event );
     },
 
     /**
      * Handles when a user drags a cell from a displayed container.
      *
-     * @param {Cell} cell
+     * @param {Container} container
      * @param {Event} event
      * @private
      */
-    onExistingCellDragStart: function( cell, event ) {
-      var piece = this.model.grabCell( cell );
-      var pieceNode = _.find( this.pieceNodes, function( pieceNode ) {
-        return pieceNode.piece === piece;
-      } );
-
-      pieceNode.originProperty.value = this.getCellMidpoint( cell );
-      pieceNode.isUserControlled = true;
-      pieceNode.dragListener.startDrag( event );
+    onExistingCellDragStart: function( container, event ) {
+      this.model.changeNumeratorManually( -1 );
+      var filledCell = container.getNextFilledCell();
+      if ( filledCell.appearsFilledProperty.value ) {
+        filledCell.empty();
+      }
+      else {
+        var pieceOnWay = filledCell.targetedPiece;
+        filledCell.untargetFromPiece( pieceOnWay );
+        this.model.pieces.remove( pieceOnWay );
+      }
+      this.startBeakerDrag( event );
     },
 
     /**
-     * This function should be overridden by the parent method
-     * @param {Container} container
-     * @param {Function} cellDownCallback
-     * @private
+     * Creates a beaker Node with 1/D
+     *
+     * @param {number} denominator
+     * @param {number} index
+     * @param {Object} [options]
+     * @returns {BeakerNode}
+     * @public
      */
-    createContainerNode: function( container, cellDownCallback ) {
-      throw new Error( 'abstract method' );
+    createBeakerNode: function( denominator, index, options ) {
+
+      // the numerator is set to one
+      return new BeakerNode( 1, denominator, options );
     },
 
     /**
-     * add a container node to the scene graph
+     * adds a container when max is increased
+     *
      * @param {Container} container
      * @private
      */
     addContainer: function( container ) {
+      var self = this;
 
-      var containerNode = this.createContainerNode( container, this.onExistingCellDragStart.bind( this ) );
-
-      var currentContainerNodesLength = this.containerNodes.length;
+      var containerNode = new BeakerContainerNode( container, function( event ) {
+        self.onExistingCellDragStart( container, event );
+      } );
 
       this.containerNodes.push( containerNode );
-
-      // creates new HBox within containerLayer dependent on VBox container
-      if ( currentContainerNodesLength % this.options.maxHorizontalContainers === 0 ) {
-        var containerHBox = new HBox( {
-          spacing: this.options.horizontalSpacing,
-          align: 'top'
-        } );
-        this.containerHBoxes.push( containerHBox );
-        this.containerLayer.addChild( containerHBox );
-      }
-
-      // adds the new containerNode at the end of containerHboxes array
-      this.containerHBoxes[ this.containerHBoxes.length - 1 ].addChild( containerNode );
-
+      this.containerLayer.addChild( containerNode );
     },
 
     /**
-     * remove a container node from the scene graph
+     * removes a container when max is decreased
+     *
      * @param {Container} container
      * @private
      */
@@ -312,25 +358,13 @@ define( function( require ) {
         return containerNode.container === container;
       } );
 
+      this.containerLayer.removeChild( containerNode );
       arrayRemove( this.containerNodes, containerNode );
-
-      // removes the last containerNode within the containerHBox Array
-      this.containerHBoxes[ this.containerHBoxes.length - 1 ].removeChild( containerNode );
-
-      var currentContainerLength = this.containerNodes.length;
-      if ( currentContainerLength % this.options.maxHorizontalContainers === 0 ) {
-
-        // removes the last HBox within containerLayer
-        var containerHBoxRemoved = this.containerHBoxes.pop();
-        this.containerLayer.removeChild( containerHBoxRemoved );
-      }
-
       containerNode.dispose();
     },
 
     /**
      * dispose of the links for garbage collection
-     *
      * @public
      */
     dispose: function() {
@@ -342,6 +376,8 @@ define( function( require ) {
       this.model.containers.removeItemRemovedListener( this.removeListener );
       this.model.pieces.removeItemAddedListener( this.pieceAddedListener );
       this.model.pieces.removeItemRemovedListener( this.pieceRemovedListener );
+      this.model.denominatorProperty.unlink( this.clearListener );
+      this.model.containerCountProperty.unlink( this.clearListener );
 
       Node.prototype.dispose.call( this );
     }

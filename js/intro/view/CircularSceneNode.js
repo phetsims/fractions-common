@@ -1,7 +1,7 @@
 // Copyright 2017, University of Colorado Boulder
 
 /**
- * Scenery Node for the container set of circles with a bucketNode
+ * TODO: Doc
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -9,7 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var CellSceneView = require( 'FRACTIONS_COMMON/intro/view/CellSceneView' );
+  var CellSceneNode = require( 'FRACTIONS_COMMON/intro/view/CellSceneNode' );
   var CircleNode = require( 'FRACTIONS_COMMON/intro/view/CircleNode' );
   var CircularContainerNode = require( 'FRACTIONS_COMMON/intro/view/CircularContainerNode' );
   var CircularPieceNode = require( 'FRACTIONS_COMMON/intro/view/CircularPieceNode' );
@@ -18,18 +18,18 @@ define( function( require ) {
 
   /**
    * @constructor
-   * @extends {CellSceneView}
+   * @extends {CellSceneNode}
    *
-   * @param {IntroModel} model
+   * @param {ContainerSetScreenView} model
    * @param {Object} [options]
    */
-  function CircularView( model, options ) {
-    CellSceneView.call( this, model, options );
+  function CircularSceneNode( model, options ) {
+    CellSceneNode.call( this, model, options );
   }
 
-  fractionsCommon.register( 'CircularView', CircularView );
+  fractionsCommon.register( 'CircularSceneNode', CircularSceneNode );
 
-  return inherit( CellSceneView, CircularView, {
+  return inherit( CellSceneNode, CircularSceneNode, {
     /**
      * create a circular container node that comprises a circle divided into cells.
      * @param {Container} container
