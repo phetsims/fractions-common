@@ -13,7 +13,6 @@ define( function( require ) {
   var DerivedProperty = require( 'AXON/DerivedProperty' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var IntroConstants = require( 'FRACTIONS_COMMON/intro/IntroConstants' );
   var Node = require( 'SCENERY/nodes/Node' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var RoundSpinner = require( 'FRACTIONS_COMMON/intro/view/RoundSpinner' );
@@ -23,11 +22,12 @@ define( function( require ) {
   var representationMaxString = require( 'string!FRACTIONS_COMMON/representationMax' );
 
   /**
+   * @constructor
    * @extends {Node}
    *
-   * @param {Property.<number>} containerCountProperty
+   * @param {NumberProperty} containerCountProperty
    * @param {Object} [options]
-   * @constructor
+   * TODO: ContainerCountSpinner
    */
   function MaxSpinner( containerCountProperty, options ) {
 
@@ -39,11 +39,11 @@ define( function( require ) {
 
     var maxUpEnabledProperty = new DerivedProperty( [ containerCountProperty ],
       function( maxNumberOfUnits ) {
-        return maxNumberOfUnits < IntroConstants.MAX_RANGE.max;
+        return maxNumberOfUnits < containerCountProperty.range.max;
       } );
     var maxDownEnabledProperty = new DerivedProperty( [ containerCountProperty ],
       function( maxNumberOfUnits ) {
-        return maxNumberOfUnits > IntroConstants.MAX_RANGE.min;
+        return maxNumberOfUnits > containerCountProperty.range.min;
       } );
 
     var maxUpButtonListener = function() {containerCountProperty.value++;};

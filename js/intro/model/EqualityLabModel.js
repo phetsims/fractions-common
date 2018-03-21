@@ -23,7 +23,8 @@ define( function( require ) {
   function EqualityLabModel() {
     ContainerSetModel.call( this, {
       representations: [ Representation.CIRCLE, Representation.HORIZONTAL_BAR, Representation.VERTICAL_BAR, Representation.BEAKER ],
-      initialContainerCount: 4
+      initialContainerCount: 4,
+      maxContainers: 4
     } );
 
     // @public {Property.<Representation>} - Representation of the noninteractive fraction display for equivalence.

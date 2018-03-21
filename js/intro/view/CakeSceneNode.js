@@ -21,11 +21,12 @@ define( function( require ) {
    * @extends {CellSceneNode}
    *
    * @param {ContainerSetScreenView} model
+   * @param {function} getBucketLocation - function(): Vector2, gives the location of the bucket when called
    * @param {Object} [options]
    */
-  function CakeSceneNode( model, options ) {
+  function CakeSceneNode( model, getBucketLocation, options ) {
 
-    CellSceneNode.call( this, model, options );
+    CellSceneNode.call( this, model, getBucketLocation, options );
   }
 
   fractionsCommon.register( 'CakeSceneNode', CakeSceneNode );

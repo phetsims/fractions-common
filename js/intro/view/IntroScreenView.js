@@ -10,6 +10,7 @@ define( function( require ) {
 
   // modules
   var AlignBox = require( 'SCENERY/nodes/AlignBox' );
+  var Checkbox = require( 'SUN/Checkbox' );
   var ContainerSetScreenView = require( 'FRACTIONS_COMMON/intro/view/ContainerSetScreenView' );
   var FractionNode = require( 'FRACTIONS_COMMON/intro/view/FractionNode' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
@@ -19,7 +20,11 @@ define( function( require ) {
   var MaxSpinner = require( 'FRACTIONS_COMMON/intro/view/MaxSpinner' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
+
+  // strings
+  var mixedNumberString = require( 'string!FRACTIONS_COMMON/mixedNumber' );
 
   /**
    * @constructor
@@ -53,14 +58,25 @@ define( function( require ) {
     } );
     this.addChild( maxPanel );
 
+    var mixedNumbersCheckbox = new Checkbox( new Text( mixedNumberString, { font: new PhetFont( 26 ) } ), model.showMixedNumbersProperty, {
+      boxWidth: 30
+    } );
+    if ( model.allowMixedNumbers ) {
+      this.addChild( mixedNumbersCheckbox );
+    }
+
     // layout
     var margin = FractionsCommonConstants.PANEL_MARGIN;
     this.resetAllButton.rightBottom = this.layoutBounds.rightBottom.plusXY( -margin, -margin );
     // TODO: aligngroup for representation/max panel
-    this.representationPanel.leftTop = this.layoutBounds.leftTop.plusXY( margin, margin );
+    this.representationPanel.leftTop = this.layoutBounds.leftTop.plusXY( margin + model.allowMixedNumbers ? 100 : 0, margin );
     maxPanel.rightTop = this.layoutBounds.rightTop.plusXY( -margin, margin );
     this.viewContainer.translation = new Vector2( this.representationPanel.centerX, this.representationPanel.bottom + 20 );
+    // TODO: factor out bucket offset?
+    this.bucketContainer.translation = new Vector2( this.representationPanel.centerX, this.layoutBounds.bottom - 120 );
     this.fractionWithSpinners.rightCenter = this.layoutBounds.rightCenter.plusXY( -margin, 0 );
+    mixedNumbersCheckbox.rightTop = new Vector2( this.layoutBounds.right - margin, this.fractionWithSpinners.bottom + 40 );
+    mixedFractionNode.leftCenter = this.layoutBounds.leftCenter.plusXY( margin, 0 );
   }
 
   fractionsCommon.register( 'IntroScreenView', IntroScreenView );

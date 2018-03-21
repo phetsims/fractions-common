@@ -25,12 +25,18 @@ define( function( require ) {
    * @constructor
    * @extends {Node}
    *
+   * TODO: EGADS, REFACTOR OUT THE COMMON STUFF!
+   *
    * @param {ContainerSetScreenView} model
+   * @param {function} getBucketLocation - function(): Vector2, gives the location of the bucket when called
    */
-  function BeakerSceneNode( model ) {
+  function BeakerSceneNode( model, getBucketLocation ) {
 
     // @private
     this.model = model;
+
+    // @private {function}
+    this.getBucketLocation = getBucketLocation;
 
     // @private {Node}
     this.containerLayer = new HBox( {
@@ -63,10 +69,10 @@ define( function( require ) {
     // Initial setup
     model.containers.forEach( this.addListener );
 
-    // @private
-    this.bucketNode = new BucketNode( model.denominatorProperty, this.pieceLayer, this.startBeakerDrag.bind( this ),
-      this.createBeakerNode.bind( this ), model.representationProperty );
+    // @public {BucketNode} - TODO: better way?
+    this.bucketNode = new BucketNode( model.denominatorProperty, this.startBeakerDrag.bind( this ), this.createBeakerNode.bind( this ), model.representationProperty );
 
+    // TODO: cleanup
     Node.call( this, {
       children: [
         new AlignBox( this.containerLayer, {
@@ -74,8 +80,7 @@ define( function( require ) {
 
           // aligns the containerNodes with respect to the top
           yAlign: 'top'
-        } ),
-        this.bucketNode
+        } )
       ]
     } );
   }
@@ -154,6 +159,7 @@ define( function( require ) {
      * @private
      */
     onPieceAdded: function( piece ) {
+      // TODO: CHECK THIS, it looks.... like a very overloaded copy of CellSceneNode's
       var self = this;
 
       //TODO: support on all
@@ -173,7 +179,7 @@ define( function( require ) {
             self.model.targetPieceToCell( piece, closestCell );
           }
           else {
-            pieceNode.destinationProperty.value = self.bucketNode.position;
+            pieceNode.destinationProperty.value = self.getBucketLocation();
           }
         } );
 
@@ -184,7 +190,7 @@ define( function( require ) {
           pieceNode.originProperty.value = this.getCellMidpoint( originCell );
         }
         else {
-          pieceNode.originProperty.value = this.bucketNode.position;
+          pieceNode.originProperty.value = this.getBucketLocation();
         }
 
         var destinationCell = piece.destinationCell;
@@ -192,7 +198,7 @@ define( function( require ) {
           pieceNode.destinationProperty.value = this.getCellMidpoint( destinationCell );
         }
         else {
-          pieceNode.destinationProperty.value = this.bucketNode.position;
+          pieceNode.destinationProperty.value = this.getBucketLocation();
         }
 
         this.pieceNodes.push( pieceNode );
@@ -267,7 +273,7 @@ define( function( require ) {
       }
       else {
         pieceNode.originProperty.value = pieceNode.center;
-        pieceNode.destinationProperty.value = this.bucketNode.position;
+        pieceNode.destinationProperty.value = this.getBucketLocation();
         pieceNode.isUserControlled = false;
       }
     },

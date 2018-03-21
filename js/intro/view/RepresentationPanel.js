@@ -4,6 +4,7 @@
  * The large horizontal panel at the top of the screen for selecting different representations.
  *
  * @author Martin Veillette (Berea College)
+ * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 define( function( require ) {
   'use strict';

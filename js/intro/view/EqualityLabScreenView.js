@@ -29,6 +29,8 @@ define( function( require ) {
     this.resetAllButton.rightBottom = this.layoutBounds.rightBottom.plusXY( -margin, -margin );
     this.representationPanel.leftTop = this.layoutBounds.leftTop.plusXY( margin, margin );
     this.viewContainer.translation = new Vector2( this.representationPanel.centerX, this.representationPanel.bottom + 20 );
+    // TODO: factor out bucket offset?
+    this.bucketContainer.translation = new Vector2( this.representationPanel.centerX, this.layoutBounds.bottom - 120 );
     this.fractionWithSpinners.rightCenter = this.layoutBounds.rightCenter.plusXY( -margin, 0 );
   }
 

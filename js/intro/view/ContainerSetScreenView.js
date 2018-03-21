@@ -23,6 +23,7 @@ define( function( require ) {
   var RepresentationPanel = require( 'FRACTIONS_COMMON/intro/view/RepresentationPanel' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * @constructor
@@ -43,6 +44,10 @@ define( function( require ) {
     this.addChild( this.representationPanel );
 
     // @protected {Node}
+    this.bucketContainer = new Node();
+    this.addChild( this.bucketContainer );
+
+    // @protected {Node}
     this.viewContainer = new Node();
     this.addChild( this.viewContainer );
 
@@ -55,34 +60,41 @@ define( function( require ) {
       model.completeAllPieces();
 
       if ( self.currentView ) {
-        self.viewContainer.removeChild( self.currentView );
+        self.viewContainer.removeAllChildren();
+        self.bucketContainer.removeAllChildren();
         self.currentView.dispose();
+      }
+
+      // TODO: fractor out, clearn erp
+      function getBucketLocation() {
+        assert && assert( self.currentView.bucketNode );
+        return self.currentView.bucketNode.getUniqueTrail().getMatrixTo( self.currentView.getUniqueTrail() ).timesVector2( Vector2.ZERO );
       }
 
       // Should this be a switch statement? TODO: yes. cleanup
       self.currentView = null;
       if ( representation === Representation.CIRCLE ) {
-        self.currentView = new CircularSceneNode( model, {
+        self.currentView = new CircularSceneNode( model, getBucketLocation, {
           verticalOffset: 10
         } );
       }
       else if ( representation === Representation.VERTICAL_BAR ) {
-        self.currentView = new RectangularSceneNode( model, {
+        self.currentView = new RectangularSceneNode( model, getBucketLocation, {
           rectangleOrientation: 'vertical'
         } );
       }
       else if ( representation === Representation.HORIZONTAL_BAR ) {
-        self.currentView = new RectangularSceneNode( model, {
+        self.currentView = new RectangularSceneNode( model, getBucketLocation, {
           rectangleOrientation: 'horizontal',
           maxHorizontalContainers: 3,
           verticalOffset: 40
         } );
       }
       else if ( representation === Representation.BEAKER ) {
-        self.currentView = new BeakerSceneNode( model );
+        self.currentView = new BeakerSceneNode( model, getBucketLocation );
       }
       else if ( representation === Representation.CAKE ) {
-        self.currentView = new CakeSceneNode( model, {
+        self.currentView = new CakeSceneNode( model, getBucketLocation, {
           verticalOffset: 30,
           horizontalSpacing: -20
         } );
@@ -100,6 +112,13 @@ define( function( require ) {
       if ( self.currentView ) {
         // add the chosen visual representation to the scene graph
         self.viewContainer.addChild( self.currentView );
+        if ( self.currentView.pieceLayer ) {
+          // TODO: egad, why are we doing this? Also when do pieces need to be behind?
+          self.viewContainer.addChild( self.currentView.pieceLayer );
+        }
+        if ( self.currentView.bucketNode ) {
+          self.bucketContainer.addChild( self.currentView.bucketNode );
+        }
       }
     } );
 

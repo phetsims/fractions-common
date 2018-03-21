@@ -22,6 +22,10 @@ define( function( require ) {
    * @param {Object} [options]
    */
   function IntroModel( allowMixedNumbers, options ) {
+    options = _.extend( {
+      maxContainers: allowMixedNumbers ? 4 : 6
+    }, options );
+
     ContainerSetModel.call( this, options );
 
     // @public {boolean} - Whether to allow the display of the fraction as a mixed number

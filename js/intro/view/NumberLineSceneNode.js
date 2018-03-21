@@ -81,7 +81,7 @@ define( function( require ) {
     var numbersNode = new Node();
 
     // distance between 0 and 1 on the number Line
-    var segmentLength = IntroConstants.NUMBER_LINE_WIDTH / IntroConstants.MAX_RANGE.max;
+    var segmentLength = IntroConstants.NUMBER_LINE_WIDTH / containerCountProperty.range.max;
 
     // Updates the minor and major ticks as well as the main number line
     var updateTicksMultilink = Property.multilink( [ containerCountProperty, denominatorProperty ], function( max, denominator ) {

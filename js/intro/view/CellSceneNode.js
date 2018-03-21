@@ -16,7 +16,6 @@ define( function( require ) {
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var IntroConstants = require( 'FRACTIONS_COMMON/intro/IntroConstants' );
   var Node = require( 'SCENERY/nodes/Node' );
   var VBox = require( 'SCENERY/nodes/VBox' );
 
@@ -25,22 +24,26 @@ define( function( require ) {
    * @extends {Node}
    *
    * @param {ContainerSetScreenView} model
+   * @param {function} getBucketLocation - function(): Vector2, gives the location of the bucket when called
    * @param {Object} [options]
    */
-  function CellSceneNode( model, options ) {
+  function CellSceneNode( model, getBucketLocation, options ) {
+    assert && assert( typeof getBucketLocation === 'function' );
 
     options = _.extend( {
-      maxHorizontalContainers: IntroConstants.MAX_RANGE.max, //default max Range
       horizontalSpacing: 10, // horizontal spacing between adjacent containers
       verticalSpacing: 10, // vertical spacing  between containers
       verticalOffset: 0
     }, options );
 
-    // @private
-    this.options = options;
-
-    // @private
+    // @private {ContainerSetScreenView}
     this.model = model;
+
+    // @private {function}
+    this.getBucketLocation = getBucketLocation;
+
+    // @private TODO: don't do this!  ... maybe we can remove now? check
+    this.options = options;
 
     // @private {VBox}
     this.containerLayer = new VBox( {
@@ -76,10 +79,11 @@ define( function( require ) {
     // Initial setup
     model.containers.forEach( this.addListener );
 
-    // @private
-    this.bucketNode = new BucketNode( model.denominatorProperty, this.pieceLayer, this.onBucketDragStart.bind( this )
-      , this.createCellNode.bind( this ), model.representationProperty );
+    // @public {BucketNode} - TODO: better way?
+    this.bucketNode = new BucketNode( model.denominatorProperty, this.onBucketDragStart.bind( this ),
+                                      this.createCellNode.bind( this ), model.representationProperty );
 
+    // TODO: cleanup
     Node.call( this, {
       children: [
         new AlignBox( this.containerLayer, {
@@ -87,8 +91,7 @@ define( function( require ) {
 
           // aligns the containerNodes with respect to the top
           yAlign: 'top'
-        } ),
-        this.bucketNode
+        } )
       ]
     } );
   }
@@ -185,7 +188,7 @@ define( function( require ) {
               self.model.targetPieceToCell( piece, closestCell );
             }
             else {
-              pieceNode.destinationProperty.value = self.bucketNode.position;
+              pieceNode.destinationProperty.value = self.getBucketLocation();
             }
           } );
 
@@ -194,7 +197,7 @@ define( function( require ) {
           pieceNode.originProperty.value = this.getCellMidpoint( originCell );
         }
         else {
-          pieceNode.originProperty.value = this.bucketNode.position;
+          pieceNode.originProperty.value = this.getBucketLocation();
         }
 
         var destinationCell = piece.destinationCell;
@@ -202,7 +205,7 @@ define( function( require ) {
           pieceNode.destinationProperty.value = this.getCellMidpoint( destinationCell );
         }
         else {
-          pieceNode.destinationProperty.value = this.bucketNode.position;
+          pieceNode.destinationProperty.value = this.getBucketLocation();
         }
 
         this.pieceNodes.push( pieceNode );
@@ -288,7 +291,7 @@ define( function( require ) {
       this.containerNodes.push( containerNode );
 
       // creates new HBox within containerLayer dependent on VBox container
-      if ( currentContainerNodesLength % this.options.maxHorizontalContainers === 0 ) {
+      if ( currentContainerNodesLength % this.model.containerCountProperty.range.max === 0 ) {
         var containerHBox = new HBox( {
           spacing: this.options.horizontalSpacing,
           align: 'top'
@@ -318,7 +321,7 @@ define( function( require ) {
       this.containerHBoxes[ this.containerHBoxes.length - 1 ].removeChild( containerNode );
 
       var currentContainerLength = this.containerNodes.length;
-      if ( currentContainerLength % this.options.maxHorizontalContainers === 0 ) {
+      if ( currentContainerLength % this.model.containerCountProperty.range.max === 0 ) {
 
         // removes the last HBox within containerLayer
         var containerHBoxRemoved = this.containerHBoxes.pop();

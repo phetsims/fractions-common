@@ -17,6 +17,7 @@ define( function( require ) {
   var Circle = require( 'SCENERY/nodes/Circle' );
   var CircularContainerNode = require( 'FRACTIONS_COMMON/intro/view/CircularContainerNode' );
   var Container = require( 'FRACTIONS_COMMON/intro/model/Container' );
+  var Dimension2 = require( 'DOT/Dimension2' );
   var FractionNode = require( 'FRACTIONS_COMMON/intro/view/FractionNode' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var HBox = require( 'SCENERY/nodes/HBox' );
@@ -48,42 +49,28 @@ define( function( require ) {
 
   /**
    * @param {Property.<number>} denominatorProperty
-   * @param {Node} pieceLayer
    * @param {function} startPieceDrag
    * @param {function} createCellNode
    * @param {Property.<Representation>} representationProperty
    * @param {Object} [options]
    * @constructor
    */
-  function BucketNode( denominatorProperty, pieceLayer, startPieceDrag, createCellNode, representationProperty, options ) {
+  function BucketNode( denominatorProperty, startPieceDrag, createCellNode, representationProperty, options ) {
 
     options = _.extend( {}, options );
 
     // model of the bucket
     var bucket = new Bucket( {
-      position: IntroConstants.BUCKET_POSITION,
       baseColor: '#8eb7f2',
-      size: IntroConstants.BUCKET_SIZE,
+      size: new Dimension2( 355, 125 ),
       invertY: true
     } );
-
-    // @public (read-only) {Vector2}
-    this.position = bucket.position;
 
     // creates bucketNode front
     var bucketFront = new BucketFront( bucket, IDENTITY_TRANSFORM );
 
     // creates hole of bucketNode
     var bucketHole = new BucketHole( bucket, IDENTITY_TRANSFORM );
-
-    // creates a white rectangle beneath the bucketNode to prevent slices to appear below the bucketNode
-    var underneathRectangle = new Rectangle( {
-      rectWidth: bucketFront.width * 0.8,
-      rectHeight: 150,
-      fill: 'white',
-      centerX: bucketHole.centerX,
-      top: bucketFront.bottom - 30
-    } );
 
     // creates icon Container
     var iconContainer = new Container();
@@ -200,7 +187,7 @@ define( function( require ) {
 
     bucketFront.setLabel( label );
 
-    options.children = [ bucketHole, staticLayer, pieceLayer, underneathRectangle, bucketFront ];
+    options.children = [ bucketHole, staticLayer, bucketFront ];
     Node.call( this, options );
 
     // add listener to the bucket and static pieces

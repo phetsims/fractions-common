@@ -16,6 +16,7 @@ define( function( require ) {
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Piece = require( 'FRACTIONS_COMMON/intro/model/Piece' );
   var Property = require( 'AXON/Property' );
+  var Range = require( 'DOT/Range' );
   var Representation = require( 'FRACTIONS_COMMON/intro/model/Representation' );
 
   /**
@@ -30,7 +31,9 @@ define( function( require ) {
       representations: Representation.VALUES,
       initialNumerator: 0,
       initialDenominator: 1,
-      initialContainerCount: 1
+      initialContainerCount: 1,
+      minContainers: 1,
+      maxContainers: 6
     }, options );
 
     // @public {Array.<Representation>}
@@ -46,8 +49,11 @@ define( function( require ) {
     // @public {Property.<number>} - If a fraction is N/D, the numerator is the D
     this.denominatorProperty = new NumberProperty( options.initialDenominator );
 
-    // @public {Property.<number>} - What is the maximum value the fraction can have?
-    this.containerCountProperty = new NumberProperty( options.initialContainerCount );
+    // @public {NumberProperty} - What is the maximum value the fraction can have?
+    this.containerCountProperty = new NumberProperty( options.initialContainerCount, {
+      range: new Range( options.minContainers, options.maxContainers ),
+      numberType: 'Integer'
+    } );
 
     // @public {ObservableArray.<Container>}
     this.containers = new ObservableArray();

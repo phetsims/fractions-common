@@ -13,7 +13,6 @@ define( function( require ) {
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Range = require( 'DOT/Range' );
-  var Vector2 = require( 'DOT/Vector2' );
 
   return fractionsCommon.register( 'IntroConstants', {
 
@@ -29,9 +28,6 @@ define( function( require ) {
     // constants for Cake
     CAKE_HEIGHT: 120,
 
-    // @public {Range} - Possible number of active containers
-    MAX_RANGE: new Range( 1, 6 ),
-
     // @public {Range}
     DENOMINATOR_RANGE: new Range( 1, 8 ),
 
@@ -41,11 +37,7 @@ define( function( require ) {
 
     // @public {number}
     CIRCULAR_RADIUS: 75,
-
-    // Constants for bucketNode
-    BUCKET_POSITION: new Vector2( 200, 350 ),
-    BUCKET_SIZE: new Dimension2( 355, 125 ),
-
+    
     // Constants for fraction node and fraction with spinner
     TEXT_SIZE: new PhetFont( 110 ),
     DIVIDING_LINE_LENGTH: 150,
