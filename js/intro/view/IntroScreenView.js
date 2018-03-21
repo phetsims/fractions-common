@@ -42,13 +42,11 @@ define( function( require ) {
 
     var self = this;
 
-    ScreenView.call( this );
-
-    // fix bugs of some kind. Talk to Jonathon. I think their is an issue somewhere else TODO: fix this once the other bug is fix
-    this.preventFit = true;
+    ScreenView.call( this, {
+      preventFit: true
+    } );
 
     // representation panel at the top of the simulation
-
     var representationPanel = new RepresentationPanel( model.representationProperty, {
       centerX: this.layoutBounds.centerX,
       y: 10

@@ -20,8 +20,20 @@ define( function( require ) {
     NUMBER_LINE: 'NUMBER_LINE'
   };
 
+  fractionsCommon.register( 'Representation', Representation );
+
+  // @public {Array.<Representation>} - All values the enumeration can take.
+  Representation.VALUES = [
+    Representation.CIRCLE,
+    Representation.HORIZONTAL_BAR,
+    Representation.VERTICAL_BAR,
+    Representation.BEAKER,
+    Representation.CAKE,
+    Representation.NUMBER_LINE
+  ];
+
   // verify that enum is immutable, without the runtime penalty in production code
   if ( assert ) { Object.freeze( Representation ); }
 
-  return fractionsCommon.register( 'Representation', Representation );
+  return Representation;
 } );
