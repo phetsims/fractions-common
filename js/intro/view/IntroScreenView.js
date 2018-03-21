@@ -68,7 +68,7 @@ define( function( require ) {
     // layout
     var margin = FractionsCommonConstants.PANEL_MARGIN;
     this.resetAllButton.rightBottom = this.layoutBounds.rightBottom.plusXY( -margin, -margin );
-    this.representationPanel.leftTop = this.layoutBounds.leftTop.plusXY( margin + model.allowMixedNumbers ? 100 : 0, margin );
+    this.representationPanel.leftTop = this.layoutBounds.leftTop.plusXY( margin + ( model.allowMixedNumbers ? 100 : 0 ), margin );
     maxPanel.rightTop = this.layoutBounds.rightTop.plusXY( -margin, margin );
     this.viewContainer.translation = new Vector2( this.representationPanel.centerX, this.representationPanel.bottom + 60 );
     // TODO: factor out bucket offset?

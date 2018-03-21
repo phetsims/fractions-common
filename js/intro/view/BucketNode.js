@@ -133,8 +133,7 @@ define( function( require ) {
         bucketIcon = new BeakerNode( 1, denominatorProperty.value, {
           fullHeight: IntroConstants.BEAKER_HEIGHT / 4,
           xRadius: 10,
-          yRadius: 3,
-          tickWidth: 1
+          yRadius: 3
         } );
         bucketIconBackground = new Node();
         break;

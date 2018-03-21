@@ -23,7 +23,7 @@ define( function( require ) {
    */
   function IntroModel( allowMixedNumbers, options ) {
     options = _.extend( {
-      maxContainers: allowMixedNumbers ? 4 : 6
+      maxContainers: allowMixedNumbers ? 4 : 5
     }, options );
 
     ContainerSetModel.call( this, options );
