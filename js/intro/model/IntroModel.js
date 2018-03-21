@@ -22,9 +22,10 @@ define( function( require ) {
    * @constructor
    * @extends {Object}
    *
+   * @param {boolean} allowMixedNumbers
    * @param {Object} [options]
    */
-  function IntroModel( options ) {
+  function IntroModel( allowMixedNumbers, options ) {
 
     options = _.extend( {
       initialNumerator: 0,

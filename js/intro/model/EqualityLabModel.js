@@ -11,23 +11,21 @@ define( function( require ) {
   // modules
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var IntroModel = require( 'FRACTIONS_COMMON/intro/model/IntroModel' );
 
   /**
    * @constructor
    * @extends {Object}
    */
   function EqualityLabModel() {
+    IntroModel.call( this, true, {
+      initialContainerCount: 4
+    } );
   }
 
   fractionsCommon.register( 'EqualityLabModel', EqualityLabModel );
 
-  return inherit( Object, EqualityLabModel, {
-    reset: function() {
-
-    },
-
-    step: function( dt ) {
-      
-    }
+  return inherit( IntroModel, EqualityLabModel, {
+    // TODO: reset override needed?
   } );
 } );

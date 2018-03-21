@@ -15,8 +15,13 @@ define( function( require ) {
   /**
    * @constructor
    * @extends {Object}
+   *
+   * @param {boolean} allowMixedNumbers
    */
-  function BuildingLabModel() {
+  function BuildingLabModel( allowMixedNumbers ) {
+
+    // @public {boolean}
+    this.allowMixedNumbers = allowMixedNumbers;
   }
 
   fractionsCommon.register( 'BuildingLabModel', BuildingLabModel );
