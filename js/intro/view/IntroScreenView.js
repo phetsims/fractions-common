@@ -109,7 +109,7 @@ define( function( require ) {
         self.currentView = new NumberLineView(
           model.numeratorProperty,
           model.denominatorProperty,
-          model.maxProperty,
+          model.containerCountProperty,
           new NumberProperty( 1 ), { x: 25 - self.layoutBounds.centerX, y: 60 }
         );
       }
@@ -131,7 +131,7 @@ define( function( require ) {
     var fractionWithSpinners = new FractionWithSpinners(
       model.numeratorProperty,
       model.denominatorProperty,
-      model.maxProperty, {
+      model.containerCountProperty, {
         bottom: self.layoutBounds.bottom - 10,
         left: self.layoutBounds.left + 30
       } );
@@ -165,7 +165,7 @@ define( function( require ) {
 
     // create and add maxSpinner at the right top of the screen
     this.addChild( new MaxSpinner(
-      model.maxProperty, {
+      model.containerCountProperty, {
         right: this.layoutBounds.right - 20,
         top: this.layoutBounds.top + 25
       } ) );

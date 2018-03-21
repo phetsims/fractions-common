@@ -23,14 +23,14 @@ define( function( require ) {
    * @extends {HBox}
    * @param {Property.<number>} numeratorProperty
    * @param {Property.<number>} denominatorProperty
-   * @param {Property.<number>} maxProperty
+   * @param {Property.<number>} containerCountProperty
    * @param {Object} [options]
    * @constructor
    */
-  function FractionWithSpinners( numeratorProperty, denominatorProperty, maxProperty, options ) {
+  function FractionWithSpinners( numeratorProperty, denominatorProperty, containerCountProperty, options ) {
 
     // convenience variable
-    var modelProperties = [ numeratorProperty, denominatorProperty, maxProperty ];
+    var modelProperties = [ numeratorProperty, denominatorProperty, containerCountProperty ];
 
     // create properties to enable/disable spinners.
     var canIncreaseNumeratorProperty = new DerivedProperty( modelProperties,

@@ -30,12 +30,7 @@ define( function( require ) {
 
     // Called when a fill property changes
     function fillChange( filled ) {
-      if ( filled ) {
-        self.filledCellCountProperty.value += 1;
-      }
-      else {
-        self.filledCellCountProperty.value -= 1;
-      }
+      self.filledCellCountProperty.value += filled ? 1 : -1;
     }
 
     // When a cell is added, listen to when its fill changes

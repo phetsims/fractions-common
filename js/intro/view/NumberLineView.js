@@ -37,7 +37,7 @@ define( function( require ) {
   /**
    * @param {Property.<number>} numeratorProperty
    * @param {Property.<number>} denominatorProperty
-   * @param {Property.<number>} maxProperty - control the upper bound of the number line
+   * @param {Property.<number>} containerCountProperty - control the upper bound of the number line
    * @param {Property.<number>} multiplicationFactorProperty - ratio of the tick on the
    *                                                            upper and lower side of the number line in order to
    *                                                            increase  number of tick on the bottom of the number
@@ -47,7 +47,7 @@ define( function( require ) {
    */
   function NumberLineView( numeratorProperty,
                            denominatorProperty,
-                           maxProperty,
+                           containerCountProperty,
                            multiplicationFactorProperty,
                            options ) {
 
@@ -88,7 +88,7 @@ define( function( require ) {
     var segmentLength = IntroConstants.NUMBER_LINE_WIDTH / IntroConstants.MAX_RANGE.max;
 
     // Updates the minor and major ticks as well as the main number line
-    var updateTicksMultilink = Property.multilink( [ maxProperty, denominatorProperty ], function( max, denominator ) {
+    var updateTicksMultilink = Property.multilink( [ containerCountProperty, denominatorProperty ], function( max, denominator ) {
 
       // sets the length of the main number line
       mainNumberLine.x2 = segmentLength * max;
@@ -206,7 +206,7 @@ define( function( require ) {
         // recall the x=0, y=0 is conveniently set at the zero of the number line
         // no need to update the position of any view elements since the numeratorProperty has callbacks to them
         numeratorProperty.value = Util.clamp( Util.roundSymmetric( x / tickMarkSeparation ),
-          0, denominatorProperty.value * maxProperty.value );
+          0, denominatorProperty.value * containerCountProperty.value );
       };
 
       // add a drag handler to the main number line

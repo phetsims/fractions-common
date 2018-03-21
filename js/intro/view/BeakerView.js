@@ -60,7 +60,7 @@ define( function( require ) {
     model.pieces.addItemAddedListener( this.pieceAddedListener );
     model.pieces.addItemRemovedListener( this.pieceRemovedListener );
     model.denominatorProperty.lazyLink( this.clearListener );
-    model.maxProperty.lazyLink( this.clearListener );
+    model.containerCountProperty.lazyLink( this.clearListener );
 
     // Initial setup
     model.containers.forEach( this.addListener );
@@ -379,7 +379,7 @@ define( function( require ) {
       this.model.pieces.removeItemAddedListener( this.pieceAddedListener );
       this.model.pieces.removeItemRemovedListener( this.pieceRemovedListener );
       this.model.denominatorProperty.unlink( this.clearListener );
-      this.model.maxProperty.unlink( this.clearListener );
+      this.model.containerCountProperty.unlink( this.clearListener );
 
       Node.prototype.dispose.call( this );
     }

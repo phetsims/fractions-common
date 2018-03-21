@@ -25,11 +25,11 @@ define( function( require ) {
   /**
    * @extends {Node}
    *
-   * @param {Property.<number>} maxProperty
+   * @param {Property.<number>} containerCountProperty
    * @param {Object} [options]
    * @constructor
    */
-  function MaxSpinner( maxProperty, options ) {
+  function MaxSpinner( containerCountProperty, options ) {
 
     options = _.extend( {
       font: new PhetFont( 32 ),
@@ -37,19 +37,19 @@ define( function( require ) {
       spacing: 3 // spacing for spinner
     }, options );
 
-    var maxUpEnabledProperty = new DerivedProperty( [ maxProperty ],
+    var maxUpEnabledProperty = new DerivedProperty( [ containerCountProperty ],
       function( maxNumberOfUnits ) {
         return maxNumberOfUnits < IntroConstants.MAX_RANGE.max;
       } );
-    var maxDownEnabledProperty = new DerivedProperty( [ maxProperty ],
+    var maxDownEnabledProperty = new DerivedProperty( [ containerCountProperty ],
       function( maxNumberOfUnits ) {
         return maxNumberOfUnits > IntroConstants.MAX_RANGE.min;
       } );
 
-    var maxUpButtonListener = function() {maxProperty.value++;};
-    var maxDownButtonListener = function() {maxProperty.value--;};
+    var maxUpButtonListener = function() {containerCountProperty.value++;};
+    var maxDownButtonListener = function() {containerCountProperty.value--;};
 
-    // creates spinner that is linked to the maxProperty
+    // creates spinner that is linked to the containerCountProperty
     var maxValueSpinner = new RoundSpinner( maxUpButtonListener, maxDownButtonListener,
       maxUpEnabledProperty, maxDownEnabledProperty, {
         radius: options.radius,
@@ -57,9 +57,9 @@ define( function( require ) {
       } );
 
     // creates the maxValueText
-    var maxValueText = new Text( maxProperty.value, { font: options.font } );
+    var maxValueText = new Text( containerCountProperty.value, { font: options.font } );
 
-    maxProperty.link( function( value ) {
+    containerCountProperty.link( function( value ) {
       maxValueText.text = value;
 
       // moves maxValueText to the right of the maxValueSpinner

@@ -21,20 +21,28 @@ define( function( require ) {
   /**
    * @constructor
    * @extends {Object}
+   *
+   * @param {Object} [options]
    */
-  function IntroModel() {
+  function IntroModel( options ) {
+
+    options = _.extend( {
+      initialNumerator: 0,
+      initialDenominator: 1,
+      initialContainerCount: 1
+    }, options );
 
     // @public {Property.<Representation>}
     this.representationProperty = new Property( Representation.CIRCLE );
 
     // @public {Property.<number>} - If a fraction is N/D, the numerator is the N
-    this.numeratorProperty = new NumberProperty( 0 );
+    this.numeratorProperty = new NumberProperty( options.initialNumerator );
 
     // @public {Property.<number>} - If a fraction is N/D, the numerator is the D
-    this.denominatorProperty = new NumberProperty( 1 );
+    this.denominatorProperty = new NumberProperty( options.initialDenominator );
 
     // @public {Property.<number>} - What is the maximum value the fraction can have?
-    this.maxProperty = new NumberProperty( 1 );
+    this.containerCountProperty = new NumberProperty( options.initialContainerCount );
 
     // @public {ObservableArray.<Container>}
     this.containers = new ObservableArray();
@@ -47,13 +55,13 @@ define( function( require ) {
     this.pieces = new ObservableArray();
 
     // initialize the model with the appropriate number of containers and number of filled cells
-    this.onMaxChange( this.maxProperty.value, 0 );
+    this.onMaxChange( this.containerCountProperty.value, 0 );
     this.onNumeratorChange( this.numeratorProperty.value, 0 );
 
     // Hook up listeners for external notifications
     this.numeratorProperty.lazyLink( this.onNumeratorChange.bind( this ) );
     this.denominatorProperty.lazyLink( this.onDenominatorChange.bind( this ) );
-    this.maxProperty.lazyLink( this.onMaxChange.bind( this ) );
+    this.containerCountProperty.lazyLink( this.onMaxChange.bind( this ) );
   }
 
   fractionsCommon.register( 'IntroModel', IntroModel );
@@ -148,7 +156,7 @@ define( function( require ) {
     reset: function() {
       this.numeratorProperty.reset();
       this.denominatorProperty.reset();
-      this.maxProperty.reset();
+      this.containerCountProperty.reset();
       this.representationProperty.reset();
     },
 
