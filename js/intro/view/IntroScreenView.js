@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var AlignBox = require( 'SCENERY/nodes/AlignBox' );
   var ContainerSetScreenView = require( 'FRACTIONS_COMMON/intro/view/ContainerSetScreenView' );
   var FractionNode = require( 'FRACTIONS_COMMON/intro/view/FractionNode' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
@@ -40,12 +41,15 @@ define( function( require ) {
     this.addChild( mixedFractionNode );
     model.showMixedNumbersProperty.linkAttribute( mixedFractionNode, 'visible' );
 
-    var maxPanel = new Panel( new MaxSpinner( model.containerCountProperty, {
+    var maxPanel = new Panel( new AlignBox( new MaxSpinner( model.containerCountProperty, {
       right: this.layoutBounds.right - 20,
       top: this.layoutBounds.top + 25
     } ), {
+      group: this.representationPanel.alignGroup
+    } ), {
       fill: FractionsCommonColorProfile.panelBackgroundProperty,
-      xMargin: 12
+      xMargin: 12,
+      yMargin: 10
     } );
     this.addChild( maxPanel );
 

@@ -32,8 +32,8 @@ define( function( require ) {
   function MaxSpinner( containerCountProperty, options ) {
 
     options = _.extend( {
-      font: new PhetFont( 32 ),
-      radius: 11, // radius of the button
+      font: new PhetFont( 24 ),
+      radius: 15, // radius of the button
       spacing: 3 // spacing for spinner
     }, options );
 

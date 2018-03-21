@@ -10,6 +10,8 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var AlignBox = require( 'SCENERY/nodes/AlignBox' );
+  var AlignGroup = require( 'SCENERY/nodes/AlignGroup' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -28,17 +30,24 @@ define( function( require ) {
 
     options = _.extend( {
       fill: FractionsCommonColorProfile.panelBackgroundProperty,
+      // TODO: factor out with MaxSpinner's panel
       xMargin: 10,
       yMargin: 10
     }, options );
 
-    var content = new RadioButtonGroup( property, items, {
+    // @public {AlignGroup}
+    this.alignGroup = new AlignGroup( {
+      matchHorizontal: false
+    } );
+
+    var content = new AlignBox( new RadioButtonGroup( property, items, {
       orientation: 'horizontal',
       baseColor: 'white',
-      cornerRadius: 10,
       spacing: 12,
       buttonContentXMargin: 5,
       buttonContentYMargin: 10
+    } ), {
+      group: this.alignGroup
     } );
 
     Panel.call( this, content, options );
