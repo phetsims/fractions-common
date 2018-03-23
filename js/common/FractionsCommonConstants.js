@@ -12,7 +12,11 @@ define( function( require ) {
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
   var FractionsCommonConstants = {
-    PANEL_MARGIN: 10
+    PANEL_MARGIN: 10,
+
+    SHAPE_CIRCLE_RADIUS: 50,
+    SHAPE_VERTICAL_BAR_WIDTH: 100,
+    SHAPE_VERTICAL_BAR_HEIGHT: 75
   };
 
   fractionsCommon.register( 'FractionsCommonConstants', FractionsCommonConstants );

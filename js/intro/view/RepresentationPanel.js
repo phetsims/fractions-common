@@ -20,7 +20,7 @@ define( function( require ) {
   var Path = require( 'SCENERY/nodes/Path' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var Representation = require( 'FRACTIONS_COMMON/intro/model/Representation' );
+  var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   var Shape = require( 'KITE/Shape' );
   var Text = require( 'SCENERY/nodes/Text' );
 

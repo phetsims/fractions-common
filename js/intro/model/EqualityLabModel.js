@@ -14,7 +14,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var NumberProperty = require( 'AXON/NumberProperty' );
   var Property = require( 'AXON/Property' );
-  var Representation = require( 'FRACTIONS_COMMON/intro/model/Representation' );
+  var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
 
   /**
    * @constructor

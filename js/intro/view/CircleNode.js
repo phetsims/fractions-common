@@ -29,14 +29,13 @@ define( function( require ) {
     assert && assert( index < denominator );
 
     options = _.extend( {
-        fill: 'rgb(140, 198, 61)',
-        stroke: 'black',
-        dropShadow: false,
-        dropShadowOffset: 5,
-        lineWidth: 2,
-        isIcon: false
-      },
-      options );
+      fill: 'rgb(140, 198, 61)',
+      stroke: 'black',
+      dropShadow: false,
+      dropShadowOffset: 5,
+      lineWidth: 2,
+      isIcon: false
+    }, options );
     options.lineWidth = options.isIcon ? 1 : 2;
 
     // @private

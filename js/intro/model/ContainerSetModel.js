@@ -17,7 +17,7 @@ define( function( require ) {
   var Piece = require( 'FRACTIONS_COMMON/intro/model/Piece' );
   var Property = require( 'AXON/Property' );
   var Range = require( 'DOT/Range' );
-  var Representation = require( 'FRACTIONS_COMMON/intro/model/Representation' );
+  var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
 
   /**
    * @constructor

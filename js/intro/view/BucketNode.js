@@ -29,7 +29,7 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/RectangularContainerNode' );
-  var Representation = require( 'FRACTIONS_COMMON/intro/model/Representation' );
+  var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants

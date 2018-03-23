@@ -19,7 +19,7 @@ define( function( require ) {
   var NumberLineSceneNode = require( 'FRACTIONS_COMMON/intro/view/NumberLineSceneNode' );
   var NumberProperty = require( 'AXON/NumberProperty' );
   var RectangularSceneNode = require( 'FRACTIONS_COMMON/intro/view/RectangularSceneNode' );
-  var Representation = require( 'FRACTIONS_COMMON/intro/model/Representation' );
+  var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   var RepresentationPanel = require( 'FRACTIONS_COMMON/intro/view/RepresentationPanel' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );

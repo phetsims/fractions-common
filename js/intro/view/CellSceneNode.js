@@ -1,7 +1,7 @@
 // Copyright 2017, University of Colorado Boulder
 
 /**
- * create a cell with listener for display on the screen inside the bucket and containers
+ * TODO: doc
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -87,6 +87,7 @@ define( function( require ) {
     Node.call( this, {
       children: [
         new AlignBox( this.containerLayer, {
+          //TODO: WTF? This is tiny?
           alignBounds: Bounds2.point( 0, options.verticalOffset ),
 
           // aligns the containerNodes with respect to the top
