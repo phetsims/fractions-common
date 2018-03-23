@@ -24,7 +24,10 @@ define( function( require ) {
 
     shapeStackFill: { default: Color.WHITE },
     shapeStackStroke: { default: Color.BLACK },
-    shapeStackSeparatorStroke: { default: new Color( 170, 170, 170 ) }
+    shapeStackSeparatorStroke: { default: new Color( 170, 170, 170 ) },
+
+    radioStroke: { default: Color.BLACK },
+    radioBase: { default: Color.WHITE }
   }, [ 'default' ] );
 
   fractionsCommon.register( 'FractionsCommonColorProfile', FractionsCommonColorProfile );
