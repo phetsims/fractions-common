@@ -49,7 +49,7 @@ define( function( require ) {
         if ( currentShapePiece === shapePiece ) {
           return rotation;
         }
-        rotation += currentShapePiece.fraction.getValue();
+        rotation += -2 * Math.PI * currentShapePiece.fraction.getValue();
       }
       throw new Error( 'ShapePiece not found' );
     }

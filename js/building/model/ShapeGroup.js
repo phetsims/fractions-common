@@ -15,6 +15,7 @@ define( function( require ) {
   var NumberProperty = require( 'AXON/NumberProperty' );
   var Property = require( 'AXON/Property' );
   var Range = require( 'DOT/Range' );
+  var ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
   var Vector2 = require( 'DOT/Vector2' );
 
   /**
@@ -43,5 +44,13 @@ define( function( require ) {
 
   fractionsCommon.register( 'ShapeGroup', ShapeGroup );
 
-  return inherit( Object, ShapeGroup );
+  return inherit( Object, ShapeGroup, {
+    // TODO: doc
+    increaseContainerCount: function() {
+      this.shapeContainers.push( new ShapeContainer( this.partitionDenominatorProperty, this.representation ) );
+    },
+    decreaseContainerCount: function() {
+      this.shapeContainers.pop();
+    }
+  } );
 } );

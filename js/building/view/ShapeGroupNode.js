@@ -11,11 +11,18 @@ define( function( require ) {
   // modules
   var DerivedProperty = require( 'AXON/DerivedProperty' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   var HBox = require( 'SCENERY/nodes/HBox' );
+  var VBox = require( 'SCENERY/nodes/VBox' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var MutableOptionsNode = require( 'SUN/MutableOptionsNode' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var ObservableArray = require( 'AXON/ObservableArray' );
+  var Path = require( 'SCENERY/nodes/Path' );
   var RoundArrowButton = require( 'FRACTIONS_COMMON/common/view/RoundArrowButton' );
+  var RoundPushButton = require( 'SUN/buttons/RoundPushButton' );
+  var Shape = require( 'KITE/Shape' );
   var ShapeContainerNode = require( 'FRACTIONS_COMMON/building/view/ShapeContainerNode' );
   var ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
 
@@ -42,8 +49,8 @@ define( function( require ) {
     // @private {Node}
     this.shapeContainerLayer = new Node();
 
-    // @private {Array.<ShapeContainerNode>}
-    this.shapeContainerNodes = [];
+    // @private {ObservableArray.<ShapeContainerNode>}
+    this.shapeContainerNodes = new ObservableArray();
 
     this.addChild( this.shapeContainerLayer );
 
@@ -53,6 +60,49 @@ define( function( require ) {
     shapeGroup.shapeContainers.forEach( this.addShapeContainer.bind( this ) );    
 
     assert && assert( shapeGroup.shapeContainers.length > 0 );
+
+    // TODO: reduplicate?
+    var lineSize = 8;
+    var addContainerButton = new MutableOptionsNode( RoundPushButton, [], {
+      content: new Path( new Shape().moveTo( -lineSize, 0 ).lineTo( lineSize, 0 ).moveTo( 0, -lineSize ).lineTo( 0, lineSize ), {
+        stroke: 'black',
+        lineCap: 'round',
+        lineWidth: 3.75
+      } ),
+      radius: FractionsCommonConstants.ROUND_BUTTON_RADIUS,
+      listener: function() {
+        shapeGroup.increaseContainerCount();
+      }
+    }, {
+      baseColor: FractionsCommonColorProfile.greenRoundArrowButtonProperty
+    } );
+    var removeContainerButton = new MutableOptionsNode( RoundPushButton, [], {
+      content: new Path( new Shape().moveTo( -lineSize, 0 ).lineTo( lineSize, 0 ), {
+        stroke: 'black',
+        lineCap: 'round',
+        lineWidth: 3.75
+      } ),
+      radius: FractionsCommonConstants.ROUND_BUTTON_RADIUS,
+      listener: function() {
+        shapeGroup.decreaseContainerCount();
+      }
+    }, {
+      baseColor: FractionsCommonColorProfile.redRoundArrowButtonProperty
+    } );
+
+    shapeGroup.shapeContainers.lengthProperty.link( function( numShapeContainers ) {
+      addContainerButton.visible = numShapeContainers < FractionsCommonConstants.MAX_SHAPE_CONTAINERS;
+      removeContainerButton.visible = numShapeContainers > 1;
+    } );
+
+    // @private {Node}
+    this.rightButtonBox = new VBox( {
+      spacing: CONTAINER_PADDING,
+      children: [ addContainerButton, removeContainerButton ],
+      centerY: 0
+    } );
+    this.addChild( this.rightButtonBox );
+    this.updateRightButtonPosition();
 
     this.addChild( new HBox( {
       spacing: CONTAINER_PADDING,
@@ -76,7 +126,7 @@ define( function( require ) {
           }
         } )
       ],
-      top: this.shapeContainerNodes[ 0 ].bottom + CONTAINER_PADDING - 3,
+      top: this.shapeContainerNodes.get( 0 ).bottom + CONTAINER_PADDING - 3,
       centerX: 0
     } ) );
 
@@ -86,6 +136,15 @@ define( function( require ) {
   fractionsCommon.register( 'ShapeGroupNode', ShapeGroupNode );
 
   return inherit( Node, ShapeGroupNode, {
+    // TODO: doc
+    updateRightButtonPosition: function() {
+      // TODO;
+      if ( this.rightButtonBox ) {
+        // Subtracts 0.5 since our containers have their origins in their centers
+        this.rightButtonBox.left = ( this.shapeContainerNodes.length - 0.5 ) * ( FractionsCommonConstants.SHAPE_WIDTH + CONTAINER_PADDING );
+      }
+    },
+
     /**
      * Adds a ShapeContainer's view
      * @private
@@ -98,6 +157,7 @@ define( function( require ) {
       } );
       this.shapeContainerNodes.push( shapeContainerNode );
       this.shapeContainerLayer.addChild( shapeContainerNode );
+      this.updateRightButtonPosition();
     },
 
     /**
@@ -107,13 +167,14 @@ define( function( require ) {
      * @param {ShapeContainer} shapeContainer
      */
     removeShapeContainer: function( shapeContainer ) {
-      var shapeContainerNode = _.find( this.shapeContainerNodes, function( shapeContainerNode ) {
+      var shapeContainerNode = this.shapeContainerNodes.find( function( shapeContainerNode ) {
         return shapeContainerNode.shapeContainer === shapeContainer;
       } );
       assert && assert( shapeContainerNode );
 
       this.shapeContainerNodes.remove( shapeContainerNode );
       this.shapeContainerLayer.removeChild( shapeContainerNode );
+      this.updateRightButtonPosition();
     }
   } );
 } );

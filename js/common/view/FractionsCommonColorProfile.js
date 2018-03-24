@@ -34,7 +34,8 @@ define( function( require ) {
     radioBase: { default: Color.WHITE },
 
     yellowRoundArrowButton: { default: new Color( '#fefd53' ) },
-    greenRoundArrowButton: { default: new Color( 134, 194, 51 ) }
+    greenRoundArrowButton: { default: new Color( 134, 194, 51 ) },
+    redRoundArrowButton: { default: new Color( 195, 71, 26 ) }
   }, [ 'default' ] );
 
   fractionsCommon.register( 'FractionsCommonColorProfile', FractionsCommonColorProfile );

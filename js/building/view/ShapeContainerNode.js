@@ -39,7 +39,7 @@ define( function( require ) {
 
     Node.call( this );
 
-    // @private {ShapeContainer}
+    // @public {ShapeContainer}
     this.shapeContainer = shapeContainer;
 
     // @private {Array.<ShapePieceNode>}
