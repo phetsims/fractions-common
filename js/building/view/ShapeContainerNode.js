@@ -66,8 +66,9 @@ define( function( require ) {
           // TODO: can we share this code with ShapeStackNode? One is stroked and has a separate color, etc.
           for ( var i = 0; i < denominator; i++ ) {
             var angle = -i * 2 * Math.PI / denominator;
-            separatorShape.moveTo( 0, 0 ).lineTo( CIRCLE_RADIUS * Math.cos( angle ), CIRCLE_RADIUS * Math.sin( angle ) );
-            // separatorShape.moveTo( 0.01 * Math.cos( angle ), 0.01 * Math.sin( angle ) ).lineTo( CIRCLE_RADIUS * Math.cos( angle ), CIRCLE_RADIUS * Math.sin( angle ) );
+            // TODO: remove commented out code once figured out (Chrome bug?)
+            // separatorShape.moveTo( 0, 0 ).lineTo( CIRCLE_RADIUS * Math.cos( angle ), CIRCLE_RADIUS * Math.sin( angle ) );
+            separatorShape.moveTo( 0.01 * Math.cos( angle ), 0.01 * Math.sin( angle ) ).lineTo( CIRCLE_RADIUS * Math.cos( angle ), CIRCLE_RADIUS * Math.sin( angle ) );
           }
           separatorPath.shape = separatorShape;
         }
