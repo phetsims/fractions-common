@@ -74,10 +74,13 @@ define( function( require ) {
       throw new Error( 'Unsupported representation for ShapePieceNode: ' + shapePiece.representation );
     }
 
+    var centroid = shapePiece.getCentroid();
+
     // TODO: hmm, we don't want this on some. Maybe just have it for draggable ones?
     shapePiece.positionProperty.lazyLink( function( position ) {
       // TODO: add an offset for approximately where our "center" looks
-      self.translation = position;
+      // TODO: No seriously, why is the 0.5 needed here? Find out, it seems wrong.
+      self.translation = position.minus( centroid.timesScalar( 0.5 ) );
     } );
 
     // @public {DragListener}

@@ -13,6 +13,8 @@ define( function( require ) {
 
   var FractionsCommonConstants = {
     PANEL_MARGIN: 10,
+
+    // TODO: some renaming would help
     SHAPE_WIDTH: 100,
     SHAPE_VERTICAL_BAR_HEIGHT: 75,
     ROUND_BUTTON_RADIUS: 15,
