@@ -23,6 +23,9 @@ define( function( require ) {
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
+  var ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
+  var ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
+  var ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
   var ShapeStackNode = require( 'FRACTIONS_COMMON/building/view/ShapeStackNode' );
@@ -84,6 +87,21 @@ define( function( require ) {
     var shapePanel = new Panel( shapeBox );
     shapePanel.leftTop = this.layoutBounds.leftTop.plusXY( PANEL_MARGIN, PANEL_MARGIN );
     this.addChild( shapePanel );
+
+
+    var group = new ShapeGroup( Representation.CIRCLE );
+    var container1 = new ShapeContainer( group.partitionDenominatorProperty, group.representation );
+    var container2 = new ShapeContainer( group.partitionDenominatorProperty, group.representation );
+    var piece1 = new ShapePiece( new Fraction( 1, 3 ), Representation.CIRCLE, FractionsCommonColorProfile.labCircleFillProperty );
+    var piece2 = new ShapePiece( new Fraction( 1, 4 ), Representation.CIRCLE, FractionsCommonColorProfile.labCircleFillProperty );
+    container1.shapePieces.push( piece1 );
+    container1.shapePieces.push( piece2 );
+    group.shapeContainers.push( container1 );
+    group.shapeContainers.push( container2 );
+
+    this.addChild( new ShapeGroupNode( group, {
+      center: this.layoutBounds.center
+    } ) );
 
     // Reset All button
     var resetAllButton = new ResetAllButton( {

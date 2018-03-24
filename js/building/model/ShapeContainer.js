@@ -17,9 +17,13 @@ define( function( require ) {
    * @constructor
    * @extends {Object}
    *
+   * @param {Property.<number>} partitionDenominatorProperty
    * @param {Representation} representation
    */
-  function ShapeContainer( representation ) {
+  function ShapeContainer( partitionDenominatorProperty, representation ) {
+
+    // @public {Property.<number>}
+    this.partitionDenominatorProperty = partitionDenominatorProperty;
 
     // @public {Representation}
     this.representation = representation;
@@ -30,5 +34,24 @@ define( function( require ) {
 
   fractionsCommon.register( 'ShapeContainer', ShapeContainer );
 
-  return inherit( Object, ShapeContainer );
+  return inherit( Object, ShapeContainer, {
+    /**
+     * Returns the rotation for a given ShapePiece.
+     * @public
+     *
+     * @param {ShapePiece} shapePiece
+     * @returns {number}
+     */
+    getShapePieceRotation: function( shapePiece ) {
+      var rotation = 0;
+      for ( var i = 0; i < this.shapePieces.length; i++ ) {
+        var currentShapePiece = this.shapePieces.get( i );
+        if ( currentShapePiece === shapePiece ) {
+          return rotation;
+        }
+        rotation += currentShapePiece.fraction.getValue();
+      }
+      throw new Error( 'ShapePiece not found' );
+    }
+  } );
 } );

@@ -22,8 +22,8 @@ define( function( require ) {
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
 
   // constants
-  var CIRCLE_RADIUS = FractionsCommonConstants.SHAPE_CIRCLE_RADIUS;
-  var BAR_WIDTH = FractionsCommonConstants.SHAPE_VERTICAL_BAR_WIDTH;
+  var CIRCLE_RADIUS = FractionsCommonConstants.SHAPE_WIDTH / 2;
+  var BAR_WIDTH = FractionsCommonConstants.SHAPE_WIDTH;
   var BAR_HEIGHT = FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT;
 
   /**

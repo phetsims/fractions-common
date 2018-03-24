@@ -26,8 +26,15 @@ define( function( require ) {
     shapeStackStroke: { default: Color.BLACK },
     shapeStackSeparatorStroke: { default: new Color( 170, 170, 170 ) },
 
+    shapeContainerFill: { default: Color.WHITE },
+    shapeContainerStroke: { default: Color.BLACK },
+    shapeContainerPartition: { default: new Color( 170, 170, 170 ) },
+
     radioStroke: { default: Color.BLACK },
-    radioBase: { default: Color.WHITE }
+    radioBase: { default: Color.WHITE },
+
+    yellowRoundArrowButton: { default: new Color( '#fefd53' ) },
+    greenRoundArrowButton: { default: new Color( 134, 194, 51 ) }
   }, [ 'default' ] );
 
   fractionsCommon.register( 'FractionsCommonColorProfile', FractionsCommonColorProfile );

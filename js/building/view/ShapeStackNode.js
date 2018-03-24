@@ -24,8 +24,8 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var CIRCLE_RADIUS = FractionsCommonConstants.SHAPE_CIRCLE_RADIUS;
-  var BAR_WIDTH = FractionsCommonConstants.SHAPE_VERTICAL_BAR_WIDTH;
+  var CIRCLE_RADIUS = FractionsCommonConstants.SHAPE_WIDTH / 2;
+  var BAR_WIDTH = FractionsCommonConstants.SHAPE_WIDTH;
   var BAR_HEIGHT = FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT;
   var PIECE_STACK_OFFSET = new Vector2( 4, -4 );
 

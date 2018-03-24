@@ -13,10 +13,9 @@ define( function( require ) {
 
   var FractionsCommonConstants = {
     PANEL_MARGIN: 10,
-
-    SHAPE_CIRCLE_RADIUS: 50,
-    SHAPE_VERTICAL_BAR_WIDTH: 100,
-    SHAPE_VERTICAL_BAR_HEIGHT: 75
+    SHAPE_WIDTH: 100,
+    SHAPE_VERTICAL_BAR_HEIGHT: 75,
+    ROUND_BUTTON_RADIUS: 15
   };
 
   fractionsCommon.register( 'FractionsCommonConstants', FractionsCommonConstants );
