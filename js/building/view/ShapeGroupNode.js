@@ -41,6 +41,8 @@ define( function( require ) {
   function ShapeGroupNode( shapeGroup, options ) {
     assert && assert( shapeGroup instanceof ShapeGroup );
 
+    var self = this;
+
     options = _.extend( {
       isIcon: false // TODO: cleanup?
     }, options );
@@ -147,7 +149,10 @@ define( function( require ) {
     this.dragListener = new DragListener( {
       // TODO: drag bounds
       targetNode: this,
-      locationProperty: shapeGroup.positionProperty
+      locationProperty: shapeGroup.positionProperty,
+      start: function( event ) {
+        self.moveToFront();
+      }
     } );
     this.shapeContainerLayer.addInputListener( this.dragListener );
 

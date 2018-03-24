@@ -12,6 +12,8 @@ define( function( require ) {
   var AlignBox = require( 'SCENERY/nodes/AlignBox' );
   var AlignGroup = require( 'SCENERY/nodes/AlignGroup' );
   var arrayRemove = require( 'PHET_CORE/arrayRemove' );
+  var Bounds2 = require( 'DOT/Bounds2' );
+  var DragListener = require( 'SCENERY/listeners/DragListener' );
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
@@ -21,6 +23,7 @@ define( function( require ) {
   var MutableOptionsNode = require( 'SUN/MutableOptionsNode' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
+  var Property = require( 'AXON/Property' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
@@ -41,6 +44,8 @@ define( function( require ) {
    * @param {BuildingLabModel} model
    */
   function BuildingLabScreenView( model ) {
+    var self = this;
+
     ScreenView.call( this );
 
     // TODO: Move all this code out to a named panel?
@@ -72,10 +77,32 @@ define( function( require ) {
 
     var stackAlignGroup = new AlignGroup();
     var circleStackNodes = model.circleStacks.map( function( circleStack ) {
-      return new AlignBox( new ShapeStackNode( circleStack ), { group: stackAlignGroup } );
+      var node = new ShapeStackNode( circleStack, {
+        pickable: false
+      } );
+      return new AlignBox( node, {
+        group: stackAlignGroup,
+        cursor: 'pointer',
+        inputListeners: [
+          DragListener.createForwardingListener( function( event ) {
+
+          } )
+        ]
+      } );
     } );
     var barStackNodes = model.barStacks.map( function( barStack ) {
-      return new AlignBox( new ShapeStackNode( barStack ), { group: stackAlignGroup } );
+      var node = new ShapeStackNode( barStack, {
+        pickable: false
+      } );
+      return new AlignBox( node, {
+        group: stackAlignGroup,
+        cursor: 'pointer',
+        inputListeners: [
+          DragListener.createForwardingListener( function( event ) {
+            
+          } )
+        ]
+      } );
     } );
 
     function createGroupIcon( representation ) {
@@ -83,17 +110,49 @@ define( function( require ) {
       iconGroup.increaseContainerCount();
       var iconNode = new ShapeGroupNode( iconGroup, {
         isIcon: true,
-        scale: FractionsCommonConstants.SHAPE_BUILD_SCALE
+        scale: FractionsCommonConstants.SHAPE_BUILD_SCALE,
+        pickable: false
       } );
       // TODO: better way? At least this is safe
       iconNode.localBounds = iconNode.localBounds.withMinY( iconNode.localBounds.minY - 2 * iconNode.localBounds.centerY );
-      return new AlignBox( iconNode, { group: stackAlignGroup } );
+      return new AlignBox( iconNode, {
+        group: stackAlignGroup,
+        cursor: 'pointer',
+        inputListeners: [
+          DragListener.createForwardingListener( function( event ) {
+            // TODO: encapsulation
+            var shapeGroup = new ShapeGroup( representation );
+            shapeGroup.increaseContainerCount();
+            shapeGroup.positionProperty.value = self.globalToLocalPoint( event.pointer.point );
+            model.shapeGroups.push( shapeGroup );
+            var shapeGroupNode = _.find( self.shapeGroupNodes, function( shapeGroupNode ) {
+              return shapeGroupNode.shapeGroup === shapeGroup;
+            } );
+            shapeGroupNode.dragListener.press( event, shapeGroupNode );
+          } )
+        ]
+      } );
     }
     var circleGroupIcon = createGroupIcon( Representation.CIRCLE );
     var barGroupIcon = createGroupIcon( Representation.VERTICAL_BAR );
 
+    var STACK_PADDING = 20;
+
+    // TODO: a better way of doing this. maybe make it an AlignBox feature
+    function linkPointerAreas( node ) {
+      Property.multilink( [ stackAlignGroup.maxWidthProperty, stackAlignGroup.maxHeightProperty ], function( width, height ) {
+        var bounds = new Bounds2( -STACK_PADDING / 2, 0, width + STACK_PADDING / 2, height );
+        node.mouseArea = bounds;
+        node.touchArea = bounds;
+      } );
+    }
+    circleStackNodes.forEach( linkPointerAreas );
+    barStackNodes.forEach( linkPointerAreas );
+    linkPointerAreas( circleGroupIcon );
+    linkPointerAreas( barGroupIcon );
+
     var shapeBox = new HBox( {
-      spacing: 20
+      spacing: STACK_PADDING
     } );
     model.topRepresentationProperty.link( function( representation ) {
       var leftSideNodes = [ representationSelectionNode ];

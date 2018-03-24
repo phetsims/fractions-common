@@ -48,6 +48,7 @@ define( function( require ) {
     /**
      * Adds a container.
      * @public
+     * TODO: don't require calling this at the start? Can we ALWAYS call it initially?
      */
     increaseContainerCount: function() {
       this.shapeContainers.push( new ShapeContainer( this.partitionDenominatorProperty, this.representation ) );
