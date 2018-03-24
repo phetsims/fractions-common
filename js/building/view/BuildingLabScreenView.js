@@ -245,7 +245,7 @@ define( function( require ) {
       var shapeGroupNode = new ShapeGroupNode( shapeGroup, {
         dropListener: function() {
           if ( shapeGroup.positionProperty.value.y < self.shapePanel.bottom ) {
-            self.removeShapeGroup( shapeGroup );
+            self.model.shapeGroups.remove( shapeGroup );
           }
         }
       } );
