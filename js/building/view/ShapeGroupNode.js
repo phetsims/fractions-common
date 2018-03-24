@@ -40,6 +40,10 @@ define( function( require ) {
   function ShapeGroupNode( shapeGroup, options ) {
     assert && assert( shapeGroup instanceof ShapeGroup );
 
+    options = _.extend( {
+      isIcon: false // TODO: cleanup?
+    }, options );
+
     // TODO: animation
 
     Node.call( this );
@@ -73,7 +77,8 @@ define( function( require ) {
       radius: FractionsCommonConstants.ROUND_BUTTON_RADIUS,
       listener: function() {
         shapeGroup.increaseContainerCount();
-      }
+      },
+      enabled: !options.isIcon
     }, {
       baseColor: FractionsCommonColorProfile.greenRoundArrowButtonProperty
     } );
@@ -86,7 +91,8 @@ define( function( require ) {
       radius: FractionsCommonConstants.ROUND_BUTTON_RADIUS,
       listener: function() {
         shapeGroup.decreaseContainerCount();
-      }
+      },
+      enabled: !options.isIcon
     }, {
       baseColor: FractionsCommonColorProfile.redRoundArrowButtonProperty
     } );
@@ -111,7 +117,7 @@ define( function( require ) {
         new RoundArrowButton( {
           arrowRotation: -Math.PI / 2,
           enabledProperty: new DerivedProperty( [ shapeGroup.partitionDenominatorProperty ], function( denominator ) {
-            return denominator > shapeGroup.partitionDenominatorProperty.range.min;
+            return !options.isIcon && ( denominator > shapeGroup.partitionDenominatorProperty.range.min );
           } ),
           listener: function() {
             shapeGroup.partitionDenominatorProperty.value -= 1;
@@ -120,7 +126,7 @@ define( function( require ) {
         new RoundArrowButton( {
           arrowRotation: Math.PI / 2,
           enabledProperty: new DerivedProperty( [ shapeGroup.partitionDenominatorProperty ], function( denominator ) {
-            return denominator < shapeGroup.partitionDenominatorProperty.range.max;
+            return !options.isIcon && ( denominator < shapeGroup.partitionDenominatorProperty.range.max );
           } ),
           listener: function() {
             shapeGroup.partitionDenominatorProperty.value += 1;

@@ -45,10 +45,18 @@ define( function( require ) {
   fractionsCommon.register( 'ShapeGroup', ShapeGroup );
 
   return inherit( Object, ShapeGroup, {
-    // TODO: doc
+    /**
+     * Adds a container.
+     * @public
+     */
     increaseContainerCount: function() {
       this.shapeContainers.push( new ShapeContainer( this.partitionDenominatorProperty, this.representation ) );
     },
+
+    /**
+     * Removes the most-recently-added container
+     * @public
+     */
     decreaseContainerCount: function() {
       this.shapeContainers.pop();
     }

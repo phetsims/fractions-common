@@ -17,7 +17,8 @@ define( function( require ) {
     SHAPE_VERTICAL_BAR_HEIGHT: 75,
     ROUND_BUTTON_RADIUS: 15,
 
-    MAX_SHAPE_CONTAINERS: 4
+    MAX_SHAPE_CONTAINERS: 4,
+    SHAPE_BUILD_SCALE: 0.6
   };
 
   fractionsCommon.register( 'FractionsCommonConstants', FractionsCommonConstants );

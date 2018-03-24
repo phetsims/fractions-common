@@ -40,7 +40,7 @@ define( function( require ) {
     assert && assert( shapeStack instanceof ShapeStack );
 
     options = _.extend( {
-      scale: 0.6 // stacks should be a bit smaller than in-play objects in general TODO: adaptive?
+      scale: FractionsCommonConstants.SHAPE_BUILD_SCALE // stacks should be a bit smaller than in-play objects in general
     }, options );
 
     Node.call( this );

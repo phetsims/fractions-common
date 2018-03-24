@@ -42,6 +42,7 @@ define( function( require ) {
   function BuildingLabScreenView( model ) {
     ScreenView.call( this );
 
+    // TODO: Move all this code out to a named panel?
     var representationSelectionNode = new MutableOptionsNode( RadioButtonGroup, [ model.topRepresentationProperty, [
       {
         value: Representation.CIRCLE,
@@ -76,16 +77,35 @@ define( function( require ) {
       return new AlignBox( new ShapeStackNode( barStack ), { group: stackAlignGroup } );
     } );
 
+    function createGroupIcon( representation ) {
+      var iconGroup = new ShapeGroup( representation );
+      iconGroup.increaseContainerCount();
+      var iconNode = new ShapeGroupNode( iconGroup, {
+        isIcon: true,
+        scale: FractionsCommonConstants.SHAPE_BUILD_SCALE
+      } );
+      // TODO: better way? At least this is safe
+      iconNode.localBounds = iconNode.localBounds.withMinY( iconNode.localBounds.minY - 2 * iconNode.localBounds.centerY );
+      return new AlignBox( iconNode, { group: stackAlignGroup } );
+    }
+    var circleGroupIcon = createGroupIcon( Representation.CIRCLE );
+    var barGroupIcon = createGroupIcon( Representation.VERTICAL_BAR );
+
     var shapeBox = new HBox( {
-      spacing: 30
+      spacing: 20
     } );
     model.topRepresentationProperty.link( function( representation ) {
-      shapeBox.children = [ representationSelectionNode ].concat( representation === Representation.CIRCLE ? circleStackNodes : barStackNodes );
+      var leftSideNodes = [ representationSelectionNode ];
+      var middleNodes = representation === Representation.CIRCLE ? circleStackNodes : barStackNodes;
+      var rightSideNodes = [ representation === Representation.CIRCLE ? circleGroupIcon : barGroupIcon ];
+      shapeBox.children = leftSideNodes.concat( middleNodes ).concat( rightSideNodes );
     } );
 
     // TODO: background color customizable
-    var shapePanel = new Panel( shapeBox );
-    shapePanel.leftTop = this.layoutBounds.leftTop.plusXY( PANEL_MARGIN, PANEL_MARGIN );
+    var shapePanel = new Panel( shapeBox, {
+      xMargin: 15
+    } );
+    shapePanel.centerTop = this.layoutBounds.centerTop.plusXY( 0, PANEL_MARGIN );
     this.addChild( shapePanel );
 
 
