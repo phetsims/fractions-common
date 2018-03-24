@@ -165,11 +165,12 @@ define( function( require ) {
     } );
 
     // TODO: background color customizable
-    var shapePanel = new Panel( shapeBox, {
+    // @private {Panel}
+    this.shapePanel = new Panel( shapeBox, {
       xMargin: 15
     } );
-    shapePanel.centerTop = this.layoutBounds.centerTop.plusXY( 0, PANEL_MARGIN );
-    this.addChild( shapePanel );
+    this.shapePanel.centerTop = this.layoutBounds.centerTop.plusXY( 0, PANEL_MARGIN );
+    this.addChild( this.shapePanel );
 
     // @private {Node}
     this.groupLayer = new Node();
@@ -239,7 +240,15 @@ define( function( require ) {
     },
 
     addShapeGroup: function( shapeGroup ) {
-      var shapeGroupNode = new ShapeGroupNode( shapeGroup );
+      var self = this;
+
+      var shapeGroupNode = new ShapeGroupNode( shapeGroup, {
+        dropListener: function() {
+          if ( shapeGroup.positionProperty.value.y < self.shapePanel.bottom ) {
+            self.removeShapeGroup( shapeGroup );
+          }
+        }
+      } );
       this.shapeGroupNodes.push( shapeGroupNode );
       this.groupLayer.addChild( shapeGroupNode );
     },

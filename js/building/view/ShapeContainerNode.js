@@ -11,6 +11,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var arrayRemove = require( 'PHET_CORE/arrayRemove' );
   var Circle = require( 'SCENERY/nodes/Circle' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
@@ -158,7 +159,7 @@ define( function( require ) {
       } );
       assert && assert( shapePieceNode );
 
-      this.shapePieceNodes.remove( shapePieceNode );
+      arrayRemove( this.shapePieceNodes, shapePieceNode );
       this.shapePieceLayer.removeChild( shapePieceNode );
     }
   } );

@@ -24,8 +24,9 @@ define( function( require ) {
    *
    * @param {Property.<number>} partitionDenominatorProperty
    * @param {Representation} representation
+   * @param {Emitter} changedEmitter
    */
-  function ShapeContainer( partitionDenominatorProperty, representation ) {
+  function ShapeContainer( partitionDenominatorProperty, representation, changedEmitter ) {
 
     // @public {Property.<number>}
     this.partitionDenominatorProperty = partitionDenominatorProperty;
@@ -33,8 +34,14 @@ define( function( require ) {
     // @public {Representation}
     this.representation = representation;
 
+    // @public {Emitter}
+    this.changedEmitter = changedEmitter;
+
     // @public {ObservableArray.<ShapePiece>}
     this.shapePieces = new ObservableArray();
+
+    this.shapePieces.addItemAddedListener( changedEmitter.emit.bind( changedEmitter ) );
+    this.shapePieces.addItemRemovedListener( changedEmitter.emit.bind( changedEmitter ) );
   }
 
   fractionsCommon.register( 'ShapeContainer', ShapeContainer );

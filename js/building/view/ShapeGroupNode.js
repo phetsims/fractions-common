@@ -21,12 +21,14 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   var RoundArrowButton = require( 'FRACTIONS_COMMON/common/view/RoundArrowButton' );
   var RoundPushButton = require( 'SUN/buttons/RoundPushButton' );
   var Shape = require( 'KITE/Shape' );
   var ShapeContainerNode = require( 'FRACTIONS_COMMON/building/view/ShapeContainerNode' );
   var ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var CONTAINER_PADDING = 8;
@@ -44,7 +46,8 @@ define( function( require ) {
     var self = this;
 
     options = _.extend( {
-      isIcon: false // TODO: cleanup?
+      isIcon: false, // TODO: cleanup?
+      dropListener: null
     }, options );
 
     // TODO: animation
@@ -143,6 +146,39 @@ define( function( require ) {
       centerX: 0
     } ) );
 
+    // TODO: Copied from UndoButton in expression-exchange. IF this is kept as-is, factor out into a common component.
+    var ICON_HEIGHT = 17; // empirically determined, controls size of icon
+    var undoArrowShape = new Shape()
+      .moveTo( 0, 0 )
+      .lineTo( 0, ICON_HEIGHT )
+      .lineTo( ICON_HEIGHT, ICON_HEIGHT )
+      .lineTo( ICON_HEIGHT * 0.7, ICON_HEIGHT * 0.7 )
+      .quadraticCurveTo( ICON_HEIGHT * 1.25, -ICON_HEIGHT * 0.1, ICON_HEIGHT * 2, ICON_HEIGHT * 0.75 )
+      .quadraticCurveTo( ICON_HEIGHT * 1.25, -ICON_HEIGHT * 0.5, ICON_HEIGHT * 0.3, ICON_HEIGHT * 0.3 )
+      .close();
+    var undoButton = new MutableOptionsNode( RectangularPushButton, [], {
+      content: new Path( undoArrowShape, {
+        fill: 'black'
+      } ),
+      xMargin: 5,
+      yMargin: 5,
+      // TODO: Make it computational
+      rightBottom: shapeGroup.representation === Representation.VERTICAL_BAR ? new Vector2( -50, -75 / 2 ) : new Vector2( -36, -36 ),
+      listener: function() {
+        shapeGroup.undoPiece();
+      }
+    }, {
+      baseColor: FractionsCommonColorProfile.undoButtonProperty
+    } );
+
+    var undoArrowContainer = new Node();
+    function updateUndoVisibility() {
+      undoArrowContainer.children = shapeGroup.hasAnyPieces() ? [ undoButton ] : [];
+    }
+    shapeGroup.changedEmitter.addListener( updateUndoVisibility );
+    updateUndoVisibility();
+    this.addChild( undoArrowContainer );
+
     shapeGroup.positionProperty.linkAttribute( this, 'translation' );
 
     // @public {DragListener}
@@ -152,6 +188,9 @@ define( function( require ) {
       locationProperty: shapeGroup.positionProperty,
       start: function( event ) {
         self.moveToFront();
+      },
+      end: function( event ) {
+        options.dropListener && options.dropListener();
       }
     } );
     this.shapeContainerLayer.addInputListener( this.dragListener );
