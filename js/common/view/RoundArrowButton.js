@@ -41,7 +41,7 @@ define( function( require ) {
 
     // "center" the shape around the origin (where we want it to rotate around)
     var size = options.radius * 0.5;
-    var ratio = 0.5;
+    var ratio = 0.4;
     var arrowShape = new Shape().moveTo( -size, ratio * size ).lineTo( 0,  ( ratio - 1 ) * size ).lineTo( size, ratio * size );
     var arrowPath = new Path( arrowShape, {
       stroke: 'black',

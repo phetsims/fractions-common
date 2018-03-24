@@ -10,6 +10,7 @@ define( function( require ) {
 
   // modules
   var DerivedProperty = require( 'AXON/DerivedProperty' );
+  var DragListener = require( 'SCENERY/listeners/DragListener' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
@@ -48,11 +49,13 @@ define( function( require ) {
 
     Node.call( this );
 
-    // @private {ShapeGroup}
+    // @public {ShapeGroup}
     this.shapeGroup = shapeGroup;
 
     // @private {Node}
-    this.shapeContainerLayer = new Node();
+    this.shapeContainerLayer = new Node( {
+      cursor: 'pointer' // We are where our input listener is added
+    } );
 
     // @private {ObservableArray.<ShapeContainerNode>}
     this.shapeContainerNodes = new ObservableArray();
@@ -137,6 +140,16 @@ define( function( require ) {
       top: ( shapeGroup.representation === Representation.VERTICAL_BAR ? FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT : FractionsCommonConstants.SHAPE_WIDTH ) / 2 + CONTAINER_PADDING - 3,
       centerX: 0
     } ) );
+
+    shapeGroup.positionProperty.linkAttribute( this, 'translation' );
+
+    // @public {DragListener}
+    this.dragListener = new DragListener( {
+      // TODO: drag bounds
+      targetNode: this,
+      locationProperty: shapeGroup.positionProperty
+    } );
+    this.shapeContainerLayer.addInputListener( this.dragListener );
 
     this.mutate( options );
   }

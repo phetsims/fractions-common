@@ -13,10 +13,13 @@ define( function( require ) {
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  var ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * @constructor
@@ -44,6 +47,12 @@ define( function( require ) {
     // @public {Array.<ShapeStack>}
     this.circleStacks = createStacks( Representation.CIRCLE, FractionsCommonColorProfile.labCircleFillProperty );
     this.barStacks = createStacks( Representation.VERTICAL_BAR, FractionsCommonColorProfile.labBarFillProperty );
+
+    // @public {ObservableArray.<ShapeGroup>}
+    this.shapeGroups = new ObservableArray();
+
+    // Shared to set up some initial state
+    this.reset();
   }
 
   fractionsCommon.register( 'BuildingLabModel', BuildingLabModel );
@@ -51,6 +60,14 @@ define( function( require ) {
   return inherit( Object, BuildingLabModel, {
     reset: function() {
       this.topRepresentationProperty.reset();
+      this.shapeGroups.reset();
+
+      // Initial state
+      var group = new ShapeGroup( Representation.CIRCLE );
+      group.increaseContainerCount();
+      // TODO: constants
+      group.positionProperty.value = new Vector2( 1024 * 2 / 3, 618 / 2 );
+      this.shapeGroups.push( group );
     },
 
     step: function( dt ) {

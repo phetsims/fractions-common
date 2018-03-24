@@ -11,6 +11,7 @@ define( function( require ) {
   // modules
   var AlignBox = require( 'SCENERY/nodes/AlignBox' );
   var AlignGroup = require( 'SCENERY/nodes/AlignGroup' );
+  var arrayRemove = require( 'PHET_CORE/arrayRemove' );
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
@@ -18,12 +19,12 @@ define( function( require ) {
   var HBox = require( 'SCENERY/nodes/HBox' );
   var inherit = require( 'PHET_CORE/inherit' );
   var MutableOptionsNode = require( 'SUN/MutableOptionsNode' );
+  var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
-  var ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
   var ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
   var ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
@@ -108,20 +109,16 @@ define( function( require ) {
     shapePanel.centerTop = this.layoutBounds.centerTop.plusXY( 0, PANEL_MARGIN );
     this.addChild( shapePanel );
 
+    // @private {Node}
+    this.groupLayer = new Node();
+    this.addChild( this.groupLayer );
 
-    var group = new ShapeGroup( Representation.CIRCLE );
-    var container1 = new ShapeContainer( group.partitionDenominatorProperty, group.representation );
-    var container2 = new ShapeContainer( group.partitionDenominatorProperty, group.representation );
-    var piece1 = new ShapePiece( new Fraction( 1, 3 ), Representation.CIRCLE, FractionsCommonColorProfile.labCircleFillProperty );
-    var piece2 = new ShapePiece( new Fraction( 1, 4 ), Representation.CIRCLE, FractionsCommonColorProfile.labCircleFillProperty );
-    container1.shapePieces.push( piece1 );
-    container1.shapePieces.push( piece2 );
-    group.shapeContainers.push( container1 );
-    group.shapeContainers.push( container2 );
+    // @private {Array.<ShapeGroupNode>}
+    this.shapeGroupNodes = [];
 
-    this.addChild( new ShapeGroupNode( group, {
-      center: this.layoutBounds.center
-    } ) );
+    model.shapeGroups.addItemAddedListener( this.addShapeGroup.bind( this ) );
+    model.shapeGroups.addItemRemovedListener( this.removeShapeGroup.bind( this ) );
+    model.shapeGroups.forEach( this.addShapeGroup.bind( this ) );
 
     // Reset All button
     var resetAllButton = new ResetAllButton( {
@@ -137,6 +134,22 @@ define( function( require ) {
   fractionsCommon.register( 'BuildingLabScreenView', BuildingLabScreenView );
 
   return inherit( ScreenView, BuildingLabScreenView, {
+    addShapeGroup: function( shapeGroup ) {
+      var shapeGroupNode = new ShapeGroupNode( shapeGroup );
+      this.shapeGroupNodes.push( shapeGroupNode );
+      this.groupLayer.addChild( shapeGroupNode );
+    },
+
+    removeShapeGroup: function( shapeGroup ) {
+      var shapeGroupNode = _.find( this.shapeGroupNodes, function( shapeGroupNode ) {
+        return shapeGroupNode.shapeGroup === shapeGroup;
+      } );
+      assert && assert( shapeGroupNode );
+
+      arrayRemove( this.shapeGroupNodes, shapeGroupNode );
+      this.groupLayer.removeChild( shapeGroupNode );
+    },
+
     step: function( dt ) {
 
     }
