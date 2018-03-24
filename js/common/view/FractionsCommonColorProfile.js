@@ -16,6 +16,10 @@ define( function( require ) {
   // Initial colors for each profile, by string key. Only profile currently is default (still helpful for making color
   // tweaks with the top-level files)
   var FractionsCommonColorProfile = new ColorProfile( {
+    introScreenBackground: { default: Color.WHITE },
+    otherScreenBackground: { default: new Color( 235, 251, 251 ) },
+
+    // TODO: Is this only on intro?
     panelBackground: { default: new Color( 230, 230, 230 ) },
     shapePieceStroke: { default: Color.BLACK },
 
