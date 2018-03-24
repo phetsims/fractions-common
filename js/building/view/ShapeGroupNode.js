@@ -166,7 +166,8 @@ define( function( require ) {
       .close();
     var undoButton = new MutableOptionsNode( RectangularPushButton, [], {
       content: new Path( undoArrowShape, {
-        fill: 'black'
+        fill: 'black',
+        scale: 0.7
       } ),
       xMargin: 5,
       yMargin: 5,
