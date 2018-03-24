@@ -3,6 +3,8 @@
 /**
  * TODO: doc
  *
+ * Its layout should be based around this node being centered (locally) around the proper origin
+ *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 define( function( require ) {
@@ -81,7 +83,7 @@ define( function( require ) {
       } ) );
     }
     else if ( shapeContainer.representation === Representation.VERTICAL_BAR ) {
-      this.addChild( new Rectangle( -BAR_WIDTH / 2, 0, BAR_WIDTH, BAR_HEIGHT, {
+      this.addChild( new Rectangle( -BAR_WIDTH / 2, -BAR_HEIGHT / 2, BAR_WIDTH, BAR_HEIGHT, {
         fill: FractionsCommonColorProfile.shapeContainerFillProperty
       } ) );
       this.addChild( this.shapePieceLayer );
@@ -90,11 +92,11 @@ define( function( require ) {
         var separatorShape = new Shape();
         for ( var i = 1; i < denominator; i++ ) {
           var x = ( i / denominator - 0.5 ) * BAR_WIDTH;
-          separatorShape.moveTo( x, 0 ).lineTo( x, BAR_HEIGHT );
+          separatorShape.moveTo( x, -BAR_HEIGHT / 2 ).lineTo( x, BAR_HEIGHT / 2 );
         }
         separatorPath.shape = separatorShape;
       } );
-      this.addChild( new Rectangle( -BAR_WIDTH / 2, 0, BAR_WIDTH, BAR_HEIGHT, {
+      this.addChild( new Rectangle( -BAR_WIDTH / 2, -BAR_HEIGHT / 2, BAR_WIDTH, BAR_HEIGHT, {
         stroke: FractionsCommonColorProfile.shapeContainerStrokeProperty
       } ) );
     }
@@ -122,10 +124,19 @@ define( function( require ) {
     addShapePiece: function( shapePiece ) {
       assert && assert( shapePiece.representation === this.shapeContainer.representation );
 
-      // TODO: ... WAT
-      var shapePieceNode = new ShapePieceNode( shapePiece, {
-        rotation: this.shapeContainer.getShapePieceRotation( shapePiece )
-      } );
+      var shapePieceNode = new ShapePieceNode( shapePiece );
+
+      var ratio = this.shapeContainer.getShapeRatio( shapePiece );
+      if ( this.shapeContainer.representation === Representation.CIRCLE ) {
+        shapePieceNode.rotation = -2 * Math.PI * ratio;
+      }
+      else if ( this.shapeContainer.representation === Representation.VERTICAL_BAR ) {
+        shapePieceNode.x = ( ratio - 0.5 ) * BAR_WIDTH;
+      }
+      else {
+        throw new Error( 'Unsupported representation for ShapeContainerNode: ' + this.shapeContainer.representation );
+      }
+
       this.shapePieceNodes.push( shapePieceNode );
       this.shapePieceLayer.addChild( shapePieceNode );
     },

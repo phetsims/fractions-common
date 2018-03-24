@@ -36,20 +36,20 @@ define( function( require ) {
 
   return inherit( Object, ShapeContainer, {
     /**
-     * Returns the rotation for a given ShapePiece.
+     * Returns the value (from 0 to 1) of where this piece's "start" is.
      * @public
      *
      * @param {ShapePiece} shapePiece
      * @returns {number}
      */
-    getShapePieceRotation: function( shapePiece ) {
+    getShapeRatio: function( shapePiece ) {
       var rotation = 0;
       for ( var i = 0; i < this.shapePieces.length; i++ ) {
         var currentShapePiece = this.shapePieces.get( i );
         if ( currentShapePiece === shapePiece ) {
           return rotation;
         }
-        rotation += -2 * Math.PI * currentShapePiece.fraction.getValue();
+        rotation += currentShapePiece.fraction.getValue();
       }
       throw new Error( 'ShapePiece not found' );
     }

@@ -74,17 +74,17 @@ define( function( require ) {
       } ) );
     }
     else if ( shapeStack.representation === Representation.VERTICAL_BAR ) {
-      this.addChild( new Rectangle( 0, 0, BAR_WIDTH, BAR_HEIGHT, {
+      this.addChild( new Rectangle( 0, -BAR_HEIGHT / 2, BAR_WIDTH, BAR_HEIGHT, {
         fill: FractionsCommonColorProfile.shapeStackFillProperty
       } ) );
       for ( i = 1; i < denominator; i++ ) {
         var x = i / denominator * BAR_WIDTH;
-        separatorShape.moveTo( x, 0 ).lineTo( x, BAR_HEIGHT );
+        separatorShape.moveTo( x, -BAR_HEIGHT / 2 ).lineTo( x, BAR_HEIGHT / 2 );
       }
       this.addChild( new Path( separatorShape, {
         stroke: FractionsCommonColorProfile.shapeStackSeparatorStrokeProperty
       } ) );
-      this.addChild( new Rectangle( 0, 0, BAR_WIDTH, BAR_HEIGHT, {
+      this.addChild( new Rectangle( 0, -BAR_HEIGHT / 2, BAR_WIDTH, BAR_HEIGHT, {
         stroke: FractionsCommonColorProfile.shapeStackStrokeProperty
       } ) );
     }

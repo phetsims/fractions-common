@@ -20,6 +20,7 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   var RoundArrowButton = require( 'FRACTIONS_COMMON/common/view/RoundArrowButton' );
   var RoundPushButton = require( 'SUN/buttons/RoundPushButton' );
   var Shape = require( 'KITE/Shape' );
@@ -126,7 +127,8 @@ define( function( require ) {
           }
         } )
       ],
-      top: this.shapeContainerNodes.get( 0 ).bottom + CONTAINER_PADDING - 3,
+      // TODO: improve? This is safe, given we can't trust container bounds
+      top: ( shapeGroup.representation === Representation.VERTICAL_BAR ? FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT : FractionsCommonConstants.SHAPE_WIDTH ) / 2 + CONTAINER_PADDING - 3,
       centerX: 0
     } ) );
 

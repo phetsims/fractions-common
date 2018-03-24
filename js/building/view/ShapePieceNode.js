@@ -61,7 +61,7 @@ define( function( require ) {
       }
     }
     else if ( shapePiece.representation === Representation.VERTICAL_BAR ) {
-      this.addChild( new Rectangle( 0, 0, fractionValue * BAR_WIDTH, BAR_HEIGHT, nodeOptions ) );
+      this.addChild( new Rectangle( 0, -BAR_HEIGHT / 2, fractionValue * BAR_WIDTH, BAR_HEIGHT, nodeOptions ) );
     }
     else {
       throw new Error( 'Unsupported representation for ShapePieceNode: ' + shapePiece.representation );
