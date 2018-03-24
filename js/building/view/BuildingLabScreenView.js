@@ -46,6 +46,9 @@ define( function( require ) {
   function BuildingLabScreenView( model ) {
     var self = this;
 
+    // @private
+    this.model = model;
+
     ScreenView.call( this );
 
     // TODO: Move all this code out to a named panel?
