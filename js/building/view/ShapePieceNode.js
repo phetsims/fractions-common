@@ -10,6 +10,7 @@ define( function( require ) {
 
   // modules
   var Circle = require( 'SCENERY/nodes/Circle' );
+  var DragListener = require( 'SCENERY/listeners/DragListener' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
@@ -35,6 +36,12 @@ define( function( require ) {
    */
   function ShapePieceNode( shapePiece, options ) {
     assert && assert( shapePiece instanceof ShapePiece );
+
+    options = _.extend( {
+      dropListener: null // {function|null} - Called when it is dropped
+    }, options );
+
+    var self = this;
 
     Node.call( this );
 
@@ -66,6 +73,22 @@ define( function( require ) {
     else {
       throw new Error( 'Unsupported representation for ShapePieceNode: ' + shapePiece.representation );
     }
+
+    // TODO: hmm, we don't want this on some. Maybe just have it for draggable ones?
+    shapePiece.positionProperty.lazyLink( function( position ) {
+      // TODO: add an offset for approximately where our "center" looks
+      self.translation = position;
+    } );
+
+    // @public {DragListener}
+    this.dragListener = new DragListener( {
+      // TODO: drag bounds
+      targetNode: this,
+      locationProperty: shapePiece.positionProperty,
+      end: function( event ) {
+        options.dropListener && options.dropListener();
+      }
+    } );
 
     this.mutate( options );
   }

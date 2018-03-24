@@ -29,6 +29,9 @@ define( function( require ) {
     // @public {Representation}
     this.representation = representation;
     
+    // @public {Property.<Color>}
+    this.colorProperty = colorProperty;
+    
     // @public {ObservableArray.<ShapePiece>} - NOTE: These should only ever be popped/pushed.
     this.shapePieces = new ObservableArray();
   }

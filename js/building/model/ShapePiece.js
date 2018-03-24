@@ -11,6 +11,8 @@ define( function( require ) {
   // modules
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Property = require( 'AXON/Property' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * @constructor
@@ -21,6 +23,7 @@ define( function( require ) {
    * @param {Property.<Color>} colorProperty
    */
   function ShapePiece( fraction, representation, colorProperty ) {
+    assert && assert( colorProperty instanceof Property );
 
     // @public {Fraction}
     this.fraction = fraction;
@@ -30,6 +33,9 @@ define( function( require ) {
     
     // @public {Property.<Color>}
     this.colorProperty = colorProperty;
+
+    // @public {Property.<Vector2>} - Applies only while out in the play area (being animated or dragged)
+    this.positionProperty = new Property( Vector2.ZERO );
   }
 
   fractionsCommon.register( 'ShapePiece', ShapePiece );

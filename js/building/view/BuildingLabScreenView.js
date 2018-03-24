@@ -76,6 +76,7 @@ define( function( require ) {
     } );
 
     var stackAlignGroup = new AlignGroup();
+    // TODO: deduplicate
     var circleStackNodes = model.circleStacks.map( function( circleStack ) {
       var node = new ShapeStackNode( circleStack, {
         pickable: false
@@ -85,7 +86,18 @@ define( function( require ) {
         cursor: 'pointer',
         inputListeners: [
           DragListener.createForwardingListener( function( event ) {
-
+            var shapePiece = new ShapePiece( circleStack.fraction, circleStack.representation, circleStack.colorProperty );
+            var shapePieceNode = new ShapePieceNode( shapePiece, {
+              dropListener: function() {
+                arrayRemove( self.shapePieceNodes, shapePieceNode );
+                self.pieceLayer.removeChild( shapePieceNode );
+              }
+            } );
+            self.shapePieceNodes.push( shapePieceNode );
+            self.pieceLayer.addChild( shapePieceNode );
+            // TODO: don't require this be set after the node creation, see our lazy link in the node
+            shapePiece.positionProperty.value = self.globalToLocalPoint( event.pointer.point );
+            shapePieceNode.dragListener.press( event, shapePieceNode );
           } )
         ]
       } );
@@ -172,8 +184,15 @@ define( function( require ) {
     this.groupLayer = new Node();
     this.addChild( this.groupLayer );
 
+    // @private {Node}
+    this.pieceLayer = new Node();
+    this.addChild( this.pieceLayer );
+
     // @private {Array.<ShapeGroupNode>}
-    this.shapeGroupNodes = [];
+    this.shapeGroupNodes = []; // TODO: interrupt on reset
+
+    // @private {Array.<ShapePieceNode>}
+    this.shapePieceNodes = []; // TODO: interrupt on reset
 
     model.shapeGroups.addItemAddedListener( this.addShapeGroup.bind( this ) );
     model.shapeGroups.addItemRemovedListener( this.removeShapeGroup.bind( this ) );

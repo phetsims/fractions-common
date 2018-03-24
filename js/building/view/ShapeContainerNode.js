@@ -48,11 +48,14 @@ define( function( require ) {
     this.shapePieceNodes = [];
 
     // @private {Node}
-    this.shapePieceLayer = new Node();
+    this.shapePieceLayer = new Node( {
+      pickable: false
+    } );
 
     var separatorPath = new Path( null, {
       stroke: FractionsCommonColorProfile.shapeContainerPartitionProperty,
-      lineDash: [ 5, 5 ]
+      lineDash: [ 5, 5 ],
+      pickable: false
     } );
 
     // Background
@@ -79,7 +82,8 @@ define( function( require ) {
         }
       } );
       this.addChild( new Circle( CIRCLE_RADIUS, {
-        stroke: FractionsCommonColorProfile.shapeContainerStrokeProperty
+        stroke: FractionsCommonColorProfile.shapeContainerStrokeProperty,
+        pickable: false
       } ) );
     }
     else if ( shapeContainer.representation === Representation.VERTICAL_BAR ) {
@@ -97,7 +101,8 @@ define( function( require ) {
         separatorPath.shape = separatorShape;
       } );
       this.addChild( new Rectangle( -BAR_WIDTH / 2, -BAR_HEIGHT / 2, BAR_WIDTH, BAR_HEIGHT, {
-        stroke: FractionsCommonColorProfile.shapeContainerStrokeProperty
+        stroke: FractionsCommonColorProfile.shapeContainerStrokeProperty,
+        pickable: false
       } ) );
     }
     else {
