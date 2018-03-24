@@ -59,7 +59,7 @@ define( function( require ) {
       cursor: 'pointer' // We are where our input listener is added
     } );
 
-    // @private {ObservableArray.<ShapeContainerNode>}
+    // @public {ObservableArray.<ShapeContainerNode>} TODO: don't require this being public
     this.shapeContainerNodes = new ObservableArray();
 
     this.addChild( this.shapeContainerLayer );
