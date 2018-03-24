@@ -51,6 +51,9 @@ define( function( require ) {
     // @public {ObservableArray.<ShapeGroup>}
     this.shapeGroups = new ObservableArray();
 
+    // @public {Property.<ShapeGroup|null>} - We'll only show controls for this shape group
+    this.selectedShapeGroupProperty = new Property( null );
+
     // Shared to set up some initial state
     this.reset();
   }
@@ -68,6 +71,8 @@ define( function( require ) {
       // TODO: constants
       group.positionProperty.value = new Vector2( 1024 * 2 / 3, 618 / 2 );
       this.shapeGroups.push( group );
+
+      this.selectedShapeGroupProperty.value = group;
     },
 
     step: function( dt ) {

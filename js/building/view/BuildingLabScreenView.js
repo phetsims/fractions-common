@@ -13,6 +13,7 @@ define( function( require ) {
   var AlignGroup = require( 'SCENERY/nodes/AlignGroup' );
   var arrayRemove = require( 'PHET_CORE/arrayRemove' );
   var Bounds2 = require( 'DOT/Bounds2' );
+  var DerivedProperty = require( 'AXON/DerivedProperty' );
   var DragListener = require( 'SCENERY/listeners/DragListener' );
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
@@ -135,6 +136,7 @@ define( function( require ) {
               return shapeGroupNode.shapeGroup === shapeGroup;
             } );
             shapeGroupNode.dragListener.press( event, shapeGroupNode );
+            event.handle(); // for our selection
           } )
         ]
       } );
@@ -193,6 +195,14 @@ define( function( require ) {
     model.shapeGroups.addItemRemovedListener( this.removeShapeGroup.bind( this ) );
     model.shapeGroups.forEach( this.addShapeGroup.bind( this ) );
 
+    phet.joist.display.addInputListener( {
+      down: function() {
+        // Any event on a shape group should handle it.
+        // TODO: How do we.... handle number groups? Use same property presumably. TODO
+        model.selectedShapeGroupProperty.value = null;
+      }
+    } );
+
     // Reset All button
     var resetAllButton = new ResetAllButton( {
       listener: function() {
@@ -250,7 +260,13 @@ define( function( require ) {
           if ( shapeGroup.positionProperty.value.y < self.shapePanel.bottom ) {
             self.model.shapeGroups.remove( shapeGroup );
           }
-        }
+        },
+        selectListener: function() {
+          self.model.selectedShapeGroupProperty.value = shapeGroup;
+        },
+        isSelectedProperty: new DerivedProperty( [ self.model.selectedShapeGroupProperty ], function( selectedShapeGroup ) {
+          return selectedShapeGroup === shapeGroup;
+        } )
       } );
       this.shapeGroupNodes.push( shapeGroupNode );
       this.groupLayer.addChild( shapeGroupNode );

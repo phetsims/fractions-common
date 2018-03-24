@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var BooleanProperty = require( 'AXON/BooleanProperty' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
   var DragListener = require( 'SCENERY/listeners/DragListener' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
@@ -47,7 +48,9 @@ define( function( require ) {
 
     options = _.extend( {
       isIcon: false, // TODO: cleanup?
-      dropListener: null
+      isSelectedProperty: new BooleanProperty( true ),
+      dropListener: null,
+      selectListener: null,
     }, options );
 
     // TODO: animation
@@ -57,15 +60,20 @@ define( function( require ) {
     // @public {ShapeGroup}
     this.shapeGroup = shapeGroup;
 
+    // @public {ObservableArray.<ShapeContainerNode>} TODO: don't require this being public
+    this.shapeContainerNodes = new ObservableArray();
+
     // @private {Node}
     this.shapeContainerLayer = new Node( {
       cursor: 'pointer' // We are where our input listener is added
     } );
-
-    // @public {ObservableArray.<ShapeContainerNode>} TODO: don't require this being public
-    this.shapeContainerNodes = new ObservableArray();
-
     this.addChild( this.shapeContainerLayer );
+
+    // @private {Node}
+    this.controlLayer = new Node();
+    this.addChild( this.controlLayer );
+
+    options.isSelectedProperty.linkAttribute( this.controlLayer, 'visible' );
 
     // NOTE: Groups will disappear whenever their views disappear
     shapeGroup.shapeContainers.addItemAddedListener( this.addShapeContainer.bind( this ) );
@@ -116,10 +124,10 @@ define( function( require ) {
       children: [ addContainerButton, removeContainerButton ],
       centerY: 0
     } );
-    this.addChild( this.rightButtonBox );
+    this.controlLayer.addChild( this.rightButtonBox );
     this.updateRightButtonPosition();
 
-    this.addChild( new HBox( {
+    this.controlLayer.addChild( new HBox( {
       spacing: CONTAINER_PADDING,
       children: [
         new RoundArrowButton( {
@@ -177,7 +185,7 @@ define( function( require ) {
     }
     shapeGroup.changedEmitter.addListener( updateUndoVisibility );
     updateUndoVisibility();
-    this.addChild( undoArrowContainer );
+    this.controlLayer.addChild( undoArrowContainer );
 
     shapeGroup.positionProperty.linkAttribute( this, 'translation' );
 
@@ -187,6 +195,7 @@ define( function( require ) {
       targetNode: this,
       locationProperty: shapeGroup.positionProperty,
       start: function( event ) {
+        options.selectListener && options.selectListener();
         self.moveToFront();
       },
       end: function( event ) {
@@ -194,6 +203,13 @@ define( function( require ) {
       }
     } );
     this.shapeContainerLayer.addInputListener( this.dragListener );
+
+    this.addInputListener( {
+      down: function( event ) {
+        options.selectListener && options.selectListener();
+        event.handle();
+      }
+    } );
 
     this.mutate( options );
   }
