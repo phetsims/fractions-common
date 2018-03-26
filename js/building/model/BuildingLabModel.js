@@ -110,7 +110,7 @@ define( function( require ) {
       // TODO: Don't use hard-coded constant for game screens
       var shapeMatrix = ShapeStack.getShapeMatrix( shapePiece.fraction, shapePiece.representation, 1 );
       var position = shapeStack.positionProperty.value.plus( shapeMatrix.timesVector2( Vector2.ZERO ).timesScalar( FractionsCommonConstants.SHAPE_BUILD_SCALE ) );
-      shapePiece.animateTo( position, shapeStack.positionProperty, Easing.QUADRATIC_IN, function() {
+      shapePiece.animateTo( position, FractionsCommonConstants.SHAPE_BUILD_SCALE, shapeStack.positionProperty, Easing.QUADRATIC_IN, function() {
         self.activeShapePieces.remove( shapePiece );
       } );
     },

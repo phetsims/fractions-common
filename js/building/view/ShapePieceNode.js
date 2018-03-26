@@ -96,8 +96,10 @@ define( function( require ) {
 
     // @private {function}
     this.positionListener = this.updatePosition.bind( this );
+    this.scaleListener = this.updateScale.bind( this );
     if ( this.positioned ) {
       this.shapePiece.positionProperty.link( this.positionListener );
+      this.shapePiece.scaleProperty.link( this.scaleListener );
     }
 
     // @private {function}
@@ -131,6 +133,14 @@ define( function( require ) {
      */
     updatePosition: function() {
       this.translation = this.modelViewTransform.modelToViewPosition( this.shapePiece.positionProperty.value );
+    },
+
+    /**
+     * Updates the scale of this node to correspond to the model scale.
+     * @public
+     */
+    updateScale: function() {
+      this.setScaleMagnitude( this.shapePiece.scaleProperty.value );
     },
 
     /** 

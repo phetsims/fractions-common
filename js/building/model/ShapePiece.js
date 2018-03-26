@@ -48,9 +48,11 @@ define( function( require ) {
     // @public {Property.<number>} - Applies only while out in the play area (being animated or dragged)
     this.rotationProperty = new NumberProperty( 0 );
 
+    // @public {Property.<number>} - Applies only while out in the play area (being animated or dragged)
+    this.scaleProperty = new NumberProperty( 1 );
+
     // @public {Property.<boolean>}
     this.isUserControlledProperty = new BooleanProperty( false );
-
 
     // @public {Property.<boolean>}
     this.isAnimatingProperty = new BooleanProperty( false );
@@ -58,9 +60,13 @@ define( function( require ) {
     // @private {number} - Ratio of the animation
     this.ratio = 0;
 
-    // @private {Vector2|number}
+    // @private {Vector2|null}
     this.originPosition = null;
     this.destinationPosition = null;
+
+    // @private {number|null}
+    this.originScale = null;
+    this.destinationScale = null;
 
     // @private {function|null}
     this.endAnimationCallback = null;
@@ -72,15 +78,20 @@ define( function( require ) {
   fractionsCommon.register( 'ShapePiece', ShapePiece );
 
   return inherit( Object, ShapePiece, {
-    animateTo: function( modelPosition, invalidationProperty, easing, endAnimationCallback ) {
+    animateTo: function( modelPosition, endScale, invalidationProperty, easing, endAnimationCallback ) {
       // TODO: How to handle an already-animating value? Finish it and call endAnimationCallback?
       // TODO: rotation
 
       // TODO: how to handle interruption of the property
       this.isAnimatingProperty.value = true;
       this.ratio = 0;
+
       this.originPosition = this.positionProperty.value;
       this.destinationPosition = modelPosition;
+
+      this.originScale = this.scaleProperty.value;
+      this.destinationScale = endScale;
+
       this.endAnimationCallback = endAnimationCallback;
       this.easing = easing;
     },
@@ -94,12 +105,15 @@ define( function( require ) {
         this.ratio = Math.min( 1, this.ratio + dt * 10 / Math.sqrt( this.originPosition.distance( this.destinationPosition ) ) );
         if ( this.ratio === 1 ) {
           this.positionProperty.value = this.destinationPosition;
+          this.scaleProperty.value = this.destinationScale;
           this.isAnimatingProperty.value = false;
           this.endAnimationCallback();
         }
         else {
           // TODO: control the easing in/out more? sometimes we want IN_OUT
-          this.positionProperty.value = this.originPosition.blend( this.destinationPosition, this.easing.value( this.ratio ) );
+          var easedRatio = this.easing.value( this.ratio );
+          this.positionProperty.value = this.originPosition.blend( this.destinationPosition, easedRatio );
+          this.scaleProperty.value = this.originScale * ( 1 - easedRatio ) + this.destinationScale * easedRatio;
         }
       }
     }
