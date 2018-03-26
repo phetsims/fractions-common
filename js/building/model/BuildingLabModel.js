@@ -53,6 +53,9 @@ define( function( require ) {
     // @public {ObservableArray.<ShapeGroup>}
     this.shapeGroups = new ObservableArray();
 
+    // @public {ObservableArray.<ShapePiece>} - Shape pieces in the play area (controlled or animating)
+    this.activeShapePieces = new ObservableArray();
+
     // @public {Property.<ShapeGroup|null>} - We'll only show controls for this shape group
     this.selectedShapeGroupProperty = new Property( null );
 

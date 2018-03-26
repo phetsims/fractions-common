@@ -95,23 +95,12 @@ define( function( require ) {
         inputListeners: [
           DragListener.createForwardingListener( function( event ) {
             var shapePiece = new ShapePiece( stack.fraction, stack.representation, stack.colorProperty );
-            var shapePieceNode = new ShapePieceNode( shapePiece, {
-              positioned: true,
-              modelViewTransform: self.modelViewTransform,
-              dropListener: function() {
-                arrayRemove( self.shapePieceNodes, shapePieceNode );
-                self.pieceLayer.removeChild( shapePieceNode );
-                shapePieceNode.dispose();
-                var shapeContainer = model.getClosestShapeContainer( shapePiece, 0 );
-                if ( shapeContainer ) {
-                  shapeContainer.shapePieces.push( shapePiece );
-                }
-              }
-            } );
-            self.shapePieceNodes.push( shapePieceNode );
-            self.pieceLayer.addChild( shapePieceNode );
-            // TODO: don't require this be set after the node creation, see our lazy link in the node
             shapePiece.positionProperty.value = self.modelViewTransform.viewToModelPosition( self.globalToLocalPoint( event.pointer.point ) );
+            model.activeShapePieces.push( shapePiece );
+            // TODO: factor this "find" usage out
+            var shapePieceNode = _.find( self.shapePieceNodes, function( shapePieceNode ) {
+              return shapePieceNode.shapePiece === shapePiece;
+            } );
             shapePieceNode.dragListener.press( event, shapePieceNode );
           } )
         ]
@@ -190,12 +179,37 @@ define( function( require ) {
     // @private {Array.<ShapeGroupNode>}
     this.shapeGroupNodes = []; // TODO: interrupt on reset
 
-    // @private {Array.<ShapePieceNode>}
-    this.shapePieceNodes = []; // TODO: interrupt on reset
-
     model.shapeGroups.addItemAddedListener( this.addShapeGroup.bind( this ) );
     model.shapeGroups.addItemRemovedListener( this.removeShapeGroup.bind( this ) );
     model.shapeGroups.forEach( this.addShapeGroup.bind( this ) );
+
+    // @private {Array.<ShapePieceNode>}
+    this.shapePieceNodes = []; // TODO: interrupt on reset
+
+    model.activeShapePieces.addItemAddedListener( function( shapePiece ) {
+      var shapePieceNode = new ShapePieceNode( shapePiece, {
+        positioned: true,
+        modelViewTransform: self.modelViewTransform,
+        dropListener: function() {
+          model.activeShapePieces.remove( shapePiece );
+          var shapeContainer = model.getClosestShapeContainer( shapePiece, 0 );
+          if ( shapeContainer ) {
+            shapeContainer.shapePieces.push( shapePiece );
+          }
+        }
+      } );
+      self.shapePieceNodes.push( shapePieceNode );
+      self.pieceLayer.addChild( shapePieceNode );
+    } );
+    model.activeShapePieces.addItemRemovedListener( function( shapePiece ) {
+      var shapePieceNode = _.find( self.shapePieceNodes, function( shapePieceNode ) {
+        return shapePieceNode.shapePiece === shapePiece;
+      } );
+
+      arrayRemove( self.shapePieceNodes, shapePieceNode );
+      self.pieceLayer.removeChild( shapePieceNode );
+      shapePieceNode.dispose();
+    } );
 
     phet.joist.display.addInputListener( {
       down: function() {
