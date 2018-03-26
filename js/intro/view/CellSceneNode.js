@@ -32,7 +32,7 @@ define( function( require ) {
 
     options = _.extend( {
       horizontalSpacing: 10, // horizontal spacing between adjacent containers
-      verticalSpacing: 10, // vertical spacing  between containers
+      verticalSpacing: 10, // vertical spacing between containers
       verticalOffset: 0
     }, options );
 

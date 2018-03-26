@@ -36,16 +36,14 @@ define( function( require ) {
     this.piece = piece;
 
     // this will be created by the <representation>PieceNode itself
-    // @private
+    // @private {Node}
     this.graphic = options.graphic;
 
-    // @public (read-only) {function}
+    // @protected (read-only) {function}
     this.finishedAnimatingCallback = finishedAnimatingCallback;
 
     Node.call( this, {
-      children: [
-        this.graphic
-      ]
+      children: [ this.graphic ]
     } );
 
     // @public {Property.<Vector2>}
@@ -97,6 +95,7 @@ define( function( require ) {
      * @public
      */
     getMidpoint: function() {
+      // TODO: Use centroids?
       return this.localToParentPoint( this.graphic.midpointOffset );
     },
 
