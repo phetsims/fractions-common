@@ -80,7 +80,7 @@ define( function( require ) {
      */
     increaseContainerCount: function() {
       var offset = new Vector2( this.shapeContainers.length * ( FractionsCommonConstants.SHAPE_SIZE + FractionsCommonConstants.SHAPE_CONTAINER_PADDING ), 0 );
-      this.shapeContainers.push( new ShapeContainer( this.partitionDenominatorProperty, this.representation, this.changedEmitter, offset ) );
+      this.shapeContainers.push( new ShapeContainer( this, this.partitionDenominatorProperty, this.representation, this.changedEmitter, offset ) );
     },
 
     /**

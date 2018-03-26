@@ -98,10 +98,9 @@ define( function( require ) {
       } );
     },
 
-    shapePieceDropped: function( shapePiece, closestThreshold ) {
-      var closestGroup = null;
+    findClosestDroppableContainer: function( shapePiece, threshold ) {
       var closestContainer = null;
-      var closestDistance = closestThreshold;
+      var closestDistance = threshold;
 
       var point = shapePiece.positionProperty.value;
 
@@ -114,15 +113,20 @@ define( function( require ) {
             if ( distance <= closestDistance ) {
               closestDistance = distance;
               closestContainer = shapeContainer;
-              closestGroup = shapeGroup;
             }
           }
         } );
       } );
 
+      return closestContainer;
+    },
+
+    shapePieceDropped: function( shapePiece, threshold ) {
+      var closestContainer = this.findClosestDroppableContainer( shapePiece, threshold );
+
       if ( closestContainer ) {
         closestContainer.shapePieces.push( shapePiece );
-        this.placeActiveShapePiece( shapePiece, closestContainer, closestGroup );
+        this.placeActiveShapePiece( shapePiece, closestContainer, closestContainer.shapeGroup );
       }
       else {
         this.returnActiveShapePiece( shapePiece );
@@ -183,8 +187,18 @@ define( function( require ) {
     },
 
     step: function( dt ) {
+      var self = this;
+
       this.activeShapePieces.forEach( function( shapePiece ) {
         shapePiece.step( dt );
+
+        // Don't compute the closest for ALL pieces, that would hurt performance.
+        if ( shapePiece.representation === Representation.CIRCLE && shapePiece.isUserControlledProperty.value ) {
+          var closestContainer = self.findClosestDroppableContainer( shapePiece, Number.POSITIVE_INFINITY );
+          if ( closestContainer ) {
+            shapePiece.orientTowardsContainer( closestContainer, dt );
+          }
+        }
       } );
     }
   } );

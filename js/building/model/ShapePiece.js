@@ -18,6 +18,7 @@ define( function( require ) {
   var NumberProperty = require( 'AXON/NumberProperty' );
   var Property = require( 'AXON/Property' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
   /**
@@ -122,10 +123,21 @@ define( function( require ) {
           var easedRatio = this.easing.value( this.ratio );
           this.positionProperty.value = this.originPosition.blend( this.destinationPosition, easedRatio );
           this.scaleProperty.value = this.originScale * ( 1 - easedRatio ) + this.destinationScale * easedRatio;
-
-          // TODO: closest-rotation handling (where have I done this). THEN PUT IT IN COMMON CODE THIS TIME.
-          this.rotationProperty.value = this.originRotation * ( 1 - easedRatio ) + this.destinationRotation * easedRatio;
+          this.rotationProperty.value = ShapePiece.clerp( this.originRotation, this.destinationRotation, easedRatio );
         }
+      }
+    },
+
+    orientTowardsContainer: function( closestContainer, dt ) {
+      var targetRotation = -2 * Math.PI * closestContainer.totalFractionProperty.value.getValue();
+      var currentRotation = this.rotationProperty.value;
+      targetRotation = ShapePiece.modifiedEndAngle( currentRotation, targetRotation );
+      var delta = Util.sign( targetRotation - currentRotation ) * dt * 5;
+      if ( Math.abs( currentRotation - targetRotation ) < delta ) {
+        this.rotationProperty.value = targetRotation;
+      }
+      else {
+        this.rotationProperty.value += delta;
       }
     }
   }, {
@@ -153,5 +165,28 @@ define( function( require ) {
       }
     },
 
+    modifiedEndAngle: function( startAngle, endAngle ) {
+      var modifiedEndAngle = Util.moduloBetweenDown( endAngle, startAngle, startAngle + 2 * Math.PI );
+      if ( modifiedEndAngle > startAngle + Math.PI ) {
+        modifiedEndAngle -= 2 * Math.PI;
+      }
+      return modifiedEndAngle;
+    },
+
+    /**
+     * Circular linear interpolation (like slerp, but on a plane).
+     * @public
+     *
+     * NOTE: my Google search for "slerp on a plane" didn't come up with anything useful besides neck pillows, so this
+     * is just called clerp. :P
+     *
+     * @param {number} startAngle
+     * @param {number} endAngle
+     * @param {number} ratio
+     * @return {number}
+     */
+    clerp: function( startAngle, endAngle, ratio ) {
+      return startAngle * ( 1 - ratio ) + ShapePiece.modifiedEndAngle( startAngle, endAngle ) * ratio;
+    }
   } );
 } );

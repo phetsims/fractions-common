@@ -31,14 +31,19 @@ define( function( require ) {
    * @constructor
    * @extends {Object}
    *
+   * @param {ShapeGroup} shapeGroup -- Should we just pass this through in general? Or get rid of the reference and
+   *                                   simplify our "find the container" logic? Or provide as null? TODO
    * @param {Property.<number>} partitionDenominatorProperty
    * @param {Representation} representation
    * @param {Emitter} changedEmitter
    * @param {Vector2} offset - Offset from the ShapeGroup's origin
    */
-  function ShapeContainer( partitionDenominatorProperty, representation, changedEmitter, offset ) {
+  function ShapeContainer( shapeGroup, partitionDenominatorProperty, representation, changedEmitter, offset ) {
 
     var self = this;
+
+    // @public {ShapeGroup} shapeGroup
+    this.shapeGroup = shapeGroup;
 
     // @public {Property.<number>}
     this.partitionDenominatorProperty = partitionDenominatorProperty;
