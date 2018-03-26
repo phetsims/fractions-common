@@ -17,6 +17,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   var Shape = require( 'KITE/Shape' );
@@ -37,9 +38,18 @@ define( function( require ) {
   function ShapePieceNode( shapePiece, options ) {
     assert && assert( shapePiece instanceof ShapePiece );
 
+    var self = this;
+
     options = _.extend( {
-      dropListener: null, // {function|null} - Called when it is dropped
-      positioned: false // {boolean} - For pieces placed in stacks/containers, we don't care about the positionProperty
+      // {function|null} - Called when it is dropped
+      dropListener: null,
+
+      // {boolean} - For pieces placed in stacks/containers, we don't care about the positionProperty. In addition,
+      // pieces in stacks/containers ALSO care about not showing up when the piece is user-controlled or animating.
+      positioned: false,
+
+      // {ModelViewTransform2|null} - If positioned, a model-view-transform should be provided.
+      modelViewTransform: null
     }, options );
 
     Node.call( this );
@@ -52,6 +62,11 @@ define( function( require ) {
 
     // @private {boolean}
     this.positioned = options.positioned;
+
+    // @private {ModelViewTransform2|null}
+    this.modelViewTransform = options.modelViewTransform;
+
+    assert && assert( !this.positioned || this.modelViewTransform, 'Positioned ShapePieceNodes need a MVT' );
 
     var fractionValue = shapePiece.fraction.getValue();
     assert && assert( fractionValue <= 1 );
@@ -85,10 +100,18 @@ define( function( require ) {
       this.shapePiece.positionProperty.link( this.positionListener );
     }
 
+    // @private {function}
+    this.visibilityListener = Property.multilink( [ shapePiece.isUserControlledProperty, shapePiece.isAnimatingProperty ], function( isUserControlled, isAnimating ) {
+      if ( !self.positioned ) {
+        self.visible = !isUserControlled && !isAnimating;
+      }
+    } );
+
     // @public {DragListener}
     this.dragListener = new DragListener( {
       // TODO: drag bounds
       targetNode: this,
+      transform: options.modelViewTransform,
       locationProperty: shapePiece.positionProperty,
       isUserControlledProperty: shapePiece.isUserControlledProperty,
       end: function( event ) {
@@ -107,9 +130,10 @@ define( function( require ) {
      * @public
      */
     updatePosition: function() {
+      var viewPosition = this.modelViewTransform.modelToViewPosition( this.shapePiece.positionProperty.value );
       // TODO: reduce GC?
       // TODO: No seriously, why is the 0.5 needed here? Find out, it seems wron
-      this.translation = this.shapePiece.positionProperty.value.minus( this.centroid.timesScalar( 0.5 ) );
+      this.translation = viewPosition.minus( this.centroid.timesScalar( 0.5 ) );
     },
 
     /** 
@@ -119,6 +143,8 @@ define( function( require ) {
     dispose: function() {
       // Required disposal, since we are passing the isUserControlledProperty
       this.dragListener.dispose();
+
+      this.visibilityListener.dispose();
 
       if ( this.positioned ) {
         this.shapePiece.positionProperty.unlink( this.positionListener );

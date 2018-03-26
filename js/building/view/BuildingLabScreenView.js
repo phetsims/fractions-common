@@ -21,6 +21,8 @@ define( function( require ) {
   var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Matrix3 = require( 'DOT/Matrix3' );
+  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var MutableOptionsNode = require( 'SUN/MutableOptionsNode' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
@@ -51,6 +53,9 @@ define( function( require ) {
     this.model = model;
 
     ScreenView.call( this );
+
+    // @public {ModelViewTransform2}
+    this.modelViewTransform = new ModelViewTransform2( Matrix3.translationFromVector( this.layoutBounds.center ) );
 
     // TODO: Move all this code out to a named panel?
     var representationSelectionNode = new MutableOptionsNode( RadioButtonGroup, [ model.topRepresentationProperty, [
@@ -92,6 +97,7 @@ define( function( require ) {
             var shapePiece = new ShapePiece( stack.fraction, stack.representation, stack.colorProperty );
             var shapePieceNode = new ShapePieceNode( shapePiece, {
               positioned: true,
+              modelViewTransform: self.modelViewTransform,
               dropListener: function() {
                 arrayRemove( self.shapePieceNodes, shapePieceNode );
                 self.pieceLayer.removeChild( shapePieceNode );
@@ -105,7 +111,7 @@ define( function( require ) {
             self.shapePieceNodes.push( shapePieceNode );
             self.pieceLayer.addChild( shapePieceNode );
             // TODO: don't require this be set after the node creation, see our lazy link in the node
-            shapePiece.positionProperty.value = self.globalToLocalPoint( event.pointer.point );
+            shapePiece.positionProperty.value = self.modelViewTransform.viewToModelPosition( self.globalToLocalPoint( event.pointer.point ) );
             shapePieceNode.dragListener.press( event, shapePieceNode );
           } )
         ]
@@ -132,7 +138,7 @@ define( function( require ) {
             // TODO: encapsulation
             var shapeGroup = new ShapeGroup( representation );
             shapeGroup.increaseContainerCount();
-            shapeGroup.positionProperty.value = self.globalToLocalPoint( event.pointer.point );
+            shapeGroup.positionProperty.value = self.modelViewTransform.viewToModelPosition( self.globalToLocalPoint( event.pointer.point ) );
             model.shapeGroups.push( shapeGroup );
             var shapeGroupNode = _.find( self.shapeGroupNodes, function( shapeGroupNode ) {
               return shapeGroupNode.shapeGroup === shapeGroup;
@@ -177,15 +183,12 @@ define( function( require ) {
       xMargin: 15
     } );
     this.shapePanel.centerTop = this.layoutBounds.centerTop.plusXY( 0, PANEL_MARGIN );
-    this.addChild( this.shapePanel );
 
     // @private {Node}
     this.groupLayer = new Node();
-    this.addChild( this.groupLayer );
 
     // @private {Node}
     this.pieceLayer = new Node();
-    this.addChild( this.pieceLayer );
 
     // @private {Array.<ShapeGroupNode>}
     this.shapeGroupNodes = []; // TODO: interrupt on reset
@@ -205,15 +208,36 @@ define( function( require ) {
       }
     } );
 
-    // Reset All button
+    // @private {Node}
     var resetAllButton = new ResetAllButton( {
       listener: function() {
         model.reset();
-      },
-      right: this.layoutBounds.maxX - 10,
-      bottom: this.layoutBounds.maxY - 10
+      }
     } );
-    this.addChild( resetAllButton );
+
+    var topAlignBox = new AlignBox( this.shapePanel, {
+      xAlign: 'center',
+      yAlign: 'top',
+      margin: PANEL_MARGIN
+    } );
+
+    var bottomRightAlignBox = new AlignBox( resetAllButton, {
+      xAlign: 'right',
+      yAlign: 'bottom',
+      margin: PANEL_MARGIN
+    } );
+
+    this.visibleBoundsProperty.link( function( visibleBounds ) {
+      topAlignBox.alignBounds = visibleBounds;
+      bottomRightAlignBox.alignBounds = visibleBounds;
+    } );
+
+    this.children = [
+      bottomRightAlignBox,
+      topAlignBox,
+      this.groupLayer,
+      this.pieceLayer
+    ];
   }
 
   fractionsCommon.register( 'BuildingLabScreenView', BuildingLabScreenView );
@@ -223,8 +247,10 @@ define( function( require ) {
       var self = this;
 
       var shapeGroupNode = new ShapeGroupNode( shapeGroup, {
+        modelViewTransform: this.modelViewTransform,
         dropListener: function() {
-          if ( self.shapePanel.bounds.dilated( 10 ).containsPoint( shapeGroup.positionProperty.value ) ) {
+          // TODO: What about groups with lots of containers?
+          if ( self.shapePanel.bounds.dilated( 10 ).containsPoint( self.modelViewTransform.modelToViewPosition( shapeGroup.positionProperty.value ) ) ) {
             self.model.shapeGroups.remove( shapeGroup );
           }
         },

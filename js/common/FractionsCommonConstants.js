@@ -12,6 +12,7 @@ define( function( require ) {
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
   var FractionsCommonConstants = {
+    // {number}
     PANEL_MARGIN: 10,
 
     // {number} - The diameter of circle shapes, and the width of vertical-bar shapes.

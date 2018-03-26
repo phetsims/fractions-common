@@ -82,10 +82,12 @@ define( function( require ) {
         var localPoint = scratchVector.set( point ).subtract( shapeGroup.positionProperty.value );
 
         shapeGroup.shapeContainers.forEach( function( shapeContainer ) {
-          var distance = shapeContainer.distanceFromPoint( localPoint );
-          if ( distance <= closestDistance ) {
-            closestDistance = distance;
-            closestContainer = shapeContainer;
+          if ( shapeContainer.canFitPiece( shapePiece ) ) {
+            var distance = shapeContainer.distanceFromPoint( localPoint );
+            if ( distance <= closestDistance ) {
+              closestDistance = distance;
+              closestContainer = shapeContainer;
+            }
           }
         } );
       } );
@@ -99,8 +101,7 @@ define( function( require ) {
       // Initial state
       var group = new ShapeGroup( Representation.CIRCLE );
       group.increaseContainerCount();
-      // TODO: constants
-      group.positionProperty.value = new Vector2( 1024 * 2 / 3, 618 / 2 );
+      group.positionProperty.value = new Vector2( 170, 0 );
       this.shapeGroups.push( group );
 
       this.selectedShapeGroupProperty.value = group;

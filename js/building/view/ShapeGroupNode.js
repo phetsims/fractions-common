@@ -51,6 +51,7 @@ define( function( require ) {
       isSelectedProperty: new BooleanProperty( true ),
       dropListener: null,
       selectListener: null,
+      modelViewTransform: null // {ModelViewTransform2|null} - Not needed if we are an icon
     }, options );
 
     // TODO: animation
@@ -188,29 +189,36 @@ define( function( require ) {
     updateUndoVisibility();
     this.controlLayer.addChild( undoArrowContainer );
 
-    shapeGroup.positionProperty.linkAttribute( this, 'translation' );
+    // TODO: Presumably won't need an unlink, since our lifetimes are the same
+    if ( !options.isIcon ) {
+      shapeGroup.positionProperty.link( function( position ) {
+        self.translation = options.modelViewTransform.modelToViewPosition( position );
+      } );
 
-    // @public {DragListener}
-    this.dragListener = new DragListener( {
-      // TODO: drag bounds
-      targetNode: this,
-      locationProperty: shapeGroup.positionProperty,
-      start: function( event ) {
-        options.selectListener && options.selectListener();
-        self.moveToFront();
-      },
-      end: function( event ) {
-        options.dropListener && options.dropListener();
-      }
-    } );
-    this.shapeContainerLayer.addInputListener( this.dragListener );
+      // @public {DragListener}
+      this.dragListener = new DragListener( {
+        // TODO: drag bounds
+        targetNode: this,
+        locationProperty: shapeGroup.positionProperty,
+        transform: options.modelViewTransform,
+        start: function( event ) {
+          options.selectListener && options.selectListener();
+          self.moveToFront();
+        },
+        end: function( event ) {
+          options.dropListener && options.dropListener();
+        }
+      } );
+      this.shapeContainerLayer.addInputListener( this.dragListener );
 
-    this.addInputListener( {
-      down: function( event ) {
-        options.selectListener && options.selectListener();
-        event.handle();
-      }
-    } );
+      this.addInputListener( {
+        down: function( event ) {
+          options.selectListener && options.selectListener();
+          event.handle();
+        }
+      } );
+    }
+
 
     this.mutate( options );
   }

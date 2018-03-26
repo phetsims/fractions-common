@@ -46,6 +46,9 @@ define( function( require ) {
 
     // @public {Property.<boolean>}
     this.isUserControlledProperty = new BooleanProperty( false );
+
+    // @public {Property.<boolean>}
+    this.isAnimatingProperty = new BooleanProperty( false );
   }
 
   fractionsCommon.register( 'ShapePiece', ShapePiece );
