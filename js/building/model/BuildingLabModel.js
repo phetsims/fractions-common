@@ -69,37 +69,6 @@ define( function( require ) {
   fractionsCommon.register( 'BuildingLabModel', BuildingLabModel );
 
   return inherit( Object, BuildingLabModel, {
-    /**
-     * Returns the closest ShapeContainer to a given ShapePiece within a certain threshold. The threshold will probably
-     * be larger for touch usage, etc.
-     * @public
-     *
-     * @param {ShapePiece} shapePiece
-     * @param {number} threshold - Should be 0 or greater generally.
-     * @returns {ShapeContainer|null}
-     */
-    getClosestShapeContainer: function( shapePiece, threshold ) {
-      var closestContainer = null;
-      var closestDistance = threshold;
-
-      var point = shapePiece.positionProperty.value;
-
-      this.shapeGroups.forEach( function( shapeGroup ) {
-        var localPoint = scratchVector.set( point ).subtract( shapeGroup.positionProperty.value );
-
-        shapeGroup.shapeContainers.forEach( function( shapeContainer ) {
-          if ( shapeContainer.canFitPiece( shapePiece ) ) {
-            var distance = shapeContainer.distanceFromPoint( localPoint );
-            if ( distance <= closestDistance ) {
-              closestDistance = distance;
-              closestContainer = shapeContainer;
-            }
-          }
-        } );
-      } );
-      return closestContainer;
-    },
-
     returnActiveShapePiece: function( shapePiece ) {
       var self = this;
 
@@ -113,6 +82,44 @@ define( function( require ) {
       shapePiece.animateTo( position, FractionsCommonConstants.SHAPE_BUILD_SCALE, shapeStack.positionProperty, Easing.QUADRATIC_IN, function() {
         self.activeShapePieces.remove( shapePiece );
       } );
+    },
+
+    placeActiveShapePiece: function( shapePiece, shapeContainer, shapeGroup ) {
+      // TODO: animate
+      this.activeShapePieces.remove( shapePiece );
+      // shapePiece.animateTo( getLocationInContainer, groupPositionWhatever -- to invalidate in motion, someCallbackWHenDoneThatRemoves )
+      // NOTE: Handle it if it starts animation and THEN the piece gets moved somewhere else. Instant animate
+    },
+
+    shapePieceDropped: function( shapePiece, closestThreshold ) {
+      var closestGroup = null;
+      var closestContainer = null;
+      var closestDistance = closestThreshold;
+
+      var point = shapePiece.positionProperty.value;
+
+      this.shapeGroups.forEach( function( shapeGroup ) {
+        var localPoint = scratchVector.set( point ).subtract( shapeGroup.positionProperty.value );
+
+        shapeGroup.shapeContainers.forEach( function( shapeContainer ) {
+          if ( shapeContainer.canFitPiece( shapePiece ) ) {
+            var distance = shapeContainer.distanceFromPoint( localPoint );
+            if ( distance <= closestDistance ) {
+              closestDistance = distance;
+              closestContainer = shapeContainer;
+              closestGroup = shapeGroup;
+            }
+          }
+        } );
+      } );
+
+      if ( closestContainer ) {
+        closestContainer.shapePieces.push( shapePiece );
+        this.placeActiveShapePiece( shapePiece, closestContainer, closestGroup );
+      }
+      else {
+        this.returnActiveShapePiece( shapePiece );
+      }
     },
 
     // TODO: doc

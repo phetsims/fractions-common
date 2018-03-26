@@ -90,18 +90,7 @@ define( function( require ) {
         positioned: true,
         modelViewTransform: self.modelViewTransform,
         dropListener: function( wasTouch ) {
-          // TODO: rename method to include droppable?
-          var shapeContainer = model.getClosestShapeContainer( shapePiece, wasTouch ? 50 : 0 );
-          if ( shapeContainer ) {
-            shapeContainer.shapePieces.push( shapePiece );
-            // TODO: animate
-            model.activeShapePieces.remove( shapePiece );
-            // shapePiece.animateTo( getLocationInContainer, groupPositionWhatever -- to invalidate in motion, someCallbackWHenDoneThatRemoves )
-            // NOTE: Handle it if it starts animation and THEN the piece gets moved somewhere else. Instant animate
-          }
-          else {
-            model.returnActiveShapePiece( shapePiece );
-          }
+          model.shapePieceDropped( shapePiece, wasTouch ? 50 : 0 );
         }
       } );
       self.shapePieceNodes.push( shapePieceNode );
