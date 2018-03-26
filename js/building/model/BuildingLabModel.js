@@ -94,17 +94,49 @@ define( function( require ) {
       return closestContainer;
     },
 
+    // TODO: doc
+    removeLastPieceFromGroup: function( shapeGroup ) {
+      for ( var i = shapeGroup.shapeContainers.length - 1; i >= 0; i-- ) {
+        var shapeContainer = shapeGroup.shapeContainers.get( i );
+        if ( shapeContainer.shapePieces.length ) {
+          shapeContainer.shapePieces.pop();
+          // TODO: Have an "in-motion" group of pieces? Or in Play area?
+          return;
+        }
+      }
+      throw new Error( 'Could not find a piece to remove' );
+    },
+
+    addShapeGroup: function( representation ) {
+      var self = this;
+
+      var shapeGroup = new ShapeGroup( representation, {
+        returnPieceListener: function() {
+          self.removeLastPieceFromGroup( shapeGroup );
+        }
+      } );
+      this.shapeGroups.push( shapeGroup );
+
+      return shapeGroup;
+    },
+
+    // TODO: symmetric methods
+    removeShapeGroup: function( shapeGroup ) {
+      while ( shapeGroup.hasAnyPieces() ) {
+        this.removeLastPieceFromGroup( shapeGroup );
+      }
+      this.shapeGroups.remove( shapeGroup );
+    },
+
     reset: function() {
       this.topRepresentationProperty.reset();
       this.shapeGroups.reset();
 
       // Initial state
-      var group = new ShapeGroup( Representation.CIRCLE );
-      group.increaseContainerCount();
-      group.positionProperty.value = new Vector2( 170, 0 );
-      this.shapeGroups.push( group );
+      var shapeGroup = this.addShapeGroup( Representation.CIRCLE );
+      shapeGroup.positionProperty.value = new Vector2( 170, 0 );
 
-      this.selectedShapeGroupProperty.value = group;
+      this.selectedShapeGroupProperty.value = shapeGroup;
     },
 
     step: function( dt ) {

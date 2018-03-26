@@ -25,11 +25,18 @@ define( function( require ) {
    * @extends {Object}
    *
    * @param {Representation} representation
+   * @param {Object} [options}]
    */
-  function ShapeGroup( representation ) {
+  function ShapeGroup( representation, options ) {
+    options = _.extend( {
+      returnPieceListener: null
+    }, options );
 
     // @public {Representation}
     this.representation = representation;
+
+    // @private {function}
+    this.returnPieceListener = options.returnPieceListener;
 
     // @public {Property.<Vector2>}
     this.positionProperty = new Property( Vector2.ZERO );
@@ -48,6 +55,9 @@ define( function( require ) {
 
     this.shapeContainers.addItemAddedListener( this.changedEmitter.emit.bind( this.changedEmitter ) );
     this.shapeContainers.addItemRemovedListener( this.changedEmitter.emit.bind( this.changedEmitter ) );
+
+    // Always want at least one container
+    this.increaseContainerCount();
   }
 
   fractionsCommon.register( 'ShapeGroup', ShapeGroup );
@@ -61,18 +71,6 @@ define( function( require ) {
         }
       }
       return false;
-    },
-
-    // TODO: doc
-    undoPiece: function() {
-      for ( var i = this.shapeContainers.length - 1; i >= 0; i-- ) {
-        var shapeContainer = this.shapeContainers.get( i );
-        if ( shapeContainer.shapePieces.length ) {
-          shapeContainer.shapePieces.pop();
-          return;
-        }
-      }
-      throw new Error( 'Could not find a piece to remove' );
     },
 
     /**
@@ -90,6 +88,9 @@ define( function( require ) {
      * @public
      */
     decreaseContainerCount: function() {
+      while ( this.shapeContainers.length && this.shapeContainers.get( this.shapeContainers.length - 1 ).shapePieces.length ) {
+        this.returnPieceListener();
+      }
       this.shapeContainers.pop();
     }
   } );

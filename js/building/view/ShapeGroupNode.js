@@ -51,6 +51,7 @@ define( function( require ) {
       isSelectedProperty: new BooleanProperty( true ),
       dropListener: null,
       selectListener: null,
+      removeLastListener: null,
       modelViewTransform: null // {ModelViewTransform2|null} - Not needed if we are an icon
     }, options );
 
@@ -175,7 +176,7 @@ define( function( require ) {
       // TODO: Make it computational
       rightBottom: shapeGroup.representation === Representation.VERTICAL_BAR ? new Vector2( -50, -75 / 2 ) : new Vector2( -36, -36 ),
       listener: function() {
-        shapeGroup.undoPiece();
+        options.removeLastListener();
       }
     }, {
       baseColor: FractionsCommonColorProfile.undoButtonProperty

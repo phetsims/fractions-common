@@ -122,7 +122,6 @@ define( function( require ) {
 
     function createGroupIcon( representation ) {
       var iconGroup = new ShapeGroup( representation );
-      iconGroup.increaseContainerCount();
       var iconNode = new ShapeGroupNode( iconGroup, {
         isIcon: true,
         scale: FractionsCommonConstants.SHAPE_BUILD_SCALE,
@@ -136,10 +135,8 @@ define( function( require ) {
         inputListeners: [
           DragListener.createForwardingListener( function( event ) {
             // TODO: encapsulation
-            var shapeGroup = new ShapeGroup( representation );
-            shapeGroup.increaseContainerCount();
+            var shapeGroup = model.addShapeGroup( representation );
             shapeGroup.positionProperty.value = self.modelViewTransform.viewToModelPosition( self.globalToLocalPoint( event.pointer.point ) );
-            model.shapeGroups.push( shapeGroup );
             var shapeGroupNode = _.find( self.shapeGroupNodes, function( shapeGroupNode ) {
               return shapeGroupNode.shapeGroup === shapeGroup;
             } );
@@ -251,11 +248,14 @@ define( function( require ) {
         dropListener: function() {
           // TODO: What about groups with lots of containers?
           if ( self.shapePanel.bounds.dilated( 10 ).containsPoint( self.modelViewTransform.modelToViewPosition( shapeGroup.positionProperty.value ) ) ) {
-            self.model.shapeGroups.remove( shapeGroup );
+            self.model.removeShapeGroup( shapeGroup );
           }
         },
         selectListener: function() {
           self.model.selectedShapeGroupProperty.value = shapeGroup;
+        },
+        removeLastListener: function() {
+          self.model.removeLastPieceFromGroup( shapeGroup );
         },
         isSelectedProperty: new DerivedProperty( [ self.model.selectedShapeGroupProperty ], function( selectedShapeGroup ) {
           return selectedShapeGroup === shapeGroup;
