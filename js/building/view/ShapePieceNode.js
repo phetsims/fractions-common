@@ -98,9 +98,11 @@ define( function( require ) {
     // @private {function}
     this.positionListener = this.updatePosition.bind( this );
     this.scaleListener = this.updateScale.bind( this );
+    this.rotationListener = this.updateRotation.bind( this );
     if ( this.positioned ) {
       this.shapePiece.positionProperty.link( this.positionListener );
       this.shapePiece.scaleProperty.link( this.scaleListener );
+      this.shapePiece.rotationProperty.link( this.rotationListener );
     }
 
     // @private {function}
@@ -142,6 +144,14 @@ define( function( require ) {
     },
 
     /**
+     * Updates the rotation of this node to correspond to the model rotation.
+     * @public
+     */
+    updateRotation: function() {
+      this.rotation = this.shapePiece.rotationProperty.value;
+    },
+
+    /**
      * Updates the scale of this node to correspond to the model scale.
      * @public
      */
@@ -161,6 +171,8 @@ define( function( require ) {
 
       if ( this.positioned ) {
         this.shapePiece.positionProperty.unlink( this.positionListener );
+        this.shapePiece.scaleProperty.unlink( this.scaleListener );
+        this.shapePiece.rotationProperty.unlink( this.rotationListener );
       }
 
       Node.prototype.dispose.call( this );

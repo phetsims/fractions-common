@@ -65,6 +65,10 @@ define( function( require ) {
     this.destinationPosition = null;
 
     // @private {number|null}
+    this.originRotation = null;
+    this.destinationRotation = null;
+
+    // @private {number|null}
     this.originScale = null;
     this.destinationScale = null;
 
@@ -78,7 +82,7 @@ define( function( require ) {
   fractionsCommon.register( 'ShapePiece', ShapePiece );
 
   return inherit( Object, ShapePiece, {
-    animateTo: function( modelPosition, endScale, invalidationProperty, easing, endAnimationCallback ) {
+    animateTo: function( endPosition, endRotation, endScale, invalidationProperty, easing, endAnimationCallback ) {
       // TODO: How to handle an already-animating value? Finish it and call endAnimationCallback?
       // TODO: rotation
 
@@ -87,7 +91,10 @@ define( function( require ) {
       this.ratio = 0;
 
       this.originPosition = this.positionProperty.value;
-      this.destinationPosition = modelPosition;
+      this.destinationPosition = endPosition;
+
+      this.originRotation = this.rotationProperty.value;
+      this.destinationRotation = endRotation;
 
       this.originScale = this.scaleProperty.value;
       this.destinationScale = endScale;
@@ -106,6 +113,7 @@ define( function( require ) {
         if ( this.ratio === 1 ) {
           this.positionProperty.value = this.destinationPosition;
           this.scaleProperty.value = this.destinationScale;
+          this.rotationProperty.value = this.destinationRotation;
           this.isAnimatingProperty.value = false;
           this.endAnimationCallback();
         }
@@ -114,6 +122,9 @@ define( function( require ) {
           var easedRatio = this.easing.value( this.ratio );
           this.positionProperty.value = this.originPosition.blend( this.destinationPosition, easedRatio );
           this.scaleProperty.value = this.originScale * ( 1 - easedRatio ) + this.destinationScale * easedRatio;
+
+          // TODO: closest-rotation handling (where have I done this). THEN PUT IT IN COMMON CODE THIS TIME.
+          this.rotationProperty.value = this.originRotation * ( 1 - easedRatio ) + this.destinationRotation * easedRatio;
         }
       }
     }

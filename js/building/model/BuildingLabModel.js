@@ -79,25 +79,22 @@ define( function( require ) {
       // TODO: Don't use hard-coded constant for game screens
       var shapeMatrix = ShapeStack.getShapeMatrix( shapePiece.fraction, shapePiece.representation, 1 );
       var position = shapeStack.positionProperty.value.plus( shapeMatrix.timesVector2( Vector2.ZERO ).timesScalar( FractionsCommonConstants.SHAPE_BUILD_SCALE ) );
-      shapePiece.animateTo( position, FractionsCommonConstants.SHAPE_BUILD_SCALE, shapeStack.positionProperty, Easing.QUADRATIC_IN, function() {
+      shapePiece.animateTo( position, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, shapeStack.positionProperty, Easing.QUADRATIC_IN, function() {
         self.activeShapePieces.remove( shapePiece );
       } );
     },
 
     placeActiveShapePiece: function( shapePiece, shapeContainer, shapeGroup ) {
       var self = this;
-      
+
       var shapeMatrix = ShapeContainer.getShapeMatrix( shapeContainer.getShapeRatio( shapePiece ), shapePiece.fraction, shapePiece.representation );
       // TODO: rotation
       var position = shapeGroup.positionProperty.value.plus( shapeContainer.offset ).plus( shapeMatrix.timesVector2( Vector2.ZERO ) );
       // TODO: also invalidate if our container goes away?
-      shapePiece.animateTo( position, 1, shapeGroup.positionProperty, Easing.QUADRATIC_IN_OUT, function() {
+      // NOTE: Handle it if it starts animation and THEN the piece gets moved somewhere else. Instant animate
+      shapePiece.animateTo( position, shapeMatrix.rotation, 1, shapeGroup.positionProperty, Easing.QUADRATIC_IN_OUT, function() {
         self.activeShapePieces.remove( shapePiece );
       } );
-      // TODO: animate
-      // this.activeShapePieces.remove( shapePiece );
-      // shapePiece.animateTo( getLocationInContainer, groupPositionWhatever -- to invalidate in motion, someCallbackWHenDoneThatRemoves )
-      // NOTE: Handle it if it starts animation and THEN the piece gets moved somewhere else. Instant animate
     },
 
     shapePieceDropped: function( shapePiece, closestThreshold ) {
