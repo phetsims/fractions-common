@@ -22,13 +22,13 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   var Shape = require( 'KITE/Shape' );
+  var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
   var ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
+  var Util = require( 'DOT/Util' );
 
   // constants
-  var CIRCLE_RADIUS = FractionsCommonConstants.SHAPE_WIDTH / 2;
-  var BAR_WIDTH = FractionsCommonConstants.SHAPE_WIDTH;
-  var BAR_HEIGHT = FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT;
+  var CIRCLE_RADIUS = FractionsCommonConstants.SHAPE_SIZE / 2;
 
   /**
    * @constructor
@@ -40,7 +40,9 @@ define( function( require ) {
   function ShapeContainerNode( shapeContainer, options ) {
     assert && assert( shapeContainer instanceof ShapeContainer );
 
-    Node.call( this );
+    Node.call( this, {
+      translation: shapeContainer.offset
+    } );
 
     // @public {ShapeContainer}
     this.shapeContainer = shapeContainer;
@@ -88,7 +90,8 @@ define( function( require ) {
       } ) );
     }
     else if ( shapeContainer.representation === Representation.VERTICAL_BAR ) {
-      this.addChild( new Rectangle( -BAR_WIDTH / 2, -BAR_HEIGHT / 2, BAR_WIDTH, BAR_HEIGHT, {
+      var barBounds = ShapePiece.VERTICAL_BAR_BOUNDS;
+      this.addChild( Rectangle.bounds( barBounds, {
         fill: FractionsCommonColorProfile.shapeContainerFillProperty
       } ) );
       this.addChild( this.shapePieceLayer );
@@ -96,12 +99,12 @@ define( function( require ) {
       shapeContainer.partitionDenominatorProperty.link( function( denominator ) {
         var separatorShape = new Shape();
         for ( var i = 1; i < denominator; i++ ) {
-          var x = ( i / denominator - 0.5 ) * BAR_WIDTH;
-          separatorShape.moveTo( x, -BAR_HEIGHT / 2 ).lineTo( x, BAR_HEIGHT / 2 );
+          var x = Util.linear( 0, 1, barBounds.minX, barBounds.maxX, i / denominator );
+          separatorShape.moveTo( x, barBounds.minY ).lineTo( x, barBounds.maxY );
         }
         separatorPath.shape = separatorShape;
       } );
-      this.addChild( new Rectangle( -BAR_WIDTH / 2, -BAR_HEIGHT / 2, BAR_WIDTH, BAR_HEIGHT, {
+      this.addChild( Rectangle.bounds( barBounds, {
         stroke: FractionsCommonColorProfile.shapeContainerStrokeProperty,
         pickable: false
       } ) );
@@ -137,7 +140,7 @@ define( function( require ) {
         shapePieceNode.rotation = -2 * Math.PI * ratio;
       }
       else if ( this.shapeContainer.representation === Representation.VERTICAL_BAR ) {
-        shapePieceNode.x = ( ratio - 0.5 ) * BAR_WIDTH;
+        shapePieceNode.x = Util.linear( 0, 1, ShapePiece.VERTICAL_BAR_BOUNDS.minX, ShapePiece.VERTICAL_BAR_BOUNDS.maxX, ratio );
       }
       else {
         throw new Error( 'Unsupported representation for ShapeContainerNode: ' + this.shapeContainer.representation );

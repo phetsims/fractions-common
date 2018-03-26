@@ -11,6 +11,7 @@ define( function( require ) {
   // modules
   var Emitter = require( 'AXON/Emitter' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var NumberProperty = require( 'AXON/NumberProperty' );
@@ -80,7 +81,8 @@ define( function( require ) {
      * TODO: don't require calling this at the start? Can we ALWAYS call it initially?
      */
     increaseContainerCount: function() {
-      this.shapeContainers.push( new ShapeContainer( this.partitionDenominatorProperty, this.representation, this.changedEmitter ) );
+      var offset = new Vector2( this.shapeContainers.length * ( FractionsCommonConstants.SHAPE_SIZE + FractionsCommonConstants.SHAPE_CONTAINER_PADDING ), 0 );
+      this.shapeContainers.push( new ShapeContainer( this.partitionDenominatorProperty, this.representation, this.changedEmitter, offset ) );
     },
 
     /**

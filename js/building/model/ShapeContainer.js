@@ -11,12 +11,19 @@ define( function( require ) {
   // modules
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
+  var Property = require( 'AXON/Property' );
+  var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   // TODO: Move to Fraction?
   var FRACTION_ONE = new Fraction( 1, 1 );
+
+  var scratchVector = new Vector2();
 
   /**
    * @constructor
@@ -25,8 +32,11 @@ define( function( require ) {
    * @param {Property.<number>} partitionDenominatorProperty
    * @param {Representation} representation
    * @param {Emitter} changedEmitter
+   * @param {Vector2} offset - Offset from the ShapeGroup's origin
    */
-  function ShapeContainer( partitionDenominatorProperty, representation, changedEmitter ) {
+  function ShapeContainer( partitionDenominatorProperty, representation, changedEmitter, offset ) {
+
+    var self = this;
 
     // @public {Property.<number>}
     this.partitionDenominatorProperty = partitionDenominatorProperty;
@@ -37,8 +47,22 @@ define( function( require ) {
     // @public {Emitter}
     this.changedEmitter = changedEmitter;
 
+    // @public {Vector2}
+    this.offset = offset;
+
     // @public {ObservableArray.<ShapePiece>}
     this.shapePieces = new ObservableArray();
+
+    // @public {Property.<Fraction>}
+    this.totalFractionProperty = new Property( new Fraction( 0, 1 ) );
+
+    // Keep totalFractionProperty up-to-date
+    this.shapePieces.addItemAddedListener( function( shapePiece ) {
+      self.totalFractionProperty.value = self.totalFractionProperty.value.plus( shapePiece.fraction ).reduced();
+    } );
+    this.shapePieces.addItemRemovedListener( function( shapePiece ) {
+      self.totalFractionProperty.value = self.totalFractionProperty.value.minus( shapePiece.fraction ).reduced();
+    } );
 
     this.shapePieces.addItemAddedListener( changedEmitter.emit.bind( changedEmitter ) );
     this.shapePieces.addItemRemovedListener( changedEmitter.emit.bind( changedEmitter ) );
@@ -47,23 +71,42 @@ define( function( require ) {
   fractionsCommon.register( 'ShapeContainer', ShapeContainer );
 
   return inherit( Object, ShapeContainer, {
-    // TODO: doc
+    /**
+     * Returns whether the ShapePiece can be placed into this container.
+     * @public
+     *
+     * @param {ShapePiece} shapePiece
+     * @returns {boolean}
+     */
     canFitPiece: function( shapePiece ) {
       if ( shapePiece.representation !== this.representation ) {
         return false;
       }
 
-      var potentialTotalFraction = this.getTotalFraction().plus( shapePiece.fraction ).reduce();
+      var potentialTotalFraction = this.totalFractionProperty.value.plus( shapePiece.fraction ).reduce();
       return potentialTotalFraction.isLessThan( FRACTION_ONE ) || potentialTotalFraction.equals( FRACTION_ONE );
     },
 
-    // TODO: doc
-    getTotalFraction: function() {
-      var fraction = new Fraction( 0, 1 );
-      for ( var i = 0; i < this.shapePieces.length; i++ ) {
-        fraction.add( this.shapePieces.get( i ).fraction );
+    /**
+     * Returns the distance of a point from this container.
+     * @public
+     *
+     * @param {Vector2} point
+     * @returns {number}
+     */
+    distanceFromPoint: function( point ) {
+      // Subtract off our local offset
+      var localPoint = scratchVector.set( point ).subtract( this.offset );
+
+      if ( this.representation === Representation.CIRCLE ) {
+        return Math.max( 0, localPoint.magnitude() - FractionsCommonConstants.SHAPE_SIZE / 2 );
       }
-      return fraction;
+      else if ( this.representation === Representation.VERTICAL_BAR ) {
+        return Math.sqrt( ShapePiece.VERTICAL_BAR_BOUNDS.minimumDistanceToPointSquared( localPoint ) );
+      }
+      else {
+        throw new Error( 'Unsupported representation for ShapeContainer: ' + this.representation );
+      }
     },
 
     /**

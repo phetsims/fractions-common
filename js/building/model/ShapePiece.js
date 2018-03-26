@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var Bounds2 = require( 'DOT/Bounds2' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -52,14 +53,17 @@ define( function( require ) {
           var positiveAngle = this.fraction.getValue() * 2 * Math.PI;
 
           // Compute the centroid for a circular sector
-          var radius = FractionsCommonConstants.SHAPE_WIDTH / 2;
+          var radius = FractionsCommonConstants.SHAPE_SIZE / 2;
           var distanceFromCenter = 4 / 3 * radius * Math.sin( positiveAngle / 2 ) / positiveAngle;
           return Vector2.createPolar( distanceFromCenter, -positiveAngle / 2 );
         }
       }
       else {
-        return new Vector2( FractionsCommonConstants.SHAPE_WIDTH * this.fraction.getValue() / 2, 0 );
+        return new Vector2( FractionsCommonConstants.SHAPE_SIZE * this.fraction.getValue() / 2, 0 );
       }
     }
+  }, {
+    // @public {Bounds2} - The bounds taken up by the full vertical-bar representation
+    VERTICAL_BAR_BOUNDS: Bounds2.point( 0, 0 ).dilatedXY( FractionsCommonConstants.SHAPE_SIZE / 2, FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT / 2 )
   } );
 } );

@@ -21,6 +21,8 @@ define( function( require ) {
   var ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
   var Vector2 = require( 'DOT/Vector2' );
 
+  var scratchVector = new Vector2();
+
   /**
    * @constructor
    * @extends {Object}
@@ -61,6 +63,35 @@ define( function( require ) {
   fractionsCommon.register( 'BuildingLabModel', BuildingLabModel );
 
   return inherit( Object, BuildingLabModel, {
+    /**
+     * Returns the closest ShapeContainer to a given ShapePiece within a certain threshold. The threshold will probably
+     * be larger for touch usage, etc.
+     * @public
+     *
+     * @param {ShapePiece} shapePiece
+     * @param {number} threshold - Should be 0 or greater generally.
+     * @returns {ShapeContainer|null}
+     */
+    getClosestShapeContainer: function( shapePiece, threshold ) {
+      var closestContainer = null;
+      var closestDistance = threshold;
+
+      var point = shapePiece.positionProperty.value;
+
+      this.shapeGroups.forEach( function( shapeGroup ) {
+        var localPoint = scratchVector.set( point ).subtract( shapeGroup.positionProperty.value );
+
+        shapeGroup.shapeContainers.forEach( function( shapeContainer ) {
+          var distance = shapeContainer.distanceFromPoint( localPoint );
+          if ( distance <= closestDistance ) {
+            closestDistance = distance;
+            closestContainer = shapeContainer;
+          }
+        } );
+      } );
+      return closestContainer;
+    },
+
     reset: function() {
       this.topRepresentationProperty.reset();
       this.shapeGroups.reset();

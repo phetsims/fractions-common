@@ -45,6 +45,7 @@ define( function( require ) {
       return count > 0 ? 'black' : 'gray';
     } );
 
+    // TODO: Don't do this! And don't pass in to children!
     this.options = options;
 
     // determine to the height and width to use when drawing the vertical or horizontal representation.

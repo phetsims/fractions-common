@@ -42,8 +42,8 @@ define( function( require ) {
     // @private {function}
     this.getBucketLocation = getBucketLocation;
 
-    // @private TODO: don't do this!  ... maybe we can remove now? check
-    this.options = options;
+    // @private {number}
+    this.horizontalSpacing = options.horizontalSpacing;
 
     // @private {VBox}
     this.containerLayer = new VBox( {
@@ -294,7 +294,7 @@ define( function( require ) {
       // creates new HBox within containerLayer dependent on VBox container
       if ( currentContainerNodesLength % this.model.containerCountProperty.range.max === 0 ) {
         var containerHBox = new HBox( {
-          spacing: this.options.horizontalSpacing,
+          spacing: this.horizontalSpacing,
           align: 'top'
         } );
         this.containerHBoxes.push( containerHBox );

@@ -65,6 +65,7 @@ define( function( require ) {
     setMidpoint: function( midpoint ) {
       this.translation = this.translation.plus( midpoint.minus( this.localToParentPoint( this.graphic.midpointOffset ) ) );
     },
+    
     /**
      * Steps forward in time.
      * @param {number} dt - in seconds

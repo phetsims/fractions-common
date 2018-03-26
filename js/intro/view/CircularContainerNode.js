@@ -37,6 +37,7 @@ define( function( require ) {
       options );
 
     // @public
+    // TODO: Don't do this! And don't pass in to children!
     this.options = options;
 
     // @public

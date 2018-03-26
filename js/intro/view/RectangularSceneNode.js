@@ -25,6 +25,7 @@ define( function( require ) {
    * @param {Object} [options]
    */
   function RectangularSceneNode( model, getBucketLocation, options ) {
+    // TODO: Don't do this! And don't pass in to children!
     this.options = options;
     CellSceneNode.call( this, model, getBucketLocation, options );
   }

@@ -56,6 +56,7 @@ define( function( require ) {
     }, options );
 
     // @private
+    // TODO: don't do this. Egad, are we passing it to children?
     this.options = options;
 
     // @private

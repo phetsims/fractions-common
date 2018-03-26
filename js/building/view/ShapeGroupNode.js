@@ -32,7 +32,7 @@ define( function( require ) {
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var CONTAINER_PADDING = 8;
+  var CONTAINER_PADDING = FractionsCommonConstants.SHAPE_CONTAINER_PADDING;
 
   /**
    * @constructor
@@ -150,7 +150,7 @@ define( function( require ) {
         } )
       ],
       // TODO: improve? This is safe, given we can't trust container bounds
-      top: ( shapeGroup.representation === Representation.VERTICAL_BAR ? FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT : FractionsCommonConstants.SHAPE_WIDTH ) / 2 + CONTAINER_PADDING - 3,
+      top: ( shapeGroup.representation === Representation.VERTICAL_BAR ? FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT : FractionsCommonConstants.SHAPE_SIZE ) / 2 + CONTAINER_PADDING - 3,
       centerX: 0
     } ) );
 
@@ -223,7 +223,7 @@ define( function( require ) {
       // TODO;
       if ( this.rightButtonBox ) {
         // Subtracts 0.5 since our containers have their origins in their centers
-        this.rightButtonBox.left = ( this.shapeContainerNodes.length - 0.5 ) * ( FractionsCommonConstants.SHAPE_WIDTH + CONTAINER_PADDING );
+        this.rightButtonBox.left = ( this.shapeContainerNodes.length - 0.5 ) * ( FractionsCommonConstants.SHAPE_SIZE + CONTAINER_PADDING );
       }
     },
 
@@ -234,9 +234,7 @@ define( function( require ) {
      * @param {ShapeContainer} shapeContainer
      */
     addShapeContainer: function( shapeContainer ) {
-      var shapeContainerNode = new ShapeContainerNode( shapeContainer, {
-        x: this.shapeContainerNodes.length * ( FractionsCommonConstants.SHAPE_WIDTH + CONTAINER_PADDING )
-      } );
+      var shapeContainerNode = new ShapeContainerNode( shapeContainer );
       this.shapeContainerNodes.push( shapeContainerNode );
       this.shapeContainerLayer.addChild( shapeContainerNode );
       this.updateRightButtonPosition();

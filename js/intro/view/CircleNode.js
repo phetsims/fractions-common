@@ -41,7 +41,9 @@ define( function( require ) {
     // @private
     this.denominator = denominator;
     this.angleUnit = 2 * Math.PI / denominator;
-    this.options = options;
+
+    // @private {boolean}
+    this.dropShadow = options.dropShadow;
 
     var startAngle = index * this.angleUnit;
     var endAngle = startAngle + this.angleUnit;
@@ -56,7 +58,7 @@ define( function( require ) {
     Node.call( this );
 
     this.foregroundSector = new Path( shape, options );
-    if ( options.dropShadow ) {
+    if ( this.dropShadow ) {
       this.backgroundSector = new Path( shape, { fill: 'black' } );
       this.backgroundSector.center = this.foregroundSector.center.plusScalar( options.dropShadowOffset );
       this.addChild( this.backgroundSector );
@@ -77,7 +79,7 @@ define( function( require ) {
      */
     rotateCircle: function( angle ) {
       this.foregroundSector.rotation = angle;
-      if ( this.options.dropShadow ) {
+      if ( this.dropShadow ) {
         this.backgroundSector.rotation = angle;
         this.backgroundSector.x = this.foregroundSector.x + 5;
       }

@@ -94,7 +94,7 @@ define( function( require ) {
               dropListener: function() {
                 arrayRemove( self.shapePieceNodes, shapePieceNode );
                 self.pieceLayer.removeChild( shapePieceNode );
-                var shapeContainer = self.getClosestShapeContainer( shapePiece, 1 );
+                var shapeContainer = model.getClosestShapeContainer( shapePiece, 0 );
                 if ( shapeContainer ) {
                   shapeContainer.shapePieces.push( shapePiece );
                 }
@@ -217,41 +217,6 @@ define( function( require ) {
   fractionsCommon.register( 'BuildingLabScreenView', BuildingLabScreenView );
 
   return inherit( ScreenView, BuildingLabScreenView, {
-    // container or null TODO doc it
-    // TODO: model method?
-    getClosestShapeContainer: function( shapePiece, threshold ) {
-      // TODO: This is a wreck. Move more position info into the model
-      var closestContainer = null;
-      var closestDistance = threshold; // TODO: a threshold
-      // TODO: LOTS of cleanup, holy crap. Decide how much layout info goes in the model (probably all)
-      this.shapeGroupNodes.forEach( function( shapeGroupNode ) {
-        if ( shapeGroupNode.shapeGroup.representation === shapePiece.representation ) {
-          shapeGroupNode.shapeContainerNodes.forEach( function( shapeContainerNode ) {
-            var shapeContainer = shapeContainerNode.shapeContainer;
-
-            if ( shapeContainer.canFitPiece( shapePiece ) ) {
-              // TODO: UNCLEAN use of view. Handle this in the model
-              var localPoint = shapePiece.positionProperty.value.minus( shapeGroupNode.translation ).minus( shapeContainerNode.translation );
-              var distance;
-              if ( shapePiece.representation === Representation.CIRCLE ) {
-                distance = Math.max( 0, localPoint.magnitude() - FractionsCommonConstants.SHAPE_WIDTH / 2 );
-              }
-              // TODO: other checks
-              else {
-                distance = Math.sqrt( shapeContainerNode.localBounds.minimumDistanceToPointSquared( localPoint ) );
-              }
-              if ( distance < closestDistance ) {
-                closestContainer = shapeContainerNode.shapeContainer;
-                closestDistance = distance;
-              }
-            }
-            
-          } );
-        }
-      } );
-      return closestContainer;
-    },
-
     addShapeGroup: function( shapeGroup ) {
       var self = this;
 
