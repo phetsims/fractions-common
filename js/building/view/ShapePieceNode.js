@@ -99,10 +99,12 @@ define( function( require ) {
     this.positionListener = this.updatePosition.bind( this );
     this.scaleListener = this.updateScale.bind( this );
     this.rotationListener = this.updateRotation.bind( this );
+    this.animatingListener = this.updateAnimating.bind( this );
     if ( this.positioned ) {
       this.shapePiece.positionProperty.link( this.positionListener );
       this.shapePiece.scaleProperty.link( this.scaleListener );
       this.shapePiece.rotationProperty.link( this.rotationListener );
+      this.shapePiece.isAnimatingProperty.link( this.animatingListener );
     }
 
     // @private {function}
@@ -159,6 +161,16 @@ define( function( require ) {
       this.setScaleMagnitude( this.shapePiece.scaleProperty.value );
     },
 
+    /**
+     * Handles animation changes.
+     * @public
+     */
+    updateAnimating: function() {
+      if ( this.shapePiece.isAnimatingProperty.value ) {
+        this.moveToBack();
+      }
+    },
+
     /** 
      * Releases references.
      * @public
@@ -173,6 +185,7 @@ define( function( require ) {
         this.shapePiece.positionProperty.unlink( this.positionListener );
         this.shapePiece.scaleProperty.unlink( this.scaleListener );
         this.shapePiece.rotationProperty.unlink( this.rotationListener );
+        this.shapePiece.isAnimatingProperty.unlink( this.animatingListener );
       }
 
       Node.prototype.dispose.call( this );
