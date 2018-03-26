@@ -22,6 +22,7 @@ define( function( require ) {
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   var Shape = require( 'KITE/Shape' );
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
+  var Touch = require( 'SCENERY/input/Touch' );
 
   // constants
   var CIRCLE_RADIUS = FractionsCommonConstants.SHAPE_SIZE / 2;
@@ -41,7 +42,7 @@ define( function( require ) {
     var self = this;
 
     options = _.extend( {
-      // {function|null} - Called when it is dropped
+      // {function|null} - Called when it is dropped, with a single argument of whether it was from a touch.
       dropListener: null,
 
       // {boolean} - For pieces placed in stacks/containers, we don't care about the positionProperty. In addition,
@@ -109,6 +110,8 @@ define( function( require ) {
       }
     } );
 
+    var wasTouch = false;
+
     // @public {DragListener}
     this.dragListener = new DragListener( {
       // TODO: drag bounds
@@ -116,8 +119,11 @@ define( function( require ) {
       transform: options.modelViewTransform,
       locationProperty: shapePiece.positionProperty,
       isUserControlledProperty: shapePiece.isUserControlledProperty,
-      end: function( event ) {
-        options.dropListener && options.dropListener();
+      start: function( event ) {
+        wasTouch = event.pointer instanceof Touch;
+      },
+      end: function() {
+        options.dropListener && options.dropListener( wasTouch );
       }
     } );
 

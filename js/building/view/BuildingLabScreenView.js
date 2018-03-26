@@ -89,10 +89,9 @@ define( function( require ) {
       var shapePieceNode = new ShapePieceNode( shapePiece, {
         positioned: true,
         modelViewTransform: self.modelViewTransform,
-        dropListener: function() {
-          // TODO: touch increase
+        dropListener: function( wasTouch ) {
           // TODO: rename method to include droppable?
-          var shapeContainer = model.getClosestShapeContainer( shapePiece, 0 );
+          var shapeContainer = model.getClosestShapeContainer( shapePiece, wasTouch ? 50 : 0 );
           if ( shapeContainer ) {
             shapeContainer.shapePieces.push( shapePiece );
             // TODO: animate
