@@ -164,6 +164,7 @@ define( function( require ) {
 
       arrayRemove( this.shapePieceNodes, shapePieceNode );
       this.shapePieceLayer.removeChild( shapePieceNode );
+      shapePieceNode.dispose();
     }
   } );
 } );

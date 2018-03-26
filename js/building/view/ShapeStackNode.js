@@ -134,6 +134,7 @@ define( function( require ) {
 
       this.shapePieceNodes.remove( shapePieceNode );
       this.removeChild( shapePieceNode );
+      shapePieceNode.dispose();
     }
   } );
 } );

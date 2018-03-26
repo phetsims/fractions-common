@@ -9,7 +9,9 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var BooleanProperty = require( 'AXON/BooleanProperty' );
   var Bounds2 = require( 'DOT/Bounds2' );
+  var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -26,6 +28,8 @@ define( function( require ) {
    * @param {Property.<Color>} colorProperty
    */
   function ShapePiece( fraction, representation, colorProperty ) {
+    assert && assert( fraction instanceof Fraction );
+    assert && assert( Representation.SHAPE_VALUES.includes( representation ) );
     assert && assert( colorProperty instanceof Property );
 
     // @public {Fraction}
@@ -39,11 +43,20 @@ define( function( require ) {
 
     // @public {Property.<Vector2>} - Applies only while out in the play area (being animated or dragged)
     this.positionProperty = new Property( Vector2.ZERO );
+
+    // @public {Property.<boolean>}
+    this.isUserControlledProperty = new BooleanProperty( false );
   }
 
   fractionsCommon.register( 'ShapePiece', ShapePiece );
 
   return inherit( Object, ShapePiece, {
+    /**
+     * Returns the centroid of this piece (without any rotation).
+     * @public
+     *
+     * @returns {Vector2}
+     */
     getCentroid: function() {
       if ( this.representation === Representation.CIRCLE ) {
         if ( this.fraction.getValue() === 1 ) {
@@ -58,8 +71,11 @@ define( function( require ) {
           return Vector2.createPolar( distanceFromCenter, -positiveAngle / 2 );
         }
       }
-      else {
+      else if ( this.representation === Representation.VERTICAL_BAR ) {
         return new Vector2( FractionsCommonConstants.SHAPE_SIZE * this.fraction.getValue() / 2, 0 );
+      }
+      else {
+        throw new Error( 'Unsupported representation for ShapePiece: ' + this.representation );
       }
     }
   }, {

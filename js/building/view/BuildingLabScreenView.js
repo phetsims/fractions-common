@@ -91,9 +91,11 @@ define( function( require ) {
           DragListener.createForwardingListener( function( event ) {
             var shapePiece = new ShapePiece( stack.fraction, stack.representation, stack.colorProperty );
             var shapePieceNode = new ShapePieceNode( shapePiece, {
+              positioned: true,
               dropListener: function() {
                 arrayRemove( self.shapePieceNodes, shapePieceNode );
                 self.pieceLayer.removeChild( shapePieceNode );
+                shapePieceNode.dispose();
                 var shapeContainer = model.getClosestShapeContainer( shapePiece, 0 );
                 if ( shapeContainer ) {
                   shapeContainer.shapePieces.push( shapePiece );

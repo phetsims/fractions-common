@@ -32,6 +32,12 @@ define( function( require ) {
     Representation.NUMBER_LINE
   ];
 
+  // @public {Array.<Representation>} - Values allowed for shape representations (lab/build-a-fraction/etc.)
+  Representation.SHAPE_VALUES = [
+    Representation.CIRCLE,
+    Representation.VERTICAL_BAR
+  ];
+
   // verify that enum is immutable, without the runtime penalty in production code
   if ( assert ) { Object.freeze( Representation ); }
 

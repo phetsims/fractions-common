@@ -38,15 +38,20 @@ define( function( require ) {
     assert && assert( shapePiece instanceof ShapePiece );
 
     options = _.extend( {
-      dropListener: null // {function|null} - Called when it is dropped
+      dropListener: null, // {function|null} - Called when it is dropped
+      positioned: false // {boolean} - For pieces placed in stacks/containers, we don't care about the positionProperty
     }, options );
-
-    var self = this;
 
     Node.call( this );
 
     // @public {ShapePiece}
     this.shapePiece = shapePiece;
+
+    // @private {Vector2}
+    this.centroid = shapePiece.getCentroid();
+
+    // @private {boolean}
+    this.positioned = options.positioned;
 
     var fractionValue = shapePiece.fraction.getValue();
     assert && assert( fractionValue <= 1 );
@@ -74,20 +79,18 @@ define( function( require ) {
       throw new Error( 'Unsupported representation for ShapePieceNode: ' + shapePiece.representation );
     }
 
-    var centroid = shapePiece.getCentroid();
-
-    // TODO: hmm, we don't want this on some. Maybe just have it for draggable ones?
-    shapePiece.positionProperty.lazyLink( function( position ) {
-      // TODO: add an offset for approximately where our "center" looks
-      // TODO: No seriously, why is the 0.5 needed here? Find out, it seems wrong.
-      self.translation = position.minus( centroid.timesScalar( 0.5 ) );
-    } );
+    // @private {function}
+    this.positionListener = this.updatePosition.bind( this );
+    if ( this.positioned ) {
+      this.shapePiece.positionProperty.link( this.positionListener );
+    }
 
     // @public {DragListener}
     this.dragListener = new DragListener( {
       // TODO: drag bounds
       targetNode: this,
       locationProperty: shapePiece.positionProperty,
+      isUserControlledProperty: shapePiece.isUserControlledProperty,
       end: function( event ) {
         options.dropListener && options.dropListener();
       }
@@ -98,5 +101,30 @@ define( function( require ) {
 
   fractionsCommon.register( 'ShapePieceNode', ShapePieceNode );
 
-  return inherit( Node, ShapePieceNode );
+  return inherit( Node, ShapePieceNode, {
+    /**
+     * Updates the position of this node to correspond to the model position.
+     * @public
+     */
+    updatePosition: function() {
+      // TODO: reduce GC?
+      // TODO: No seriously, why is the 0.5 needed here? Find out, it seems wron
+      this.translation = this.shapePiece.positionProperty.value.minus( this.centroid.timesScalar( 0.5 ) );
+    },
+
+    /** 
+     * Releases references.
+     * @public
+     */
+    dispose: function() {
+      // Required disposal, since we are passing the isUserControlledProperty
+      this.dragListener.dispose();
+
+      if ( this.positioned ) {
+        this.shapePiece.positionProperty.unlink( this.positionListener );
+      }
+
+      Node.prototype.dispose.call( this );
+    }
+  } );
 } );
