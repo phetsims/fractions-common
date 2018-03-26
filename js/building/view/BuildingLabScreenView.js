@@ -12,6 +12,7 @@ define( function( require ) {
   var AlignBox = require( 'SCENERY/nodes/AlignBox' );
   var arrayRemove = require( 'PHET_CORE/arrayRemove' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
+  var Easing = require( 'TWIXT/Easing' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -45,7 +46,6 @@ define( function( require ) {
     // @public {ModelViewTransform2}
     this.modelViewTransform = new ModelViewTransform2( Matrix3.translationFromVector( this.layoutBounds.center ) );
 
-    // TODO: background color customizable
     // @private {Node}
     this.shapePanel = new LabShapePanel( model, {
       dragPieceFromStackListener: function( event, stack ) {
@@ -102,9 +102,11 @@ define( function( require ) {
             // NOTE: Handle it if it starts animation and THEN the piece gets moved somewhere else. Instant animate
           }
           else {
-            // TODO: animate
-            model.activeShapePieces.remove( shapePiece );
-            // shapePiece.animateTo( getLocationInPanel, visibleBOundsProperty -- to invalidate in motion, someCallbackWHenDoneThatRemoves )
+            // TODO: In the game, remember we'll want to add the piece to the stack
+            var modelPosition = self.modelViewTransform.viewToModelPosition( self.shapePanel.getStackLocation( shapePiece.fraction ) );
+            shapePiece.animateTo( modelPosition, self.visibleBoundsProperty, Easing.QUADRATIC_IN, function() {
+              model.activeShapePieces.remove( shapePiece );
+            } );
           }
         }
       } );

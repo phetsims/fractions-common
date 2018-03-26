@@ -45,7 +45,7 @@ define( function( require ) {
 
     Node.call( this );
 
-    // @private {ShapeStack}
+    // @public {ShapeStack}
     this.shapeStack = shapeStack;
 
     // @private {Array.<ShapePieceNode>}

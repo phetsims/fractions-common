@@ -143,7 +143,9 @@ define( function( require ) {
     },
 
     step: function( dt ) {
-      
+      this.activeShapePieces.forEach( function( shapePiece ) {
+        shapePiece.step( dt );
+      } );
     }
   } );
 } );

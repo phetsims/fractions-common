@@ -29,6 +29,7 @@ define( function( require ) {
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
   var ShapeStackNode = require( 'FRACTIONS_COMMON/building/view/ShapeStackNode' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * @constructor
@@ -38,14 +39,18 @@ define( function( require ) {
    * @param {Object} options
    */
   function LabShapePanel( model, options ) {
+    var self = this;
 
     options = _.extend( {
       dragPieceFromStackListener: null,
       dragGroupFromStackListener: null
     }, options );
 
+    // @private {Property.<Representation>}
+    this.representationProperty = model.topRepresentationProperty;
+
     // TODO: Move all this code out to a named panel?
-    var representationSelectionNode = new MutableOptionsNode( RadioButtonGroup, [ model.topRepresentationProperty, [
+    var representationSelectionNode = new MutableOptionsNode( RadioButtonGroup, [ this.representationProperty, [
       {
         value: Representation.CIRCLE,
         node: new ShapePieceNode( new ShapePiece( new Fraction( 1, 1 ), Representation.CIRCLE, FractionsCommonColorProfile.labCircleFillProperty ), {
@@ -71,11 +76,15 @@ define( function( require ) {
       baseColor: FractionsCommonColorProfile.radioBaseProperty
     } );
 
+    // @private {Array.<ShapeStackNode>}
+    this.shapeStackNodes = [];
+
     var stackAlignGroup = new AlignGroup();
     function createStackNode( stack ) {
       var node = new ShapeStackNode( stack, {
         pickable: false
       } );
+      self.shapeStackNodes.push( node );
       return new AlignBox( node, {
         group: stackAlignGroup,
         cursor: 'pointer',
@@ -90,6 +99,9 @@ define( function( require ) {
     var circleStackNodes = model.circleStacks.map( createStackNode );
     var barStackNodes = model.barStacks.map( createStackNode );
 
+    // @private {Array.<ShapeGroupNode>}
+    this.shapeGroupNodes = [];
+
     function createGroupIcon( representation ) {
       var iconGroup = new ShapeGroup( representation );
       var iconNode = new ShapeGroupNode( iconGroup, {
@@ -97,6 +109,7 @@ define( function( require ) {
         scale: FractionsCommonConstants.SHAPE_BUILD_SCALE,
         pickable: false
       } );
+      self.shapeGroupNodes.push( iconNode );
       // TODO: better way? At least this is safe
       iconNode.localBounds = iconNode.localBounds.withMinY( iconNode.localBounds.minY - 2 * iconNode.localBounds.centerY );
       return new AlignBox( iconNode, {
@@ -130,7 +143,7 @@ define( function( require ) {
     var shapeBox = new HBox( {
       spacing: STACK_PADDING
     } );
-    model.topRepresentationProperty.link( function( representation ) {
+    this.representationProperty.link( function( representation ) {
       var leftSideNodes = [ representationSelectionNode ];
       var middleNodes = representation === Representation.CIRCLE ? circleStackNodes : barStackNodes;
       var rightSideNodes = [ representation === Representation.CIRCLE ? circleGroupIcon : barGroupIcon ];
@@ -145,5 +158,23 @@ define( function( require ) {
 
   fractionsCommon.register( 'LabShapePanel', LabShapePanel );
 
-  return inherit( Panel, LabShapePanel );
+  return inherit( Panel, LabShapePanel, {
+    /**
+     * Since only one representation has positions at a time (even if they don't change), we need to do some legwork.
+     * @public
+     *
+     * @param {Fraction} fraction
+     * @returns {Vector2}
+     */
+    getStackLocation: function( fraction ) {
+      for ( var i = 0; i < this.shapeStackNodes.length; i++ ) {
+        var shapeStackNode = this.shapeStackNodes[ i ];
+        var shapeStack = shapeStackNode.shapeStack;
+        if ( shapeStack.fraction.equals( fraction ) && shapeStack.representation === this.representationProperty.value ) {
+          return shapeStackNode.getUniqueTrailTo( this ).localToGlobalPoint( Vector2.ZERO );
+        }
+      }
+      throw new Error( 'Stack location not found!' );
+    }
+  } );
 } );

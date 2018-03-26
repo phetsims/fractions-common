@@ -47,8 +47,22 @@ define( function( require ) {
     // @public {Property.<boolean>}
     this.isUserControlledProperty = new BooleanProperty( false );
 
+
     // @public {Property.<boolean>}
     this.isAnimatingProperty = new BooleanProperty( false );
+
+    // @private {number} - Ratio of the animation
+    this.ratio = 0;
+
+    // @private {Vector2|number}
+    this.originPosition = null;
+    this.destinationPosition = null;
+
+    // @private {function|null}
+    this.endAnimationCallback = null;
+
+    // @private {Easing|null}
+    this.easing = null;
   }
 
   fractionsCommon.register( 'ShapePiece', ShapePiece );
@@ -79,6 +93,34 @@ define( function( require ) {
       }
       else {
         throw new Error( 'Unsupported representation for ShapePiece: ' + this.representation );
+      }
+    },
+
+    animateTo: function( modelPosition, invalidatingProperty, easing, endAnimationCallback ) {
+      // TODO: How to handle an already-animating value? Finish it and call endAnimationCallback?
+      // TODO: rotation
+      this.isAnimatingProperty.value = true;
+      this.ratio = 0;
+      this.originPosition = this.positionProperty.value;
+      this.destinationPosition = modelPosition;
+      this.endAnimationCallback = endAnimationCallback;
+      this.easing = easing;
+    },
+
+    step: function( dt ) {
+      if ( this.isAnimatingProperty.value ) {
+        // TODO: Could factor our speed, make it constant
+        // TODO: factor out the speed with other things in this sim
+        this.ratio = Math.min( 1, this.ratio + dt * 50 / Math.sqrt( this.originPosition.distance( this.destinationPosition ) ) );
+        if ( this.ratio === 1 ) {
+          this.positionProperty.value = this.destinationPosition;
+          this.isAnimatingProperty.value = false;
+          this.endAnimationCallback();
+        }
+        else {
+          // TODO: control the easing in/out more? sometimes we want IN_OUT
+          this.positionProperty.value = this.originPosition.blend( this.destinationPosition, this.easing.value( this.ratio ) );
+        }
       }
     }
   }, {
