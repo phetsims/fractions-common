@@ -60,6 +60,9 @@ define( function( require ) {
     // @private {number} - Ratio of the animation
     this.ratio = 0;
 
+    // @private {number}
+    this.animationSpeed = 0;
+
     // @private {Vector2|null}
     this.originPosition = null;
     this.destinationPosition = null;
@@ -82,7 +85,7 @@ define( function( require ) {
   fractionsCommon.register( 'ShapePiece', ShapePiece );
 
   return inherit( Object, ShapePiece, {
-    animateTo: function( endPosition, endRotation, endScale, invalidationProperty, easing, endAnimationCallback ) {
+    animateTo: function( endPosition, endRotation, endScale, invalidationProperty, easing, animationSpeed, endAnimationCallback ) {
       // TODO: How to handle an already-animating value? Finish it and call endAnimationCallback?
       // TODO: rotation
 
@@ -99,17 +102,14 @@ define( function( require ) {
       this.originScale = this.scaleProperty.value;
       this.destinationScale = endScale;
 
-      this.endAnimationCallback = endAnimationCallback;
       this.easing = easing;
+      this.animationSpeed = animationSpeed;
+      this.endAnimationCallback = endAnimationCallback;
     },
 
     step: function( dt ) {
       if ( this.isAnimatingProperty.value ) {
-        // TODO: Could factor our speed, make it constant
-        // TODO: factor out the speed with other things in this sim
-        // this.ratio = Math.min( 1, this.ratio + dt * 50 / Math.sqrt( this.originPosition.distance( this.destinationPosition ) ) );
-        // TODO: Use above-sped-up animations soon
-        this.ratio = Math.min( 1, this.ratio + dt * 10 / Math.sqrt( this.originPosition.distance( this.destinationPosition ) ) );
+        this.ratio = Math.min( 1, this.ratio + dt * this.animationSpeed );
         if ( this.ratio === 1 ) {
           this.positionProperty.value = this.destinationPosition;
           this.scaleProperty.value = this.destinationScale;
