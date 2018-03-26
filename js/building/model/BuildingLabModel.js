@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var Easing = require( 'TWIXT/Easing' );
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
@@ -95,6 +96,18 @@ define( function( require ) {
         } );
       } );
       return closestContainer;
+    },
+
+    returnActiveShapePiece: function( shapePiece ) {
+      var self = this;
+
+      var shapeStack = _.find( shapePiece.representation === Representation.CIRCLE ? this.circleStacks : this.barStacks, function( stack ) {
+        return stack.fraction.equals( shapePiece.fraction );
+      } );
+
+      shapePiece.animateTo( shapeStack.positionProperty, Easing.QUADRATIC_IN, function() {
+        self.activeShapePieces.remove( shapePiece );
+      } );
     },
 
     // TODO: doc

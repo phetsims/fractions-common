@@ -96,13 +96,15 @@ define( function( require ) {
       }
     },
 
-    animateTo: function( modelPosition, invalidatingProperty, easing, endAnimationCallback ) {
+    animateTo: function( modelPositionProperty, easing, endAnimationCallback ) {
       // TODO: How to handle an already-animating value? Finish it and call endAnimationCallback?
       // TODO: rotation
+
+      // TODO: how to handle interruption of the property
       this.isAnimatingProperty.value = true;
       this.ratio = 0;
       this.originPosition = this.positionProperty.value;
-      this.destinationPosition = modelPosition;
+      this.destinationPosition = modelPositionProperty.value;
       this.endAnimationCallback = endAnimationCallback;
       this.easing = easing;
     },

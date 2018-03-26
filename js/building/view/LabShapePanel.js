@@ -29,7 +29,6 @@ define( function( require ) {
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
   var ShapeStackNode = require( 'FRACTIONS_COMMON/building/view/ShapeStackNode' );
-  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * @constructor
@@ -45,6 +44,9 @@ define( function( require ) {
       dragPieceFromStackListener: null,
       dragGroupFromStackListener: null
     }, options );
+
+    // @private {BuildingLabModel}
+    this.model = model;
 
     // @private {Property.<Representation>}
     this.representationProperty = model.topRepresentationProperty;
@@ -159,22 +161,25 @@ define( function( require ) {
   fractionsCommon.register( 'LabShapePanel', LabShapePanel );
 
   return inherit( Panel, LabShapePanel, {
-    /**
-     * Since only one representation has positions at a time (even if they don't change), we need to do some legwork.
-     * @public
-     *
-     * @param {Fraction} fraction
-     * @returns {Vector2}
-     */
-    getStackLocation: function( fraction ) {
+    // TODO: doc
+    updateModelStackLocations: function( modelViewTransform ) {
+      // TODO: This is generally unclean. find a better way
       for ( var i = 0; i < this.shapeStackNodes.length; i++ ) {
         var shapeStackNode = this.shapeStackNodes[ i ];
-        var shapeStack = shapeStackNode.shapeStack;
-        if ( shapeStack.fraction.equals( fraction ) && shapeStack.representation === this.representationProperty.value ) {
-          return shapeStackNode.getUniqueTrailTo( this ).localToGlobalPoint( Vector2.ZERO );
+        if ( shapeStackNode.shapeStack.representation === this.representationProperty.value ) {
+          var stackLocation = shapeStackNode.getModelStackLocation( modelViewTransform, this );
+
+          // TODO: Ideally have stacks more linked so we can hook positions better?
+          for ( var j = 0; j < this.model.circleStacks.length; j++ ) {
+            if ( this.model.circleStacks[ j ].fraction.equals( shapeStackNode.shapeStack.fraction ) ) {
+              this.model.circleStacks[ j ].positionProperty.value = stackLocation;
+            }
+            if ( this.model.barStacks[ j ].fraction.equals( shapeStackNode.shapeStack.fraction ) ) {
+              this.model.barStacks[ j ].positionProperty.value = stackLocation;
+            }
+          }
         }
       }
-      throw new Error( 'Stack location not found!' );
     }
   } );
 } );

@@ -135,6 +135,11 @@ define( function( require ) {
       this.shapePieceNodes.remove( shapePieceNode );
       this.removeChild( shapePieceNode );
       shapePieceNode.dispose();
+    },
+
+    // TODO: doc
+    getModelStackLocation: function( modelViewTransform, shapePanel ) {
+      return modelViewTransform.viewToModelPosition( this.getUniqueTrailTo( shapePanel ).localToGlobalPoint( Vector2.ZERO ) );
     }
   } );
 } );
