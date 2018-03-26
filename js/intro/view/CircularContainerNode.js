@@ -99,10 +99,10 @@ define( function( require ) {
       var denominator = this.container.cells.length;
 
       // disregard segment for denominator equal to 1
-      var cellDividersLength = (denominator > 1) ? self.circleRadius : 0;
+      var cellDividersLength = ( denominator > 1 ) ? self.circleRadius : 0;
 
       // creates an angle between the cells of a circle node that corresponds to the denominator value
-      var cellDividersAngle = (Math.PI * 2) / (denominator);
+      var cellDividersAngle = ( Math.PI * 2 ) / (denominator);
 
       for ( var i = 0; i < denominator; i++ ) {
         (function() {
@@ -125,7 +125,9 @@ define( function( require ) {
 
         // positions and draws the polar coordinate of the dividing line between cells
         var edgePosition = Vector2.createPolar( cellDividersLength, i * cellDividersAngle );
-        cellDividersShape.moveToPoint( edgePosition ).lineToPoint( Vector2.ZERO );
+        if ( cellDividersLength ) {
+          cellDividersShape.moveToPoint( edgePosition ).lineToPoint( edgePosition.normalized().timesScalar( 0.01 ) );
+        }
       }
       self.cellDividersPath.setShape( cellDividersShape );
     },
