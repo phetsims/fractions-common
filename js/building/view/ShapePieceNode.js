@@ -57,9 +57,6 @@ define( function( require ) {
     // @public {ShapePiece}
     this.shapePiece = shapePiece;
 
-    // @private {Vector2}
-    this.centroid = shapePiece.getCentroid();
-
     // @private {boolean}
     this.positioned = options.positioned;
 
@@ -84,11 +81,14 @@ define( function( require ) {
                                     .lineTo( CIRCLE_RADIUS, 0 )
                                     .arc( 0, 0, CIRCLE_RADIUS, 0, -fractionValue * 2 * Math.PI, true )
                                     .close();
-        this.addChild( new Path( sliceShape, nodeOptions ) );
+        this.addChild( new Path( sliceShape, _.extend( {
+          translation: ShapePiece.getSweptCentroid( shapePiece.fraction ).negated()
+        }, nodeOptions ) ) );
       }
     }
     else if ( shapePiece.representation === Representation.VERTICAL_BAR ) {
-      this.addChild( new Rectangle( 0, -BAR_HEIGHT / 2, fractionValue * BAR_WIDTH, BAR_HEIGHT, nodeOptions ) );
+      var width = fractionValue * BAR_WIDTH;
+      this.addChild( new Rectangle( -width / 2, -BAR_HEIGHT / 2, width, BAR_HEIGHT, nodeOptions ) );
     }
     else {
       throw new Error( 'Unsupported representation for ShapePieceNode: ' + shapePiece.representation );
@@ -130,10 +130,7 @@ define( function( require ) {
      * @public
      */
     updatePosition: function() {
-      var viewPosition = this.modelViewTransform.modelToViewPosition( this.shapePiece.positionProperty.value );
-      // TODO: reduce GC?
-      // TODO: No seriously, why is the 0.5 needed here? Find out, it seems wron
-      this.translation = viewPosition.minus( this.centroid.timesScalar( 0.5 ) );
+      this.translation = this.modelViewTransform.modelToViewPosition( this.shapePiece.positionProperty.value );
     },
 
     /** 

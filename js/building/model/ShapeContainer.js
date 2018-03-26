@@ -13,10 +13,12 @@ define( function( require ) {
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Matrix3 = require( 'DOT/Matrix3' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
+  var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -126,6 +128,27 @@ define( function( require ) {
         rotation += currentShapePiece.fraction.getValue();
       }
       throw new Error( 'ShapePiece not found' );
+    }
+  }, {
+    // TODO: doc
+    getShapeMatrix: function( startingRatio, fraction, representation ) {
+      if ( representation === Representation.CIRCLE ) {
+        if ( fraction.equals( FRACTION_ONE ) ) {
+          return Matrix3.IDENTITY;
+        }
+        else {
+          var centroid = ShapePiece.getSweptCentroid( fraction );
+          var angle = -2 * Math.PI * startingRatio;
+          return Matrix3.rotation2( angle ).timesMatrix( Matrix3.translationFromVector( centroid ) );
+        }
+      }
+      else if ( representation === Representation.VERTICAL_BAR ) {
+        var centralValue = startingRatio + fraction.getValue() / 2;
+        return Matrix3.translation( Util.linear( 0, 1, ShapePiece.VERTICAL_BAR_BOUNDS.minX, ShapePiece.VERTICAL_BAR_BOUNDS.maxX, centralValue ), 0 );
+      }
+      else {
+        throw new Error( 'Unsupported representation for getShapeMatrix: ' + representation );
+      }
     }
   } );
 } );

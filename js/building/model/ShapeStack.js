@@ -11,8 +11,10 @@ define( function( require ) {
   // modules
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Matrix3 = require( 'DOT/Matrix3' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
+  var ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
   var Vector2 = require( 'DOT/Vector2' );
 
   /**
@@ -43,5 +45,18 @@ define( function( require ) {
 
   fractionsCommon.register( 'ShapeStack', ShapeStack );
 
-  return inherit( Object, ShapeStack );
+  return inherit( Object, ShapeStack, {}, {
+    /**
+     * Returns the matrix transform (locally) for how to position a piece with the given properties.
+     * @public
+     *
+     * @param {Fraction} fraction
+     * @param {Representation} representation
+     * @param {number} index
+     * @returns {Matrix3}
+     */
+    getShapeMatrix: function( fraction, representation, index ) {
+      return Matrix3.translation( 4 * index, -4 * index ).timesMatrix( ShapeContainer.getShapeMatrix( 0, fraction, representation ) );
+    }
+  } );
 } );

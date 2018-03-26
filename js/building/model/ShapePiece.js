@@ -68,34 +68,6 @@ define( function( require ) {
   fractionsCommon.register( 'ShapePiece', ShapePiece );
 
   return inherit( Object, ShapePiece, {
-    /**
-     * Returns the centroid of this piece (without any rotation).
-     * @public
-     *
-     * @returns {Vector2}
-     */
-    getCentroid: function() {
-      if ( this.representation === Representation.CIRCLE ) {
-        if ( this.fraction.getValue() === 1 ) {
-          return Vector2.ZERO;
-        }
-        else {
-          var positiveAngle = this.fraction.getValue() * 2 * Math.PI;
-
-          // Compute the centroid for a circular sector
-          var radius = FractionsCommonConstants.SHAPE_SIZE / 2;
-          var distanceFromCenter = 4 / 3 * radius * Math.sin( positiveAngle / 2 ) / positiveAngle;
-          return Vector2.createPolar( distanceFromCenter, -positiveAngle / 2 );
-        }
-      }
-      else if ( this.representation === Representation.VERTICAL_BAR ) {
-        return new Vector2( FractionsCommonConstants.SHAPE_SIZE * this.fraction.getValue() / 2, 0 );
-      }
-      else {
-        throw new Error( 'Unsupported representation for ShapePiece: ' + this.representation );
-      }
-    },
-
     animateTo: function( modelPositionProperty, easing, endAnimationCallback ) {
       // TODO: How to handle an already-animating value? Finish it and call endAnimationCallback?
       // TODO: rotation
@@ -113,7 +85,9 @@ define( function( require ) {
       if ( this.isAnimatingProperty.value ) {
         // TODO: Could factor our speed, make it constant
         // TODO: factor out the speed with other things in this sim
-        this.ratio = Math.min( 1, this.ratio + dt * 50 / Math.sqrt( this.originPosition.distance( this.destinationPosition ) ) );
+        // this.ratio = Math.min( 1, this.ratio + dt * 50 / Math.sqrt( this.originPosition.distance( this.destinationPosition ) ) );
+        // TODO: Use above-sped-up animations soon
+        this.ratio = Math.min( 1, this.ratio + dt * 10 / Math.sqrt( this.originPosition.distance( this.destinationPosition ) ) );
         if ( this.ratio === 1 ) {
           this.positionProperty.value = this.destinationPosition;
           this.isAnimatingProperty.value = false;
@@ -127,6 +101,28 @@ define( function( require ) {
     }
   }, {
     // @public {Bounds2} - The bounds taken up by the full vertical-bar representation
-    VERTICAL_BAR_BOUNDS: Bounds2.point( 0, 0 ).dilatedXY( FractionsCommonConstants.SHAPE_SIZE / 2, FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT / 2 )
+    VERTICAL_BAR_BOUNDS: Bounds2.point( 0, 0 ).dilatedXY( FractionsCommonConstants.SHAPE_SIZE / 2, FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT / 2 ),
+
+    /**
+     * Returns the centroid of a swept (circular arc) piece (without any rotation).
+     * @public
+     *
+     * @param {Fraction} fraction
+     * @returns {Vector2}
+     */
+    getSweptCentroid: function( fraction ) {
+      if ( fraction.getValue() === 1 ) {
+        return Vector2.ZERO;
+      }
+      else {
+        var positiveAngle = fraction.getValue() * 2 * Math.PI;
+
+        // Compute the centroid for a circular sector
+        var radius = FractionsCommonConstants.SHAPE_SIZE / 2;
+        var distanceFromCenter = 4 / 3 * radius * Math.sin( positiveAngle / 2 ) / positiveAngle;
+        return Vector2.createPolar( distanceFromCenter, -positiveAngle / 2 );
+      }
+    },
+
   } );
 } );

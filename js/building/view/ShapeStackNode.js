@@ -20,14 +20,13 @@ define( function( require ) {
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   var Shape = require( 'KITE/Shape' );
   var ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
+  var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
+  var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var CIRCLE_RADIUS = FractionsCommonConstants.SHAPE_SIZE / 2;
-  var BAR_WIDTH = FractionsCommonConstants.SHAPE_SIZE;
-  var BAR_HEIGHT = FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT;
-  var PIECE_STACK_OFFSET = new Vector2( 4, -4 );
 
   /**
    * @constructor
@@ -74,17 +73,19 @@ define( function( require ) {
       } ) );
     }
     else if ( shapeStack.representation === Representation.VERTICAL_BAR ) {
-      this.addChild( new Rectangle( 0, -BAR_HEIGHT / 2, BAR_WIDTH, BAR_HEIGHT, {
+      // TODO: Share separator code
+      var barBounds = ShapePiece.VERTICAL_BAR_BOUNDS;
+      this.addChild( Rectangle.bounds( barBounds, {
         fill: FractionsCommonColorProfile.shapeStackFillProperty
       } ) );
       for ( i = 1; i < denominator; i++ ) {
-        var x = i / denominator * BAR_WIDTH;
-        separatorShape.moveTo( x, -BAR_HEIGHT / 2 ).lineTo( x, BAR_HEIGHT / 2 );
+        var x = Util.linear( 0, 1, barBounds.minX, barBounds.maxX, i / denominator );
+        separatorShape.moveTo( x, barBounds.minY ).lineTo( x, barBounds.maxY );
       }
       this.addChild( new Path( separatorShape, {
         stroke: FractionsCommonColorProfile.shapeStackSeparatorStrokeProperty
       } ) );
-      this.addChild( new Rectangle( 0, -BAR_HEIGHT / 2, BAR_WIDTH, BAR_HEIGHT, {
+      this.addChild( Rectangle.bounds( barBounds, {
         stroke: FractionsCommonColorProfile.shapeStackStrokeProperty
       } ) );
     }
@@ -114,7 +115,7 @@ define( function( require ) {
       assert && assert( shapePiece.representation === this.shapeStack.representation );
 
       var shapePieceNode = new ShapePieceNode( shapePiece, {
-        translation: PIECE_STACK_OFFSET.timesScalar( this.shapePieceNodes.length )
+        matrix: ShapeStack.getShapeMatrix( shapePiece.fraction, shapePiece.representation, this.shapePieceNodes.length )
       } );
       this.shapePieceNodes.push( shapePieceNode );
       this.addChild( shapePieceNode );

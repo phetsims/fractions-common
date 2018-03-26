@@ -97,6 +97,7 @@ define( function( require ) {
       this.addChild( this.shapePieceLayer );
       this.addChild( separatorPath );
       shapeContainer.partitionDenominatorProperty.link( function( denominator ) {
+        // TODO: Share separator code
         var separatorShape = new Shape();
         for ( var i = 1; i < denominator; i++ ) {
           var x = Util.linear( 0, 1, barBounds.minX, barBounds.maxX, i / denominator );
@@ -136,15 +137,7 @@ define( function( require ) {
       var shapePieceNode = new ShapePieceNode( shapePiece );
 
       var ratio = this.shapeContainer.getShapeRatio( shapePiece );
-      if ( this.shapeContainer.representation === Representation.CIRCLE ) {
-        shapePieceNode.rotation = -2 * Math.PI * ratio;
-      }
-      else if ( this.shapeContainer.representation === Representation.VERTICAL_BAR ) {
-        shapePieceNode.x = Util.linear( 0, 1, ShapePiece.VERTICAL_BAR_BOUNDS.minX, ShapePiece.VERTICAL_BAR_BOUNDS.maxX, ratio );
-      }
-      else {
-        throw new Error( 'Unsupported representation for ShapeContainerNode: ' + this.shapeContainer.representation );
-      }
+      shapePieceNode.matrix = ShapeContainer.getShapeMatrix( ratio, shapePiece.fraction, shapePiece.representation );
 
       this.shapePieceNodes.push( shapePieceNode );
       this.shapePieceLayer.addChild( shapePieceNode );
