@@ -15,6 +15,7 @@ define( function( require ) {
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var NumberProperty = require( 'AXON/NumberProperty' );
   var Property = require( 'AXON/Property' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -44,6 +45,9 @@ define( function( require ) {
     // @public {Property.<Vector2>} - Applies only while out in the play area (being animated or dragged)
     this.positionProperty = new Property( Vector2.ZERO );
 
+    // @public {Property.<number>} - Applies only while out in the play area (being animated or dragged)
+    this.rotationProperty = new NumberProperty( 0 );
+
     // @public {Property.<boolean>}
     this.isUserControlledProperty = new BooleanProperty( false );
 
@@ -68,7 +72,7 @@ define( function( require ) {
   fractionsCommon.register( 'ShapePiece', ShapePiece );
 
   return inherit( Object, ShapePiece, {
-    animateTo: function( modelPositionProperty, easing, endAnimationCallback ) {
+    animateTo: function( modelPosition, invalidationProperty, easing, endAnimationCallback ) {
       // TODO: How to handle an already-animating value? Finish it and call endAnimationCallback?
       // TODO: rotation
 
@@ -76,7 +80,7 @@ define( function( require ) {
       this.isAnimatingProperty.value = true;
       this.ratio = 0;
       this.originPosition = this.positionProperty.value;
-      this.destinationPosition = modelPositionProperty.value;
+      this.destinationPosition = modelPosition;
       this.endAnimationCallback = endAnimationCallback;
       this.easing = easing;
     },

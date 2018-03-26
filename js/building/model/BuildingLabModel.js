@@ -13,10 +13,12 @@ define( function( require ) {
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
+  var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  var ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
   var ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
@@ -105,7 +107,10 @@ define( function( require ) {
         return stack.fraction.equals( shapePiece.fraction );
       } );
 
-      shapePiece.animateTo( shapeStack.positionProperty, Easing.QUADRATIC_IN, function() {
+      // TODO: Don't use hard-coded constant for game screens
+      var shapeMatrix = ShapeStack.getShapeMatrix( shapePiece.fraction, shapePiece.representation, 1 );
+      var position = shapeStack.positionProperty.value.plus( shapeMatrix.timesVector2( Vector2.ZERO ).timesScalar( FractionsCommonConstants.SHAPE_BUILD_SCALE ) );
+      shapePiece.animateTo( position, shapeStack.positionProperty, Easing.QUADRATIC_IN, function() {
         self.activeShapePieces.remove( shapePiece );
       } );
     },
@@ -118,7 +123,10 @@ define( function( require ) {
           var shapePiece = shapeContainer.shapePieces.pop();
 
           // TODO: Better determination of the position, including with centroid and rotation offsets
-          shapePiece.positionProperty.value = shapeGroup.positionProperty.value.plus( shapeContainer.offset );
+          var shapeMatrix = ShapeContainer.getShapeMatrix( shapeContainer.totalFractionProperty.value.getValue(), shapePiece.fraction, shapePiece.representation );
+          var containerPoint = shapeGroup.positionProperty.value.plus( shapeContainer.offset );
+          shapePiece.positionProperty.value = containerPoint.plus( shapeMatrix.timesVector2( Vector2.ZERO ) );
+          shapePiece.rotationProperty.value = shapeMatrix.rotation;
           this.activeShapePieces.push( shapePiece );
           this.returnActiveShapePiece( shapePiece );
 
