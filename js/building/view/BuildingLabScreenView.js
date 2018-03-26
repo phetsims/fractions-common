@@ -191,10 +191,20 @@ define( function( require ) {
         positioned: true,
         modelViewTransform: self.modelViewTransform,
         dropListener: function() {
-          model.activeShapePieces.remove( shapePiece );
+          // TODO: touch increase
+          // TODO: rename method to include droppable?
           var shapeContainer = model.getClosestShapeContainer( shapePiece, 0 );
           if ( shapeContainer ) {
             shapeContainer.shapePieces.push( shapePiece );
+            // TODO: animate
+            model.activeShapePieces.remove( shapePiece );
+            // shapePiece.animateTo( getLocationInContainer, groupPositionWhatever -- to invalidate in motion, someCallbackWHenDoneThatRemoves )
+            // NOTE: Handle it if it starts animation and THEN the piece gets moved somewhere else. Instant animate
+          }
+          else {
+            // TODO: animate
+            model.activeShapePieces.remove( shapePiece );
+            // shapePiece.animateTo( getLocationInPanel, visibleBOundsProperty -- to invalidate in motion, someCallbackWHenDoneThatRemoves )
           }
         }
       } );
