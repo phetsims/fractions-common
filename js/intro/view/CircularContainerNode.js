@@ -126,6 +126,7 @@ define( function( require ) {
         // positions and draws the polar coordinate of the dividing line between cells
         var edgePosition = Vector2.createPolar( cellDividersLength, i * cellDividersAngle );
         if ( cellDividersLength ) {
+          // Workaround for https://github.com/phetsims/scenery/issues/750
           cellDividersShape.moveToPoint( edgePosition ).lineToPoint( edgePosition.normalized().timesScalar( 0.01 ) );
         }
       }
