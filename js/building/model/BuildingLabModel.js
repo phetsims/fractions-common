@@ -115,8 +115,13 @@ define( function( require ) {
       for ( var i = shapeGroup.shapeContainers.length - 1; i >= 0; i-- ) {
         var shapeContainer = shapeGroup.shapeContainers.get( i );
         if ( shapeContainer.shapePieces.length ) {
-          shapeContainer.shapePieces.pop();
-          // TODO: Have an "in-motion" group of pieces? Or in Play area?
+          var shapePiece = shapeContainer.shapePieces.pop();
+
+          // TODO: Better determination of the position, including with centroid and rotation offsets
+          shapePiece.positionProperty.value = shapeGroup.positionProperty.value.plus( shapeContainer.offset );
+          this.activeShapePieces.push( shapePiece );
+          this.returnActiveShapePiece( shapePiece );
+
           return;
         }
       }
