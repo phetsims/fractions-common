@@ -178,6 +178,10 @@ define( function( require ) {
     reset: function() {
       this.topRepresentationProperty.reset();
       this.shapeGroups.reset();
+      this.activeShapePieces.forEach( function( shapePiece ) {
+        shapePiece.endAnimation();
+      } );
+      this.activeShapePieces.reset();
 
       // Initial state
       var shapeGroup = this.addShapeGroup( Representation.CIRCLE );
