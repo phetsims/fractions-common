@@ -48,7 +48,7 @@ define( function( require ) {
 
     options = _.extend( {
       isIcon: false, // TODO: cleanup?
-      isSelectedProperty: new BooleanProperty( true ),
+      isSelectedProperty: new BooleanProperty( true ), // takes ownership, will dispose at the end
       dropListener: null,
       selectListener: null,
       removeLastListener: null,
@@ -75,7 +75,10 @@ define( function( require ) {
     this.controlLayer = new Node();
     this.addChild( this.controlLayer );
 
-    options.isSelectedProperty.linkAttribute( this.controlLayer, 'visible' );
+    // @private {Property.<boolean>}
+    this.isSelectedProperty = options.isSelectedProperty;
+
+    this.isSelectedProperty.linkAttribute( this.controlLayer, 'visible' );
 
     // NOTE: Groups will disappear whenever their views disappear
     shapeGroup.shapeContainers.addItemAddedListener( this.addShapeContainer.bind( this ) );
@@ -294,6 +297,7 @@ define( function( require ) {
       this.addContainerButton.dispose();
       this.removeContainerButton.dispose();
       this.undoButton.dispose();
+      this.isSelectedProperty.dispose();
     }
   } );
 } );
