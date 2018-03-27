@@ -29,6 +29,7 @@ define( function( require ) {
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
   var ShapeStackNode = require( 'FRACTIONS_COMMON/building/view/ShapeStackNode' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * @constructor
@@ -167,7 +168,7 @@ define( function( require ) {
       for ( var i = 0; i < this.shapeStackNodes.length; i++ ) {
         var shapeStackNode = this.shapeStackNodes[ i ];
         if ( shapeStackNode.shapeStack.representation === this.representationProperty.value ) {
-          var stackLocation = shapeStackNode.getModelStackLocation( modelViewTransform, this );
+          var stackLocation = modelViewTransform.viewToModelPosition( shapeStackNode.getUniqueTrailTo( this ).localToGlobalPoint( Vector2.ZERO ) );
 
           // TODO: Ideally have stacks more linked so we can hook positions better?
           for ( var j = 0; j < this.model.circleStacks.length; j++ ) {
@@ -178,6 +179,14 @@ define( function( require ) {
               this.model.barStacks[ j ].positionProperty.value = stackLocation;
             }
           }
+        }
+      }
+
+      for ( i = 0; i < this.shapeGroupNodes.length; i++ ) {
+        var shapeGroupNode = this.shapeGroupNodes[ i ];
+        if ( shapeGroupNode.shapeGroup.representation === this.representationProperty.value ) {
+          var returnPosition = modelViewTransform.viewToModelPosition( shapeGroupNode.getUniqueTrailTo( this ).localToGlobalPoint( Vector2.ZERO ) );
+          this.model.returnGroupPositionProperty.value = returnPosition;
         }
       }
     }

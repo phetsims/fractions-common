@@ -23,7 +23,6 @@ define( function( require ) {
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
   var Util = require( 'DOT/Util' );
-  var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var CIRCLE_RADIUS = FractionsCommonConstants.SHAPE_SIZE / 2;
@@ -136,11 +135,6 @@ define( function( require ) {
       this.shapePieceNodes.remove( shapePieceNode );
       this.removeChild( shapePieceNode );
       shapePieceNode.dispose();
-    },
-
-    // TODO: doc
-    getModelStackLocation: function( modelViewTransform, shapePanel ) {
-      return modelViewTransform.viewToModelPosition( this.getUniqueTrailTo( shapePanel ).localToGlobalPoint( Vector2.ZERO ) );
     }
   } );
 } );

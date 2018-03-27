@@ -195,6 +195,9 @@ define( function( require ) {
       shapeGroup.positionProperty.link( function( position ) {
         self.translation = options.modelViewTransform.modelToViewPosition( position );
       } );
+      shapeGroup.scaleProperty.link( function( scale ) {
+        self.setScaleMagnitude( scale );
+      } );
 
       // @public {DragListener}
       this.dragListener = new DragListener( {

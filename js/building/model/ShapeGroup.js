@@ -9,6 +9,8 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var Animator = require( 'FRACTIONS_COMMON/building/model/Animator' );
+  var BooleanProperty = require( 'AXON/BooleanProperty' );
   var Emitter = require( 'AXON/Emitter' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
@@ -41,6 +43,9 @@ define( function( require ) {
     // @public {Property.<Vector2>}
     this.positionProperty = new Property( Vector2.ZERO );
 
+    // @public {Property.<number>} - Applies only while out in the play area (being animated or dragged)
+    this.scaleProperty = new NumberProperty( 1 );
+
     // @public {ObservableArray.<ShapeContainer>} - Should generally only be popped/pushed
     this.shapeContainers = new ObservableArray();
 
@@ -53,6 +58,12 @@ define( function( require ) {
     // @public {Emitter} - Emitted when containers/pieces change
     this.changedEmitter = new Emitter();
 
+    // @public {Property.<boolean>}
+    this.isAnimatingProperty = new BooleanProperty( false );
+
+    // @public {Animator}
+    this.animator = new Animator( this.positionProperty, new NumberProperty( 0 ), this.scaleProperty, this.isAnimatingProperty );
+
     this.shapeContainers.addItemAddedListener( this.changedEmitter.emit.bind( this.changedEmitter ) );
     this.shapeContainers.addItemRemovedListener( this.changedEmitter.emit.bind( this.changedEmitter ) );
 
@@ -63,6 +74,10 @@ define( function( require ) {
   fractionsCommon.register( 'ShapeGroup', ShapeGroup );
 
   return inherit( Object, ShapeGroup, {
+    step: function( dt ) {
+      this.animator.step( dt );
+    },
+
     // TODO: doc
     hasAnyPieces: function() {
       for ( var i = 0; i < this.shapeContainers.length; i++ ) {

@@ -158,7 +158,7 @@ define( function( require ) {
         dropListener: function() {
           // TODO: What about groups with lots of containers?
           if ( self.shapePanel.bounds.dilated( 10 ).containsPoint( self.modelViewTransform.modelToViewPosition( shapeGroup.positionProperty.value ) ) ) {
-            self.model.removeShapeGroup( shapeGroup );
+            self.model.returnShapeGroup( shapeGroup );
           }
         },
         selectListener: function() {

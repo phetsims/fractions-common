@@ -70,10 +70,10 @@ define( function( require ) {
 
   return inherit( Object, Animator, {
     animateTo: function( endPosition, endRotation, endScale, animationInvalidationProperty, easing, animationSpeed, endAnimationCallback ) {
-      // TODO: How to handle an already-animating value? Finish it and call endAnimationCallback?
-      // TODO: rotation
+      // TODO: Make it non-pickable so we can't regrab
 
-      // TODO: how to handle interruption of the property
+
+      // TODO: How to handle an already-animating value? Finish it and call endAnimationCallback?
       this.isAnimatingProperty.value = true;
       this.ratio = 0;
 

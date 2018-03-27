@@ -53,6 +53,9 @@ define( function( require ) {
     this.circleStacks = createStacks( Representation.CIRCLE, FractionsCommonColorProfile.labCircleFillProperty );
     this.barStacks = createStacks( Representation.VERTICAL_BAR, FractionsCommonColorProfile.labBarFillProperty );
 
+    // @public {Property.<Vector2>}
+    this.returnGroupPositionProperty = new Property( Vector2.ZERO );
+
     // @public {ObservableArray.<ShapeGroup>}
     this.shapeGroups = new ObservableArray();
 
@@ -167,17 +170,28 @@ define( function( require ) {
       return shapeGroup;
     },
 
-    // TODO: symmetric methods
-    removeShapeGroup: function( shapeGroup ) {
+    returnShapeGroup: function( shapeGroup ) {
+      var self = this;
+      
       while ( shapeGroup.hasAnyPieces() ) {
         this.removeLastPieceFromGroup( shapeGroup );
       }
-      this.shapeGroups.remove( shapeGroup );
+
+      var position = this.returnGroupPositionProperty.value;
+      var speed = 40 / Math.sqrt( position.distance( shapeGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
+      shapeGroup.animator.animateTo( position, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, this.returnGroupPositionProperty, Easing.QUADRATIC_IN, speed, function() {
+        self.shapeGroups.remove( shapeGroup );
+      } );
     },
 
     reset: function() {
       this.topRepresentationProperty.reset();
+
+      this.shapeGroups.forEach( function( shapeGroup ) {
+        shapeGroup.animator.endAnimation();
+      } );
       this.shapeGroups.reset();
+
       this.activeShapePieces.forEach( function( shapePiece ) {
         shapePiece.animator.endAnimation();
       } );
@@ -192,6 +206,11 @@ define( function( require ) {
 
     step: function( dt ) {
       var self = this;
+
+      // TODO: minimize garbage
+      this.shapeGroups.forEach( function( shapeGroup ) {
+        shapeGroup.step( dt );
+      } );
 
       this.activeShapePieces.forEach( function( shapePiece ) {
         shapePiece.step( dt );
