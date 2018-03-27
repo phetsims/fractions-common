@@ -16,6 +16,11 @@ define( function( require ) {
   /**
    * @constructor
    * @extends {Object}
+   *
+   * @param {Property.<Vector2>} positionProperty
+   * @param {Property.<number>} rotationProperty
+   * @param {Property.<number>} scaleProperty
+   * @param {Property.<boolean>} isAnimatingProperty
    */
   function Animator( positionProperty, rotationProperty, scaleProperty, isAnimatingProperty ) {
     // @public {Property.<Vector2>}
