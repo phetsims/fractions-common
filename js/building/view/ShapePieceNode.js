@@ -168,6 +168,7 @@ define( function( require ) {
     updateAnimating: function() {
       if ( this.shapePiece.isAnimatingProperty.value ) {
         this.moveToBack();
+        this.pickable = false;
       }
     },
 

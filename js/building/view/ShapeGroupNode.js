@@ -199,6 +199,13 @@ define( function( require ) {
         self.setScaleMagnitude( scale );
       } );
 
+      // Don't allow touching once we start animating
+      shapeGroup.isAnimatingProperty.link( function( isAnimating ) {
+        if ( isAnimating ) {
+          self.pickable = false;
+        }
+      } );
+
       // @public {DragListener}
       this.dragListener = new DragListener( {
         // TODO: drag bounds
