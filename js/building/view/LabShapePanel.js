@@ -162,7 +162,7 @@ define( function( require ) {
 
   return inherit( Panel, LabShapePanel, {
     // TODO: doc
-    updateModelStackLocations: function( modelViewTransform ) {
+    updateModelLocations: function( modelViewTransform ) {
       // TODO: This is generally unclean. find a better way
       for ( var i = 0; i < this.shapeStackNodes.length; i++ ) {
         var shapeStackNode = this.shapeStackNodes[ i ];

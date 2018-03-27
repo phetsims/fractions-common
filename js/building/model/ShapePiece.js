@@ -3,6 +3,8 @@
 /**
  * TODO: doc
  *
+ * NOTE: The coordinate frame of pieces are always where the origin of this piece is at its centroid.
+ *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 define( function( require ) {
@@ -63,6 +65,12 @@ define( function( require ) {
     // @public {Property.<boolean>} TODO: consider rename, as we also "animate" when this is false...
     this.isAnimatingProperty = new BooleanProperty( false );
 
+    // @function {Property.<Vector2>|null}
+    this.animationInvalidationProperty = null;
+
+    // @private {function}
+    this.endAnimationListener = this.endAnimation.bind( this );
+
     // @private {number} - Ratio of the animation
     this.ratio = 0;
 
@@ -119,7 +127,7 @@ define( function( require ) {
   fractionsCommon.register( 'ShapePiece', ShapePiece );
 
   return inherit( Object, ShapePiece, {
-    animateTo: function( endPosition, endRotation, endScale, invalidationProperty, easing, animationSpeed, endAnimationCallback ) {
+    animateTo: function( endPosition, endRotation, endScale, animationInvalidationProperty, easing, animationSpeed, endAnimationCallback ) {
       // TODO: How to handle an already-animating value? Finish it and call endAnimationCallback?
       // TODO: rotation
 
@@ -136,20 +144,28 @@ define( function( require ) {
       this.originScale = this.scaleProperty.value;
       this.destinationScale = endScale;
 
+      this.animationInvalidationProperty = animationInvalidationProperty;
+      this.animationInvalidationProperty.lazyLink( this.endAnimationListener );
+
       this.easing = easing;
       this.animationSpeed = animationSpeed;
       this.endAnimationCallback = endAnimationCallback;
+    },
+
+    endAnimation: function() {
+      this.positionProperty.value = this.destinationPosition;
+      this.scaleProperty.value = this.destinationScale;
+      this.rotationProperty.value = this.destinationRotation;
+      this.isAnimatingProperty.value = false;
+      this.animationInvalidationProperty.unlink( this.endAnimationListener );
+      this.endAnimationCallback();
     },
 
     step: function( dt ) {
       if ( this.isAnimatingProperty.value ) {
         this.ratio = Math.min( 1, this.ratio + dt * this.animationSpeed );
         if ( this.ratio === 1 ) {
-          this.positionProperty.value = this.destinationPosition;
-          this.scaleProperty.value = this.destinationScale;
-          this.rotationProperty.value = this.destinationRotation;
-          this.isAnimatingProperty.value = false;
-          this.endAnimationCallback();
+          this.endAnimation();
         }
         else {
           // TODO: control the easing in/out more? sometimes we want IN_OUT

@@ -143,7 +143,7 @@ define( function( require ) {
     this.visibleBoundsProperty.link( function( visibleBounds ) {
       topAlignBox.alignBounds = visibleBounds;
       bottomRightAlignBox.alignBounds = visibleBounds;
-      self.shapePanel.updateModelStackLocations( self.modelViewTransform );
+      self.shapePanel.updateModelLocations( self.modelViewTransform );
     } );
   }
 
