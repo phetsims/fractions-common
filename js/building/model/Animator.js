@@ -95,12 +95,14 @@ define( function( require ) {
     },
 
     endAnimation: function() {
-      this.positionProperty.value = this.destinationPosition;
-      this.scaleProperty.value = this.destinationScale;
-      this.rotationProperty.value = this.destinationRotation;
-      this.isAnimatingProperty.value = false;
-      this.animationInvalidationProperty.unlink( this.endAnimationListener );
-      this.endAnimationCallback();
+      if ( this.isAnimatingProperty.value ) {
+        this.positionProperty.value = this.destinationPosition;
+        this.scaleProperty.value = this.destinationScale;
+        this.rotationProperty.value = this.destinationRotation;
+        this.isAnimatingProperty.value = false;
+        this.animationInvalidationProperty.unlink( this.endAnimationListener );
+        this.endAnimationCallback();
+      }
     },
 
     step: function( dt ) {

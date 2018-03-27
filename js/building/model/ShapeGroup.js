@@ -41,7 +41,9 @@ define( function( require ) {
     this.returnPieceListener = options.returnPieceListener;
 
     // @public {Property.<Vector2>}
-    this.positionProperty = new Property( Vector2.ZERO );
+    this.positionProperty = new Property( Vector2.ZERO, {
+      valueType: Vector2
+    } );
 
     // @public {Property.<number>} - Applies only while out in the play area (being animated or dragged)
     this.scaleProperty = new NumberProperty( 1 );
