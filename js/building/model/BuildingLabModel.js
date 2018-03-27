@@ -80,7 +80,7 @@ define( function( require ) {
       var shapeMatrix = ShapeStack.getShapeMatrix( shapePiece.fraction, shapePiece.representation, 1 );
       var position = shapeStack.positionProperty.value.plus( shapeMatrix.timesVector2( Vector2.ZERO ).timesScalar( FractionsCommonConstants.SHAPE_BUILD_SCALE ) );
       var speed = 40 / Math.sqrt( position.distance( shapePiece.positionProperty.value ) );
-      shapePiece.animateTo( position, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, shapeStack.positionProperty, Easing.QUADRATIC_IN, speed, function() {
+      shapePiece.animator.animateTo( position, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, shapeStack.positionProperty, Easing.QUADRATIC_IN, speed, function() {
         self.activeShapePieces.remove( shapePiece );
       } );
     },
@@ -93,7 +93,7 @@ define( function( require ) {
       var position = shapeGroup.positionProperty.value.plus( shapeContainer.offset ).plus( shapeMatrix.timesVector2( Vector2.ZERO ) );
       // TODO: also invalidate if our container goes away?
       // NOTE: Handle it if it starts animation and THEN the piece gets moved somewhere else. Instant animate
-      shapePiece.animateTo( position, shapeMatrix.rotation, 1, shapeGroup.positionProperty, Easing.QUADRATIC_IN_OUT, 5, function() {
+      shapePiece.animator.animateTo( position, shapeMatrix.rotation, 1, shapeGroup.positionProperty, Easing.QUADRATIC_IN_OUT, 5, function() {
         self.activeShapePieces.remove( shapePiece );
       } );
     },
@@ -179,7 +179,7 @@ define( function( require ) {
       this.topRepresentationProperty.reset();
       this.shapeGroups.reset();
       this.activeShapePieces.forEach( function( shapePiece ) {
-        shapePiece.endAnimation();
+        shapePiece.animator.endAnimation();
       } );
       this.activeShapePieces.reset();
 

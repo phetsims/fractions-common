@@ -11,6 +11,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var Animator = require( 'FRACTIONS_COMMON/building/model/Animator' );
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var DampedHarmonic = require( 'DOT/DampedHarmonic' );
@@ -21,7 +22,6 @@ define( function( require ) {
   var NumberProperty = require( 'AXON/NumberProperty' );
   var Property = require( 'AXON/Property' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
-  var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
   /**
@@ -60,43 +60,12 @@ define( function( require ) {
     // @public {Property.<boolean>}
     this.isUserControlledProperty = new BooleanProperty( false );
 
-    // Animation when the user has released the piece
-
     // @public {Property.<boolean>} TODO: consider rename, as we also "animate" when this is false...
     this.isAnimatingProperty = new BooleanProperty( false );
 
-    // @function {Property.<Vector2>|null}
-    this.animationInvalidationProperty = null;
-
-    // @private {function}
-    this.endAnimationListener = this.endAnimation.bind( this );
-
-    // @private {number} - Ratio of the animation
-    this.ratio = 0;
-
-    // @private {number}
-    this.animationSpeed = 0;
-
-    // @private {Vector2|null}
-    this.originPosition = null;
-    this.destinationPosition = null;
-
-    // @private {number|null}
-    this.originRotation = null;
-    this.destinationRotation = null;
-
-    // @private {number|null}
-    this.originScale = null;
-    this.destinationScale = null;
-
-    // @private {function|null}
-    this.endAnimationCallback = null;
-
-    // @private {Easing|null}
-    this.easing = null;
-
-    // rotation-based animation while the user drags
-
+    // @public {Animator}
+    this.animator = new Animator( this.positionProperty, this.rotationProperty, this.scaleProperty, this.isAnimatingProperty );
+    
     // @private {Property.<number>}
     this.angularVelocityProperty = new NumberProperty( 0 );
     this.targetRotationProperty = new NumberProperty( 0 );
@@ -111,7 +80,7 @@ define( function( require ) {
     Property.multilink( [ this.isUserControlledProperty, this.targetRotationProperty ], function( isUserControlled, targetRotation ) {
       if ( isUserControlled ) {
         var currentRotation = self.rotationProperty.value;
-        self.trueTargetRotation = ShapePiece.modifiedEndAngle( currentRotation, self.targetRotationProperty.value );
+        self.trueTargetRotation = Animator.modifiedEndAngle( currentRotation, self.targetRotationProperty.value );
 
         var damping = 1;
         var force = 50;
@@ -127,54 +96,8 @@ define( function( require ) {
   fractionsCommon.register( 'ShapePiece', ShapePiece );
 
   return inherit( Object, ShapePiece, {
-    animateTo: function( endPosition, endRotation, endScale, animationInvalidationProperty, easing, animationSpeed, endAnimationCallback ) {
-      // TODO: How to handle an already-animating value? Finish it and call endAnimationCallback?
-      // TODO: rotation
-
-      // TODO: how to handle interruption of the property
-      this.isAnimatingProperty.value = true;
-      this.ratio = 0;
-
-      this.originPosition = this.positionProperty.value;
-      this.destinationPosition = endPosition;
-
-      this.originRotation = this.rotationProperty.value;
-      this.destinationRotation = endRotation;
-
-      this.originScale = this.scaleProperty.value;
-      this.destinationScale = endScale;
-
-      this.animationInvalidationProperty = animationInvalidationProperty;
-      this.animationInvalidationProperty.lazyLink( this.endAnimationListener );
-
-      this.easing = easing;
-      this.animationSpeed = animationSpeed;
-      this.endAnimationCallback = endAnimationCallback;
-    },
-
-    endAnimation: function() {
-      this.positionProperty.value = this.destinationPosition;
-      this.scaleProperty.value = this.destinationScale;
-      this.rotationProperty.value = this.destinationRotation;
-      this.isAnimatingProperty.value = false;
-      this.animationInvalidationProperty.unlink( this.endAnimationListener );
-      this.endAnimationCallback();
-    },
-
     step: function( dt ) {
-      if ( this.isAnimatingProperty.value ) {
-        this.ratio = Math.min( 1, this.ratio + dt * this.animationSpeed );
-        if ( this.ratio === 1 ) {
-          this.endAnimation();
-        }
-        else {
-          // TODO: control the easing in/out more? sometimes we want IN_OUT
-          var easedRatio = this.easing.value( this.ratio );
-          this.positionProperty.value = this.originPosition.blend( this.destinationPosition, easedRatio );
-          this.scaleProperty.value = this.originScale * ( 1 - easedRatio ) + this.destinationScale * easedRatio;
-          this.rotationProperty.value = ShapePiece.clerp( this.originRotation, this.destinationRotation, easedRatio );
-        }
-      }
+      this.animator.step( dt );
     },
 
     orientTowardsContainer: function( closestContainer, dt ) {
@@ -207,30 +130,6 @@ define( function( require ) {
         var distanceFromCenter = 4 / 3 * radius * Math.sin( positiveAngle / 2 ) / positiveAngle;
         return Vector2.createPolar( distanceFromCenter, -positiveAngle / 2 );
       }
-    },
-
-    modifiedEndAngle: function( startAngle, endAngle ) {
-      var modifiedEndAngle = Util.moduloBetweenDown( endAngle, startAngle, startAngle + 2 * Math.PI );
-      if ( modifiedEndAngle > startAngle + Math.PI ) {
-        modifiedEndAngle -= 2 * Math.PI;
-      }
-      return modifiedEndAngle;
-    },
-
-    /**
-     * Circular linear interpolation (like slerp, but on a plane).
-     * @public
-     *
-     * NOTE: my Google search for "slerp on a plane" didn't come up with anything useful besides neck pillows, so this
-     * is just called clerp. :P
-     *
-     * @param {number} startAngle
-     * @param {number} endAngle
-     * @param {number} ratio
-     * @return {number}
-     */
-    clerp: function( startAngle, endAngle, ratio ) {
-      return startAngle * ( 1 - ratio ) + ShapePiece.modifiedEndAngle( startAngle, endAngle ) * ratio;
     }
   } );
 } );

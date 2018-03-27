@@ -1,0 +1,149 @@
+// Copyright 2017, University of Colorado Boulder
+
+/**
+ * TODO: doc
+ *
+ * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ */
+define( function( require ) {
+  'use strict';
+
+  // modules
+  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var Util = require( 'DOT/Util' );
+
+  /**
+   * @constructor
+   * @extends {Object}
+   */
+  function Animator( positionProperty, rotationProperty, scaleProperty, isAnimatingProperty ) {
+    // @public {Property.<Vector2>}
+    this.positionProperty = positionProperty;
+
+    // @public {Property.<number>}
+    this.rotationProperty = rotationProperty;
+
+    // @public {Property.<number>}
+    this.scaleProperty = scaleProperty;
+
+    // @public {Property.<boolean>}
+    this.isAnimatingProperty = isAnimatingProperty;
+
+    // @function {Property.<Vector2>|null}
+    this.animationInvalidationProperty = null;
+
+    // @private {function}
+    this.endAnimationListener = this.endAnimation.bind( this );
+
+    // @private {number} - Ratio of the animation
+    this.ratio = 0;
+
+    // @private {number}
+    this.animationSpeed = 0;
+
+    // @private {Vector2|null}
+    this.originPosition = null;
+    this.destinationPosition = null;
+
+    // @private {number|null}
+    this.originRotation = null;
+    this.destinationRotation = null;
+
+    // @private {number|null}
+    this.originScale = null;
+    this.destinationScale = null;
+
+    // @private {function|null}
+    this.endAnimationCallback = null;
+
+    // @private {Easing|null}
+    this.easing = null;
+  }
+
+  fractionsCommon.register( 'Animator', Animator );
+
+  return inherit( Object, Animator, {
+    animateTo: function( endPosition, endRotation, endScale, animationInvalidationProperty, easing, animationSpeed, endAnimationCallback ) {
+      // TODO: How to handle an already-animating value? Finish it and call endAnimationCallback?
+      // TODO: rotation
+
+      // TODO: how to handle interruption of the property
+      this.isAnimatingProperty.value = true;
+      this.ratio = 0;
+
+      this.originPosition = this.positionProperty.value;
+      this.destinationPosition = endPosition;
+
+      this.originRotation = this.rotationProperty.value;
+      this.destinationRotation = endRotation;
+
+      this.originScale = this.scaleProperty.value;
+      this.destinationScale = endScale;
+
+      this.animationInvalidationProperty = animationInvalidationProperty;
+      this.animationInvalidationProperty.lazyLink( this.endAnimationListener );
+
+      this.easing = easing;
+      this.animationSpeed = animationSpeed;
+      this.endAnimationCallback = endAnimationCallback;
+    },
+
+    endAnimation: function() {
+      this.positionProperty.value = this.destinationPosition;
+      this.scaleProperty.value = this.destinationScale;
+      this.rotationProperty.value = this.destinationRotation;
+      this.isAnimatingProperty.value = false;
+      this.animationInvalidationProperty.unlink( this.endAnimationListener );
+      this.endAnimationCallback();
+    },
+
+    step: function( dt ) {
+      if ( this.isAnimatingProperty.value ) {
+        this.ratio = Math.min( 1, this.ratio + dt * this.animationSpeed );
+        if ( this.ratio === 1 ) {
+          this.endAnimation();
+        }
+        else {
+          // TODO: control the easing in/out more? sometimes we want IN_OUT
+          var easedRatio = this.easing.value( this.ratio );
+          this.positionProperty.value = this.originPosition.blend( this.destinationPosition, easedRatio );
+          this.scaleProperty.value = this.originScale * ( 1 - easedRatio ) + this.destinationScale * easedRatio;
+          this.rotationProperty.value = Animator.clerp( this.originRotation, this.destinationRotation, easedRatio );
+        }
+      }
+    },
+
+    orientTowardsContainer: function( closestContainer, dt ) {
+      this.targetRotationProperty.value = -2 * Math.PI * closestContainer.totalFractionProperty.value.getValue();
+
+      this.dampedHarmonicTimeElapsed += dt;
+      this.rotationProperty.value = this.trueTargetRotation + this.dampedHarmonic.getValue( this.dampedHarmonicTimeElapsed );
+      this.angularVelocityProperty.value = this.dampedHarmonic.getDerivative( this.dampedHarmonicTimeElapsed );
+    }
+  }, {
+    modifiedEndAngle: function( startAngle, endAngle ) {
+      var modifiedEndAngle = Util.moduloBetweenDown( endAngle, startAngle, startAngle + 2 * Math.PI );
+      if ( modifiedEndAngle > startAngle + Math.PI ) {
+        modifiedEndAngle -= 2 * Math.PI;
+      }
+      return modifiedEndAngle;
+    },
+
+    /**
+     * Circular linear interpolation (like slerp, but on a plane).
+     * @public
+     *
+     * NOTE: my Google search for "slerp on a plane" didn't come up with anything useful besides neck pillows, so this
+     * is just called clerp. :P
+     *
+     * @param {number} startAngle
+     * @param {number} endAngle
+     * @param {number} ratio
+     * @return {number}
+     */
+    clerp: function( startAngle, endAngle, ratio ) {
+      return startAngle * ( 1 - ratio ) + Animator.modifiedEndAngle( startAngle, endAngle ) * ratio;
+    }
+  } );
+} );
