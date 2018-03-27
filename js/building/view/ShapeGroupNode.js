@@ -131,28 +131,30 @@ define( function( require ) {
     this.controlLayer.addChild( this.rightButtonBox );
     this.updateRightButtonPosition();
 
+    // @private {Node}
+    this.decreasePartitionCountButton = new RoundArrowButton( {
+      arrowRotation: -Math.PI / 2,
+      enabledProperty: new DerivedProperty( [ shapeGroup.partitionDenominatorProperty ], function( denominator ) {
+        return !options.isIcon && ( denominator > shapeGroup.partitionDenominatorProperty.range.min );
+      } ),
+      listener: function() {
+        shapeGroup.partitionDenominatorProperty.value -= 1;
+      }
+    } );
+    // @private {Node}
+    this.increasePartitionCountButton = new RoundArrowButton( {
+      arrowRotation: Math.PI / 2,
+      enabledProperty: new DerivedProperty( [ shapeGroup.partitionDenominatorProperty ], function( denominator ) {
+        return !options.isIcon && ( denominator < shapeGroup.partitionDenominatorProperty.range.max );
+      } ),
+      listener: function() {
+        shapeGroup.partitionDenominatorProperty.value += 1;
+      }
+    } );
+
     this.controlLayer.addChild( new HBox( {
       spacing: CONTAINER_PADDING,
-      children: [
-        new RoundArrowButton( {
-          arrowRotation: -Math.PI / 2,
-          enabledProperty: new DerivedProperty( [ shapeGroup.partitionDenominatorProperty ], function( denominator ) {
-            return !options.isIcon && ( denominator > shapeGroup.partitionDenominatorProperty.range.min );
-          } ),
-          listener: function() {
-            shapeGroup.partitionDenominatorProperty.value -= 1;
-          }
-        } ),
-        new RoundArrowButton( {
-          arrowRotation: Math.PI / 2,
-          enabledProperty: new DerivedProperty( [ shapeGroup.partitionDenominatorProperty ], function( denominator ) {
-            return !options.isIcon && ( denominator < shapeGroup.partitionDenominatorProperty.range.max );
-          } ),
-          listener: function() {
-            shapeGroup.partitionDenominatorProperty.value += 1;
-          }
-        } )
-      ],
+      children: [ this.decreasePartitionCountButton, this.increasePartitionCountButton ],
       // TODO: improve? This is safe, given we can't trust container bounds
       top: ( shapeGroup.representation === Representation.VERTICAL_BAR ? FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT : FractionsCommonConstants.SHAPE_SIZE ) / 2 + CONTAINER_PADDING - 3,
       centerX: 0
@@ -287,6 +289,8 @@ define( function( require ) {
     dispose: function() {
       Node.prototype.dispose.call( this );
 
+      this.decreasePartitionCountButton.dispose();
+      this.increasePartitionCountButton.dispose();
       this.addContainerButton.dispose();
       this.removeContainerButton.dispose();
       this.undoButton.dispose();
