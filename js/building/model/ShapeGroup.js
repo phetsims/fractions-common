@@ -101,6 +101,8 @@ define( function( require ) {
     /**
      * Removes the most-recently-added container
      * @public
+     *
+     * TODO: Should we do this when being returned/animated back to the panel?
      */
     decreaseContainerCount: function() {
       while ( this.shapeContainers.length && this.shapeContainers.get( this.shapeContainers.length - 1 ).shapePieces.length ) {
