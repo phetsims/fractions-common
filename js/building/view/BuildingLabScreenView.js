@@ -183,6 +183,7 @@ define( function( require ) {
 
       arrayRemove( this.shapeGroupNodes, shapeGroupNode );
       this.groupLayer.removeChild( shapeGroupNode );
+      shapeGroupNode.dispose();
     },
 
     step: function( dt ) {

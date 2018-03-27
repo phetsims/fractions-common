@@ -86,7 +86,8 @@ define( function( require ) {
 
     // TODO: reduplicate?
     var lineSize = 8;
-    var addContainerButton = new MutableOptionsNode( RoundPushButton, [], {
+    // @private {Node}
+    this.addContainerButton = new MutableOptionsNode( RoundPushButton, [], {
       content: new Path( new Shape().moveTo( -lineSize, 0 ).lineTo( lineSize, 0 ).moveTo( 0, -lineSize ).lineTo( 0, lineSize ), {
         stroke: 'black',
         lineCap: 'round',
@@ -100,7 +101,8 @@ define( function( require ) {
     }, {
       baseColor: FractionsCommonColorProfile.greenRoundArrowButtonProperty
     } );
-    var removeContainerButton = new MutableOptionsNode( RoundPushButton, [], {
+    // @private {Node}
+    this.removeContainerButton = new MutableOptionsNode( RoundPushButton, [], {
       content: new Path( new Shape().moveTo( -lineSize, 0 ).lineTo( lineSize, 0 ), {
         stroke: 'black',
         lineCap: 'round',
@@ -116,14 +118,14 @@ define( function( require ) {
     } );
 
     shapeGroup.shapeContainers.lengthProperty.link( function( numShapeContainers ) {
-      addContainerButton.visible = numShapeContainers < FractionsCommonConstants.MAX_SHAPE_CONTAINERS;
-      removeContainerButton.visible = numShapeContainers > 1;
+      self.addContainerButton.visible = numShapeContainers < FractionsCommonConstants.MAX_SHAPE_CONTAINERS;
+      self.removeContainerButton.visible = numShapeContainers > 1;
     } );
 
     // @private {Node}
     this.rightButtonBox = new VBox( {
       spacing: CONTAINER_PADDING,
-      children: [ addContainerButton, removeContainerButton ],
+      children: [ this.addContainerButton, this.removeContainerButton ],
       centerY: 0
     } );
     this.controlLayer.addChild( this.rightButtonBox );
@@ -166,7 +168,8 @@ define( function( require ) {
       .quadraticCurveTo( ICON_HEIGHT * 1.25, -ICON_HEIGHT * 0.1, ICON_HEIGHT * 2, ICON_HEIGHT * 0.75 )
       .quadraticCurveTo( ICON_HEIGHT * 1.25, -ICON_HEIGHT * 0.5, ICON_HEIGHT * 0.3, ICON_HEIGHT * 0.3 )
       .close();
-    var undoButton = new MutableOptionsNode( RectangularPushButton, [], {
+    // @private {Node}
+    this.undoButton = new MutableOptionsNode( RectangularPushButton, [], {
       content: new Path( undoArrowShape, {
         fill: 'black',
         scale: 0.7
@@ -184,7 +187,7 @@ define( function( require ) {
 
     var undoArrowContainer = new Node();
     function updateUndoVisibility() {
-      undoArrowContainer.children = shapeGroup.hasAnyPieces() ? [ undoButton ] : [];
+      undoArrowContainer.children = shapeGroup.hasAnyPieces() ? [ self.undoButton ] : [];
     }
     shapeGroup.changedEmitter.addListener( updateUndoVisibility );
     updateUndoVisibility();
@@ -274,6 +277,19 @@ define( function( require ) {
       this.shapeContainerNodes.remove( shapeContainerNode );
       this.shapeContainerLayer.removeChild( shapeContainerNode );
       this.updateRightButtonPosition();
+    },
+
+    /**
+     * Releases references
+     * @public
+     * @override
+     */
+    dispose: function() {
+      Node.prototype.dispose.call( this );
+
+      this.addContainerButton.dispose();
+      this.removeContainerButton.dispose();
+      this.undoButton.dispose();
     }
   } );
 } );
