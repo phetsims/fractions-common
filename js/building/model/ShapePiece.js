@@ -11,6 +11,7 @@ define( function( require ) {
   // modules
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var Bounds2 = require( 'DOT/Bounds2' );
+  var DampedHarmonic = require( 'DOT/DampedHarmonic' );
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
@@ -34,6 +35,8 @@ define( function( require ) {
     assert && assert( Representation.SHAPE_VALUES.includes( representation ) );
     assert && assert( colorProperty instanceof Property );
 
+    var self = this;
+
     // @public {Fraction}
     this.fraction = fraction;
     
@@ -55,7 +58,9 @@ define( function( require ) {
     // @public {Property.<boolean>}
     this.isUserControlledProperty = new BooleanProperty( false );
 
-    // @public {Property.<boolean>}
+    // Animation when the user has released the piece
+
+    // @public {Property.<boolean>} TODO: consider rename, as we also "animate" when this is false...
     this.isAnimatingProperty = new BooleanProperty( false );
 
     // @private {number} - Ratio of the animation
@@ -81,6 +86,34 @@ define( function( require ) {
 
     // @private {Easing|null}
     this.easing = null;
+
+    // rotation-based animation while the user drags
+
+    // @private {Property.<number>}
+    this.angularVelocityProperty = new NumberProperty( 0 );
+    this.targetRotationProperty = new NumberProperty( 0 );
+
+    // @private {DampedHarmonic|null}
+    this.dampedHarmonic = null;
+
+    // @private {number}
+    this.dampedHarmonicTimeElapsed = 0;
+    this.trueTargetRotation = 0;
+
+    Property.multilink( [ this.isUserControlledProperty, this.targetRotationProperty ], function( isUserControlled, targetRotation ) {
+      if ( isUserControlled ) {
+        var currentRotation = self.rotationProperty.value;
+        self.trueTargetRotation = ShapePiece.modifiedEndAngle( currentRotation, self.targetRotationProperty.value );
+
+        var damping = 1;
+        var force = 50;
+        self.dampedHarmonicTimeElapsed = 0;
+        self.dampedHarmonic = new DampedHarmonic( 1, Math.sqrt( 4 * force ) * damping, force, currentRotation - self.trueTargetRotation, self.angularVelocityProperty.value );
+      }
+      else {
+        self.dampedHarmonic = null;
+      }
+    } );
   }
 
   fractionsCommon.register( 'ShapePiece', ShapePiece );
@@ -129,16 +162,11 @@ define( function( require ) {
     },
 
     orientTowardsContainer: function( closestContainer, dt ) {
-      var targetRotation = -2 * Math.PI * closestContainer.totalFractionProperty.value.getValue();
-      var currentRotation = this.rotationProperty.value;
-      targetRotation = ShapePiece.modifiedEndAngle( currentRotation, targetRotation );
-      var delta = Util.sign( targetRotation - currentRotation ) * dt * 5;
-      if ( Math.abs( currentRotation - targetRotation ) < delta ) {
-        this.rotationProperty.value = targetRotation;
-      }
-      else {
-        this.rotationProperty.value += delta;
-      }
+      this.targetRotationProperty.value = -2 * Math.PI * closestContainer.totalFractionProperty.value.getValue();
+
+      this.dampedHarmonicTimeElapsed += dt;
+      this.rotationProperty.value = this.trueTargetRotation + this.dampedHarmonic.getValue( this.dampedHarmonicTimeElapsed );
+      this.angularVelocityProperty.value = this.dampedHarmonic.getDerivative( this.dampedHarmonicTimeElapsed );
     }
   }, {
     // @public {Bounds2} - The bounds taken up by the full vertical-bar representation
