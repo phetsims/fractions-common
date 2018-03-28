@@ -25,6 +25,7 @@ define( function( require ) {
 
     labCircleFill: { default: new Color( 233, 69, 69 ) },
     labBarFill: { default: new Color( 87, 182, 221 ) },
+    shapeShadow: { default: new Color( 0, 0, 0, 0.5 ) },
 
     shapeStackFill: { default: Color.WHITE },
     shapeStackStroke: { default: Color.BLACK },

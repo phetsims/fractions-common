@@ -69,42 +69,62 @@ define( function( require ) {
     var fractionValue = shapePiece.fraction.getValue();
     assert && assert( fractionValue <= 1 );
 
+    // @private {Node|null}
+    this.viewNode = null;
+    this.shadowNode = null;
+
     var nodeOptions = {
       fill: shapePiece.colorProperty,
       stroke: FractionsCommonColorProfile.shapePieceStrokeProperty
     };
+    var shadowOptions = {
+      fill: FractionsCommonColorProfile.shapeShadowProperty
+    };
     if ( shapePiece.representation === Representation.CIRCLE ) {
       if ( fractionValue === 1 ) {
-        this.addChild( new Circle( CIRCLE_RADIUS, nodeOptions ) );
+        this.viewNode = new Circle( CIRCLE_RADIUS, nodeOptions );
+        this.shadowNode = new Circle( CIRCLE_RADIUS, shadowOptions ); // TODO: conditionally create?
       }
       else {
-        var sliceShape = new Shape().moveTo( 0, 0 )
-                                    .lineTo( CIRCLE_RADIUS, 0 )
-                                    .arc( 0, 0, CIRCLE_RADIUS, 0, -fractionValue * 2 * Math.PI, true )
+        var translation = ShapePiece.getSweptCentroid( shapePiece.fraction ).negated();
+        var sliceShape = new Shape().moveTo( translation.x, translation.y )
+                                    .lineTo( CIRCLE_RADIUS + translation.x, translation.y )
+                                    .arc( translation.x, translation.y, CIRCLE_RADIUS, 0, -fractionValue * 2 * Math.PI, true )
                                     .close();
-        this.addChild( new Path( sliceShape, _.extend( {
-          translation: ShapePiece.getSweptCentroid( shapePiece.fraction ).negated()
-        }, nodeOptions ) ) );
+        this.viewNode = new Path( sliceShape, nodeOptions );
+        this.shadowNode = new Path( sliceShape, shadowOptions );
       }
     }
     else if ( shapePiece.representation === Representation.VERTICAL_BAR ) {
       var width = fractionValue * BAR_WIDTH;
-      this.addChild( new Rectangle( -width / 2, -BAR_HEIGHT / 2, width, BAR_HEIGHT, nodeOptions ) );
+      this.viewNode = new Rectangle( -width / 2, -BAR_HEIGHT / 2, width, BAR_HEIGHT, nodeOptions );
+      this.shadowNode = new Rectangle( -width / 2, -BAR_HEIGHT / 2, width, BAR_HEIGHT, shadowOptions );
     }
     else {
       throw new Error( 'Unsupported representation for ShapePieceNode: ' + shapePiece.representation );
     }
+    if ( this.positioned ) {
+      var shadowContainer = new Node( {
+        x: 4,
+        y: 4
+      } );
+      shadowContainer.addChild( this.shadowNode );
+      this.addChild( shadowContainer );
+    }
+    this.addChild( this.viewNode );
 
     // @private {function}
     this.positionListener = this.updatePosition.bind( this );
     this.scaleListener = this.updateScale.bind( this );
     this.rotationListener = this.updateRotation.bind( this );
     this.animatingListener = this.updateAnimating.bind( this );
+    this.shadowListener = this.updateShadow.bind( this );
     if ( this.positioned ) {
       this.shapePiece.positionProperty.link( this.positionListener );
       this.shapePiece.scaleProperty.link( this.scaleListener );
       this.shapePiece.rotationProperty.link( this.rotationListener );
       this.shapePiece.isAnimatingProperty.link( this.animatingListener );
+      this.shapePiece.isUserControlledProperty.link( this.shadowListener );
     }
 
     // @private {function}
@@ -150,7 +170,10 @@ define( function( require ) {
      * @public
      */
     updateRotation: function() {
-      this.rotation = this.shapePiece.rotationProperty.value;
+      this.viewNode.rotation = this.shapePiece.rotationProperty.value;
+      if ( this.positioned ) {
+        this.shadowNode.rotation = this.shapePiece.rotationProperty.value;
+      }
     },
 
     /**
@@ -159,6 +182,14 @@ define( function( require ) {
      */
     updateScale: function() {
       this.setScaleMagnitude( this.shapePiece.scaleProperty.value );
+    },
+
+    /**
+     * Updates whether the shadow is visible or not
+     * @public
+     */
+    updateShadow: function() {
+      this.shadowNode.visible = this.shapePiece.isUserControlledProperty.value;
     },
 
     /**
@@ -187,6 +218,7 @@ define( function( require ) {
         this.shapePiece.scaleProperty.unlink( this.scaleListener );
         this.shapePiece.rotationProperty.unlink( this.rotationListener );
         this.shapePiece.isAnimatingProperty.unlink( this.animatingListener );
+        this.shapePiece.isUserControlledProperty.unlink( this.shadowListener );
       }
 
       Node.prototype.dispose.call( this );
