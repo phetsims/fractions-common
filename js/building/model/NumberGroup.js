@@ -118,6 +118,9 @@ define( function( require ) {
     // @private {function}
     this.spotAllowedListener = this.updateAllowedSpots.bind( this );
     this.activeNumberRangeProperty.link( this.spotAllowedListener );
+
+    // @public {boolean} TODO
+    this.disposed = false;
   }
 
   fractionsCommon.register( 'NumberGroup', NumberGroup );
@@ -168,6 +171,7 @@ define( function( require ) {
 
     dispose: function() {
       this.activeNumberRangeProperty.unlink( this.spotAllowedListener );
+      this.disposed = true;
     }
   } );
 } );

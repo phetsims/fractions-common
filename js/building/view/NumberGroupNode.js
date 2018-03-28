@@ -125,11 +125,11 @@ define( function( require ) {
     } );
 
     // @private {Node}
-    var undoButton = new TemporaryUndoButton( options.removeLastListener, {
+    this.undoButton = new TemporaryUndoButton( options.removeLastListener, {
       // TODO: Make it computational
       rightCenter: cardBackground.leftCenter.plusXY( 5, 0 ) // Some slight overlap shown in mockups
     } );
-    numberGroup.hasPiecesProperty.linkAttribute( undoButton, 'visible' );
+    numberGroup.hasPiecesProperty.linkAttribute( this.undoButton, 'visible' );
 
     if ( !options.isIcon ) {
       // TODO: Factor out common code here between the groups!!!
@@ -150,7 +150,7 @@ define( function( require ) {
 
     this.children = [
       cardBackground
-    ].concat( options.isIcon ? [] : [ undoButton ] ).concat( [
+    ].concat( options.isIcon ? [] : [ this.undoButton ] ).concat( [
       fractionLine,
       numeratorSpot,
       denominatorSpot
@@ -198,6 +198,7 @@ define( function( require ) {
       // Required disposal, since we are passing the isUserControlledProperty
       this.dragListener.dispose();
       this.dragBoundsProperty.dispose();
+      this.undoButton.dispose();
 
       Node.prototype.dispose.call( this );
     }

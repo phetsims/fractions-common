@@ -352,6 +352,9 @@ define( function( require ) {
 
       this.numberGroups.forEach( function( numberGroup ) {
         numberGroup.animator.endAnimation();
+        if ( !numberGroup.disposed ) {
+          numberGroup.dispose();
+        }
       } );
       this.numberGroups.reset();
 
