@@ -10,6 +10,7 @@ define( function( require ) {
 
   // modules
   var BooleanProperty = require( 'AXON/BooleanProperty' );
+  var Bounds2 = require( 'DOT/Bounds2' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
   var DragListener = require( 'SCENERY/listeners/DragListener' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
@@ -22,6 +23,7 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var Property = require( 'AXON/Property' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   var RoundArrowButton = require( 'FRACTIONS_COMMON/common/view/RoundArrowButton' );
   var RoundPushButton = require( 'SUN/buttons/RoundPushButton' );
@@ -65,6 +67,9 @@ define( function( require ) {
 
     // @public {ObservableArray.<ShapeContainerNode>} TODO: don't require this being public
     this.shapeContainerNodes = new ObservableArray();
+
+    // @private {Property.<Bounds2>}
+    this.generalDragBoundsProperty = options.dragBoundsProperty;
 
     // @private {Node}
     this.shapeContainerLayer = new Node( {
@@ -194,11 +199,22 @@ define( function( require ) {
         }
       } );
 
+      // @private {Property.<Bounds2>}
+      this.dragBoundsProperty = new Property( Bounds2.NOTHING );
+
+      this.dragBoundsListener = this.updateDragBounds.bind( this );
+      this.generalDragBoundsProperty.link( this.dragBoundsListener );
+
+      // Keep the group in the drag bounds (when they change)
+      this.dragBoundsProperty.lazyLink( function( dragBounds ) {
+        shapeGroup.positionProperty.value = dragBounds.closestPointTo( shapeGroup.positionProperty.value );
+      } );
+
       // @public {DragListener}
       this.dragListener = new DragListener( {
         // TODO: drag bounds
         targetNode: this,
-        dragBoundsProperty: options.dragBoundsProperty,
+        dragBoundsProperty: this.dragBoundsProperty,
         locationProperty: shapeGroup.positionProperty,
         transform: options.modelViewTransform,
         start: function( event ) {
@@ -226,12 +242,25 @@ define( function( require ) {
   fractionsCommon.register( 'ShapeGroupNode', ShapeGroupNode );
 
   return inherit( Node, ShapeGroupNode, {
+    updateDragBounds: function() {
+      var safeBounds = this.controlLayer.bounds.union( this.undoButton.bounds ); // undo button not always in the control layer
+
+      var containerTop = -( this.shapeGroup.representation === Representation.CIRCLE ? FractionsCommonConstants.SHAPE_SIZE : FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT ) / 2;
+      safeBounds = safeBounds.withMinY( Math.min( safeBounds.top, containerTop ) );
+      this.dragBoundsProperty.value = this.generalDragBoundsProperty.value.withOffsets( safeBounds.left, safeBounds.top, -safeBounds.right, -safeBounds.bottom );
+    },
+
     // TODO: doc
     updateRightButtonPosition: function() {
       // TODO;
       if ( this.rightButtonBox ) {
         // Subtracts 0.5 since our containers have their origins in their centers
         this.rightButtonBox.left = ( this.shapeContainerNodes.length - 0.5 ) * ( FractionsCommonConstants.SHAPE_SIZE + CONTAINER_PADDING );
+
+        // TODO:
+        if ( this.undoButton ) {
+          this.updateDragBounds();
+        }
       }
     },
 
@@ -279,6 +308,8 @@ define( function( require ) {
       this.removeContainerButton.dispose();
       this.undoButton.dispose();
       this.isSelectedProperty.dispose();
+      this.generalDragBoundsProperty.unlink( this.dragBoundsListener );
+      this.dragListener.dispose();
     }
   } );
 } );
