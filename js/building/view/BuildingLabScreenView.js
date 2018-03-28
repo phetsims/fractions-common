@@ -15,6 +15,7 @@ define( function( require ) {
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var LabNumberPanel = require( 'FRACTIONS_COMMON/building/view/LabNumberPanel' );
   var LabShapePanel = require( 'FRACTIONS_COMMON/building/view/LabShapePanel' );
   var Matrix3 = require( 'DOT/Matrix3' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
@@ -66,6 +67,16 @@ define( function( require ) {
         } );
         shapeGroupNode.dragListener.press( event, shapeGroupNode );
         event.handle(); // for our selection
+      }
+    } );
+
+    // @private {Node}
+    this.numberPanel = new LabNumberPanel( model, {
+      dragPieceFromStackListener: function( event, numberStack ) {
+        // TODO
+      },
+      dragGroupFromStackListener: function( event, isMixedNumber ) {
+        // TODO
       }
     } );
 
@@ -127,6 +138,12 @@ define( function( require ) {
       margin: PANEL_MARGIN
     } );
 
+    var bottomAlignBox = new AlignBox( this.numberPanel, {
+      xAlign: 'center',
+      yAlign: 'bottom',
+      margin: PANEL_MARGIN
+    } );
+
     var bottomRightAlignBox = new AlignBox( resetAllButton, {
       xAlign: 'right',
       yAlign: 'bottom',
@@ -136,12 +153,14 @@ define( function( require ) {
     this.children = [
       bottomRightAlignBox,
       topAlignBox,
+      bottomAlignBox,
       this.groupLayer,
       this.pieceLayer
     ];
 
     this.visibleBoundsProperty.link( function( visibleBounds ) {
       topAlignBox.alignBounds = visibleBounds;
+      bottomAlignBox.alignBounds = visibleBounds;
       bottomRightAlignBox.alignBounds = visibleBounds;
       self.shapePanel.updateModelLocations( self.modelViewTransform );
     } );

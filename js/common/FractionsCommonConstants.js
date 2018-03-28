@@ -10,6 +10,7 @@ define( function( require ) {
 
   // modules
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
 
   var FractionsCommonConstants = {
     // {number}
@@ -24,11 +25,25 @@ define( function( require ) {
     // {number} - The amount of space between shape containers
     SHAPE_CONTAINER_PADDING: 8,
 
+    // {number}
+    NUMBER_HEIGHT: 75,
+
+    // {number}
+    NUMBER_SINGLE_DIGIT_WIDTH: 54,
+
+    // {number}
+    NUMBER_DOUBLE_DIGIT_WIDTH: 80,
+
+    NUMBER_FRACTIONAL_FONT: new PhetFont( { size: 60, weight: 'bold' } ),
+    NUMBER_WHOLE_FONT: new PhetFont( { size: 110, weight: 'bold' } ),
+
+    NUMBER_CORNER_RADIUS: 5,
 
     ROUND_BUTTON_RADIUS: 15,
 
     MAX_SHAPE_CONTAINERS: 4,
-    SHAPE_BUILD_SCALE: 0.6
+    SHAPE_BUILD_SCALE: 0.6,
+    NUMBER_BUILD_SCALE: 0.8
   };
 
   fractionsCommon.register( 'FractionsCommonConstants', FractionsCommonConstants );

@@ -34,6 +34,12 @@ define( function( require ) {
     shapeContainerStroke: { default: Color.BLACK },
     shapeContainerPartition: { default: new Color( 170, 170, 170 ) },
 
+    numberStroke: { default: Color.BLACK },
+    numberFill: { default: Color.WHITE },
+    numberTextFill: { default: Color.BLACK },
+    numberOutline: { default: Color.RED },
+    numberFractionLine: { default: Color.BLACK },
+
     radioStroke: { default: Color.BLACK },
     radioBase: { default: Color.WHITE },
 

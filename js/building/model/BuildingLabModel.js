@@ -15,6 +15,8 @@ define( function( require ) {
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
+  var NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
@@ -52,6 +54,14 @@ define( function( require ) {
     // @public {Array.<ShapeStack>}
     this.circleStacks = createStacks( Representation.CIRCLE, FractionsCommonColorProfile.labCircleFillProperty );
     this.barStacks = createStacks( Representation.VERTICAL_BAR, FractionsCommonColorProfile.labBarFillProperty );
+
+    // @public {Array.<NumberStack>}
+    this.numberStacks = _.range( 1, 9 ).map( function( number ) {
+      var stack = new NumberStack( number );
+      stack.numberPieces.push( new NumberPiece( number ) );
+      stack.numberPieces.push( new NumberPiece( number ) );
+      return stack;
+    } );
 
     // @public {Property.<Vector2>}
     this.returnGroupPositionProperty = new Property( Vector2.ZERO );
