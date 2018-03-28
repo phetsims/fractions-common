@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var DerivedProperty = require( 'AXON/DerivedProperty' );
   var DragListener = require( 'SCENERY/listeners/DragListener' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
@@ -42,6 +43,8 @@ define( function( require ) {
       // {boolean} - For pieces placed in stacks/containers, we don't care about the positionProperty. In addition,
       // pieces in stacks/containers ALSO care about not showing up when the piece is user-controlled or animating.
       isIcon: false,
+
+      dragBoundsProperty: null,
 
       // {ModelViewTransform2|null}
       modelViewTransform: null,
@@ -153,20 +156,33 @@ define( function( require ) {
       denominatorSpot
     ] ).concat( numberGroup.isMixedNumber ? [ wholeSpot ] : [] );
 
-    // @public {DragListener}
-    this.dragListener = new DragListener( {
-      // TODO: drag bounds
-      targetNode: this,
-      transform: options.modelViewTransform,
-      locationProperty: numberGroup.positionProperty,
-      start: function( event ) {
-        self.moveToFront();
-      },
-      end: function( event ) {
-        options.dropListener && options.dropListener();
-      }
-    } );
-    this.addInputListener( this.dragListener );
+    if ( !options.isIcon ) {
+      // @private {Property.<Bounds2>}
+      this.dragBoundsProperty = new DerivedProperty( [ options.dragBoundsProperty ], function( dragBounds ) {
+        return dragBounds.withOffsets( cardBackground.left, cardBackground.top, -cardBackground.right, -cardBackground.bottom );
+      } );
+
+      // Keep the group in the drag bounds (when they change)
+      this.dragBoundsProperty.lazyLink( function( dragBounds ) {
+        numberGroup.positionProperty.value = dragBounds.closestPointTo( numberGroup.positionProperty.value );
+      } );
+
+      // @public {DragListener}
+      this.dragListener = new DragListener( {
+        // TODO: drag bounds
+        targetNode: this,
+        dragBoundsProperty: this.dragBoundsProperty,
+        transform: options.modelViewTransform,
+        locationProperty: numberGroup.positionProperty,
+        start: function( event ) {
+          self.moveToFront();
+        },
+        end: function( event ) {
+          options.dropListener && options.dropListener();
+        }
+      } );
+      this.addInputListener( this.dragListener );
+    }
 
     this.mutate( options );
   }
@@ -181,6 +197,7 @@ define( function( require ) {
     dispose: function() {
       // Required disposal, since we are passing the isUserControlledProperty
       this.dragListener.dispose();
+      this.dragBoundsProperty.dispose();
 
       Node.prototype.dispose.call( this );
     }

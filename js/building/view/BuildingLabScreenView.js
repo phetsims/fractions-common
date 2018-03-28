@@ -11,6 +11,7 @@ define( function( require ) {
   // modules
   var AlignBox = require( 'SCENERY/nodes/AlignBox' );
   var arrayRemove = require( 'PHET_CORE/arrayRemove' );
+  var Bounds2 = require( 'DOT/Bounds2' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
@@ -23,6 +24,7 @@ define( function( require ) {
   var NumberGroupNode = require( 'FRACTIONS_COMMON/building/view/NumberGroupNode' );
   var NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   var NumberPieceNode = require( 'FRACTIONS_COMMON/building/view/NumberPieceNode' );
+  var Property = require( 'AXON/Property' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
@@ -48,6 +50,10 @@ define( function( require ) {
 
     // @public {ModelViewTransform2}
     this.modelViewTransform = new ModelViewTransform2( Matrix3.translationFromVector( this.layoutBounds.center ) );
+
+    // @private {Property.<Bounds2>}
+    this.shapeDragBoundsProperty = new Property( this.visibleBounds );
+    this.numberDragBoundsProperty = new Property( this.visibleBounds );
 
     // @private {Node}
     this.shapePanel = new LabShapePanel( model, {
@@ -210,6 +216,19 @@ define( function( require ) {
       bottomRightAlignBox.alignBounds = visibleBounds;
       self.shapePanel.updateModelLocations( self.modelViewTransform );
       self.numberPanel.updateModelLocations( self.modelViewTransform );
+
+      self.shapeDragBoundsProperty.value = self.modelViewTransform.viewToModelBounds( new Bounds2(
+        visibleBounds.left,
+        visibleBounds.top,
+        visibleBounds.right,
+        self.numberPanel.top
+      ) );
+      self.numberDragBoundsProperty.value = self.modelViewTransform.viewToModelBounds( new Bounds2(
+        visibleBounds.left,
+        self.shapePanel.bottom,
+        visibleBounds.right,
+        visibleBounds.bottom
+      ) );
     } );
   }
 
@@ -220,6 +239,7 @@ define( function( require ) {
       var self = this;
 
       var shapeGroupNode = new ShapeGroupNode( shapeGroup, {
+        dragBoundsProperty: this.shapeDragBoundsProperty,
         modelViewTransform: this.modelViewTransform,
         dropListener: function() {
           // TODO: What about groups with lots of containers?
@@ -256,6 +276,7 @@ define( function( require ) {
       var self = this;
 
       var numberGroupNode = new NumberGroupNode( numberGroup, {
+        dragBoundsProperty: this.numberDragBoundsProperty,
         modelViewTransform: this.modelViewTransform,
 
         dropListener: function() {

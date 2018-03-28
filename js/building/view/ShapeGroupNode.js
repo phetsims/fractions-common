@@ -52,6 +52,7 @@ define( function( require ) {
       dropListener: null,
       selectListener: null,
       removeLastListener: null,
+      dragBoundsProperty: null,
       modelViewTransform: null // {ModelViewTransform2|null} - Not needed if we are an icon
     }, options );
 
@@ -197,6 +198,7 @@ define( function( require ) {
       this.dragListener = new DragListener( {
         // TODO: drag bounds
         targetNode: this,
+        dragBoundsProperty: options.dragBoundsProperty,
         locationProperty: shapeGroup.positionProperty,
         transform: options.modelViewTransform,
         start: function( event ) {
