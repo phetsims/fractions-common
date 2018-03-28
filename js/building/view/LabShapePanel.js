@@ -186,7 +186,7 @@ define( function( require ) {
         var shapeGroupNode = this.shapeGroupNodes[ i ];
         if ( shapeGroupNode.shapeGroup.representation === this.representationProperty.value ) {
           var returnPosition = modelViewTransform.viewToModelPosition( shapeGroupNode.getUniqueTrailTo( this ).localToGlobalPoint( Vector2.ZERO ) );
-          this.model.returnGroupPositionProperty.value = returnPosition;
+          this.model.returnShapeGroupPositionProperty.value = returnPosition;
         }
       }
     }

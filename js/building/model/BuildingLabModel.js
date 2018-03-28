@@ -65,7 +65,13 @@ define( function( require ) {
     } );
 
     // @public {Property.<Vector2>}
-    this.returnGroupPositionProperty = new Property( Vector2.ZERO );
+    this.returnShapeGroupPositionProperty = new Property( Vector2.ZERO );
+
+    // @public {Property.<Vector2>} TODO: Can we AMP THE VERBOSITY UP A BIT?
+    this.returnNonMixedNumberGroupPositionProperty = new Property( Vector2.ZERO );
+
+    // @public {Property.<Vector2>}
+    this.returnMixedNumberGroupPositionProperty = new Property( Vector2.ZERO );
 
     // @public {ObservableArray.<ShapeGroup>}
     this.shapeGroups = new ObservableArray();
@@ -151,6 +157,7 @@ define( function( require ) {
     },
 
     // TODO: doc
+    // TODO: rename to make it shape-specific
     removeLastPieceFromGroup: function( shapeGroup ) {
       for ( var i = shapeGroup.shapeContainers.length - 1; i >= 0; i-- ) {
         var shapeContainer = shapeGroup.shapeContainers.get( i );
@@ -191,10 +198,23 @@ define( function( require ) {
         this.removeLastPieceFromGroup( shapeGroup );
       }
 
-      var position = this.returnGroupPositionProperty.value;
+      var position = this.returnShapeGroupPositionProperty.value;
       var speed = 40 / Math.sqrt( position.distance( shapeGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
-      shapeGroup.animator.animateTo( position, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, this.returnGroupPositionProperty, Easing.QUADRATIC_IN, speed, function() {
+      shapeGroup.animator.animateTo( position, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, this.returnShapeGroupPositionProperty, Easing.QUADRATIC_IN, speed, function() {
         self.shapeGroups.remove( shapeGroup );
+      } );
+    },
+
+    returnNumberGroup: function( numberGroup ) {
+      var self = this;
+      
+      // TODO: RETURN ALL THE THINGS
+
+      var returnPositionProperty = ( numberGroup.isMixedNumber ? this.returnMixedNumberGroupPositionProperty : this.returnNonMixedNumberGroupPositionProperty );
+      var position = returnPositionProperty.value;
+      var speed = 40 / Math.sqrt( position.distance( numberGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
+      numberGroup.animator.animateTo( position, 0, FractionsCommonConstants.NUMBER_BUILD_SCALE, returnPositionProperty, Easing.QUADRATIC_IN, speed, function() {
+        self.numberGroups.remove( numberGroup );
       } );
     },
 
@@ -232,6 +252,10 @@ define( function( require ) {
       // TODO: minimize garbage
       this.shapeGroups.forEach( function( shapeGroup ) {
         shapeGroup.step( dt );
+      } );
+
+      this.numberGroups.forEach( function( numberGroup ) {
+        numberGroup.step( dt );
       } );
 
       this.activeShapePieces.forEach( function( shapePiece ) {

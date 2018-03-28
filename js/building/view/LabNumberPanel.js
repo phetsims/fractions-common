@@ -67,6 +67,10 @@ define( function( require ) {
       } );
     } );
 
+    // @private {Node|null}
+    this.nonMixedGroupNode = null;
+    this.mixedGroupNode = null;
+
     function createGroupIcon( isMixedNumber ) {
       var iconGroup = new NumberGroup( isMixedNumber );
       var iconNode = new NumberGroupNode( iconGroup, {
@@ -74,6 +78,13 @@ define( function( require ) {
         scale: FractionsCommonConstants.NUMBER_BUILD_SCALE,
         pickable: false
       } );
+      // TODO: this is unclean
+      if ( isMixedNumber ) {
+        self.mixedGroupNode = iconNode;
+      }
+      else {
+        self.nonMixedGroupNode = iconNode;
+      }
       return new AlignBox( iconNode, {
         group: stackAlignGroup,
         cursor: 'pointer',
@@ -117,11 +128,17 @@ define( function( require ) {
     updateModelLocations: function( modelViewTransform ) {
       for ( var i = 0; i < this.numberStackNodes.length; i++ ) {
         var numberStackNode = this.numberStackNodes[ i ];
+        // TODO: Lots of usages of this. refactor out? have shared "panel" code for it?
+        // TODO: Yes, have a shared panel
         var stackLocation = modelViewTransform.viewToModelPosition( numberStackNode.getUniqueTrailTo( this ).localToGlobalPoint( Vector2.ZERO ) );
         numberStackNode.numberStack.positionProperty.value = stackLocation;
       }
 
-      // TODO: positioning of the groups
+      // TODO: less verbosity perhaps. NO REPEAT
+      this.model.returnNonMixedNumberGroupPositionProperty.value = modelViewTransform.viewToModelPosition( this.nonMixedGroupNode.getUniqueTrailTo( this ).localToGlobalPoint( Vector2.ZERO ) );
+      if ( this.model.allowMixedNumbers ) {
+        this.model.returnMixedNumberGroupPositionProperty.value = modelViewTransform.viewToModelPosition( this.mixedGroupNode.getUniqueTrailTo( this ).localToGlobalPoint( Vector2.ZERO ) );
+      }
     }
   } );
 } );

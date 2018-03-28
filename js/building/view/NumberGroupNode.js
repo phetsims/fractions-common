@@ -41,6 +41,8 @@ define( function( require ) {
       // {ModelViewTransform2|null}
       modelViewTransform: null,
 
+      dropListener: null,
+
       // node options
       cursor: 'pointer'
     }, options );
@@ -87,6 +89,9 @@ define( function( require ) {
       cardBounds = cardBounds.union( numberGroup.wholeBounds );
     }
 
+    this.mouseArea = cardBounds.dilatedX( 5 );
+    this.touchArea = cardBounds.dilatedX( 5 );
+
     var cardBackground = Rectangle.bounds( cardBounds.dilatedXY( 10, 20 ), {
       fill: FractionsCommonColorProfile.numberFillProperty,
       stroke: FractionsCommonColorProfile.numberStrokeProperty,
@@ -106,9 +111,21 @@ define( function( require ) {
     } );
 
     if ( !options.isIcon ) {
+      // TODO: Factor out common code here between the groups!!!
       numberGroup.positionProperty.link( function( position ) {
         self.translation = options.modelViewTransform.modelToViewPosition( numberGroup.positionProperty.value );
       } );
+      numberGroup.scaleProperty.link( function( scale ) {
+        self.setScaleMagnitude( scale );
+      } );
+
+      // Don't allow touching once we start animating
+      numberGroup.isAnimatingProperty.link( function( isAnimating ) {
+        if ( isAnimating ) {
+          self.pickable = false;
+        }
+      } );
+
     }
 
     this.children = [
@@ -126,6 +143,9 @@ define( function( require ) {
       locationProperty: numberGroup.positionProperty,
       start: function( event ) {
         self.moveToFront();
+      },
+      end: function( event ) {
+        options.dropListener && options.dropListener();
       }
     } );
     this.addInputListener( this.dragListener );

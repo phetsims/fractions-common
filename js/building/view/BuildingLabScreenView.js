@@ -179,6 +179,7 @@ define( function( require ) {
       bottomAlignBox.alignBounds = visibleBounds;
       bottomRightAlignBox.alignBounds = visibleBounds;
       self.shapePanel.updateModelLocations( self.modelViewTransform );
+      self.numberPanel.updateModelLocations( self.modelViewTransform );
     } );
   }
 
@@ -222,8 +223,16 @@ define( function( require ) {
     },
 
     addNumberGroup: function( numberGroup ) {
+      var self = this;
+
       var numberGroupNode = new NumberGroupNode( numberGroup, {
-        modelViewTransform: this.modelViewTransform
+        modelViewTransform: this.modelViewTransform,
+
+        dropListener: function() {
+          if ( self.numberPanel.bounds.dilated( 10 ).containsPoint( self.modelViewTransform.modelToViewPosition( numberGroup.positionProperty.value ) ) ) {
+            self.model.returnNumberGroup( numberGroup );
+          }
+        }
       } );
       this.numberGroupNodes.push( numberGroupNode );
       this.groupLayer.addChild( numberGroupNode );
