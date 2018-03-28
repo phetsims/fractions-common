@@ -110,6 +110,29 @@ define( function( require ) {
   fractionsCommon.register( 'NumberGroup', NumberGroup );
 
   return inherit( Object, NumberGroup, {
+    canPlaceNumberInSpot: function( numberPiece, spot ) {
+      // TODO: simplify into one boolean
+      if ( spot.pieceProperty.value !== null ) {
+        return false;
+      }
+
+      if ( this.isMixedNumber ) {
+        if ( spot === this.denominatorSpot && this.numeratorSpot.pieceProperty.value !== null && this.numeratorSpot.pieceProperty.value.number >= numberPiece.number ) {
+          return false;
+        }
+        if ( spot === this.numeratorSpot && this.denominatorSpot.pieceProperty.value !== null && this.denominatorSpot.pieceProperty.value.number <= numberPiece.number ) {
+          return false;
+        }
+
+        // Don't allow 1s here as there is no valid choice
+        if ( spot === this.denominatorSpot && numberPiece.number === 1 ) {
+          return false;
+        }
+      }
+
+      return true;
+    },
+
     // TODO: doc
     hasAnyPieces: function() {
       return _.some( this.spots, function( spot ) {

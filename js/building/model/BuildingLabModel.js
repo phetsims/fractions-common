@@ -186,7 +186,7 @@ define( function( require ) {
         var localPoint = scratchVector.set( point ).subtract( numberGroup.positionProperty.value );
 
         numberGroup.spots.forEach( function( spot ) {
-          if ( spot.pieceProperty.value === null ) {
+          if ( numberGroup.canPlaceNumberInSpot( numberPiece, spot ) ) {
             var distance = Math.sqrt( spot.bounds.minimumDistanceToPointSquared( localPoint ) );
             if ( distance <= closestDistance ) {
               closestDistance = distance;
