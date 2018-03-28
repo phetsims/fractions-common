@@ -133,7 +133,7 @@ define( function( require ) {
       var shapeMatrix = ShapeStack.getShapeMatrix( shapePiece.fraction, shapePiece.representation, 1 );
       var position = shapeStack.positionProperty.value.plus( shapeMatrix.timesVector2( Vector2.ZERO ).timesScalar( FractionsCommonConstants.SHAPE_BUILD_SCALE ) );
       var speed = 40 / Math.sqrt( position.distance( shapePiece.positionProperty.value ) );
-      shapePiece.animator.animateTo( position, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, shapeStack.positionProperty, Easing.QUADRATIC_IN, speed, function() {
+      shapePiece.animator.animateTo( position, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, 0, shapeStack.positionProperty, Easing.QUADRATIC_IN, speed, function() {
         self.activeShapePieces.remove( shapePiece );
       } );
     },
@@ -149,7 +149,7 @@ define( function( require ) {
       var offset = NumberStack.getOffset( 1 );
       var position = numberStack.positionProperty.value.plus( offset.timesScalar( FractionsCommonConstants.NUMBER_BUILD_SCALE ) );
       var speed = 40 / Math.sqrt( position.distance( numberPiece.positionProperty.value ) );
-      numberPiece.animator.animateTo( position, 0, 1, numberStack.positionProperty, Easing.QUADRATIC_IN, speed, function() {
+      numberPiece.animator.animateTo( position, 0, 1, 0, numberStack.positionProperty, Easing.QUADRATIC_IN, speed, function() {
         self.activeNumberPieces.remove( numberPiece );
       } );
     },
@@ -162,7 +162,7 @@ define( function( require ) {
       var position = shapeGroup.positionProperty.value.plus( shapeContainer.offset ).plus( shapeMatrix.timesVector2( Vector2.ZERO ) );
       // TODO: also invalidate if our container goes away?
       // NOTE: Handle it if it starts animation and THEN the piece gets moved somewhere else. Instant animate
-      shapePiece.animator.animateTo( position, shapeMatrix.rotation, 1, shapeGroup.positionProperty, Easing.QUADRATIC_IN_OUT, 5, function() {
+      shapePiece.animator.animateTo( position, shapeMatrix.rotation, 1, 0, shapeGroup.positionProperty, Easing.QUADRATIC_IN_OUT, 5, function() {
         self.activeShapePieces.remove( shapePiece );
       } );
     },
@@ -303,7 +303,7 @@ define( function( require ) {
 
       var position = this.returnShapeGroupPositionProperty.value;
       var speed = 40 / Math.sqrt( position.distance( shapeGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
-      shapeGroup.animator.animateTo( position, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, this.returnShapeGroupPositionProperty, Easing.QUADRATIC_IN, speed, function() {
+      shapeGroup.animator.animateTo( position, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, 0, this.returnShapeGroupPositionProperty, Easing.QUADRATIC_IN, speed, function() {
         self.shapeGroups.remove( shapeGroup );
       } );
     },
@@ -318,7 +318,7 @@ define( function( require ) {
       var returnPositionProperty = ( numberGroup.isMixedNumber ? this.returnMixedNumberGroupPositionProperty : this.returnNonMixedNumberGroupPositionProperty );
       var position = returnPositionProperty.value;
       var speed = 40 / Math.sqrt( position.distance( numberGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
-      numberGroup.animator.animateTo( position, 0, FractionsCommonConstants.NUMBER_BUILD_SCALE, returnPositionProperty, Easing.QUADRATIC_IN, speed, function() {
+      numberGroup.animator.animateTo( position, 0, FractionsCommonConstants.NUMBER_BUILD_SCALE, 0, returnPositionProperty, Easing.QUADRATIC_IN, speed, function() {
         // TODO: More methods for adding/removing to make things un-missable
         self.numberGroups.remove( numberGroup );
         numberGroup.dispose();

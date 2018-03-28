@@ -23,11 +23,13 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var Touch = require( 'SCENERY/input/Touch' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   // constants
   var CIRCLE_RADIUS = FractionsCommonConstants.SHAPE_SIZE / 2;
   var BAR_WIDTH = FractionsCommonConstants.SHAPE_SIZE;
   var BAR_HEIGHT = FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT;
+  var SHADOW_VECTOR = new Vector2( 4, 4 );
 
   /**
    * @constructor
@@ -104,12 +106,10 @@ define( function( require ) {
       throw new Error( 'Unsupported representation for ShapePieceNode: ' + shapePiece.representation );
     }
     if ( this.positioned ) {
-      var shadowContainer = new Node( {
-        x: 4,
-        y: 4
-      } );
-      shadowContainer.addChild( this.shadowNode );
-      this.addChild( shadowContainer );
+      // @private {Node}
+      this.shadowContainer = new Node();
+      this.shadowContainer.addChild( this.shadowNode );
+      this.addChild( this.shadowContainer );
     }
     this.addChild( this.viewNode );
 
@@ -124,7 +124,7 @@ define( function( require ) {
       this.shapePiece.scaleProperty.link( this.scaleListener );
       this.shapePiece.rotationProperty.link( this.rotationListener );
       this.shapePiece.isAnimatingProperty.link( this.animatingListener );
-      this.shapePiece.isUserControlledProperty.link( this.shadowListener );
+      this.shapePiece.shadowProperty.link( this.shadowListener );
     }
 
     // @private {function}
@@ -189,7 +189,7 @@ define( function( require ) {
      * @public
      */
     updateShadow: function() {
-      this.shadowNode.visible = this.shapePiece.isUserControlledProperty.value;
+      this.shadowContainer.translation = SHADOW_VECTOR.timesScalar( this.shapePiece.shadowProperty.value );
     },
 
     /**
@@ -218,7 +218,7 @@ define( function( require ) {
         this.shapePiece.scaleProperty.unlink( this.scaleListener );
         this.shapePiece.rotationProperty.unlink( this.rotationListener );
         this.shapePiece.isAnimatingProperty.unlink( this.animatingListener );
-        this.shapePiece.isUserControlledProperty.unlink( this.shadowListener );
+        this.shapePiece.shadowProperty.unlink( this.shadowListener );
       }
 
       Node.prototype.dispose.call( this );

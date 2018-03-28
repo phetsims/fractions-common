@@ -57,6 +57,10 @@ define( function( require ) {
     // @public {Property.<number>} - Applies only while out in the play area (being animated or dragged)
     this.scaleProperty = new NumberProperty( 1 );
 
+    // TODO: doc [0,1]
+    // @public {Property.<number>} - Applies only while out in the play area (being animated or dragged)
+    this.shadowProperty = new NumberProperty( 0 );
+
     // @public {Property.<boolean>}
     this.isUserControlledProperty = new BooleanProperty( false );
 
@@ -64,7 +68,7 @@ define( function( require ) {
     this.isAnimatingProperty = new BooleanProperty( false );
 
     // @public {Animator}
-    this.animator = new Animator( this.positionProperty, this.rotationProperty, this.scaleProperty, this.isAnimatingProperty );
+    this.animator = new Animator( this.positionProperty, this.rotationProperty, this.scaleProperty, this.shadowProperty, this.isAnimatingProperty );
     
     // @private {Property.<number>}
     this.angularVelocityProperty = new NumberProperty( 0 );
@@ -76,6 +80,12 @@ define( function( require ) {
     // @private {number}
     this.dampedHarmonicTimeElapsed = 0;
     this.trueTargetRotation = 0;
+
+    this.isUserControlledProperty.link( function( isUserControlled ) {
+      if ( isUserControlled ) {
+        self.shadowProperty.value = 1;
+      }
+    } );
 
     Property.multilink( [ this.isUserControlledProperty, this.targetRotationProperty ], function( isUserControlled, targetRotation ) {
       if ( isUserControlled ) {

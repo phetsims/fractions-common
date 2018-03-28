@@ -64,7 +64,7 @@ define( function( require ) {
     this.isAnimatingProperty = new BooleanProperty( false );
 
     // @public {Animator}
-    this.animator = new Animator( this.positionProperty, new NumberProperty( 0 ), this.scaleProperty, this.isAnimatingProperty );
+    this.animator = new Animator( this.positionProperty, new NumberProperty( 0 ), this.scaleProperty, new NumberProperty( 0 ), this.isAnimatingProperty );
 
     this.shapeContainers.addItemAddedListener( this.changedEmitter.emit.bind( this.changedEmitter ) );
     this.shapeContainers.addItemRemovedListener( this.changedEmitter.emit.bind( this.changedEmitter ) );

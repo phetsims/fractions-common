@@ -20,9 +20,10 @@ define( function( require ) {
    * @param {Property.<Vector2>} positionProperty
    * @param {Property.<number>} rotationProperty
    * @param {Property.<number>} scaleProperty
+   * @param {Property.<number>} shadowProperty
    * @param {Property.<boolean>} isAnimatingProperty
    */
-  function Animator( positionProperty, rotationProperty, scaleProperty, isAnimatingProperty ) {
+  function Animator( positionProperty, rotationProperty, scaleProperty, shadowProperty, isAnimatingProperty ) {
     // @public {Property.<Vector2>}
     this.positionProperty = positionProperty;
 
@@ -31,6 +32,9 @@ define( function( require ) {
 
     // @public {Property.<number>}
     this.scaleProperty = scaleProperty;
+
+    // @public {Property.<number>}
+    this.shadowProperty = shadowProperty;
 
     // @public {Property.<boolean>}
     this.isAnimatingProperty = isAnimatingProperty;
@@ -59,6 +63,10 @@ define( function( require ) {
     this.originScale = null;
     this.destinationScale = null;
 
+    // @private {number|null}
+    this.originShadow = null;
+    this.destinationShadow = null;
+
     // @private {function|null}
     this.endAnimationCallback = null;
 
@@ -69,7 +77,8 @@ define( function( require ) {
   fractionsCommon.register( 'Animator', Animator );
 
   return inherit( Object, Animator, {
-    animateTo: function( endPosition, endRotation, endScale, animationInvalidationProperty, easing, animationSpeed, endAnimationCallback ) {
+    // TODO: Options objects, since we do have some "unused" options that could have defaults?
+    animateTo: function( endPosition, endRotation, endScale, endShadow, animationInvalidationProperty, easing, animationSpeed, endAnimationCallback ) {
       // TODO: Make it non-pickable so we can't regrab
 
 
@@ -86,6 +95,9 @@ define( function( require ) {
       this.originScale = this.scaleProperty.value;
       this.destinationScale = endScale;
 
+      this.originShadow = this.shadowProperty.value;
+      this.destinationShadow = endShadow;
+
       this.animationInvalidationProperty = animationInvalidationProperty;
       this.animationInvalidationProperty.lazyLink( this.endAnimationListener );
 
@@ -97,8 +109,9 @@ define( function( require ) {
     endAnimation: function() {
       if ( this.isAnimatingProperty.value ) {
         this.positionProperty.value = this.destinationPosition;
-        this.scaleProperty.value = this.destinationScale;
         this.rotationProperty.value = this.destinationRotation;
+        this.scaleProperty.value = this.destinationScale;
+        this.shadowProperty.value = this.destinationShadow;
         this.isAnimatingProperty.value = false;
         this.animationInvalidationProperty.unlink( this.endAnimationListener );
         this.endAnimationCallback();
@@ -115,8 +128,9 @@ define( function( require ) {
           // TODO: control the easing in/out more? sometimes we want IN_OUT
           var easedRatio = this.easing.value( this.ratio );
           this.positionProperty.value = this.originPosition.blend( this.destinationPosition, easedRatio );
-          this.scaleProperty.value = this.originScale * ( 1 - easedRatio ) + this.destinationScale * easedRatio;
           this.rotationProperty.value = Animator.clerp( this.originRotation, this.destinationRotation, easedRatio );
+          this.scaleProperty.value = this.originScale * ( 1 - easedRatio ) + this.destinationScale * easedRatio;
+          this.shadowProperty.value = this.originShadow * ( 1 - easedRatio ) + this.destinationShadow * easedRatio;
         }
       }
     },

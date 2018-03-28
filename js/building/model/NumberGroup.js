@@ -110,7 +110,7 @@ define( function( require ) {
     this.isAnimatingProperty = new BooleanProperty( false );
 
     // @public {Animator}
-    this.animator = new Animator( this.positionProperty, new NumberProperty( 0 ), this.scaleProperty, this.isAnimatingProperty );
+    this.animator = new Animator( this.positionProperty, new NumberProperty( 0 ), this.scaleProperty, new NumberProperty( 0 ), this.isAnimatingProperty );
 
     // @public {number} - TODO: Any reason we need this in the model
     this.fractionLineWidth = FRACTION_LINE_WIDTH;
