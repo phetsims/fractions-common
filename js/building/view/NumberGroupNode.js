@@ -17,7 +17,7 @@ define( function( require ) {
   var Line = require( 'SCENERY/nodes/Line' );
   var Node = require( 'SCENERY/nodes/Node' );
   var NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
-  var Property = require( 'AXON/Property' );
+  var NumberSpotType = require( 'FRACTIONS_COMMON/building/enum/NumberSpotType' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Text = require( 'SCENERY/nodes/Text' );
 
@@ -57,8 +57,8 @@ define( function( require ) {
 
     assert && assert( options.isIcon || this.modelViewTransform, 'Positioned NumberGroupNodes need a MVT' );
 
-    function createSpot( property, bounds, font ) {
-      var outline = Rectangle.bounds( bounds, {
+    function createSpot( spot ) {
+      var outline = Rectangle.bounds( spot.bounds, {
         stroke: FractionsCommonColorProfile.numberOutlineProperty,
         lineDash: [ 10, 5 ],
         lineWidth: 2,
@@ -66,10 +66,10 @@ define( function( require ) {
       } );
       var text = new Text( ' ', {
         fill: FractionsCommonColorProfile.numberTextFillProperty,
-        font: font,
+        font: spot.type === NumberSpotType.WHOLE ? FractionsCommonConstants.NUMBER_WHOLE_FONT : FractionsCommonConstants.NUMBER_FRACTIONAL_FONT,
         center: outline.center // TODO: is this right-aligned instead for the whole number?
       } );
-      property.link( function( piece ) {
+      spot.pieceProperty.link( function( piece ) {
         if ( piece !== null ) {
           text.text = piece.number;
           text.center = outline.center;
@@ -80,31 +80,26 @@ define( function( require ) {
       return new Node( { children: [ outline, text ] } );
     }
 
-    var numeratorSpot = createSpot( numberGroup.numeratorProperty, numberGroup.numeratorBounds, FractionsCommonConstants.NUMBER_FRACTIONAL_FONT );
-    var denominatorSpot = createSpot( numberGroup.denominatorProperty, numberGroup.denominatorBounds, FractionsCommonConstants.NUMBER_FRACTIONAL_FONT );
-    var wholeSpot = createSpot( numberGroup.wholeProperty, numberGroup.wholeBounds, FractionsCommonConstants.NUMBER_WHOLE_FONT );
-
-    var cardBounds = numberGroup.numeratorBounds.union( numberGroup.denominatorBounds );
+    var numeratorSpot = createSpot( numberGroup.numeratorSpot );
+    var denominatorSpot = createSpot( numberGroup.denominatorSpot );
+    var wholeSpot;
     if ( numberGroup.isMixedNumber ) {
-      cardBounds = cardBounds.union( numberGroup.wholeBounds );
+      wholeSpot = createSpot( numberGroup.wholeSpot ); 
     }
 
-    this.mouseArea = cardBounds.dilatedX( 5 );
-    this.touchArea = cardBounds.dilatedX( 5 );
+    this.mouseArea = numberGroup.allSpotsBounds.dilatedX( 5 );
+    this.touchArea = numberGroup.allSpotsBounds.dilatedX( 5 );
 
-    var cardBackground = Rectangle.bounds( cardBounds.dilatedXY( 10, 20 ), {
+    var cardBackground = Rectangle.bounds( numberGroup.allSpotsBounds.dilatedXY( 20, 15 ), {
       fill: FractionsCommonColorProfile.numberFillProperty,
       stroke: FractionsCommonColorProfile.numberStrokeProperty,
       cornerRadius: FractionsCommonConstants.NUMBER_CORNER_RADIUS
     } );
-    Property.multilink( [ numberGroup.numeratorProperty, numberGroup.denominatorProperty, numberGroup.wholeProperty ], function( numeratorPiece, denominatorPiece, wholePiece ) {
-      var isComplete = numeratorPiece !== null && denominatorPiece !== null && ( !numberGroup.isMixedNumber || wholePiece !== null );
-      cardBackground.visible = isComplete;
-    } );
+    numberGroup.isCompleteProperty.linkAttribute( cardBackground, 'visible' );
 
     var fractionLine = new Line( {
-      x1: -numberGroup.fractionLineWidth / 2 + numberGroup.numeratorBounds.centerX,
-      x2: numberGroup.fractionLineWidth / 2 + numberGroup.numeratorBounds.centerX,
+      x1: -numberGroup.fractionLineWidth / 2 + numberGroup.numeratorSpot.bounds.centerX,
+      x2: numberGroup.fractionLineWidth / 2 + numberGroup.numeratorSpot.bounds.centerX,
       lineCap: 'round',
       lineWidth: 4,
       stroke: FractionsCommonColorProfile.numberFractionLineProperty

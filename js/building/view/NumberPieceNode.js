@@ -73,9 +73,11 @@ define( function( require ) {
 
     // @private {function}
     this.positionListener = this.updatePosition.bind( this );
+    this.scaleListener = this.updateScale.bind( this );
     this.animatingListener = this.updateAnimating.bind( this );
     if ( this.positioned ) {
       this.numberPiece.positionProperty.link( this.positionListener );
+      this.numberPiece.scaleProperty.link( this.scaleListener );
       this.numberPiece.isAnimatingProperty.link( this.animatingListener );
     }
 
@@ -118,6 +120,14 @@ define( function( require ) {
     },
 
     /**
+     * Updates the scale of this node to correspond to the model scale.
+     * @public
+     */
+    updateScale: function() {
+      this.setScaleMagnitude( this.numberPiece.scaleProperty.value );
+    },
+
+    /**
      * Handles animation changes.
      * @public
      */
@@ -140,6 +150,7 @@ define( function( require ) {
 
       if ( this.positioned ) {
         this.numberPiece.positionProperty.unlink( this.positionListener );
+        this.numberPiece.scaleProperty.unlink( this.scaleListener );
         this.numberPiece.isAnimatingProperty.unlink( this.animatingListener );
       }
 

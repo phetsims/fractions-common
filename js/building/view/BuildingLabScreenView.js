@@ -150,7 +150,7 @@ define( function( require ) {
         positioned: true,
         modelViewTransform: self.modelViewTransform,
         dropListener: function( wasTouch ) {
-          model.numberPieceDropped( numberPiece, wasTouch ? 50 : 0 );
+          model.numberPieceDropped( numberPiece, wasTouch ? 50 : 20 );
         }
       } );
       self.numberPieceNodes.push( numberPieceNode );
@@ -234,7 +234,7 @@ define( function( require ) {
           self.model.selectedShapeGroupProperty.value = shapeGroup;
         },
         removeLastListener: function() {
-          self.model.removeLastPieceFromGroup( shapeGroup );
+          self.model.removeLastPieceFromShapeGroup( shapeGroup );
         },
         isSelectedProperty: new DerivedProperty( [ self.model.selectedShapeGroupProperty ], function( selectedShapeGroup ) {
           return selectedShapeGroup === shapeGroup;

@@ -12,6 +12,8 @@ define( function( require ) {
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
 
+  var WHOLE_FRACTIONAL_SIZE_RATIO = 1.8;
+
   var FractionsCommonConstants = {
     // {number}
     PANEL_MARGIN: 10,
@@ -34,8 +36,11 @@ define( function( require ) {
     // {number}
     NUMBER_DOUBLE_DIGIT_WIDTH: 80,
 
+    // TODO: cleanup
     NUMBER_FRACTIONAL_FONT: new PhetFont( { size: 60, weight: 'bold' } ),
-    NUMBER_WHOLE_FONT: new PhetFont( { size: 110, weight: 'bold' } ),
+    NUMBER_WHOLE_FONT: new PhetFont( { size: 60 * WHOLE_FRACTIONAL_SIZE_RATIO, weight: 'bold' } ),
+
+    WHOLE_FRACTIONAL_SIZE_RATIO: WHOLE_FRACTIONAL_SIZE_RATIO,
 
     NUMBER_CORNER_RADIUS: 5,
 

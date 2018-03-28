@@ -18,6 +18,7 @@ define( function( require ) {
   var NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
   var NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   var NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
+  var NumberSpotType = require( 'FRACTIONS_COMMON/building/enum/NumberSpotType' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
@@ -122,7 +123,7 @@ define( function( require ) {
       var offset = NumberStack.getOffset( 1 );
       var position = numberStack.positionProperty.value.plus( offset.timesScalar( FractionsCommonConstants.NUMBER_BUILD_SCALE ) );
       var speed = 40 / Math.sqrt( position.distance( numberPiece.positionProperty.value ) );
-      numberPiece.animator.animateTo( position, 0, FractionsCommonConstants.NUMBER_BUILD_SCALE, numberStack.positionProperty, Easing.QUADRATIC_IN, speed, function() {
+      numberPiece.animator.animateTo( position, 0, 1, numberStack.positionProperty, Easing.QUADRATIC_IN, speed, function() {
         self.activeNumberPieces.remove( numberPiece );
       } );
     },
@@ -176,14 +177,37 @@ define( function( require ) {
     },
 
     numberPieceDropped: function( numberPiece, threshold ) {
-      // TODO
+      var closestSpot = null;
+      var closestDistance = threshold;
 
-      this.returnActiveNumberPiece( numberPiece );
+      var point = numberPiece.positionProperty.value;
+
+      this.numberGroups.forEach( function( numberGroup ) {
+        var localPoint = scratchVector.set( point ).subtract( numberGroup.positionProperty.value );
+
+        numberGroup.spots.forEach( function( spot ) {
+          if ( spot.pieceProperty.value === null ) {
+            var distance = Math.sqrt( spot.bounds.minimumDistanceToPointSquared( localPoint ) );
+            if ( distance <= closestDistance ) {
+              closestDistance = distance;
+              closestSpot = spot;
+            }
+          }
+        } );
+      } );
+
+      if ( closestSpot ) {
+        // Instant like the old sim (for now)
+        closestSpot.pieceProperty.value = numberPiece;
+        this.activeNumberPieces.remove( numberPiece );
+      }
+      else {
+        this.returnActiveNumberPiece( numberPiece );
+      }
     },
 
     // TODO: doc
-    // TODO: rename to make it shape-specific
-    removeLastPieceFromGroup: function( shapeGroup ) {
+    removeLastPieceFromShapeGroup: function( shapeGroup ) {
       for ( var i = shapeGroup.shapeContainers.length - 1; i >= 0; i-- ) {
         var shapeContainer = shapeGroup.shapeContainers.get( i );
         if ( shapeContainer.shapePieces.length ) {
@@ -203,12 +227,29 @@ define( function( require ) {
       throw new Error( 'Could not find a piece to remove' );
     },
 
+    removeLastPieceFromNumberGroup: function( numberGroup ) {
+      for ( var i = 0; i < numberGroup.spots.length; i++ ) {
+        var spot = numberGroup.spots[ i ];
+        if ( spot.pieceProperty.value !== null ) {
+          var numberPiece = spot.pieceProperty.value;
+          spot.pieceProperty.value = null;
+
+          numberPiece.positionProperty.value = spot.bounds.center.plus( numberGroup.positionProperty.value );
+          if ( spot.type === NumberSpotType.WHOLE ) {
+            numberPiece.scaleProperty.value = FractionsCommonConstants.WHOLE_FRACTIONAL_SIZE_RATIO;
+          }
+          this.activeNumberPieces.push( numberPiece );
+          this.returnActiveNumberPiece( numberPiece );
+        }
+      }
+    },
+
     addShapeGroup: function( representation ) {
       var self = this;
 
       var shapeGroup = new ShapeGroup( representation, {
         returnPieceListener: function() {
-          self.removeLastPieceFromGroup( shapeGroup );
+          self.removeLastPieceFromShapeGroup( shapeGroup );
         }
       } );
       this.shapeGroups.push( shapeGroup );
@@ -220,7 +261,7 @@ define( function( require ) {
       var self = this;
       
       while ( shapeGroup.hasAnyPieces() ) {
-        this.removeLastPieceFromGroup( shapeGroup );
+        this.removeLastPieceFromShapeGroup( shapeGroup );
       }
 
       var position = this.returnShapeGroupPositionProperty.value;
@@ -233,7 +274,9 @@ define( function( require ) {
     returnNumberGroup: function( numberGroup ) {
       var self = this;
 
-      // TODO: RETURN ALL THE THINGS
+      while ( numberGroup.hasAnyPieces() ) {
+        this.removeLastPieceFromNumberGroup( numberGroup );
+      }
 
       var returnPositionProperty = ( numberGroup.isMixedNumber ? this.returnMixedNumberGroupPositionProperty : this.returnNonMixedNumberGroupPositionProperty );
       var position = returnPositionProperty.value;

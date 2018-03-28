@@ -35,6 +35,9 @@ define( function( require ) {
     // @public {Property.<Vector2>} - Applies only while out in the play area (being animated or dragged)
     this.positionProperty = new Property( Vector2.ZERO );
 
+    // @public {Property.<number>} - Applies only while out in the play area (being animated or dragged)
+    this.scaleProperty = new NumberProperty( 1 );
+
     // @public {Property.<boolean>}
     this.isUserControlledProperty = new BooleanProperty( false );
 
@@ -42,7 +45,7 @@ define( function( require ) {
     this.isAnimatingProperty = new BooleanProperty( false );
 
     // @public {Animator}
-    this.animator = new Animator( this.positionProperty, new NumberProperty( 0 ), new NumberProperty( 1 ), this.isAnimatingProperty );
+    this.animator = new Animator( this.positionProperty, new NumberProperty( 0 ), this.scaleProperty, this.isAnimatingProperty );
 
     // @public {Bounds2}
     this.bounds = Bounds2.point( 0, 0 ).dilatedXY( ( number >= 10 ? FractionsCommonConstants.NUMBER_DOUBLE_DIGIT_WIDTH : FractionsCommonConstants.NUMBER_SINGLE_DIGIT_WIDTH ) / 2, FractionsCommonConstants.NUMBER_HEIGHT / 2 );
