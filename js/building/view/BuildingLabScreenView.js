@@ -22,6 +22,8 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
   var NumberGroupNode = require( 'FRACTIONS_COMMON/building/view/NumberGroupNode' );
+  var NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
+  var NumberPieceNode = require( 'FRACTIONS_COMMON/building/view/NumberPieceNode' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
@@ -75,7 +77,14 @@ define( function( require ) {
     // @private {Node}
     this.numberPanel = new LabNumberPanel( model, {
       dragPieceFromStackListener: function( event, numberStack ) {
-        // TODO
+        var numberPiece = new NumberPiece( numberStack.number );
+        numberPiece.positionProperty.value = self.modelViewTransform.viewToModelPosition( self.globalToLocalPoint( event.pointer.point ) );
+        model.activeNumberPieces.push( numberPiece );
+        // TODO: factor this "find" usage out
+        var numberPieceNode = _.find( self.numberPieceNodes, function( numberPieceNode ) {
+          return numberPieceNode.numberPiece === numberPiece;
+        } );
+        numberPieceNode.dragListener.press( event, numberPieceNode );
       },
       dragGroupFromStackListener: function( event, isMixedNumber ) {
         // TODO: encapsulation
@@ -131,6 +140,30 @@ define( function( require ) {
       arrayRemove( self.shapePieceNodes, shapePieceNode );
       self.pieceLayer.removeChild( shapePieceNode );
       shapePieceNode.dispose();
+    } );
+
+    // @private {Array.<NumberPieceNode>}
+    this.numberPieceNodes = []; // TODO: interrupt on reset
+
+    model.activeNumberPieces.addItemAddedListener( function( numberPiece ) {
+      var numberPieceNode = new NumberPieceNode( numberPiece, {
+        positioned: true,
+        modelViewTransform: self.modelViewTransform,
+        dropListener: function( wasTouch ) {
+          model.numberPieceDropped( numberPiece, wasTouch ? 50 : 0 );
+        }
+      } );
+      self.numberPieceNodes.push( numberPieceNode );
+      self.pieceLayer.addChild( numberPieceNode );
+    } );
+    model.activeNumberPieces.addItemRemovedListener( function( numberPiece ) {
+      var numberPieceNode = _.find( self.numberPieceNodes, function( numberPieceNode ) {
+        return numberPieceNode.numberPiece === numberPiece;
+      } );
+
+      arrayRemove( self.numberPieceNodes, numberPieceNode );
+      self.pieceLayer.removeChild( numberPieceNode );
+      numberPieceNode.dispose();
     } );
 
     phet.joist.display.addInputListener( {

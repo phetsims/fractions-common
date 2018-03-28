@@ -85,6 +85,9 @@ define( function( require ) {
     // @public {ObservableArray.<NumberGroup>}
     this.numberGroups = new ObservableArray();
 
+    // @public {ObservableArray.<NumberPiece>} - Number pieces in the play area (controlled or animating)
+    this.activeNumberPieces = new ObservableArray();
+
     // Shared to set up some initial state
     this.reset();
   }
@@ -108,6 +111,22 @@ define( function( require ) {
       } );
     },
 
+    returnActiveNumberPiece: function( numberPiece ) {
+      var self = this;
+
+      var numberStack = _.find( this.numberStacks, function( stack ) {
+        return stack.number === numberPiece.number;
+      } );
+
+      // TODO: Don't use hard-coded constant (index 1) for game screens
+      var offset = NumberStack.getOffset( 1 );
+      var position = numberStack.positionProperty.value.plus( offset.timesScalar( FractionsCommonConstants.NUMBER_BUILD_SCALE ) );
+      var speed = 40 / Math.sqrt( position.distance( numberPiece.positionProperty.value ) );
+      numberPiece.animator.animateTo( position, 0, FractionsCommonConstants.NUMBER_BUILD_SCALE, numberStack.positionProperty, Easing.QUADRATIC_IN, speed, function() {
+        self.activeNumberPieces.remove( numberPiece );
+      } );
+    },
+
     placeActiveShapePiece: function( shapePiece, shapeContainer, shapeGroup ) {
       var self = this;
 
@@ -121,7 +140,7 @@ define( function( require ) {
       } );
     },
 
-    findClosestDroppableContainer: function( shapePiece, threshold ) {
+    closestDroppableShapeContainer: function( shapePiece, threshold ) {
       var closestContainer = null;
       var closestDistance = threshold;
 
@@ -145,7 +164,7 @@ define( function( require ) {
     },
 
     shapePieceDropped: function( shapePiece, threshold ) {
-      var closestContainer = this.findClosestDroppableContainer( shapePiece, threshold );
+      var closestContainer = this.closestDroppableShapeContainer( shapePiece, threshold );
 
       if ( closestContainer ) {
         closestContainer.shapePieces.push( shapePiece );
@@ -154,6 +173,12 @@ define( function( require ) {
       else {
         this.returnActiveShapePiece( shapePiece );
       }
+    },
+
+    numberPieceDropped: function( numberPiece, threshold ) {
+      // TODO
+
+      this.returnActiveNumberPiece( numberPiece );
     },
 
     // TODO: doc
@@ -207,7 +232,7 @@ define( function( require ) {
 
     returnNumberGroup: function( numberGroup ) {
       var self = this;
-      
+
       // TODO: RETURN ALL THE THINGS
 
       var returnPositionProperty = ( numberGroup.isMixedNumber ? this.returnMixedNumberGroupPositionProperty : this.returnNonMixedNumberGroupPositionProperty );
@@ -236,6 +261,11 @@ define( function( require ) {
       } );
       this.activeShapePieces.reset();
 
+      this.activeNumberPieces.forEach( function( shapePiece ) {
+        shapePiece.animator.endAnimation();
+      } );
+      this.activeNumberPieces.reset();
+
       // Initial state
       var shapeGroup = this.addShapeGroup( Representation.CIRCLE );
       shapeGroup.positionProperty.value = new Vector2( 170, 0 );
@@ -263,11 +293,15 @@ define( function( require ) {
 
         // Don't compute the closest for ALL pieces, that would hurt performance.
         if ( shapePiece.representation === Representation.CIRCLE && shapePiece.isUserControlledProperty.value ) {
-          var closestContainer = self.findClosestDroppableContainer( shapePiece, Number.POSITIVE_INFINITY );
+          var closestContainer = self.closestDroppableShapeContainer( shapePiece, Number.POSITIVE_INFINITY );
           if ( closestContainer ) {
             shapePiece.orientTowardsContainer( closestContainer, dt );
           }
         }
+      } );
+
+      this.activeNumberPieces.forEach( function( numberPiece ) {
+        numberPiece.step( dt );
       } );
     }
   } );

@@ -35,5 +35,10 @@ define( function( require ) {
 
   fractionsCommon.register( 'NumberStack', NumberStack );
 
-  return inherit( Object, NumberStack, {} );
+  return inherit( Object, NumberStack, {}, {
+    // TODO: doc
+    getOffset: function( index ) {
+      return new Vector2( 4 * index, 4 * index );
+    }
+  } );
 } );

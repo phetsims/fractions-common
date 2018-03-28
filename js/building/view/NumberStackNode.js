@@ -14,7 +14,6 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var NumberPieceNode = require( 'FRACTIONS_COMMON/building/view/NumberPieceNode' );
   var NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
-  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * @constructor
@@ -56,7 +55,7 @@ define( function( require ) {
 
       var index = this.numberPieceNodes.length;
       var numberPieceNode = new NumberPieceNode( numberPiece, {
-        translation: new Vector2( 4 * index, 4 * index )
+        translation: NumberStack.getOffset( index )
       } );
       this.numberPieceNodes.push( numberPieceNode );
       this.addChild( numberPieceNode );
