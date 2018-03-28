@@ -14,6 +14,7 @@ define( function( require ) {
   var Bounds2 = require( 'DOT/Bounds2' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
   var NumberProperty = require( 'AXON/NumberProperty' );
   var NumberSpot = require( 'FRACTIONS_COMMON/building/model/NumberSpot' );
@@ -25,7 +26,9 @@ define( function( require ) {
   var FRACTIONAL_NUMBER_HEIGHT = 43;
   var FRACTIONAL_NUMBER_WIDTH = 32;
   var WHOLE_NUMBER_HEIGHT = 100;
-  var WHOLE_NUMBER_WIDTH = WHOLE_NUMBER_HEIGHT * FRACTIONAL_NUMBER_WIDTH / FRACTIONAL_NUMBER_HEIGHT;
+  // TODO: Probably compute the width slightly differently here, but we need this compensation right now
+  var HACK_FACTOR = FractionsCommonConstants.WHOLE_FRACTIONAL_SIZE_RATIO / ( WHOLE_NUMBER_HEIGHT / FRACTIONAL_NUMBER_HEIGHT );
+  var WHOLE_NUMBER_WIDTH = HACK_FACTOR * WHOLE_NUMBER_HEIGHT * FRACTIONAL_NUMBER_WIDTH / FRACTIONAL_NUMBER_HEIGHT;
   var FRACTION_LINE_WIDTH = 40;
   var VERTICAL_SPACING = 12;
 
@@ -41,6 +44,7 @@ define( function( require ) {
   MIXED_DENOMINATOR_BOUNDS.shiftX( -beforeCenter );
   MIXED_WHOLE_BOUNDS.shiftX( -beforeCenter );
 
+  // TODO: double-digit support
 
   /**
    * @constructor

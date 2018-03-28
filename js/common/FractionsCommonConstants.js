@@ -12,7 +12,7 @@ define( function( require ) {
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
 
-  var WHOLE_FRACTIONAL_SIZE_RATIO = 1.8;
+  var WHOLE_FRACTIONAL_SIZE_RATIO = 2;
 
   var FractionsCommonConstants = {
     // {number}
