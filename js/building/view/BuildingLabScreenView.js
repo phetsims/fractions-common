@@ -20,6 +20,7 @@ define( function( require ) {
   var Matrix3 = require( 'DOT/Matrix3' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
   var NumberGroupNode = require( 'FRACTIONS_COMMON/building/view/NumberGroupNode' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
@@ -77,7 +78,14 @@ define( function( require ) {
         // TODO
       },
       dragGroupFromStackListener: function( event, isMixedNumber ) {
-        // TODO
+        // TODO: encapsulation
+        var numberGroup = new NumberGroup( isMixedNumber );
+        model.numberGroups.push( numberGroup );
+        numberGroup.positionProperty.value = self.modelViewTransform.viewToModelPosition( self.globalToLocalPoint( event.pointer.point ) );
+        var numberGroupNode = _.find( self.numberGroupNodes, function( numberGroupNode ) {
+          return numberGroupNode.numberGroup === numberGroup;
+        } );
+        numberGroupNode.dragListener.press( event, numberGroupNode );
       }
     } );
 

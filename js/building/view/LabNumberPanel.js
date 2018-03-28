@@ -91,9 +91,9 @@ define( function( require ) {
 
     var STACK_PADDING = 20;
 
-    stackContainers.forEach( function( node ) {
-      Property.multilink( [ stackAlignGroup.maxWidthProperty, stackAlignGroup.maxHeightProperty ], function( width, height ) {
-        var bounds = new Bounds2( -STACK_PADDING / 2, 0, width + STACK_PADDING / 2, height );
+    stackContainers.concat( [ nonMixedGroupIcon, mixedGroupIcon ] ).forEach( function( node ) {
+      Property.multilink( [ stackAlignGroup.maxHeightProperty ], function( height ) {
+        var bounds = new Bounds2( -STACK_PADDING / 2 + node.left, 0, node.right + STACK_PADDING / 2, height );
         node.mouseArea = bounds;
         node.touchArea = bounds;
       } );
