@@ -20,7 +20,6 @@ define( function( require ) {
   var Matrix3 = require( 'DOT/Matrix3' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
   var NumberGroupNode = require( 'FRACTIONS_COMMON/building/view/NumberGroupNode' );
   var NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   var NumberPieceNode = require( 'FRACTIONS_COMMON/building/view/NumberPieceNode' );
@@ -79,7 +78,7 @@ define( function( require ) {
       dragPieceFromStackListener: function( event, numberStack ) {
         var numberPiece = new NumberPiece( numberStack.number );
         numberPiece.positionProperty.value = self.modelViewTransform.viewToModelPosition( self.globalToLocalPoint( event.pointer.point ) );
-        model.activeNumberPieces.push( numberPiece );
+        model.dragNumberPieceFromStack( numberPiece, numberStack );
         // TODO: factor this "find" usage out
         var numberPieceNode = _.find( self.numberPieceNodes, function( numberPieceNode ) {
           return numberPieceNode.numberPiece === numberPiece;
@@ -87,9 +86,7 @@ define( function( require ) {
         numberPieceNode.dragListener.press( event, numberPieceNode );
       },
       dragGroupFromStackListener: function( event, isMixedNumber ) {
-        // TODO: encapsulation
-        var numberGroup = new NumberGroup( isMixedNumber );
-        model.numberGroups.push( numberGroup );
+        var numberGroup = model.addNumberGroup( isMixedNumber );
         numberGroup.positionProperty.value = self.modelViewTransform.viewToModelPosition( self.globalToLocalPoint( event.pointer.point ) );
         var numberGroupNode = _.find( self.numberGroupNodes, function( numberGroupNode ) {
           return numberGroupNode.numberGroup === numberGroup;

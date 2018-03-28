@@ -51,12 +51,21 @@ define( function( require ) {
    * @extends {Object}
    *
    * @param {boolean} isMixedNumber
+   * @param {Object} [options]
    */
-  function NumberGroup( isMixedNumber ) {
+  function NumberGroup( isMixedNumber, options ) {
     var self = this;
+
+    options = _.extend( {
+      // {Property.<Range|null>}
+      activeNumberRangeProperty: new Property( null )
+    }, options );
 
     // @public {boolean}
     this.isMixedNumber = isMixedNumber;
+
+    // @private {Property.<Range|null>}
+    this.activeNumberRangeProperty = options.activeNumberRangeProperty;
 
     // @public {NumberSpot}
     this.numeratorSpot = new NumberSpot( this, NumberSpotType.NUMERATOR, isMixedNumber ? MIXED_NUMERATOR_BOUNDS : NUMERATOR_BOUNDS );
@@ -105,27 +114,40 @@ define( function( require ) {
 
     // @public {number} - TODO: Any reason we need this in the model
     this.fractionLineWidth = FRACTION_LINE_WIDTH;
+
+    // @private {function}
+    this.spotAllowedListener = this.updateAllowedSpots.bind( this );
+    this.activeNumberRangeProperty.link( this.spotAllowedListener );
   }
 
   fractionsCommon.register( 'NumberGroup', NumberGroup );
 
   return inherit( Object, NumberGroup, {
-    canPlaceNumberInSpot: function( numberPiece, spot ) {
+    updateAllowedSpots: function() {
+      if ( this.isMixedNumber ) {
+        var range = this.activeNumberRangeProperty.value;
+
+        this.numeratorSpot.showNotAllowedProperty.value = range === null ? false : !this.canPlaceNumberInSpot( range.min, this.numeratorSpot );
+        this.denominatorSpot.showNotAllowedProperty.value = range === null ? false : !this.canPlaceNumberInSpot( range.max, this.denominatorSpot );
+      }
+    },
+
+    canPlaceNumberInSpot: function( number, spot ) {
       // TODO: simplify into one boolean
       if ( spot.pieceProperty.value !== null ) {
         return false;
       }
 
       if ( this.isMixedNumber ) {
-        if ( spot === this.denominatorSpot && this.numeratorSpot.pieceProperty.value !== null && this.numeratorSpot.pieceProperty.value.number >= numberPiece.number ) {
+        if ( spot === this.denominatorSpot && this.numeratorSpot.pieceProperty.value !== null && this.numeratorSpot.pieceProperty.value.number >= number ) {
           return false;
         }
-        if ( spot === this.numeratorSpot && this.denominatorSpot.pieceProperty.value !== null && this.denominatorSpot.pieceProperty.value.number <= numberPiece.number ) {
+        if ( spot === this.numeratorSpot && this.denominatorSpot.pieceProperty.value !== null && this.denominatorSpot.pieceProperty.value.number <= number ) {
           return false;
         }
 
         // Don't allow 1s here as there is no valid choice
-        if ( spot === this.denominatorSpot && numberPiece.number === 1 ) {
+        if ( spot === this.denominatorSpot && number === 1 ) {
           return false;
         }
       }
@@ -142,6 +164,10 @@ define( function( require ) {
 
     step: function( dt ) {
       this.animator.step( dt );
+    },
+
+    dispose: function() {
+      this.activeNumberRangeProperty.unlink( this.spotAllowedListener );
     }
   } );
 } );

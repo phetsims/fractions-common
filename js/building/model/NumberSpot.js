@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var BooleanProperty = require( 'AXON/BooleanProperty' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
@@ -34,6 +35,9 @@ define( function( require ) {
 
     // @public {Property.<NumberPiece|null>}
     this.pieceProperty = new Property( null );
+
+    // @public {Property.<boolean>}
+    this.showNotAllowedProperty = new BooleanProperty( false );
   }
 
   fractionsCommon.register( 'NumberSpot', NumberSpot );

@@ -18,9 +18,13 @@ define( function( require ) {
   var Node = require( 'SCENERY/nodes/Node' );
   var NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
   var NumberSpotType = require( 'FRACTIONS_COMMON/building/enum/NumberSpotType' );
+  var Path = require( 'SCENERY/nodes/Path' );
+  var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var Shape = require( 'KITE/Shape' );
   var TemporaryUndoButton = require( 'FRACTIONS_COMMON/building/view/TemporaryUndoButton' );
   var Text = require( 'SCENERY/nodes/Text' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * @constructor
@@ -71,15 +75,25 @@ define( function( require ) {
         font: spot.type === NumberSpotType.WHOLE ? FractionsCommonConstants.NUMBER_WHOLE_FONT : FractionsCommonConstants.NUMBER_FRACTIONAL_FONT,
         center: outline.center // TODO: is this right-aligned instead for the whole number?
       } );
-      spot.pieceProperty.link( function( piece ) {
+      var notAllowedSize = spot.bounds.width * 0.6; // Find the right ratio?
+      var notAllowedShape = new Shape().circle( 0, 0, notAllowedSize )
+                                       .moveToPoint( Vector2.createPolar( notAllowedSize, -0.25 * Math.PI ) )
+                                       .lineToPoint( Vector2.createPolar( notAllowedSize, 0.75 * Math.PI ) );
+      var notAllowedNode = new Path( notAllowedShape, {
+        stroke: FractionsCommonColorProfile.numberNotAllowedProperty,
+        lineWidth: 3,
+        center: outline.center
+      } );
+      Property.multilink( [ spot.pieceProperty, spot.showNotAllowedProperty ], function( piece, notAllowed ) {
         if ( piece !== null ) {
           text.text = piece.number;
           text.center = outline.center;
         }
         text.visible = piece !== null;
-        outline.visible = !text.visible;
+        outline.visible = !text.visible && !notAllowed;
+        notAllowedNode.visible = !text.visible && notAllowed;
       } );
-      return new Node( { children: [ outline, text ] } );
+      return new Node( { children: [ outline, notAllowedNode, text ] } );
     }
 
     var numeratorSpot = createSpot( numberGroup.numeratorSpot );

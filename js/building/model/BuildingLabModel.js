@@ -21,6 +21,7 @@ define( function( require ) {
   var NumberSpotType = require( 'FRACTIONS_COMMON/building/enum/NumberSpotType' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Property = require( 'AXON/Property' );
+  var Range = require( 'DOT/Range' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   var ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
   var ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
@@ -65,6 +66,8 @@ define( function( require ) {
       return stack;
     } );
 
+    // TODO: better encapsulation, so things don't reach in here
+
     // @public {Property.<Vector2>}
     this.returnShapeGroupPositionProperty = new Property( Vector2.ZERO );
 
@@ -89,6 +92,19 @@ define( function( require ) {
     // @public {ObservableArray.<NumberPiece>} - Number pieces in the play area (controlled or animating)
     this.activeNumberPieces = new ObservableArray();
 
+    // @public {ObservableArray.<NumberPiece>}
+    this.draggedNumberPieces = new ObservableArray();
+
+    // @public {Property.<Range|null>} - null when there are no active numbers, otherwise a range of all values being dragged.
+    this.activeNumberRangeProperty = new Property( null, {
+      useDeepEquality: true
+    } );
+
+    var rangeListener = this.updateDraggedNumberRange.bind( this );
+    this.draggedNumberPieces.addItemAddedListener( rangeListener );
+    this.draggedNumberPieces.addItemRemovedListener( rangeListener );
+    rangeListener();
+
     // Shared to set up some initial state
     this.reset();
   }
@@ -96,6 +112,16 @@ define( function( require ) {
   fractionsCommon.register( 'BuildingLabModel', BuildingLabModel );
 
   return inherit( Object, BuildingLabModel, {
+    dragNumberPieceFromStack: function( numberPiece, numberStack ) {
+      this.activeNumberPieces.push( numberPiece );
+      this.draggedNumberPieces.push( numberPiece );
+
+      // Support for the game where they can be removed
+      if ( numberStack.numberPieces.contains( numberPiece ) ) {
+        numberStack.numberPieces.remove( numberPiece );
+      }
+    },
+
     returnActiveShapePiece: function( shapePiece ) {
       var self = this;
 
@@ -177,7 +203,7 @@ define( function( require ) {
     },
 
     numberPieceDropped: function( numberPiece, threshold ) {
-      var closestSpot = null;
+      var closestSpot = null; 
       var closestDistance = threshold;
 
       var point = numberPiece.positionProperty.value;
@@ -186,7 +212,7 @@ define( function( require ) {
         var localPoint = scratchVector.set( point ).subtract( numberGroup.positionProperty.value );
 
         numberGroup.spots.forEach( function( spot ) {
-          if ( numberGroup.canPlaceNumberInSpot( numberPiece, spot ) ) {
+          if ( numberGroup.canPlaceNumberInSpot( numberPiece.number, spot ) ) {
             var distance = Math.sqrt( spot.bounds.minimumDistanceToPointSquared( localPoint ) );
             if ( distance <= closestDistance ) {
               closestDistance = distance;
@@ -195,6 +221,8 @@ define( function( require ) {
           }
         } );
       } );
+
+      this.draggedNumberPieces.remove( numberPiece );
 
       if ( closestSpot ) {
         // Instant like the old sim (for now)
@@ -257,6 +285,15 @@ define( function( require ) {
       return shapeGroup;
     },
 
+    addNumberGroup: function( isMixedNumber ) {
+      var numberGroup = new NumberGroup( isMixedNumber, {
+        activeNumberRangeProperty: this.activeNumberRangeProperty
+      } );
+      this.numberGroups.push( numberGroup );
+
+      return numberGroup;
+    },
+
     returnShapeGroup: function( shapeGroup ) {
       var self = this;
       
@@ -282,8 +319,27 @@ define( function( require ) {
       var position = returnPositionProperty.value;
       var speed = 40 / Math.sqrt( position.distance( numberGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
       numberGroup.animator.animateTo( position, 0, FractionsCommonConstants.NUMBER_BUILD_SCALE, returnPositionProperty, Easing.QUADRATIC_IN, speed, function() {
+        // TODO: More methods for adding/removing to make things un-missable
         self.numberGroups.remove( numberGroup );
+        numberGroup.dispose();
       } );
+    },
+
+    updateDraggedNumberRange: function() {
+      if ( this.draggedNumberPieces.length === 0 ) {
+        this.activeNumberRangeProperty.value = null;
+      }
+      else {
+        var min = Number.POSITIVE_INFINITY;
+        var max = Number.NEGATIVE_INFINITY;
+
+        this.draggedNumberPieces.forEach( function( numberPiece ) {
+          min = Math.min( min, numberPiece.number );
+          max = Math.max( max, numberPiece.number );
+        } );
+
+        this.activeNumberRangeProperty.value = new Range( min, max );
+      }
     },
 
     reset: function() {
@@ -308,14 +364,14 @@ define( function( require ) {
         shapePiece.animator.endAnimation();
       } );
       this.activeNumberPieces.reset();
+      this.draggedNumberPieces.reset();
 
       // Initial state
       var shapeGroup = this.addShapeGroup( Representation.CIRCLE );
       shapeGroup.positionProperty.value = new Vector2( 170, 0 );
       this.selectedShapeGroupProperty.value = shapeGroup;
 
-      var numberGroup = new NumberGroup( false );
-      this.numberGroups.push( numberGroup );
+      var numberGroup = this.addNumberGroup( false );
       numberGroup.positionProperty.value = new Vector2( -170, 0 );
     },
 

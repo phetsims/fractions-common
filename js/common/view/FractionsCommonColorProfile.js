@@ -39,6 +39,7 @@ define( function( require ) {
     numberTextFill: { default: Color.BLACK },
     numberOutline: { default: Color.RED },
     numberFractionLine: { default: Color.BLACK },
+    numberNotAllowed: { default: Color.RED },
 
     radioStroke: { default: Color.BLACK },
     radioBase: { default: Color.WHITE },
