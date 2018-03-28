@@ -20,6 +20,7 @@ define( function( require ) {
   var Matrix3 = require( 'DOT/Matrix3' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var NumberGroupNode = require( 'FRACTIONS_COMMON/building/view/NumberGroupNode' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
@@ -92,6 +93,13 @@ define( function( require ) {
     model.shapeGroups.addItemAddedListener( this.addShapeGroup.bind( this ) );
     model.shapeGroups.addItemRemovedListener( this.removeShapeGroup.bind( this ) );
     model.shapeGroups.forEach( this.addShapeGroup.bind( this ) );
+
+    // @private {Array.<NumberGroupNode>}
+    this.numberGroupNodes = []; // TODO: interrupt on reset
+
+    model.numberGroups.addItemAddedListener( this.addNumberGroup.bind( this ) );
+    model.numberGroups.addItemRemovedListener( this.removeNumberGroup.bind( this ) );
+    model.numberGroups.forEach( this.addNumberGroup.bind( this ) );
 
     // @private {Array.<ShapePieceNode>}
     this.shapePieceNodes = []; // TODO: interrupt on reset
@@ -203,6 +211,25 @@ define( function( require ) {
       arrayRemove( this.shapeGroupNodes, shapeGroupNode );
       this.groupLayer.removeChild( shapeGroupNode );
       shapeGroupNode.dispose();
+    },
+
+    addNumberGroup: function( numberGroup ) {
+      var numberGroupNode = new NumberGroupNode( numberGroup, {
+        modelViewTransform: this.modelViewTransform
+      } );
+      this.numberGroupNodes.push( numberGroupNode );
+      this.groupLayer.addChild( numberGroupNode );
+    },
+
+    removeNumberGroup: function( numberGroup ) {
+      var numberGroupNode = _.find( this.numberGroupNodes, function( numberGroupNode ) {
+        return numberGroupNode.numberGroup === numberGroup;
+      } );
+      assert && assert( numberGroupNode );
+
+      arrayRemove( this.numberGroupNodes, numberGroupNode );
+      this.groupLayer.removeChild( numberGroupNode );
+      numberGroupNode.dispose();
     },
 
     step: function( dt ) {

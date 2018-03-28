@@ -39,7 +39,10 @@ define( function( require ) {
       isIcon: false,
 
       // {ModelViewTransform2|null}
-      modelViewTransform: null
+      modelViewTransform: null,
+
+      // node options
+      cursor: 'pointer'
     }, options );
 
     Node.call( this );
@@ -125,6 +128,7 @@ define( function( require ) {
         self.moveToFront();
       }
     } );
+    this.addInputListener( this.dragListener );
 
     this.mutate( options );
   }

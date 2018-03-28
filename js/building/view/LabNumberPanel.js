@@ -101,7 +101,7 @@ define( function( require ) {
 
     var numberBox = new HBox( {
       spacing: STACK_PADDING,
-      children: [ nonMixedGroupIcon ].concat( stackContainers ).concat( [ mixedGroupIcon ] )
+      children: [ nonMixedGroupIcon ].concat( stackContainers ).concat( model.allowMixedNumbers ? [ mixedGroupIcon ] : [] )
     } );
 
     // TODO: background color customizable

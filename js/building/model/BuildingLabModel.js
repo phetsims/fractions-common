@@ -15,6 +15,7 @@ define( function( require ) {
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
   var NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   var NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
   var ObservableArray = require( 'AXON/ObservableArray' );
@@ -74,6 +75,9 @@ define( function( require ) {
 
     // @public {Property.<ShapeGroup|null>} - We'll only show controls for this shape group
     this.selectedShapeGroupProperty = new Property( null );
+
+    // @public {ObservableArray.<NumberGroup>}
+    this.numberGroups = new ObservableArray();
 
     // Shared to set up some initial state
     this.reset();
@@ -202,6 +206,11 @@ define( function( require ) {
       } );
       this.shapeGroups.reset();
 
+      this.numberGroups.forEach( function( numberGroup ) {
+        numberGroup.animator.endAnimation();
+      } );
+      this.numberGroups.reset();
+
       this.activeShapePieces.forEach( function( shapePiece ) {
         shapePiece.animator.endAnimation();
       } );
@@ -210,8 +219,11 @@ define( function( require ) {
       // Initial state
       var shapeGroup = this.addShapeGroup( Representation.CIRCLE );
       shapeGroup.positionProperty.value = new Vector2( 170, 0 );
-
       this.selectedShapeGroupProperty.value = shapeGroup;
+
+      var numberGroup = new NumberGroup( false );
+      this.numberGroups.push( numberGroup );
+      numberGroup.positionProperty.value = new Vector2( -170, 0 );
     },
 
     step: function( dt ) {
