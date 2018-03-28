@@ -19,6 +19,7 @@ define( function( require ) {
   var NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
   var NumberSpotType = require( 'FRACTIONS_COMMON/building/enum/NumberSpotType' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var TemporaryUndoButton = require( 'FRACTIONS_COMMON/building/view/TemporaryUndoButton' );
   var Text = require( 'SCENERY/nodes/Text' );
 
   /**
@@ -42,6 +43,7 @@ define( function( require ) {
       modelViewTransform: null,
 
       dropListener: null,
+      removeLastListener: null,
 
       // node options
       cursor: 'pointer'
@@ -105,6 +107,13 @@ define( function( require ) {
       stroke: FractionsCommonColorProfile.numberFractionLineProperty
     } );
 
+    // @private {Node}
+    var undoButton = new TemporaryUndoButton( options.removeLastListener, {
+      // TODO: Make it computational
+      rightCenter: cardBackground.leftCenter.plusXY( 5, 0 ) // Some slight overlap shown in mockups
+    } );
+    numberGroup.hasPiecesProperty.linkAttribute( undoButton, 'visible' );
+
     if ( !options.isIcon ) {
       // TODO: Factor out common code here between the groups!!!
       numberGroup.positionProperty.link( function( position ) {
@@ -120,15 +129,15 @@ define( function( require ) {
           self.pickable = false;
         }
       } );
-
     }
 
     this.children = [
-      cardBackground,
+      cardBackground
+    ].concat( options.isIcon ? [] : [ undoButton ] ).concat( [
       fractionLine,
       numeratorSpot,
       denominatorSpot
-    ].concat( numberGroup.isMixedNumber ? [ wholeSpot ] : [] );
+    ] ).concat( numberGroup.isMixedNumber ? [ wholeSpot ] : [] );
 
     // @public {DragListener}
     this.dragListener = new DragListener( {

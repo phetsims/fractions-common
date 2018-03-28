@@ -265,6 +265,9 @@ define( function( require ) {
           if ( self.numberPanel.bounds.dilated( 10 ).containsPoint( self.modelViewTransform.modelToViewPosition( numberGroup.positionProperty.value ) ) ) {
             self.model.returnNumberGroup( numberGroup );
           }
+        },
+        removeLastListener: function() {
+          self.model.removeLastPieceFromNumberGroup( numberGroup );
         }
       } );
       this.numberGroupNodes.push( numberGroupNode );

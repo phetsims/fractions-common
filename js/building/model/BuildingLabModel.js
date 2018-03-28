@@ -220,7 +220,6 @@ define( function( require ) {
           shapePiece.rotationProperty.value = shapeMatrix.rotation;
           this.activeShapePieces.push( shapePiece );
           this.returnActiveShapePiece( shapePiece );
-
           return;
         }
       }
@@ -240,6 +239,7 @@ define( function( require ) {
           }
           this.activeNumberPieces.push( numberPiece );
           this.returnActiveNumberPiece( numberPiece );
+          return;
         }
       }
     },

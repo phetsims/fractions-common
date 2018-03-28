@@ -77,6 +77,13 @@ define( function( require ) {
       } );
     } );
 
+    // @public {Property.<boolean>} TODO: hasAnyPieces usage can move to this?
+    this.hasPiecesProperty = new DerivedProperty( this.spots.map( function( spot ) { return spot.pieceProperty; } ), function() {
+      return _.some( self.spots, function( spot ) {
+        return spot.pieceProperty.value !== null;
+      } );
+    } );
+
     // @public {Bounds2}
     this.allSpotsBounds = _.reduce( this.spots, function( bounds, spot ) {
       return bounds.union( spot.bounds );
