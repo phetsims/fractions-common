@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var BooleanProperty = require( 'AXON/BooleanProperty' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
   var DragListener = require( 'SCENERY/listeners/DragListener' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
@@ -44,12 +45,15 @@ define( function( require ) {
       // pieces in stacks/containers ALSO care about not showing up when the piece is user-controlled or animating.
       isIcon: false,
 
+      isSelectedProperty: new BooleanProperty( true ), // takes ownership, will dispose at the end
+
       dragBoundsProperty: null,
 
       // {ModelViewTransform2|null}
       modelViewTransform: null,
 
       dropListener: null,
+      selectListener: null,
       removeLastListener: null,
 
       // node options
@@ -129,7 +133,14 @@ define( function( require ) {
       // TODO: Make it computational
       rightCenter: cardBackground.leftCenter.plusXY( 5, 0 ) // Some slight overlap shown in mockups
     } );
-    numberGroup.hasPiecesProperty.linkAttribute( this.undoButton, 'visible' );
+
+    // @private {Property.<boolean>}
+    this.isSelectedProperty = options.isSelectedProperty;
+
+    // @private {function}
+    this.undoVisibilityListener = Property.multilink( [ numberGroup.hasPiecesProperty, options.isSelectedProperty ], function( hasPieces, isSelected ) {
+      self.undoButton.visible = hasPieces && isSelected;
+    } );
 
     if ( !options.isIcon ) {
       // TODO: Factor out common code here between the groups!!!
@@ -175,6 +186,7 @@ define( function( require ) {
         transform: options.modelViewTransform,
         locationProperty: numberGroup.positionProperty,
         start: function( event ) {
+          options.selectListener && options.selectListener();
           self.moveToFront();
         },
         end: function( event ) {
@@ -182,6 +194,13 @@ define( function( require ) {
         }
       } );
       this.addInputListener( this.dragListener );
+
+      this.addInputListener( {
+        down: function( event ) {
+          options.selectListener && options.selectListener();
+          event.handle();
+        }
+      } );
     }
 
     this.mutate( options );
@@ -199,6 +218,8 @@ define( function( require ) {
       this.dragListener.dispose();
       this.dragBoundsProperty.dispose();
       this.undoButton.dispose();
+      this.undoVisibilityListener.dispose();
+      this.isSelectedProperty.dispose();
 
       Node.prototype.dispose.call( this );
     }

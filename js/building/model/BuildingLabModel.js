@@ -83,8 +83,8 @@ define( function( require ) {
     // @public {ObservableArray.<ShapePiece>} - Shape pieces in the play area (controlled or animating)
     this.activeShapePieces = new ObservableArray();
 
-    // @public {Property.<ShapeGroup|null>} - We'll only show controls for this shape group
-    this.selectedShapeGroupProperty = new Property( null );
+    // @public {Property.<ShapeGroup|NumberGroup|null>} - We'll only show controls for this shape group
+    this.selectedGroupProperty = new Property( null );
 
     // @public {ObservableArray.<NumberGroup>}
     this.numberGroups = new ObservableArray();
@@ -372,7 +372,7 @@ define( function( require ) {
       // Initial state
       var shapeGroup = this.addShapeGroup( Representation.CIRCLE );
       shapeGroup.positionProperty.value = new Vector2( 170, 0 );
-      this.selectedShapeGroupProperty.value = shapeGroup;
+      this.selectedGroupProperty.value = shapeGroup;
 
       var numberGroup = this.addNumberGroup( false );
       numberGroup.positionProperty.value = new Vector2( -170, 0 );

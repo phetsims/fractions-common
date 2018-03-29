@@ -173,7 +173,7 @@ define( function( require ) {
       down: function() {
         // Any event on a shape group should handle it.
         // TODO: How do we.... handle number groups? Use same property presumably. TODO
-        model.selectedShapeGroupProperty.value = null;
+        model.selectedGroupProperty.value = null;
       }
     } );
 
@@ -248,13 +248,13 @@ define( function( require ) {
           }
         },
         selectListener: function() {
-          self.model.selectedShapeGroupProperty.value = shapeGroup;
+          self.model.selectedGroupProperty.value = shapeGroup;
         },
         removeLastListener: function() {
           self.model.removeLastPieceFromShapeGroup( shapeGroup );
         },
-        isSelectedProperty: new DerivedProperty( [ self.model.selectedShapeGroupProperty ], function( selectedShapeGroup ) {
-          return selectedShapeGroup === shapeGroup;
+        isSelectedProperty: new DerivedProperty( [ self.model.selectedGroupProperty ], function( selectedGroup ) {
+          return selectedGroup === shapeGroup;
         } )
       } );
       this.shapeGroupNodes.push( shapeGroupNode );
@@ -284,9 +284,15 @@ define( function( require ) {
             self.model.returnNumberGroup( numberGroup );
           }
         },
+        selectListener: function() {
+          self.model.selectedGroupProperty.value = numberGroup;
+        },
         removeLastListener: function() {
           self.model.removeLastPieceFromNumberGroup( numberGroup );
-        }
+        },
+        isSelectedProperty: new DerivedProperty( [ self.model.selectedGroupProperty ], function( selectedGroup ) {
+          return selectedGroup === numberGroup;
+        } )
       } );
       this.numberGroupNodes.push( numberGroupNode );
       this.groupLayer.addChild( numberGroupNode );

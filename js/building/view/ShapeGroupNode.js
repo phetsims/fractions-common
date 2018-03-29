@@ -83,7 +83,6 @@ define( function( require ) {
 
     // @private {Property.<boolean>}
     this.isSelectedProperty = options.isSelectedProperty;
-
     this.isSelectedProperty.linkAttribute( this.controlLayer, 'visible' );
 
     // NOTE: Groups will disappear whenever their views disappear
