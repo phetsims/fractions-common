@@ -22,13 +22,17 @@ define( function( require ) {
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Node = require( 'SCENERY/nodes/Node' );
   var NumberGroupNode = require( 'FRACTIONS_COMMON/building/view/NumberGroupNode' );
+  var NumberGroupStack = require( 'FRACTIONS_COMMON/building/model/NumberGroupStack' );
   var NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   var NumberPieceNode = require( 'FRACTIONS_COMMON/building/view/NumberPieceNode' );
+  var NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
   var Property = require( 'AXON/Property' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
+  var ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
   var ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
+  var ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
   var ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
 
   // constants
@@ -56,8 +60,8 @@ define( function( require ) {
     this.numberDragBoundsProperty = new Property( this.visibleBounds );
 
     // @private {Node}
-    this.shapePanel = new LabShapePanel( model, {
-      dragPieceFromStackListener: function( event, stack ) {
+    this.shapePanel = new LabShapePanel( model, function( event, stack ) {
+      if ( stack instanceof ShapeStack ) {
         var shapePiece = new ShapePiece( stack.fraction, stack.representation, stack.colorProperty );
         shapePiece.positionProperty.value = self.modelViewTransform.viewToModelPosition( self.globalToLocalPoint( event.pointer.point ) );
         model.activeShapePieces.push( shapePiece );
@@ -66,10 +70,10 @@ define( function( require ) {
           return shapePieceNode.shapePiece === shapePiece;
         } );
         shapePieceNode.dragListener.press( event, shapePieceNode );
-      },
-      dragGroupFromStackListener: function( event, representation ) {
+      }
+      else if ( stack instanceof ShapeGroupStack ) {
         // TODO: encapsulation
-        var shapeGroup = model.addShapeGroup( representation );
+        var shapeGroup = model.addShapeGroup( stack.representation );
         shapeGroup.positionProperty.value = self.modelViewTransform.viewToModelPosition( self.globalToLocalPoint( event.pointer.point ) );
         var shapeGroupNode = _.find( self.shapeGroupNodes, function( shapeGroupNode ) {
           return shapeGroupNode.shapeGroup === shapeGroup;
@@ -77,27 +81,33 @@ define( function( require ) {
         shapeGroupNode.dragListener.press( event, shapeGroupNode );
         event.handle(); // for our selection
       }
+      else {
+        throw new Error( 'unknown stack type' );
+      }
     } );
 
     // @private {Node}
-    this.numberPanel = new LabNumberPanel( model, {
-      dragPieceFromStackListener: function( event, numberStack ) {
-        var numberPiece = new NumberPiece( numberStack.number );
+    this.numberPanel = new LabNumberPanel( model, function( event, stack ) {
+      if ( stack instanceof NumberStack ) {
+        var numberPiece = new NumberPiece( stack.number );
         numberPiece.positionProperty.value = self.modelViewTransform.viewToModelPosition( self.globalToLocalPoint( event.pointer.point ) );
-        model.dragNumberPieceFromStack( numberPiece, numberStack );
+        model.dragNumberPieceFromStack( numberPiece, stack );
         // TODO: factor this "find" usage out
         var numberPieceNode = _.find( self.numberPieceNodes, function( numberPieceNode ) {
           return numberPieceNode.numberPiece === numberPiece;
         } );
         numberPieceNode.dragListener.press( event, numberPieceNode );
-      },
-      dragGroupFromStackListener: function( event, isMixedNumber ) {
-        var numberGroup = model.addNumberGroup( isMixedNumber );
+      }
+      else if ( stack instanceof NumberGroupStack ) {
+        var numberGroup = model.addNumberGroup( stack.isMixedNumber );
         numberGroup.positionProperty.value = self.modelViewTransform.viewToModelPosition( self.globalToLocalPoint( event.pointer.point ) );
         var numberGroupNode = _.find( self.numberGroupNodes, function( numberGroupNode ) {
           return numberGroupNode.numberGroup === numberGroup;
         } );
         numberGroupNode.dragListener.press( event, numberGroupNode );
+      }
+      else {
+        throw new Error( 'unknown stack type' );
       }
     } );
 

@@ -14,9 +14,11 @@ define( function( require ) {
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
   var NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   var NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  var ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
   var Target = require( 'FRACTIONS_COMMON/game/model/Target' );
@@ -91,11 +93,22 @@ define( function( require ) {
     } );
 
     if ( shapePieces.length ) {
+      // WAT? TODO: representation
       this.addShapeGroup( Representation.CIRCLE );
+
+      // TODO: Don't add all reprs
+      this.shapeGroupStacks.forEach( function( shapeGroupStack ) {
+        shapeGroupStack.shapeGroups.push( new ShapeGroup( shapeGroupStack.representation ) );
+      } );
     }
 
     if ( numberPieces.length ) {
       this.addNumberGroup( this.hasMixedTargets );
+
+      // TODO: Don't add all reprs
+      this.numberGroupStacks.forEach( function( numberGroupStack ) {
+        numberGroupStack.numberGroups.push( new NumberGroup( numberGroupStack.isMixedNumber ) );
+      } );
     }
   }
 

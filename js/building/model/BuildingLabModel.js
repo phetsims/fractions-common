@@ -15,10 +15,12 @@ define( function( require ) {
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
   var NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   var NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
   var Property = require( 'AXON/Property' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  var ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -61,6 +63,14 @@ define( function( require ) {
       stack.numberPieces.push( new NumberPiece( number ) );
       stack.numberPieces.push( new NumberPiece( number ) );
       self.numberStacks.push( stack );
+    } );
+
+    // Add initial stacks
+    this.shapeGroupStacks.forEach( function( shapeGroupStack ) {
+      shapeGroupStack.shapeGroups.push( new ShapeGroup( shapeGroupStack.representation ) );
+    } );
+    this.numberGroupStacks.forEach( function( numberGroupStack ) {
+      numberGroupStack.numberGroups.push( new NumberGroup( numberGroupStack.isMixedNumber ) );
     } );
 
     // Shared to set up some initial state

@@ -15,6 +15,7 @@ define( function( require ) {
   var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
   var NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
+  var NumberGroupStack = require( 'FRACTIONS_COMMON/building/model/NumberGroupStack' );
   var NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
   var NumberSpotType = require( 'FRACTIONS_COMMON/building/enum/NumberSpotType' );
   var ObservableArray = require( 'AXON/ObservableArray' );
@@ -23,6 +24,7 @@ define( function( require ) {
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   var ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
   var ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
+  var ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
   var ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -40,16 +42,19 @@ define( function( require ) {
     // @public {Array.<NumberStack>}
     this.numberStacks = [];
 
+    // @public {Array.<ShapeGroupStack>}
+    this.shapeGroupStacks = [
+      new ShapeGroupStack( Representation.CIRCLE ),
+      new ShapeGroupStack( Representation.VERTICAL_BAR )
+    ];
+
+    // @public {Array.<NumberGroupStack>}
+    this.numberGroupStacks = [
+      new NumberGroupStack( false ),
+      new NumberGroupStack( true )
+    ];
+
     // TODO: better encapsulation, so things don't reach in here
-
-    // @public {Property.<Vector2>}
-    this.returnShapeGroupPositionProperty = new Property( Vector2.ZERO );
-
-    // @public {Property.<Vector2>} TODO: Can we AMP THE VERBOSITY UP A BIT?
-    this.returnNonMixedNumberGroupPositionProperty = new Property( Vector2.ZERO );
-
-    // @public {Property.<Vector2>}
-    this.returnMixedNumberGroupPositionProperty = new Property( Vector2.ZERO );
 
     // @public {ObservableArray.<ShapeGroup>}
     this.shapeGroups = new ObservableArray();
@@ -285,9 +290,11 @@ define( function( require ) {
         this.removeLastPieceFromShapeGroup( shapeGroup );
       }
 
-      var position = this.returnShapeGroupPositionProperty.value;
-      var speed = 40 / Math.sqrt( position.distance( shapeGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
-      shapeGroup.animator.animateTo( position, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, 0, this.returnShapeGroupPositionProperty, Easing.QUADRATIC_IN, speed, function() {
+      var positionProperty = _.find( this.shapeGroupStacks, function( shapeGroupStack ) {
+        return shapeGroupStack.representation === shapeGroup.representation;
+      } ).positionProperty;
+      var speed = 40 / Math.sqrt( positionProperty.value.distance( shapeGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
+      shapeGroup.animator.animateTo( positionProperty.value, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, 0, positionProperty, Easing.QUADRATIC_IN, speed, function() {
         self.shapeGroups.remove( shapeGroup );
       } );
     },
@@ -299,10 +306,11 @@ define( function( require ) {
         this.removeLastPieceFromNumberGroup( numberGroup );
       }
 
-      var returnPositionProperty = ( numberGroup.isMixedNumber ? this.returnMixedNumberGroupPositionProperty : this.returnNonMixedNumberGroupPositionProperty );
-      var position = returnPositionProperty.value;
-      var speed = 40 / Math.sqrt( position.distance( numberGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
-      numberGroup.animator.animateTo( position, 0, FractionsCommonConstants.NUMBER_BUILD_SCALE, 0, returnPositionProperty, Easing.QUADRATIC_IN, speed, function() {
+      var positionProperty = _.find( this.numberGroupStacks, function( numberGroupStack ) {
+        return numberGroupStack.isMixedNumber === numberGroup.isMixedNumber;
+      } ).positionProperty;
+      var speed = 40 / Math.sqrt( positionProperty.value.distance( numberGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
+      numberGroup.animator.animateTo( positionProperty.value, 0, FractionsCommonConstants.NUMBER_BUILD_SCALE, 0, positionProperty, Easing.QUADRATIC_IN, speed, function() {
         // TODO: More methods for adding/removing to make things un-missable
         self.numberGroups.remove( numberGroup );
         numberGroup.dispose();

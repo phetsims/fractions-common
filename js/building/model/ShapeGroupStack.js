@@ -19,25 +19,25 @@ define( function( require ) {
    * @constructor
    * @extends {Stack}
    *
-   * @param {number} number
+   * @param {Representation} representation
    */
-  function NumberStack( number ) {
+  function ShapeGroupStack( representation ) {
 
     Stack.call( this );
 
-    // @public {number}
-    this.number = number;
+    // @public {Representation}
+    this.representation = representation;
     
-    // @public {ObservableArray.<NumberPiece>} - NOTE: These should only ever be popped/pushed.
-    this.numberPieces = new ObservableArray();
+    // @public {ObservableArray.<ShapeGroup>} - NOTE: These should only ever be popped/pushed.
+    this.shapeGroups = new ObservableArray();
   }
 
-  fractionsCommon.register( 'NumberStack', NumberStack );
+  fractionsCommon.register( 'ShapeGroupStack', ShapeGroupStack );
 
-  return inherit( Stack, NumberStack, {}, {
+  return inherit( Stack, ShapeGroupStack, {}, {
     // TODO: doc
     getOffset: function( index ) {
-      return new Vector2( 4 * index, 4 * index );
+      return new Vector2( -4 * index, 4 * index );
     }
   } );
 } );

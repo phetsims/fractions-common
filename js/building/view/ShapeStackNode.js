@@ -14,7 +14,6 @@ define( function( require ) {
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
@@ -22,6 +21,7 @@ define( function( require ) {
   var ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
+  var StackNode = require( 'FRACTIONS_COMMON/building/view/StackNode' );
   var Util = require( 'DOT/Util' );
 
   // constants
@@ -29,7 +29,7 @@ define( function( require ) {
 
   /**
    * @constructor
-   * @extends {Node}
+   * @extends {StackNode}
    *
    * @param {ShapeStack} shapeStack
    * @param {Object} [options]
@@ -41,8 +41,9 @@ define( function( require ) {
       scale: FractionsCommonConstants.SHAPE_BUILD_SCALE // stacks should be a bit smaller than in-play objects in general
     }, options );
 
-    Node.call( this );
+    StackNode.call( this, shapeStack );
 
+    // TODO: consider using this.stack?
     // @public {ShapeStack}
     this.shapeStack = shapeStack;
 
@@ -102,7 +103,7 @@ define( function( require ) {
 
   fractionsCommon.register( 'ShapeStackNode', ShapeStackNode );
 
-  return inherit( Node, ShapeStackNode, {
+  return inherit( StackNode, ShapeStackNode, {
     /**
      * Adds a ShapePiece's view
      * @private

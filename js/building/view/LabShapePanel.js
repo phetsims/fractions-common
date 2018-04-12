@@ -10,42 +10,55 @@ define( function( require ) {
 
   // modules
   var AlignBox = require( 'SCENERY/nodes/AlignBox' );
-  var AlignGroup = require( 'SCENERY/nodes/AlignGroup' );
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var DragListener = require( 'SCENERY/listeners/DragListener' );
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var inherit = require( 'PHET_CORE/inherit' );
   var MutableOptionsNode = require( 'SUN/MutableOptionsNode' );
+  var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
-  var Property = require( 'AXON/Property' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
-  var ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
-  var ShapeStackNode = require( 'FRACTIONS_COMMON/building/view/ShapeStackNode' );
-  var Vector2 = require( 'DOT/Vector2' );
+  var StackNodesBox = require( 'FRACTIONS_COMMON/building/view/StackNodesBox' );
 
   /**
    * @constructor
    * @extends {Panel}
    *
    * @param {BuildingLabModel} model
-   * @param {Object} options
+   * @param {function} pressCallback - function( {Event}, {Stack} ) - Called when a press is started.
    */
-  function LabShapePanel( model, options ) {
+  function LabShapePanel( model, pressCallback ) {
     var self = this;
 
-    options = _.extend( {
-      dragPieceFromStackListener: null,
-      dragGroupFromStackListener: null
-    }, options );
+    function createBox( representation ) {
+      var stacks = model.shapeStacks.filter( function( shapeStack ) {
+        return shapeStack.representation === representation;
+      } );
+      var groupStacks = model.shapeGroupStacks.filter( function( shapeGroupStack ) {
+        return shapeGroupStack.representation === representation;
+      } );
+      return new StackNodesBox( stacks.concat( groupStacks ), pressCallback, {
+        // TODO: Is there a better way where this is not needed or hardcoded?
+        maxHeightOverride: 113,
 
-    // @private {BuildingLabModel}
-    this.model = model;
+        padding: 37
+      } );
+    }
+
+    // @private {StackNodesBox}
+    this.circleBox = createBox( Representation.CIRCLE );
+    this.barBox = createBox( Representation.VERTICAL_BAR );
+
+    var boxContainer = new Node( {
+      children: [
+        this.circleBox,
+        this.barBox
+      ]
+    } );
 
     // @private {Property.<Representation>}
     this.representationProperty = model.topRepresentationProperty;
@@ -77,75 +90,15 @@ define( function( require ) {
       baseColor: FractionsCommonColorProfile.radioBaseProperty
     } );
 
-    // @private {Array.<ShapeStackNode>}
-    this.shapeStackNodes = [];
-
-    var stackAlignGroup = new AlignGroup();
-    function createStackNode( stack ) {
-      var node = new ShapeStackNode( stack, {
-        pickable: false
-      } );
-      self.shapeStackNodes.push( node );
-      return new AlignBox( node, {
-        group: stackAlignGroup,
-        cursor: 'pointer',
-        inputListeners: [
-          DragListener.createForwardingListener( function( event ) {
-            // TODO: doc
-            options.dragPieceFromStackListener( event, stack );
-          } )
-        ]
-      } );
-    }
-    var circleStackNodes = model.shapeStacks.filter( function( stack ) {
-      return stack.representation === Representation.CIRCLE;
-    } ).map( createStackNode );
-    var barStackNodes = model.shapeStacks.filter( function( stack ) {
-      return stack.representation === Representation.VERTICAL_BAR;
-    } ).map( createStackNode );
-
-    // @private {Array.<ShapeGroupNode>}
-    this.shapeGroupNodes = [];
-
-    function createGroupIcon( representation ) {
-      var iconNode = ShapeGroupNode.createIcon( representation );
-      self.shapeGroupNodes.push( iconNode );
-      return new AlignBox( iconNode, {
-        group: stackAlignGroup,
-        cursor: 'pointer',
-        inputListeners: [
-          DragListener.createForwardingListener( function( event ) {
-            options.dragGroupFromStackListener( event, representation );
-          } )
-        ]
-      } );
-    }
-    var circleGroupIcon = createGroupIcon( Representation.CIRCLE );
-    var barGroupIcon = createGroupIcon( Representation.VERTICAL_BAR );
-
-    var STACK_PADDING = 20;
-
-    // TODO: a better way of doing this. maybe make it an AlignBox feature
-    function linkPointerAreas( node ) {
-      Property.multilink( [ stackAlignGroup.maxWidthProperty, stackAlignGroup.maxHeightProperty ], function( width, height ) {
-        var bounds = new Bounds2( -STACK_PADDING / 2, 0, width + STACK_PADDING / 2, height );
-        node.mouseArea = bounds;
-        node.touchArea = bounds;
-      } );
-    }
-    circleStackNodes.forEach( linkPointerAreas );
-    barStackNodes.forEach( linkPointerAreas );
-    linkPointerAreas( circleGroupIcon );
-    linkPointerAreas( barGroupIcon );
-
     var shapeBox = new HBox( {
-      spacing: STACK_PADDING
+      spacing: 20,
+      children: [ new AlignBox( representationSelectionNode, {
+        rightMargin: 10
+      } ) ].concat( [ boxContainer ] )
     } );
     this.representationProperty.link( function( representation ) {
-      var leftSideNodes = [ representationSelectionNode ];
-      var middleNodes = representation === Representation.CIRCLE ? circleStackNodes : barStackNodes;
-      var rightSideNodes = [ representation === Representation.CIRCLE ? circleGroupIcon : barGroupIcon ];
-      shapeBox.children = leftSideNodes.concat( middleNodes ).concat( rightSideNodes );
+      self.circleBox.visible = representation === Representation.CIRCLE;
+      self.barBox.visible = representation === Representation.VERTICAL_BAR;
     } );
 
     // TODO: background color customizable
@@ -157,31 +110,10 @@ define( function( require ) {
   fractionsCommon.register( 'LabShapePanel', LabShapePanel );
 
   return inherit( Panel, LabShapePanel, {
-    // TODO: doc
+    // TODO: doc ---- and when to call? Can we call it when our representationProperty changes?
     updateModelLocations: function( modelViewTransform ) {
-      // TODO: This is generally unclean. find a better way
-      for ( var i = 0; i < this.shapeStackNodes.length; i++ ) {
-        var shapeStackNode = this.shapeStackNodes[ i ];
-        if ( shapeStackNode.shapeStack.representation === this.representationProperty.value ) {
-          var stackLocation = modelViewTransform.viewToModelPosition( shapeStackNode.getUniqueTrailTo( this ).localToGlobalPoint( Vector2.ZERO ) );
-
-          // TODO: Ideally have stacks more linked so we can hook positions better?
-          for ( var j = 0; j < this.model.shapeStacks.length; j++ ) {
-            var stack = this.model.shapeStacks[ j ];
-            if ( stack.fraction.equals( shapeStackNode.shapeStack.fraction ) ) {
-              stack.positionProperty.value = stackLocation;
-            }
-          }
-        }
-      }
-
-      for ( i = 0; i < this.shapeGroupNodes.length; i++ ) {
-        var shapeGroupNode = this.shapeGroupNodes[ i ];
-        if ( shapeGroupNode.shapeGroup.representation === this.representationProperty.value ) {
-          var returnPosition = modelViewTransform.viewToModelPosition( shapeGroupNode.getUniqueTrailTo( this ).localToGlobalPoint( Vector2.ZERO ) );
-          this.model.returnShapeGroupPositionProperty.value = returnPosition;
-        }
-      }
+      this.circleBox.updateModelLocations( modelViewTransform, this );
+      this.barBox.updateModelLocations( modelViewTransform, this );
     }
   } );
 } );

@@ -11,13 +11,13 @@ define( function( require ) {
   // modules
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
   var NumberPieceNode = require( 'FRACTIONS_COMMON/building/view/NumberPieceNode' );
   var NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
+  var StackNode = require( 'FRACTIONS_COMMON/building/view/StackNode' );
 
   /**
    * @constructor
-   * @extends {Node}
+   * @extends {StackNode}
    *
    * @param {NumberStack} numberStack
    * @param {Object} [options]
@@ -25,9 +25,9 @@ define( function( require ) {
   function NumberStackNode( numberStack, options ) {
     assert && assert( numberStack instanceof NumberStack );
 
-    Node.call( this );
+    StackNode.call( this, numberStack );
 
-    // @public {NumberStack}
+    // @public {NumberStack} TODO: consider using this.stack
     this.numberStack = numberStack;
 
     // @private {Array.<NumberPieceNode>}
@@ -43,7 +43,7 @@ define( function( require ) {
 
   fractionsCommon.register( 'NumberStackNode', NumberStackNode );
 
-  return inherit( Node, NumberStackNode, {
+  return inherit( StackNode, NumberStackNode, {
     /**
      * Adds a NumberPiece's view
      * @private

@@ -13,19 +13,21 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var Matrix3 = require( 'DOT/Matrix3' );
   var ObservableArray = require( 'AXON/ObservableArray' );
-  var Property = require( 'AXON/Property' );
+  var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   var ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
-  var Vector2 = require( 'DOT/Vector2' );
+  var Stack = require( 'FRACTIONS_COMMON/building/model/Stack' );
 
   /**
    * @constructor
-   * @extends {Object}
+   * @extends {Stack}
    *
    * @param {Fraction} fraction
    * @param {Representation} representation
    * @param {Property.<Color>} colorProperty
    */
   function ShapeStack( fraction, representation, colorProperty ) {
+
+    Stack.call( this );
 
     // @public {Fraction}
     this.fraction = fraction;
@@ -38,14 +40,11 @@ define( function( require ) {
     
     // @public {ObservableArray.<ShapePiece>} - NOTE: These should only ever be popped/pushed.
     this.shapePieces = new ObservableArray();
-
-    // @public {Property.<Vector2>} - Position of our stack in model units (updated from the view)
-    this.positionProperty = new Property( Vector2.ZERO );
   }
 
   fractionsCommon.register( 'ShapeStack', ShapeStack );
 
-  return inherit( Object, ShapeStack, {}, {
+  return inherit( Stack, ShapeStack, {}, {
     /**
      * Returns the matrix transform (locally) for how to position a piece with the given properties.
      * @public
@@ -56,7 +55,7 @@ define( function( require ) {
      * @returns {Matrix3}
      */
     getShapeMatrix: function( fraction, representation, index ) {
-      return Matrix3.translation( 4 * index, -4 * index ).timesMatrix( ShapeContainer.getShapeMatrix( 0, fraction, representation ) );
+      return Matrix3.translation( ( representation === Representation.CIRCLE ? 1 : -1 ) * 4 * index, -4 * index ).timesMatrix( ShapeContainer.getShapeMatrix( 0, fraction, representation ) );
     }
   } );
 } );

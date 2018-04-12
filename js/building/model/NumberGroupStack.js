@@ -13,31 +13,25 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Stack = require( 'FRACTIONS_COMMON/building/model/Stack' );
-  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * @constructor
    * @extends {Stack}
    *
-   * @param {number} number
+   * @param {boolean} isMixedNumber
    */
-  function NumberStack( number ) {
+  function NumberGroupStack( isMixedNumber ) {
 
     Stack.call( this );
 
-    // @public {number}
-    this.number = number;
+    // @public {boolean}
+    this.isMixedNumber = isMixedNumber;
     
-    // @public {ObservableArray.<NumberPiece>} - NOTE: These should only ever be popped/pushed.
-    this.numberPieces = new ObservableArray();
+    // @public {ObservableArray.<NumberGroup>} - NOTE: These should only ever be popped/pushed.
+    this.numberGroups = new ObservableArray();
   }
 
-  fractionsCommon.register( 'NumberStack', NumberStack );
+  fractionsCommon.register( 'NumberGroupStack', NumberGroupStack );
 
-  return inherit( Stack, NumberStack, {}, {
-    // TODO: doc
-    getOffset: function( index ) {
-      return new Vector2( 4 * index, 4 * index );
-    }
-  } );
+  return inherit( Stack, NumberGroupStack );
 } );
