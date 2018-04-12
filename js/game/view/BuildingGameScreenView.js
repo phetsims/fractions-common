@@ -81,7 +81,7 @@ define( function( require ) {
       return new VBox( {
         children: [
           new AlignBox( label, { group: textAlignGroup } ),
-          new AlignBox( icon, { group: iconAlignGroup } )
+          new AlignBox( icon, { group: iconAlignGroup, bottomMargin: 10 } )
         ],
         spacing: 20
       } );
