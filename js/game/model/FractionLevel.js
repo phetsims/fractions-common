@@ -19,14 +19,18 @@ define( function( require ) {
    *
    * @param {number} number
    * @param {number} numTargets
+   * @param {BuildingType} buildingType
    */
-  function FractionLevel( number, numTargets ) {
+  function FractionLevel( number, numTargets, buildingType ) {
 
     // @public {number}
     this.number = number;
 
     // @public {number}
     this.numTargets = numTargets;
+
+    // @public {BuildingType}
+    this.buildingType = buildingType;
 
     // @public {Property.<number>}
     this.scoreProperty = new NumberProperty( 0 );

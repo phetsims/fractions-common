@@ -13,6 +13,7 @@ define( function( require ) {
   var AlignGroup = require( 'SCENERY/nodes/AlignGroup' );
   var BackButton = require( 'SCENERY_PHET/buttons/BackButton' );
   var BooleanProperty = require( 'AXON/BooleanProperty' );
+  var BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
@@ -20,6 +21,9 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var LevelSelectionButton = require( 'VEGAS/LevelSelectionButton' );
   var Node = require( 'SCENERY/nodes/Node' );
+  var NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
+  var NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
+  var NumberStackNode = require( 'FRACTIONS_COMMON/building/view/NumberStackNode' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
@@ -64,7 +68,19 @@ define( function( require ) {
                     font: new PhetFont( 20 )
                   } );
 
-                  var icon = new Rectangle( 0, 0, 40, 40, { fill: 'red' } );
+                  var icon;
+                  if ( !model.hasMixedNumbers && level.buildingType === BuildingType.NUMBER ) {
+                    var stack = new NumberStack( level.number );
+                    for ( var i = 0; i < level.number; i++ ) {
+                      stack.numberPieces.push( new NumberPiece( level.number ) );
+                    }
+                    icon = new NumberStackNode( stack, {
+
+                    } );
+                  }
+                  else {
+                    icon = new Rectangle( 0, 0, 40, 40, { fill: 'red' } );
+                  }
 
                   return new LevelSelectionButton.ScoreDisplayCreator( new VBox( {
                     children: [
