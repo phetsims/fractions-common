@@ -12,6 +12,7 @@ define( function( require ) {
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
   var NumberProperty = require( 'AXON/NumberProperty' );
+  var Property = require( 'AXON/Property' );
 
   /**
    * @constructor
@@ -20,8 +21,9 @@ define( function( require ) {
    * @param {number} number
    * @param {number} numTargets
    * @param {BuildingType} buildingType
+   * @param {function} generateChallenge - function(): {FractionChallenge}
    */
-  function FractionLevel( number, numTargets, buildingType ) {
+  function FractionLevel( number, numTargets, buildingType, generateChallenge ) {
 
     // @public {number}
     this.number = number;
@@ -32,8 +34,14 @@ define( function( require ) {
     // @public {BuildingType}
     this.buildingType = buildingType;
 
+    // @private {function}
+    this.generateChallenge = generateChallenge;
+
     // @public {Property.<number>}
     this.scoreProperty = new NumberProperty( 0 );
+
+    // @public {Property.<FractionChallenge>}
+    this.challengeProperty = new Property( generateChallenge() );
   }
 
   fractionsCommon.register( 'FractionLevel', FractionLevel );
@@ -45,6 +53,7 @@ define( function( require ) {
      */
     reset: function() {
       this.scoreProperty.reset();
+      this.challengeProperty.value = this.generateChallenge();
     }
   } );
 } );
