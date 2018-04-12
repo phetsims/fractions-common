@@ -310,5 +310,16 @@ define( function( require ) {
       this.generalDragBoundsProperty.unlink( this.dragBoundsListener );
       this.dragListener.dispose();
     }
+  }, {
+    createIcon: function( representation ) {
+      var iconNode = new ShapeGroupNode( new ShapeGroup( representation ), {
+        isIcon: true,
+        scale: FractionsCommonConstants.SHAPE_BUILD_SCALE,
+        pickable: false
+      } );
+      // TODO: better way? At least this is safe
+      iconNode.localBounds = iconNode.localBounds.withMinY( iconNode.localBounds.minY - 2 * iconNode.localBounds.centerY );
+      return iconNode;
+    }
   } );
 } );

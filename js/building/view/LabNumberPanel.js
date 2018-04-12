@@ -14,10 +14,8 @@ define( function( require ) {
   var Bounds2 = require( 'DOT/Bounds2' );
   var DragListener = require( 'SCENERY/listeners/DragListener' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
   var NumberGroupNode = require( 'FRACTIONS_COMMON/building/view/NumberGroupNode' );
   var NumberStackNode = require( 'FRACTIONS_COMMON/building/view/NumberStackNode' );
   var Panel = require( 'SUN/Panel' );
@@ -72,12 +70,7 @@ define( function( require ) {
     this.mixedGroupNode = null;
 
     function createGroupIcon( isMixedNumber ) {
-      var iconGroup = new NumberGroup( isMixedNumber );
-      var iconNode = new NumberGroupNode( iconGroup, {
-        isIcon: true,
-        scale: FractionsCommonConstants.NUMBER_BUILD_SCALE,
-        pickable: false
-      } );
+      var iconNode = NumberGroupNode.createIcon( isMixedNumber );
       // TODO: this is unclean
       if ( isMixedNumber ) {
         self.mixedGroupNode = iconNode;

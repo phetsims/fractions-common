@@ -223,5 +223,13 @@ define( function( require ) {
 
       Node.prototype.dispose.call( this );
     }
+  }, {
+    createIcon: function( isMixedNumber ) {
+      return new NumberGroupNode( new NumberGroup( isMixedNumber ), {
+        isIcon: true,
+        scale: FractionsCommonConstants.NUMBER_BUILD_SCALE,
+        pickable: false
+      } );
+    }
   } );
 } );

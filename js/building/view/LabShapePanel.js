@@ -16,7 +16,6 @@ define( function( require ) {
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
-  var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var inherit = require( 'PHET_CORE/inherit' );
   var MutableOptionsNode = require( 'SUN/MutableOptionsNode' );
@@ -24,7 +23,6 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
-  var ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
   var ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
@@ -110,15 +108,8 @@ define( function( require ) {
     this.shapeGroupNodes = [];
 
     function createGroupIcon( representation ) {
-      var iconGroup = new ShapeGroup( representation );
-      var iconNode = new ShapeGroupNode( iconGroup, {
-        isIcon: true,
-        scale: FractionsCommonConstants.SHAPE_BUILD_SCALE,
-        pickable: false
-      } );
+      var iconNode = ShapeGroupNode.createIcon( representation );
       self.shapeGroupNodes.push( iconNode );
-      // TODO: better way? At least this is safe
-      iconNode.localBounds = iconNode.localBounds.withMinY( iconNode.localBounds.minY - 2 * iconNode.localBounds.centerY );
       return new AlignBox( iconNode, {
         group: stackAlignGroup,
         cursor: 'pointer',
