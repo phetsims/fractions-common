@@ -21,10 +21,6 @@ define( function( require ) {
   var Util = require( 'DOT/Util' );
   var Vector2 = require( 'DOT/Vector2' );
 
-  // constants
-  // TODO: Move to Fraction?
-  var FRACTION_ONE = new Fraction( 1, 1 );
-
   var scratchVector = new Vector2();
 
   /**
@@ -91,7 +87,7 @@ define( function( require ) {
       }
 
       var potentialTotalFraction = this.totalFractionProperty.value.plus( shapePiece.fraction ).reduce();
-      return potentialTotalFraction.isLessThan( FRACTION_ONE ) || potentialTotalFraction.equals( FRACTION_ONE );
+      return potentialTotalFraction.isLessThan( Fraction.ONE ) || potentialTotalFraction.equals( Fraction.ONE );
     },
 
     /**
@@ -138,7 +134,7 @@ define( function( require ) {
     // TODO: doc
     getShapeMatrix: function( startingRatio, fraction, representation ) {
       if ( representation === Representation.CIRCLE ) {
-        if ( fraction.equals( FRACTION_ONE ) ) {
+        if ( fraction.equals( Fraction.ONE ) ) {
           return Matrix3.IDENTITY;
         }
         else {

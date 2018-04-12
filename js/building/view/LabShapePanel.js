@@ -56,13 +56,13 @@ define( function( require ) {
     var representationSelectionNode = new MutableOptionsNode( RadioButtonGroup, [ this.representationProperty, [
       {
         value: Representation.CIRCLE,
-        node: new ShapePieceNode( new ShapePiece( new Fraction( 1, 1 ), Representation.CIRCLE, FractionsCommonColorProfile.labCircleFillProperty ), {
+        node: new ShapePieceNode( new ShapePiece( Fraction.ONE, Representation.CIRCLE, FractionsCommonColorProfile.labCircleFillProperty ), {
           scale: 0.3
         } )
       },
       {
         value: Representation.VERTICAL_BAR,
-        node: new ShapePieceNode( new ShapePiece( new Fraction( 1, 1 ), Representation.VERTICAL_BAR, FractionsCommonColorProfile.labBarFillProperty ), {
+        node: new ShapePieceNode( new ShapePiece( Fraction.ONE, Representation.VERTICAL_BAR, FractionsCommonColorProfile.labBarFillProperty ), {
           scale: 0.3
         } )
       }

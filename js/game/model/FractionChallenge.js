@@ -9,13 +9,21 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var BuildingModel = require( 'FRACTIONS_COMMON/building/model/BuildingModel' );
   var ChallengeType = require( 'FRACTIONS_COMMON/game/enum/ChallengeType' );
+  var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
+  var NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
+  var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
+  var ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
+  var Target = require( 'FRACTIONS_COMMON/game/model/Target' );
 
   /**
    * @constructor
-   * @extends {Object}
+   * @extends {BuildingModel}
    *
    * @param {ChallengeType} challengeType
    * @param {Array.<Target>} targets
@@ -27,6 +35,11 @@ define( function( require ) {
     assert && assert( Array.isArray( targets ) );
     assert && assert( Array.isArray( shapePieces ) );
     assert && assert( Array.isArray( numberPieces ) );
+    assert && targets.forEach( function( target ) { assert( target instanceof Target ); } );
+    assert && shapePieces.forEach( function( shapePiece ) { assert( shapePiece instanceof ShapePiece ); } );
+    assert && numberPieces.forEach( function( numberPiece ) { assert( numberPiece instanceof NumberPiece ); } );
+
+    var self = this;
 
     // @public {ChallengeType}
     this.challengeType = challengeType;
@@ -34,26 +47,59 @@ define( function( require ) {
     // @public {Array.<Target>}
     this.targets = targets;
 
-    // @public {Array.<ShapePiece>}
-    this.shapePieces = shapePieces;
+    // @public {boolean}
+    this.hasMixedTargets = _.some( targets, function( target ) {
+      return Fraction.ONE.isLessThan( target.fraction );
+    } );
 
-    // @public {Array.<NumberPiece>}
-    this.numberPieces = numberPieces;
+    BuildingModel.call( this );
 
+    // Sort out inputs (with a new copy, so we don't modify our actual paramater reference) so we create the stacks in
+    // increasing order
+    shapePieces = shapePieces.slice().sort( function( a, b ) {
+      // NOTE: This seems backwards, but we want the BIGGEST fraction at the start
+      if ( a.fraction.isLessThan( b.fraction ) ) {
+        return 1;
+      }
+      else if ( a.fraction.equals( b.fraction ) ) {
+        return 0;
+      }
+      else {
+        return -1;
+      }
+    } );
+    numberPieces = numberPieces.slice().sort( function( a, b ) {
+      if ( a.number < b.number ) { return -1; } else if ( a.number === b.number ) { return 0; } else { return 1; }
+    } );
 
+    shapePieces.forEach( function( shapePiece ) {
+      var shapeStack = self.findMatchingShapeStack( shapePiece );
+      if ( !shapeStack ) {
+        shapeStack = new ShapeStack( shapePiece.fraction, shapePiece.representation, shapePiece.colorProperty );
+        self.shapeStacks.push( shapeStack );
+      }
+      shapeStack.shapePieces.push( shapePiece );
+    } );
 
-    // TODO: Supertype for something that can have shapes/numbers with groups (and locations for groups).
-    // share code with BuildingLabModel.js
+    numberPieces.forEach( function( numberPiece ) {
+      var numberStack = self.findMatchingNumberStack( numberPiece );
+      if ( !numberStack ) {
+        numberStack = new NumberStack( numberPiece.number );
+        self.numberStacks.push( numberStack );
+      }
+      numberStack.numberPieces.push( numberPiece );
+    } );
 
+    if ( shapePieces.length ) {
+      this.addShapeGroup( Representation.CIRCLE );
+    }
 
-    // @public {Array.<ShapeStack>}
-    this.shapeStacks = [];
-
-    // @public {Array.<NumberStack>}
-    this.numberStacks = [];
+    if ( numberPieces.length ) {
+      this.addNumberGroup( this.hasMixedTargets );
+    }
   }
 
   fractionsCommon.register( 'FractionChallenge', FractionChallenge );
 
-  return inherit( Object, FractionChallenge );
+  return inherit( BuildingModel, FractionChallenge );
 } );

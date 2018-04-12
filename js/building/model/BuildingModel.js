@@ -98,12 +98,22 @@ define( function( require ) {
       }
     },
 
+    findMatchingShapeStack: function( shapePiece ) {
+      return _.find( this.shapeStacks, function( stack ) {
+        return stack.representation === shapePiece.representation && stack.fraction.equals( shapePiece.fraction );
+      } ) || null;
+    },
+
+    findMatchingNumberStack: function( numberPiece ) {
+      return _.find( this.numberStacks, function( stack ) {
+        return stack.number === numberPiece.number;
+      } ) || null;
+    },
+
     returnActiveShapePiece: function( shapePiece ) {
       var self = this;
 
-      var shapeStack = _.find( this.shapeStacks, function( stack ) {
-        return stack.representation === shapePiece.representation && stack.fraction.equals( shapePiece.fraction );
-      } );
+      var shapeStack = this.findMatchingShapeStack( shapePiece );
 
       // TODO: Don't use hard-coded constant (index 1) for game screens
       var shapeMatrix = ShapeStack.getShapeMatrix( shapePiece.fraction, shapePiece.representation, 1 );
@@ -117,9 +127,7 @@ define( function( require ) {
     returnActiveNumberPiece: function( numberPiece ) {
       var self = this;
 
-      var numberStack = _.find( this.numberStacks, function( stack ) {
-        return stack.number === numberPiece.number;
-      } );
+      var numberStack = this.findMatchingNumberStack( numberPiece );
 
       // TODO: Don't use hard-coded constant (index 1) for game screens
       var offset = NumberStack.getOffset( 1 );
