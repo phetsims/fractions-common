@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var ChallengeType = require( 'FRACTIONS_COMMON/game/enum/ChallengeType' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
 
@@ -16,15 +17,18 @@ define( function( require ) {
    * @constructor
    * @extends {Object}
    *
-   * @param {BuildingType} interactiveType
+   * @param {ChallengeType} challengeType
    * @param {Array.<Target>} targets
    * @param {Array.<number>} pieces - An array (with duplicates allowed) of the denominators or numbers that are
    *                                  available to the user to interact with.
    */
-  function FractionChallenge( interactiveType, targets, pieces ) {
+  function FractionChallenge( challengeType, targets, pieces ) {
+    assert && assert( ChallengeType.VALUES.includes( challengeType ) );
+    assert && assert( Array.isArray( targets ) );
+    assert && assert( Array.isArray( pieces ) );
 
-    // @public {BuildingType}
-    this.interactiveType = interactiveType;
+    // @public {ChallengeType}
+    this.challengeType = challengeType;
 
     // @public {Array.<Target>}
     this.targets = targets;

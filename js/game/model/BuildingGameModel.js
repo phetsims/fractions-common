@@ -11,6 +11,7 @@ define( function( require ) {
   // modules
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
+  var ChallengeType = require( 'FRACTIONS_COMMON/game/enum/ChallengeType' );
   var FractionChallenge = require( 'FRACTIONS_COMMON/game/model/FractionChallenge' );
   var FractionLevel = require( 'FRACTIONS_COMMON/game/model/FractionLevel' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
@@ -40,122 +41,142 @@ define( function( require ) {
       new FractionLevel( 1, 3, BuildingType.SHAPE, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.SHAPE, targets, pieces );
+        var type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+        return new FractionChallenge( type, targets, pieces );
       } ),
       // "Mixed Numbers" Shapes level 2
       new FractionLevel( 2, 3, BuildingType.SHAPE, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.SHAPE, targets, pieces );
+        var type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+        return new FractionChallenge( type, targets, pieces );
       } ),
       // "Mixed Numbers" Shapes level 3
       new FractionLevel( 3, 3, BuildingType.SHAPE, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.SHAPE, targets, pieces );
+        var type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+        return new FractionChallenge( type, targets, pieces );
       } ),
       // "Mixed Numbers" Shapes level 4
       new FractionLevel( 4, 3, BuildingType.SHAPE, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.SHAPE, targets, pieces );
+        var type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+        return new FractionChallenge( type, targets, pieces );
       } ),
       // "Mixed Numbers" Shapes level 5
       new FractionLevel( 5, 3, BuildingType.SHAPE, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.SHAPE, targets, pieces );
+        var type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+        return new FractionChallenge( type, targets, pieces );
       } ),
       // "Mixed Numbers" Shapes level 6
       new FractionLevel( 6, 4, BuildingType.SHAPE, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.SHAPE, targets, pieces );
+        var type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+        return new FractionChallenge( type, targets, pieces );
       } ),
       // "Mixed Numbers" Shapes level 7
       new FractionLevel( 7, 4, BuildingType.SHAPE, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.SHAPE, targets, pieces );
+        var type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+        return new FractionChallenge( type, targets, pieces );
       } ),
       // "Mixed Numbers" Shapes level 8
       new FractionLevel( 8, 4, BuildingType.SHAPE, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.SHAPE, targets, pieces );
+        var type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+        return new FractionChallenge( type, targets, pieces );
       } ),
       // "Mixed Numbers" Shapes level 9
       new FractionLevel( 9, 4, BuildingType.SHAPE, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.SHAPE, targets, pieces );
+        var type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+        return new FractionChallenge( type, targets, pieces );
       } ),
       // "Mixed Numbers" Shapes level 10
       new FractionLevel( 10, 4, BuildingType.SHAPE, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.SHAPE, targets, pieces );
+        var type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+        return new FractionChallenge( type, targets, pieces );
       } )
     ] : [
       // "Build a Fraction" Shapes level 1
       new FractionLevel( 1, 3, BuildingType.SHAPE, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.SHAPE, targets, pieces );
+        var type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+        return new FractionChallenge( type, targets, pieces );
       } ),
       // "Build a Fraction" Shapes level 2
       new FractionLevel( 2, 3, BuildingType.SHAPE, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.SHAPE, targets, pieces );
+        var type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+        return new FractionChallenge( type, targets, pieces );
       } ),
       // "Build a Fraction" Shapes level 3
       new FractionLevel( 3, 3, BuildingType.SHAPE, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.SHAPE, targets, pieces );
+        var type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+        return new FractionChallenge( type, targets, pieces );
       } ),
       // "Build a Fraction" Shapes level 4
       new FractionLevel( 4, 3, BuildingType.SHAPE, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.SHAPE, targets, pieces );
+        var type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+        return new FractionChallenge( type, targets, pieces );
       } ),
       // "Build a Fraction" Shapes level 5
       new FractionLevel( 5, 3, BuildingType.SHAPE, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.SHAPE, targets, pieces );
+        var type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+        return new FractionChallenge( type, targets, pieces );
       } ),
       // "Build a Fraction" Shapes level 6
       new FractionLevel( 6, 4, BuildingType.SHAPE, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.SHAPE, targets, pieces );
+        var type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+        return new FractionChallenge( type, targets, pieces );
       } ),
       // "Build a Fraction" Shapes level 7
       new FractionLevel( 7, 4, BuildingType.SHAPE, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.SHAPE, targets, pieces );
+        var type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+        return new FractionChallenge( type, targets, pieces );
       } ),
       // "Build a Fraction" Shapes level 8
       new FractionLevel( 8, 4, BuildingType.SHAPE, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.SHAPE, targets, pieces );
+        var type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+        return new FractionChallenge( type, targets, pieces );
       } ),
       // "Build a Fraction" Shapes level 9
       new FractionLevel( 9, 4, BuildingType.SHAPE, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.SHAPE, targets, pieces );
+        var type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+        return new FractionChallenge( type, targets, pieces );
       } ),
       // "Build a Fraction" Shapes level 10
       new FractionLevel( 10, 4, BuildingType.SHAPE, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.SHAPE, targets, pieces );
+        var type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+        return new FractionChallenge( type, targets, pieces );
       } )
     ];
 
@@ -165,122 +186,122 @@ define( function( require ) {
       new FractionLevel( 1, 3, BuildingType.NUMBER, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.NUMBER, targets, pieces );
+        return new FractionChallenge( ChallengeType.NUMBER, targets, pieces );
       } ),
       // "Mixed Numbers" Numbers level 2
       new FractionLevel( 2, 3, BuildingType.NUMBER, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.NUMBER, targets, pieces );
+        return new FractionChallenge( ChallengeType.NUMBER, targets, pieces );
       } ),
       // "Mixed Numbers" Numbers level 3
       new FractionLevel( 3, 3, BuildingType.NUMBER, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.NUMBER, targets, pieces );
+        return new FractionChallenge( ChallengeType.NUMBER, targets, pieces );
       } ),
       // "Mixed Numbers" Numbers level 4
       new FractionLevel( 4, 3, BuildingType.NUMBER, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.NUMBER, targets, pieces );
+        return new FractionChallenge( ChallengeType.NUMBER, targets, pieces );
       } ),
       // "Mixed Numbers" Numbers level 5
       new FractionLevel( 5, 3, BuildingType.NUMBER, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.NUMBER, targets, pieces );
+        return new FractionChallenge( ChallengeType.NUMBER, targets, pieces );
       } ),
       // "Mixed Numbers" Numbers level 6
       new FractionLevel( 6, 4, BuildingType.NUMBER, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.NUMBER, targets, pieces );
+        return new FractionChallenge( ChallengeType.NUMBER, targets, pieces );
       } ),
       // "Mixed Numbers" Numbers level 7
       new FractionLevel( 7, 4, BuildingType.NUMBER, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.NUMBER, targets, pieces );
+        return new FractionChallenge( ChallengeType.NUMBER, targets, pieces );
       } ),
       // "Mixed Numbers" Numbers level 8
       new FractionLevel( 8, 4, BuildingType.NUMBER, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.NUMBER, targets, pieces );
+        return new FractionChallenge( ChallengeType.NUMBER, targets, pieces );
       } ),
       // "Mixed Numbers" Numbers level 9
       new FractionLevel( 9, 4, BuildingType.NUMBER, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.NUMBER, targets, pieces );
+        return new FractionChallenge( ChallengeType.NUMBER, targets, pieces );
       } ),
       // "Mixed Numbers" Numbers level 10
       new FractionLevel( 10, 4, BuildingType.NUMBER, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.NUMBER, targets, pieces );
+        return new FractionChallenge( ChallengeType.NUMBER, targets, pieces );
       } )
     ] : [
       // "Build a Fraction" Numbers level 1
       new FractionLevel( 1, 3, BuildingType.NUMBER, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.NUMBER, targets, pieces );
+        return new FractionChallenge( ChallengeType.NUMBER, targets, pieces );
       } ),
       // "Build a Fraction" Numbers level 2
       new FractionLevel( 2, 3, BuildingType.NUMBER, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.NUMBER, targets, pieces );
+        return new FractionChallenge( ChallengeType.NUMBER, targets, pieces );
       } ),
       // "Build a Fraction" Numbers level 3
       new FractionLevel( 3, 3, BuildingType.NUMBER, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.NUMBER, targets, pieces );
+        return new FractionChallenge( ChallengeType.NUMBER, targets, pieces );
       } ),
       // "Build a Fraction" Numbers level 4
       new FractionLevel( 4, 3, BuildingType.NUMBER, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.NUMBER, targets, pieces );
+        return new FractionChallenge( ChallengeType.NUMBER, targets, pieces );
       } ),
       // "Build a Fraction" Numbers level 5
       new FractionLevel( 5, 3, BuildingType.NUMBER, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.NUMBER, targets, pieces );
+        return new FractionChallenge( ChallengeType.NUMBER, targets, pieces );
       } ),
       // "Build a Fraction" Numbers level 6
       new FractionLevel( 6, 4, BuildingType.NUMBER, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.NUMBER, targets, pieces );
+        return new FractionChallenge( ChallengeType.NUMBER, targets, pieces );
       } ),
       // "Build a Fraction" Numbers level 7
       new FractionLevel( 7, 4, BuildingType.NUMBER, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.NUMBER, targets, pieces );
+        return new FractionChallenge( ChallengeType.NUMBER, targets, pieces );
       } ),
       // "Build a Fraction" Numbers level 8
       new FractionLevel( 8, 4, BuildingType.NUMBER, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.NUMBER, targets, pieces );
+        return new FractionChallenge( ChallengeType.NUMBER, targets, pieces );
       } ),
       // "Build a Fraction" Numbers level 9
       new FractionLevel( 9, 4, BuildingType.NUMBER, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.NUMBER, targets, pieces );
+        return new FractionChallenge( ChallengeType.NUMBER, targets, pieces );
       } ),
       // "Build a Fraction" Numbers level 10
       new FractionLevel( 10, 4, BuildingType.NUMBER, function() {
         var targets = [];
         var pieces = [];
-        return new FractionChallenge( BuildingType.NUMBER, targets, pieces );
+        return new FractionChallenge( ChallengeType.NUMBER, targets, pieces );
       } )
     ];
   }
