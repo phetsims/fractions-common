@@ -54,56 +54,70 @@ define( function( require ) {
 
     ScreenView.call( this );
 
-    function createLevelSection( shapeLevels, numberLevels ) {
+    var textAlignGroup = new AlignGroup();
+    var iconAlignGroup = new AlignGroup();
+
+    function createLevelIcon( level ) {
+      var label = new Text( StringUtils.fillIn( levelTitlePatternString, {
+        number: level.number
+      } ), {
+        font: new PhetFont( 20 )
+      } );
+
+      var icon;
+      if ( !model.hasMixedNumbers && level.buildingType === BuildingType.NUMBER ) {
+        var stack = new NumberStack( level.number );
+        for ( var i = 0; i < level.number; i++ ) {
+          stack.numberPieces.push( new NumberPiece( level.number ) );
+        }
+        icon = new NumberStackNode( stack, {
+
+        } );
+      }
+      else {
+        icon = new Rectangle( 0, 0, 40, 40, { fill: 'red' } );
+      }
+
+      return new VBox( {
+        children: [
+          new AlignBox( label, { group: textAlignGroup } ),
+          new AlignBox( icon, { group: iconAlignGroup } )
+        ],
+        spacing: 20
+      } );
+    }
+
+    var shapeIcons = model.shapeLevels.map( createLevelIcon );
+    var numberIcons = model.numberLevels.map( createLevelIcon );
+
+    function createLevelRow( levels, icons ) {
+      return new HBox( {
+        children: levels.map( function( level, index ) {
+          return new LevelSelectionButton.ScoreDisplayCreator( icons[ index ], level.scoreProperty, {
+            buttonWidth: 110,
+            buttonHeight: 200,
+            scoreDisplayConstructor: ScoreDisplayDiscreteStars,
+            scoreDisplayOptions: {
+              numStars: level.numTargets,
+              perfectScore: level.numTargets
+            },
+            listener: function() {
+              model.levelProperty.value = level;
+            }
+          } );
+        } ),
+        spacing: LEVEL_SELECTION_SPACING
+      } );
+    }
+
+    function createLevelSection( minIndex, maxIndex ) {
       return new Node( {
         children: [
           new VBox( {
-            children: [ shapeLevels, numberLevels ].map( function( levels ) {
-              return new HBox( {
-                children: levels.map( function( level ) {
-
-                  var label = new Text( StringUtils.fillIn( levelTitlePatternString, {
-                    number: level.number
-                  } ), {
-                    font: new PhetFont( 20 )
-                  } );
-
-                  var icon;
-                  if ( !model.hasMixedNumbers && level.buildingType === BuildingType.NUMBER ) {
-                    var stack = new NumberStack( level.number );
-                    for ( var i = 0; i < level.number; i++ ) {
-                      stack.numberPieces.push( new NumberPiece( level.number ) );
-                    }
-                    icon = new NumberStackNode( stack, {
-
-                    } );
-                  }
-                  else {
-                    icon = new Rectangle( 0, 0, 40, 40, { fill: 'red' } );
-                  }
-
-                  return new LevelSelectionButton.ScoreDisplayCreator( new VBox( {
-                    children: [
-                      label,
-                      icon
-                    ],
-                    spacing: 10
-                  } ), level.scoreProperty, {
-                    buttonWidth: 110,
-                    buttonHeight: 200,
-                    scoreDisplayConstructor: ScoreDisplayDiscreteStars,
-                    scoreDisplayOptions: {
-                      numStars: level.numTargets,
-                      perfectScore: level.numTargets
-                    },
-                    listener: function() {
-                      model.levelProperty.value = level;
-                    }
-                  } );
-                } ),
-                spacing: LEVEL_SELECTION_SPACING
-              } );
-            } ),
+            children: [
+              createLevelRow( model.shapeLevels.slice( minIndex, maxIndex + 1 ), shapeIcons.slice( minIndex, maxIndex + 1 ) ),
+              createLevelRow( model.numberLevels.slice( minIndex, maxIndex + 1 ), numberIcons.slice( minIndex, maxIndex + 1 ) )
+            ],
             spacing: LEVEL_SELECTION_SPACING,
             center: self.layoutBounds.center
           } )
@@ -111,8 +125,8 @@ define( function( require ) {
       } );
     }
 
-    var leftLevelSelectionNode = createLevelSection( model.shapeLevels.slice( 0, 5 ), model.numberLevels.slice( 0, 5 ) );
-    var rightLevelSelectionNode = createLevelSection( model.shapeLevels.slice( 5, 10 ), model.numberLevels.slice( 5, 10 ) );
+    var leftLevelSelectionNode = createLevelSection( 0, 4 );
+    var rightLevelSelectionNode = createLevelSection( 5, 9 );
 
     // @private {Property.<boolean>}
     this.leftLevelSelectionProperty = new BooleanProperty( true );
