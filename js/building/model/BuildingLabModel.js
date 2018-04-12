@@ -54,9 +54,11 @@ define( function( require ) {
       } );
     }
 
+    var circleStacks = createStacks( Representation.CIRCLE, FractionsCommonColorProfile.labCircleFillProperty );
+    var barStacks = createStacks( Representation.VERTICAL_BAR, FractionsCommonColorProfile.labBarFillProperty );
+
     // @public {Array.<ShapeStack>}
-    this.circleStacks = createStacks( Representation.CIRCLE, FractionsCommonColorProfile.labCircleFillProperty );
-    this.barStacks = createStacks( Representation.VERTICAL_BAR, FractionsCommonColorProfile.labBarFillProperty );
+    this.shapeStacks = circleStacks.concat( barStacks );
 
     // @public {Array.<NumberStack>}
     this.numberStacks = _.range( 1, 9 ).map( function( number ) {
@@ -125,8 +127,8 @@ define( function( require ) {
     returnActiveShapePiece: function( shapePiece ) {
       var self = this;
 
-      var shapeStack = _.find( shapePiece.representation === Representation.CIRCLE ? this.circleStacks : this.barStacks, function( stack ) {
-        return stack.fraction.equals( shapePiece.fraction );
+      var shapeStack = _.find( this.shapeStacks, function( stack ) {
+        return stack.representation === shapePiece.representation && stack.fraction.equals( shapePiece.fraction );
       } );
 
       // TODO: Don't use hard-coded constant (index 1) for game screens

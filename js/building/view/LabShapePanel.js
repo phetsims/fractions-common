@@ -99,8 +99,12 @@ define( function( require ) {
         ]
       } );
     }
-    var circleStackNodes = model.circleStacks.map( createStackNode );
-    var barStackNodes = model.barStacks.map( createStackNode );
+    var circleStackNodes = model.shapeStacks.filter( function( stack ) {
+      return stack.representation === Representation.CIRCLE;
+    } ).map( createStackNode );
+    var barStackNodes = model.shapeStacks.filter( function( stack ) {
+      return stack.representation === Representation.VERTICAL_BAR;
+    } ).map( createStackNode );
 
     // @private {Array.<ShapeGroupNode>}
     this.shapeGroupNodes = [];
@@ -171,12 +175,10 @@ define( function( require ) {
           var stackLocation = modelViewTransform.viewToModelPosition( shapeStackNode.getUniqueTrailTo( this ).localToGlobalPoint( Vector2.ZERO ) );
 
           // TODO: Ideally have stacks more linked so we can hook positions better?
-          for ( var j = 0; j < this.model.circleStacks.length; j++ ) {
-            if ( this.model.circleStacks[ j ].fraction.equals( shapeStackNode.shapeStack.fraction ) ) {
-              this.model.circleStacks[ j ].positionProperty.value = stackLocation;
-            }
-            if ( this.model.barStacks[ j ].fraction.equals( shapeStackNode.shapeStack.fraction ) ) {
-              this.model.barStacks[ j ].positionProperty.value = stackLocation;
+          for ( var j = 0; j < this.model.shapeStacks.length; j++ ) {
+            var stack = this.model.shapeStacks[ j ];
+            if ( stack.fraction.equals( shapeStackNode.shapeStack.fraction ) ) {
+              stack.positionProperty.value = stackLocation;
             }
           }
         }
