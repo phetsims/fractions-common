@@ -114,7 +114,8 @@ define( function( require ) {
     var leftLevelSelectionNode = createLevelSection( model.shapeLevels.slice( 0, 5 ), model.numberLevels.slice( 0, 5 ) );
     var rightLevelSelectionNode = createLevelSection( model.shapeLevels.slice( 5, 10 ), model.numberLevels.slice( 5, 10 ) );
 
-    var leftLevelSelectionProperty = new BooleanProperty( true );
+    // @private {Property.<boolean>}
+    this.leftLevelSelectionProperty = new BooleanProperty( true );
 
     // TODO: better name
     var leftChallengeProperty = new DerivedProperty( [ model.levelProperty ], function( level ) {
@@ -128,7 +129,7 @@ define( function( require ) {
     this.challengeLayer = new Node();
 
     // @private {SlidingScreen}
-    this.levelSelectionSlidingScreen = new SlidingScreen( leftLevelSelectionNode, rightLevelSelectionNode, this.visibleBoundsProperty, leftLevelSelectionProperty );
+    this.levelSelectionSlidingScreen = new SlidingScreen( leftLevelSelectionNode, rightLevelSelectionNode, this.visibleBoundsProperty, this.leftLevelSelectionProperty );
     this.challengeSlidingScreen = new SlidingScreen( this.levelSelectionLayer, this.challengeLayer, this.visibleBoundsProperty, leftChallengeProperty );
 
     this.addChild( this.challengeSlidingScreen );
@@ -139,18 +140,18 @@ define( function( require ) {
       mutableBaseColor: FractionsCommonColorProfile.yellowRoundArrowButtonProperty,
       radius: 20,
       arrowRotation: -Math.PI / 2,
-      enabledProperty: new DerivedProperty( [ leftLevelSelectionProperty ], function( value ) { return !value; } ),
+      enabledProperty: new DerivedProperty( [ this.leftLevelSelectionProperty ], function( value ) { return !value; } ),
       listener: function() {
-        leftLevelSelectionProperty.value = true;
+        self.leftLevelSelectionProperty.value = true;
       }
     } );
     var rightButton = new RoundArrowButton( {
       mutableBaseColor: FractionsCommonColorProfile.yellowRoundArrowButtonProperty,
       radius: 20,
       arrowRotation: Math.PI / 2,
-      enabledProperty: leftLevelSelectionProperty,
+      enabledProperty: this.leftLevelSelectionProperty,
       listener: function() {
-        leftLevelSelectionProperty.value = false;
+        self.leftLevelSelectionProperty.value = false;
       }
     } );
 
@@ -181,6 +182,7 @@ define( function( require ) {
     var resetAllButton = new AlignBox( new ResetAllButton( {
       listener: function() {
         model.reset();
+        self.reset();
       },
       right: this.layoutBounds.maxX - 10,
       bottom: this.layoutBounds.maxY - 10
@@ -216,6 +218,18 @@ define( function( require ) {
     step: function( dt ) {
       this.levelSelectionSlidingScreen.step( dt );
       this.challengeSlidingScreen.step( dt );
+    },
+
+    /**
+     * Resets the view portion.
+     * @public
+     */
+    reset: function() {
+      this.leftLevelSelectionProperty.reset();
+
+      // TODO: better way of saying "animate instantly"
+      this.levelSelectionSlidingScreen.step( Number.POSITIVE_INFINITY );
+      this.challengeSlidingScreen.step( Number.POSITIVE_INFINITY );
     }
   } );
 } );
