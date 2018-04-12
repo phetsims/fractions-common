@@ -19,13 +19,14 @@ define( function( require ) {
    *
    * @param {ChallengeType} challengeType
    * @param {Array.<Target>} targets
-   * @param {Array.<number>} pieces - An array (with duplicates allowed) of the denominators or numbers that are
-   *                                  available to the user to interact with.
+   * @param {Array.<ShapePiece>} shapePieces
+   * @param {Array.<NumberPiece>} numberPieces
    */
-  function FractionChallenge( challengeType, targets, pieces ) {
+  function FractionChallenge( challengeType, targets, shapePieces, numberPieces ) {
     assert && assert( ChallengeType.VALUES.includes( challengeType ) );
     assert && assert( Array.isArray( targets ) );
-    assert && assert( Array.isArray( pieces ) );
+    assert && assert( Array.isArray( shapePieces ) );
+    assert && assert( Array.isArray( numberPieces ) );
 
     // @public {ChallengeType}
     this.challengeType = challengeType;
@@ -33,8 +34,23 @@ define( function( require ) {
     // @public {Array.<Target>}
     this.targets = targets;
 
-    // @public {Array.<number>} pieces
-    this.pieces = pieces;
+    // @public {Array.<ShapePiece>}
+    this.shapePieces = shapePieces;
+
+    // @public {Array.<NumberPiece>}
+    this.numberPieces = numberPieces;
+
+
+
+    // TODO: Supertype for something that can have shapes/numbers with groups (and locations for groups).
+    // share code with BuildingLabModel.js
+
+
+    // @public {Array.<ShapeStack>}
+    this.shapeStacks = [];
+
+    // @public {Array.<NumberStack>}
+    this.numberStacks = [];
   }
 
   fractionsCommon.register( 'FractionChallenge', FractionChallenge );
