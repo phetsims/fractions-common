@@ -253,9 +253,7 @@ define( function( require ) {
         removeLastListener: function() {
           self.model.removeLastPieceFromShapeGroup( shapeGroup );
         },
-        isSelectedProperty: new DerivedProperty( [ self.model.selectedGroupProperty ], function( selectedGroup ) {
-          return selectedGroup === shapeGroup;
-        } )
+        isSelectedProperty: self.model.getShapeControlsVisibleProperty( shapeGroup )
       } );
       this.shapeGroupNodes.push( shapeGroupNode );
       this.groupLayer.addChild( shapeGroupNode );
