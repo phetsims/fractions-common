@@ -9,6 +9,9 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var AlignBox = require( 'SCENERY/nodes/AlignBox' );
+  var AlignGroup = require( 'SCENERY/nodes/AlignGroup' );
+  var BackButton = require( 'SCENERY_PHET/buttons/BackButton' );
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
@@ -24,6 +27,7 @@ define( function( require ) {
   var ScoreDisplayDiscreteStars = require( 'VEGAS/ScoreDisplayDiscreteStars' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var SlidingScreen = require( 'SUN/SlidingScreen' );
+  var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   var Text = require( 'SCENERY/nodes/Text' );
   var VBox = require( 'SCENERY/nodes/VBox' );
@@ -33,6 +37,7 @@ define( function( require ) {
 
   // constants
   var LEVEL_SELECTION_SPACING = 20;
+  var SIDE_MARGIN = 10;
 
   /**
    * @constructor
@@ -76,7 +81,7 @@ define( function( require ) {
                       perfectScore: level.numTargets
                     },
                     listener: function() {
-                      console.log( 'TODO' );
+                      model.levelProperty.value = level;
                     }
                   } );
                 } ),
@@ -93,33 +98,52 @@ define( function( require ) {
     var leftLevelSelectionNode = createLevelSection( model.shapeLevels.slice( 0, 5 ), model.numberLevels.slice( 0, 5 ) );
     var rightLevelSelectionNode = createLevelSection( model.shapeLevels.slice( 5, 10 ), model.numberLevels.slice( 5, 10 ) );
 
-    var showingLeftLevelsProperty = new BooleanProperty( true );
+    var leftLevelSelectionProperty = new BooleanProperty( true );
+
+    // TODO: better name
+    var leftChallengeProperty = new DerivedProperty( [ model.levelProperty ], function( level ) {
+      return level === null;
+    } );
+
+    // @private {Node} - The "left" half of the sliding layer, displayed first
+    this.levelSelectionLayer = new Node();
+
+    // @private {Node} - The "right" half of the sliding layer, will slide into view when the user selects a level
+    this.challengeLayer = new Node();
 
     // @private {SlidingScreen}
-    this.slidingLevels = new SlidingScreen( leftLevelSelectionNode, rightLevelSelectionNode, this.visibleBoundsProperty, showingLeftLevelsProperty );
+    this.levelSelectionSlidingScreen = new SlidingScreen( leftLevelSelectionNode, rightLevelSelectionNode, this.visibleBoundsProperty, leftLevelSelectionProperty );
+    this.challengeSlidingScreen = new SlidingScreen( this.levelSelectionLayer, this.challengeLayer, this.visibleBoundsProperty, leftChallengeProperty );
 
-    this.addChild( this.slidingLevels );
+    this.addChild( this.challengeSlidingScreen );
+
+    this.levelSelectionLayer.addChild( this.levelSelectionSlidingScreen );
 
     var leftButton = new RoundArrowButton( {
       mutableBaseColor: FractionsCommonColorProfile.yellowRoundArrowButtonProperty,
       radius: 20,
       arrowRotation: -Math.PI / 2,
-      enabledProperty: new DerivedProperty( [ showingLeftLevelsProperty ], function( value ) { return !value; } ),
+      enabledProperty: new DerivedProperty( [ leftLevelSelectionProperty ], function( value ) { return !value; } ),
       listener: function() {
-        showingLeftLevelsProperty.value = true;
+        leftLevelSelectionProperty.value = true;
       }
     } );
     var rightButton = new RoundArrowButton( {
       mutableBaseColor: FractionsCommonColorProfile.yellowRoundArrowButtonProperty,
       radius: 20,
       arrowRotation: Math.PI / 2,
-      enabledProperty: showingLeftLevelsProperty,
+      enabledProperty: leftLevelSelectionProperty,
       listener: function() {
-        showingLeftLevelsProperty.value = false;
+        leftLevelSelectionProperty.value = false;
       }
     } );
 
-    this.addChild( new HBox( {
+    // We'll vertically center the things along the bottom
+    var bottomAlignGroup = new AlignGroup( {
+      matchHorizontal: false
+    } );
+
+    var slidingLevelSelectionNode = new AlignBox( new HBox( {
       children: [
         leftButton,
         rightButton
@@ -127,24 +151,55 @@ define( function( require ) {
       centerX: this.layoutBounds.centerX,
       bottom: this.layoutBounds.bottom - 10, // TODO: center with reset-all and sound button
       spacing: 20
-    } ) );
+    } ), { group: bottomAlignGroup } );
+    this.levelSelectionLayer.addChild( slidingLevelSelectionNode );
 
-    // Reset All button
-    var resetAllButton = new ResetAllButton( {
+    var soundToggleButton = new AlignBox( new SoundToggleButton( model.soundEnabledProperty, {
+      touchAreaXDilation: 10,
+      touchAreaYDilation: 10,
+      x: 20,
+      bottom: this.layoutBounds.height - 20
+    } ), { group: bottomAlignGroup } );
+    this.levelSelectionLayer.addChild( soundToggleButton );
+
+    var resetAllButton = new AlignBox( new ResetAllButton( {
       listener: function() {
         model.reset();
       },
       right: this.layoutBounds.maxX - 10,
       bottom: this.layoutBounds.maxY - 10
+    } ), { group: bottomAlignGroup } );
+    this.levelSelectionLayer.addChild( resetAllButton );
+
+    // TODO: cleanup layout
+    slidingLevelSelectionNode.bottom = soundToggleButton.bottom = resetAllButton.bottom = this.layoutBounds.bottom - SIDE_MARGIN;
+    slidingLevelSelectionNode.centerX = this.layoutBounds.centerX;
+    soundToggleButton.left = this.layoutBounds.left + SIDE_MARGIN;
+    resetAllButton.right = this.layoutBounds.right - SIDE_MARGIN;
+
+    var backButton = new BackButton( {
+      left: this.layoutBounds.left + SIDE_MARGIN,
+      top: this.layoutBounds.top + SIDE_MARGIN,
+      listener: function() {
+        model.levelProperty.value = null;
+      }
     } );
-    this.addChild( resetAllButton );
+
+    this.challengeLayer.addChild( backButton );
   }
 
   fractionsCommon.register( 'BuildingGameScreenView', BuildingGameScreenView );
 
   return inherit( ScreenView, BuildingGameScreenView, {
+    /**
+     * Steps the view forward in time.
+     * @public
+     *
+     * @param {number} dt
+     */
     step: function( dt ) {
-      this.slidingLevels.step( dt );
+      this.levelSelectionSlidingScreen.step( dt );
+      this.challengeSlidingScreen.step( dt );
     }
   } );
 } );

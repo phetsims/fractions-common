@@ -9,15 +9,23 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var BooleanProperty = require( 'AXON/BooleanProperty' );
   var FractionLevel = require( 'FRACTIONS_COMMON/game/model/FractionLevel' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var Property = require( 'AXON/Property' );
 
   /**
    * @constructor
    * @extends {Object}
    */
   function BuildingGameModel() {
+
+    // @public {Property.<FractionLevel|null>}
+    this.levelProperty = new Property( null );
+
+    // @public {Property.<boolean>}
+    this.soundEnabledProperty = new BooleanProperty( true );
 
     // @public {FractionLevel}
     this.shapeLevels = [
