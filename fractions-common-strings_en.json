@@ -4,5 +4,8 @@
   },
   "mixedNumber": {
     "value": "Mixed Number"
+  },
+  "levelTitlePattern": {
+    "value": "Level {{number}}"
   }
 }
