@@ -16,12 +16,21 @@ define( function( require ) {
    * @constructor
    * @extends {Object}
    *
-   * @param {BuildingType} buildingType
+   * @param {BuildingType} interactiveType
+   * @param {Array.<Target>} targets
+   * @param {Array.<number>} pieces - An array (with duplicates allowed) of the denominators or numbers that are
+   *                                  available to the user to interact with.
    */
-  function FractionChallenge( buildingType ) {
+  function FractionChallenge( interactiveType, targets, pieces ) {
 
     // @public {BuildingType}
-    this.buildingType = buildingType;
+    this.interactiveType = interactiveType;
+
+    // @public {Array.<Target>}
+    this.targets = targets;
+
+    // @public {Array.<number>} pieces
+    this.pieces = pieces;
   }
 
   fractionsCommon.register( 'FractionChallenge', FractionChallenge );
