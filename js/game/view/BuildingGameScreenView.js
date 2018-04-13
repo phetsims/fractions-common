@@ -30,7 +30,7 @@ define( function( require ) {
   var RoundArrowButton = require( 'FRACTIONS_COMMON/common/view/RoundArrowButton' );
   var ScoreDisplayDiscreteStars = require( 'VEGAS/ScoreDisplayDiscreteStars' );
   var ScreenView = require( 'JOIST/ScreenView' );
-  var SlidingScreen = require( 'SUN/SlidingScreen' );
+  var SlidingScreen = require( 'TWIXT/SlidingScreen' );
   var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   var Text = require( 'SCENERY/nodes/Text' );
