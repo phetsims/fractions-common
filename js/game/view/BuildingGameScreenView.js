@@ -28,7 +28,7 @@ define( function( require ) {
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var RoundArrowButton = require( 'FRACTIONS_COMMON/common/view/RoundArrowButton' );
-  var ScoreDisplayDiscreteStars = require( 'VEGAS/ScoreDisplayDiscreteStars' );
+  var ScoreDisplayStars = require( 'VEGAS/ScoreDisplayStars' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var SlidingScreen = require( 'TWIXT/SlidingScreen' );
   var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
@@ -96,7 +96,7 @@ define( function( require ) {
           return new LevelSelectionButton.ScoreDisplayCreator( icons[ index ], level.scoreProperty, {
             buttonWidth: 110,
             buttonHeight: 200,
-            scoreDisplayConstructor: ScoreDisplayDiscreteStars,
+            scoreDisplayConstructor: ScoreDisplayStars,
             scoreDisplayOptions: {
               numStars: level.numTargets,
               perfectScore: level.numTargets
