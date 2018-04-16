@@ -98,7 +98,7 @@ define( function( require ) {
             buttonHeight: 200,
             scoreDisplayConstructor: ScoreDisplayStars,
             scoreDisplayOptions: {
-              numStars: level.numTargets,
+              numberOfStars: level.numTargets,
               perfectScore: level.numTargets
             },
             listener: function() {
