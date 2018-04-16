@@ -93,7 +93,7 @@ define( function( require ) {
     function createLevelRow( levels, icons ) {
       return new HBox( {
         children: levels.map( function( level, index ) {
-          return new LevelSelectionButton.ScoreDisplayCreator( icons[ index ], level.scoreProperty, {
+          return new LevelSelectionButton( icons[ index ], level.scoreProperty, {
             buttonWidth: 110,
             buttonHeight: 200,
             scoreDisplayConstructor: ScoreDisplayStars,
