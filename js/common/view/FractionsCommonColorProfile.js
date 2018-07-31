@@ -48,7 +48,10 @@ define( function( require ) {
     yellowRoundArrowButton: { default: new Color( '#fefd53' ) },
     greenRoundArrowButton: { default: new Color( 134, 194, 51 ) },
     redRoundArrowButton: { default: new Color( 195, 71, 26 ) },
-    undoButton: { default: Color.YELLOW }
+    undoButton: { default: Color.YELLOW },
+
+    shapePartitionBackground: { default: Color.WHITE },
+    shapePartitionBorder: { default: Color.BLACK }
   }, [ 'default' ] );
 
   fractionsCommon.register( 'FractionsCommonColorProfile', FractionsCommonColorProfile );

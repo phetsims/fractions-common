@@ -15,6 +15,8 @@ define( function( require ) {
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
+  var FilledPartition = require( 'FRACTIONS_COMMON/game/model/FilledPartition' );
+  var FilledPartitionNode = require( 'FRACTIONS_COMMON/game/view/FilledPartitionNode' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   var HBox = require( 'SCENERY/nodes/HBox' );
@@ -30,6 +32,7 @@ define( function( require ) {
   var RoundArrowButton = require( 'FRACTIONS_COMMON/common/view/RoundArrowButton' );
   var ScoreDisplayStars = require( 'VEGAS/ScoreDisplayStars' );
   var ScreenView = require( 'JOIST/ScreenView' );
+  var ShapePartition = require( 'FRACTIONS_COMMON/game/model/ShapePartition' );
   var SlidingScreen = require( 'TWIXT/SlidingScreen' );
   var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
@@ -218,6 +221,13 @@ define( function( require ) {
     } );
 
     this.challengeLayer.addChild( backButton );
+
+    var shapePartition = ShapePartition.createPie( 5 ).rescaled( 10000 );
+    var filledPartition = new FilledPartition( shapePartition, [ true, false, true, true, false ] );
+    this.challengeLayer.addChild( new FilledPartitionNode( filledPartition, {
+      primaryFill: 'red',
+      center: this.layoutBounds.center
+    } ) );
   }
 
   fractionsCommon.register( 'BuildingGameScreenView', BuildingGameScreenView );
