@@ -16,8 +16,10 @@ define( function( require ) {
     PIE: 'PIE',
     HORIZONTAL_BARS: 'HORIZONTAL_BARS',
     VERTICAL_BARS: 'VERTICAL_BARS',
-    POLYGON: 'POLYGON'
-    //tetrisPiece
+    POLYGON: 'POLYGON',
+    INTERLEAVED_L: 'INTERLEAVED_L',
+    DIAGONAL_L: 'DIAGONAL_L',
+    TETRIS: 'TETRIS'
     //sixFlower
     //grid
     //plusSigns
@@ -27,8 +29,6 @@ define( function( require ) {
     //ringOfHexagons
     //ninjaStar
     //fivePointStarWithLeaves
-    //letterLShapedDiagonal
-    //interleavedLShape,
     //horizontallySlicedCube
     //verticallySlicedCube
   };
@@ -40,7 +40,10 @@ define( function( require ) {
     PartitionType.PIE,
     PartitionType.HORIZONTAL_BARS,
     PartitionType.VERTICAL_BARS,
-    PartitionType.POLYGON
+    PartitionType.POLYGON,
+    PartitionType.INTERLEAVED_L,
+    PartitionType.DIAGONAL_L,
+    PartitionType.TETRIS
   ];
 
   // verify that enum is immutable, without the runtime penalty in production code

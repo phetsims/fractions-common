@@ -133,6 +133,132 @@ define( function( require ) {
         PartitionType.VERTICAL_BARS
       );
     }
+
+    /**
+     * Returns a pattern of interleaved L-like pieces.
+     * @public
+     *
+     * @param {number} numPairColumns
+     * @param {number} numPairRows
+     * @returns {ShapePartition}
+     */
+    static createInterleavedL( numPairColumns, numPairRows ) {
+      const shapes = [];
+
+      const leftSideShape = Shape.polygon( [
+        new Vector2( 0, 0 ),
+        new Vector2( 1 / 3, 0 ),
+        new Vector2( 1 / 3, 0.5 ),
+        new Vector2( 2 / 3, 0.5 ),
+        new Vector2( 2 / 3, 1 ),
+        new Vector2( 0, 1 )
+      ] );
+      const rightSideShape = Shape.polygon( [
+        new Vector2( 1, 0 ),
+        new Vector2( 1, 1 ),
+        new Vector2( 2 / 3, 1 ),
+        new Vector2( 2 / 3, 0.5 ),
+        new Vector2( 1 / 3, 0.5 ),
+        new Vector2( 1 / 3, 0 )
+      ] );
+
+      for ( let i = 0; i < numPairColumns; i++ ) {
+        for ( let j = 0; j < numPairRows; j++ ) {
+          var matrix = Matrix3.translation( i, j );
+          shapes.push( leftSideShape.transformed( matrix ) );
+          shapes.push( rightSideShape.transformed( matrix ) );
+        }
+      }
+
+      return new ShapePartition( shapes, PartitionType.INTERLEAVED_L );
+    }
+
+    /**
+     * Returns a diagonal pattern of interlocking L pieces
+     * @public
+     *
+     * @param {number} numPairs
+     * @returns {ShapePartition}
+     */
+    static createDiagonalL( numPairs ) {
+      const shapes = [];
+
+      const topShape = Shape.polygon( [
+        new Vector2( 0, 0 ),
+        new Vector2( 2, 0 ),
+        new Vector2( 2, 3 ),
+        new Vector2( 1, 3 ),
+        new Vector2( 1, 1 ),
+        new Vector2( 0, 1 )
+      ] );
+      const bottomShape = Shape.polygon( [
+        new Vector2( 0, 1 ),
+        new Vector2( 1, 1 ),
+        new Vector2( 1, 3 ),
+        new Vector2( 2, 3 ),
+        new Vector2( 2, 4 ),
+        new Vector2( 0, 4 )
+      ] );
+
+      for ( let i = 0; i < numPairs; i++ ) {
+        var matrix = Matrix3.translation( i * 2, i );
+        shapes.push( topShape.transformed( matrix ) );
+        shapes.push( bottomShape.transformed( matrix ) );
+      }
+
+      return new ShapePartition( shapes, PartitionType.DIAGONAL_L );
+    }
+
+    /**
+     * Returns a tetris piece shape
+     * @public
+     *
+     * @returns {ShapePartition}
+     */
+    static createTetris() {
+      return new ShapePartition( [
+        Shape.polygon( [
+          new Vector2( 0, 0 ),
+          new Vector2( 3, 0 ),
+          new Vector2( 3, 1 ),
+          new Vector2( 2, 1 ),
+          new Vector2( 2, 2 ),
+          new Vector2( 1, 2 ),
+          new Vector2( 1, 1 ),
+          new Vector2( 0, 1 )
+        ] ),
+        Shape.polygon( [
+          new Vector2( 3, 0 ),
+          new Vector2( 4, 0 ),
+          new Vector2( 4, 3 ),
+          new Vector2( 3, 3 ),
+          new Vector2( 3, 2 ),
+          new Vector2( 2, 2 ),
+          new Vector2( 2, 1 ),
+          new Vector2( 3, 1 )
+        ] ),
+        Shape.polygon( [
+          new Vector2( 4, 3 ),
+          new Vector2( 4, 4 ),
+          new Vector2( 1, 4 ),
+          new Vector2( 1, 3 ),
+          new Vector2( 2, 3 ),
+          new Vector2( 2, 2 ),
+          new Vector2( 3, 2 ),
+          new Vector2( 3, 3 )
+        ] ),
+        Shape.polygon( [
+          new Vector2( 0, 4 ),
+          new Vector2( 0, 1 ),
+          new Vector2( 1, 1 ),
+          new Vector2( 1, 2 ),
+          new Vector2( 2, 2 ),
+          new Vector2( 2, 3 ),
+          new Vector2( 1, 3 ),
+          new Vector2( 1, 4 )
+        ] )
+      ], PartitionType.TETRIS );
+    }
   }
 
   fractionsCommon.register( 'ShapePartition', ShapePartition );

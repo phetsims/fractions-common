@@ -236,6 +236,15 @@ define( function( require ) {
         } ),
         new FilledPartitionNode( new FilledPartition( ShapePartition.createPolygon( 5 ).rescaled( 10000 ), [ true, false, true, true, false ] ), {
           primaryFill: 'red'
+        } ),
+        new FilledPartitionNode( new FilledPartition( ShapePartition.createInterleavedL( 2, 3 ).rescaled( 10000 ), [ true, false, true, true, false, false, true, false, true, true, false, false ] ), {
+          primaryFill: 'red'
+        } ),
+        new FilledPartitionNode( new FilledPartition( ShapePartition.createDiagonalL( 5 ).rescaled( 10000 ), [ true, false, true, true, false, true, false, true, true, false ] ), {
+          primaryFill: 'red'
+        } ),
+        new FilledPartitionNode( new FilledPartition( ShapePartition.createTetris().rescaled( 10000 ), [ true, false, true, true ] ), {
+          primaryFill: 'red'
         } )
       ],
       center: this.layoutBounds.center
