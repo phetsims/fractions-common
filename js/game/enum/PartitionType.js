@@ -13,12 +13,12 @@ define( function( require ) {
 
   // TODO: check for usage
   var PartitionType = {
-    PIE: 'PIE'
+    PIE: 'PIE',
+    HORIZONTAL_BARS: 'HORIZONTAL_BARS',
+    VERTICAL_BARS: 'VERTICAL_BARS',
+    POLYGON: 'POLYGON'
     //tetrisPiece
     //sixFlower
-    //horizontalBars
-    //verticalBars
-    //polygon
     //grid
     //plusSigns
     //singlePyramid
@@ -37,7 +37,10 @@ define( function( require ) {
 
   // @public {Array.<PartitionType>} - All values the enumeration can take.
   PartitionType.VALUES = [
-    PartitionType.PIE
+    PartitionType.PIE,
+    PartitionType.HORIZONTAL_BARS,
+    PartitionType.VERTICAL_BARS,
+    PartitionType.POLYGON
   ];
 
   // verify that enum is immutable, without the runtime penalty in production code

@@ -222,10 +222,22 @@ define( function( require ) {
 
     this.challengeLayer.addChild( backButton );
 
-    var shapePartition = ShapePartition.createPie( 5 ).rescaled( 10000 );
-    var filledPartition = new FilledPartition( shapePartition, [ true, false, true, true, false ] );
-    this.challengeLayer.addChild( new FilledPartitionNode( filledPartition, {
-      primaryFill: 'red',
+    this.challengeLayer.addChild( new HBox( {
+      spacing: 10,
+      children: [
+        new FilledPartitionNode( new FilledPartition( ShapePartition.createPie( 5 ).rescaled( 10000 ), [ true, false, true, true, false ] ), {
+          primaryFill: 'red'
+        } ),
+        new FilledPartitionNode( new FilledPartition( ShapePartition.createHorizontalBars( 5 ).rescaled( 10000 ), [ true, false, true, true, false ] ), {
+          primaryFill: 'red'
+        } ),
+        new FilledPartitionNode( new FilledPartition( ShapePartition.createVerticalBars( 5 ).rescaled( 10000 ), [ true, false, true, true, false ] ), {
+          primaryFill: 'red'
+        } ),
+        new FilledPartitionNode( new FilledPartition( ShapePartition.createPolygon( 5 ).rescaled( 10000 ), [ true, false, true, true, false ] ), {
+          primaryFill: 'red'
+        } )
+      ],
       center: this.layoutBounds.center
     } ) );
   }
