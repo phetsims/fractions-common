@@ -38,6 +38,7 @@ define( function( require ) {
       this.children = [
         ...filledPartition.shapePartition.shapes.map( ( shape, index ) => new Path( shape, {
           fill: filledPartition.fills[ index ] ? config.primaryFill : config.backgroundFill,
+          // fill: new phet.scenery.Color( index / ( filledPartition.shapePartition.shapes.length - 1 ) * 255, index / ( filledPartition.shapePartition.shapes.length - 1 ) * 255, index / ( filledPartition.shapePartition.shapes.length - 1 ) * 255 ),
           stroke: config.interiorStroke,
           lineWidth: config.interiorLineWidth
         } ) ),

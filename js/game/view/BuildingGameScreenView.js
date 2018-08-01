@@ -14,6 +14,7 @@ define( function( require ) {
   var BackButton = require( 'SCENERY_PHET/buttons/BackButton' );
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
+  var Color = require( 'SCENERY/util/Color' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
   var FilledPartition = require( 'FRACTIONS_COMMON/game/model/FilledPartition' );
   var FilledPartitionNode = require( 'FRACTIONS_COMMON/game/view/FilledPartitionNode' );
@@ -222,29 +223,74 @@ define( function( require ) {
 
     this.challengeLayer.addChild( backButton );
 
-    this.challengeLayer.addChild( new HBox( {
+    this.challengeLayer.addChild( new VBox( {
       spacing: 10,
       children: [
-        new FilledPartitionNode( new FilledPartition( ShapePartition.createPie( 5 ).rescaled( 10000 ), [ true, false, true, true, false ] ), {
-          primaryFill: 'red'
+        new HBox( {
+          spacing: 10,
+          children: [
+            new FilledPartitionNode( new FilledPartition( ShapePartition.createPie( 5 ).rescaled( 6000 ), [ true, false, true, true, false ] ), {
+              primaryFill: new Color( 233, 69, 69 )
+            } ),
+            new FilledPartitionNode( new FilledPartition( ShapePartition.createHorizontalBars( 5 ).rescaled( 6000 ), [ true, false, true, true, false ] ), {
+              primaryFill: new Color( 233, 69, 69 )
+            } ),
+            new FilledPartitionNode( new FilledPartition( ShapePartition.createVerticalBars( 5 ).rescaled( 6000 ), [ true, false, true, true, false ] ), {
+              primaryFill: new Color( 233, 69, 69 )
+            } ),
+            new FilledPartitionNode( new FilledPartition( ShapePartition.createPolygon( 5 ).rescaled( 6000 ), [ true, false, true, true, false ] ), {
+              primaryFill: new Color( 233, 69, 69 )
+            } ),
+            new FilledPartitionNode( new FilledPartition( ShapePartition.createInterleavedL( 2, 3 ).rescaled( 6000 ), [ true, false, true, true, false, false, true, false, true, true, false, false ] ), {
+              primaryFill: new Color( 233, 69, 69 )
+            } ),
+            new FilledPartitionNode( new FilledPartition( ShapePartition.createDiagonalL( 5 ).rescaled( 6000 ), [ true, false, true, true, false, true, false, true, true, false ] ), {
+              primaryFill: new Color( 233, 69, 69 )
+            } ),
+            new FilledPartitionNode( new FilledPartition( ShapePartition.createTetris().rescaled( 6000 ), [ true, false, true, true ] ), {
+              primaryFill: new Color( 233, 69, 69 )
+            } ),
+            new FilledPartitionNode( new FilledPartition( ShapePartition.createFlower( 6 ).rescaled( 6000 ), [ true, false, true, true, false, false ] ), {
+              primaryFill: new Color( 233, 69, 69 )
+            } ),
+            new FilledPartitionNode( new FilledPartition( ShapePartition.createPie( 4 ).rescaled( 6000 ), [ true, false, true, true ] ), {
+              primaryFill: new Color( 233, 69, 69 )
+            } ),
+            new FilledPartitionNode( new FilledPartition( ShapePartition.createPolygon( 4 ).rescaled( 6000 ), [ true, false, true, true ] ), {
+              primaryFill: new Color( 233, 69, 69 )
+            } )
+          ]
         } ),
-        new FilledPartitionNode( new FilledPartition( ShapePartition.createHorizontalBars( 5 ).rescaled( 10000 ), [ true, false, true, true, false ] ), {
-          primaryFill: 'red'
-        } ),
-        new FilledPartitionNode( new FilledPartition( ShapePartition.createVerticalBars( 5 ).rescaled( 10000 ), [ true, false, true, true, false ] ), {
-          primaryFill: 'red'
-        } ),
-        new FilledPartitionNode( new FilledPartition( ShapePartition.createPolygon( 5 ).rescaled( 10000 ), [ true, false, true, true, false ] ), {
-          primaryFill: 'red'
-        } ),
-        new FilledPartitionNode( new FilledPartition( ShapePartition.createInterleavedL( 2, 3 ).rescaled( 10000 ), [ true, false, true, true, false, false, true, false, true, true, false, false ] ), {
-          primaryFill: 'red'
-        } ),
-        new FilledPartitionNode( new FilledPartition( ShapePartition.createDiagonalL( 5 ).rescaled( 10000 ), [ true, false, true, true, false, true, false, true, true, false ] ), {
-          primaryFill: 'red'
-        } ),
-        new FilledPartitionNode( new FilledPartition( ShapePartition.createTetris().rescaled( 10000 ), [ true, false, true, true ] ), {
-          primaryFill: 'red'
+        new HBox( {
+          spacing: 10,
+          children: [
+            new FilledPartitionNode( new FilledPartition( ShapePartition.createFlower( 6, true ).rescaled( 6000 ), [ true, false, true, true, false, false, true, false, true, true, false, false ] ), {
+              primaryFill: new Color( 233, 69, 69 )
+            } ),
+            new FilledPartitionNode( new FilledPartition( ShapePartition.createFlower( 5, true ).rescaled( 6000 ), [ true, false, true, true, false, false, true, false, true, true ] ), {
+              primaryFill: new Color( 233, 69, 69 )
+            } ),
+            // Constant from the Java version, it's 100 / ( sqrt(2) * 65 * Math.abs( Math.cos( toDegrees( 45 ) ) ) )
+            // Yes, `toDegrees( 45 )` is not a typo. I've simplified it to a constant here.
+            new FilledPartitionNode( new FilledPartition( ShapePartition.createFlower( 4, true, 1.8381770764635208 ).rescaled( 6000 ), [ true, false, true, true, false, false, true, false ] ), {
+              primaryFill: new Color( 233, 69, 69 )
+            } ),
+            new FilledPartitionNode( new FilledPartition( ShapePartition.createPlusSigns( 6 ).rescaled( 6000 ), [ true, false, true, true, false, false ] ), {
+              primaryFill: new Color( 233, 69, 69 )
+            } ),
+            new FilledPartitionNode( new FilledPartition( ShapePartition.createGrid( 3, 3 ).rescaled( 6000 ), [ true, false, true, true, false, false, true, false, true ] ), {
+              primaryFill: new Color( 233, 69, 69 )
+            } ),
+            new FilledPartitionNode( new FilledPartition( ShapePartition.createPyramid( 3 ).rescaled( 6000 ), [ true, false, true, true, false, false, true, false, true ] ), {
+              primaryFill: new Color( 233, 69, 69 )
+            } ),
+            new FilledPartitionNode( new FilledPartition( ShapePartition.createHoneycomb( 1 ).rescaled( 6000 ), [ true, false, true, true, false, false, true ] ), {
+              primaryFill: new Color( 233, 69, 69 )
+            } ),
+            new FilledPartitionNode( new FilledPartition( ShapePartition.createPolygon( 8 ).rescaled( 6000 ), [ true, false, true, true, false, false, false, false ] ), {
+              primaryFill: new Color( 233, 69, 69 )
+            } )
+          ]
         } )
       ],
       center: this.layoutBounds.center

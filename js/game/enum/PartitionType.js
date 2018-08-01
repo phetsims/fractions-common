@@ -11,7 +11,7 @@ define( function( require ) {
   // modules
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
-  // TODO: check for usage
+  // TODO: check for usage... was in the Java version
   var PartitionType = {
     PIE: 'PIE',
     HORIZONTAL_BARS: 'HORIZONTAL_BARS',
@@ -19,18 +19,12 @@ define( function( require ) {
     POLYGON: 'POLYGON',
     INTERLEAVED_L: 'INTERLEAVED_L',
     DIAGONAL_L: 'DIAGONAL_L',
-    TETRIS: 'TETRIS'
-    //sixFlower
-    //grid
-    //plusSigns
-    //singlePyramid
-    //fourPyramid
-    //ninePyramid
-    //ringOfHexagons
-    //ninjaStar
-    //fivePointStarWithLeaves
-    //horizontallySlicedCube
-    //verticallySlicedCube
+    TETRIS: 'TETRIS',
+    FLOWER: 'FLOWER',
+    PLUS_SIGNS: 'PLUS_SIGNS',
+    GRID: 'GRID',
+    PYRAMID: 'PYRAMID',
+    HONEYCOMB: 'HONEYCOMB'
   };
 
   fractionsCommon.register( 'PartitionType', PartitionType );
@@ -43,7 +37,12 @@ define( function( require ) {
     PartitionType.POLYGON,
     PartitionType.INTERLEAVED_L,
     PartitionType.DIAGONAL_L,
-    PartitionType.TETRIS
+    PartitionType.TETRIS,
+    PartitionType.FLOWER,
+    PartitionType.PLUS_SIGNS,
+    PartitionType.GRID,
+    PartitionType.PYRAMID,
+    PartitionType.HONEYCOMB
   ];
 
   // verify that enum is immutable, without the runtime penalty in production code

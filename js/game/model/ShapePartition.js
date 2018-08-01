@@ -92,11 +92,13 @@ define( function( require ) {
     static createPolygon( quantity ) {
       assert && assert( quantity >= 3 && quantity % 1 === 0 );
 
+      const offset = -Math.PI / 2 + ( ( quantity % 2 === 0 ) ? ( -Math.PI / quantity ) : 0 );
+
       return new ShapePartition(
         _.range( 0, quantity ).map( i => Shape.polygon( [
           Vector2.ZERO,
-          Vector2.createPolar( 1, 2 * Math.PI * i / quantity - Math.PI / 2 ),
-          Vector2.createPolar( 1, 2 * Math.PI * ( i + 1 ) / quantity - Math.PI / 2 )
+          Vector2.createPolar( 1, 2 * Math.PI * i / quantity + offset ),
+          Vector2.createPolar( 1, 2 * Math.PI * ( i + 1 ) / quantity + offset )
         ] ) ),
         PartitionType.POLYGON
       );
@@ -258,6 +260,168 @@ define( function( require ) {
           new Vector2( 1, 4 )
         ] )
       ], PartitionType.TETRIS );
+    }
+
+    /**
+     * Creates a flower-like shape composed of (by default) rhombi around a center.
+     * @public
+     *
+     * @param {number} numPetals
+     * @param {boolean} [split] - Whether each petal should be split into two shapes (or left as one)
+     * @param {number} [tipDistance] - How far the petal tips are from the center.
+     * @returns {ShapePartition}
+     */
+    static createFlower( numPetals, split = false, tipDistance = Vector2.createPolar( 1, 2 * Math.PI / numPetals ).plus( Vector2.X_UNIT ).magnitude() ) {
+      assert && assert( numPetals >= 3 && numPetals % 1 === 0 );
+      assert && assert( typeof split === 'boolean' );
+
+      const halfAngle = Math.PI / numPetals;
+      return new ShapePartition( _.flatten( _.range( 0, numPetals ).map( i => {
+        const baseAngle = 2 * Math.PI * i / numPetals - Math.PI / 2;
+        if ( split ) {
+          return [
+            Shape.polygon( [
+              Vector2.ZERO,
+              Vector2.createPolar( tipDistance, baseAngle ),
+              Vector2.createPolar( 1, baseAngle + halfAngle )
+            ] ),
+            Shape.polygon( [
+              Vector2.ZERO,
+              Vector2.createPolar( 1, baseAngle + halfAngle ),
+              Vector2.createPolar( tipDistance, baseAngle + 2 * halfAngle )
+            ] )
+          ];
+        }
+        else {
+          return [ Shape.polygon( [
+            Vector2.ZERO,
+            Vector2.createPolar( 1, baseAngle - halfAngle ),
+            Vector2.createPolar( tipDistance, baseAngle ),
+            Vector2.createPolar( 1, baseAngle + halfAngle )
+          ] ) ];
+        }
+      } ) ), PartitionType.FLOWER );
+    }
+
+    /**
+     * Creates a grouping of plus signs.
+     * @public
+     *
+     * @param {number} quantity
+     * @returns {ShapePartition}
+     */
+    static createPlusSigns( quantity ) {
+      assert && assert( quantity >= 1 && quantity <= 6 );
+
+      const plusShape = Shape.union( [
+        Shape.rect( 0, 1, 3, 1 ),
+        Shape.rect( 1, 0, 1, 3 )
+      ] );
+      return new ShapePartition( [
+        new Vector2( 1, 0 ),
+        new Vector2( 0, 2 ),
+        new Vector2( 3, 1 ),
+        new Vector2( 2, 3 ),
+        new Vector2( 5, 2 ),
+        new Vector2( 4, 4 )
+      ].slice( 0, quantity ).map( offset => {
+        return plusShape.transformed( Matrix3.translation( offset.x, offset.y ) );
+      } ), PartitionType.PLUS_SIGNS );
+    }
+
+    /**
+     * Creates a rectangular grid of shapes.
+     * @public
+     *
+     * @param {number} rows
+     * @param {number} columns
+     * @returns {ShapePartition}
+     */
+    static createGrid( rows, columns ) {
+      assert && assert( rows >= 1 && rows % 1 === 0 );
+      assert && assert( columns >= 1 && columns % 1 === 0 );
+
+      return new ShapePartition( _.flatten( _.range( 0, rows ).map( row => {
+        return _.range( 0, columns ).map( column => {
+          return Shape.rect( column, row, 1, 1 );
+        } );
+      } ) ), PartitionType.GRID );
+    }
+
+    /**
+     * Creates a pyramidal grid of equilateral triangles.
+     * @public
+     *
+     * @param {number} rows
+     * @returns {ShapePartition}
+     */
+    static createPyramid( rows ) {
+      assert && assert( rows >= 1 && rows % 1 === 0 );
+
+      const height = Math.sqrt( 3 ) / 2;
+      const shapes = [];
+
+      const UPPER_LEFT = new Vector2( -0.5, -height );
+      const UPPER_RIGHT = new Vector2( 0.5, -height );
+      const RIGHT = Vector2.X_UNIT;
+
+      for ( let row = 0; row < rows; row++ ) {
+        for ( let column = 0; column <= row; column++ ) {
+          const corner = new Vector2( -row / 2 + column, row * height );
+          if ( column !== 0 ) {
+            shapes.push( Shape.polygon( [
+              corner,
+              corner.plus( UPPER_LEFT ),
+              corner.plus( UPPER_RIGHT )
+            ] ) );
+          }
+          shapes.push( Shape.polygon( [
+            corner,
+            corner.plus( UPPER_RIGHT ),
+            corner.plus( RIGHT )
+          ] ) );
+        }
+      }
+
+      return new ShapePartition( shapes, PartitionType.PYRAMID );
+    }
+
+    /**
+     * Creates a honeycomb-like grid of hexagons
+     * @public
+     *
+     * @param {number} radius
+     * @returns {ShapePartition}
+     */
+    static createHoneycomb( radius ) {
+      assert && assert( radius >= 1 && radius % 1 === 0 );
+
+      const hexShape = Shape.regularPolygon( 6, 1 );
+      const shapes = [];
+      const x = 3 / 2;
+      const y = Math.sqrt( 3 );
+      const directions = [
+        new Vector2( 0, -y ),
+        new Vector2( x, -y / 2 ),
+        new Vector2( x, y / 2 ),
+        new Vector2( 0, y ),
+        new Vector2( -x, y / 2 ),
+        new Vector2( -x, -y / 2 )
+      ];
+
+      for ( let ring = radius; ring >= 1; ring-- ) {
+        for ( let dir = 0; dir < 6; dir++ ) {
+          let coord = directions[ dir ].timesScalar( ring );
+          for ( let i = 0; i < ring; i++ ) {
+            shapes.push( hexShape.transformed( Matrix3.translation( coord.x, coord.y ) ) );
+            coord = coord.plus( directions[ ( dir + 2 ) % 6 ] );
+          }
+        }
+      }
+
+      shapes.push( hexShape );
+
+      return new ShapePartition( shapes, PartitionType.HONEYCOMB );
     }
   }
 
