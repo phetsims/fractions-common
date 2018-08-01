@@ -9,13 +9,20 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Color = require( 'SCENERY/util/Color' );
-  var ColorProfile = require( 'SCENERY_PHET/ColorProfile' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Color = require( 'SCENERY/util/Color' );
+  const ColorProfile = require( 'SCENERY_PHET/ColorProfile' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+
+  // Colors from the Java version
+  const LIGHT_RED = new Color( 233, 69, 69 );
+  const LIGHT_BLUE = new Color( 87, 182, 221 );
+  const LIGHT_GREEN = new Color( 140, 198, 63 );
+  const LIGHT_ORANGE = Color.ORANGE;
+  const LIGHT_PINK = new Color( 255, 112, 213 );
 
   // Initial colors for each profile, by string key. Only profile currently is default (still helpful for making color
   // tweaks with the top-level files)
-  var FractionsCommonColorProfile = new ColorProfile( {
+  const FractionsCommonColorProfile = new ColorProfile( {
     introScreenBackground: { default: Color.WHITE },
     otherScreenBackground: { default: new Color( 235, 251, 251 ) },
 
@@ -23,8 +30,8 @@ define( function( require ) {
     panelBackground: { default: new Color( 230, 230, 230 ) },
     shapePieceStroke: { default: Color.BLACK },
 
-    labCircleFill: { default: new Color( 233, 69, 69 ) },
-    labBarFill: { default: new Color( 87, 182, 221 ) },
+    labCircleFill: { default: LIGHT_RED },
+    labBarFill: { default: LIGHT_BLUE },
     shapeShadow: { default: new Color( 0, 0, 0, 0.5 ) },
 
     shapeStackFill: { default: Color.WHITE },
@@ -51,7 +58,24 @@ define( function( require ) {
     undoButton: { default: Color.YELLOW },
 
     shapePartitionBackground: { default: Color.WHITE },
-    shapePartitionBorder: { default: Color.BLACK }
+    shapePartitionBorder: { default: Color.BLACK },
+
+    shapeGreen: { default: LIGHT_GREEN },
+    shapeBlue: { default: LIGHT_BLUE },
+    shapeRed: { default: LIGHT_RED },
+    shapeOrange: { default: LIGHT_ORANGE },
+    shapePink: { default: LIGHT_PINK },
+
+    level1: { default: LIGHT_RED },
+    level2: { default: LIGHT_BLUE },
+    level3: { default: LIGHT_GREEN },
+    level4: { default: LIGHT_ORANGE },
+    level5: { default: Color.MAGENTA },
+    level6: { default: Color.YELLOW },
+    level7: { default: Color.CYAN },
+    level8: { default: new Color( 146, 54, 173 ) },
+    level9: { default: new Color( 255, 112, 213 ) },
+    level10: { default: new Color( 45, 165, 59 ) }
   }, [ 'default' ] );
 
   fractionsCommon.register( 'FractionsCommonColorProfile', FractionsCommonColorProfile );

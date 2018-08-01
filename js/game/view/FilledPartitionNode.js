@@ -24,7 +24,7 @@ define( function( require ) {
 
       config = _.extend( {
         // {PaintDef} - Fills and strokes
-        primaryFill: null, // required
+        primaryFill: filledPartition.color,
         backgroundFill: FractionsCommonColorProfile.shapePartitionBackgroundProperty,
         interiorStroke: FractionsCommonColorProfile.shapePartitionBorderProperty,
         borderStroke: FractionsCommonColorProfile.shapePartitionBorderProperty,

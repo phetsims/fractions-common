@@ -16,8 +16,9 @@ define( function( require ) {
     /**
      * @param {ShapePartition} shapePartition
      * @param {Array.<boolean>} fills
+     * @param {ColorDef} color
      */
-    constructor( shapePartition, fills ) {
+    constructor( shapePartition, fills, color ) {
       assert && assert( shapePartition instanceof ShapePartition );
       assert && assert( Array.isArray( fills ) );
       assert && assert( fills.length === shapePartition.shapes.length );
@@ -28,6 +29,9 @@ define( function( require ) {
 
       // @public {Array.<boolean>} - Index corresponds to the shapes in shapePartition
       this.fills = fills;
+
+      // @public {ColorDef}
+      this.color = color;
 
       // TODO: compute the fraction for this?
     }

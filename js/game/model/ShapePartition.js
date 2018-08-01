@@ -427,5 +427,48 @@ define( function( require ) {
 
   fractionsCommon.register( 'ShapePartition', ShapePartition );
 
+  const RESCALE_SIZE = 4000;
+  const MAX_PIECES = 10;
+
+  // @public {Array.<ShapePartition>}
+  ShapePartition.PIES = _.range( 1, MAX_PIECES + 1 ).map( quantity => ShapePartition.createPie( quantity ).rescaled( RESCALE_SIZE ) );
+  ShapePartition.POLYGONS = _.range( 3, MAX_PIECES + 1 ).map( quantity => ShapePartition.createPolygon( quantity ).rescaled( RESCALE_SIZE ) );
+  ShapePartition.HORIZONTAL_BARS = _.range( 1, MAX_PIECES + 1 ).map( quantity => ShapePartition.createHorizontalBars( quantity ).rescaled( RESCALE_SIZE ) );
+  ShapePartition.VERTICAL_BARS = _.range( 1, MAX_PIECES + 1 ).map( quantity => ShapePartition.createVerticalBars( quantity ).rescaled( RESCALE_SIZE ) );
+  ShapePartition.INTERLEAVED_LS = [
+    ShapePartition.createInterleavedL( 1, 1 ),
+    ShapePartition.createInterleavedL( 2, 1 ),
+    ShapePartition.createInterleavedL( 2, 3 )
+  ].map( partition => partition.rescaled( RESCALE_SIZE ) );
+  ShapePartition.DIAGONAL_LS = _.range( 1, MAX_PIECES / 2 + 1 ).map( quantity => ShapePartition.createDiagonalL( quantity ).rescaled( RESCALE_SIZE ) );
+  ShapePartition.PLUS_SIGNS = _.range( 1, 7 ).map( quantity => ShapePartition.createPlusSigns( quantity ).rescaled( RESCALE_SIZE ) );
+  ShapePartition.GRIDS = _.range( 2, 4 ).map( quantity => ShapePartition.createGrid( quantity, quantity ).rescaled( RESCALE_SIZE ) );
+  ShapePartition.PYRAMIDS = _.range( 1, 4 ).map( quantity => ShapePartition.createPyramid( quantity ).rescaled( RESCALE_SIZE ) );
+
+  // @public {ShapePartition}
+  ShapePartition.TETRIS = ShapePartition.createTetris().rescaled( RESCALE_SIZE );
+  ShapePartition.NINJA_STAR = ShapePartition.createFlower( 4, true, 1.8381770764635208 ).rescaled( RESCALE_SIZE );
+  ShapePartition.FIVE_POINT = ShapePartition.createFlower( 5, true ).rescaled( RESCALE_SIZE );
+  ShapePartition.SIX_FLOWER = ShapePartition.createFlower( 6 ).rescaled( RESCALE_SIZE );
+  ShapePartition.HEX_RING = ShapePartition.createHoneycomb( 1 ).rescaled( RESCALE_SIZE );
+
+  // @public {Array.<ShapePartition>}
+  ShapePartition.SHAPE_PARTITIONS = [
+    ...ShapePartition.PIES,
+    ...ShapePartition.POLYGONS,
+    ...ShapePartition.HORIZONTAL_BARS,
+    ...ShapePartition.VERTICAL_BARS,
+    ...ShapePartition.INTERLEAVED_LS,
+    ...ShapePartition.DIAGONAL_LS,
+    ...ShapePartition.PLUS_SIGNS,
+    ...ShapePartition.GRIDS,
+    ...ShapePartition.PYRAMIDS,
+    ShapePartition.TETRIS,
+    ShapePartition.NINJA_STAR,
+    ShapePartition.FIVE_POINT,
+    ShapePartition.SIX_FLOWER,
+    ShapePartition.HEX_RING
+  ];
+
   return ShapePartition;
 } );
