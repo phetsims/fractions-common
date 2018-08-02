@@ -5,7 +5,7 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
@@ -36,7 +36,7 @@ define( function( require ) {
       .quadraticCurveTo( ICON_HEIGHT * 1.25, -ICON_HEIGHT * 0.1, ICON_HEIGHT * 2, ICON_HEIGHT * 0.75 )
       .quadraticCurveTo( ICON_HEIGHT * 1.25, -ICON_HEIGHT * 0.5, ICON_HEIGHT * 0.3, ICON_HEIGHT * 0.3 )
       .close();
-    
+
     MutableOptionsNode.call( this, RectangularPushButton, [], _.extend( {
       content: new Path( undoArrowShape, {
         fill: 'black',

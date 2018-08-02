@@ -5,95 +5,85 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var BooleanProperty = require( 'AXON/BooleanProperty' );
-  var Easing = require( 'TWIXT/Easing' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
-  var NumberGroupStack = require( 'FRACTIONS_COMMON/building/model/NumberGroupStack' );
-  var NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
-  var NumberSpotType = require( 'FRACTIONS_COMMON/building/enum/NumberSpotType' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
-  var Property = require( 'AXON/Property' );
-  var Range = require( 'DOT/Range' );
-  var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
-  var ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
-  var ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
-  var ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
-  var ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const Easing = require( 'TWIXT/Easing' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
+  const NumberGroupStack = require( 'FRACTIONS_COMMON/building/model/NumberGroupStack' );
+  const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
+  const NumberSpotType = require( 'FRACTIONS_COMMON/building/enum/NumberSpotType' );
+  const ObservableArray = require( 'AXON/ObservableArray' );
+  const Property = require( 'AXON/Property' );
+  const Range = require( 'DOT/Range' );
+  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  const ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
+  const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
+  const ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
+  const ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
+  const Vector2 = require( 'DOT/Vector2' );
 
-  var scratchVector = new Vector2();
+  const scratchVector = new Vector2();
 
-  /**
-   * @constructor
-   * @extends {Object}
-   */
-  function BuildingModel() {
+  class BuildingModel {
+    constructor() {
 
-    // @public {Array.<ShapeStack>}
-    this.shapeStacks = [];
+      // @public {Array.<ShapeStack>}
+      this.shapeStacks = [];
 
-    // @public {Array.<NumberStack>}
-    this.numberStacks = [];
+      // @public {Array.<NumberStack>}
+      this.numberStacks = [];
 
-    // @public {Array.<ShapeGroupStack>}
-    this.shapeGroupStacks = [
-      new ShapeGroupStack( Representation.CIRCLE ),
-      new ShapeGroupStack( Representation.VERTICAL_BAR )
-    ];
+      // @public {Array.<ShapeGroupStack>}
+      this.shapeGroupStacks = [
+        new ShapeGroupStack( Representation.CIRCLE ),
+        new ShapeGroupStack( Representation.VERTICAL_BAR )
+      ];
 
-    // @public {Array.<NumberGroupStack>}
-    this.numberGroupStacks = [
-      new NumberGroupStack( false ),
-      new NumberGroupStack( true )
-    ];
+      // @public {Array.<NumberGroupStack>}
+      this.numberGroupStacks = [
+        new NumberGroupStack( false ),
+        new NumberGroupStack( true )
+      ];
 
-    // TODO: better encapsulation, so things don't reach in here
+      // TODO: better encapsulation, so things don't reach in here
 
-    // @public {ObservableArray.<ShapeGroup>}
-    this.shapeGroups = new ObservableArray();
+      // @public {ObservableArray.<ShapeGroup>}
+      this.shapeGroups = new ObservableArray();
 
-    // @public {ObservableArray.<ShapePiece>} - Shape pieces in the play area (controlled or animating)
-    this.activeShapePieces = new ObservableArray();
+      // @public {ObservableArray.<ShapePiece>} - Shape pieces in the play area (controlled or animating)
+      this.activeShapePieces = new ObservableArray();
 
-    // @public {ObservableArray.<NumberGroup>}
-    this.numberGroups = new ObservableArray();
+      // @public {ObservableArray.<NumberGroup>}
+      this.numberGroups = new ObservableArray();
 
-    // @public {ObservableArray.<NumberPiece>} - Number pieces in the play area (controlled or animating)
-    this.activeNumberPieces = new ObservableArray();
+      // @public {ObservableArray.<NumberPiece>} - Number pieces in the play area (controlled or animating)
+      this.activeNumberPieces = new ObservableArray();
 
-    // @public {ObservableArray.<NumberPiece>}
-    this.draggedNumberPieces = new ObservableArray();
+      // @public {ObservableArray.<NumberPiece>}
+      this.draggedNumberPieces = new ObservableArray();
 
-    // @public {Property.<Range|null>} - null when there are no active numbers, otherwise a range of all values being dragged.
-    this.activeNumberRangeProperty = new Property( null, {
-      useDeepEquality: true
-    } );
+      // @public {Property.<Range|null>} - null when there are no active numbers, otherwise a range of all values being dragged.
+      this.activeNumberRangeProperty = new Property( null, {
+        useDeepEquality: true
+      } );
 
-    var rangeListener = this.updateDraggedNumberRange.bind( this );
-    this.draggedNumberPieces.addItemAddedListener( rangeListener );
-    this.draggedNumberPieces.addItemRemovedListener( rangeListener );
-    rangeListener();
+      var rangeListener = this.updateDraggedNumberRange.bind( this );
+      this.draggedNumberPieces.addItemAddedListener( rangeListener );
+      this.draggedNumberPieces.addItemRemovedListener( rangeListener );
+      rangeListener();
+    }
 
-    // Shared to set up some initial state
-    this.reset();
-  }
-
-  fractionsCommon.register( 'BuildingModel', BuildingModel );
-
-  return inherit( Object, BuildingModel, {
     // NOTE: Meant to override
-    getShapeControlsVisibleProperty: function( shapeGroup ) {
+    getShapeControlsVisibleProperty( shapeGroup ) {
       return new BooleanProperty( true );
-    },
+    }
 
-    dragNumberPieceFromStack: function( numberPiece, numberStack ) {
+    dragNumberPieceFromStack( numberPiece, numberStack ) {
       this.activeNumberPieces.push( numberPiece );
       this.draggedNumberPieces.push( numberPiece );
 
@@ -101,21 +91,19 @@ define( function( require ) {
       if ( numberStack.numberPieces.contains( numberPiece ) ) {
         numberStack.numberPieces.remove( numberPiece );
       }
-    },
+    }
 
-    findMatchingShapeStack: function( shapePiece ) {
-      return _.find( this.shapeStacks, function( stack ) {
+    findMatchingShapeStack( shapePiece ) {
+      return _.find( this.shapeStacks, stack => {
         return stack.representation === shapePiece.representation && stack.fraction.equals( shapePiece.fraction );
       } ) || null;
-    },
+    }
 
-    findMatchingNumberStack: function( numberPiece ) {
-      return _.find( this.numberStacks, function( stack ) {
-        return stack.number === numberPiece.number;
-      } ) || null;
-    },
+    findMatchingNumberStack( numberPiece ) {
+      return _.find( this.numberStacks, stack => stack.number === numberPiece.number ) || null;
+    }
 
-    returnActiveShapePiece: function( shapePiece ) {
+    returnActiveShapePiece( shapePiece ) {
       var self = this;
 
       var shapeStack = this.findMatchingShapeStack( shapePiece );
@@ -124,12 +112,12 @@ define( function( require ) {
       var shapeMatrix = ShapeStack.getShapeMatrix( shapePiece.fraction, shapePiece.representation, 1 );
       var position = shapeStack.positionProperty.value.plus( shapeMatrix.timesVector2( Vector2.ZERO ).timesScalar( FractionsCommonConstants.SHAPE_BUILD_SCALE ) );
       var speed = 40 / Math.sqrt( position.distance( shapePiece.positionProperty.value ) );
-      shapePiece.animator.animateTo( position, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, 0, shapeStack.positionProperty, Easing.QUADRATIC_IN, speed, function() {
+      shapePiece.animator.animateTo( position, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, 0, shapeStack.positionProperty, Easing.QUADRATIC_IN, speed, () => {
         self.activeShapePieces.remove( shapePiece );
       } );
-    },
+    }
 
-    returnActiveNumberPiece: function( numberPiece ) {
+    returnActiveNumberPiece( numberPiece ) {
       var self = this;
 
       var numberStack = this.findMatchingNumberStack( numberPiece );
@@ -138,12 +126,12 @@ define( function( require ) {
       var offset = NumberStack.getOffset( 1 );
       var position = numberStack.positionProperty.value.plus( offset.timesScalar( FractionsCommonConstants.NUMBER_BUILD_SCALE ) );
       var speed = 40 / Math.sqrt( position.distance( numberPiece.positionProperty.value ) );
-      numberPiece.animator.animateTo( position, 0, 1, 0, numberStack.positionProperty, Easing.QUADRATIC_IN, speed, function() {
+      numberPiece.animator.animateTo( position, 0, 1, 0, numberStack.positionProperty, Easing.QUADRATIC_IN, speed, () => {
         self.activeNumberPieces.remove( numberPiece );
       } );
-    },
+    }
 
-    placeActiveShapePiece: function( shapePiece, shapeContainer, shapeGroup ) {
+    placeActiveShapePiece( shapePiece, shapeContainer, shapeGroup ) {
       var self = this;
 
       var shapeMatrix = ShapeContainer.getShapeMatrix( shapeContainer.getShapeRatio( shapePiece ), shapePiece.fraction, shapePiece.representation );
@@ -151,21 +139,21 @@ define( function( require ) {
       var position = shapeGroup.positionProperty.value.plus( shapeContainer.offset ).plus( shapeMatrix.timesVector2( Vector2.ZERO ) );
       // TODO: also invalidate if our container goes away?
       // NOTE: Handle it if it starts animation and THEN the piece gets moved somewhere else. Instant animate
-      shapePiece.animator.animateTo( position, shapeMatrix.rotation, 1, 0, shapeGroup.positionProperty, Easing.QUADRATIC_IN_OUT, 5, function() {
+      shapePiece.animator.animateTo( position, shapeMatrix.rotation, 1, 0, shapeGroup.positionProperty, Easing.QUADRATIC_IN_OUT, 5, () => {
         self.activeShapePieces.remove( shapePiece );
       } );
-    },
+    }
 
-    closestDroppableShapeContainer: function( shapePiece, threshold ) {
+    closestDroppableShapeContainer( shapePiece, threshold ) {
       var closestContainer = null;
       var closestDistance = threshold;
 
       var point = shapePiece.positionProperty.value;
 
-      this.shapeGroups.forEach( function( shapeGroup ) {
+      this.shapeGroups.forEach( shapeGroup => {
         var localPoint = scratchVector.set( point ).subtract( shapeGroup.positionProperty.value );
 
-        shapeGroup.shapeContainers.forEach( function( shapeContainer ) {
+        shapeGroup.shapeContainers.forEach( shapeContainer => {
           if ( shapeContainer.canFitPiece( shapePiece ) ) {
             var distance = shapeContainer.distanceFromPoint( localPoint );
             if ( distance <= closestDistance ) {
@@ -177,9 +165,9 @@ define( function( require ) {
       } );
 
       return closestContainer;
-    },
+    }
 
-    shapePieceDropped: function( shapePiece, threshold ) {
+    shapePieceDropped( shapePiece, threshold ) {
       var closestContainer = this.closestDroppableShapeContainer( shapePiece, threshold );
 
       if ( closestContainer ) {
@@ -189,18 +177,18 @@ define( function( require ) {
       else {
         this.returnActiveShapePiece( shapePiece );
       }
-    },
+    }
 
-    numberPieceDropped: function( numberPiece, threshold ) {
-      var closestSpot = null; 
+    numberPieceDropped( numberPiece, threshold ) {
+      var closestSpot = null;
       var closestDistance = threshold;
 
       var point = numberPiece.positionProperty.value;
 
-      this.numberGroups.forEach( function( numberGroup ) {
+      this.numberGroups.forEach( numberGroup => {
         var localPoint = scratchVector.set( point ).subtract( numberGroup.positionProperty.value );
 
-        numberGroup.spots.forEach( function( spot ) {
+        numberGroup.spots.forEach( spot => {
           if ( numberGroup.canPlaceNumberInSpot( numberPiece.number, spot ) ) {
             var distance = Math.sqrt( spot.bounds.minimumDistanceToPointSquared( localPoint ) );
             if ( distance <= closestDistance ) {
@@ -221,10 +209,10 @@ define( function( require ) {
       else {
         this.returnActiveNumberPiece( numberPiece );
       }
-    },
+    }
 
     // TODO: doc
-    removeLastPieceFromShapeGroup: function( shapeGroup ) {
+    removeLastPieceFromShapeGroup( shapeGroup ) {
       for ( var i = shapeGroup.shapeContainers.length - 1; i >= 0; i-- ) {
         var shapeContainer = shapeGroup.shapeContainers.get( i );
         if ( shapeContainer.shapePieces.length ) {
@@ -241,9 +229,9 @@ define( function( require ) {
         }
       }
       throw new Error( 'Could not find a piece to remove' );
-    },
+    }
 
-    removeLastPieceFromNumberGroup: function( numberGroup ) {
+    removeLastPieceFromNumberGroup( numberGroup ) {
       for ( var i = 0; i < numberGroup.spots.length; i++ ) {
         var spot = numberGroup.spots[ i ];
         if ( spot.pieceProperty.value !== null ) {
@@ -259,65 +247,57 @@ define( function( require ) {
           return;
         }
       }
-    },
+    }
 
-    addShapeGroup: function( representation ) {
+    addShapeGroup( representation ) {
       var self = this;
 
       var shapeGroup = new ShapeGroup( representation, {
-        returnPieceListener: function() {
+        returnPieceListener() {
           self.removeLastPieceFromShapeGroup( shapeGroup );
         }
       } );
       this.shapeGroups.push( shapeGroup );
 
       return shapeGroup;
-    },
+    }
 
-    addNumberGroup: function( isMixedNumber ) {
+    addNumberGroup( isMixedNumber ) {
       var numberGroup = new NumberGroup( isMixedNumber, {
         activeNumberRangeProperty: this.activeNumberRangeProperty
       } );
       this.numberGroups.push( numberGroup );
 
       return numberGroup;
-    },
+    }
 
-    returnShapeGroup: function( shapeGroup ) {
-      var self = this;
-      
+    returnShapeGroup( shapeGroup ) {
       while ( shapeGroup.hasAnyPieces() ) {
         this.removeLastPieceFromShapeGroup( shapeGroup );
       }
 
-      var positionProperty = _.find( this.shapeGroupStacks, function( shapeGroupStack ) {
-        return shapeGroupStack.representation === shapeGroup.representation;
-      } ).positionProperty;
+      var positionProperty = _.find( this.shapeGroupStacks, shapeGroupStack => shapeGroupStack.representation === shapeGroup.representation ).positionProperty;
       var speed = 40 / Math.sqrt( positionProperty.value.distance( shapeGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
-      shapeGroup.animator.animateTo( positionProperty.value, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, 0, positionProperty, Easing.QUADRATIC_IN, speed, function() {
-        self.shapeGroups.remove( shapeGroup );
+      shapeGroup.animator.animateTo( positionProperty.value, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, 0, positionProperty, Easing.QUADRATIC_IN, speed, () => {
+        this.shapeGroups.remove( shapeGroup );
       } );
-    },
+    }
 
-    returnNumberGroup: function( numberGroup ) {
-      var self = this;
-
+    returnNumberGroup( numberGroup ) {
       while ( numberGroup.hasAnyPieces() ) {
         this.removeLastPieceFromNumberGroup( numberGroup );
       }
 
-      var positionProperty = _.find( this.numberGroupStacks, function( numberGroupStack ) {
-        return numberGroupStack.isMixedNumber === numberGroup.isMixedNumber;
-      } ).positionProperty;
+      var positionProperty = _.find( this.numberGroupStacks, numberGroupStack => numberGroupStack.isMixedNumber === numberGroup.isMixedNumber ).positionProperty;
       var speed = 40 / Math.sqrt( positionProperty.value.distance( numberGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
-      numberGroup.animator.animateTo( positionProperty.value, 0, FractionsCommonConstants.NUMBER_BUILD_SCALE, 0, positionProperty, Easing.QUADRATIC_IN, speed, function() {
+      numberGroup.animator.animateTo( positionProperty.value, 0, FractionsCommonConstants.NUMBER_BUILD_SCALE, 0, positionProperty, Easing.QUADRATIC_IN, speed, () => {
         // TODO: More methods for adding/removing to make things un-missable
-        self.numberGroups.remove( numberGroup );
+        this.numberGroups.remove( numberGroup );
         numberGroup.dispose();
       } );
-    },
+    }
 
-    updateDraggedNumberRange: function() {
+    updateDraggedNumberRange() {
       if ( this.draggedNumberPieces.length === 0 ) {
         this.activeNumberRangeProperty.value = null;
       }
@@ -325,22 +305,22 @@ define( function( require ) {
         var min = Number.POSITIVE_INFINITY;
         var max = Number.NEGATIVE_INFINITY;
 
-        this.draggedNumberPieces.forEach( function( numberPiece ) {
+        this.draggedNumberPieces.forEach( numberPiece => {
           min = Math.min( min, numberPiece.number );
           max = Math.max( max, numberPiece.number );
         } );
 
         this.activeNumberRangeProperty.value = new Range( min, max );
       }
-    },
+    }
 
-    reset: function() {
-      this.shapeGroups.forEach( function( shapeGroup ) {
+    reset() {
+      this.shapeGroups.forEach( shapeGroup => {
         shapeGroup.animator.endAnimation();
       } );
       this.shapeGroups.reset();
 
-      this.numberGroups.forEach( function( numberGroup ) {
+      this.numberGroups.forEach( numberGroup => {
         numberGroup.animator.endAnimation();
         if ( !numberGroup.disposed ) {
           numberGroup.dispose();
@@ -348,31 +328,31 @@ define( function( require ) {
       } );
       this.numberGroups.reset();
 
-      this.activeShapePieces.forEach( function( shapePiece ) {
+      this.activeShapePieces.forEach( shapePiece => {
         shapePiece.animator.endAnimation();
       } );
       this.activeShapePieces.reset();
 
-      this.activeNumberPieces.forEach( function( shapePiece ) {
+      this.activeNumberPieces.forEach( shapePiece => {
         shapePiece.animator.endAnimation();
       } );
       this.activeNumberPieces.reset();
       this.draggedNumberPieces.reset();
-    },
+    }
 
-    step: function( dt ) {
+    step( dt ) {
       var self = this;
 
       // TODO: minimize garbage
-      this.shapeGroups.forEach( function( shapeGroup ) {
+      this.shapeGroups.forEach( shapeGroup => {
         shapeGroup.step( dt );
       } );
 
-      this.numberGroups.forEach( function( numberGroup ) {
+      this.numberGroups.forEach( numberGroup => {
         numberGroup.step( dt );
       } );
 
-      this.activeShapePieces.forEach( function( shapePiece ) {
+      this.activeShapePieces.forEach( shapePiece => {
         shapePiece.step( dt );
 
         // Don't compute the closest for ALL pieces, that would hurt performance.
@@ -384,9 +364,11 @@ define( function( require ) {
         }
       } );
 
-      this.activeNumberPieces.forEach( function( numberPiece ) {
+      this.activeNumberPieces.forEach( numberPiece => {
         numberPiece.step( dt );
       } );
     }
-  } );
+  }
+
+  return fractionsCommon.register( 'BuildingModel', BuildingModel );
 } );

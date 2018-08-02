@@ -5,89 +5,80 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var BuildingModel = require( 'FRACTIONS_COMMON/building/model/BuildingModel' );
-  var DerivedProperty = require( 'AXON/DerivedProperty' );
-  var Fraction = require( 'PHETCOMMON/model/Fraction' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
-  var NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
-  var NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
-  var Property = require( 'AXON/Property' );
-  var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
-  var ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
-  var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
-  var ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const BuildingModel = require( 'FRACTIONS_COMMON/building/model/BuildingModel' );
+  const DerivedProperty = require( 'AXON/DerivedProperty' );
+  const Fraction = require( 'PHETCOMMON/model/Fraction' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
+  const NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
+  const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
+  const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
+  const Property = require( 'AXON/Property' );
+  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
+  const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
+  const ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
+  const Vector2 = require( 'DOT/Vector2' );
 
-  /**
-   * @constructor
-   * @extends {BuildingModel}
-   *
-   * @param {boolean} allowMixedNumbers
-   */
-  function BuildingLabModel( allowMixedNumbers ) {
-    var self = this;
+  class BuildingLabModel extends BuildingModel {
+    /**
+     * @param {boolean} allowMixedNumbers
+     */
+    constructor( allowMixedNumbers ) {
+      super();
 
-    // @public {boolean}
-    this.allowMixedNumbers = allowMixedNumbers;
+      // @public {boolean}
+      this.allowMixedNumbers = allowMixedNumbers;
 
-    // @public {Property.<Representation>}
-    this.topRepresentationProperty = new Property( Representation.CIRCLE );
+      // @public {Property.<Representation>}
+      this.topRepresentationProperty = new Property( Representation.CIRCLE );
 
-    // @public {Property.<ShapeGroup|NumberGroup|null>} - We'll only show controls for this shape group
-    this.selectedGroupProperty = new Property( null );
+      // @public {Property.<ShapeGroup|NumberGroup|null>} - We'll only show controls for this shape group
+      this.selectedGroupProperty = new Property( null );
 
-    BuildingModel.call( this );
-
-    // Shape stacks
-    function addShapeStacks( representation, colorProperty ) {
-      return _.range( 1, 9 ).map( function( denominator ) {
-        var stack = new ShapeStack( new Fraction( 1, denominator ), representation, colorProperty );
-        stack.shapePieces.push( new ShapePiece( new Fraction( 1, denominator ), representation, colorProperty ) );
-        stack.shapePieces.push( new ShapePiece( new Fraction( 1, denominator ), representation, colorProperty ) );
-        self.shapeStacks.push( stack );
+      // Shape stacks
+      [
+        { representation: Representation.CIRCLE, color: FractionsCommonColorProfile.labCircleFillProperty },
+        { representation: Representation.VERTICAL_BAR, color: FractionsCommonColorProfile.labBarFillProperty }
+      ].forEach( ( { representation, color } ) => {
+        _.range( 1, 9 ).forEach( denominator => {
+          var stack = new ShapeStack( new Fraction( 1, denominator ), representation, color );
+          stack.shapePieces.push( new ShapePiece( new Fraction( 1, denominator ), representation, color ) );
+          stack.shapePieces.push( new ShapePiece( new Fraction( 1, denominator ), representation, color ) );
+          this.shapeStacks.push( stack );
+        } );
       } );
+
+      // Number stacks
+      _.range( 1, 9 ).map( number => {
+        var stack = new NumberStack( number );
+        stack.numberPieces.push( new NumberPiece( number ) );
+        stack.numberPieces.push( new NumberPiece( number ) );
+        this.numberStacks.push( stack );
+      } );
+
+      // Add initial stacks
+      this.shapeGroupStacks.forEach( shapeGroupStack => {
+        shapeGroupStack.shapeGroups.push( new ShapeGroup( shapeGroupStack.representation ) );
+      } );
+      this.numberGroupStacks.forEach( numberGroupStack => {
+        numberGroupStack.numberGroups.push( new NumberGroup( numberGroupStack.isMixedNumber ) );
+      } );
+
+      // Shared to set up some initial state
+      this.reset();
     }
-    addShapeStacks( Representation.CIRCLE, FractionsCommonColorProfile.labCircleFillProperty );
-    addShapeStacks( Representation.VERTICAL_BAR, FractionsCommonColorProfile.labBarFillProperty );
 
-    // Number stacks
-    _.range( 1, 9 ).map( function( number ) {
-      var stack = new NumberStack( number );
-      stack.numberPieces.push( new NumberPiece( number ) );
-      stack.numberPieces.push( new NumberPiece( number ) );
-      self.numberStacks.push( stack );
-    } );
-
-    // Add initial stacks
-    this.shapeGroupStacks.forEach( function( shapeGroupStack ) {
-      shapeGroupStack.shapeGroups.push( new ShapeGroup( shapeGroupStack.representation ) );
-    } );
-    this.numberGroupStacks.forEach( function( numberGroupStack ) {
-      numberGroupStack.numberGroups.push( new NumberGroup( numberGroupStack.isMixedNumber ) );
-    } );
-
-    // Shared to set up some initial state
-    this.reset();
-  }
-
-  fractionsCommon.register( 'BuildingLabModel', BuildingLabModel );
-
-  return inherit( BuildingModel, BuildingLabModel, {
     // NOTE: Meant to override
-    getShapeControlsVisibleProperty: function( shapeGroup ) {
-      return new DerivedProperty( [ this.selectedGroupProperty ], function( selectedGroup ) {
-        return selectedGroup === shapeGroup;
-      } );
-    },
+    getShapeControlsVisibleProperty( shapeGroup ) {
+      return new DerivedProperty( [ this.selectedGroupProperty ], selectedGroup => selectedGroup === shapeGroup );
+    }
 
-    reset: function() {
+    reset() {
       this.topRepresentationProperty.reset();
 
       BuildingModel.prototype.reset.call( this );
@@ -100,5 +91,7 @@ define( function( require ) {
       var numberGroup = this.addNumberGroup( false );
       numberGroup.positionProperty.value = new Vector2( -170, 0 );
     }
-  } );
+  }
+
+  return fractionsCommon.register( 'BuildingLabModel', BuildingLabModel );
 } );

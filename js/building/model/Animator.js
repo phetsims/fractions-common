@@ -5,80 +5,74 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Util = require( 'DOT/Util' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Util = require( 'DOT/Util' );
 
-  /**
-   * @constructor
-   * @extends {Object}
-   *
-   * @param {Property.<Vector2>} positionProperty
-   * @param {Property.<number>} rotationProperty
-   * @param {Property.<number>} scaleProperty
-   * @param {Property.<number>} shadowProperty
-   * @param {Property.<boolean>} isAnimatingProperty
-   */
-  function Animator( positionProperty, rotationProperty, scaleProperty, shadowProperty, isAnimatingProperty ) {
-    // @public {Property.<Vector2>}
-    this.positionProperty = positionProperty;
+  class Animator {
+    /**
+     * @param {Property.<Vector2>} positionProperty
+     * @param {Property.<number>} rotationProperty
+     * @param {Property.<number>} scaleProperty
+     * @param {Property.<number>} shadowProperty
+     * @param {Property.<boolean>} isAnimatingProperty
+     */
+    constructor( positionProperty, rotationProperty, scaleProperty, shadowProperty, isAnimatingProperty ) {
+      // @public {Property.<Vector2>}
+      this.positionProperty = positionProperty;
 
-    // @public {Property.<number>}
-    this.rotationProperty = rotationProperty;
+      // @public {Property.<number>}
+      this.rotationProperty = rotationProperty;
 
-    // @public {Property.<number>}
-    this.scaleProperty = scaleProperty;
+      // @public {Property.<number>}
+      this.scaleProperty = scaleProperty;
 
-    // @public {Property.<number>}
-    this.shadowProperty = shadowProperty;
+      // @public {Property.<number>}
+      this.shadowProperty = shadowProperty;
 
-    // @public {Property.<boolean>}
-    this.isAnimatingProperty = isAnimatingProperty;
+      // @public {Property.<boolean>}
+      this.isAnimatingProperty = isAnimatingProperty;
 
-    // @function {Property.<Vector2>|null}
-    this.animationInvalidationProperty = null;
+      // @function {Property.<Vector2>|null}
+      this.animationInvalidationProperty = null;
 
-    // @private {function}
-    this.endAnimationListener = this.endAnimation.bind( this );
+      // @private {function}
+      this.endAnimationListener = this.endAnimation.bind( this );
 
-    // @private {number} - Ratio of the animation
-    this.ratio = 0;
+      // @private {number} - Ratio of the animation
+      this.ratio = 0;
 
-    // @private {number}
-    this.animationSpeed = 0;
+      // @private {number}
+      this.animationSpeed = 0;
 
-    // @private {Vector2|null}
-    this.originPosition = null;
-    this.destinationPosition = null;
+      // @private {Vector2|null}
+      this.originPosition = null;
+      this.destinationPosition = null;
 
-    // @private {number|null}
-    this.originRotation = null;
-    this.destinationRotation = null;
+      // @private {number|null}
+      this.originRotation = null;
+      this.destinationRotation = null;
 
-    // @private {number|null}
-    this.originScale = null;
-    this.destinationScale = null;
+      // @private {number|null}
+      this.originScale = null;
+      this.destinationScale = null;
 
-    // @private {number|null}
-    this.originShadow = null;
-    this.destinationShadow = null;
+      // @private {number|null}
+      this.originShadow = null;
+      this.destinationShadow = null;
 
-    // @private {function|null}
-    this.endAnimationCallback = null;
+      // @private {function|null}
+      this.endAnimationCallback = null;
 
-    // @private {Easing|null}
-    this.easing = null;
-  }
+      // @private {Easing|null}
+      this.easing = null;
+    }
 
-  fractionsCommon.register( 'Animator', Animator );
-
-  return inherit( Object, Animator, {
     // TODO: Options objects, since we do have some "unused" options that could have defaults?
-    animateTo: function( endPosition, endRotation, endScale, endShadow, animationInvalidationProperty, easing, animationSpeed, endAnimationCallback ) {
+    animateTo( endPosition, endRotation, endScale, endShadow, animationInvalidationProperty, easing, animationSpeed, endAnimationCallback ) {
       // TODO: Make it non-pickable so we can't regrab
 
 
@@ -104,9 +98,9 @@ define( function( require ) {
       this.easing = easing;
       this.animationSpeed = animationSpeed;
       this.endAnimationCallback = endAnimationCallback;
-    },
+    }
 
-    endAnimation: function() {
+    endAnimation() {
       if ( this.isAnimatingProperty.value ) {
         this.positionProperty.value = this.destinationPosition;
         this.rotationProperty.value = this.destinationRotation;
@@ -116,9 +110,9 @@ define( function( require ) {
         this.animationInvalidationProperty.unlink( this.endAnimationListener );
         this.endAnimationCallback();
       }
-    },
+    }
 
-    step: function( dt ) {
+    step( dt ) {
       if ( this.isAnimatingProperty.value ) {
         this.ratio = Math.min( 1, this.ratio + dt * this.animationSpeed );
         if ( this.ratio === 1 ) {
@@ -133,23 +127,23 @@ define( function( require ) {
           this.shadowProperty.value = this.originShadow * ( 1 - easedRatio ) + this.destinationShadow * easedRatio;
         }
       }
-    },
+    }
 
-    orientTowardsContainer: function( closestContainer, dt ) {
+    orientTowardsContainer( closestContainer, dt ) {
       this.targetRotationProperty.value = -2 * Math.PI * closestContainer.totalFractionProperty.value.getValue();
 
       this.dampedHarmonicTimeElapsed += dt;
       this.rotationProperty.value = this.trueTargetRotation + this.dampedHarmonic.getValue( this.dampedHarmonicTimeElapsed );
       this.angularVelocityProperty.value = this.dampedHarmonic.getDerivative( this.dampedHarmonicTimeElapsed );
     }
-  }, {
-    modifiedEndAngle: function( startAngle, endAngle ) {
+
+    static modifiedEndAngle( startAngle, endAngle ) {
       var modifiedEndAngle = Util.moduloBetweenDown( endAngle, startAngle, startAngle + 2 * Math.PI );
       if ( modifiedEndAngle > startAngle + Math.PI ) {
         modifiedEndAngle -= 2 * Math.PI;
       }
       return modifiedEndAngle;
-    },
+    }
 
     /**
      * Circular linear interpolation (like slerp, but on a plane).
@@ -163,8 +157,10 @@ define( function( require ) {
      * @param {number} ratio
      * @return {number}
      */
-    clerp: function( startAngle, endAngle, ratio ) {
+    static clerp( startAngle, endAngle, ratio ) {
       return startAngle * ( 1 - ratio ) + Animator.modifiedEndAngle( startAngle, endAngle ) * ratio;
     }
-  } );
+  }
+
+  return fractionsCommon.register( 'Animator', Animator );
 } );

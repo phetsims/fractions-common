@@ -5,46 +5,39 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Matrix3 = require( 'DOT/Matrix3' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
-  var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
-  var ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
-  var Stack = require( 'FRACTIONS_COMMON/building/model/Stack' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Matrix3 = require( 'DOT/Matrix3' );
+  const ObservableArray = require( 'AXON/ObservableArray' );
+  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  const ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
+  const Stack = require( 'FRACTIONS_COMMON/building/model/Stack' );
 
-  /**
-   * @constructor
-   * @extends {Stack}
-   *
-   * @param {Fraction} fraction
-   * @param {Representation} representation
-   * @param {Property.<Color>} colorProperty
-   */
-  function ShapeStack( fraction, representation, colorProperty ) {
+  class ShapeStack extends Stack {
+    /**
+     * @param {Fraction} fraction
+     * @param {Representation} representation
+     * @param {Property.<Color>} colorProperty
+     */
+    constructor( fraction, representation, colorProperty ) {
+      super();
 
-    Stack.call( this );
+      // @public {Fraction}
+      this.fraction = fraction;
 
-    // @public {Fraction}
-    this.fraction = fraction;
-    
-    // @public {Representation}
-    this.representation = representation;
-    
-    // @public {Property.<Color>}
-    this.colorProperty = colorProperty;
-    
-    // @public {ObservableArray.<ShapePiece>} - NOTE: These should only ever be popped/pushed.
-    this.shapePieces = new ObservableArray();
-  }
+      // @public {Representation}
+      this.representation = representation;
 
-  fractionsCommon.register( 'ShapeStack', ShapeStack );
+      // @public {Property.<Color>}
+      this.colorProperty = colorProperty;
 
-  return inherit( Stack, ShapeStack, {}, {
+      // @public {ObservableArray.<ShapePiece>} - NOTE: These should only ever be popped/pushed.
+      this.shapePieces = new ObservableArray();
+    }
+
     /**
      * Returns the matrix transform (locally) for how to position a piece with the given properties.
      * @public
@@ -54,8 +47,10 @@ define( function( require ) {
      * @param {number} index
      * @returns {Matrix3}
      */
-    getShapeMatrix: function( fraction, representation, index ) {
+    static getShapeMatrix( fraction, representation, index ) {
       return Matrix3.translation( ( representation === Representation.CIRCLE ? 1 : -1 ) * 4 * index, -4 * index ).timesMatrix( ShapeContainer.getShapeMatrix( 0, fraction, representation ) );
     }
-  } );
+  }
+
+  return fractionsCommon.register( 'ShapeStack', ShapeStack );
 } );

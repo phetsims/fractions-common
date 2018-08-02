@@ -5,28 +5,23 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Property = require( 'AXON/Property' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Property = require( 'AXON/Property' );
+  const Vector2 = require( 'DOT/Vector2' );
 
-  /**
-   * @constructor
-   * @extends {Object}
-   */
-  function Stack() {
+  class Stack {
+    constructor() {
 
-    // @public {Property.<Vector2>} - Position of our stack in model units (updated from the view)
-    this.positionProperty = new Property( Vector2.ZERO );
+      // @public {Property.<Vector2>} - Position of our stack in model units (updated from the view)
+      this.positionProperty = new Property( Vector2.ZERO );
 
-    // TODO: abstract out the observable array if needed/desired?
+      // TODO: abstract out the observable array if needed/desired?
+    }
   }
 
-  fractionsCommon.register( 'Stack', Stack );
-
-  return inherit( Object, Stack );
+  return fractionsCommon.register( 'Stack', Stack );
 } );

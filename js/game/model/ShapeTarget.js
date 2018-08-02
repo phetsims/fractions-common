@@ -5,32 +5,25 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Target = require( 'FRACTIONS_COMMON/game/model/Target' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Target = require( 'FRACTIONS_COMMON/game/model/Target' );
 
-  /**
-   * @constructor
-   * @extends {Target}
-   *
-   * @param {Fraction} fraction
-   * @param {Property.<Color>} colorProperty
-   */
-  function ShapeTarget( fraction, colorProperty ) {
+  class ShapeTarget extends Target {
+    /**
+     * @param {Fraction} fraction
+     * @param {ColorDef} color
+     */
+    constructor( fraction, color ) {
+      super( fraction );
 
-    // TODO: add things
-
-    Target.call( this, fraction );
-
-    // @public {Property.<Color>}
-    this.colorProperty = colorProperty;
+      // @public {ColorDef}
+      this.color = color;
+    }
   }
 
-  fractionsCommon.register( 'ShapeTarget', ShapeTarget );
-
-  return inherit( Target, ShapeTarget );
+  return fractionsCommon.register( 'ShapeTarget', ShapeTarget );
 } );

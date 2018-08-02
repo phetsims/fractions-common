@@ -5,7 +5,7 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
@@ -203,7 +203,7 @@ define( function( require ) {
       }
     },
 
-    /** 
+    /**
      * Releases references.
      * @public
      */

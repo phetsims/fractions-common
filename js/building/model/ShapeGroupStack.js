@@ -1,43 +1,43 @@
 // Copyright 2017, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * A stack of ShapeGroups of a particular representation.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
-  var Stack = require( 'FRACTIONS_COMMON/building/model/Stack' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const ObservableArray = require( 'AXON/ObservableArray' );
+  const Stack = require( 'FRACTIONS_COMMON/building/model/Stack' );
+  const Vector2 = require( 'DOT/Vector2' );
 
-  /**
-   * @constructor
-   * @extends {Stack}
-   *
-   * @param {Representation} representation
-   */
-  function ShapeGroupStack( representation ) {
+  class ShapeGroupStack extends Stack {
+    /**
+     * @param {Representation} representation
+     */
+    constructor( representation ) {
+      super();
 
-    Stack.call( this );
+      // @public {Representation}
+      this.representation = representation;
 
-    // @public {Representation}
-    this.representation = representation;
-    
-    // @public {ObservableArray.<ShapeGroup>} - NOTE: These should only ever be popped/pushed.
-    this.shapeGroups = new ObservableArray();
-  }
+      // @public {ObservableArray.<ShapeGroup>} - NOTE: These should only ever be popped/pushed.
+      this.shapeGroups = new ObservableArray();
+    }
 
-  fractionsCommon.register( 'ShapeGroupStack', ShapeGroupStack );
-
-  return inherit( Stack, ShapeGroupStack, {}, {
-    // TODO: doc
-    getOffset: function( index ) {
+    /**
+     * Returns the desired visual offset of an item in the stack from the base.
+     *
+     * @param {number} index
+     * @returns {Vector2}
+     */
+    static getOffset( index ) {
       return new Vector2( -4 * index, 4 * index );
     }
-  } );
+  }
+
+  return fractionsCommon.register( 'ShapeGroupStack', ShapeGroupStack );
 } );

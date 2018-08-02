@@ -6,7 +6,7 @@
  * @author Vincent Davis (Berea College)
  */
 
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules

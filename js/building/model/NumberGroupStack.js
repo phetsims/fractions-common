@@ -1,37 +1,32 @@
 // Copyright 2017, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * A stack of number groups (either mixed or non-mixed)
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
-  var Stack = require( 'FRACTIONS_COMMON/building/model/Stack' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const ObservableArray = require( 'AXON/ObservableArray' );
+  const Stack = require( 'FRACTIONS_COMMON/building/model/Stack' );
 
-  /**
-   * @constructor
-   * @extends {Stack}
-   *
-   * @param {boolean} isMixedNumber
-   */
-  function NumberGroupStack( isMixedNumber ) {
+  class NumberGroupStack extends Stack {
+    /**
+     * @param {boolean} isMixedNumber
+     */
+    constructor( isMixedNumber ) {
+      super();
 
-    Stack.call( this );
+      // @public {boolean}
+      this.isMixedNumber = isMixedNumber;
 
-    // @public {boolean}
-    this.isMixedNumber = isMixedNumber;
-    
-    // @public {ObservableArray.<NumberGroup>} - NOTE: These should only ever be popped/pushed.
-    this.numberGroups = new ObservableArray();
+      // @public {ObservableArray.<NumberGroup>} - NOTE: These should only ever be popped/pushed.
+      this.numberGroups = new ObservableArray();
+    }
   }
 
-  fractionsCommon.register( 'NumberGroupStack', NumberGroupStack );
-
-  return inherit( Stack, NumberGroupStack );
+  return fractionsCommon.register( 'NumberGroupStack', NumberGroupStack );
 } );

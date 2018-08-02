@@ -5,39 +5,34 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
-  var Stack = require( 'FRACTIONS_COMMON/building/model/Stack' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const ObservableArray = require( 'AXON/ObservableArray' );
+  const Stack = require( 'FRACTIONS_COMMON/building/model/Stack' );
+  const Vector2 = require( 'DOT/Vector2' );
 
-  /**
-   * @constructor
-   * @extends {Stack}
-   *
-   * @param {number} number
-   */
-  function NumberStack( number ) {
+  class NumberStack extends Stack {
+    /**
+     * @param {number} number
+     */
+    constructor( number ) {
+      super();
 
-    Stack.call( this );
+      // @public {number}
+      this.number = number;
 
-    // @public {number}
-    this.number = number;
-    
-    // @public {ObservableArray.<NumberPiece>} - NOTE: These should only ever be popped/pushed.
-    this.numberPieces = new ObservableArray();
-  }
+      // @public {ObservableArray.<NumberPiece>} - NOTE: These should only ever be popped/pushed.
+      this.numberPieces = new ObservableArray();
+    }
 
-  fractionsCommon.register( 'NumberStack', NumberStack );
-
-  return inherit( Stack, NumberStack, {}, {
     // TODO: doc
-    getOffset: function( index ) {
+    static getOffset( index ) {
       return new Vector2( 4 * index, 4 * index );
     }
-  } );
+  }
+
+  return fractionsCommon.register( 'NumberStack', NumberStack );
 } );

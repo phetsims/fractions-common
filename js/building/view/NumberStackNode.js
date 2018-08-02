@@ -5,7 +5,7 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
@@ -36,7 +36,7 @@ define( function( require ) {
     // NOTE: Stacks and their nodes should be persistent, no need to unlink
     numberStack.numberPieces.addItemAddedListener( this.addNumberPiece.bind( this ) );
     numberStack.numberPieces.addItemRemovedListener( this.removeNumberPiece.bind( this ) );
-    numberStack.numberPieces.forEach( this.addNumberPiece.bind( this ) );    
+    numberStack.numberPieces.forEach( this.addNumberPiece.bind( this ) );
 
     this.mutate( options );
   }

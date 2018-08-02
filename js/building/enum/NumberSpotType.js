@@ -5,13 +5,13 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
-  var NumberSpotType = {
+  const NumberSpotType = {
     WHOLE: 'WHOLE',
     NUMERATOR: 'NUMERATOR',
     DENOMINATOR: 'DENOMINATOR'

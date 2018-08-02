@@ -5,10 +5,11 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
+  const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const ShapePartition = require( 'FRACTIONS_COMMON/game/model/ShapePartition' );
 
@@ -33,7 +34,8 @@ define( function( require ) {
       // @public {ColorDef}
       this.color = color;
 
-      // TODO: compute the fraction for this?
+      // @public {Fraction} - The computed fraction for the value of this filled partition
+      this.fraction = new Fraction( fills.filter( _.identity ).length, fills.length ).reduce();
     }
   }
 

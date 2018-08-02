@@ -5,75 +5,67 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var Fraction = require( 'PHETCOMMON/model/Fraction' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Matrix3 = require( 'DOT/Matrix3' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
-  var Property = require( 'AXON/Property' );
-  var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
-  var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
-  var Util = require( 'DOT/Util' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const Fraction = require( 'PHETCOMMON/model/Fraction' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const Matrix3 = require( 'DOT/Matrix3' );
+  const ObservableArray = require( 'AXON/ObservableArray' );
+  const Property = require( 'AXON/Property' );
+  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
+  const Util = require( 'DOT/Util' );
+  const Vector2 = require( 'DOT/Vector2' );
 
-  var scratchVector = new Vector2();
+  const scratchVector = new Vector2();
 
-  /**
-   * @constructor
-   * @extends {Object}
-   *
-   * @param {ShapeGroup} shapeGroup -- Should we just pass this through in general? Or get rid of the reference and
-   *                                   simplify our "find the container" logic? Or provide as null? TODO
-   * @param {Property.<number>} partitionDenominatorProperty
-   * @param {Representation} representation
-   * @param {Emitter} changedEmitter
-   * @param {Vector2} offset - Offset from the ShapeGroup's origin
-   */
-  function ShapeContainer( shapeGroup, partitionDenominatorProperty, representation, changedEmitter, offset ) {
+  class ShapeContainer {
+    /**
+     * @param {ShapeGroup} shapeGroup -- Should we just pass this through in general? Or get rid of the reference and
+     *                                   simplify our "find the container" logic? Or provide as null? TODO
+     * @param {Property.<number>} partitionDenominatorProperty
+     * @param {Representation} representation
+     * @param {Emitter} changedEmitter
+     * @param {Vector2} offset - Offset from the ShapeGroup's origin
+     */
+    constructor( shapeGroup, partitionDenominatorProperty, representation, changedEmitter, offset ) {
 
-    var self = this;
+      // @public {ShapeGroup} shapeGroup
+      this.shapeGroup = shapeGroup;
 
-    // @public {ShapeGroup} shapeGroup
-    this.shapeGroup = shapeGroup;
+      // @public {Property.<number>}
+      this.partitionDenominatorProperty = partitionDenominatorProperty;
 
-    // @public {Property.<number>}
-    this.partitionDenominatorProperty = partitionDenominatorProperty;
+      // @public {Representation}
+      this.representation = representation;
 
-    // @public {Representation}
-    this.representation = representation;
+      // @public {Emitter}
+      this.changedEmitter = changedEmitter;
 
-    // @public {Emitter}
-    this.changedEmitter = changedEmitter;
+      // @public {Vector2}
+      this.offset = offset;
 
-    // @public {Vector2}
-    this.offset = offset;
+      // @public {ObservableArray.<ShapePiece>}
+      this.shapePieces = new ObservableArray();
 
-    // @public {ObservableArray.<ShapePiece>}
-    this.shapePieces = new ObservableArray();
+      // @public {Property.<Fraction>}
+      this.totalFractionProperty = new Property( new Fraction( 0, 1 ) );
 
-    // @public {Property.<Fraction>}
-    this.totalFractionProperty = new Property( new Fraction( 0, 1 ) );
+      // Keep totalFractionProperty up-to-date
+      this.shapePieces.addItemAddedListener( shapePiece => {
+        this.totalFractionProperty.value = this.totalFractionProperty.value.plus( shapePiece.fraction ).reduced();
+      } );
+      this.shapePieces.addItemRemovedListener( shapePiece => {
+        this.totalFractionProperty.value = this.totalFractionProperty.value.minus( shapePiece.fraction ).reduced();
+      } );
 
-    // Keep totalFractionProperty up-to-date
-    this.shapePieces.addItemAddedListener( function( shapePiece ) {
-      self.totalFractionProperty.value = self.totalFractionProperty.value.plus( shapePiece.fraction ).reduced();
-    } );
-    this.shapePieces.addItemRemovedListener( function( shapePiece ) {
-      self.totalFractionProperty.value = self.totalFractionProperty.value.minus( shapePiece.fraction ).reduced();
-    } );
+      this.shapePieces.addItemAddedListener( changedEmitter.emit.bind( changedEmitter ) );
+      this.shapePieces.addItemRemovedListener( changedEmitter.emit.bind( changedEmitter ) );
+    }
 
-    this.shapePieces.addItemAddedListener( changedEmitter.emit.bind( changedEmitter ) );
-    this.shapePieces.addItemRemovedListener( changedEmitter.emit.bind( changedEmitter ) );
-  }
-
-  fractionsCommon.register( 'ShapeContainer', ShapeContainer );
-
-  return inherit( Object, ShapeContainer, {
     /**
      * Returns whether the ShapePiece can be placed into this container.
      * @public
@@ -81,14 +73,14 @@ define( function( require ) {
      * @param {ShapePiece} shapePiece
      * @returns {boolean}
      */
-    canFitPiece: function( shapePiece ) {
+    canFitPiece( shapePiece ) {
       if ( shapePiece.representation !== this.representation ) {
         return false;
       }
 
-      var potentialTotalFraction = this.totalFractionProperty.value.plus( shapePiece.fraction ).reduce();
+      const potentialTotalFraction = this.totalFractionProperty.value.plus( shapePiece.fraction ).reduce();
       return potentialTotalFraction.isLessThan( Fraction.ONE ) || potentialTotalFraction.equals( Fraction.ONE );
-    },
+    }
 
     /**
      * Returns the distance of a point from this container.
@@ -97,9 +89,9 @@ define( function( require ) {
      * @param {Vector2} point
      * @returns {number}
      */
-    distanceFromPoint: function( point ) {
+    distanceFromPoint( point ) {
       // Subtract off our local offset
-      var localPoint = scratchVector.set( point ).subtract( this.offset );
+      const localPoint = scratchVector.set( point ).subtract( this.offset );
 
       if ( this.representation === Representation.CIRCLE ) {
         return Math.max( 0, localPoint.magnitude() - FractionsCommonConstants.SHAPE_SIZE / 2 );
@@ -110,7 +102,7 @@ define( function( require ) {
       else {
         throw new Error( 'Unsupported representation for ShapeContainer: ' + this.representation );
       }
-    },
+    }
 
     /**
      * Returns the value (from 0 to 1) of where this piece's "start" is.
@@ -119,10 +111,10 @@ define( function( require ) {
      * @param {ShapePiece} shapePiece
      * @returns {number}
      */
-    getShapeRatio: function( shapePiece ) {
-      var rotation = 0;
-      for ( var i = 0; i < this.shapePieces.length; i++ ) {
-        var currentShapePiece = this.shapePieces.get( i );
+    getShapeRatio( shapePiece ) {
+      let rotation = 0;
+      for ( let i = 0; i < this.shapePieces.length; i++ ) {
+        const currentShapePiece = this.shapePieces.get( i );
         if ( currentShapePiece === shapePiece ) {
           return rotation;
         }
@@ -130,26 +122,28 @@ define( function( require ) {
       }
       throw new Error( 'ShapePiece not found' );
     }
-  }, {
+
     // TODO: doc
-    getShapeMatrix: function( startingRatio, fraction, representation ) {
+    static getShapeMatrix( startingRatio, fraction, representation ) {
       if ( representation === Representation.CIRCLE ) {
         if ( fraction.equals( Fraction.ONE ) ) {
           return Matrix3.IDENTITY;
         }
         else {
-          var centroid = ShapePiece.getSweptCentroid( fraction );
-          var angle = -2 * Math.PI * startingRatio;
+          const centroid = ShapePiece.getSweptCentroid( fraction );
+          const angle = -2 * Math.PI * startingRatio;
           return Matrix3.rotation2( angle ).timesMatrix( Matrix3.translationFromVector( centroid ) );
         }
       }
       else if ( representation === Representation.VERTICAL_BAR ) {
-        var centralValue = startingRatio + fraction.getValue() / 2;
+        const centralValue = startingRatio + fraction.getValue() / 2;
         return Matrix3.translation( Util.linear( 0, 1, ShapePiece.VERTICAL_BAR_BOUNDS.minX, ShapePiece.VERTICAL_BAR_BOUNDS.maxX, centralValue ), 0 );
       }
       else {
         throw new Error( 'Unsupported representation for getShapeMatrix: ' + representation );
       }
     }
-  } );
+  }
+
+  return fractionsCommon.register( 'ShapeContainer', ShapeContainer );
 } );

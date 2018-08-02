@@ -5,7 +5,7 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
@@ -88,7 +88,7 @@ define( function( require ) {
     // NOTE: Groups will disappear whenever their views disappear
     shapeGroup.shapeContainers.addItemAddedListener( this.addShapeContainer.bind( this ) );
     shapeGroup.shapeContainers.addItemRemovedListener( this.removeShapeContainer.bind( this ) );
-    shapeGroup.shapeContainers.forEach( this.addShapeContainer.bind( this ) );    
+    shapeGroup.shapeContainers.forEach( this.addShapeContainer.bind( this ) );
 
     assert && assert( shapeGroup.shapeContainers.length > 0 );
 

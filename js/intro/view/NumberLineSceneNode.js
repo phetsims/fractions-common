@@ -8,7 +8,7 @@
  * @author Vincent Davis (Berea College)
  * @author Dusty Cole (Berea College)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules

@@ -5,7 +5,7 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
@@ -38,7 +38,7 @@ define( function( require ) {
     // NOTE: Stacks and their nodes should be persistent, no need to unlink
     shapeGroupStack.shapeGroups.addItemAddedListener( this.addShapeGroup.bind( this ) );
     shapeGroupStack.shapeGroups.addItemRemovedListener( this.removeShapeGroup.bind( this ) );
-    shapeGroupStack.shapeGroups.forEach( this.addShapeGroup.bind( this ) );    
+    shapeGroupStack.shapeGroups.forEach( this.addShapeGroup.bind( this ) );
 
     this.mutate( options );
   }

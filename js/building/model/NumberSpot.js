@@ -1,46 +1,42 @@
 // Copyright 2017, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * Represents a place in a mixed fraction where a natural number can be potentially placed.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
   var Property = require( 'AXON/Property' );
 
-  /**
-   * @constructor
-   * @extends {Object}
-   *
-   * @param {NumberGroup} numberGroup
-   * @param {NumberSpotType} type
-   * @param {Bounds2} bounds
-   */
-  function NumberSpot( numberGroup, type, bounds ) {
+  class NumberSpot {
+    /**
+     * @param {NumberGroup} numberGroup
+     * @param {NumberSpotType} type
+     * @param {Bounds2} bounds
+     */
+    constructor( numberGroup, type, bounds ) {
 
-    // @public {NumberGroup}
-    this.numberGroup = numberGroup;
+      // @public {NumberGroup}
+      this.numberGroup = numberGroup;
 
-    // @public {NumberSpotType}
-    this.type = type;
+      // @public {NumberSpotType}
+      this.type = type;
 
-    // @public {Bounds2}
-    this.bounds = bounds;
+      // @public {Bounds2}
+      this.bounds = bounds;
 
-    // @public {Property.<NumberPiece|null>}
-    this.pieceProperty = new Property( null );
+      // @public {Property.<NumberPiece|null>}
+      this.pieceProperty = new Property( null );
 
-    // @public {Property.<boolean>}
-    this.showNotAllowedProperty = new BooleanProperty( false );
+      // @public {Property.<boolean>}
+      this.showNotAllowedProperty = new BooleanProperty( false );
+    }
   }
 
-  fractionsCommon.register( 'NumberSpot', NumberSpot );
-
-  return inherit( Object, NumberSpot );
+  return fractionsCommon.register( 'NumberSpot', NumberSpot );
 } );

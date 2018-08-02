@@ -7,7 +7,7 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
@@ -117,7 +117,7 @@ define( function( require ) {
     // NOTE: Containers will disappear whenever their views disappear
     shapeContainer.shapePieces.addItemAddedListener( this.addShapePiece.bind( this ) );
     shapeContainer.shapePieces.addItemRemovedListener( this.removeShapePiece.bind( this ) );
-    shapeContainer.shapePieces.forEach( this.addShapePiece.bind( this ) );    
+    shapeContainer.shapePieces.forEach( this.addShapePiece.bind( this ) );
 
     this.mutate( options );
   }

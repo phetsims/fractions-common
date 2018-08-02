@@ -1,11 +1,11 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * Displays a filled partition (shapes) visually.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
@@ -17,12 +17,12 @@ define( function( require ) {
   class FilledPartitionNode extends Node {
     /**
      * @param {FilledPartition} filledPartition
-     * @param {Object} config
+     * @param {Object} [options]
      */
-    constructor( filledPartition, config ) {
+    constructor( filledPartition, options ) {
       super();
 
-      config = _.extend( {
+      options = _.extend( {
         // {PaintDef} - Fills and strokes
         primaryFill: filledPartition.color,
         backgroundFill: FractionsCommonColorProfile.shapePartitionBackgroundProperty,
@@ -31,24 +31,24 @@ define( function( require ) {
 
         interiorLineWidth: 1,
         borderLineWidth: 2
-      }, config );
+      }, options );
 
-      assert && assert( config.primaryFill, 'primaryFill should be provided' );
+      assert && assert( options.primaryFill, 'primaryFill should be provided' );
 
       this.children = [
         ...filledPartition.shapePartition.shapes.map( ( shape, index ) => new Path( shape, {
-          fill: filledPartition.fills[ index ] ? config.primaryFill : config.backgroundFill,
+          fill: filledPartition.fills[ index ] ? options.primaryFill : options.backgroundFill,
           // fill: new phet.scenery.Color( index / ( filledPartition.shapePartition.shapes.length - 1 ) * 255, index / ( filledPartition.shapePartition.shapes.length - 1 ) * 255, index / ( filledPartition.shapePartition.shapes.length - 1 ) * 255 ),
-          stroke: config.interiorStroke,
-          lineWidth: config.interiorLineWidth
+          stroke: options.interiorStroke,
+          lineWidth: options.interiorLineWidth
         } ) ),
         new Path( filledPartition.shapePartition.outlineShape, {
-          stroke: config.borderStroke,
-          lineWidth: config.borderLineWidth
+          stroke: options.borderStroke,
+          lineWidth: options.borderLineWidth
         } )
       ];
 
-      this.mutate( config );
+      this.mutate( options );
     }
   }
 

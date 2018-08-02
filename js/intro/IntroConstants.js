@@ -5,7 +5,7 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
@@ -37,7 +37,7 @@ define( function( require ) {
 
     // @public {number}
     CIRCULAR_RADIUS: 75,
-    
+
     // Constants for fraction node and fraction with spinner
     TEXT_SIZE: new PhetFont( 110 ),
     DIVIDING_LINE_LENGTH: 150,

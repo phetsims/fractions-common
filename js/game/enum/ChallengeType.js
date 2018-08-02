@@ -5,14 +5,14 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
   // TODO: Use this more
-  var ChallengeType = {
+  const ChallengeType = {
     PIE: 'PIE',
     BAR: 'BAR',
     NUMBER: 'NUMBER'

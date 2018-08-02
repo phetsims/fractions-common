@@ -5,7 +5,7 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
@@ -107,7 +107,7 @@ define( function( require ) {
     var denominatorSpot = createSpot( numberGroup.denominatorSpot );
     var wholeSpot;
     if ( numberGroup.isMixedNumber ) {
-      wholeSpot = createSpot( numberGroup.wholeSpot ); 
+      wholeSpot = createSpot( numberGroup.wholeSpot );
     }
 
     this.mouseArea = numberGroup.allSpotsBounds.dilatedX( 5 );
@@ -209,7 +209,7 @@ define( function( require ) {
   fractionsCommon.register( 'NumberGroupNode', NumberGroupNode );
 
   return inherit( Node, NumberGroupNode, {
-    /** 
+    /**
      * Releases references.
      * @public
      */
