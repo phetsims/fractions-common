@@ -9,10 +9,10 @@ define( require => {
   'use strict';
 
   // modules
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
   // TODO: check for usage... was in the Java version
-  var PartitionType = {
+  const PartitionType = {
     PIE: 'PIE',
     HORIZONTAL_BARS: 'HORIZONTAL_BARS',
     VERTICAL_BARS: 'VERTICAL_BARS',

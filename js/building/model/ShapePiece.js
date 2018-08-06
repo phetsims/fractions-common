@@ -27,7 +27,7 @@ define( require => {
     /**
      * @param {Fraction} fraction
      * @param {Representation} representation
-     * @param {Property.<Color>} colorProperty
+     * @param {Property.<Color>} colorProperty TODO: ColorDef
      */
     constructor( fraction, representation, colorProperty ) {
       assert && assert( fraction instanceof Fraction );

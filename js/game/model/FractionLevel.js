@@ -18,9 +18,10 @@ define( require => {
      * @param {number} number
      * @param {number} numTargets
      * @param {BuildingType} buildingType
-     * @param {function} generateChallenge - function(): {FractionChallenge}
+     * @param {ColorDef} color
+     * @param {function} generateChallenge - function({ColorDef}): {FractionChallenge}
      */
-    constructor( number, numTargets, buildingType, generateChallenge ) {
+    constructor( number, numTargets, buildingType, color, generateChallenge ) {
 
       // @public {number}
       this.number = number;
@@ -31,6 +32,9 @@ define( require => {
       // @public {BuildingType}
       this.buildingType = buildingType;
 
+      // @public {ColorDef}
+      this.color = color;
+
       // @private {function}
       this.generateChallenge = generateChallenge;
 
@@ -38,7 +42,7 @@ define( require => {
       this.scoreProperty = new NumberProperty( 0 );
 
       // @public {Property.<FractionChallenge>}
-      this.challengeProperty = new Property( generateChallenge() );
+      this.challengeProperty = new Property( generateChallenge( this.color ) );
     }
 
     /**
@@ -47,7 +51,7 @@ define( require => {
      */
     reset() {
       this.scoreProperty.reset();
-      this.challengeProperty.value = this.generateChallenge();
+      this.challengeProperty.value = this.generateChallenge( this.color );
     }
   }
 

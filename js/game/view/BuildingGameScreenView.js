@@ -45,19 +45,6 @@ define( require => {
   var LEVEL_SELECTION_SPACING = 20;
   var SIDE_MARGIN = 10;
 
-  const LEVEL_COLORS = [
-    FractionsCommonColorProfile.level1Property,
-    FractionsCommonColorProfile.level2Property,
-    FractionsCommonColorProfile.level3Property,
-    FractionsCommonColorProfile.level4Property,
-    FractionsCommonColorProfile.level5Property,
-    FractionsCommonColorProfile.level6Property,
-    FractionsCommonColorProfile.level7Property,
-    FractionsCommonColorProfile.level8Property,
-    FractionsCommonColorProfile.level9Property,
-    FractionsCommonColorProfile.level10Property
-  ];
-
   function select( shapePartitions, quantity ) {
     return _.find( shapePartitions, shapePartition => shapePartition.shapes.length === quantity );
   }
@@ -106,16 +93,15 @@ define( require => {
         } );
       }
       else {
-        const color = LEVEL_COLORS[ level.number - 1 ];
         let shapePartition = LEVEL_SHAPE_PARTITIONS[ level.number - 1 ];
         // There's a different shape for non-mixed level 10
         if ( level.number === 10 && !model.hasMixedNumbers ) {
           shapePartition = select( ShapePartition.DIAGONAL_LS, 10 );
         }
         const filledPartitions = [
-          new FilledPartition( shapePartition, _.times( level.number, () => true ), color ),
+          new FilledPartition( shapePartition, _.times( level.number, () => true ), level.color ),
           ...( ( model.hasMixedNumbers && level.number > 1 ) ? [
-            new FilledPartition( shapePartition, [ true, ..._.times( level.number - 1, () => false ) ], color )
+            new FilledPartition( shapePartition, [ true, ..._.times( level.number - 1, () => false ) ], level.color )
           ] : [] )
         ];
         icon = new HBox( {
