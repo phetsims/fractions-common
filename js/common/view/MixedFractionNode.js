@@ -61,6 +61,8 @@ define( require => {
       this._denominator = options.denominator;
 
       this.update();
+
+      this.mutate( options );
     }
 
     /**

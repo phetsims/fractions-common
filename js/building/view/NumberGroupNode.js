@@ -45,6 +45,8 @@ define( require => {
       // pieces in stacks/containers ALSO care about not showing up when the piece is user-controlled or animating.
       isIcon: false,
 
+      hasCardBackground: true,
+
       isSelectedProperty: new BooleanProperty( true ), // takes ownership, will dispose at the end
 
       dragBoundsProperty: null,
@@ -160,12 +162,13 @@ define( require => {
     }
 
     this.children = [
-      cardBackground
-    ].concat( options.isIcon ? [] : [ this.returnButton ] ).concat( [
+      ...( options.hasCardBackground ? [ cardBackground ] : [] ),
+      ...( options.isIcon ? [] : [ this.returnButton ] ),
       fractionLine,
       numeratorSpot,
-      denominatorSpot
-    ] ).concat( numberGroup.isMixedNumber ? [ wholeSpot ] : [] );
+      denominatorSpot,
+      ...( numberGroup.isMixedNumber ? [ wholeSpot ] : [] )
+    ];
 
     if ( !options.isIcon ) {
       // @private {Property.<Bounds2>}

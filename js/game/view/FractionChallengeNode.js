@@ -129,7 +129,7 @@ define( require => {
         spacing: PANEL_MARGIN + 2,
         align: 'left',
         // TODO: unlink?
-        children: challenge.targets.map( target => new TargetNode( target ) )
+        children: challenge.targets.map( target => new TargetNode( target, challenge ) )
       } );
 
       // @private {Node}

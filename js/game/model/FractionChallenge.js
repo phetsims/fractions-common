@@ -44,6 +44,12 @@ define( require => {
 
       super();
 
+      const hasCircles = _.some( shapePieces, piece => piece.representation === Representation.CIRCLE );
+      const hasBars = _.some( shapePieces, piece => piece.representation === Representation.VERTICAL_BAR );
+      const hasNumbers = !!numberPieces.length;
+
+      assert && assert( hasCircles + hasBars + hasNumbers === 1, 'We only support one for now' );
+
       // @public {number}
       this.levelNumber = levelNumber;
 
@@ -56,9 +62,17 @@ define( require => {
       // @public {boolean}
       this.hasMixedTargets = _.some( targets, target => Fraction.ONE.isLessThan( target.fraction ) );
 
-      const hasCircles = _.some( shapePieces, piece => piece.representation === Representation.CIRCLE );
-      const hasBars = _.some( shapePieces, piece => piece.representation === Representation.VERTICAL_BAR );
-      const hasNumbers = !!numberPieces.length;
+      // @public {boolean}
+      this.hasShapes = hasBars || hasCircles;
+
+      // @public {Representation|null}
+      this.representation = hasCircles ? Representation.CIRCLE : ( hasBars ? Representation.VERTICAL_BAR : null );
+
+      // @public {number}
+      this.maxTargetWholes = Math.ceil( Math.max( ...targets.map( target => target.fraction.getValue() ) ) );
+
+      // @public {number}
+      this.maxNumber = Math.max( ...numberPieces.map( numberPiece => numberPiece.number ) );
 
       if ( hasCircles ) {
         this.shapeGroupStacks.push( new ShapeGroupStack( Representation.CIRCLE ) );

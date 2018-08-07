@@ -15,8 +15,13 @@ define( require => {
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const MixedFractionNode = require( 'FRACTIONS_COMMON/common/view/MixedFractionNode' );
+  const NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
+  const NumberGroupNode = require( 'FRACTIONS_COMMON/building/view/NumberGroupNode' );
+  const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const ReturnButton = require( 'FRACTIONS_COMMON/building/view/ReturnButton' );
+  const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
+  const ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
   const ShapeTarget = require( 'FRACTIONS_COMMON/game/model/ShapeTarget' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -27,20 +32,50 @@ define( require => {
   class TargetNode extends HBox {
     /**
      * @param {Target} target
+     * @param {FractionChallenge} challenge
      */
-    constructor( target ) {
+    constructor( target, challenge ) {
       super( {
         spacing: 10
       } );
 
       const isShapeTarget = target instanceof ShapeTarget;
 
+      // @private {Node|null}
+      this.placeholder = null;
+      if ( challenge.hasShapes ) {
+        const shapeGroup = new ShapeGroup( challenge.representation );
+        shapeGroup.partitionDenominatorProperty.value = target.fraction.denominator;
+        _.times( challenge.maxTargetWholes, () => shapeGroup.increaseContainerCount() );
+        this.placeholder = new ShapeGroupNode( shapeGroup, {
+          isIcon: true,
+          hasButtons: false,
+          scale: 0.5
+        } );
+      }
+      else {
+        const numberGroup = new NumberGroup( challenge.hasMixedTargets );
+        numberGroup.numeratorSpot.pieceProperty.value = new NumberPiece( challenge.maxNumber );
+        numberGroup.denominatorSpot.pieceProperty.value = new NumberPiece( challenge.maxNumber );
+        if ( challenge.hasMixedTargets ) {
+          numberGroup.wholeSpot.pieceProperty.value = new NumberPiece( challenge.maxNumber );
+        }
+        this.placeholder = new NumberGroupNode( numberGroup, {
+          isIcon: true,
+          hasCardBackground: false,
+          scale: 0.5
+        } );
+      }
+
       // @private {Rectangle}
-      this.container = new Rectangle( 0, 0, 100, 100, {
+      this.container = new Rectangle( 0, 0, Math.max( 100, this.placeholder.width + 20 ), 100, {
         cornerRadius: CORNER_RADIUS,
         fill: FractionsCommonColorProfile.collectionBackgroundProperty,
         stroke: FractionsCommonColorProfile.collectionBorderProperty
       } );
+
+      this.placeholder.center = this.container.center.plusXY( 0, challenge.hasShapes ? 10 : 0 );
+      this.container.addChild( this.placeholder );
 
       // @private {Node}
       this.returnButton = new ReturnButton( () => {}, {

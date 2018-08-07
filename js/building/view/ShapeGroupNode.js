@@ -50,6 +50,7 @@ define( require => {
 
     options = _.extend( {
       isIcon: false, // TODO: cleanup?
+      hasButtons: true,
       isSelectedProperty: new BooleanProperty( true ), // takes ownership, will dispose at the end
       dropListener: null,
       selectListener: null,
@@ -136,7 +137,9 @@ define( require => {
       children: [ this.addContainerButton, this.removeContainerButton ],
       centerY: 0
     } );
-    this.controlLayer.addChild( this.rightButtonBox );
+    if ( options.hasButtons ) {
+      this.controlLayer.addChild( this.rightButtonBox );
+    }
     this.updateRightButtonPosition();
 
     // @private {Node}
@@ -160,13 +163,15 @@ define( require => {
       }
     } );
 
-    this.controlLayer.addChild( new HBox( {
-      spacing: CONTAINER_PADDING,
-      children: [ this.decreasePartitionCountButton, this.increasePartitionCountButton ],
-      // TODO: improve? This is safe, given we can't trust container bounds
-      top: ( shapeGroup.representation === Representation.VERTICAL_BAR ? FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT : FractionsCommonConstants.SHAPE_SIZE ) / 2 + CONTAINER_PADDING - 3,
-      centerX: 0
-    } ) );
+    if ( options.hasButtons ) {
+      this.controlLayer.addChild( new HBox( {
+        spacing: CONTAINER_PADDING,
+        children: [ this.decreasePartitionCountButton, this.increasePartitionCountButton ],
+        // TODO: improve? This is safe, given we can't trust container bounds
+        top: ( shapeGroup.representation === Representation.VERTICAL_BAR ? FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT : FractionsCommonConstants.SHAPE_SIZE ) / 2 + CONTAINER_PADDING - 3,
+        centerX: 0
+      } ) );
+    }
 
     // @private {Node}
     this.returnButton = new ReturnButton( options.removeLastListener, {
@@ -180,7 +185,9 @@ define( require => {
     }
     shapeGroup.changedEmitter.addListener( updateUndoVisibility );
     updateUndoVisibility();
-    this.controlLayer.addChild( undoArrowContainer );
+    if ( options.hasButtons ) {
+      this.controlLayer.addChild( undoArrowContainer );
+    }
 
     // TODO: Presumably won't need an unlink, since our lifetimes are the same
     if ( !options.isIcon ) {
