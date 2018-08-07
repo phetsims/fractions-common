@@ -9,6 +9,7 @@ define( require => {
   'use strict';
 
   // modules
+  const arrayRemove = require( 'PHET_CORE/arrayRemove' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
   var NumberPieceNode = require( 'FRACTIONS_COMMON/building/view/NumberPieceNode' );
@@ -73,7 +74,7 @@ define( require => {
       } );
       assert && assert( numberPieceNode );
 
-      this.numberPieceNodes.remove( numberPieceNode );
+      arrayRemove( this.numberPieceNodes, numberPieceNode );
       this.removeChild( numberPieceNode );
       numberPieceNode.dispose();
     }
