@@ -9,23 +9,24 @@ define( require => {
   'use strict';
 
   // modules
-  var Circle = require( 'SCENERY/nodes/Circle' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
-  var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
-  var Shape = require( 'KITE/Shape' );
-  var ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
-  var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
-  var ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
-  var StackNode = require( 'FRACTIONS_COMMON/building/view/StackNode' );
-  var Util = require( 'DOT/Util' );
+  const arrayRemove = require( 'PHET_CORE/arrayRemove' );
+  const Circle = require( 'SCENERY/nodes/Circle' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
+  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Path = require( 'SCENERY/nodes/Path' );
+  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  const Shape = require( 'KITE/Shape' );
+  const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
+  const ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
+  const ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
+  const StackNode = require( 'FRACTIONS_COMMON/building/view/StackNode' );
+  const Util = require( 'DOT/Util' );
 
   // constants
-  var CIRCLE_RADIUS = FractionsCommonConstants.SHAPE_SIZE / 2;
+  const CIRCLE_RADIUS = FractionsCommonConstants.SHAPE_SIZE / 2;
 
   /**
    * @constructor
@@ -133,7 +134,7 @@ define( require => {
       } );
       assert && assert( shapePieceNode );
 
-      this.shapePieceNodes.remove( shapePieceNode );
+      arrayRemove( this.shapePieceNodes, shapePieceNode );
       this.removeChild( shapePieceNode );
       shapePieceNode.dispose();
     }

@@ -63,7 +63,7 @@ define( require => {
     this.stackTargets = this.stackNodes.map( function( stackNode ) {
       return new Node( {
         children: [ stackNode ],
-        cursor: 'pointer',
+        cursor: 'pointer', // TODO: only pointer if it has 1+ in stack
         inputListeners: [
           DragListener.createForwardingListener( function( event ) {
             pressCallback( event, stackNode.stack );

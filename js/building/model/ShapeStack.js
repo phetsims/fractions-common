@@ -11,7 +11,6 @@ define( require => {
   // modules
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Matrix3 = require( 'DOT/Matrix3' );
-  const ObservableArray = require( 'AXON/ObservableArray' );
   const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   const ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
   const Stack = require( 'FRACTIONS_COMMON/building/model/Stack' );
@@ -21,9 +20,10 @@ define( require => {
      * @param {Fraction} fraction
      * @param {Representation} representation
      * @param {Property.<Color>} colorProperty
+     * @param {boolean} [isMutable]
      */
-    constructor( fraction, representation, colorProperty ) {
-      super();
+    constructor( fraction, representation, colorProperty, isMutable = true ) {
+      super( isMutable );
 
       // @public {Fraction}
       this.fraction = fraction;
@@ -35,7 +35,7 @@ define( require => {
       this.colorProperty = colorProperty;
 
       // @public {ObservableArray.<ShapePiece>} - NOTE: These should only ever be popped/pushed.
-      this.shapePieces = new ObservableArray();
+      this.shapePieces = this.array;
     }
 
     /**

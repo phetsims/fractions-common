@@ -20,13 +20,11 @@ define( require => {
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberGroupNode = require( 'FRACTIONS_COMMON/building/view/NumberGroupNode' );
   const NumberGroupStack = require( 'FRACTIONS_COMMON/building/model/NumberGroupStack' );
-  const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   const NumberPieceNode = require( 'FRACTIONS_COMMON/building/view/NumberPieceNode' );
   const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
   const Property = require( 'AXON/Property' );
   const ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
   const ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
-  const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   const ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
   const ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
 
@@ -55,7 +53,10 @@ define( require => {
       // @private {Node}
       this.panel = new FractionChallengePanel( challenge, ( event, stack ) => {
         if ( stack instanceof ShapeStack ) {
-          var shapePiece = new ShapePiece( stack.fraction, stack.representation, stack.colorProperty );
+          if ( !stack.shapePieces.length ) { return; }
+          var shapePiece = stack.shapePieces.pop();
+          shapePiece.scaleProperty.reset();
+          shapePiece.rotationProperty.reset();
           shapePiece.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
           challenge.activeShapePieces.push( shapePiece );
           // TODO: factor this "find" usage out
@@ -65,7 +66,9 @@ define( require => {
           shapePieceNode.dragListener.press( event, shapePieceNode );
         }
         else if ( stack instanceof NumberStack ) {
-          var numberPiece = new NumberPiece( stack.number );
+          if ( !stack.numberPieces.length ) { return; }
+          var numberPiece = stack.numberPieces.pop();
+          numberPiece.scaleProperty.reset();
           numberPiece.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
           challenge.dragNumberPieceFromStack( numberPiece, stack );
           // TODO: factor this "find" usage out
@@ -76,6 +79,7 @@ define( require => {
         }
         else if ( stack instanceof ShapeGroupStack ) {
           // TODO: encapsulation
+          // TODO: limit quantity
           var shapeGroup = challenge.addShapeGroup( stack.representation );
           shapeGroup.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
           var shapeGroupNode = _.find( this.shapeGroupNodes, function( shapeGroupNode ) {
@@ -85,6 +89,7 @@ define( require => {
           event.handle(); // for our selection
         }
         else if ( stack instanceof NumberGroupStack ) {
+          // TODO: limit quantity
           var numberGroup = challenge.addNumberGroup( stack.isMixedNumber );
           numberGroup.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
           var numberGroupNode = _.find( this.numberGroupNodes, function( numberGroupNode ) {

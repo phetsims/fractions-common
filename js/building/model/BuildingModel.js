@@ -106,6 +106,9 @@ define( require => {
       var speed = 40 / Math.sqrt( position.distance( shapePiece.positionProperty.value ) );
       shapePiece.animator.animateTo( position, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, 0, shapeStack.positionProperty, Easing.QUADRATIC_IN, speed, () => {
         self.activeShapePieces.remove( shapePiece );
+        if ( shapeStack.isMutable ) {
+          shapeStack.shapePieces.push( shapePiece );
+        }
       } );
     }
 
@@ -120,6 +123,9 @@ define( require => {
       var speed = 40 / Math.sqrt( position.distance( numberPiece.positionProperty.value ) );
       numberPiece.animator.animateTo( position, 0, 1, 0, numberStack.positionProperty, Easing.QUADRATIC_IN, speed, () => {
         self.activeNumberPieces.remove( numberPiece );
+        if ( numberStack.isMutable ) {
+          numberStack.numberPieces.push( numberPiece );
+        }
       } );
     }
 

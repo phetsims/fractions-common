@@ -10,22 +10,22 @@ define( require => {
 
   // modules
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const ObservableArray = require( 'AXON/ObservableArray' );
   const Stack = require( 'FRACTIONS_COMMON/building/model/Stack' );
   const Vector2 = require( 'DOT/Vector2' );
 
   class NumberStack extends Stack {
     /**
      * @param {number} number
+     * @param {boolean} [isMutable]
      */
-    constructor( number ) {
-      super();
+    constructor( number, isMutable = true ) {
+      super( isMutable );
 
       // @public {number}
       this.number = number;
 
       // @public {ObservableArray.<NumberPiece>} - NOTE: These should only ever be popped/pushed.
-      this.numberPieces = new ObservableArray();
+      this.numberPieces = this.array;
     }
 
     // TODO: doc

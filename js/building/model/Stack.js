@@ -10,16 +10,35 @@ define( require => {
 
   // modules
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const ObservableArray = require( 'AXON/ObservableArray' );
   const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
 
   class Stack {
-    constructor() {
+    /**
+     * @param {boolean} [isMutable]
+     */
+    constructor( isMutable = true ) {
+      assert && assert( typeof isMutable === 'boolean' );
 
       // @public {Property.<Vector2>} - Position of our stack in model units (updated from the view)
       this.positionProperty = new Property( Vector2.ZERO );
 
-      // TODO: abstract out the observable array if needed/desired?
+      // @public {ObservableArray.<*>}
+      this.array = new ObservableArray();
+
+      // @public {boolean}
+      this.isMutable = isMutable;
+    }
+
+    /**
+     * Returns whether it is empty.
+     * @public
+     *
+     * @returns {boolean}
+     */
+    isEmpty() {
+      return this.array.length === 0;
     }
   }
 

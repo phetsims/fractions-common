@@ -63,11 +63,11 @@ define( require => {
         this.numberStacks.push( stack );
       } );
 
-      this.shapeGroupStacks.push( new ShapeGroupStack( Representation.CIRCLE ) );
-      this.shapeGroupStacks.push( new ShapeGroupStack( Representation.VERTICAL_BAR ) );
-
-      this.numberGroupStacks.push( new NumberGroupStack( false ) );
-      this.numberGroupStacks.push( new NumberGroupStack( true ) );
+      // Non-mutable stacks
+      this.shapeGroupStacks.push( new ShapeGroupStack( Representation.CIRCLE, false ) );
+      this.shapeGroupStacks.push( new ShapeGroupStack( Representation.VERTICAL_BAR, false ) );
+      this.numberGroupStacks.push( new NumberGroupStack( false, false ) );
+      this.numberGroupStacks.push( new NumberGroupStack( true, false ) );
 
       // Add initial stacks
       this.shapeGroupStacks.forEach( shapeGroupStack => {
