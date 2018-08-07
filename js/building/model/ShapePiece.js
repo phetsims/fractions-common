@@ -27,12 +27,12 @@ define( require => {
     /**
      * @param {Fraction} fraction
      * @param {Representation} representation
-     * @param {Property.<Color>} colorProperty TODO: ColorDef
+     * @param {ColorDef} color
      */
-    constructor( fraction, representation, colorProperty ) {
+    constructor( fraction, representation, color ) {
       assert && assert( fraction instanceof Fraction );
       assert && assert( Representation.SHAPE_VALUES.includes( representation ) );
-      assert && assert( colorProperty instanceof Property );
+      assert && assert( color instanceof Property );
 
       var self = this;
 
@@ -42,8 +42,8 @@ define( require => {
       // @public {Representation}
       this.representation = representation;
 
-      // @public {Property.<Color>}
-      this.colorProperty = colorProperty;
+      // @public {ColorDef}
+      this.color = color;
 
       // @public {Property.<Vector2>} - Applies only while out in the play area (being animated or dragged)
       this.positionProperty = new Property( Vector2.ZERO );

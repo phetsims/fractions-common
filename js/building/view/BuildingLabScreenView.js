@@ -62,7 +62,7 @@ define( require => {
     // @private {Node}
     this.shapePanel = new LabShapePanel( model, function( event, stack ) {
       if ( stack instanceof ShapeStack ) {
-        var shapePiece = new ShapePiece( stack.fraction, stack.representation, stack.colorProperty );
+        var shapePiece = new ShapePiece( stack.fraction, stack.representation, stack.color );
         shapePiece.positionProperty.value = self.modelViewTransform.viewToModelPosition( self.globalToLocalPoint( event.pointer.point ) );
         model.activeShapePieces.push( shapePiece );
         // TODO: factor this "find" usage out

@@ -76,7 +76,7 @@ define( require => {
     this.shadowNode = null;
 
     var nodeOptions = {
-      fill: shapePiece.colorProperty,
+      fill: shapePiece.color,
       stroke: FractionsCommonColorProfile.shapePieceStrokeProperty
     };
     var shadowOptions = {

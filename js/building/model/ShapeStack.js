@@ -19,10 +19,10 @@ define( require => {
     /**
      * @param {Fraction} fraction
      * @param {Representation} representation
-     * @param {Property.<Color>} colorProperty
+     * @param {ColorDef} color
      * @param {boolean} [isMutable]
      */
-    constructor( fraction, representation, colorProperty, isMutable = true ) {
+    constructor( fraction, representation, color, isMutable = true ) {
       super( isMutable );
 
       // @public {Fraction}
@@ -31,8 +31,8 @@ define( require => {
       // @public {Representation}
       this.representation = representation;
 
-      // @public {Property.<Color>}
-      this.colorProperty = colorProperty;
+      // @public {ColorDef}
+      this.color = color;
 
       // @public {ObservableArray.<ShapePiece>} - NOTE: These should only ever be popped/pushed.
       this.shapePieces = this.array;

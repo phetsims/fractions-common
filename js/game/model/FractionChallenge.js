@@ -91,7 +91,7 @@ define( require => {
       shapePieces.forEach( shapePiece => {
         var shapeStack = this.findMatchingShapeStack( shapePiece );
         if ( !shapeStack ) {
-          shapeStack = new ShapeStack( shapePiece.fraction, shapePiece.representation, shapePiece.colorProperty );
+          shapeStack = new ShapeStack( shapePiece.fraction, shapePiece.representation, shapePiece.color );
           this.shapeStacks.push( shapeStack );
         }
         shapeStack.shapePieces.push( shapePiece );
