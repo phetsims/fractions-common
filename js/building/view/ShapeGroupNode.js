@@ -87,10 +87,13 @@ define( require => {
     this.isSelectedProperty = options.isSelectedProperty;
     this.isSelectedProperty.linkAttribute( this.controlLayer, 'visible' );
 
-    // NOTE: Groups will disappear whenever their views disappear
-    shapeGroup.shapeContainers.addItemAddedListener( this.addShapeContainer.bind( this ) );
-    shapeGroup.shapeContainers.addItemRemovedListener( this.removeShapeContainer.bind( this ) );
-    shapeGroup.shapeContainers.forEach( this.addShapeContainer.bind( this ) );
+    // @private {function}
+    this.addShapeContainerListener = this.addShapeContainer.bind( this );
+    this.removeShapeContainerListener = this.removeShapeContainer.bind( this );
+
+    this.shapeGroup.shapeContainers.addItemAddedListener( this.addShapeContainerListener );
+    this.shapeGroup.shapeContainers.addItemRemovedListener( this.removeShapeContainerListener );
+    this.shapeGroup.shapeContainers.forEach( this.addShapeContainerListener );
 
     assert && assert( shapeGroup.shapeContainers.length > 0 );
 
@@ -317,6 +320,9 @@ define( require => {
       Node.prototype.dispose.call( this );
 
       this.shapeGroup.isAnimatingProperty.unlink( this.visibilityListener );
+
+      this.shapeGroup.shapeContainers.removeItemAddedListener( this.addShapeContainerListener );
+      this.shapeGroup.shapeContainers.removeItemRemovedListener( this.removeShapeContainerListener );
 
       this.decreasePartitionCountButton.dispose();
       this.increasePartitionCountButton.dispose();

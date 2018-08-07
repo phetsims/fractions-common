@@ -124,21 +124,20 @@ define( require => {
       } );
 
       if ( shapePieces.length ) {
-        // WAT? TODO: representation
-        this.addShapeGroup( Representation.CIRCLE );
-
         // TODO: Don't add all reprs
         this.shapeGroupStacks.forEach( shapeGroupStack => {
-          shapeGroupStack.shapeGroups.push( new ShapeGroup( shapeGroupStack.representation ) );
+          _.times( targets.length - 1, () => {
+            shapeGroupStack.shapeGroups.push( new ShapeGroup( shapeGroupStack.representation ) );
+          } );
         } );
       }
 
       if ( numberPieces.length ) {
-        this.addNumberGroup( this.hasMixedTargets );
-
         // TODO: Don't add all reprs
         this.numberGroupStacks.forEach( numberGroupStack => {
-          numberGroupStack.numberGroups.push( new NumberGroup( numberGroupStack.isMixedNumber ) );
+          _.times( targets.length - 1, () => {
+            numberGroupStack.numberGroups.push( new NumberGroup( numberGroupStack.isMixedNumber ) );
+          } );
         } );
       }
 
@@ -179,12 +178,15 @@ define( require => {
       return bestTarget;
     }
 
+    // TODO: reduce duplication between shapes and numbers!
     collectShapeGroup( shapeGroup, target ) {
       assert && assert( shapeGroup instanceof ShapeGroup );
       assert && assert( target.groupProperty.value === null );
 
       // Setting this should result in a side-effect of updating our target's positionProperty to the correct location.
       target.groupProperty.value = shapeGroup;
+
+      shapeGroup.partitionDenominatorProperty.value = target.fraction.denominator;
 
       var positionProperty = target.positionProperty;
       var speed = 40 / Math.sqrt( positionProperty.value.distance( shapeGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere

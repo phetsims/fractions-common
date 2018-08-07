@@ -274,10 +274,18 @@ define( require => {
         this.removeLastPieceFromShapeGroup( shapeGroup );
       }
 
-      var positionProperty = _.find( this.shapeGroupStacks, shapeGroupStack => shapeGroupStack.representation === shapeGroup.representation ).positionProperty;
+      while ( shapeGroup.shapeContainers.length > 1 ) {
+        shapeGroup.decreaseContainerCount();
+      }
+
+      const shapeGroupStack = _.find( this.shapeGroupStacks, shapeGroupStack => shapeGroupStack.representation === shapeGroup.representation );
+      var positionProperty = shapeGroupStack.positionProperty;
       var speed = 40 / Math.sqrt( positionProperty.value.distance( shapeGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
       shapeGroup.animator.animateTo( positionProperty.value, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, 0, positionProperty, Easing.QUADRATIC_IN, speed, () => {
         this.shapeGroups.remove( shapeGroup );
+        if ( shapeGroupStack.isMutable ) {
+          shapeGroupStack.shapeGroups.push( shapeGroup );
+        }
       } );
     }
 
@@ -286,12 +294,18 @@ define( require => {
         this.removeLastPieceFromNumberGroup( numberGroup );
       }
 
-      var positionProperty = _.find( this.numberGroupStacks, numberGroupStack => numberGroupStack.isMixedNumber === numberGroup.isMixedNumber ).positionProperty;
+      const numberGroupStack = _.find( this.numberGroupStacks, numberGroupStack => numberGroupStack.isMixedNumber === numberGroup.isMixedNumber );
+      var positionProperty = numberGroupStack.positionProperty;
       var speed = 40 / Math.sqrt( positionProperty.value.distance( numberGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
       numberGroup.animator.animateTo( positionProperty.value, 0, FractionsCommonConstants.NUMBER_BUILD_SCALE, 0, positionProperty, Easing.QUADRATIC_IN, speed, () => {
         // TODO: More methods for adding/removing to make things un-missable
         this.numberGroups.remove( numberGroup );
-        numberGroup.dispose();
+        if ( numberGroupStack.isMutable ) {
+          numberGroupStack.numberGroups.push( numberGroup );
+        }
+        else {
+          numberGroup.dispose();
+        }
       } );
     }
 

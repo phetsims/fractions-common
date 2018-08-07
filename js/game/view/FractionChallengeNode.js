@@ -57,8 +57,8 @@ define( require => {
 
       // @private {Node}
       this.panel = new FractionChallengePanel( challenge, ( event, stack ) => {
+        if ( !stack.array.length ) { return; }
         if ( stack instanceof ShapeStack ) {
-          if ( !stack.shapePieces.length ) { return; }
           var shapePiece = stack.shapePieces.pop();
           shapePiece.scaleProperty.reset();
           shapePiece.rotationProperty.reset();
@@ -71,7 +71,6 @@ define( require => {
           shapePieceNode.dragListener.press( event, shapePieceNode );
         }
         else if ( stack instanceof NumberStack ) {
-          if ( !stack.numberPieces.length ) { return; }
           var numberPiece = stack.numberPieces.pop();
           numberPiece.scaleProperty.reset();
           numberPiece.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
@@ -84,9 +83,12 @@ define( require => {
         }
         else if ( stack instanceof ShapeGroupStack ) {
           // TODO: encapsulation
-          // TODO: limit quantity
-          var shapeGroup = challenge.addShapeGroup( stack.representation );
+          var shapeGroup = stack.shapeGroups.pop();
+          // TODO: better model place to handle this
+          shapeGroup.scaleProperty.reset();
+          shapeGroup.partitionDenominatorProperty.reset();
           shapeGroup.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
+          challenge.shapeGroups.push( shapeGroup );
           var shapeGroupNode = _.find( this.shapeGroupNodes, function( shapeGroupNode ) {
             return shapeGroupNode.shapeGroup === shapeGroup;
           } );
@@ -94,9 +96,10 @@ define( require => {
           event.handle(); // for our selection
         }
         else if ( stack instanceof NumberGroupStack ) {
-          // TODO: limit quantity
-          var numberGroup = challenge.addNumberGroup( stack.isMixedNumber );
+          var numberGroup = stack.numberGroups.pop();
+          numberGroup.scaleProperty.reset();
           numberGroup.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
+          challenge.numberGroups.push( numberGroup );
           var numberGroupNode = _.find( this.numberGroupNodes, function( numberGroupNode ) {
             return numberGroupNode.numberGroup === numberGroup;
           } );

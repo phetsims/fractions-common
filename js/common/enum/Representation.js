@@ -9,9 +9,10 @@ define( require => {
   'use strict';
 
   // modules
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Vector2 = require( 'DOT/Vector2' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
-  var Representation = {
+  const Representation = {
     CIRCLE: 'CIRCLE',
     HORIZONTAL_BAR: 'HORIZONTAL_BAR',
     VERTICAL_BAR: 'VERTICAL_BAR',
@@ -37,6 +38,19 @@ define( require => {
     Representation.CIRCLE,
     Representation.VERTICAL_BAR
   ];
+
+  /**
+   * Returns the offset for a stack given the index.
+   * @public
+   *
+   * @param {Representation} representation
+   * @param {number} index
+   *
+   * @returns {Vector2}
+   */
+  Representation.getOffset = ( representation, index ) => {
+    return new Vector2( ( representation === Representation.CIRCLE ? 1 : -1 ) * 4 * index, -4 * index );
+  };
 
   // verify that enum is immutable, without the runtime penalty in production code
   if ( assert ) { Object.freeze( Representation ); }

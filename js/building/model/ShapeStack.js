@@ -48,7 +48,7 @@ define( require => {
      * @returns {Matrix3}
      */
     static getShapeMatrix( fraction, representation, index ) {
-      return Matrix3.translation( ( representation === Representation.CIRCLE ? 1 : -1 ) * 4 * index, -4 * index ).timesMatrix( ShapeContainer.getShapeMatrix( 0, fraction, representation ) );
+      return Matrix3.translationFromVector( Representation.getOffset( representation, index ) ).timesMatrix( ShapeContainer.getShapeMatrix( 0, fraction, representation ) );
     }
   }
 

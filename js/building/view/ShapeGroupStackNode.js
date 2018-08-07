@@ -9,14 +9,13 @@ define( require => {
   'use strict';
 
   // modules
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
-  var ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
-  var StackNode = require( 'FRACTIONS_COMMON/building/view/StackNode' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
+  const StackNode = require( 'FRACTIONS_COMMON/building/view/StackNode' );
 
   /**
    * @constructor
@@ -57,7 +56,7 @@ define( require => {
 
       this.addChild( new Node( {
         children: [ this.icon ],
-        translation: new Vector2( this.representation === Representation.CIRCLE ? 4 : -4, 4 ).timesScalar( numOffsets )
+        translation: ShapeGroupStack.getOffset( this.representation, numOffsets )
       } ) );
     },
 

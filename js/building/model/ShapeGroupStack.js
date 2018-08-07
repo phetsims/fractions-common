@@ -10,8 +10,8 @@ define( require => {
 
   // modules
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   const Stack = require( 'FRACTIONS_COMMON/building/model/Stack' );
-  const Vector2 = require( 'DOT/Vector2' );
 
   class ShapeGroupStack extends Stack {
     /**
@@ -31,11 +31,15 @@ define( require => {
     /**
      * Returns the desired visual offset of an item in the stack from the base.
      *
+     * @param {Representation} representation
      * @param {number} index
      * @returns {Vector2}
      */
-    static getOffset( index ) {
-      return new Vector2( -4 * index, 4 * index );
+    static getOffset( representation, index ) {
+      assert && assert( _.includes( Representation.SHAPE_VALUES, representation ) );
+      assert && assert( typeof index === 'number' );
+
+      return Representation.getOffset( representation, index );
     }
   }
 

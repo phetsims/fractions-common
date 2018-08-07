@@ -55,7 +55,6 @@ define( require => {
       this.placeholder = null;
       if ( challenge.hasShapes ) {
         const shapeGroup = new ShapeGroup( challenge.representation );
-        shapeGroup.partitionDenominatorProperty.value = target.fraction.denominator;
         _.times( challenge.maxTargetWholes - 1, () => shapeGroup.increaseContainerCount() );
         this.placeholder = new ShapeGroupNode( shapeGroup, {
           isIcon: true,

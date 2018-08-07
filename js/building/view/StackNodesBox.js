@@ -61,7 +61,7 @@ define( require => {
 
     // @private {Array.<Node>}
     this.stackTargets = this.stackNodes.map( function( stackNode ) {
-      return new Node( {
+      const stackTarget = new Node( {
         children: [ stackNode ],
         cursor: 'pointer', // TODO: only pointer if it has 1+ in stack
         inputListeners: [
@@ -70,6 +70,10 @@ define( require => {
           } )
         ]
       } );
+      stackNode.stack.array.lengthProperty.link( length => {
+        stackTarget.pickable = length === 0 ? false : null;
+      } );
+      return stackTarget;
     } );
 
     // Apply appropriate mouse/touch areas
