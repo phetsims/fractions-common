@@ -161,16 +161,25 @@ define( require => {
       } );
     }
 
-    findClosestTarget( position ) {
+    /**
+     * Finds the closest Target to a list of given model positions.
+     * @public
+     *
+     * @param {Array.<Vector2>} positions
+     * @returns {Target}
+     */
+    findClosestTarget( positions ) {
       let bestTarget = null;
       let bestDistance = Number.POSITIVE_INFINITY;
 
-      this.targets.forEach( target => {
-        const distance = target.positionProperty.value.distance( position );
-        if ( distance < bestDistance ) {
-          bestDistance = distance;
-          bestTarget = target;
-        }
+      positions.forEach( position => {
+        this.targets.forEach( target => {
+          const distance = target.positionProperty.value.distance( position );
+          if ( distance < bestDistance ) {
+            bestDistance = distance;
+            bestTarget = target;
+          }
+        } );
       } );
 
       assert && assert( bestTarget );

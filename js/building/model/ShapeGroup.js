@@ -76,6 +76,11 @@ define( require => {
       return this.shapeContainers.reduce( new Fraction( 0, 1 ), ( fraction, shapeContainer ) => fraction.plus( shapeContainer.totalFractionProperty.value ) );
     }
 
+    // TODO: doc (and if on all groups, bring up to Group.js?)
+    get centerPoints() {
+      return this.shapeContainers.getArray().map( shapeContainer => this.positionProperty.value.plus( shapeContainer.offset ) );
+    }
+
     /**
      * Steps forward in time.
      * @public

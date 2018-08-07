@@ -122,6 +122,10 @@ define( require => {
       return fraction;
     }
 
+    get centerPoints() {
+      return [ this.positionProperty.value ];
+    }
+
     updateAllowedSpots() {
       if ( this.isMixedNumber ) {
         var range = this.activeNumberRangeProperty.value;

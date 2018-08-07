@@ -204,11 +204,13 @@ define( require => {
         dragBoundsProperty: this.shapeDragBoundsProperty,
         modelViewTransform: this.modelViewTransform,
         dropListener: () => {
-          // TODO: better "drop areas"
-          const modelPoint = shapeGroup.positionProperty.value;
-          const viewPoint = this.modelViewTransform.modelToViewPosition( modelPoint );
-          if ( this.targetsContainer.bounds.dilated( 10 ).containsPoint( viewPoint ) ) {
-            const closestTarget = this.challenge.findClosestTarget( modelPoint );
+          const modelPoints = shapeGroup.centerPoints;
+          const viewPoints = modelPoints.map( modelPoint => this.modelViewTransform.modelToViewPosition( modelPoint ) );
+          const targetBounds = this.targetsContainer.bounds.dilated( 10 );
+          const panelBounds = this.panel.bounds.dilated( 10 );
+
+          if ( _.some( viewPoints, viewPoint => targetBounds.containsPoint( viewPoint ) ) ) {
+            const closestTarget = this.challenge.findClosestTarget( modelPoints );
             if ( closestTarget.groupProperty.value === null && shapeGroup.totalFraction.reduced().equals( closestTarget.fraction.reduced() ) ) {
               this.challenge.collectShapeGroup( shapeGroup, closestTarget );
             }
@@ -216,8 +218,7 @@ define( require => {
               this.challenge.centerShapeGroup( shapeGroup );
             }
           }
-          else if ( this.panel.bounds.dilated( 10 ).containsPoint( viewPoint ) ) {
-            // TODO: What about groups with lots of containers?
+          else if ( _.some( viewPoints, viewPoints => panelBounds.containsPoint( viewPoints ) ) ) {
             this.challenge.returnShapeGroup( shapeGroup );
           }
         },
@@ -247,11 +248,14 @@ define( require => {
         modelViewTransform: this.modelViewTransform,
 
         dropListener: () => {
-          // TODO: better "drop areas"
-          const modelPoint = numberGroup.positionProperty.value;
-          const viewPoint = this.modelViewTransform.modelToViewPosition( modelPoint );
-          if ( this.targetsContainer.bounds.dilated( 10 ).containsPoint( viewPoint ) ) {
-            const closestTarget = this.challenge.findClosestTarget( modelPoint );
+          // TODO: factor out with shape stuff above
+          const modelPoints = numberGroup.centerPoints;
+          const viewPoints = modelPoints.map( modelPoint => this.modelViewTransform.modelToViewPosition( modelPoint ) );
+          const targetBounds = this.targetsContainer.bounds.dilated( 10 );
+          const panelBounds = this.panel.bounds.dilated( 10 );
+
+          if ( _.some( viewPoints, viewPoint => targetBounds.containsPoint( viewPoint ) ) ) {
+            const closestTarget = this.challenge.findClosestTarget( modelPoints );
             if ( closestTarget.groupProperty.value === null && numberGroup.totalFraction.reduced().equals( closestTarget.fraction.reduced() ) ) {
               this.challenge.collectNumberGroup( numberGroup, closestTarget );
             }
@@ -259,8 +263,7 @@ define( require => {
               this.challenge.centerNumberGroup( numberGroup );
             }
           }
-          else if ( this.panel.bounds.dilated( 10 ).containsPoint( viewPoint ) ) {
-            // TODO: What about groups with lots of containers?
+          else if ( _.some( viewPoints, viewPoints => panelBounds.containsPoint( viewPoints ) ) ) {
             this.challenge.returnNumberGroup( numberGroup );
           }
         },
