@@ -15,11 +15,13 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
+  const NumberGroupStack = require( 'FRACTIONS_COMMON/building/model/NumberGroupStack' );
   const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
   const Property = require( 'AXON/Property' );
   const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
+  const ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
   const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   const ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -60,6 +62,12 @@ define( require => {
         stack.numberPieces.push( new NumberPiece( number ) );
         this.numberStacks.push( stack );
       } );
+
+      this.shapeGroupStacks.push( new ShapeGroupStack( Representation.CIRCLE ) );
+      this.shapeGroupStacks.push( new ShapeGroupStack( Representation.VERTICAL_BAR ) );
+
+      this.numberGroupStacks.push( new NumberGroupStack( false ) );
+      this.numberGroupStacks.push( new NumberGroupStack( true ) );
 
       // Add initial stacks
       this.shapeGroupStacks.forEach( shapeGroupStack => {

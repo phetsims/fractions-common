@@ -14,7 +14,6 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
-  const NumberGroupStack = require( 'FRACTIONS_COMMON/building/model/NumberGroupStack' );
   const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
   const NumberSpotType = require( 'FRACTIONS_COMMON/building/enum/NumberSpotType' );
   const ObservableArray = require( 'AXON/ObservableArray' );
@@ -23,7 +22,6 @@ define( require => {
   const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   const ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
   const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
-  const ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
   const ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -39,16 +37,10 @@ define( require => {
       this.numberStacks = [];
 
       // @public {Array.<ShapeGroupStack>}
-      this.shapeGroupStacks = [
-        new ShapeGroupStack( Representation.CIRCLE ),
-        new ShapeGroupStack( Representation.VERTICAL_BAR )
-      ];
+      this.shapeGroupStacks = [];
 
       // @public {Array.<NumberGroupStack>}
-      this.numberGroupStacks = [
-        new NumberGroupStack( false ),
-        new NumberGroupStack( true )
-      ];
+      this.numberGroupStacks = [];
 
       // TODO: better encapsulation, so things don't reach in here
 

@@ -14,10 +14,12 @@ define( require => {
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
+  const NumberGroupStack = require( 'FRACTIONS_COMMON/building/model/NumberGroupStack' );
   const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
   const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
+  const ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
   const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   const ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
   const Target = require( 'FRACTIONS_COMMON/game/model/Target' );
@@ -48,6 +50,16 @@ define( require => {
 
       // @public {boolean}
       this.hasMixedTargets = _.some( targets, target => Fraction.ONE.isLessThan( target.fraction ) );
+
+      if ( _.some( shapePieces, piece => piece.representation === Representation.CIRCLE ) ) {
+        this.shapeGroupStacks.push( new ShapeGroupStack( Representation.CIRCLE ) );
+      }
+      if ( _.some( shapePieces, piece => piece.representation === Representation.VERTICAL_BAR ) ) {
+        this.shapeGroupStacks.push( new ShapeGroupStack( Representation.VERTICAL_BAR ) );
+      }
+      if ( numberPieces.length ) {
+        this.numberGroupStacks.push( new NumberGroupStack( this.hasMixedTargets ) );
+      }
 
       // Sort out inputs (with a new copy, so we don't modify our actual paramater reference) so we create the stacks in
       // increasing order
