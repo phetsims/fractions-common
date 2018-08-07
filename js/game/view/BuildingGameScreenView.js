@@ -17,6 +17,7 @@ define( require => {
   var DerivedProperty = require( 'AXON/DerivedProperty' );
   var FilledPartition = require( 'FRACTIONS_COMMON/game/model/FilledPartition' );
   var FilledPartitionNode = require( 'FRACTIONS_COMMON/game/view/FilledPartitionNode' );
+  var FractionChallengeNode = require( 'FRACTIONS_COMMON/game/view/FractionChallengeNode' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   var HBox = require( 'SCENERY/nodes/HBox' );
@@ -179,6 +180,14 @@ define( require => {
     this.challengeSlidingScreen = new SlidingScreen( this.levelSelectionLayer, this.challengeLayer, this.visibleBoundsProperty, leftChallengeProperty );
 
     this.addChild( this.challengeSlidingScreen );
+
+    // @private {FractionChallengeNode}
+    this.challengeNode = null;
+    model.challengeProperty.link( challenge => {
+      this.challengeNode && this.challengeNode.dispose();
+      this.challengeNode = new FractionChallengeNode( challenge, this.layoutBounds );
+      this.challengeLayer.addChild( this.challengeNode );
+    } );
 
     this.levelSelectionLayer.addChild( this.levelSelectionSlidingScreen );
 

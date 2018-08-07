@@ -12,6 +12,8 @@ define( require => {
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
   const ChallengeType = require( 'FRACTIONS_COMMON/game/enum/ChallengeType' );
+  const DerivedProperty = require( 'AXON/DerivedProperty' );
+  const DynamicProperty = require( 'AXON/DynamicProperty' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const FractionChallenge = require( 'FRACTIONS_COMMON/game/model/FractionChallenge' );
   const FractionLevel = require( 'FRACTIONS_COMMON/game/model/FractionLevel' );
@@ -33,12 +35,6 @@ define( require => {
 
       // @public {boolean}
       this.hasMixedNumbers = hasMixedNumbers;
-
-      // @public {Property.<FractionLevel|null>}
-      this.levelProperty = new Property( null );
-
-      // @public {Property.<boolean>}
-      this.soundEnabledProperty = new BooleanProperty( true );
 
       function placeholderShapeChallengeGenerator( numTargets ) {
         return color => {
@@ -195,6 +191,28 @@ define( require => {
         // "Build a Fraction" Numbers level 10
         new FractionLevel( 10, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level10Property, placeholderNumberChallengeGenerator( 4 ) )
       ];
+
+      // @public {Property.<FractionLevel|null>}
+      this.levelProperty = new Property( null );
+
+      let lastLevel = this.shapeLevels[ 0 ];
+
+      // @public {Property.<FractionLevel>}
+      this.displayedLevelProperty = new DerivedProperty( [ this.levelProperty ], level => {
+        if ( !level ) {
+          level = lastLevel;
+        }
+        lastLevel = level;
+        return level;
+      } );
+
+      // @public {Property.<FractionChallenge>}
+      this.challengeProperty = new DynamicProperty( this.displayedLevelProperty, {
+        derive: 'challengeProperty'
+      } );
+
+      // @public {Property.<boolean>}
+      this.soundEnabledProperty = new BooleanProperty( true );
     }
 
     /**
@@ -204,7 +222,7 @@ define( require => {
      * @param {number} dt
      */
     step( dt ) {
-
+      this.challengeProperty.value.step( dt );
     }
 
     /**
