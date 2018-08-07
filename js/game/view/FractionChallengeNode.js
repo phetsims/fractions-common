@@ -44,12 +44,16 @@ define( require => {
     /**
      * @param {FractionChallenge} challenge
      * @param {Bounds2} layoutBounds
+     * @param {GameAudioPlayer} gameAudioPlayer
      */
-    constructor( challenge, layoutBounds ) {
+    constructor( challenge, layoutBounds, gameAudioPlayer ) {
       super();
 
       // @private
       this.challenge = challenge;
+
+      // @private {GameAudioPlayer}
+      this.gameAudioPlayer = gameAudioPlayer;
 
       // @private {Property.<Bounds2>}
       this.shapeDragBoundsProperty = new Property( layoutBounds );
@@ -199,6 +203,15 @@ define( require => {
       challenge.activeNumberPieces.addItemRemovedListener( this.removeNumberPieceListener );
     }
 
+    playCollectedSound() {
+      if ( _.some( this.challenge.targets, target => target.groupProperty.value === null ) ) {
+        this.gameAudioPlayer.correctAnswer();
+      }
+      else {
+        this.gameAudioPlayer.gameOverPerfectScore();
+      }
+    }
+
     addShapeGroup( shapeGroup ) {
       var shapeGroupNode = new ShapeGroupNode( shapeGroup, {
         dragBoundsProperty: this.shapeDragBoundsProperty,
@@ -213,6 +226,7 @@ define( require => {
             const closestTarget = this.challenge.findClosestTarget( modelPoints );
             if ( closestTarget.groupProperty.value === null && shapeGroup.totalFraction.reduced().equals( closestTarget.fraction.reduced() ) ) {
               this.challenge.collectShapeGroup( shapeGroup, closestTarget );
+              this.playCollectedSound();
             }
             else {
               this.challenge.centerShapeGroup( shapeGroup );
@@ -258,6 +272,7 @@ define( require => {
             const closestTarget = this.challenge.findClosestTarget( modelPoints );
             if ( closestTarget.groupProperty.value === null && numberGroup.totalFraction.reduced().equals( closestTarget.fraction.reduced() ) ) {
               this.challenge.collectNumberGroup( numberGroup, closestTarget );
+              this.playCollectedSound();
             }
             else {
               this.challenge.centerNumberGroup( numberGroup );

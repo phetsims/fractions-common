@@ -20,6 +20,7 @@ define( require => {
   const FractionChallengeNode = require( 'FRACTIONS_COMMON/game/view/FractionChallengeNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
+  const GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const inherit = require( 'PHET_CORE/inherit' );
   const LevelSelectionButton = require( 'VEGAS/LevelSelectionButton' );
@@ -182,11 +183,14 @@ define( require => {
 
     this.addChild( this.challengeSlidingScreen );
 
+    // @public {GameAudioPlayer}
+    this.gameAudioPlayer = new GameAudioPlayer( model.soundEnabledProperty );
+
     // @private {FractionChallengeNode}
     this.challengeNode = null;
     model.challengeProperty.link( challenge => {
       this.challengeNode && this.challengeNode.dispose();
-      this.challengeNode = new FractionChallengeNode( challenge, this.layoutBounds );
+      this.challengeNode = new FractionChallengeNode( challenge, this.layoutBounds, this.gameAudioPlayer );
       this.challengeLayer.addChild( this.challengeNode );
     } );
 

@@ -52,7 +52,6 @@ define( require => {
      * @public
      */
     reset() {
-      this.scoreProperty.reset();
       this.challengeProperty.value = this.generateChallenge( this.number, this.color );
     }
   }
