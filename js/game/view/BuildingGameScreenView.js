@@ -9,35 +9,36 @@ define( require => {
   'use strict';
 
   // modules
-  var AlignBox = require( 'SCENERY/nodes/AlignBox' );
-  var AlignGroup = require( 'SCENERY/nodes/AlignGroup' );
-  var BackButton = require( 'SCENERY_PHET/buttons/BackButton' );
-  var BooleanProperty = require( 'AXON/BooleanProperty' );
-  var BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
-  var DerivedProperty = require( 'AXON/DerivedProperty' );
-  var FilledPartition = require( 'FRACTIONS_COMMON/game/model/FilledPartition' );
-  var FilledPartitionNode = require( 'FRACTIONS_COMMON/game/view/FilledPartitionNode' );
-  var FractionChallengeNode = require( 'FRACTIONS_COMMON/game/view/FractionChallengeNode' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var LevelSelectionButton = require( 'VEGAS/LevelSelectionButton' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
-  var NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
-  var NumberStackNode = require( 'FRACTIONS_COMMON/building/view/NumberStackNode' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  var RoundArrowButton = require( 'FRACTIONS_COMMON/common/view/RoundArrowButton' );
-  var ScoreDisplayStars = require( 'VEGAS/ScoreDisplayStars' );
-  var ScreenView = require( 'JOIST/ScreenView' );
-  var ShapePartition = require( 'FRACTIONS_COMMON/game/model/ShapePartition' );
-  var SlidingScreen = require( 'TWIXT/SlidingScreen' );
-  var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
-  var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
+  const AlignBox = require( 'SCENERY/nodes/AlignBox' );
+  const AlignGroup = require( 'SCENERY/nodes/AlignGroup' );
+  const BackButton = require( 'SCENERY_PHET/buttons/BackButton' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
+  const DerivedProperty = require( 'AXON/DerivedProperty' );
+  const FilledPartition = require( 'FRACTIONS_COMMON/game/model/FilledPartition' );
+  const FilledPartitionNode = require( 'FRACTIONS_COMMON/game/view/FilledPartitionNode' );
+  const FractionChallengeNode = require( 'FRACTIONS_COMMON/game/view/FractionChallengeNode' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const LevelSelectionButton = require( 'VEGAS/LevelSelectionButton' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
+  const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
+  const NumberStackNode = require( 'FRACTIONS_COMMON/building/view/NumberStackNode' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const RefreshButton = require( 'SCENERY_PHET/buttons/RefreshButton' );
+  const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
+  const RoundArrowButton = require( 'FRACTIONS_COMMON/common/view/RoundArrowButton' );
+  const ScoreDisplayStars = require( 'VEGAS/ScoreDisplayStars' );
+  const ScreenView = require( 'JOIST/ScreenView' );
+  const ShapePartition = require( 'FRACTIONS_COMMON/game/model/ShapePartition' );
+  const SlidingScreen = require( 'TWIXT/SlidingScreen' );
+  const SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
+  const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
+  const Text = require( 'SCENERY/nodes/Text' );
+  const VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
   var levelTitlePatternString = require( 'string!FRACTIONS_COMMON/levelTitlePattern' );
@@ -250,15 +251,27 @@ define( require => {
     soundToggleButton.left = this.layoutBounds.left + SIDE_MARGIN;
     resetAllButton.right = this.layoutBounds.right - SIDE_MARGIN;
 
-    var backButton = new BackButton( {
-      left: this.layoutBounds.left + SIDE_MARGIN,
+    this.challengeLayer.addChild( new VBox( {
+      spacing: SIDE_MARGIN,
       top: this.layoutBounds.top + SIDE_MARGIN,
-      listener: function() {
-        model.levelProperty.value = null;
-      }
-    } );
-
-    this.challengeLayer.addChild( backButton );
+      left: this.layoutBounds.left + SIDE_MARGIN,
+      children: [
+        new BackButton( {
+          listener() {
+            model.levelProperty.value = null;
+          }
+        } ),
+        new RefreshButton( {
+          // TODO: hmm, these 3 are copied from expression-exchange, and make the button the same width...
+          iconScale: 0.7,
+          xMargin: 9,
+          yMargin: 7,
+          listener() {
+            model.levelProperty.value && model.levelProperty.value.reset();
+          }
+        } )
+      ]
+    } ) );
   }
 
   fractionsCommon.register( 'BuildingGameScreenView', BuildingGameScreenView );
