@@ -27,12 +27,13 @@ define( require => {
 
   class FractionChallenge extends BuildingModel {
     /**
+     * @param {number} levelNumber
      * @param {ChallengeType} challengeType
      * @param {Array.<Target>} targets
      * @param {Array.<ShapePiece>} shapePieces
      * @param {Array.<NumberPiece>} numberPieces
      */
-    constructor( challengeType, targets, shapePieces, numberPieces ) {
+    constructor( levelNumber, challengeType, targets, shapePieces, numberPieces ) {
       assert && assert( ChallengeType.VALUES.includes( challengeType ) );
       assert && assert( Array.isArray( targets ) );
       assert && assert( Array.isArray( shapePieces ) );
@@ -42,6 +43,9 @@ define( require => {
       assert && numberPieces.forEach( numberPiece => assert( numberPiece instanceof NumberPiece ) );
 
       super();
+
+      // @public {number}
+      this.levelNumber = levelNumber;
 
       // @public {ChallengeType}
       this.challengeType = challengeType;

@@ -9,7 +9,6 @@ define( require => {
   'use strict';
 
   // modules
-  const AlignBox = require( 'SCENERY/nodes/AlignBox' );
   const arrayRemove = require( 'PHET_CORE/arrayRemove' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const FractionChallengePanel = require( 'FRACTIONS_COMMON/game/view/FractionChallengePanel' );
@@ -22,13 +21,20 @@ define( require => {
   const NumberGroupStack = require( 'FRACTIONS_COMMON/building/model/NumberGroupStack' );
   const NumberPieceNode = require( 'FRACTIONS_COMMON/building/view/NumberPieceNode' );
   const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Property = require( 'AXON/Property' );
   const ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
   const ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
   const ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
   const ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
+  const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   const TargetNode = require( 'FRACTIONS_COMMON/game/view/TargetNode' );
+  const Text = require( 'SCENERY/nodes/Text' );
   const VBox = require( 'SCENERY/nodes/VBox' );
+  const Vector2 = require( 'DOT/Vector2' );
+
+  // strings
+  const levelTitlePatternString = require( 'string!FRACTIONS_COMMON/levelTitlePattern' );
 
   // constants
   const PANEL_MARGIN = FractionsCommonConstants.PANEL_MARGIN;
@@ -44,9 +50,6 @@ define( require => {
 
       // @private
       this.challenge = challenge;
-
-      // @public {ModelViewTransform2}
-      this.modelViewTransform = new ModelViewTransform2( Matrix3.translationFromVector( layoutBounds.center ) );
 
       // @private {Property.<Bounds2>}
       this.shapeDragBoundsProperty = new Property( layoutBounds );
@@ -120,6 +123,48 @@ define( require => {
       // @private {Node}
       this.pieceLayer = new Node();
 
+      // @private {Node}
+      this.targetsContainer = new VBox( {
+        // TODO: unhook from panel_margin?
+        spacing: PANEL_MARGIN + 2,
+        align: 'left',
+        // TODO: unlink?
+        children: challenge.targets.map( target => new TargetNode( target ) )
+      } );
+
+      // @private {Node}
+      this.levelText = new Text( StringUtils.fillIn( levelTitlePatternString, { number: challenge.levelNumber } ), {
+        font: new PhetFont( { size: 30, weight: 'bold' } )
+      } );
+
+      this.children = [
+        this.panel,
+        this.targetsContainer,
+        this.levelText,
+        this.groupLayer,
+        this.pieceLayer
+      ];
+
+      // layout
+      this.panel.bottom = layoutBounds.bottom - PANEL_MARGIN;
+      this.targetsContainer.right = layoutBounds.right - PANEL_MARGIN;
+      const horizontalCenter = ( layoutBounds.left + this.targetsContainer.left ) / 2;
+      this.targetsContainer.centerY = ( layoutBounds.top + this.panel.top ) / 2;
+      this.panel.centerX = horizontalCenter;
+      if ( this.panel.left < PANEL_MARGIN ) {
+        this.panel.left = PANEL_MARGIN;
+      }
+      this.levelText.centerX = horizontalCenter;
+      this.levelText.top = layoutBounds.top + PANEL_MARGIN;
+
+      // @public {ModelViewTransform2}
+      this.modelViewTransform = new ModelViewTransform2( Matrix3.translationFromVector( new Vector2( horizontalCenter, layoutBounds.centerY ) ) );
+
+      this.panel.updateModelLocations( this.modelViewTransform );
+
+      this.shapeDragBoundsProperty.value = this.modelViewTransform.viewToModelBounds( layoutBounds );
+      this.numberDragBoundsProperty.value = this.modelViewTransform.viewToModelBounds( layoutBounds );
+
       // @private {Array.<ShapeGroupNode>}
       this.shapeGroupNodes = []; // TODO: interrupt on reset
 
@@ -145,41 +190,6 @@ define( require => {
 
       challenge.activeNumberPieces.addItemAddedListener( this.addNumberPieceListener );
       challenge.activeNumberPieces.addItemRemovedListener( this.removeNumberPieceListener );
-
-      // @private {Node}
-      this.targetsNode = new VBox( {
-        spacing: PANEL_MARGIN,
-        align: 'left',
-        // TODO: unlink?
-        children: challenge.targets.map( target => new TargetNode( target ) )
-      } );
-
-      var bottomAlignBox = new AlignBox( this.panel, {
-        xAlign: 'center',
-        yAlign: 'bottom',
-        margin: PANEL_MARGIN
-      } );
-
-      var targetAlignBox = new AlignBox( this.targetsNode, {
-        xAlign: 'right',
-        yAlign: 'center',
-        margin: 2 * PANEL_MARGIN
-      } );
-
-      this.children = [
-        bottomAlignBox,
-        targetAlignBox,
-        this.groupLayer,
-        this.pieceLayer
-      ];
-
-      // layout
-      bottomAlignBox.alignBounds = layoutBounds;
-      targetAlignBox.alignBounds = layoutBounds.withMaxY( this.panel.top );
-      this.panel.updateModelLocations( this.modelViewTransform );
-
-      this.shapeDragBoundsProperty.value = this.modelViewTransform.viewToModelBounds( layoutBounds );
-      this.numberDragBoundsProperty.value = this.modelViewTransform.viewToModelBounds( layoutBounds );
     }
 
     addShapeGroup( shapeGroup ) {

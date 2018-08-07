@@ -37,7 +37,7 @@ define( require => {
       this.hasMixedNumbers = hasMixedNumbers;
 
       function placeholderShapeChallengeGenerator( numTargets ) {
-        return color => {
+        return ( levelNumber, color ) => {
           // TODO: unimplemented
           var targets = ( hasMixedNumbers ? [
             new Target( new Fraction( 3, 2 ) ),
@@ -65,12 +65,12 @@ define( require => {
             new ShapePiece( new Fraction( 1, 4 ), representation, color ),
             new ShapePiece( new Fraction( 1, 6 ), representation, color )
           ];
-          return new FractionChallenge( type, targets, shapePieces, [] );
+          return new FractionChallenge( levelNumber, type, targets, shapePieces, [] );
         };
       }
 
       function placeholderNumberChallengeGenerator( numTargets ) {
-        return color => {
+        return ( levelNumber, color ) => {
           // TODO: deduplicate
           function select( shapePartitions, quantity ) {
             return _.find( shapePartitions, shapePartition => shapePartition.shapes.length === quantity );
@@ -78,7 +78,7 @@ define( require => {
           var targets = ( hasMixedNumbers ? [
             ShapeTarget.sequentialFill( select( ShapePartition.HORIZONTAL_BARS, 2 ), new Fraction( 3, 2 ), color ),
             ShapeTarget.sequentialFill( select( ShapePartition.PIES, 3 ), new Fraction( 5, 3 ), color ),
-            ShapeTarget.sequentialFill( select( ShapePartition.PYRAMIDS, 4 ), new Fraction( 11, 4 ), color ),
+            ShapeTarget.sequentialFill( select( ShapePartition.PYRAMIDS, 4 ), new Fraction( 15, 4 ), color ),
             ShapeTarget.sequentialFill( select( ShapePartition.PLUS_SIGNS, 2 ), new Fraction( 5, 2 ), color )
           ] : [
             ShapeTarget.sequentialFill( select( ShapePartition.HORIZONTAL_BARS, 2 ), new Fraction( 1, 2 ), color ),
@@ -98,7 +98,7 @@ define( require => {
             new NumberPiece( 4 ),
             new NumberPiece( 6 )
           ];
-          return new FractionChallenge( ChallengeType.NUMBER, targets, [], numberPieces );
+          return new FractionChallenge( levelNumber, ChallengeType.NUMBER, targets, [], numberPieces );
         };
       }
 

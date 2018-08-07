@@ -184,6 +184,7 @@ define( require => {
 
     // TODO: Presumably won't need an unlink, since our lifetimes are the same
     if ( !options.isIcon ) {
+      // TODO: proper disposal handling!
       shapeGroup.positionProperty.link( function( position ) {
         self.translation = options.modelViewTransform.modelToViewPosition( position );
       } );
