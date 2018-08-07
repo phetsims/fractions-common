@@ -28,6 +28,8 @@ define( require => {
   // constants
   const CORNER_RADIUS = 5;
   const CORNER_OFFSET = 1;
+  const SHAPE_SCALE = 0.6;
+  const NUMBER_SCALE = 0.7;
 
   class TargetNode extends HBox {
     /**
@@ -50,7 +52,7 @@ define( require => {
         this.placeholder = new ShapeGroupNode( shapeGroup, {
           isIcon: true,
           hasButtons: false,
-          scale: 0.5
+          scale: SHAPE_SCALE
         } );
       }
       else {
@@ -63,12 +65,12 @@ define( require => {
         this.placeholder = new NumberGroupNode( numberGroup, {
           isIcon: true,
           hasCardBackground: false,
-          scale: 0.5
+          scale: NUMBER_SCALE
         } );
       }
 
       // @private {Rectangle}
-      this.container = new Rectangle( 0, 0, Math.max( 100, this.placeholder.width + 20 ), 100, {
+      this.container = new Rectangle( 0, 0, this.placeholder.width + ( challenge.hasShapes ? 20 : challenge.hasMixedTargets ? 60 : 80 ), 100, {
         cornerRadius: CORNER_RADIUS,
         fill: FractionsCommonColorProfile.collectionBackgroundProperty,
         stroke: FractionsCommonColorProfile.collectionBorderProperty
