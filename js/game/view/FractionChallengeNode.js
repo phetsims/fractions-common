@@ -27,6 +27,8 @@ define( require => {
   const ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
   const ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
   const ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
+  const TargetNode = require( 'FRACTIONS_COMMON/game/view/TargetNode' );
+  const VBox = require( 'SCENERY/nodes/VBox' );
 
   // constants
   const PANEL_MARGIN = FractionsCommonConstants.PANEL_MARGIN;
@@ -144,20 +146,36 @@ define( require => {
       challenge.activeNumberPieces.addItemAddedListener( this.addNumberPieceListener );
       challenge.activeNumberPieces.addItemRemovedListener( this.removeNumberPieceListener );
 
+      // @private {Node}
+      this.targetsNode = new VBox( {
+        spacing: PANEL_MARGIN,
+        align: 'left',
+        // TODO: unlink?
+        children: challenge.targets.map( target => new TargetNode( target ) )
+      } );
+
       var bottomAlignBox = new AlignBox( this.panel, {
         xAlign: 'center',
         yAlign: 'bottom',
         margin: PANEL_MARGIN
       } );
 
+      var targetAlignBox = new AlignBox( this.targetsNode, {
+        xAlign: 'right',
+        yAlign: 'center',
+        margin: 2 * PANEL_MARGIN
+      } );
+
       this.children = [
         bottomAlignBox,
+        targetAlignBox,
         this.groupLayer,
         this.pieceLayer
       ];
 
       // layout
       bottomAlignBox.alignBounds = layoutBounds;
+      targetAlignBox.alignBounds = layoutBounds.withMaxY( this.panel.top );
       this.panel.updateModelLocations( this.modelViewTransform );
 
       this.shapeDragBoundsProperty.value = this.modelViewTransform.viewToModelBounds( layoutBounds );

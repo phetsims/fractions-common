@@ -75,7 +75,10 @@ define( require => {
     level7: { default: Color.CYAN },
     level8: { default: new Color( 146, 54, 173 ) },
     level9: { default: new Color( 255, 112, 213 ) },
-    level10: { default: new Color( 45, 165, 59 ) }
+    level10: { default: new Color( 45, 165, 59 ) },
+
+    collectionBackground: { default: Color.WHITE },
+    collectionBorder: { default: Color.BLACK }
   }, [ 'default' ] );
 
   fractionsCommon.register( 'FractionsCommonColorProfile', FractionsCommonColorProfile );
