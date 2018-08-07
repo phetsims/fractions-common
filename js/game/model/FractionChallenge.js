@@ -11,6 +11,7 @@ define( require => {
   // modules
   const BuildingModel = require( 'FRACTIONS_COMMON/building/model/BuildingModel' );
   const ChallengeType = require( 'FRACTIONS_COMMON/game/enum/ChallengeType' );
+  const DerivedProperty = require( 'AXON/DerivedProperty' );
   const Easing = require( 'TWIXT/Easing' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
@@ -76,6 +77,11 @@ define( require => {
 
       // @public {number}
       this.maxNumber = Math.max( ...numberPieces.map( numberPiece => numberPiece.number ) );
+
+      // @public {Property.<number>}
+      this.scoreProperty = new DerivedProperty( targets.map( target => target.groupProperty ), ( ...groups ) => {
+        return groups.filter( group => group !== null ).length;
+      } );
 
       if ( hasCircles ) {
         this.shapeGroupStacks.push( new ShapeGroupStack( Representation.CIRCLE ) );
@@ -197,6 +203,9 @@ define( require => {
 
       shapeGroup.partitionDenominatorProperty.value = target.fraction.denominator;
 
+      // Try to start moving out another group
+      this.ensureShapeGroups();
+
       var positionProperty = target.positionProperty;
       var speed = 40 / Math.sqrt( positionProperty.value.distance( shapeGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
       shapeGroup.animator.animateTo( positionProperty.value, 0, FractionsCommonConstants.SHAPE_COLLECTION_SCALE, 0, positionProperty, Easing.QUADRATIC_IN, speed, () => {
@@ -211,6 +220,9 @@ define( require => {
       // Setting this should result in a side-effect of updating our target's positionProperty to the correct location.
       target.groupProperty.value = numberGroup;
 
+      // Try to start moving out another group
+      this.ensureNumberGroups();
+
       var positionProperty = target.positionProperty;
       var speed = 40 / Math.sqrt( positionProperty.value.distance( numberGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
       numberGroup.animator.animateTo( positionProperty.value, 0, FractionsCommonConstants.NUMBER_COLLECTION_SCALE, 0, positionProperty, Easing.QUADRATIC_IN, speed, () => {
@@ -222,7 +234,7 @@ define( require => {
       assert && assert( shapeGroup instanceof ShapeGroup );
 
       const center = Vector2.ZERO;
-      var speed = 40 / Math.sqrt( center.distance( shapeGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
+      var speed = 60 / Math.sqrt( center.distance( shapeGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
       shapeGroup.animator.animateTo( center, 0, 1, 0, new Property( center ), Easing.QUADRATIC_IN, speed, () => {} );
     }
 
@@ -230,8 +242,42 @@ define( require => {
       assert && assert( numberGroup instanceof NumberGroup );
 
       const center = Vector2.ZERO;
-      var speed = 40 / Math.sqrt( center.distance( numberGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
+      var speed = 60 / Math.sqrt( center.distance( numberGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
       numberGroup.animator.animateTo( center, 0, 1, 0, new Property( center ), Easing.QUADRATIC_IN, speed, () => {} );
+    }
+
+    ensureShapeGroups() {
+      // If we already have one out, don't look for more
+      if ( this.shapeGroups.length >= 2 ) { return; }
+
+      for ( let shapeGroupStack of this.shapeGroupStacks ) {
+        if ( !shapeGroupStack.isEmpty() ) {
+          const shapeGroup = shapeGroupStack.shapeGroups.pop();
+          // TODO: don't require this here AND in the challengenode. Have things "reset" once they go to the stack!!!
+          shapeGroup.partitionDenominatorProperty.reset();
+          // TODO: add the stack offset here (should be a common method on Stack?)
+          shapeGroup.positionProperty.value = shapeGroupStack.positionProperty.value;
+          this.shapeGroups.push( shapeGroup );
+          this.centerShapeGroup( shapeGroup );
+          break;
+        }
+      }
+    }
+
+    ensureNumberGroups() {
+      // If we already have one out, don't look for more
+      if ( this.numberGroups.length >= 2 ) { return; }
+
+      for ( let numberGroupStack of this.numberGroupStacks ) {
+        if ( !numberGroupStack.isEmpty() ) {
+          const numberGroup = numberGroupStack.numberGroups.pop();
+          // TODO: add the stack offset here (should be a common method on Stack?)
+          numberGroup.positionProperty.value = numberGroupStack.positionProperty.value;
+          this.numberGroups.push( numberGroup );
+          this.centerNumberGroup( numberGroup );
+          break;
+        }
+      }
     }
   }
 

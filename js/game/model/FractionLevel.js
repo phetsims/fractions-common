@@ -9,8 +9,8 @@ define( require => {
   'use strict';
 
   // modules
+  const DynamicProperty = require( 'AXON/DynamicProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const NumberProperty = require( 'AXON/NumberProperty' );
   const Property = require( 'AXON/Property' );
 
   class FractionLevel {
@@ -38,11 +38,13 @@ define( require => {
       // @private {function}
       this.generateChallenge = generateChallenge;
 
-      // @public {Property.<number>}
-      this.scoreProperty = new NumberProperty( 0 );
-
       // @public {Property.<FractionChallenge>}
       this.challengeProperty = new Property( generateChallenge( this.number, this.color ) );
+
+      // @public {Property.<number>}
+      this.scoreProperty = new DynamicProperty( this.challengeProperty, {
+        derive: 'scoreProperty'
+      } );
     }
 
     /**

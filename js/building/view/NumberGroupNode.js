@@ -157,10 +157,9 @@ define( require => {
       } );
 
       // Don't allow touching once we start animating
-      numberGroup.isAnimatingProperty.link( function( isAnimating ) {
-        if ( isAnimating ) {
-          self.pickable = false;
-        }
+      // TODO: unlink this type of stuff
+      numberGroup.isAnimatingProperty.link( isAnimating => {
+        this.pickable = !isAnimating;
       } );
     }
 

@@ -115,7 +115,7 @@ define( require => {
 
     // TODO: do we want this as a property?
     get totalFraction() {
-      const fraction = new Fraction( this.wholeSpot.pieceProperty.value ? this.wholeSpot.pieceProperty.value.number : 0, 1 );
+      const fraction = new Fraction( this.wholeSpot && this.wholeSpot.pieceProperty.value ? this.wholeSpot.pieceProperty.value.number : 0, 1 );
       if ( this.numeratorSpot.pieceProperty.value && this.denominatorSpot.pieceProperty.value ) {
         fraction.add( new Fraction( this.numeratorSpot.pieceProperty.value.number, this.denominatorSpot.pieceProperty.value.number ) );
       }

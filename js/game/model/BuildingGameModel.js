@@ -62,7 +62,7 @@ define( require => {
             new ShapePiece( new Fraction( 1, 3 ), representation, color ),
             new ShapePiece( new Fraction( 1, 4 ), representation, color ),
             new ShapePiece( new Fraction( 1, 4 ), representation, color ),
-            new ShapePiece( new Fraction( 1, 4 ), representation, color ),
+            new ShapePiece( new Fraction( 1, 5 ), representation, color ),
             new ShapePiece( new Fraction( 1, 6 ), representation, color )
           ];
           return new FractionChallenge( levelNumber, type, targets, shapePieces, [] );
@@ -96,6 +96,7 @@ define( require => {
             new NumberPiece( 3 ),
             new NumberPiece( 4 ),
             new NumberPiece( 4 ),
+            new NumberPiece( 5 ),
             new NumberPiece( 6 )
           ];
           return new FractionChallenge( levelNumber, ChallengeType.NUMBER, targets, [], numberPieces );
