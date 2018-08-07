@@ -210,9 +210,7 @@ define( require => {
 
       // Don't allow touching once we start animating
       shapeGroup.isAnimatingProperty.link( function( isAnimating ) {
-        if ( isAnimating ) {
-          self.pickable = false;
-        }
+        self.pickable = !isAnimating;
       } );
 
       // @private {Property.<Bounds2>}

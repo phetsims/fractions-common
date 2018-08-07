@@ -116,6 +116,7 @@ define( require => {
         this.returnButton.visible = !!group;
 
         this.groupNode && this.groupNode.dispose();
+        this.groupNode = null;
 
         if ( group ) {
           if ( challenge.hasShapes ) {
