@@ -13,6 +13,7 @@ define( require => {
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
+  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const MixedFractionNode = require( 'FRACTIONS_COMMON/common/view/MixedFractionNode' );
   const NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
@@ -28,8 +29,6 @@ define( require => {
   // constants
   const CORNER_RADIUS = 5;
   const CORNER_OFFSET = 1;
-  const SHAPE_SCALE = 0.6;
-  const NUMBER_SCALE = 0.7;
 
   class TargetNode extends HBox {
     /**
@@ -44,6 +43,12 @@ define( require => {
       // @private {Target}
       this.target = target;
 
+      // @private {ModelViewTransform|null}
+      this.modelViewTransform = null;
+
+      // @private {Node|null}
+      this.parentContainer = null;
+
       const isShapeTarget = target instanceof ShapeTarget;
 
       // @private {Node|null}
@@ -51,11 +56,11 @@ define( require => {
       if ( challenge.hasShapes ) {
         const shapeGroup = new ShapeGroup( challenge.representation );
         shapeGroup.partitionDenominatorProperty.value = target.fraction.denominator;
-        _.times( challenge.maxTargetWholes, () => shapeGroup.increaseContainerCount() );
+        _.times( challenge.maxTargetWholes - 1, () => shapeGroup.increaseContainerCount() );
         this.placeholder = new ShapeGroupNode( shapeGroup, {
           isIcon: true,
           hasButtons: false,
-          scale: SHAPE_SCALE
+          scale: FractionsCommonConstants.SHAPE_COLLECTION_SCALE
         } );
       }
       else {
@@ -68,7 +73,7 @@ define( require => {
         this.placeholder = new NumberGroupNode( numberGroup, {
           isIcon: true,
           hasCardBackground: false,
-          scale: NUMBER_SCALE
+          scale: FractionsCommonConstants.NUMBER_COLLECTION_SCALE
         } );
       }
 
@@ -79,13 +84,28 @@ define( require => {
         stroke: FractionsCommonColorProfile.collectionBorderProperty
       } );
 
-      const groupCenter = this.container.center.plusXY( 0, challenge.hasShapes ? 10 : 0 );
+      // @private {Vector2}
+      this.groupCenter = this.container.center.plusXY( 0, challenge.hasShapes ? 10 : 0 );
 
       // @private {Node|null}
       this.groupNode = null;
 
       // @private {Node}
-      this.returnButton = new ReturnButton( () => {}, {
+      this.returnButton = new ReturnButton( () => {
+        // TODO: cleanup?
+        if ( this.groupNode ) {
+          const group = target.groupProperty.value;
+          target.groupProperty.value = null;
+          if ( challenge.hasShapes ) {
+            challenge.shapeGroups.push( group );
+            challenge.returnShapeGroup( group );
+          }
+          else {
+            challenge.numberGroups.push( group );
+            challenge.returnNumberGroup( group );
+          }
+        }
+      }, {
         cornerRadius: CORNER_RADIUS - CORNER_OFFSET,
         leftTop: this.container.leftTop.plus( new Vector2( CORNER_OFFSET, CORNER_OFFSET ) )
       } );
@@ -102,7 +122,7 @@ define( require => {
             this.groupNode = new ShapeGroupNode( group, {
               isIcon: true,
               hasButtons: false,
-              scale: SHAPE_SCALE,
+              scale: FractionsCommonConstants.SHAPE_COLLECTION_SCALE,
               positioned: false
             } );
           }
@@ -110,12 +130,18 @@ define( require => {
             this.groupNode = new NumberGroupNode( group, {
               isIcon: true,
               hasCardBackground: false,
-              scale: NUMBER_SCALE,
+              scale: FractionsCommonConstants.NUMBER_COLLECTION_SCALE,
               positioned: false
             } );
           }
-          this.groupNode.center = groupCenter;
+          this.groupNode.center = this.groupCenter;
           this.container.addChild( this.groupNode );
+
+          // Whenever we get a group placed, we need to update the target location so that the subsequent animation
+          // goes to the right place.
+          target.positionProperty.value = this.modelViewTransform.viewToModelPosition(
+            this.groupNode.getUniqueTrailTo( this.parentContainer ).localToGlobalPoint( Vector2.ZERO )
+          );
         }
       };
       this.target.groupProperty.link( this.groupListener );
@@ -139,6 +165,17 @@ define( require => {
           denominator
         } ) );
       }
+    }
+
+    // TODO: doc and cleanup
+    updateModelLocations( modelViewTransform, parentContainer ) {
+      this.modelViewTransform = modelViewTransform;
+      this.parentContainer = parentContainer;
+
+      // Initialize with an approximate location so we can compute the closest target
+      this.target.positionProperty.value = modelViewTransform.viewToModelPosition(
+        this.container.getUniqueTrailTo( parentContainer ).localToGlobalPoint( this.groupCenter )
+      );
     }
 
     /**

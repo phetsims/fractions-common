@@ -48,8 +48,12 @@ define( require => {
     ROUND_BUTTON_RADIUS: 15,
 
     MAX_SHAPE_CONTAINERS: 4,
+
     SHAPE_BUILD_SCALE: 0.6,
-    NUMBER_BUILD_SCALE: 0.8
+    NUMBER_BUILD_SCALE: 0.8,
+
+    SHAPE_COLLECTION_SCALE: 0.6,
+    NUMBER_COLLECTION_SCALE: 0.7
   };
 
   fractionsCommon.register( 'FractionsCommonConstants', FractionsCommonConstants );

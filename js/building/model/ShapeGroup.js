@@ -12,10 +12,11 @@ define( require => {
   const Animator = require( 'FRACTIONS_COMMON/building/model/Animator' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Emitter = require( 'AXON/Emitter' );
+  const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
-  const ObservableArray = require( 'AXON/ObservableArray' );
   const NumberProperty = require( 'AXON/NumberProperty' );
+  const ObservableArray = require( 'AXON/ObservableArray' );
   const Property = require( 'AXON/Property' );
   const Range = require( 'DOT/Range' );
   const ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
@@ -68,6 +69,11 @@ define( require => {
 
       // Always want at least one container
       this.increaseContainerCount();
+    }
+
+    // TODO: do we want this as a property?
+    get totalFraction() {
+      return this.shapeContainers.reduce( new Fraction( 0, 1 ), ( fraction, shapeContainer ) => fraction.plus( shapeContainer.totalFractionProperty.value ) );
     }
 
     /**

@@ -164,6 +164,7 @@ define( require => {
       this.modelViewTransform = new ModelViewTransform2( Matrix3.translationFromVector( new Vector2( horizontalCenter, verticalCenter ) ) );
 
       this.panel.updateModelLocations( this.modelViewTransform );
+      this.targetNodes.forEach( targetNode => targetNode.updateModelLocations( this.modelViewTransform, this.targetsContainer ) );
 
       this.shapeDragBoundsProperty.value = this.modelViewTransform.viewToModelBounds( layoutBounds );
       this.numberDragBoundsProperty.value = this.modelViewTransform.viewToModelBounds( layoutBounds );
@@ -200,8 +201,20 @@ define( require => {
         dragBoundsProperty: this.shapeDragBoundsProperty,
         modelViewTransform: this.modelViewTransform,
         dropListener: () => {
-          // TODO: What about groups with lots of containers?
-          if ( this.panel.bounds.dilated( 10 ).containsPoint( this.modelViewTransform.modelToViewPosition( shapeGroup.positionProperty.value ) ) ) {
+          // TODO: better "drop areas"
+          const modelPoint = shapeGroup.positionProperty.value;
+          const viewPoint = this.modelViewTransform.modelToViewPosition( modelPoint );
+          if ( this.targetsContainer.bounds.dilated( 10 ).containsPoint( viewPoint ) ) {
+            const closestTarget = this.challenge.findClosestTarget( modelPoint );
+            if ( closestTarget.groupProperty.value === null && shapeGroup.totalFraction.reduced().equals( closestTarget.fraction.reduced() ) ) {
+              this.challenge.collectShapeGroup( shapeGroup, closestTarget );
+            }
+            else {
+              this.challenge.centerShapeGroup( shapeGroup );
+            }
+          }
+          else if ( this.panel.bounds.dilated( 10 ).containsPoint( viewPoint ) ) {
+            // TODO: What about groups with lots of containers?
             this.challenge.returnShapeGroup( shapeGroup );
           }
         },
@@ -231,7 +244,20 @@ define( require => {
         modelViewTransform: this.modelViewTransform,
 
         dropListener: () => {
-          if ( this.panel.bounds.dilated( 10 ).containsPoint( this.modelViewTransform.modelToViewPosition( numberGroup.positionProperty.value ) ) ) {
+          // TODO: better "drop areas"
+          const modelPoint = numberGroup.positionProperty.value;
+          const viewPoint = this.modelViewTransform.modelToViewPosition( modelPoint );
+          if ( this.targetsContainer.bounds.dilated( 10 ).containsPoint( viewPoint ) ) {
+            const closestTarget = this.challenge.findClosestTarget( modelPoint );
+            if ( closestTarget.groupProperty.value === null && numberGroup.totalFraction.reduced().equals( closestTarget.fraction.reduced() ) ) {
+              this.challenge.collectNumberGroup( numberGroup, closestTarget );
+            }
+            else {
+              this.challenge.centerNumberGroup( numberGroup );
+            }
+          }
+          else if ( this.panel.bounds.dilated( 10 ).containsPoint( viewPoint ) ) {
+            // TODO: What about groups with lots of containers?
             this.challenge.returnNumberGroup( numberGroup );
           }
         },

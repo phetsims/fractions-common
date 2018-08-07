@@ -13,6 +13,7 @@ define( require => {
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Bounds2 = require( 'DOT/Bounds2' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
+  const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const NumberProperty = require( 'AXON/NumberProperty' );
@@ -110,6 +111,15 @@ define( require => {
 
       // @public {boolean} TODO
       this.disposed = false;
+    }
+
+    // TODO: do we want this as a property?
+    get totalFraction() {
+      const fraction = new Fraction( this.wholeSpot.pieceProperty.value ? this.wholeSpot.pieceProperty.value.number : 0, 1 );
+      if ( this.numeratorSpot.pieceProperty.value && this.denominatorSpot.pieceProperty.value ) {
+        fraction.add( new Fraction( this.numeratorSpot.pieceProperty.value.number, this.denominatorSpot.pieceProperty.value.number ) );
+      }
+      return fraction;
     }
 
     updateAllowedSpots() {

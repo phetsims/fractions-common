@@ -231,8 +231,8 @@ define( require => {
       this.numberGroup.isAnimatingProperty.unlink( this.visibilityListener );
 
       // Required disposal, since we are passing the isUserControlledProperty
-      this.dragListener.dispose();
-      this.dragBoundsProperty.dispose();
+      this.dragListener && this.dragListener.dispose();
+      this.dragBoundsProperty && this.dragBoundsProperty.dispose();
       this.returnButton.dispose();
       this.undoVisibilityListener.dispose();
       this.isSelectedProperty.dispose();

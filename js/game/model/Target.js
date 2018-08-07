@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * Represents the goal "target" fraction along with its associated collection area values.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -9,8 +9,9 @@ define( require => {
   'use strict';
 
   // modules
-  const Property = require( 'AXON/Property' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Property = require( 'AXON/Property' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   class Target {
     /**
@@ -23,6 +24,9 @@ define( require => {
 
       // @public {Property.<ShapeGroup|NumberGroup|null>}
       this.groupProperty = new Property( null );
+
+      // @public {Property.<Vector2>} - Position of our target in model units (updated from the view)
+      this.positionProperty = new Property( Vector2.ZERO );
     }
   }
 

@@ -326,8 +326,8 @@ define( require => {
       this.removeContainerButton.dispose();
       this.returnButton.dispose();
       this.isSelectedProperty.dispose();
-      this.generalDragBoundsProperty.unlink( this.dragBoundsListener );
-      this.dragListener.dispose();
+      this.generalDragBoundsProperty && this.generalDragBoundsProperty.unlink( this.dragBoundsListener );
+      this.dragListener && this.dragListener.dispose();
     }
   }, {
     createIcon: function( representation ) {

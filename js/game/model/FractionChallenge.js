@@ -11,12 +11,15 @@ define( require => {
   // modules
   const BuildingModel = require( 'FRACTIONS_COMMON/building/model/BuildingModel' );
   const ChallengeType = require( 'FRACTIONS_COMMON/game/enum/ChallengeType' );
+  const Easing = require( 'TWIXT/Easing' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
   const NumberGroupStack = require( 'FRACTIONS_COMMON/building/model/NumberGroupStack' );
   const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
+  const Property = require( 'AXON/Property' );
   const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
   const ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
@@ -157,6 +160,67 @@ define( require => {
       initialGroups.forEach( ( group, index ) => {
         group.positionProperty.value = new Vector2( halfSpace * ( 2 * index - initialGroups.length + 1 ), 0 );
       } );
+    }
+
+    findClosestTarget( position ) {
+      let bestTarget = null;
+      let bestDistance = Number.POSITIVE_INFINITY;
+
+      this.targets.forEach( target => {
+        const distance = target.positionProperty.value.distance( position );
+        if ( distance < bestDistance ) {
+          bestDistance = distance;
+          bestTarget = target;
+        }
+      } );
+
+      assert && assert( bestTarget );
+
+      return bestTarget;
+    }
+
+    collectShapeGroup( shapeGroup, target ) {
+      assert && assert( shapeGroup instanceof ShapeGroup );
+      assert && assert( target.groupProperty.value === null );
+
+      // Setting this should result in a side-effect of updating our target's positionProperty to the correct location.
+      target.groupProperty.value = shapeGroup;
+
+      var positionProperty = target.positionProperty;
+      var speed = 40 / Math.sqrt( positionProperty.value.distance( shapeGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
+      shapeGroup.animator.animateTo( positionProperty.value, 0, FractionsCommonConstants.SHAPE_COLLECTION_SCALE, 0, positionProperty, Easing.QUADRATIC_IN, speed, () => {
+        this.shapeGroups.remove( shapeGroup );
+      } );
+    }
+
+    collectNumberGroup( numberGroup, target ) {
+      assert && assert( numberGroup instanceof NumberGroup );
+      assert && assert( target.groupProperty.value === null );
+
+      // Setting this should result in a side-effect of updating our target's positionProperty to the correct location.
+      target.groupProperty.value = numberGroup;
+
+      var positionProperty = target.positionProperty;
+      var speed = 40 / Math.sqrt( positionProperty.value.distance( numberGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
+      numberGroup.animator.animateTo( positionProperty.value, 0, FractionsCommonConstants.NUMBER_COLLECTION_SCALE, 0, positionProperty, Easing.QUADRATIC_IN, speed, () => {
+        this.numberGroups.remove( numberGroup );
+      } );
+    }
+
+    centerShapeGroup( shapeGroup ) {
+      assert && assert( shapeGroup instanceof ShapeGroup );
+
+      const center = Vector2.ZERO;
+      var speed = 40 / Math.sqrt( center.distance( shapeGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
+      shapeGroup.animator.animateTo( center, 0, 1, 0, new Property( center ), Easing.QUADRATIC_IN, speed, () => {} );
+    }
+
+    centerNumberGroup( numberGroup ) {
+      assert && assert( numberGroup instanceof NumberGroup );
+
+      const center = Vector2.ZERO;
+      var speed = 40 / Math.sqrt( center.distance( numberGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
+      numberGroup.animator.animateTo( center, 0, 1, 0, new Property( center ), Easing.QUADRATIC_IN, speed, () => {} );
     }
   }
 
