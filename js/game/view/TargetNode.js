@@ -41,6 +41,9 @@ define( require => {
         spacing: 10
       } );
 
+      // @private {Target}
+      this.target = target;
+
       const isShapeTarget = target instanceof ShapeTarget;
 
       // @private {Node|null}
@@ -76,8 +79,10 @@ define( require => {
         stroke: FractionsCommonColorProfile.collectionBorderProperty
       } );
 
-      this.placeholder.center = this.container.center.plusXY( 0, challenge.hasShapes ? 10 : 0 );
-      this.container.addChild( this.placeholder );
+      const groupCenter = this.container.center.plusXY( 0, challenge.hasShapes ? 10 : 0 );
+
+      // @private {Node|null}
+      this.groupNode = null;
 
       // @private {Node}
       this.returnButton = new ReturnButton( () => {}, {
@@ -85,6 +90,35 @@ define( require => {
         leftTop: this.container.leftTop.plus( new Vector2( CORNER_OFFSET, CORNER_OFFSET ) )
       } );
       this.container.addChild( this.returnButton );
+
+      // @private {function}
+      this.groupListener = group => {
+        this.returnButton.visible = !!group;
+
+        this.groupNode && this.groupNode.dispose();
+
+        if ( group ) {
+          if ( challenge.hasShapes ) {
+            this.groupNode = new ShapeGroupNode( group, {
+              isIcon: true,
+              hasButtons: false,
+              scale: SHAPE_SCALE,
+              positioned: false
+            } );
+          }
+          else {
+            this.groupNode = new NumberGroupNode( group, {
+              isIcon: true,
+              hasCardBackground: false,
+              scale: NUMBER_SCALE,
+              positioned: false
+            } );
+          }
+          this.groupNode.center = groupCenter;
+          this.container.addChild( this.groupNode );
+        }
+      };
+      this.target.groupProperty.link( this.groupListener );
 
       this.addChild( this.container );
 
@@ -105,6 +139,19 @@ define( require => {
           denominator
         } ) );
       }
+    }
+
+    /**
+     * Disposes the node
+     * @public
+     * @override
+     */
+    dispose() {
+      this.target.groupProperty.unlink( this.groupListener );
+
+      this.groupNode && this.groupNode.dispose();
+
+      super.dispose();
     }
   }
 

@@ -123,13 +123,15 @@ define( require => {
       // @private {Node}
       this.pieceLayer = new Node();
 
+      // @private {Array.<Node>}
+      this.targetNodes = challenge.targets.map( target => new TargetNode( target, challenge ) );
+
       // @private {Node}
       this.targetsContainer = new VBox( {
         // TODO: unhook from panel_margin?
         spacing: PANEL_MARGIN + 2,
         align: 'left',
-        // TODO: unlink?
-        children: challenge.targets.map( target => new TargetNode( target, challenge ) )
+        children: this.targetNodes
       } );
 
       // @private {Node}
@@ -303,6 +305,8 @@ define( require => {
 
       this.challenge.activeNumberPieces.removeItemAddedListener( this.addNumberPieceListener );
       this.challenge.activeNumberPieces.removeItemRemovedListener( this.removeNumberPieceListener );
+
+      this.targetNodes.forEach( targetNode => targetNode.dispose() );
 
       super.dispose();
     }

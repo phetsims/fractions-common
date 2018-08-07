@@ -56,7 +56,8 @@ define( require => {
       selectListener: null,
       removeLastListener: null,
       dragBoundsProperty: null,
-      modelViewTransform: null // {ModelViewTransform2|null} - Not needed if we are an icon
+      modelViewTransform: null, // {ModelViewTransform2|null} - Not needed if we are an icon
+      positioned: true
     }, options );
 
     // TODO: animation
@@ -189,6 +190,14 @@ define( require => {
       this.controlLayer.addChild( undoArrowContainer );
     }
 
+    // @private {function}
+    this.visibilityListener = isAnimating => {
+      if ( !options.positioned ) {
+        this.visible = !isAnimating;
+      }
+    };
+    this.shapeGroup.isAnimatingProperty.link( this.visibilityListener );
+
     // TODO: Presumably won't need an unlink, since our lifetimes are the same
     if ( !options.isIcon ) {
       // TODO: proper disposal handling!
@@ -308,6 +317,8 @@ define( require => {
      */
     dispose: function() {
       Node.prototype.dispose.call( this );
+
+      this.shapeGroup.isAnimatingProperty.unlink( this.visibilityListener );
 
       this.decreasePartitionCountButton.dispose();
       this.increasePartitionCountButton.dispose();

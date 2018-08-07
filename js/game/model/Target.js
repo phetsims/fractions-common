@@ -9,22 +9,22 @@ define( require => {
   'use strict';
 
   // modules
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
+  const Property = require( 'AXON/Property' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
-  /**
-   * @constructor
-   * @extends {Object}
-   *
-   * @param {Fraction} fraction
-   */
-  function Target( fraction ) {
+  class Target {
+    /**
+     * @param {Fraction} fraction
+     */
+    constructor( fraction ) {
 
-    // @public {Fraction}
-    this.fraction = fraction;
+      // @public {Fraction}
+      this.fraction = fraction;
+
+      // @public {Property.<ShapeGroup|NumberGroup|null>}
+      this.groupProperty = new Property( null );
+    }
   }
 
-  fractionsCommon.register( 'Target', Target );
-
-  return inherit( Object, Target );
+  return fractionsCommon.register( 'Target', Target );
 } );

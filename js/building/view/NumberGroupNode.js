@@ -59,7 +59,10 @@ define( require => {
       removeLastListener: null,
 
       // node options
-      cursor: 'pointer'
+      cursor: 'pointer',
+
+      // TODO: cleanup
+      positioned: true
     }, options );
 
     Node.call( this );
@@ -170,6 +173,14 @@ define( require => {
       ...( numberGroup.isMixedNumber ? [ wholeSpot ] : [] )
     ];
 
+    // @private {function}
+    this.visibilityListener = isAnimating => {
+      if ( !options.positioned ) {
+        this.visible = !isAnimating;
+      }
+    };
+    this.numberGroup.isAnimatingProperty.link( this.visibilityListener );
+
     if ( !options.isIcon ) {
       // @private {Property.<Bounds2>}
       this.dragBoundsProperty = new DerivedProperty( [ options.dragBoundsProperty ], function( dragBounds ) {
@@ -217,6 +228,8 @@ define( require => {
      * @public
      */
     dispose: function() {
+      this.numberGroup.isAnimatingProperty.unlink( this.visibilityListener );
+
       // Required disposal, since we are passing the isUserControlledProperty
       this.dragListener.dispose();
       this.dragBoundsProperty.dispose();
