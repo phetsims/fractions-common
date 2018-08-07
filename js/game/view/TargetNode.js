@@ -16,7 +16,13 @@ define( require => {
   const HBox = require( 'SCENERY/nodes/HBox' );
   const MixedFractionNode = require( 'FRACTIONS_COMMON/common/view/MixedFractionNode' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const ReturnButton = require( 'FRACTIONS_COMMON/building/view/ReturnButton' );
   const ShapeTarget = require( 'FRACTIONS_COMMON/game/model/ShapeTarget' );
+  const Vector2 = require( 'DOT/Vector2' );
+
+  // constants
+  const CORNER_RADIUS = 5;
+  const CORNER_OFFSET = 1;
 
   class TargetNode extends HBox {
     /**
@@ -31,10 +37,17 @@ define( require => {
 
       // @private {Rectangle}
       this.container = new Rectangle( 0, 0, 100, 100, {
-        cornerRadius: 4,
+        cornerRadius: CORNER_RADIUS,
         fill: FractionsCommonColorProfile.collectionBackgroundProperty,
         stroke: FractionsCommonColorProfile.collectionBorderProperty
       } );
+
+      // @private {Node}
+      this.returnButton = new ReturnButton( () => {}, {
+        cornerRadius: CORNER_RADIUS - CORNER_OFFSET,
+        leftTop: this.container.leftTop.plus( new Vector2( CORNER_OFFSET, CORNER_OFFSET ) )
+      } );
+      this.container.addChild( this.returnButton );
 
       this.addChild( this.container );
 

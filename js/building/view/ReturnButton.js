@@ -24,7 +24,7 @@ define( require => {
    * @param {function} callback
    * @param {Object} [options]
    */
-  function TemporaryUndoButton( callback, options ) {
+  function ReturnButton( callback, options ) {
 
     // TODO: Copied from UndoButton in expression-exchange. IF this is kept as-is, factor out into a common component.
     var ICON_HEIGHT = 17; // empirically determined, controls size of icon
@@ -52,7 +52,7 @@ define( require => {
     } );
   }
 
-  fractionsCommon.register( 'TemporaryUndoButton', TemporaryUndoButton );
+  fractionsCommon.register( 'ReturnButton', ReturnButton );
 
-  return inherit( MutableOptionsNode, TemporaryUndoButton );
+  return inherit( MutableOptionsNode, ReturnButton );
 } );

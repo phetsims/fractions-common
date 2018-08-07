@@ -23,8 +23,8 @@ define( require => {
   var Path = require( 'SCENERY/nodes/Path' );
   var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  var ReturnButton = require( 'FRACTIONS_COMMON/building/view/ReturnButton' );
   var Shape = require( 'KITE/Shape' );
-  var TemporaryUndoButton = require( 'FRACTIONS_COMMON/building/view/TemporaryUndoButton' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -129,7 +129,7 @@ define( require => {
     } );
 
     // @private {Node}
-    this.undoButton = new TemporaryUndoButton( options.removeLastListener, {
+    this.returnButton = new ReturnButton( options.removeLastListener, {
       // TODO: Make it computational
       rightCenter: cardBackground.leftCenter.plusXY( 5, 0 ) // Some slight overlap shown in mockups
     } );
@@ -139,7 +139,7 @@ define( require => {
 
     // @private {function}
     this.undoVisibilityListener = Property.multilink( [ numberGroup.hasPiecesProperty, options.isSelectedProperty ], function( hasPieces, isSelected ) {
-      self.undoButton.visible = hasPieces && isSelected;
+      self.returnButton.visible = hasPieces && isSelected;
     } );
 
     if ( !options.isIcon ) {
@@ -161,7 +161,7 @@ define( require => {
 
     this.children = [
       cardBackground
-    ].concat( options.isIcon ? [] : [ this.undoButton ] ).concat( [
+    ].concat( options.isIcon ? [] : [ this.returnButton ] ).concat( [
       fractionLine,
       numeratorSpot,
       denominatorSpot
@@ -217,7 +217,7 @@ define( require => {
       // Required disposal, since we are passing the isUserControlledProperty
       this.dragListener.dispose();
       this.dragBoundsProperty.dispose();
-      this.undoButton.dispose();
+      this.returnButton.dispose();
       this.undoVisibilityListener.dispose();
       this.isSelectedProperty.dispose();
 

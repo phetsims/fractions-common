@@ -156,9 +156,10 @@ define( require => {
       }
       this.levelText.centerX = horizontalCenter;
       this.levelText.top = layoutBounds.top + PANEL_MARGIN;
+      const verticalCenter = ( this.levelText.bottom + this.panel.top ) / 2;
 
       // @public {ModelViewTransform2}
-      this.modelViewTransform = new ModelViewTransform2( Matrix3.translationFromVector( new Vector2( horizontalCenter, layoutBounds.centerY ) ) );
+      this.modelViewTransform = new ModelViewTransform2( Matrix3.translationFromVector( new Vector2( horizontalCenter, verticalCenter ) ) );
 
       this.panel.updateModelLocations( this.modelViewTransform );
 

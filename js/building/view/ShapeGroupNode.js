@@ -25,12 +25,12 @@ define( require => {
   var Path = require( 'SCENERY/nodes/Path' );
   var Property = require( 'AXON/Property' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  var ReturnButton = require( 'FRACTIONS_COMMON/building/view/ReturnButton' );
   var RoundArrowButton = require( 'FRACTIONS_COMMON/common/view/RoundArrowButton' );
   var RoundPushButton = require( 'SUN/buttons/RoundPushButton' );
   var Shape = require( 'KITE/Shape' );
   var ShapeContainerNode = require( 'FRACTIONS_COMMON/building/view/ShapeContainerNode' );
   var ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
-  var TemporaryUndoButton = require( 'FRACTIONS_COMMON/building/view/TemporaryUndoButton' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // constants
@@ -169,14 +169,14 @@ define( require => {
     } ) );
 
     // @private {Node}
-    this.undoButton = new TemporaryUndoButton( options.removeLastListener, {
+    this.returnButton = new ReturnButton( options.removeLastListener, {
       // TODO: Make it computational
       rightBottom: shapeGroup.representation === Representation.VERTICAL_BAR ? new Vector2( -50, -75 / 2 ) : new Vector2( -36, -36 )
     } );
 
     var undoArrowContainer = new Node();
     function updateUndoVisibility() {
-      undoArrowContainer.children = shapeGroup.hasAnyPieces() ? [ self.undoButton ] : [];
+      undoArrowContainer.children = shapeGroup.hasAnyPieces() ? [ self.returnButton ] : [];
     }
     shapeGroup.changedEmitter.addListener( updateUndoVisibility );
     updateUndoVisibility();
@@ -243,7 +243,7 @@ define( require => {
 
   return inherit( Node, ShapeGroupNode, {
     updateDragBounds: function() {
-      var safeBounds = this.controlLayer.bounds.union( this.undoButton.bounds ); // undo button not always in the control layer
+      var safeBounds = this.controlLayer.bounds.union( this.returnButton.bounds ); // undo button not always in the control layer
 
       var containerTop = -( this.shapeGroup.representation === Representation.CIRCLE ? FractionsCommonConstants.SHAPE_SIZE : FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT ) / 2;
       safeBounds = safeBounds.withMinY( Math.min( safeBounds.top, containerTop ) );
@@ -258,7 +258,7 @@ define( require => {
         this.rightButtonBox.left = ( this.shapeContainerNodes.length - 0.5 ) * ( FractionsCommonConstants.SHAPE_SIZE + CONTAINER_PADDING );
 
         // TODO:
-        if ( this.undoButton ) {
+        if ( this.returnButton ) {
           this.updateDragBounds();
         }
       }
@@ -306,7 +306,7 @@ define( require => {
       this.increasePartitionCountButton.dispose();
       this.addContainerButton.dispose();
       this.removeContainerButton.dispose();
-      this.undoButton.dispose();
+      this.returnButton.dispose();
       this.isSelectedProperty.dispose();
       this.generalDragBoundsProperty.unlink( this.dragBoundsListener );
       this.dragListener.dispose();
