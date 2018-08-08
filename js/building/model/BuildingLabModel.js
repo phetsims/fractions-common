@@ -86,6 +86,35 @@ define( require => {
       return new DerivedProperty( [ this.selectedGroupProperty ], selectedGroup => selectedGroup === shapeGroup );
     }
 
+    /**
+     * Places a ShapePiece into a ShapeContainer.
+     * @public
+     * @override
+     *
+     * @param {ShapePiece}
+     * @param {ShapeContainer} shapeContainer
+     * @param {ShapeGroup} shapeGroup
+     */
+    placeActiveShapePiece( shapePiece, shapeContainer, shapeGroup ) {
+      super.placeActiveShapePiece( shapePiece, shapeContainer, shapeGroup );
+
+      this.selectedGroupProperty.value = shapeGroup;
+    }
+
+    /**
+     * Places a NumberPiece in a NumberSpot
+     * @public
+     * @override
+     *
+     * @param {NumberSpot} numberSpot
+     * @param {NumberPiece} numberPiece
+     */
+    placeNumberPiece( numberSpot, numberPiece ) {
+      super.placeNumberPiece( numberSpot, numberPiece );
+
+      this.selectedGroupProperty.value = numberSpot.numberGroup;
+    }
+
     reset() {
       this.topRepresentationProperty.reset();
 

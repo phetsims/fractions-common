@@ -129,6 +129,14 @@ define( require => {
       } );
     }
 
+    /**
+     * Places a ShapePiece into a ShapeContainer.
+     * @public
+     *
+     * @param {ShapePiece}
+     * @param {ShapeContainer} shapeContainer
+     * @param {ShapeGroup} shapeGroup
+     */
     placeActiveShapePiece( shapePiece, shapeContainer, shapeGroup ) {
       var self = this;
 
@@ -201,12 +209,23 @@ define( require => {
 
       if ( closestSpot ) {
         // Instant like the old sim (for now)
-        closestSpot.pieceProperty.value = numberPiece;
-        this.activeNumberPieces.remove( numberPiece );
+        this.placeNumberPiece( closestSpot, numberPiece );
       }
       else {
         this.returnActiveNumberPiece( numberPiece );
       }
+    }
+
+    /**
+     * Places a NumberPiece in a NumberSpot
+     * @public
+     *
+     * @param {NumberSpot} numberSpot
+     * @param {NumberPiece} numberPiece
+     */
+    placeNumberPiece( numberSpot, numberPiece ) {
+      numberSpot.pieceProperty.value = numberPiece;
+      this.activeNumberPieces.remove( numberPiece );
     }
 
     // TODO: doc
