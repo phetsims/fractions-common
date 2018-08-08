@@ -21,6 +21,7 @@ define( require => {
   const FractionChallengeNode = require( 'FRACTIONS_COMMON/game/view/FractionChallengeNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
+  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const inherit = require( 'PHET_CORE/inherit' );
@@ -205,7 +206,8 @@ define( require => {
       lastChallengeNode = null;
       let transition;
       if ( challenge ) {
-        const challengeNode = new FractionChallengeNode( challenge, this.layoutBounds, this.gameAudioPlayer );
+        const nextLevelCallback = challenge.levelNumber < FractionsCommonConstants.NUM_LEVELS ? model.nextLevel.bind( model ) : null;
+        const challengeNode = new FractionChallengeNode( challenge, this.layoutBounds, this.gameAudioPlayer, nextLevelCallback );
         lastChallengeNode = challengeNode;
         // TODO: don't need wrapper, include somehow? (maybe put the things in the challenge node?)
         // TODO: Or have a transition between a challenge OR the two level select screens!!!!!!!!!

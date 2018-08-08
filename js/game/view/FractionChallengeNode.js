@@ -11,6 +11,7 @@ define( require => {
   // modules
   const arrayRemove = require( 'PHET_CORE/arrayRemove' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const FaceNode = require( 'SCENERY_PHET/FaceNode' );
   const FractionChallengePanel = require( 'FRACTIONS_COMMON/game/view/FractionChallengePanel' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
@@ -21,6 +22,7 @@ define( require => {
   const NumberGroupStack = require( 'FRACTIONS_COMMON/building/model/NumberGroupStack' );
   const NumberPieceNode = require( 'FRACTIONS_COMMON/building/view/NumberPieceNode' );
   const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
+  const PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Property = require( 'AXON/Property' );
   const ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
@@ -30,11 +32,13 @@ define( require => {
   const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   const TargetNode = require( 'FRACTIONS_COMMON/game/view/TargetNode' );
   const Text = require( 'SCENERY/nodes/Text' );
+  const TextPushButton = require( 'SUN/buttons/TextPushButton' );
   const VBox = require( 'SCENERY/nodes/VBox' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // strings
   const levelTitlePatternString = require( 'string!FRACTIONS_COMMON/levelTitlePattern' );
+  const nextString = require( 'string!VEGAS/next' );
 
   // constants
   const PANEL_MARGIN = FractionsCommonConstants.PANEL_MARGIN;
@@ -45,8 +49,9 @@ define( require => {
      * @param {FractionChallenge} challenge
      * @param {Bounds2} layoutBounds
      * @param {GameAudioPlayer} gameAudioPlayer
+     * @param {function|null} nextLevelCallback - Called with no arguments, forwards to the next level (if there is one)
      */
-    constructor( challenge, layoutBounds, gameAudioPlayer ) {
+    constructor( challenge, layoutBounds, gameAudioPlayer, nextLevelCallback ) {
       super();
 
       // @private
@@ -146,12 +151,32 @@ define( require => {
         font: new PhetFont( { size: 30, weight: 'bold' } )
       } );
 
+      // @private {Node}
+      this.levelCompleteNode = new VBox( {
+        spacing: 10,
+        children: [
+          new FaceNode( 180 ),
+          ...( nextLevelCallback ? [ new TextPushButton( nextString, {
+            listener: nextLevelCallback,
+            baseColor: PhetColorScheme.BUTTON_YELLOW,
+            font: new PhetFont( 24 )
+          } ) ] : [] )
+        ]
+      } );
+
+      // @private {function}
+      this.levelCompleteListener = score => {
+        this.levelCompleteNode.visible = score === this.challenge.targets.length;
+      };
+      this.challenge.scoreProperty.link( this.levelCompleteListener );
+
       this.children = [
         this.panel,
         this.targetsContainer,
         this.levelText,
         this.groupLayer,
-        this.pieceLayer
+        this.pieceLayer,
+        this.levelCompleteNode
       ];
 
       // layout
@@ -166,9 +191,11 @@ define( require => {
       this.levelText.centerX = horizontalCenter;
       this.levelText.top = layoutBounds.top + PANEL_MARGIN;
       const verticalCenter = ( this.levelText.bottom + this.panel.top ) / 2;
+      const center = new Vector2( horizontalCenter, verticalCenter );
+      this.levelCompleteNode.center = center;
 
       // @public {ModelViewTransform2}
-      this.modelViewTransform = new ModelViewTransform2( Matrix3.translationFromVector( new Vector2( horizontalCenter, verticalCenter ) ) );
+      this.modelViewTransform = new ModelViewTransform2( Matrix3.translationFromVector( center ) );
 
       this.panel.updateModelLocations( this.modelViewTransform );
       this.targetNodes.forEach( targetNode => targetNode.updateModelLocations( this.modelViewTransform, this.targetsContainer ) );
@@ -352,6 +379,8 @@ define( require => {
 
       this.challenge.activeNumberPieces.removeItemAddedListener( this.addNumberPieceListener );
       this.challenge.activeNumberPieces.removeItemRemovedListener( this.removeNumberPieceListener );
+
+      this.challenge.scoreProperty.unlink( this.levelCompleteListener );
 
       this.targetNodes.forEach( targetNode => targetNode.dispose() );
 

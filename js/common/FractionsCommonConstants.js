@@ -53,7 +53,9 @@ define( require => {
     NUMBER_BUILD_SCALE: 0.8,
 
     SHAPE_COLLECTION_SCALE: 0.6,
-    NUMBER_COLLECTION_SCALE: 0.7
+    NUMBER_COLLECTION_SCALE: 0.7,
+
+    NUM_LEVELS: 10
   };
 
   fractionsCommon.register( 'FractionsCommonConstants', FractionsCommonConstants );

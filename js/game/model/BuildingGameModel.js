@@ -18,6 +18,7 @@ define( require => {
   const FractionLevel = require( 'FRACTIONS_COMMON/game/model/FractionLevel' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
+  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   const Property = require( 'AXON/Property' );
   const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
@@ -194,6 +195,9 @@ define( require => {
         new FractionLevel( 10, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level10Property, placeholderNumberChallengeGenerator( 4 ) )
       ];
 
+      assert && assert( this.shapeLevels.length === FractionsCommonConstants.NUM_LEVELS );
+      assert && assert( this.numberLevels.length === FractionsCommonConstants.NUM_LEVELS );
+
       // @public {Property.<FractionLevel|null>}
       this.levelProperty = new Property( null );
 
@@ -214,6 +218,21 @@ define( require => {
      */
     step( dt ) {
       this.challengeProperty.value && this.challengeProperty.value.step( dt );
+    }
+
+    /**
+     * Moves to the next level (if possible)
+     * @public
+     */
+    nextLevel() {
+      const shapeIndex = this.shapeLevels.indexOf( this.levelProperty.value ) + 1;
+      const numberIndex = this.numberLevels.indexOf( this.levelProperty.value ) + 1;
+      if ( shapeIndex > 0 && this.shapeLevels[ shapeIndex ] ) {
+        this.levelProperty.value = this.shapeLevels[ shapeIndex ];
+      }
+      else if ( numberIndex > 0 && this.numberLevels[ numberIndex ] ) {
+        this.levelProperty.value = this.numberLevels[ numberIndex ];
+      }
     }
 
     /**
