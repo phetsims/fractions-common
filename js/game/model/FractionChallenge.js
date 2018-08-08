@@ -137,7 +137,9 @@ define( require => {
         // TODO: Don't add all reprs
         this.shapeGroupStacks.forEach( shapeGroupStack => {
           _.times( targets.length - 1, () => {
-            shapeGroupStack.shapeGroups.push( new ShapeGroup( shapeGroupStack.representation ) );
+            shapeGroupStack.shapeGroups.push( new ShapeGroup( shapeGroupStack.representation, {
+              maxContainers: this.maxTargetWholes
+            } ) );
           } );
         } );
       }
@@ -155,10 +157,10 @@ define( require => {
 
       const initialGroups = [];
       if ( hasCircles ) {
-        initialGroups.push( this.addShapeGroup( Representation.CIRCLE ) );
+        initialGroups.push( this.addShapeGroup( Representation.CIRCLE, this.maxTargetWholes ) );
       }
       if ( hasBars ) {
-        initialGroups.push( this.addShapeGroup( Representation.VERTICAL_BAR ) );
+        initialGroups.push( this.addShapeGroup( Representation.VERTICAL_BAR, this.maxTargetWholes ) );
       }
       if ( hasNumbers ) {
         initialGroups.push( this.addNumberGroup( this.hasMixedTargets ) );

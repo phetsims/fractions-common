@@ -19,6 +19,7 @@ define( require => {
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Property = require( 'AXON/Property' );
   const Range = require( 'DOT/Range' );
+  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   const ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -29,11 +30,20 @@ define( require => {
      */
     constructor( representation, options ) {
       options = _.extend( {
-        returnPieceListener: null
+        returnPieceListener: null,
+
+        // {number} - The maximum number of containers. Should be at least 1
+        maxContainers: FractionsCommonConstants.MAX_SHAPE_CONTAINERS
       }, options );
+
+      assert && assert( _.includes( Representation.VALUES, representation ) );
+      assert && assert( typeof options.maxContainers === 'number' && options.maxContainers >= 1 );
 
       // @public {Representation}
       this.representation = representation;
+
+      // @public {number}
+      this.maxContainers = options.maxContainers;
 
       // @private {function}
       this.returnPieceListener = options.returnPieceListener;

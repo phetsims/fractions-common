@@ -131,7 +131,7 @@ define( require => {
     } );
 
     shapeGroup.shapeContainers.lengthProperty.link( function( numShapeContainers ) {
-      self.addContainerButton.visible = numShapeContainers < FractionsCommonConstants.MAX_SHAPE_CONTAINERS;
+      self.addContainerButton.visible = numShapeContainers < shapeGroup.maxContainers;
       self.removeContainerButton.visible = numShapeContainers > 1;
     } );
 

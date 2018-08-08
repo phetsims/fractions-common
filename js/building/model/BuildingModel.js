@@ -247,13 +247,15 @@ define( require => {
       }
     }
 
-    addShapeGroup( representation ) {
+    addShapeGroup( representation, maxContainers = FractionsCommonConstants.MAX_SHAPE_CONTAINERS ) {
       var self = this;
 
       var shapeGroup = new ShapeGroup( representation, {
         returnPieceListener() {
           self.removeLastPieceFromShapeGroup( shapeGroup );
-        }
+        },
+
+        maxContainers
       } );
       this.shapeGroups.push( shapeGroup );
 
