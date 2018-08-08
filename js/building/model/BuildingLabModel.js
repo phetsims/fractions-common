@@ -52,7 +52,7 @@ define( require => {
         { representation: Representation.VERTICAL_BAR, color: FractionsCommonColorProfile.labBarFillProperty }
       ].forEach( ( { representation, color } ) => {
         _.range( 1, 9 ).forEach( denominator => {
-          var stack = new ShapeStack( new Fraction( 1, denominator ), PIECE_LAYOUT_QUANTITY, representation, color );
+          var stack = new ShapeStack( new Fraction( 1, denominator ), PIECE_LAYOUT_QUANTITY, representation, color, false );
           stack.shapePieces.push( new ShapePiece( new Fraction( 1, denominator ), representation, color ) );
           stack.shapePieces.push( new ShapePiece( new Fraction( 1, denominator ), representation, color ) );
           this.shapeStacks.push( stack );
@@ -61,7 +61,7 @@ define( require => {
 
       // Number stacks
       _.range( 1, 9 ).map( number => {
-        var stack = new NumberStack( number, PIECE_LAYOUT_QUANTITY );
+        var stack = new NumberStack( number, PIECE_LAYOUT_QUANTITY, false );
         stack.numberPieces.push( new NumberPiece( number ) );
         stack.numberPieces.push( new NumberPiece( number ) );
         this.numberStacks.push( stack );
