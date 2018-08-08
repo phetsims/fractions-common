@@ -137,11 +137,13 @@ define( require => {
           this.groupNode.center = this.groupCenter;
           this.container.addChild( this.groupNode );
 
-          // Whenever we get a group placed, we need to update the target location so that the subsequent animation
-          // goes to the right place.
-          target.positionProperty.value = this.modelViewTransform.viewToModelPosition(
-            this.groupNode.getUniqueTrailTo( this.parentContainer ).localToGlobalPoint( Vector2.ZERO )
-          );
+          if ( this.modelViewTransform ) {
+            // Whenever we get a group placed, we need to update the target location so that the subsequent animation
+            // goes to the right place.
+            target.positionProperty.value = this.modelViewTransform.viewToModelPosition(
+              this.groupNode.getUniqueTrailTo( this.parentContainer ).localToGlobalPoint( Vector2.ZERO )
+            );
+          }
         }
       };
       this.target.groupProperty.link( this.groupListener );
