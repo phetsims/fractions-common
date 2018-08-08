@@ -1,7 +1,7 @@
 // Copyright 2017, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * A stack that holds NumberPieces.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */

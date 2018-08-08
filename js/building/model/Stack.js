@@ -1,7 +1,9 @@
 // Copyright 2017, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * Base class for different types of object stacks (usually for pieces and groups) that are placed in panels usually.
+ *
+ * "mutable" stacks have elements dynamically added/removed, whereas "immutable" ones are not affected by the user.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
