@@ -15,11 +15,12 @@ define( require => {
 
   class ShapeGroupStack extends Stack {
     /**
+     * @param {number} layoutQuantity
      * @param {Representation} representation
      * @param {boolean} [isMutable]
      */
-    constructor( representation, isMutable = true ) {
-      super( isMutable );
+    constructor( layoutQuantity, representation, isMutable = true ) {
+      super( layoutQuantity, isMutable );
 
       // @public {Representation}
       this.representation = representation;

@@ -16,10 +16,11 @@ define( require => {
   class NumberStack extends Stack {
     /**
      * @param {number} number
+     * @param {number} layoutQuantity
      * @param {boolean} [isMutable]
      */
-    constructor( number, isMutable = true ) {
-      super( isMutable );
+    constructor( number, layoutQuantity, isMutable = true ) {
+      super( layoutQuantity, isMutable );
 
       // @public {number}
       this.number = number;

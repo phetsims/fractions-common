@@ -30,6 +30,8 @@ define( require => {
     this.stack = stack;
   }
 
+  // TODO: note abstract layoutBounds? (guaranteed?)
+
   fractionsCommon.register( 'StackNode', StackNode );
 
   return inherit( Node, StackNode );

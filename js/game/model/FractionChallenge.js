@@ -87,16 +87,6 @@ define( require => {
       // should instead be a "refresh" animation instead of "next" challenge.
       this.refreshedChallenge = null;
 
-      if ( hasCircles ) {
-        this.shapeGroupStacks.push( new ShapeGroupStack( Representation.CIRCLE ) );
-      }
-      if ( hasBars ) {
-        this.shapeGroupStacks.push( new ShapeGroupStack( Representation.VERTICAL_BAR ) );
-      }
-      if ( hasNumbers ) {
-        this.numberGroupStacks.push( new NumberGroupStack( this.hasMixedTargets ) );
-      }
-
       // Sort out inputs (with a new copy, so we don't modify our actual paramater reference) so we create the stacks in
       // increasing order
       shapePieces = shapePieces.slice().sort( ( a, b ) => {
@@ -115,10 +105,21 @@ define( require => {
         if ( a.number < b.number ) { return -1; } else if ( a.number === b.number ) { return 0; } else { return 1; }
       } );
 
+      if ( hasCircles ) {
+        this.shapeGroupStacks.push( new ShapeGroupStack( targets.length, Representation.CIRCLE ) );
+      }
+      if ( hasBars ) {
+        this.shapeGroupStacks.push( new ShapeGroupStack( targets.length, Representation.VERTICAL_BAR ) );
+      }
+      if ( hasNumbers ) {
+        this.numberGroupStacks.push( new NumberGroupStack( targets.length, this.hasMixedTargets ) );
+      }
+
       shapePieces.forEach( shapePiece => {
         var shapeStack = this.findMatchingShapeStack( shapePiece );
         if ( !shapeStack ) {
-          shapeStack = new ShapeStack( shapePiece.fraction, shapePiece.representation, shapePiece.color );
+          const quantity = shapePieces.filter( otherPiece => otherPiece.fraction.equals( shapePiece.fraction ) ).length;
+          shapeStack = new ShapeStack( shapePiece.fraction, quantity, shapePiece.representation, shapePiece.color );
           this.shapeStacks.push( shapeStack );
         }
         shapeStack.shapePieces.push( shapePiece );
@@ -127,7 +128,8 @@ define( require => {
       numberPieces.forEach( numberPiece => {
         var numberStack = this.findMatchingNumberStack( numberPiece );
         if ( !numberStack ) {
-          numberStack = new NumberStack( numberPiece.number );
+          const quantity = numberPieces.filter( otherPiece => otherPiece.number === numberPiece.number ).length;
+          numberStack = new NumberStack( numberPiece.number, quantity );
           this.numberStacks.push( numberStack );
         }
         numberStack.numberPieces.push( numberPiece );

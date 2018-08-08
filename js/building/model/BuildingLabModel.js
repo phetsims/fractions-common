@@ -26,6 +26,10 @@ define( require => {
   const ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
   const Vector2 = require( 'DOT/Vector2' );
 
+  // constants
+  const PIECE_LAYOUT_QUANTITY = 2;
+  const GROUP_LAYOUT_QUANTITY = 1;
+
   class BuildingLabModel extends BuildingModel {
     /**
      * @param {boolean} allowMixedNumbers
@@ -48,7 +52,7 @@ define( require => {
         { representation: Representation.VERTICAL_BAR, color: FractionsCommonColorProfile.labBarFillProperty }
       ].forEach( ( { representation, color } ) => {
         _.range( 1, 9 ).forEach( denominator => {
-          var stack = new ShapeStack( new Fraction( 1, denominator ), representation, color );
+          var stack = new ShapeStack( new Fraction( 1, denominator ), PIECE_LAYOUT_QUANTITY, representation, color );
           stack.shapePieces.push( new ShapePiece( new Fraction( 1, denominator ), representation, color ) );
           stack.shapePieces.push( new ShapePiece( new Fraction( 1, denominator ), representation, color ) );
           this.shapeStacks.push( stack );
@@ -57,17 +61,17 @@ define( require => {
 
       // Number stacks
       _.range( 1, 9 ).map( number => {
-        var stack = new NumberStack( number );
+        var stack = new NumberStack( number, PIECE_LAYOUT_QUANTITY );
         stack.numberPieces.push( new NumberPiece( number ) );
         stack.numberPieces.push( new NumberPiece( number ) );
         this.numberStacks.push( stack );
       } );
 
       // Non-mutable stacks
-      this.shapeGroupStacks.push( new ShapeGroupStack( Representation.CIRCLE, false ) );
-      this.shapeGroupStacks.push( new ShapeGroupStack( Representation.VERTICAL_BAR, false ) );
-      this.numberGroupStacks.push( new NumberGroupStack( false, false ) );
-      this.numberGroupStacks.push( new NumberGroupStack( true, false ) );
+      this.shapeGroupStacks.push( new ShapeGroupStack( GROUP_LAYOUT_QUANTITY, Representation.CIRCLE, false ) );
+      this.shapeGroupStacks.push( new ShapeGroupStack( GROUP_LAYOUT_QUANTITY, Representation.VERTICAL_BAR, false ) );
+      this.numberGroupStacks.push( new NumberGroupStack( GROUP_LAYOUT_QUANTITY, false, false ) );
+      this.numberGroupStacks.push( new NumberGroupStack( GROUP_LAYOUT_QUANTITY, true, false ) );
 
       // Add initial stacks
       this.shapeGroupStacks.forEach( shapeGroupStack => {

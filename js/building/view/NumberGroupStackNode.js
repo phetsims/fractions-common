@@ -28,18 +28,33 @@ define( require => {
     // @private {boolean}
     this.isMixedNumber = numberGroupStack.isMixedNumber;
 
-    var icon = NumberGroupNode.createIcon( numberGroupStack.isMixedNumber );
+    // @private {Node}
+    this.icon = NumberGroupNode.createIcon( numberGroupStack.isMixedNumber );
 
-    this.addChild( icon );
+    this.addChild( this.icon );
 
-    numberGroupStack.numberGroups.lengthProperty.link( function( length ) {
-      icon.visible = length > 0;
+    numberGroupStack.numberGroups.lengthProperty.link( length => {
+      this.icon.visible = length > 0;
     } );
+
+    // @public {Bounds2}
+    this.layoutBounds = this.computeLayoutBounds();
 
     this.mutate( options );
   }
 
   fractionsCommon.register( 'NumberGroupStackNode', NumberGroupStackNode );
 
-  return inherit( StackNode, NumberGroupStackNode );
+  return inherit( StackNode, NumberGroupStackNode, {
+    /**
+     * Returns the ideal layout bounds for this node (that should be used for layout).
+     * @public
+     *
+     * @returns {Bounds2}
+     */
+    computeLayoutBounds() {
+      return this.icon.bounds;
+    }
+
+  } );
 } );

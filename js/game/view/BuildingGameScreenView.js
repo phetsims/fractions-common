@@ -89,7 +89,7 @@ define( require => {
 
       var icon;
       if ( !model.hasMixedNumbers && level.buildingType === BuildingType.NUMBER ) {
-        var stack = new NumberStack( level.number );
+        var stack = new NumberStack( level.number, level.number );
         for ( var i = 0; i < level.number; i++ ) {
           stack.numberPieces.push( new NumberPiece( level.number ) );
         }

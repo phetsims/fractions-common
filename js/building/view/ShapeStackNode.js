@@ -94,10 +94,16 @@ define( require => {
       throw new Error( 'Unsupported representation for ShapeStackNode: ' + shapeStack.representation );
     }
 
+    // @private {Bounds2} - The bounds that include the main display (besides the pieces)
+    this.vanillaBounds = this.localBounds;
+
     // NOTE: Stacks and their nodes should be persistent, no need to unlink
     shapeStack.shapePieces.addItemAddedListener( this.addShapePiece.bind( this ) );
     shapeStack.shapePieces.addItemRemovedListener( this.removeShapePiece.bind( this ) );
     shapeStack.shapePieces.forEach( this.addShapePiece.bind( this ) );
+
+    // @public {Bounds2}
+    this.layoutBounds = this.computeLayoutBounds();
 
     this.mutate( options );
   }
@@ -105,6 +111,24 @@ define( require => {
   fractionsCommon.register( 'ShapeStackNode', ShapeStackNode );
 
   return inherit( StackNode, ShapeStackNode, {
+    /**
+     * Returns the ideal layout bounds for this node (that should be used for layout).
+     * @public
+     *
+     * @returns {Bounds2}
+     */
+    computeLayoutBounds() {
+      const bounds = this.vanillaBounds.copy();
+      const shapePiece = new ShapePiece( this.shapeStack.fraction, this.shapeStack.representation, this.shapeStack.color );
+      const shapePieceNode = new ShapePieceNode( shapePiece );
+      for ( let i = 0; i < this.shapeStack.layoutQuantity; i++ ) {
+        shapePieceNode.matrix = ShapeStack.getShapeMatrix( shapePiece.fraction, shapePiece.representation, i );
+        bounds.includeBounds( shapePieceNode.bounds );
+      }
+      shapePieceNode.dispose();
+      return bounds;
+    },
+
     /**
      * Adds a ShapePiece's view
      * @private

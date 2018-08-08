@@ -14,11 +14,12 @@ define( require => {
 
   class NumberGroupStack extends Stack {
     /**
+     * @param {number} layoutQuantity
      * @param {boolean} isMixedNumber
      * @param {boolean} [isMutable]
      */
-    constructor( isMixedNumber, isMutable = true ) {
-      super( isMutable );
+    constructor( layoutQuantity, isMixedNumber, isMutable = true ) {
+      super( layoutQuantity, isMutable );
 
       // @public {boolean}
       this.isMixedNumber = isMixedNumber;

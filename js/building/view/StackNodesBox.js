@@ -70,6 +70,8 @@ define( require => {
           } )
         ]
       } );
+      // TODO: cleanliness
+      stackTarget.layoutBounds = stackNode.localToParentBounds( stackNode.layoutBounds );
       stackNode.stack.array.lengthProperty.link( length => {
         stackTarget.pickable = length === 0 ? false : null;
       } );
@@ -77,19 +79,20 @@ define( require => {
     } );
 
     // Apply appropriate mouse/touch areas
-    var maxTargetHeight = _.max( this.stackTargets.map( function( stackTarget ) { return stackTarget.height; } ) );
+    var maxTargetHeight = _.max( this.stackTargets.map( function( stackTarget ) { return stackTarget.layoutBounds.height; } ) );
     if ( options.maxHeightOverride ) {
       assert && assert( maxTargetHeight <= options.maxHeightOverride );
       maxTargetHeight = options.maxHeightOverride;
     }
     this.stackTargets.forEach( function( node ) {
-      var bounds = new Bounds2( -options.padding / 2 + node.left, -maxTargetHeight / 2, node.right + options.padding / 2, maxTargetHeight / 2 );
-      assert && assert( node.bounds.isValid() );
+      const layoutBounds = node.layoutBounds;
+      assert && assert( layoutBounds.isValid() );
+      var bounds = new Bounds2( -options.padding / 2 + layoutBounds.left, -maxTargetHeight / 2, layoutBounds.right + options.padding / 2, maxTargetHeight / 2 );
       node.mouseArea = bounds;
       node.touchArea = bounds;
 
       // For layout, handle verticality
-      node.localBounds = new Bounds2( node.left, -maxTargetHeight / 2, node.right, maxTargetHeight / 2 );
+      node.localBounds = new Bounds2( layoutBounds.left, -maxTargetHeight / 2, layoutBounds.right, maxTargetHeight / 2 );
     } );
 
     HBox.call( this, {

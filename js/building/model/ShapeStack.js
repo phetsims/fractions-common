@@ -18,12 +18,13 @@ define( require => {
   class ShapeStack extends Stack {
     /**
      * @param {Fraction} fraction
+     * @param {number} layoutQuantity
      * @param {Representation} representation
      * @param {ColorDef} color
      * @param {boolean} [isMutable]
      */
-    constructor( fraction, representation, color, isMutable = true ) {
-      super( isMutable );
+    constructor( fraction, layoutQuantity, representation, color, isMutable = true ) {
+      super( layoutQuantity, isMutable );
 
       // @public {Fraction}
       this.fraction = fraction;

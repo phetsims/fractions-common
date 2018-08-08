@@ -10,6 +10,8 @@ define( require => {
 
   // modules
   const arrayRemove = require( 'PHET_CORE/arrayRemove' );
+  const Bounds2 = require( 'DOT/Bounds2' );
+  const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
   var NumberPieceNode = require( 'FRACTIONS_COMMON/building/view/NumberPieceNode' );
@@ -39,12 +41,33 @@ define( require => {
     numberStack.numberPieces.addItemRemovedListener( this.removeNumberPiece.bind( this ) );
     numberStack.numberPieces.forEach( this.addNumberPiece.bind( this ) );
 
+    // @public {Bounds2}
+    this.layoutBounds = this.computeLayoutBounds();
+
     this.mutate( options );
   }
 
   fractionsCommon.register( 'NumberStackNode', NumberStackNode );
 
   return inherit( StackNode, NumberStackNode, {
+    /**
+     * Returns the ideal layout bounds for this node (that should be used for layout).
+     * @public
+     *
+     * @returns {Bounds2}
+     */
+    computeLayoutBounds() {
+      const bounds = Bounds2.NOTHING.copy();
+      const numberPiece = new NumberPiece( this.numberStack.number );
+      const numberPieceNode = new NumberPieceNode( numberPiece );
+      for ( let i = 0; i < this.numberStack.layoutQuantity; i++ ) {
+        numberPieceNode.translation = NumberStack.getOffset( i );
+        bounds.includeBounds( numberPieceNode.bounds );
+      }
+      numberPieceNode.dispose();
+      return bounds;
+    },
+
     /**
      * Adds a NumberPiece's view
      * @private

@@ -16,19 +16,24 @@ define( require => {
 
   class Stack {
     /**
+     * @param {number} layoutQuantity
      * @param {boolean} [isMutable]
      */
-    constructor( isMutable = true ) {
+    constructor( layoutQuantity, isMutable = true ) {
+      assert && assert( typeof layoutQuantity === 'number' && layoutQuantity >= 1 && layoutQuantity % 1 === 0 );
       assert && assert( typeof isMutable === 'boolean' );
+
+      // @public {boolean}
+      this.layoutQuantity = layoutQuantity;
+
+      // @public {boolean}
+      this.isMutable = isMutable;
 
       // @public {Property.<Vector2>} - Position of our stack in model units (updated from the view)
       this.positionProperty = new Property( Vector2.ZERO );
 
       // @public {ObservableArray.<*>}
       this.array = new ObservableArray();
-
-      // @public {boolean}
-      this.isMutable = isMutable;
     }
 
     /**
