@@ -52,7 +52,10 @@ define( require => {
      * @public
      */
     reset() {
-      this.challengeProperty.value = this.generateChallenge( this.number, this.color );
+      // Note it as a refreshed challenge, so that we'll dissolve to it if needed.
+      const nextChallenge = this.generateChallenge( this.number, this.color );
+      this.challengeProperty.value.refreshedChallenge = nextChallenge;
+      this.challengeProperty.value = nextChallenge;
     }
   }
 

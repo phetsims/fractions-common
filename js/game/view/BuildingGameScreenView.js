@@ -15,6 +15,7 @@ define( require => {
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
+  const Easing = require( 'TWIXT/Easing' );
   const FilledPartition = require( 'FRACTIONS_COMMON/game/model/FilledPartition' );
   const FilledPartitionNode = require( 'FRACTIONS_COMMON/game/view/FilledPartitionNode' );
   const FractionChallengeNode = require( 'FRACTIONS_COMMON/game/view/FractionChallengeNode' );
@@ -35,10 +36,10 @@ define( require => {
   const ScoreDisplayStars = require( 'VEGAS/ScoreDisplayStars' );
   const ScreenView = require( 'JOIST/ScreenView' );
   const ShapePartition = require( 'FRACTIONS_COMMON/game/model/ShapePartition' );
-  const SlidingScreen = require( 'TWIXT/SlidingScreen' );
   const SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   const Text = require( 'SCENERY/nodes/Text' );
+  const TransitionNode = require( 'TWIXT/TransitionNode' );
   const VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
@@ -166,35 +167,110 @@ define( require => {
     // @private {Property.<boolean>}
     this.leftLevelSelectionProperty = new BooleanProperty( true );
 
-    // TODO: better name
-    var leftChallengeProperty = new DerivedProperty( [ model.levelProperty ], function( level ) {
-      return level === null;
-    } );
-
     // @private {Node} - The "left" half of the sliding layer, displayed first
     this.levelSelectionLayer = new Node();
 
-    // @private {Node} - The "right" half of the sliding layer, will slide into view when the user selects a level
-    this.challengeLayer = new Node();
+    // @orivate {TransitionNode}
+    this.levelSelectionTransitionNode = new TransitionNode( this.visibleBoundsProperty, {
+      content: leftLevelSelectionNode,
+      cachedNodes: [ leftLevelSelectionNode, rightLevelSelectionNode ]
+    } );
+    this.leftLevelSelectionProperty.lazyLink( isLeft => {
+      if ( isLeft ) {
+        this.levelSelectionTransitionNode.slideRightTo( leftLevelSelectionNode, {
+          duration: 0.4,
+          targetOptions: {
+            easing: Easing.QUADRATIC_IN_OUT
+          }
+        } );
+      }
+      else {
+        this.levelSelectionTransitionNode.slideLeftTo( rightLevelSelectionNode, {
+          duration: 0.4,
+          targetOptions: {
+            easing: Easing.QUADRATIC_IN_OUT
+          }
+        } );
+      }
+    } );
 
-    // @private {SlidingScreen}
-    this.levelSelectionSlidingScreen = new SlidingScreen( leftLevelSelectionNode, rightLevelSelectionNode, this.visibleBoundsProperty, this.leftLevelSelectionProperty );
-    this.challengeSlidingScreen = new SlidingScreen( this.levelSelectionLayer, this.challengeLayer, this.visibleBoundsProperty, leftChallengeProperty );
+    // @private {TransitionNode}
+    this.mainTransitionNode = new TransitionNode( this.visibleBoundsProperty, {
+      content: this.levelSelectionLayer,
+      cachedNodes: [ this.levelSelectionLayer ]
+    } );
+    let lastChallengeNode = null;
+    model.challengeProperty.lazyLink( ( challenge, oldChallenge ) => {
+      const oldChallengeNode = lastChallengeNode;
+      lastChallengeNode = null;
+      let transition;
+      if ( challenge ) {
+        const challengeNode = new FractionChallengeNode( challenge, this.layoutBounds, this.gameAudioPlayer );
+        lastChallengeNode = challengeNode;
+        // TODO: don't need wrapper, include somehow? (maybe put the things in the challenge node?)
+        // TODO: Or have a transition between a challenge OR the two level select screens!!!!!!!!!
+        const wrapper = new Node( {
+          children: [
+            new VBox( {
+              spacing: SIDE_MARGIN,
+              top: this.layoutBounds.top + SIDE_MARGIN,
+              left: this.layoutBounds.left + SIDE_MARGIN,
+              children: [
+                new BackButton( {
+                  listener() {
+                    model.levelProperty.value = null;
+                  }
+                } ),
+                new RefreshButton( {
+                  // TODO: hmm, these 3 are copied from expression-exchange, and make the button the same width...
+                  iconScale: 0.7,
+                  xMargin: 9,
+                  yMargin: 7,
+                  listener() {
+                    model.levelProperty.value && model.levelProperty.value.reset();
+                  }
+                } )
+              ]
+            } ),
+            challengeNode
+          ]
+        } );
+        if ( oldChallenge && oldChallenge.refreshedChallenge === challenge ) {
+          transition = this.mainTransitionNode.dissolveTo( wrapper, {
+            duration: 0.6,
+            targetOptions: {
+              easing: Easing.LINEAR
+            }
+          } );
+        }
+        else {
+          transition = this.mainTransitionNode.slideLeftTo( wrapper, {
+            duration: 0.4,
+            targetOptions: {
+              easing: Easing.QUADRATIC_IN_OUT
+            }
+          } );
+        }
+      }
+      else {
+        transition = this.mainTransitionNode.slideRightTo( this.levelSelectionLayer, {
+          duration: 0.4,
+          targetOptions: {
+            easing: Easing.QUADRATIC_IN_OUT
+          }
+        } );
+      }
+      if ( oldChallengeNode ) {
+        transition.endedEmitter.addListener( () => oldChallengeNode.dispose() );
+      }
+    } );
 
-    this.addChild( this.challengeSlidingScreen );
+    this.addChild( this.mainTransitionNode );
 
     // @public {GameAudioPlayer}
     this.gameAudioPlayer = new GameAudioPlayer( model.soundEnabledProperty );
 
-    // @private {FractionChallengeNode}
-    this.challengeNode = null;
-    model.challengeProperty.link( challenge => {
-      this.challengeNode && this.challengeNode.dispose();
-      this.challengeNode = new FractionChallengeNode( challenge, this.layoutBounds, this.gameAudioPlayer );
-      this.challengeLayer.addChild( this.challengeNode );
-    } );
-
-    this.levelSelectionLayer.addChild( this.levelSelectionSlidingScreen );
+    this.levelSelectionLayer.addChild( this.levelSelectionTransitionNode );
 
     var leftButton = new RoundArrowButton( {
       mutableBaseColor: FractionsCommonColorProfile.yellowRoundArrowButtonProperty,
@@ -254,28 +330,6 @@ define( require => {
     slidingLevelSelectionNode.centerX = this.layoutBounds.centerX;
     soundToggleButton.left = this.layoutBounds.left + SIDE_MARGIN;
     resetAllButton.right = this.layoutBounds.right - SIDE_MARGIN;
-
-    this.challengeLayer.addChild( new VBox( {
-      spacing: SIDE_MARGIN,
-      top: this.layoutBounds.top + SIDE_MARGIN,
-      left: this.layoutBounds.left + SIDE_MARGIN,
-      children: [
-        new BackButton( {
-          listener() {
-            model.levelProperty.value = null;
-          }
-        } ),
-        new RefreshButton( {
-          // TODO: hmm, these 3 are copied from expression-exchange, and make the button the same width...
-          iconScale: 0.7,
-          xMargin: 9,
-          yMargin: 7,
-          listener() {
-            model.levelProperty.value && model.levelProperty.value.reset();
-          }
-        } )
-      ]
-    } ) );
   }
 
   fractionsCommon.register( 'BuildingGameScreenView', BuildingGameScreenView );
@@ -288,8 +342,8 @@ define( require => {
      * @param {number} dt
      */
     step: function( dt ) {
-      this.levelSelectionSlidingScreen.step( dt );
-      this.challengeSlidingScreen.step( dt );
+      this.levelSelectionTransitionNode.step( dt );
+      this.mainTransitionNode.step( dt );
     },
 
     /**
@@ -300,8 +354,8 @@ define( require => {
       this.leftLevelSelectionProperty.reset();
 
       // TODO: better way of saying "animate instantly"
-      this.levelSelectionSlidingScreen.step( Number.POSITIVE_INFINITY );
-      this.challengeSlidingScreen.step( Number.POSITIVE_INFINITY );
+      this.levelSelectionTransitionNode.step( Number.POSITIVE_INFINITY );
+      this.mainTransitionNode.step( Number.POSITIVE_INFINITY );
     }
   } );
 } );

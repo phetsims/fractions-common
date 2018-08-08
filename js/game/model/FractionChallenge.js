@@ -83,6 +83,10 @@ define( require => {
         return groups.filter( group => group !== null ).length;
       } );
 
+      // @public {FractionChallenge} - Set externally if, when going from this challenge to the specified one, there
+      // should instead be a "refresh" animation instead of "next" challenge.
+      this.refreshedChallenge = null;
+
       if ( hasCircles ) {
         this.shapeGroupStacks.push( new ShapeGroupStack( Representation.CIRCLE ) );
       }

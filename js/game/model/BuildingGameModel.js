@@ -12,7 +12,6 @@ define( require => {
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
   const ChallengeType = require( 'FRACTIONS_COMMON/game/enum/ChallengeType' );
-  const DerivedProperty = require( 'AXON/DerivedProperty' );
   const DynamicProperty = require( 'AXON/DynamicProperty' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const FractionChallenge = require( 'FRACTIONS_COMMON/game/model/FractionChallenge' );
@@ -198,19 +197,8 @@ define( require => {
       // @public {Property.<FractionLevel|null>}
       this.levelProperty = new Property( null );
 
-      let lastLevel = this.shapeLevels[ 0 ];
-
-      // @public {Property.<FractionLevel>}
-      this.displayedLevelProperty = new DerivedProperty( [ this.levelProperty ], level => {
-        if ( !level ) {
-          level = lastLevel;
-        }
-        lastLevel = level;
-        return level;
-      } );
-
-      // @public {Property.<FractionChallenge>}
-      this.challengeProperty = new DynamicProperty( this.displayedLevelProperty, {
+      // @public {Property.<FractionChallenge|null>}
+      this.challengeProperty = new DynamicProperty( this.levelProperty, {
         derive: 'challengeProperty'
       } );
 
@@ -225,7 +213,7 @@ define( require => {
      * @param {number} dt
      */
     step( dt ) {
-      this.challengeProperty.value.step( dt );
+      this.challengeProperty.value && this.challengeProperty.value.step( dt );
     }
 
     /**
