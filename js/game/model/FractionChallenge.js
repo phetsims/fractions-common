@@ -287,6 +287,13 @@ define( require => {
         }
       }
     }
+
+    static createShapeChallenge( levelNumber, color, type, targetFractions, pieceFractions ) {
+      var representation = type === ChallengeType.PIE ? Representation.CIRCLE : Representation.VERTICAL_BAR;
+      const targets = targetFractions.map( f => new Target( f ) );
+      const shapePieces = pieceFractions.map( f => new ShapePiece( f, representation, color ) );
+      return new FractionChallenge( levelNumber, type, targets, shapePieces, [] );
+    }
   }
 
   return fractionsCommon.register( 'FractionChallenge', FractionChallenge );
