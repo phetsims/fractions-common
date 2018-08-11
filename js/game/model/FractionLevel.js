@@ -15,6 +15,7 @@ define( require => {
   const FractionChallenge = require( 'FRACTIONS_COMMON/game/model/FractionChallenge' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Property = require( 'AXON/Property' );
+  const UnitCollection = require( 'FRACTIONS_COMMON/game/model/UnitCollection' );
 
   // globals
   let generated1Shapes = false;
@@ -85,6 +86,10 @@ define( require => {
       return _.flatten( fractions.map( fraction => {
         return _.times( fraction.numerator, () => new Fraction( 1, fraction.denominator ) );
       } ) );
+    }
+
+    static REMOVEME_I_EXIST_ONLY_TO_IMPORT_UNIT_COLLECTION_FOR_LINTER() {
+      return UnitCollection.allCollectionsTo8( new Fraction( 1, 8 ) );
     }
 
     /**
