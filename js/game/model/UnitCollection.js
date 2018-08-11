@@ -11,6 +11,8 @@ define( require => {
   // modules
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const PrimeFactorization = require( 'FRACTIONS_COMMON/common/model/PrimeFactorization' );
+  const Util = require( 'DOT/Util' );
 
   class UnitCollection {
     /**
@@ -38,11 +40,23 @@ define( require => {
       return this.quantities.map( ( quantity, index ) => quantity ? `${quantity}/${index + 1}` : '' ).filter( _.identity ).join( ' + ' );
     }
 
+    static allCollections( fraction, options ) {
+      const {
+        // maxQuantity = Number.POSITIVE_INFINITY,
+        // maxTotalQuantity = Number.POSITIVE_INFINITY,
+        denominators = _.range( 1, 9 )
+      } = options || {};
+
+      const lcm = _.reduce( denominators, Util.lcm, 1 );
+
+      return PrimeFactorization.factor( lcm );
+    }
+
     static allCollectionsTo8( fraction, options ) {
       const {
         maxQuantity = Number.POSITIVE_INFINITY,
         maxTotalQuantity = Number.POSITIVE_INFINITY,
-        maxDenominator = 8
+        maxDenominator = 8 // TODO: pass in a list of denominators to the general version
       } = options || {};
 
       const results = [];
