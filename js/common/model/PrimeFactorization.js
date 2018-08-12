@@ -12,6 +12,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const PrimeFactor = require( 'FRACTIONS_COMMON/common/model/PrimeFactor' );
   const Primes = require( 'FRACTIONS_COMMON/common/model/Primes' );
+  const Util = require( 'DOT/Util' );
 
   class PrimeFactorization {
     /**
@@ -39,6 +40,68 @@ define( require => {
     }
 
     /**
+     * Returns the total combined order of all factors.
+     * @public
+     *
+     * @returns {number}
+     */
+    get totalOrder() {
+      return _.sum( this.factors.map( f => f.order ) );
+    }
+
+    /**
+     * Returns a list of all factorizations that divide this one.
+     * @public
+     *
+     * @returns {Array.<PrimeFactorization>}
+     */
+    get divisors() {
+      const results = [];
+      const arr = [];
+
+      ( function add( factors, index ) {
+        if ( index === factors.length ) {
+          results.push( new PrimeFactorization( arr.slice() ) );
+        }
+        else {
+          const factor = factors[ index ];
+          const order = factor.order;
+          for ( let i = 0; i <= order; i++ ) {
+            if ( i ) {
+              arr.push( new PrimeFactor( factor.prime, i ) );
+            }
+            add( factors, index + 1 );
+            if ( i ) {
+              arr.pop();
+            }
+          }
+        }
+      } )( this.factors, 0 );
+
+      return results;
+    }
+
+    /**
+     * Helper function for providing binary operations that operate on f( aOrder, bOrder ) => cOrder.
+     * @private
+     *
+     * @param {PrimeFactorization} primeFactorization
+     * @param {function} operation - Binary operation on factor orders
+     * @returns {PrimeFactorization}
+     */
+    binaryOperation( factorization, operation ) {
+      const primes = _.uniq( [ ...this.factors, ...factorization.factors ].map( f => f.prime ) );
+      const factors = [];
+      for ( let prime of primes ) {
+        const order = operation( this.getOrder( prime ), factorization.getOrder( prime ) );
+        if ( order ) {
+          factors.push( new PrimeFactor( prime, order ) );
+        }
+      }
+      return new PrimeFactorization( factors );
+    }
+
+    /**
      * Returns the result of multiplying this factorization by another.
      * @public
      *
@@ -46,15 +109,7 @@ define( require => {
      * @returns {PrimeFactorization}
      */
     times( factorization ) {
-      const factors = _.sortBy( this.factors.concat( factorization.factors ), 'prime' );
-      for ( let i = 0; i < factors.length - 1; i++ ) {
-        const factorA = factors[ i ];
-        const factorB = factors[ i + 1 ];
-        if ( factorA.prime === factorB.prime ) {
-          factors.splice( i, 2, new PrimeFactor( factorA.prime, factorA.order + factorB.order ) );
-        }
-      }
-      const result = new PrimeFactorization( factors );
+      const result = this.binaryOperation( factorization, ( a, b ) => a + b );
       assert && assert( this.number * factorization.number === result.number );
       return result;
     }
@@ -67,23 +122,37 @@ define( require => {
      * @returns {PrimeFactorization}
      */
     divided( factorization ) {
-      const factors = _.sortBy( this.factors.concat( factorization.factors ), 'prime' );
-      for ( let i = 0; i < factors.length - 1; i++ ) {
-        const factorA = factors[ i ];
-        const factorB = factors[ i + 1 ];
-        if ( factorA.prime === factorB.prime ) {
-          const order = factorA.order - factorB.order;
-          assert && assert( order >= 0, 'Division of factorizations not defined' );
-          if ( order ) {
-            factors.splice( i, 2, new PrimeFactor( factorA.prime, order ) );
-          }
-          else {
-            factors.splice( i, 2 );
-          }
-        }
-      }
-      const result = new PrimeFactorization( factors );
+      const result = this.binaryOperation( factorization, ( a, b ) => {
+        assert && assert( a >= b, 'Division of factorizations not defined' );
+        return a - b;
+      } );
       assert && assert( this.number / factorization.number === result.number );
+      return result;
+    }
+
+    /**
+     * Returns the GCD (greatest common divisor) of this factorization and another.
+     * @public
+     *
+     * @param {PrimeFactorization} factorization
+     * @returns {PrimeFactorization}
+     */
+    gcd( factorization ) {
+      const result = this.binaryOperation( factorization, Math.min );
+      assert && assert( Util.gcd( this.number, factorization.number ) === result.number );
+      return result;
+    }
+
+    /**
+     * Returns the LCM (least common multiple) of this factorization and another.
+     * @public
+     *
+     * @param {PrimeFactorization} factorization
+     * @returns {PrimeFactorization}
+     */
+    lcm( factorization ) {
+      const result = this.binaryOperation( factorization, Math.max );
+      assert && assert( Util.lcm( this.number, factorization.number ) === result.number );
       return result;
     }
 
@@ -118,6 +187,35 @@ define( require => {
     }
 
     /**
+     * Returns a string representation, mostly for debugging.
+     * @public
+     *
+     * @returns {string}
+     */
+    toString() {
+      return this.factors.join( '*' );
+    }
+
+    /**
+     * Checks for equality between factorizations.
+     * @public
+     *
+     * @param {PrimeFactorization} primeFactorization
+     * @returns {boolean}
+     */
+    equals( primeFactorization ) {
+      if ( this.factors.length !== primeFactorization.factors.length ) {
+        return false;
+      }
+      for ( let i = 0; i < this.factors.length; i++ ) {
+        if ( !this.factors[ i ].equals( primeFactorization.factors[ i ] ) ) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    /**
      * Returns the prime factorization of a number.
      * @public
      *
@@ -125,7 +223,11 @@ define( require => {
      * @returns {PrimeFactorization}
      */
     static factor( n ) {
-      assert && assert( typeof n === 'number' && n % 1 === 0 && n > 1 );
+      assert && assert( typeof n === 'number' && n % 1 === 0 && n >= 1 );
+
+      if ( n === 1 ) {
+        return new PrimeFactorization( [] );
+      }
 
       // Find all primes that we'll check for. If we don't find a prime less than or equal to this, our number itself is
       // prime.
@@ -163,6 +265,9 @@ define( require => {
   }
 
   fractionsCommon.register( 'PrimeFactorization', PrimeFactorization );
+
+  // @public {PrimeFactorization}
+  PrimeFactorization.ONE = new PrimeFactorization( [] );
 
   return PrimeFactorization;
 } );

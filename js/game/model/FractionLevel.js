@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   const ChallengeType = require( 'FRACTIONS_COMMON/game/enum/ChallengeType' );
+  const CollectionFinder = require( 'FRACTIONS_COMMON/game/model/CollectionFinder' );
   const DynamicProperty = require( 'AXON/DynamicProperty' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const FractionChallenge = require( 'FRACTIONS_COMMON/game/model/FractionChallenge' );
@@ -89,7 +90,7 @@ define( require => {
     }
 
     static REMOVEME_I_EXIST_ONLY_TO_IMPORT_UNIT_COLLECTION_FOR_LINTER() {
-      return UnitCollection.allCollectionsTo8( new Fraction( 1, 8 ) );
+      return UnitCollection.allCollectionsTo8( new Fraction( 1, 8 ) ) && CollectionFinder.doSomething();
     }
 
     /**

@@ -56,6 +56,16 @@ define( require => {
     equals( primeFactor ) {
       return this.prime === primeFactor.prime && this.order === primeFactor.order;
     }
+
+    /**
+     * Returns a string representation, mostly for debugging.
+     * @public
+     *
+     * @returns {string}
+     */
+    toString() {
+      return `${this.prime}${this.order > 1 ? '^' + this.order : ''}`;
+    }
   }
 
   fractionsCommon.register( 'PrimeFactor', PrimeFactor );
