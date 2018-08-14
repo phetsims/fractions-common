@@ -22,18 +22,73 @@ define( require => {
       this.quantities = quantities;
     }
 
+    /**
+     * Returns the total fraction value of the full collection (all fractions added together).
+     * @public
+     *
+     * @returns {Fraction}
+     */
     get totalFraction() {
       return _.reduce( this.fractions, ( a, b ) => a.plus( b ), Fraction.ZERO ).reduced();
     }
 
+    /**
+     * Returns the value represented as a list of fractions (one for each denominator)
+     * @public
+     *
+     * @returns {Array.<Fraction>}
+     */
     get fractions() {
       return this.quantities.map( ( quantity, index ) => new Fraction( quantity, index + 1 ) ).filter( f => f.numerator !== 0 );
     }
 
+    /**
+     * Returns the collection as represented by unit fractions (1/x).
+     * @public
+     *
+     * @returns {Array.<Fraction>}
+     */
     get unitFractions() {
       return _.flatten( this.quantities.map( ( quantity, index ) => _.times( quantity, () => new Fraction( 1, index + 1 ) ) ) );
     }
 
+    /**
+     * Returns a value based on the lexicographic order of the two collections, used for sorting.
+     * @public
+     *
+     * @param {UnitCollection} collection
+     * @returns {number}
+     */
+    compare( collection ) {
+      // We'll compare all of the indices, defaulting any not defined to 0
+      const maxIndex = Math.max( this.quantities.length, collection.quantities.length ) - 1;
+
+      for ( let i = 0; i <= maxIndex; i++ ) {
+        const diff = ( this.quantities[ i ] || 0 ) - ( collection.quantities[ i ] || 0 );
+        if ( diff ) {
+          return diff;
+        }
+      }
+      return 0;
+    }
+
+    /**
+     * Returns whether the two collections have equal numbers of fractions.
+     * @public
+     *
+     * @param {UnitCollection} collection
+     * @returns {boolean}
+     */
+    equals( collection ) {
+      return this.compare( collection ) === 0;
+    }
+
+    /**
+     * Returns a string representation useful for debugging.
+     * @public
+     *
+     * @returns {string}
+     */
     toString() {
       return this.quantities.map( ( quantity, index ) => quantity ? `${quantity}/${index + 1}` : '' ).filter( _.identity ).join( ' + ' );
     }
