@@ -11,6 +11,7 @@ define( require => {
   // modules
   const BuildingModel = require( 'FRACTIONS_COMMON/building/model/BuildingModel' );
   const ChallengeType = require( 'FRACTIONS_COMMON/game/enum/ChallengeType' );
+  const ColorDef = require( 'SCENERY/util/ColorDef' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const Easing = require( 'TWIXT/Easing' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
@@ -289,6 +290,14 @@ define( require => {
     }
 
     static createShapeChallenge( levelNumber, color, type, targetFractions, pieceFractions ) {
+      assert && assert( typeof levelNumber === 'number' );
+      assert && assert( ColorDef.isColorDef( color ) );
+      assert && assert( _.includes( ChallengeType.VALUES, type ) );
+      assert && assert( Array.isArray( targetFractions ) );
+      assert && targetFractions.forEach( fraction => assert( fraction instanceof Fraction ) );
+      assert && assert( Array.isArray( pieceFractions ) );
+      assert && pieceFractions.forEach( fraction => assert( fraction instanceof Fraction ) );
+
       var representation = type === ChallengeType.PIE ? Representation.CIRCLE : Representation.VERTICAL_BAR;
       const targets = targetFractions.map( f => new Target( f ) );
       const shapePieces = pieceFractions.map( f => new ShapePiece( f, representation, color ) );

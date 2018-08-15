@@ -53,6 +53,16 @@ define( require => {
     }
 
     /**
+     * Returns the total of all of the numerators.
+     * @public
+     *
+     * @returns {number}
+     */
+    get totalQuantities() {
+      return _.sum( this.quantities );
+    }
+
+    /**
      * Returns a value based on the lexicographic order of the two collections, used for sorting.
      * @public
      *

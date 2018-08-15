@@ -15,12 +15,18 @@ define( require => {
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const FractionChallenge = require( 'FRACTIONS_COMMON/game/model/FractionChallenge' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const PrimeFactorization = require( 'FRACTIONS_COMMON/common/model/PrimeFactorization' );
   const Property = require( 'AXON/Property' );
-  const UnitCollection = require( 'FRACTIONS_COMMON/game/model/UnitCollection' );
 
   // globals
   let generated1Shapes = false;
-  // let generated2Shapes = false;
+  let generated2Shapes = false;
+
+  // constants
+  const collectionFinder8 = new CollectionFinder( {
+    // default denominators to match the Java search
+    denominators: _.range( 1, 9 ).map( PrimeFactorization.factor )
+  } );
 
   class FractionLevel {
     /**
@@ -89,8 +95,23 @@ define( require => {
       } ) );
     }
 
-    static REMOVEME_I_EXIST_ONLY_TO_IMPORT_UNIT_COLLECTION_FOR_LINTER() {
-      return UnitCollection.allCollectionsTo8( new Fraction( 1, 8 ) ) && CollectionFinder.doSomething();
+    static interestingFractions( fraction, quantity = 5 ) {
+      let collections = collectionFinder8.search( fraction );
+      assert && assert( collections.length );
+
+      // Java comment:
+      //In order to remove the tedium but still require creation of interesting shapes, sort by the number of pieces
+      //required to create the fraction
+      //and choose one of the solutions with a small number of cards.
+      _.sortBy( collections, collection => collection.totalQuantities );
+      const filteredCollections = collections.filter( collection => collection.fractions.length > 1 );
+      // The Java code used collections with more than one denominator whenever possible
+      if ( filteredCollections.length ) {
+        collections = filteredCollections;
+      }
+      collections = collections.slice( 0, quantity );
+
+      return phet.joist.random.sample( collections ).unitFractions;
     }
 
     /**
@@ -116,14 +137,48 @@ define( require => {
       ] );
 
       const pieceFractions = [
-        ..._.times( 2, new Fraction( 1, 1 ) ),
-        ..._.times( 2, new Fraction( 1, 2 ) ),
-        ..._.times( 3, new Fraction( 1, 3 ) )
+        ..._.times( 2, () => new Fraction( 1, 1 ) ),
+        ..._.times( 2, () => new Fraction( 1, 2 ) ),
+        ..._.times( 3, () => new Fraction( 1, 3 ) )
       ];
 
       // Always choose PIE the first time
       const type = ( !generated1Shapes || phet.joist.random.nextBoolean() ) ? ChallengeType.PIE : ChallengeType.BAR;
       generated1Shapes = true;
+
+      return FractionChallenge.createShapeChallenge( levelNumber, color, type, targetFractions, pieceFractions );
+    }
+
+    /**
+     * Creates a challenge for (unmixed) shapes level 2.
+     * @public
+     *
+     * @param {number} levelNumber
+     * @param {ColorDef} color
+     * @returns {FractionChallenge}
+     */
+    static level2Shapes( levelNumber, color ) {
+      const targetFractions = FractionLevel.choose( 3, [
+        new Fraction( 1, 2 ),
+        new Fraction( 1, 3 ),
+        new Fraction( 1, 4 ),
+        new Fraction( 1, 5 ),
+        new Fraction( 2, 3 ),
+        new Fraction( 2, 4 ),
+        new Fraction( 2, 5 ),
+        new Fraction( 3, 4 ),
+        new Fraction( 3, 5 ),
+        new Fraction( 4, 5 )
+      ] );
+
+      const pieceFractions = [
+        ...FractionLevel.unitFractions( targetFractions ),
+        ...FractionLevel.interestingFractions( phet.joist.random.sample( targetFractions ) )
+      ];
+
+      // Always choose BAR the first time
+      const type = ( !generated2Shapes || phet.joist.random.nextBoolean() ) ? ChallengeType.BAR : ChallengeType.PIE;
+      generated2Shapes = true;
 
       return FractionChallenge.createShapeChallenge( levelNumber, color, type, targetFractions, pieceFractions );
     }

@@ -129,9 +129,9 @@ define( require => {
         new FractionLevel( 10, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level10Property, placeholderShapeChallengeGenerator( 4 ) )
       ] : [
         // "Build a Fraction" Shapes level 1
-        new FractionLevel( 1, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level1Property, placeholderShapeChallengeGenerator( 3 ) ),
+        new FractionLevel( 1, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level1Property, FractionLevel.level1Shapes ),
         // "Build a Fraction" Shapes level 2
-        new FractionLevel( 2, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level2Property, placeholderShapeChallengeGenerator( 3 ) ),
+        new FractionLevel( 2, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level2Property, FractionLevel.level2Shapes ),
         // "Build a Fraction" Shapes level 3
         new FractionLevel( 3, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level3Property, placeholderShapeChallengeGenerator( 3 ) ),
         // "Build a Fraction" Shapes level 4
