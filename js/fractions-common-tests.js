@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   require( 'FRACTIONS_COMMON/game/model/CollectionFinderTests' );
+  require( 'FRACTIONS_COMMON/common/model/PrimeFactorizationTests' );
   require( 'FRACTIONS_COMMON/common/model/PrimesTests' );
 
   // Since our tests are loaded asynchronously, we must direct QUnit to begin the tests
