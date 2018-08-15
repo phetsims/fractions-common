@@ -34,12 +34,15 @@ define( require => {
     /**
      * @param {number} levelNumber
      * @param {ChallengeType} challengeType
+     * @param {boolean} hasMixedTargets
      * @param {Array.<Target>} targets
      * @param {Array.<ShapePiece>} shapePieces
      * @param {Array.<NumberPiece>} numberPieces
      */
-    constructor( levelNumber, challengeType, targets, shapePieces, numberPieces ) {
+    constructor( levelNumber, challengeType, hasMixedTargets, targets, shapePieces, numberPieces ) {
+      assert && assert( typeof levelNumber === 'number' );
       assert && assert( ChallengeType.VALUES.includes( challengeType ) );
+      assert && assert( typeof hasMixedTargets === 'boolean' );
       assert && assert( Array.isArray( targets ) );
       assert && assert( Array.isArray( shapePieces ) );
       assert && assert( Array.isArray( numberPieces ) );
@@ -289,8 +292,9 @@ define( require => {
       }
     }
 
-    static createShapeChallenge( levelNumber, color, type, targetFractions, pieceFractions ) {
+    static createShapeChallenge( levelNumber, hasMixedTargets, color, type, targetFractions, pieceFractions ) {
       assert && assert( typeof levelNumber === 'number' );
+      assert && assert( typeof hasMixedTargets === 'boolean' );
       assert && assert( ColorDef.isColorDef( color ) );
       assert && assert( _.includes( ChallengeType.VALUES, type ) );
       assert && assert( Array.isArray( targetFractions ) );
@@ -301,7 +305,7 @@ define( require => {
       var representation = type === ChallengeType.PIE ? Representation.CIRCLE : Representation.VERTICAL_BAR;
       const targets = targetFractions.map( f => new Target( f ) );
       const shapePieces = pieceFractions.map( f => new ShapePiece( f, representation, color ) );
-      return new FractionChallenge( levelNumber, type, targets, shapePieces, [] );
+      return new FractionChallenge( levelNumber, type, hasMixedTargets, targets, shapePieces, [] );
     }
   }
 

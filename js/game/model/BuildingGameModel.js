@@ -36,7 +36,9 @@ define( require => {
       // @public {boolean}
       this.hasMixedNumbers = hasMixedNumbers;
 
-      function placeholderShapeChallengeGenerator( numTargets ) {
+      function placeholderShapeChallengeGenerator( numTargets, hasMixedNumbers ) {
+        assert && assert( typeof hasMixedNumbers === 'boolean' );
+
         return ( levelNumber, color ) => {
           // TODO: unimplemented
           var targets = ( hasMixedNumbers ? [
@@ -66,11 +68,13 @@ define( require => {
             new ShapePiece( new Fraction( 1, 6 ), representation, color ),
             new ShapePiece( new Fraction( 1, 6 ), representation, color )
           ];
-          return new FractionChallenge( levelNumber, type, targets, shapePieces, [] );
+          return new FractionChallenge( levelNumber, type, hasMixedNumbers, targets, shapePieces, [] );
         };
       }
 
-      function placeholderNumberChallengeGenerator( numTargets ) {
+      function placeholderNumberChallengeGenerator( numTargets, hasMixedNumbers ) {
+        assert && assert( typeof hasMixedNumbers === 'boolean' );
+
         return ( levelNumber, color ) => {
           // TODO: deduplicate
           function select( shapePartitions, quantity ) {
@@ -101,98 +105,98 @@ define( require => {
             new NumberPiece( 6 ),
             new NumberPiece( 6 )
           ];
-          return new FractionChallenge( levelNumber, ChallengeType.NUMBER, targets, [], numberPieces );
+          return new FractionChallenge( levelNumber, ChallengeType.NUMBER, hasMixedNumbers, targets, [], numberPieces );
         };
       }
 
       // @public {FractionLevel}
       this.shapeLevels = hasMixedNumbers ? [
         // "Mixed Numbers" Shapes level 1
-        new FractionLevel( 1, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level1Property, placeholderShapeChallengeGenerator( 3 ) ),
+        new FractionLevel( 1, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level1Property, placeholderShapeChallengeGenerator( 3, true ) ),
         // "Mixed Numbers" Shapes level 2
-        new FractionLevel( 2, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level2Property, placeholderShapeChallengeGenerator( 3 ) ),
+        new FractionLevel( 2, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level2Property, placeholderShapeChallengeGenerator( 3, true ) ),
         // "Mixed Numbers" Shapes level 3
-        new FractionLevel( 3, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level3Property, placeholderShapeChallengeGenerator( 3 ) ),
+        new FractionLevel( 3, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level3Property, placeholderShapeChallengeGenerator( 3, true ) ),
         // "Mixed Numbers" Shapes level 4
-        new FractionLevel( 4, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level4Property, placeholderShapeChallengeGenerator( 3 ) ),
+        new FractionLevel( 4, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level4Property, placeholderShapeChallengeGenerator( 3, true ) ),
         // "Mixed Numbers" Shapes level 5
-        new FractionLevel( 5, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level5Property, placeholderShapeChallengeGenerator( 3 ) ),
+        new FractionLevel( 5, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level5Property, placeholderShapeChallengeGenerator( 3, true ) ),
         // "Mixed Numbers" Shapes level 6
-        new FractionLevel( 6, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level6Property, placeholderShapeChallengeGenerator( 4 ) ),
+        new FractionLevel( 6, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level6Property, placeholderShapeChallengeGenerator( 4, true ) ),
         // "Mixed Numbers" Shapes level 7
-        new FractionLevel( 7, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level7Property, placeholderShapeChallengeGenerator( 4 ) ),
+        new FractionLevel( 7, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level7Property, placeholderShapeChallengeGenerator( 4, true ) ),
         // "Mixed Numbers" Shapes level 8
-        new FractionLevel( 8, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level8Property, placeholderShapeChallengeGenerator( 4 ) ),
+        new FractionLevel( 8, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level8Property, placeholderShapeChallengeGenerator( 4, true ) ),
         // "Mixed Numbers" Shapes level 9
-        new FractionLevel( 9, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level9Property, placeholderShapeChallengeGenerator( 4 ) ),
+        new FractionLevel( 9, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level9Property, placeholderShapeChallengeGenerator( 4, true ) ),
         // "Mixed Numbers" Shapes level 10
-        new FractionLevel( 10, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level10Property, placeholderShapeChallengeGenerator( 4 ) )
+        new FractionLevel( 10, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level10Property, placeholderShapeChallengeGenerator( 4, true ) )
       ] : [
         // "Build a Fraction" Shapes level 1
         new FractionLevel( 1, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level1Property, FractionLevel.level1Shapes ),
         // "Build a Fraction" Shapes level 2
         new FractionLevel( 2, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level2Property, FractionLevel.level2Shapes ),
         // "Build a Fraction" Shapes level 3
-        new FractionLevel( 3, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level3Property, placeholderShapeChallengeGenerator( 3 ) ),
+        new FractionLevel( 3, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level3Property, placeholderShapeChallengeGenerator( 3, false ) ),
         // "Build a Fraction" Shapes level 4
-        new FractionLevel( 4, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level4Property, placeholderShapeChallengeGenerator( 3 ) ),
+        new FractionLevel( 4, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level4Property, placeholderShapeChallengeGenerator( 3, false ) ),
         // "Build a Fraction" Shapes level 5
-        new FractionLevel( 5, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level5Property, placeholderShapeChallengeGenerator( 3 ) ),
+        new FractionLevel( 5, 3, BuildingType.SHAPE, FractionsCommonColorProfile.level5Property, placeholderShapeChallengeGenerator( 3, false ) ),
         // "Build a Fraction" Shapes level 6
-        new FractionLevel( 6, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level6Property, placeholderShapeChallengeGenerator( 4 ) ),
+        new FractionLevel( 6, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level6Property, placeholderShapeChallengeGenerator( 4, false ) ),
         // "Build a Fraction" Shapes level 7
-        new FractionLevel( 7, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level7Property, placeholderShapeChallengeGenerator( 4 ) ),
+        new FractionLevel( 7, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level7Property, placeholderShapeChallengeGenerator( 4, false ) ),
         // "Build a Fraction" Shapes level 8
-        new FractionLevel( 8, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level8Property, placeholderShapeChallengeGenerator( 4 ) ),
+        new FractionLevel( 8, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level8Property, placeholderShapeChallengeGenerator( 4, false ) ),
         // "Build a Fraction" Shapes level 9
-        new FractionLevel( 9, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level9Property, placeholderShapeChallengeGenerator( 4 ) ),
+        new FractionLevel( 9, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level9Property, placeholderShapeChallengeGenerator( 4, false ) ),
         // "Build a Fraction" Shapes level 10
-        new FractionLevel( 10, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level10Property, placeholderShapeChallengeGenerator( 4 ) )
+        new FractionLevel( 10, 4, BuildingType.SHAPE, FractionsCommonColorProfile.level10Property, placeholderShapeChallengeGenerator( 4, false ) )
       ];
 
       // @public {FractionLevel}
       this.numberLevels = hasMixedNumbers ? [
         // "Mixed Numbers" Numbers level 1
-        new FractionLevel( 1, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level1Property, placeholderNumberChallengeGenerator( 3 ) ),
+        new FractionLevel( 1, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level1Property, placeholderNumberChallengeGenerator( 3, true ) ),
         // "Mixed Numbers" Numbers level 2
-        new FractionLevel( 2, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level2Property, placeholderNumberChallengeGenerator( 3 ) ),
+        new FractionLevel( 2, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level2Property, placeholderNumberChallengeGenerator( 3, true ) ),
         // "Mixed Numbers" Numbers level 3
-        new FractionLevel( 3, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level3Property, placeholderNumberChallengeGenerator( 3 ) ),
+        new FractionLevel( 3, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level3Property, placeholderNumberChallengeGenerator( 3, true ) ),
         // "Mixed Numbers" Numbers level 4
-        new FractionLevel( 4, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level4Property, placeholderNumberChallengeGenerator( 3 ) ),
+        new FractionLevel( 4, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level4Property, placeholderNumberChallengeGenerator( 3, true ) ),
         // "Mixed Numbers" Numbers level 5
-        new FractionLevel( 5, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level5Property, placeholderNumberChallengeGenerator( 3 ) ),
+        new FractionLevel( 5, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level5Property, placeholderNumberChallengeGenerator( 3, true ) ),
         // "Mixed Numbers" Numbers level 6
-        new FractionLevel( 6, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level6Property, placeholderNumberChallengeGenerator( 4 ) ),
+        new FractionLevel( 6, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level6Property, placeholderNumberChallengeGenerator( 4, true ) ),
         // "Mixed Numbers" Numbers level 7
-        new FractionLevel( 7, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level7Property, placeholderNumberChallengeGenerator( 4 ) ),
+        new FractionLevel( 7, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level7Property, placeholderNumberChallengeGenerator( 4, true ) ),
         // "Mixed Numbers" Numbers level 8
-        new FractionLevel( 8, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level8Property, placeholderNumberChallengeGenerator( 4 ) ),
+        new FractionLevel( 8, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level8Property, placeholderNumberChallengeGenerator( 4, true ) ),
         // "Mixed Numbers" Numbers level 9
-        new FractionLevel( 9, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level9Property, placeholderNumberChallengeGenerator( 4 ) ),
+        new FractionLevel( 9, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level9Property, placeholderNumberChallengeGenerator( 4, true ) ),
         // "Mixed Numbers" Numbers level 10
-        new FractionLevel( 10, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level10Property, placeholderNumberChallengeGenerator( 4 ) )
+        new FractionLevel( 10, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level10Property, placeholderNumberChallengeGenerator( 4, true ) )
       ] : [
         // "Build a Fraction" Numbers level 1
-        new FractionLevel( 1, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level1Property, placeholderNumberChallengeGenerator( 3 ) ),
+        new FractionLevel( 1, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level1Property, placeholderNumberChallengeGenerator( 3, false ) ),
         // "Build a Fraction" Numbers level 2
-        new FractionLevel( 2, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level2Property, placeholderNumberChallengeGenerator( 3 ) ),
+        new FractionLevel( 2, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level2Property, placeholderNumberChallengeGenerator( 3, false ) ),
         // "Build a Fraction" Numbers level 3
-        new FractionLevel( 3, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level3Property, placeholderNumberChallengeGenerator( 3 ) ),
+        new FractionLevel( 3, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level3Property, placeholderNumberChallengeGenerator( 3, false ) ),
         // "Build a Fraction" Numbers level 4
-        new FractionLevel( 4, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level4Property, placeholderNumberChallengeGenerator( 3 ) ),
+        new FractionLevel( 4, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level4Property, placeholderNumberChallengeGenerator( 3, false ) ),
         // "Build a Fraction" Numbers level 5
-        new FractionLevel( 5, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level5Property, placeholderNumberChallengeGenerator( 3 ) ),
+        new FractionLevel( 5, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level5Property, placeholderNumberChallengeGenerator( 3, false ) ),
         // "Build a Fraction" Numbers level 6
-        new FractionLevel( 6, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level6Property, placeholderNumberChallengeGenerator( 4 ) ),
+        new FractionLevel( 6, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level6Property, placeholderNumberChallengeGenerator( 4, false ) ),
         // "Build a Fraction" Numbers level 7
-        new FractionLevel( 7, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level7Property, placeholderNumberChallengeGenerator( 4 ) ),
+        new FractionLevel( 7, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level7Property, placeholderNumberChallengeGenerator( 4, false ) ),
         // "Build a Fraction" Numbers level 8
-        new FractionLevel( 8, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level8Property, placeholderNumberChallengeGenerator( 4 ) ),
+        new FractionLevel( 8, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level8Property, placeholderNumberChallengeGenerator( 4, false ) ),
         // "Build a Fraction" Numbers level 9
-        new FractionLevel( 9, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level9Property, placeholderNumberChallengeGenerator( 4 ) ),
+        new FractionLevel( 9, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level9Property, placeholderNumberChallengeGenerator( 4, false ) ),
         // "Build a Fraction" Numbers level 10
-        new FractionLevel( 10, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level10Property, placeholderNumberChallengeGenerator( 4 ) )
+        new FractionLevel( 10, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level10Property, placeholderNumberChallengeGenerator( 4, false ) )
       ];
 
       assert && assert( this.shapeLevels.length === FractionsCommonConstants.NUM_LEVELS );

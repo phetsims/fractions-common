@@ -146,7 +146,7 @@ define( require => {
       const type = ( !generated1Shapes || phet.joist.random.nextBoolean() ) ? ChallengeType.PIE : ChallengeType.BAR;
       generated1Shapes = true;
 
-      return FractionChallenge.createShapeChallenge( levelNumber, color, type, targetFractions, pieceFractions );
+      return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
     }
 
     /**
@@ -180,7 +180,7 @@ define( require => {
       const type = ( !generated2Shapes || phet.joist.random.nextBoolean() ) ? ChallengeType.BAR : ChallengeType.PIE;
       generated2Shapes = true;
 
-      return FractionChallenge.createShapeChallenge( levelNumber, color, type, targetFractions, pieceFractions );
+      return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
     }
   }
 
