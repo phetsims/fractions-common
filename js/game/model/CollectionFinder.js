@@ -9,8 +9,8 @@ define( require => {
   'use strict';
 
   // modules
+  const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const Permutation = require( 'DOT/Permutation' );
   const PrimeFactor = require( 'FRACTIONS_COMMON/common/model/PrimeFactor' );
   const PrimeFactorization = require( 'FRACTIONS_COMMON/common/model/PrimeFactorization' );
   const UnitCollection = require( 'FRACTIONS_COMMON/game/model/UnitCollection' );
@@ -96,10 +96,23 @@ define( require => {
       // @private {PrimeFactorization}
       this.lcm = lcm;
 
-      // @private {Permutation} - How to permute arrays
-      this.permutation = new Permutation( this.entries.map( entry => denominators.indexOf( entry.denominator ) ) ).inverted();
+      // @private {number}
+      this.maxDenominatorNumber = Math.max( ...denominators.map( d => d.number ) );
+
+      // @private {Array.<number>} - Maps "internal index" (based on entries) into the UnitCollection array index.
+      this.collectionIndexMap = this.entries.map( entry => entry.denominator.number - 1 );
     }
 
+    /**
+     * Returns an array of all UnitCollections that match the given parameters (using this finder's denominators).
+     * This is basically a list of all ways a given fraction (the input) can be partitioned into different sums of
+     * fractions (with this finder's denominators) with numerators matching the option constraints.
+     * @public
+     *
+     * @param {Fraction} fraction
+     * @param {Object} [options]
+     * @returns {Array.<UnitCollection>}
+     */
     search( fraction, options ) {
       const {
         // {number} - The maximum possible quantity for each individual denominator (so e.g. if maxQuantity:4, the
@@ -111,13 +124,14 @@ define( require => {
         maxTotalQuantity = Number.POSITIVE_INFINITY
       } = options || {};
 
+      const self = this;
+
       assert && assert( typeof maxQuantity === 'number' && maxQuantity >= 1 );
       assert && assert( typeof maxTotalQuantity === 'number' && maxTotalQuantity >= 1 );
 
       const r = fraction.numerator * this.lcm.number / fraction.denominator;
 
       const entries = this.entries;
-      const permutation = this.permutation;
       const coefficients = [];
       const results = [];
 
@@ -138,7 +152,7 @@ define( require => {
             // We have a solution!
 
             coefficients.push( coefficient );
-            const collection = new UnitCollection( permutation.apply( coefficients ) );
+            const collection = self.unitCollectionFromCoefficients( coefficients );
             coefficients.pop();
 
             assert && assert( collection.totalFraction.equals( fraction ) );
@@ -174,6 +188,96 @@ define( require => {
 
       return results;
     }
+
+    /**
+     * Like search() above, but with "simple" logic (and slower) for unit test verification.
+     * @public
+     *
+     * @param {Fraction} fraction
+     * @param {Object} [options]
+     * @returns {Array.<UnitCollection>}
+     */
+    bruteForceSearch( fraction, options ) {
+      const {
+        // {number} - The maximum possible quantity for each individual denominator (so e.g. if maxQuantity:4, the
+        // finder will never report 5 halves).
+        maxQuantity = Number.POSITIVE_INFINITY,
+
+        // {number} - The maximum possible quantity total including all denominators (so e.g. if maxTotalQuantity:4,
+        // the finder will never report 2 halves and 3 thirds).
+        maxTotalQuantity = Number.POSITIVE_INFINITY
+      } = options || {};
+
+      const self = this;
+
+      assert && assert( typeof maxQuantity === 'number' && maxQuantity >= 1 );
+      assert && assert( typeof maxTotalQuantity === 'number' && maxTotalQuantity >= 1 );
+
+      const entries = this.entries;
+      const results = [];
+      const coefficients = [];
+
+      /**
+       * @param {number} index - Index into our denominators
+       * @param {Fraction} remainder
+       * @param {number} totalCount
+       */
+      ( function recur( index, remainder, totalCount ) {
+        const denominator = entries[ index ].denominatorNumber;
+
+        for ( let coefficient = 0; coefficient <= maxQuantity; coefficient++ ) {
+          const subRemainder = remainder.minus( new Fraction( coefficient, denominator ) );
+          if ( subRemainder.getValue() < 0 || coefficient + totalCount > maxTotalQuantity ) {
+            break;
+          }
+
+          coefficients.push( coefficient );
+          if ( index === entries.length - 1 ) {
+            if ( subRemainder.numerator === 0 ) {
+              // We have a solution!
+              const collection = self.unitCollectionFromCoefficients( coefficients );
+
+              assert && assert( collection.totalFraction.equals( fraction ) );
+              assert && collection.quantities.forEach( quantity => assert( quantity <= maxQuantity ) );
+              assert && assert( _.sum( collection.quantities ) <= maxTotalQuantity );
+
+              results.push( collection );
+            }
+          }
+          else {
+            recur( index + 1, subRemainder, totalCount + coefficient );
+          }
+          coefficients.pop();
+        }
+      } )( 0, fraction, 0 );
+
+      return results;
+    }
+
+    /**
+     * Permutes and pads coefficients to create a UnitCollection.
+     * @private
+     *
+     * @param {Array.<number>} coefficients - In the same order as our entries, e.g. coefficients[ i ] is the
+     *                                        coefficient for entries[ i ].
+     * @returns {UnitCollection}
+     */
+    unitCollectionFromCoefficients( coefficients ) {
+      // {Array.<number>} - Construct some permuted coefficients in the "correct" order
+      const permutedCoefficients = [];
+
+      // Zero-pad, since we may have some denominators "missing"
+      while ( permutedCoefficients.length < this.maxDenominatorNumber ) {
+        permutedCoefficients.push( 0 );
+      }
+
+      // Fill in the coefficients we do have.
+      for ( let i = 0; i < coefficients.length; i++ ) {
+        permutedCoefficients[ this.collectionIndexMap[ i ] ] = coefficients[ i ];
+      }
+
+      return new UnitCollection( permutedCoefficients );
+    }
   }
 
   class Entry {
@@ -192,6 +296,9 @@ define( require => {
 
       // @public {Array.<Constraint>}
       this.constraints = constraints;
+
+      // @public {number}
+      this.denominatorNumber = denominator.number;
 
       // @public {number}
       this.inverseNumber = inverse.number;
