@@ -21,11 +21,22 @@ define( require => {
   // globals
   let generated1Shapes = false;
   let generated2Shapes = false;
+  let generated3Shapes = false;
+  let generated4Shapes = false;
+
+  // Convenience functions. TODO: What is the best way to have concise usage in the code?
+  const nextBoolean = () => phet.joist.random.nextBoolean();
+  const sample = array => phet.joist.random.sample( array );
+  const shuffle = array => phet.joist.random.shuffle( array );
+  const nextIntBetween = ( a, b ) => phet.joist.random.nextIntBetween( a, b );
+  const choose = ( q, i ) => FractionLevel.choose( q, i );
+  const inclusive = ( a, b ) => _.range( a, b + 1 );
+  const repeat = ( q, i ) => _.times( q, () => i );
 
   // constants
   const collectionFinder8 = new CollectionFinder( {
     // default denominators to match the Java search
-    denominators: _.range( 1, 9 ).map( PrimeFactorization.factor )
+    denominators: inclusive( 1, 8 ).map( PrimeFactorization.factor )
   } );
 
   class FractionLevel {
@@ -86,13 +97,19 @@ define( require => {
       assert && assert( Array.isArray( items ) );
       assert && assert( items.length >= quantity );
 
-      return phet.joist.random.shuffle( items ).slice( 0, quantity );
+      return shuffle( items ).slice( 0, quantity );
     }
 
     static unitFractions( fractions ) {
       return _.flatten( fractions.map( fraction => {
-        return _.times( fraction.numerator, () => new Fraction( 1, fraction.denominator ) );
+        return repeat( fraction.numerator, new Fraction( 1, fraction.denominator ) );
       } ) );
+    }
+
+    // TODO: note createCardsSameNumberEachType from Java
+    static maxNumeratorUnitFractions( fractions ) {
+      const maxNumerator = Math.max( ...fractions.map( f => f.numerator ) );
+      return _.flatten( fractions.map( f => repeat( maxNumerator, new Fraction( 1, f.denominator ) ) ) );
     }
 
     static interestingFractions( fraction, quantity = 5 ) {
@@ -111,7 +128,7 @@ define( require => {
       }
       collections = collections.slice( 0, quantity );
 
-      return phet.joist.random.sample( collections ).unitFractions;
+      return sample( collections ).unitFractions;
     }
 
     /**
@@ -123,13 +140,13 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level1Shapes( levelNumber, color ) {
-      const targetFractions = phet.joist.random.shuffle( [
-        ...FractionLevel.choose( 1, [
+      const targetFractions = shuffle( [
+        ...choose( 1, [
           new Fraction( 1, 1 ),
           new Fraction( 2, 2 ),
           new Fraction( 3, 3 )
         ] ),
-        ...FractionLevel.choose( 2, [
+        ...choose( 2, [
           new Fraction( 1, 2 ),
           new Fraction( 1, 3 ),
           new Fraction( 2, 3 )
@@ -137,13 +154,13 @@ define( require => {
       ] );
 
       const pieceFractions = [
-        ..._.times( 2, () => new Fraction( 1, 1 ) ),
-        ..._.times( 2, () => new Fraction( 1, 2 ) ),
-        ..._.times( 3, () => new Fraction( 1, 3 ) )
+        ...repeat( 2, new Fraction( 1, 1 ) ),
+        ...repeat( 2, new Fraction( 1, 2 ) ),
+        ...repeat( 3, new Fraction( 1, 3 ) )
       ];
 
       // Always choose PIE the first time
-      const type = ( !generated1Shapes || phet.joist.random.nextBoolean() ) ? ChallengeType.PIE : ChallengeType.BAR;
+      const type = ( !generated1Shapes || nextBoolean() ) ? ChallengeType.PIE : ChallengeType.BAR;
       generated1Shapes = true;
 
       return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
@@ -158,7 +175,7 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level2Shapes( levelNumber, color ) {
-      const targetFractions = FractionLevel.choose( 3, [
+      const targetFractions = choose( 3, [
         new Fraction( 1, 2 ),
         new Fraction( 1, 3 ),
         new Fraction( 1, 4 ),
@@ -173,14 +190,96 @@ define( require => {
 
       const pieceFractions = [
         ...FractionLevel.unitFractions( targetFractions ),
-        ...FractionLevel.interestingFractions( phet.joist.random.sample( targetFractions ) )
+        ...FractionLevel.interestingFractions( sample( targetFractions ) )
       ];
 
       // Always choose BAR the first time
-      const type = ( !generated2Shapes || phet.joist.random.nextBoolean() ) ? ChallengeType.BAR : ChallengeType.PIE;
+      const type = ( !generated2Shapes || nextBoolean() ) ? ChallengeType.BAR : ChallengeType.PIE;
       generated2Shapes = true;
 
       return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
+    }
+
+    /**
+     * Creates a challenge for (unmixed) shapes level 3.
+     * @public
+     *
+     * @param {number} levelNumber
+     * @param {ColorDef} color
+     * @returns {FractionChallenge}
+     */
+    static level3Shapes( levelNumber, color ) {
+      const targetFractions = choose( 3, _.flatten( inclusive( 1, 6 ).map( d => {
+        return inclusive( 1, d ).map( n => new Fraction( n, d ) );
+      } ) ) );
+
+      const pieceFractions = FractionLevel.maxNumeratorUnitFractions( targetFractions );
+
+      // Always choose PIE the first time
+      const type = ( !generated3Shapes || nextBoolean() ) ? ChallengeType.PIE : ChallengeType.BAR;
+      generated3Shapes = true;
+
+      return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
+    }
+
+    /**
+     * Creates a challenge for (unmixed) shapes level 4.
+     * @public
+     *
+     * @param {number} levelNumber
+     * @param {ColorDef} color
+     * @returns {FractionChallenge}
+     */
+    static level4Shapes( levelNumber, color ) {
+      let targetFractions;
+      let pieceFractions;
+
+      if ( nextBoolean() ) {
+        // Java wholesLevel4
+        targetFractions = repeat( 3, new Fraction( 1, 1 ) );
+        pieceFractions = [
+          ...repeat( 3, new Fraction( 1, 2 ) ),
+          ...repeat( 3, new Fraction( 1, 3 ) ),
+          ...repeat( 3, new Fraction( 1, 4 ) ),
+          ...repeat( 3, new Fraction( 1, 6 ) )
+        ];
+      }
+      else {
+        // Java halfLevel4
+        targetFractions = repeat( 3, new Fraction( 1, 2 ) );
+        pieceFractions = [
+          new Fraction( 1, 2 ),
+          ...repeat( 3, new Fraction( 1, 3 ) ),
+          ...repeat( 3, new Fraction( 1, 4 ) ),
+          ...repeat( 3, new Fraction( 1, 6 ) )
+        ];
+      }
+
+      // Always choose BAR the first time
+      const type = ( !generated4Shapes || nextBoolean() ) ? ChallengeType.BAR : ChallengeType.PIE;
+      generated4Shapes = true;
+
+      return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
+    }
+
+    /**
+     * Creates a challenge for (unmixed) shapes level 5.
+     * @public
+     *
+     * @param {number} levelNumber
+     * @param {ColorDef} color
+     * @returns {FractionChallenge}
+     */
+    static level5Shapes( levelNumber, color ) {
+      const targetFractions = choose( 3, inclusive( 1, 8 ) ).map( denominator => {
+        return new Fraction( nextIntBetween( 1, denominator ), denominator );
+      } );
+      const pieceFractions = [
+        ...FractionLevel.unitFractions( targetFractions ),
+        ...FractionLevel.interestingFractions( sample( targetFractions ) )
+      ];
+
+      return FractionChallenge.createShapeChallenge( levelNumber, false, color, ChallengeType.PIE, targetFractions, pieceFractions );
     }
   }
 

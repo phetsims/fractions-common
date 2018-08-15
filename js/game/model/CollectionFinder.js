@@ -155,7 +155,7 @@ define( require => {
             const collection = self.unitCollectionFromCoefficients( coefficients );
             coefficients.pop();
 
-            assert && assert( collection.totalFraction.equals( fraction ) );
+            assert && assert( collection.totalFraction.reduced().equals( fraction.reduced() ) );
             assert && collection.quantities.forEach( quantity => assert( quantity <= maxQuantity ) );
             assert && assert( _.sum( collection.quantities ) <= maxTotalQuantity );
 
@@ -237,7 +237,7 @@ define( require => {
               // We have a solution!
               const collection = self.unitCollectionFromCoefficients( coefficients );
 
-              assert && assert( collection.totalFraction.equals( fraction ) );
+              assert && assert( collection.totalFraction.reduced().equals( fraction.reduced() ) );
               assert && collection.quantities.forEach( quantity => assert( quantity <= maxQuantity ) );
               assert && assert( _.sum( collection.quantities ) <= maxTotalQuantity );
 
