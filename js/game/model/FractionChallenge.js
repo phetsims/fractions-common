@@ -68,7 +68,7 @@ define( require => {
       this.targets = targets;
 
       // @public {boolean}
-      this.hasMixedTargets = _.some( targets, target => Fraction.ONE.isLessThan( target.fraction ) );
+      this.hasMixedTargets = hasMixedTargets;
 
       // @public {boolean}
       this.hasShapes = hasBars || hasCircles;
