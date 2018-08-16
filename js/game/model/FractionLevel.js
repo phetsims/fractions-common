@@ -467,6 +467,119 @@ define( require => {
 
       return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
     }
+
+    /**
+     * Creates a challenge for (unmixed) shapes level 8.
+     * @public
+     *
+     * Java doc:
+     * > -- Introduce numbers larger than 1 at this level
+     * > -- On this level lets have at least 2 numbers larger than 1 as targets
+     * > -- Enough pieces available to match targets in "obvious ways"...so if 5/4 is a target a whole piece is
+     * >    available and a 1/4 piece available
+     * > -- Students are first introduced to numbers greater than 1 only with 1/2's and 1/4's.  So if the number is
+     * >    greater than 1 on level 8, it should be something like 3/2 or 4/2 or 7/4, since 1/2's and 1/4's are more
+     * >    familiar to students (rather than 1/3's and such).
+     *
+     * Design doc:
+     * > -- Introduce numbers larger than 1 at this level
+     * > -- On this level  at least 2 numbers larger than 1 as targets
+     * > -- Enough pieces available to match targets in "obvious ways"...so if 5/4 is a target a whole piece is
+     * >    available and a 1/4 piece available for numbers larger than 1, uses only 1/2's or 1/4's on this level
+     *
+     * TODO: The "obvious" way may not exist for here, since we use "interesting" fractions.
+     *
+     * @param {number} levelNumber
+     * @param {ColorDef} color
+     * @returns {FractionChallenge}
+     */
+    static level8Shapes( levelNumber, color ) {
+      const targetFractions = shuffle( [
+        ...choose( 2, [ new Fraction( 3, 2 ), new Fraction( 4, 2 ), new Fraction( 5, 4 ), new Fraction( 7, 4 ) ] ),
+        ...choose( 2, [ new Fraction( 2, 3 ), new Fraction( 3, 4 ), new Fraction( 2, 5 ), new Fraction( 3, 5 ), new Fraction( 4, 5 ) ] )
+      ] );
+
+      const pieceFractions = _.flatten( targetFractions.map( f => FractionLevel.interestingFractions( f ) ) );
+
+      const type = nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+
+      return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
+    }
+
+    /**
+     * Creates a challenge for (unmixed) shapes level 9.
+     * @public
+     *
+     * Java doc:
+     * > --Same as level 8 but now some targets only allow "non-obvious" matches with pieces.  For instance, if the
+     * >   target is greater than one, no "wholes" should be available.  So if 5/4 is a target it would need to be
+     * >   built from something like 2 half pieces and a quarter piece
+     *
+     * Design doc:
+     * > --Same as level 8 but now some targets only allow "non-obvious" matches with pieces.  For instance, if the
+     * >   target is greater than one, no "wholes" should be available.  So if 5/4 is a target it would need to be
+     * >   built from something like 2 half pieces and a quarter piece
+     *
+     * TODO: This is literally the same implementation as level 8
+     *
+     * @param {number} levelNumber
+     * @param {ColorDef} color
+     * @returns {FractionChallenge}
+     */
+    static level9Shapes( levelNumber, color ) {
+      const targetFractions = shuffle( [
+        ...choose( 2, [ new Fraction( 3, 2 ), new Fraction( 4, 2 ), new Fraction( 5, 4 ), new Fraction( 7, 4 ) ] ),
+        ...choose( 2, [ new Fraction( 2, 3 ), new Fraction( 3, 4 ), new Fraction( 2, 5 ), new Fraction( 3, 5 ), new Fraction( 4, 5 ) ] )
+      ] );
+
+      const pieceFractions = _.flatten( targetFractions.map( f => FractionLevel.interestingFractions( f ) ) );
+
+      const type = nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+
+      return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
+    }
+
+    /**
+     * Creates a challenge for (unmixed) shapes level 10.
+     * @public
+     *
+     * Java doc:
+     * > --Same as level 7 but now all targets are greater than one.
+     * > --Still top two targets same, and bottom two targets the same
+     * > --No whole pieces available, and targets must be built in interesting ways.  E.g., the target must be built
+     * >   from 3 or more pieces as a way to constrain the pieces given. So for instance something like 4/3 would have
+     * >   to be built by something like 1(half) + 2(quarters) + (1/3)
+     *
+     * Design doc:
+     * > --Same as level 7 but now all targets are greater than one.
+     * > --Still top two targets same, and bottom two targets the same
+     * > --No whole pieces available, and targets must be built in interesting ways.  We could say something like the
+     * >   target must be built from 3 or more pieces as a way to constrain the pieces given. So for instance something
+     * >   like 4/3 would have to be built by something like 1(half) + 2(quarters) + (1/3)
+     *
+     * TODO: Technically whole pieces COULD be available? Would need to generate some. Also, there is no guarantee that
+     * shapes are "fully" interesting?
+     *
+     * @param {number} levelNumber
+     * @param {ColorDef} color
+     * @returns {FractionChallenge}
+     */
+    static level10Shapes( levelNumber, color ) {
+      const fractions = choose( 2, [
+        new Fraction( 3, 2 ),
+        new Fraction( 4, 3 ), new Fraction( 5, 3 ),
+        new Fraction( 5, 4 ), new Fraction( 7, 4 ),
+        new Fraction( 6, 5 ), new Fraction( 7, 5 ), new Fraction( 8, 5 ), new Fraction( 9, 5 ),
+        new Fraction( 7, 6 )
+      ] );
+      const targetFractions = [ fractions[ 0 ], fractions[ 0 ], fractions[ 1 ], fractions[ 1 ] ];
+
+      const pieceFractions = _.flatten( targetFractions.map( f => FractionLevel.interestingFractions( f ) ) );
+
+      const type = nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+
+      return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
+    }
   }
 
   return fractionsCommon.register( 'FractionLevel', FractionLevel );
