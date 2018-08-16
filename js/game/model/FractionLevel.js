@@ -351,6 +351,122 @@ define( require => {
 
       return FractionChallenge.createShapeChallenge( levelNumber, false, color, ChallengeType.PIE, targetFractions, pieceFractions );
     }
+
+    /**
+     * Creates a challenge for (unmixed) shapes level 6.
+     * @public
+     *
+     * Java doc:
+     * > --all targets are made from only 2 stacks of the same size pieces
+     * > --So for instance we give a stack of thirds and a stack of halves, and {2/3, 2/4, 5/6, 1/1} are the target
+     * >   fractions, but we constrain the pieces so that some fractions must be made in "interesting" ways.  2/3 could
+     * >   just be made with 2 third pieces, but 5/6 would need to be made of a 1/2 and a 1/3.
+     * > --It seems the sets that would work well for pieces would be, {1/2, 1/3}, {1/2, 1/4}, {1/3, 1/4}, {1/2, 1/6},
+     * >   {1/3, 1/6}, {1/4, 1/8}, {1/2, 1/8}
+     * > --the constraint should be such that only enough pieces exist to complete the targets.
+     * > Keep the values less than 1 by trial and error.
+     *
+     * Design doc:
+     * > -- switch to 4 targets for this level
+     * > -- all targets are made from only 2 stacks of pieces
+     * > -- So for instance we give a stack of thirds and a stack of halves, and {2/3, 2/4, 5/6, 1/1} are the target
+     * >    fractions, but we constrain the pieces so that some fractions must be made in "interesting" ways.  2/3
+     * >    could just be made with 2 third pieces, but 5/6 would need to be made of a 1/2 and a 1/3.
+     * > -- It seems the sets that would work well for pieces would be, {1/2, 1/3}, {1/2, 1/4}, {1/3, 1/4}, {1/2, 1/6},
+     *      {1/3, 1/6}, {1/4, 1/8}, {1/2, 1/8}
+     * > -- the constraint should be such that only enough pieces exist to complete the targets
+     *
+     * @param {number} levelNumber
+     * @param {ColorDef} color
+     * @returns {FractionChallenge}
+     */
+    static level6Shapes( levelNumber, color ) {
+      while ( true ) { // eslint-disable-line no-constant-condition
+
+        // Java doc:
+        //let's implement this my making each solution as na + mb, where a and b are the fractions from pairs above
+
+        const cardSizes = sample( [ [ 2, 3 ], [ 2, 4 ], [ 3, 4 ], [ 2, 6 ], [ 3, 6 ], [ 4, 8 ], [ 2, 8 ] ] );
+        const selectedCoefficients = choose( 4, [ [ 0, 1 ], [ 1, 0 ], [ 1, 1 ], [ 1, 2 ], [ 2, 1 ], [ 2, 2 ], [ 3, 1 ], [ 1, 3 ] ] );
+
+        const targetFractions = selectedCoefficients.map( ( [ n, m ] ) => {
+          return new Fraction( n, cardSizes[ 0 ] ).plus( new Fraction( m, cardSizes[ 1 ] ) ).reduced();
+        } );
+        if ( _.some( targetFractions, f => Fraction.ONE.isLessThan( f ) ) ) {
+          continue;
+        }
+
+        const pieceFractions = _.flatten( selectedCoefficients.map( ( [ n, m ] ) => {
+          return [
+            ...repeat( n, new Fraction( 1, cardSizes[ 0 ] ) ),
+            ...repeat( m, new Fraction( 1, cardSizes[ 1 ] ) )
+          ];
+        } ) );
+
+        const type = nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+
+        return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
+      }
+    }
+
+    /**
+     * Creates a challenge for (unmixed) shapes level 7.
+     * @public
+     *
+     * Java doc:
+     * > --Top two targets, and bottom 2 targets are equivalent but still numbers less than 1
+     * > -- A built in check to draw a different fraction for the top 2 and the bottom 2
+     * > -- Possible fractions sets from which to draw 2 each {1/2, 1/3, 2/3, 1/4, 3/4, 5/6, 3/8, 5/8}
+     * > -- Shape pieces constrained so that for instance if 1/2 and 1/2 appears for the top targets, a 1/2 piece might
+     * >    be available but the other one will need to be made with a 1/4 and 1/4, or a 1/3 and a 1/6 or such.
+     * > -- If 3/8 or 5/8 are drawn circles should be used, if not circles or tiles will work fine
+     *
+     * Design doc:
+     * > --Top two targets, and bottom 2 targets are equivalent but still numbers less than 1
+     * > -- A built in check to draw a different fraction for the top 2 and the bottom 2
+     * > -- Possible fractions sets from which to draw 2 each {1/2, 1/3, 2/3, 1/4, 3/4, 5/6, 3/8, 5/8}
+     * > -- Shape pieces constrained so that for instance if 1/2 and 1/2 appears for the top targets, a 1/2 piece might
+     * >    be available but the other one will need to be made with a 1/4 and 1/4, or a 1/3 and a 1/6 or such.
+     *
+     * TODO: I see no explicit guarantee of the "having to make things using other shapes", it may work out to be
+     * easier than expected.
+     *
+     * @param {number} levelNumber
+     * @param {ColorDef} color
+     * @returns {FractionChallenge}
+     */
+    static level7Shapes( levelNumber, color ) {
+      const selected = choose( 2, [
+        new Fraction( 1, 2 ),
+        new Fraction( 1, 3 ),
+        new Fraction( 2, 3 ),
+        new Fraction( 1, 4 ),
+        new Fraction( 3, 4 ),
+        new Fraction( 5, 6 ),
+        new Fraction( 3, 8 ),
+        new Fraction( 5, 8 )
+      ] );
+
+      const targetFractions = [
+        selected[ 0 ],
+        selected[ 0 ],
+        selected[ 1 ],
+        selected[ 1 ]
+      ];
+
+      const pieceFractions = _.flatten( _.flatten( [
+        choose( 2, collectionFinder8.search( selected[ 0 ], {
+          maxQuantity: 8
+        } ) ),
+        choose( 2, collectionFinder8.search( selected[ 1 ], {
+          maxQuantity: 8
+        } ) )
+      ] ).map( collection => collection.unitFractions ) );
+
+      const type = nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+
+      return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
+    }
   }
 
   return fractionsCommon.register( 'FractionLevel', FractionLevel );
