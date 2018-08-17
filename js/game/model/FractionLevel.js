@@ -106,6 +106,18 @@ define( require => {
       } ) );
     }
 
+    static straightforwardFractions( fractions ) {
+      return _.flatten( fractions.map( fraction => {
+        const whole = Math.floor( fraction.getValue() );
+        return [
+          ...repeat( whole, new Fraction( 1, 1 ) ),
+          ...repeat( fraction.numerator - whole * fraction.denominator, new Fraction( 1, fraction.denominator ) )
+        ];
+      } ) );
+    }
+
+    // TODO: substituteSubdividedCardsExact same as substituteSubdividedCards
+
     // note createCardsSameNumberEachType from Java
     static maxNumeratorUnitFractions( fractions ) {
       const maxNumerator = Math.max( ...fractions.map( f => f.numerator ) );
