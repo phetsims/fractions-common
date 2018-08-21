@@ -28,7 +28,6 @@ define( require => {
   const choose = ( q, i ) => FractionLevel.choose( q, i );
   const inclusive = ( a, b ) => _.range( a, b + 1 );
   const repeat = ( q, i ) => _.times( q, () => i );
-  const select = ( q, shapePartitions ) => _.find( shapePartitions, shapePartition => shapePartition.shapes.length === q );
 
   // constants
   const collectionFinder8 = new CollectionFinder( {
@@ -147,6 +146,76 @@ define( require => {
       collections = collections.slice( 0, quantity );
 
       return sample( collections ).unitFractions;
+    }
+
+    /**
+     * Returns an (optionally) filtered list of fractions from the list of numerators/denominators.
+     * @public
+     *
+     * @param {Array.<number>} numerators
+     * @param {Array.<number>} denominators
+     * @param {function} [predicate] - function( {Fraction} ): {boolean}
+     * @returns {Array.<Fraction>}
+     */
+    static fractions( numerators, denominators, predicate = _.constant( true ) ) {
+      return _.flatten( numerators.map( numerator => {
+        return denominators.map( denominator => {
+          return new Fraction( numerator, denominator );
+        } ).filter( predicate );
+      } ) );
+    }
+
+    /**
+     * Returns a list of numbers required exactly for the given fractions (for number challenges).
+     * @public
+     *
+     * @param {Array.<Fraction>}
+     * @returns {Array.<number>}
+     */
+    static exactNumbers( fractions ) {
+      return _.flatten( fractions.map( fraction => [
+        fraction.numerator,
+        fraction.denominator
+      ] ) ).filter( _.identity );
+    }
+
+    /**
+     * Returns a list of numbers required exactly for the given fractions (for number challenges).
+     * @public
+     *
+     * @param {Array.<Fraction>}
+     * @returns {Array.<number>}
+     */
+    static exactMixedNumbers( fractions ) {
+      return _.flatten( fractions.map( fraction => {
+        const whole = Math.floor( fraction.getValue() );
+        fraction = fraction.minus( new Fraction( whole, 1 ) );
+        return [
+          whole,
+          fraction.numerator,
+          fraction.denominator
+        ];
+      } ) ).filter( _.identity );
+    }
+
+    static sequentialFromFraction( shapePartitions, fraction, color ) {
+      const potentialPartitions = ShapePartition.supportsDenominator( shapePartitions, fraction.denominator );
+      return ShapeTarget.sequentialFill( sample( potentialPartitions ), fraction, color );
+    }
+
+    static sequentialFromDivisibleFraction( shapePartitions, fraction, color ) {
+      const potentialPartitions = ShapePartition.supportsDivisibleDenominator( shapePartitions, fraction.denominator );
+      return ShapeTarget.sequentialFill( sample( potentialPartitions ), fraction, color );
+    }
+
+    static sequentialFromFractions( shapePartitions, fractions, colors ) {
+      colors = shuffle( colors );
+      return fractions.map( ( fraction, index ) => FractionLevel.sequentialFromFraction( shapePartitions, fraction, colors[ index ] ) );
+    }
+
+    static sequentialFromDivisibleFractions( shapePartitions, fractions, colors ) {
+      colors = shuffle( colors );
+      return fractions.map( ( fraction, index ) => FractionLevel.sequentialFromDivisibleFraction( shapePartitions, fraction, colors[ index ] ) );
     }
 
     /**
@@ -566,15 +635,41 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level1Numbers( levelNumber ) {
-      const colors = shuffle( COLORS_3 );
-      const pieceNumbers = [ 1, 1, 2, 2, 3, 3 ];
-      const shapeTargets = shuffle( [
+      const targetFractions = shuffle( [
         new Fraction( 1, 2 ),
         new Fraction( 1, 3 ),
         new Fraction( 2, 3 )
-      ] ).map( ( fraction, index ) => {
-        return ShapeTarget.sequentialFill( select( fraction.denominator, ShapePartition.PIES ), fraction, colors[ index ] );
-      } );
+      ] );
+      const pieceNumbers = [ 1, 1, 2, 2, 3, 3 ];
+      const shapeTargets = FractionLevel.sequentialFromFractions( ShapePartition.PIES, targetFractions, COLORS_3 );
+
+      return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
+    }
+
+    /**
+     * Creates a challenge for (unmixed) numbers level 2.
+     * @public
+     *
+     * Design doc:
+     * > --Distribution of fractions ranging from 1/2 to 4/5.  As in the numerator could be 1, 2, 3, or 4 and the
+     * >   denominator could be 2, 3, 4, or 5 with the stipulation that the fraction is always less than 1.
+     * > -- circles or rectangles, but all targets one shape
+     * > --just enough cards to complete targets
+     *
+     * @param {number} levelNumber
+     * @returns {FractionChallenge}
+     */
+    static level2Numbers( levelNumber ) {
+      const shapePartitions = sample( [
+        ShapePartition.PIES,
+        ShapePartition.HORIZONTAL_BARS,
+        ShapePartition.VERTICAL_BARS
+      ] );
+
+      const targetFractions = choose( 3, FractionLevel.fractions( inclusive( 1, 4 ), inclusive( 2, 5 ), f => f.isLessThan( Fraction.ONE ) ) );
+      const pieceNumbers = FractionLevel.exactNumbers( targetFractions );
+      const shapeTargets = FractionLevel.sequentialFromFractions( shapePartitions, targetFractions, COLORS_3 );
+
       return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
     }
   }

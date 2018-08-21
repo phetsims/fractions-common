@@ -53,6 +53,30 @@ define( require => {
     }
 
     /**
+     * Returns a filtered list of all ShapePartitions that have the same number of shapes as the given denominator.
+     * @public
+     *
+     * @param {Array.<ShapePartition>} shapePartitions
+     * @param {number} denominator
+     * @returns {Array.<ShapePartition>}
+     */
+    static supportsDenominator( shapePartitions, denominator ) {
+      return shapePartitions.filter( shapePartition => shapePartition.shapes.length === denominator );
+    }
+
+    /**
+     * Returns a filtered list of all ShapePartitions whose number of shapes is divisible by the denominator.
+     * @public
+     *
+     * @param {Array.<ShapePartition>} shapePartitions
+     * @param {number} denominator
+     * @returns {Array.<ShapePartition>}
+     */
+    static supportsDivisibleDenominator( shapePartitions, denominator ) {
+      return shapePartitions.filter( shapePartition => shapePartition.shapes.length % denominator === 0 );
+    }
+
+    /**
      * Returns a pie-shaped partition.
      * @public
      *
@@ -451,6 +475,13 @@ define( require => {
   ShapePartition.FIVE_POINT = ShapePartition.createFlower( 5, true ).rescaled( RESCALE_SIZE );
   ShapePartition.SIX_FLOWER = ShapePartition.createFlower( 6 ).rescaled( RESCALE_SIZE );
   ShapePartition.HEX_RING = ShapePartition.createHoneycomb( 1 ).rescaled( RESCALE_SIZE );
+
+  // @public {Array.<ShapePartition>}
+  ShapePartition.UNIVERSAL_PARTITIONS = [
+    ...ShapePartition.PIES,
+    ...ShapePartition.HORIZONTAL_BARS,
+    ...ShapePartition.VERTICAL_BARS
+  ];
 
   // @public {Array.<ShapePartition>}
   ShapePartition.SHAPE_PARTITIONS = [
