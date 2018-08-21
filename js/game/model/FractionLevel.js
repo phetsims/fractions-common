@@ -672,6 +672,54 @@ define( require => {
 
       return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
     }
+
+    /**
+     * Creates a challenge for (unmixed) numbers level 3.
+     * @public
+     *
+     * TODO: Check design/source
+     *
+     * @param {number} levelNumber
+     * @returns {FractionChallenge}
+     */
+    static level3Numbers( levelNumber ) {
+      const shapePartitions = [
+        ShapePartition.SIX_FLOWER
+      ];
+
+      const numerators = choose( 3, inclusive( 1, 5 ) );
+      const pieceNumbers = _.includes( numerators, 5 ) ? [
+        1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 9, 9, 9
+      ] : [
+        1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 6, 6, 9, 9, 9
+      ];
+      const targetFractions = numerators.map( n => new Fraction( n, 6 ) );
+      const shapeTargets = FractionLevel.sequentialFromFractions( shapePartitions, targetFractions, COLORS_3 );
+
+      return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
+    }
+
+    /**
+     * Creates a challenge for (unmixed) numbers level 4.
+     * @public
+     *
+     * TODO: Check design/source
+     *
+     * @param {number} levelNumber
+     * @returns {FractionChallenge}
+     */
+    static level4Numbers( levelNumber ) {
+      const shapePartitions = ShapePartition.PYRAMIDS;
+      const targetFractions = [
+        new Fraction( 1, 1 ),
+        new Fraction( sample( inclusive( 1, 4 ) ), 4 ),
+        new Fraction( sample( inclusive( 1, 9 ) ), 9 )
+      ];
+      const pieceNumbers = FractionLevel.exactNumbers( targetFractions );
+      const shapeTargets = FractionLevel.sequentialFromFractions( shapePartitions, targetFractions, COLORS_3 );
+
+      return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
+    }
   }
 
   return fractionsCommon.register( 'FractionLevel', FractionLevel );
