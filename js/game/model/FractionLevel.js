@@ -9,7 +9,6 @@ define( require => {
   'use strict';
 
   // modules
-  const ChallengeType = require( 'FRACTIONS_COMMON/game/enum/ChallengeType' );
   const CollectionFinder = require( 'FRACTIONS_COMMON/game/model/CollectionFinder' );
   const DynamicProperty = require( 'AXON/DynamicProperty' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
@@ -17,12 +16,6 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const PrimeFactorization = require( 'FRACTIONS_COMMON/common/model/PrimeFactorization' );
   const Property = require( 'AXON/Property' );
-
-  // globals
-  let generated1Shapes = false;
-  let generated2Shapes = false;
-  let generated3Shapes = false;
-  let generated4Shapes = false;
 
   // Convenience functions.
   const nextBoolean = () => phet.joist.random.nextBoolean();
@@ -184,11 +177,7 @@ define( require => {
         ...repeat( 3, new Fraction( 1, 3 ) )
       ];
 
-      // Always choose PIE the first time
-      const type = ( !generated1Shapes || nextBoolean() ) ? ChallengeType.PIE : ChallengeType.BAR;
-      generated1Shapes = true;
-
-      return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
+      return FractionChallenge.createShapeChallenge( levelNumber, false, color, targetFractions, pieceFractions );
     }
 
     /**
@@ -231,11 +220,7 @@ define( require => {
         ...FractionLevel.interestingFractions( sample( targetFractions ) )
       ];
 
-      // Always choose BAR the first time
-      const type = ( !generated2Shapes || nextBoolean() ) ? ChallengeType.BAR : ChallengeType.PIE;
-      generated2Shapes = true;
-
-      return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
+      return FractionChallenge.createShapeChallenge( levelNumber, false, color, targetFractions, pieceFractions );
     }
 
     /**
@@ -264,11 +249,7 @@ define( require => {
 
       const pieceFractions = FractionLevel.maxNumeratorUnitFractions( targetFractions );
 
-      // Always choose PIE the first time
-      const type = ( !generated3Shapes || nextBoolean() ) ? ChallengeType.PIE : ChallengeType.BAR;
-      generated3Shapes = true;
-
-      return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
+      return FractionChallenge.createShapeChallenge( levelNumber, false, color, targetFractions, pieceFractions );
     }
 
     /**
@@ -321,11 +302,7 @@ define( require => {
         ];
       }
 
-      // Always choose BAR the first time
-      const type = ( !generated4Shapes || nextBoolean() ) ? ChallengeType.BAR : ChallengeType.PIE;
-      generated4Shapes = true;
-
-      return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
+      return FractionChallenge.createShapeChallenge( levelNumber, false, color, targetFractions, pieceFractions );
     }
 
     /**
@@ -361,7 +338,7 @@ define( require => {
         ...FractionLevel.interestingFractions( sample( targetFractions ) )
       ];
 
-      return FractionChallenge.createShapeChallenge( levelNumber, false, color, ChallengeType.PIE, targetFractions, pieceFractions );
+      return FractionChallenge.createShapeChallenge( levelNumber, false, color, targetFractions, pieceFractions );
     }
 
     /**
@@ -415,9 +392,7 @@ define( require => {
           ];
         } ) );
 
-        const type = nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
-
-        return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
+        return FractionChallenge.createShapeChallenge( levelNumber, false, color, targetFractions, pieceFractions );
       }
     }
 
@@ -475,9 +450,7 @@ define( require => {
         } ) )
       ] ).map( collection => collection.unitFractions ) );
 
-      const type = nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
-
-      return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
+      return FractionChallenge.createShapeChallenge( levelNumber, false, color, targetFractions, pieceFractions );
     }
 
     /**
@@ -513,9 +486,7 @@ define( require => {
 
       const pieceFractions = _.flatten( targetFractions.map( f => FractionLevel.interestingFractions( f ) ) );
 
-      const type = nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
-
-      return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
+      return FractionChallenge.createShapeChallenge( levelNumber, false, color, targetFractions, pieceFractions );
     }
 
     /**
@@ -546,9 +517,7 @@ define( require => {
 
       const pieceFractions = _.flatten( targetFractions.map( f => FractionLevel.interestingFractions( f ) ) );
 
-      const type = nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
-
-      return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
+      return FractionChallenge.createShapeChallenge( levelNumber, false, color, targetFractions, pieceFractions );
     }
 
     /**
@@ -588,9 +557,7 @@ define( require => {
 
       const pieceFractions = _.flatten( targetFractions.map( f => FractionLevel.interestingFractions( f ) ) );
 
-      const type = nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
-
-      return FractionChallenge.createShapeChallenge( levelNumber, false, color, type, targetFractions, pieceFractions );
+      return FractionChallenge.createShapeChallenge( levelNumber, false, color, targetFractions, pieceFractions );
     }
   }
 

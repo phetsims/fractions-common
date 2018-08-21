@@ -292,17 +292,17 @@ define( require => {
       }
     }
 
-    static createShapeChallenge( levelNumber, hasMixedTargets, color, type, targetFractions, pieceFractions ) {
+    static createShapeChallenge( levelNumber, hasMixedTargets, color, targetFractions, pieceFractions ) {
       assert && assert( typeof levelNumber === 'number' );
       assert && assert( typeof hasMixedTargets === 'boolean' );
       assert && assert( ColorDef.isColorDef( color ) );
-      assert && assert( _.includes( ChallengeType.VALUES, type ) );
       assert && assert( Array.isArray( targetFractions ) );
       assert && targetFractions.forEach( fraction => assert( fraction instanceof Fraction ) );
       assert && assert( Array.isArray( pieceFractions ) );
       assert && pieceFractions.forEach( fraction => assert( fraction instanceof Fraction ) );
 
-      var representation = type === ChallengeType.PIE ? Representation.CIRCLE : Representation.VERTICAL_BAR;
+      const type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+      const representation = type === ChallengeType.PIE ? Representation.CIRCLE : Representation.VERTICAL_BAR;
       const targets = targetFractions.map( f => new Target( f ) );
       const shapePieces = pieceFractions.map( f => new ShapePiece( f, representation, color ) );
       return new FractionChallenge( levelNumber, type, hasMixedTargets, targets, shapePieces, [] );
