@@ -178,7 +178,7 @@ define( require => {
         new FractionLevel( 10, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level10Property, placeholderNumberChallengeGenerator( 4, true ) )
       ] : [
         // "Build a Fraction" Numbers level 1
-        new FractionLevel( 1, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level1Property, placeholderNumberChallengeGenerator( 3, false ) ),
+        new FractionLevel( 1, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level1Property, FractionLevel.level1Numbers ),
         // "Build a Fraction" Numbers level 2
         new FractionLevel( 2, 3, BuildingType.NUMBER, FractionsCommonColorProfile.level2Property, placeholderNumberChallengeGenerator( 3, false ) ),
         // "Build a Fraction" Numbers level 3

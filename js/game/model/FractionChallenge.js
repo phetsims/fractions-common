@@ -27,6 +27,7 @@ define( require => {
   const ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
   const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   const ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
+  const ShapeTarget = require( 'FRACTIONS_COMMON/game/model/ShapeTarget' );
   const Target = require( 'FRACTIONS_COMMON/game/model/Target' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -292,6 +293,17 @@ define( require => {
       }
     }
 
+    /**
+     * Creates a FractionChallenge for a "Shape" level.
+     * @public
+     *
+     * @param {number} levelNumber
+     * @param {boolean} hasMixedTargets
+     * @param {ColorDef} color
+     * @param {Array.<Fraction>} targetFractions
+     * @param {Array.<Fraction>} pieceFractions
+     * @returns {FractionChallenge}
+     */
     static createShapeChallenge( levelNumber, hasMixedTargets, color, targetFractions, pieceFractions ) {
       assert && assert( typeof levelNumber === 'number' );
       assert && assert( typeof hasMixedTargets === 'boolean' );
@@ -306,6 +318,28 @@ define( require => {
       const targets = targetFractions.map( f => new Target( f ) );
       const shapePieces = pieceFractions.map( f => new ShapePiece( f, representation, color ) );
       return new FractionChallenge( levelNumber, type, hasMixedTargets, targets, shapePieces, [] );
+    }
+
+    /**
+     * Creates a FractionChallenge for a "Number" level.
+     * @public
+     *
+     * @param {number} levelNumber
+     * @param {boolean} hasMixedTargets
+     * @param {Array.<ShapeTarget>} shapeTargets
+     * @param {Array.<number>} pieceNumbers
+     */
+    static createNumberChallenge( levelNumber, hasMixedTargets, shapeTargets, pieceNumbers ) {
+      assert && assert( typeof levelNumber === 'number' );
+      assert && assert( typeof hasMixedTargets === 'boolean' );
+      assert && assert( Array.isArray( shapeTargets ) );
+      assert && shapeTargets.forEach( shapeTarget => assert( shapeTarget instanceof ShapeTarget ) );
+      assert && assert( Array.isArray( pieceNumbers ) );
+      assert && pieceNumbers.forEach( pieceNumber => assert( typeof pieceNumber === 'number' ) );
+
+      return new FractionChallenge( levelNumber, ChallengeType.NUMBER, hasMixedTargets, shapeTargets, [], pieceNumbers.map( number => {
+        return new NumberPiece( number );
+      } ) );
     }
   }
 

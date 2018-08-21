@@ -14,8 +14,11 @@ define( require => {
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const FractionChallenge = require( 'FRACTIONS_COMMON/game/model/FractionChallenge' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const PrimeFactorization = require( 'FRACTIONS_COMMON/common/model/PrimeFactorization' );
   const Property = require( 'AXON/Property' );
+  const ShapePartition = require( 'FRACTIONS_COMMON/game/model/ShapePartition' );
+  const ShapeTarget = require( 'FRACTIONS_COMMON/game/model/ShapeTarget' );
 
   // Convenience functions.
   const nextBoolean = () => phet.joist.random.nextBoolean();
@@ -25,12 +28,22 @@ define( require => {
   const choose = ( q, i ) => FractionLevel.choose( q, i );
   const inclusive = ( a, b ) => _.range( a, b + 1 );
   const repeat = ( q, i ) => _.times( q, () => i );
+  const select = ( q, shapePartitions ) => _.find( shapePartitions, shapePartition => shapePartition.shapes.length === q );
 
   // constants
   const collectionFinder8 = new CollectionFinder( {
     // default denominators to match the Java search
     denominators: inclusive( 1, 8 ).map( PrimeFactorization.factor )
   } );
+  const COLORS_3 = [
+    FractionsCommonColorProfile.level1Property,
+    FractionsCommonColorProfile.level2Property,
+    FractionsCommonColorProfile.level3Property
+  ];
+  // const COLORS_4 = [
+  //   ...COLORS_3,
+  //   FractionsCommonColorProfile.level4Property
+  // ];
 
   class FractionLevel {
     /**
@@ -537,6 +550,32 @@ define( require => {
       const pieceFractions = _.flatten( targetFractions.map( f => FractionLevel.interestingFractions( f ) ) );
 
       return FractionChallenge.createShapeChallenge( levelNumber, false, color, targetFractions, pieceFractions );
+    }
+
+    /**
+     * Creates a challenge for (unmixed) numbers level 1.
+     * @public
+     *
+     * Design doc:
+     * > -- fractions are {1/2, ⅓, ⅔}
+     * > -- if refresh button is pressed, colors and numbers are shuffled
+     * > -- always circles
+     * > -- just enough cards to complete targets
+     *
+     * @param {number} levelNumber
+     * @returns {FractionChallenge}
+     */
+    static level1Numbers( levelNumber ) {
+      const colors = shuffle( COLORS_3 );
+      const pieceNumbers = [ 1, 1, 2, 2, 3, 3 ];
+      const shapeTargets = shuffle( [
+        new Fraction( 1, 2 ),
+        new Fraction( 1, 3 ),
+        new Fraction( 2, 3 )
+      ] ).map( ( fraction, index ) => {
+        return ShapeTarget.sequentialFill( select( fraction.denominator, ShapePartition.PIES ), fraction, colors[ index ] );
+      } );
+      return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
     }
   }
 
