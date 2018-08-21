@@ -11,6 +11,7 @@ define( require => {
   // modules
   const CollectionFinder = require( 'FRACTIONS_COMMON/game/model/CollectionFinder' );
   const DynamicProperty = require( 'AXON/DynamicProperty' );
+  const FillType = require( 'FRACTIONS_COMMON/game/enum/FillType' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const FractionChallenge = require( 'FRACTIONS_COMMON/game/model/FractionChallenge' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
@@ -198,31 +199,22 @@ define( require => {
       } ) ).filter( _.identity );
     }
 
-    static sequentialFromFraction( shapePartitions, fraction, color ) {
-      const potentialPartitions = ShapePartition.supportsDenominator( shapePartitions, fraction.denominator );
-      return ShapeTarget.sequentialFill( sample( potentialPartitions ), fraction, color );
-    }
-
-    static sequentialFromDivisibleFraction( shapePartitions, fraction, color ) {
-      const potentialPartitions = ShapePartition.supportsDivisibleDenominator( shapePartitions, fraction.denominator );
-      return ShapeTarget.sequentialFill( sample( potentialPartitions ), fraction, color );
-    }
-
-    static sequentialFromFractions( shapePartitions, fractions, colors ) {
+    static targetsFromFractions( shapePartitions, fractions, colors, fillType, allowSubdivision = false ) {
       colors = shuffle( colors );
-      return fractions.map( ( fraction, index ) => FractionLevel.sequentialFromFraction( shapePartitions, fraction, colors[ index ] ) );
+      return fractions.map( ( fraction, index ) => {
+        const potentialPartitions = allowSubdivision
+          ? ShapePartition.supportsDivisibleDenominator( shapePartitions, fraction.denominator )
+          : ShapePartition.supportsDenominator( shapePartitions, fraction.denominator );
+
+        return ShapeTarget.fill( sample( potentialPartitions ), fraction, colors[ index ], fillType );
+      } );
     }
 
-    static sequentialFromDivisibleFractions( shapePartitions, fractions, colors ) {
-      colors = shuffle( colors );
-      return fractions.map( ( fraction, index ) => FractionLevel.sequentialFromDivisibleFraction( shapePartitions, fraction, colors[ index ] ) );
-    }
-
-    static sequentialFromPartitions( shapePartitions, colors, denominatorToNumerator ) {
+    static targetsFromPartitions( shapePartitions, colors, denominatorToNumerator, fillType ) {
       colors = shuffle( colors );
       return shapePartitions.map( ( shapePartition, index ) => {
         const denominator = shapePartition.shapes.length;
-        return ShapeTarget.sequentialFill( shapePartition, new Fraction( denominatorToNumerator( denominator ), denominator ), colors[ index ] );
+        return ShapeTarget.fill( shapePartition, new Fraction( denominatorToNumerator( denominator ), denominator ), colors[ index ], fillType );
       } );
     }
 
@@ -649,7 +641,7 @@ define( require => {
         new Fraction( 2, 3 )
       ] );
       const pieceNumbers = [ 1, 1, 2, 2, 3, 3 ];
-      const shapeTargets = FractionLevel.sequentialFromFractions( ShapePartition.PIES, targetFractions, COLORS_3 );
+      const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.PIES, targetFractions, COLORS_3, FillType.SEQUENTIAL );
 
       return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
     }
@@ -676,7 +668,7 @@ define( require => {
 
       const targetFractions = choose( 3, FractionLevel.fractions( inclusive( 1, 4 ), inclusive( 2, 5 ), f => f.isLessThan( Fraction.ONE ) ) );
       const pieceNumbers = FractionLevel.exactNumbers( targetFractions );
-      const shapeTargets = FractionLevel.sequentialFromFractions( shapePartitions, targetFractions, COLORS_3 );
+      const shapeTargets = FractionLevel.targetsFromFractions( shapePartitions, targetFractions, COLORS_3, FillType.SEQUENTIAL );
 
       return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
     }
@@ -702,7 +694,7 @@ define( require => {
         1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 6, 6, 9, 9, 9
       ];
       const targetFractions = numerators.map( n => new Fraction( n, 6 ) );
-      const shapeTargets = FractionLevel.sequentialFromFractions( shapePartitions, targetFractions, COLORS_3 );
+      const shapeTargets = FractionLevel.targetsFromFractions( shapePartitions, targetFractions, COLORS_3, FillType.SEQUENTIAL );
 
       return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
     }
@@ -724,7 +716,7 @@ define( require => {
         new Fraction( sample( inclusive( 1, 9 ) ), 9 )
       ];
       const pieceNumbers = FractionLevel.exactNumbers( targetFractions );
-      const shapeTargets = FractionLevel.sequentialFromFractions( shapePartitions, targetFractions, COLORS_3 );
+      const shapeTargets = FractionLevel.targetsFromFractions( shapePartitions, targetFractions, COLORS_3, FillType.SEQUENTIAL );
 
       return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
     }
@@ -739,7 +731,7 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level5Numbers( levelNumber ) {
-      const shapeTargets = FractionLevel.sequentialFromPartitions( choose( 3, ShapePartition.GAME_PARTITIONS ), COLORS_3, d => sample( inclusive( 1, d ) ) );
+      const shapeTargets = FractionLevel.targetsFromPartitions( choose( 3, ShapePartition.GAME_PARTITIONS ), COLORS_3, d => sample( inclusive( 1, d ) ), FillType.SEQUENTIAL );
       const pieceNumbers = FractionLevel.exactNumbers( shapeTargets.map( target => target.fraction ) );
 
       return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );

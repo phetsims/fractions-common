@@ -26,6 +26,20 @@ define( require => {
     }
 
     /**
+     * Returns a target filled in the specified manner.
+     * @public
+     *
+     * @param {ShapePartition} shapePartition
+     * @param {Fraction} fraction
+     * @param {ColorDef} color
+     * @param {FillType} fillType
+     * @returns {ShapeTarget}
+     */
+    static fill( shapePartition, fraction, color, fillType ) {
+      return new ShapeTarget( fraction, FilledPartition.fill( shapePartition, fraction, color, fillType ) );
+    }
+
+    /**
      * Returns a target filled sequentially from the start.
      * @public
      *

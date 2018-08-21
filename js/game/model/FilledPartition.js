@@ -9,6 +9,7 @@ define( require => {
   'use strict';
 
   // modules
+  const FillType = require( 'FRACTIONS_COMMON/game/enum/FillType' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const ShapePartition = require( 'FRACTIONS_COMMON/game/model/ShapePartition' );
@@ -36,6 +37,38 @@ define( require => {
 
       // @public {Fraction} - The computed fraction for the value of this filled partition
       this.fraction = new Fraction( fills.filter( _.identity ).length, fills.length ).reduce();
+    }
+
+    /**
+     * Returns a list of filled partitions, filled in the specified manner.
+     * @public
+     *
+     * @param {ShapePartition} shapePartition
+     * @param {Fraction} fraction
+     * @param {ColorDef} color
+     * @param {FillType} fillType
+     * @returns {Array.<FilledPartition>}
+     */
+    static fill( shapePartition, fraction, color, fillType ) {
+      assert && assert( _.includes( FillType.VALUES, fillType ) );
+
+      if ( fillType === FillType.RANDOM ) {
+        return FilledPartition.randomFill( shapePartition, fraction, color );
+      }
+      else if ( fillType === FillType.SEQUENTIAL ) {
+        return FilledPartition.sequentialFill( shapePartition, fraction, color );
+      }
+      else {
+        let result = [];
+        while ( !fraction.isLessThan( Fraction.ONE ) ) {
+          result = result.concat( FilledPartition.sequentialFill( shapePartition, Fraction.ONE, color ) );
+          fraction = fraction.minus( Fraction.ONE );
+        }
+        return [
+          ...result,
+          ...FilledPartition.randomFill( shapePartition, fraction, color )
+        ];
+      }
     }
 
     /**
