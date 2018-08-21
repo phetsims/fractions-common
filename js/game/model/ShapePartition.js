@@ -484,6 +484,17 @@ define( require => {
   ];
 
   // @public {Array.<ShapePartition>}
+  ShapePartition.GAME_PARTITIONS = [
+    ...ShapePartition.PIES,
+    ...ShapePartition.HORIZONTAL_BARS,
+    ...ShapePartition.VERTICAL_BARS,
+    ...ShapePartition.GRIDS,
+    ...ShapePartition.PYRAMIDS,
+    ShapePartition.SIX_FLOWER,
+    ...ShapePartition.POLYGONS
+  ];
+
+  // @public {Array.<ShapePartition>}
   ShapePartition.SHAPE_PARTITIONS = [
     ...ShapePartition.PIES,
     ...ShapePartition.POLYGONS,

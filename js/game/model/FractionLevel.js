@@ -218,6 +218,14 @@ define( require => {
       return fractions.map( ( fraction, index ) => FractionLevel.sequentialFromDivisibleFraction( shapePartitions, fraction, colors[ index ] ) );
     }
 
+    static sequentialFromPartitions( shapePartitions, colors, denominatorToNumerator ) {
+      colors = shuffle( colors );
+      return shapePartitions.map( ( shapePartition, index ) => {
+        const denominator = shapePartition.shapes.length;
+        return ShapeTarget.sequentialFill( shapePartition, new Fraction( denominatorToNumerator( denominator ), denominator ), colors[ index ] );
+      } );
+    }
+
     /**
      * Creates a challenge for (unmixed) shapes level 1.
      * @public
@@ -717,6 +725,22 @@ define( require => {
       ];
       const pieceNumbers = FractionLevel.exactNumbers( targetFractions );
       const shapeTargets = FractionLevel.sequentialFromFractions( shapePartitions, targetFractions, COLORS_3 );
+
+      return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
+    }
+
+    /**
+     * Creates a challenge for (unmixed) numbers level 5.
+     * @public
+     *
+     * TODO: Check design/source
+     *
+     * @param {number} levelNumber
+     * @returns {FractionChallenge}
+     */
+    static level5Numbers( levelNumber ) {
+      const shapeTargets = FractionLevel.sequentialFromPartitions( choose( 3, ShapePartition.GAME_PARTITIONS ), COLORS_3, d => sample( inclusive( 1, d ) ) );
+      const pieceNumbers = FractionLevel.exactNumbers( shapeTargets.map( target => target.fraction ) );
 
       return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
     }
