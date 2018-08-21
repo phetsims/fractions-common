@@ -140,18 +140,11 @@ define( require => {
      * Creates a challenge for (unmixed) shapes level 1.
      * @public
      *
-     * Java doc:
-     * > Make two draws, one target should be from the set  {1/1, 2/2, 3/3} and the second draw for the next two targets
-     * > from the set {1/2, 1/3, 2/3}
-     *
      * Design doc:
      * > Two "draws", one target should be from the set  {1/1, 2/2, 3/3} and the second draw for the next two targets
      * > from the set {1/2, 1/3, 2/3}
      *
      * We do three "draws", one from the first set, and two from the second set (if that's clear).
-     *
-     * NOTE: In the Java version, this randomly started as either pie/bar and STAYED for the entire sim duration.
-     * This is inconsistent with our general practices now, so now it always STARTS as pie, then is random.
      *
      * @param {number} levelNumber
      * @param {ColorDef} color
@@ -184,18 +177,10 @@ define( require => {
      * Creates a challenge for (unmixed) shapes level 2.
      * @public
      *
-     * Java doc:
-     * > Choose from a distribution of fractions ranging from 1/2 to 4/5. The numerator could be 1, 2, 3, or 4 and the
-     * > denominator could be 2, 3, 4, or 5 with the stipulation that the fraction is always less than 1. No "wholes"
-     * > will appear in the shapes pile.
-     *
      * Design doc:
      * > Choosing from a distribution of fractions ranging from 1/2 to 4/5.  The numerator can be 1, 2, 3, or 4 and the
      * > denominator could be 2, 3, 4, or 5 with the stipulation that the fraction is always less than 1. No "wholes" in
      * > the shapes piles. 2 possible ways to make at least one of the targets
-     *
-     * NOTE: In the Java version, this randomly started as either pie/bar and STAYED for the entire sim duration.
-     * This is inconsistent with our general practices now, so now it always STARTS as bar, then is random.
      *
      * @param {number} levelNumber
      * @param {ColorDef} color
@@ -227,12 +212,9 @@ define( require => {
      * Creates a challenge for (unmixed) shapes level 3.
      * @public
      *
-     * Java and design doc (identical for this level):
+     * Design doc:
      * > Like level 2, but now fractions ranging from 1/1 to 6/6, and with "whole" pieces available.
      * > Number of pieces of each fraction allowing for multiple solutions
-     *
-     * NOTE: In the Java version, this randomly started as either pie/bar and STAYED for the entire sim duration.
-     * This is inconsistent with our general practices now, so now it always STARTS as pie, then is random.
      *
      * TODO: Descriptions do NOT note anything about the "max numerator" selection. It's also conceivable that three
      * of the same numerator could be selected, thus NOT being like level2 (not two ways to make one) since it would
@@ -266,9 +248,6 @@ define( require => {
      * > All 3 targets the same, 2 possible target values {1/2, 1/1}.
      * > No "whole" pieces available
      * > constrain one of the targets so that two different sizes must be used.
-     *
-     * NOTE: In the Java version, this randomly started as either pie/bar and STAYED for the entire sim duration.
-     * This is inconsistent with our general practices now, so now it always STARTS as bar, then is random.
      *
      * TODO: The 3rd statement "constrain one of the targets so that two different sizes must be used" is false for the
      * "half" version - Use 1/2 for one, 2/4 for another and 3/6 for the last.
