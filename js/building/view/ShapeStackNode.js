@@ -63,7 +63,8 @@ define( require => {
       if ( denominator > 1 ) {
         for ( i = 0; i < denominator; i++ ) {
           var angle = -i * 2 * Math.PI / denominator;
-          separatorShape.moveTo( 0, 0 ).lineTo( CIRCLE_RADIUS * Math.cos( angle ), CIRCLE_RADIUS * Math.sin( angle ) );
+          // Slight offset for https://github.com/phetsims/fractions-common/issues/2
+          separatorShape.moveTo( 1e-5 * Math.cos( angle ), 1e-5 * Math.sin( angle ) ).lineTo( CIRCLE_RADIUS * Math.cos( angle ), CIRCLE_RADIUS * Math.sin( angle ) );
         }
         this.addChild( new Path( separatorShape, {
           stroke: FractionsCommonColorProfile.shapeStackSeparatorStrokeProperty
