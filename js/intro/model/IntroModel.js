@@ -9,33 +9,29 @@ define( require => {
   'use strict';
 
   // modules
-  var BooleanProperty = require( 'AXON/BooleanProperty' );
-  var ContainerSetModel = require( 'FRACTIONS_COMMON/intro/model/ContainerSetModel' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const ContainerSetModel = require( 'FRACTIONS_COMMON/intro/model/ContainerSetModel' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
-  /**
-   * @constructor
-   * @extends {Object}
-   *
-   * @param {boolean} allowMixedNumbers
-   * @param {Object} [options]
-   */
-  function IntroModel( allowMixedNumbers, options ) {
-    options = _.extend( {
-      maxContainers: allowMixedNumbers ? 4 : 6
-    }, options );
+  class IntroModel extends ContainerSetModel {
+    /**
+     * @param {boolean} allowMixedNumbers
+     * @param {Object} [options]
+     */
+    constructor( allowMixedNumbers, options ) {
+      options = _.extend( {
+        maxContainers: allowMixedNumbers ? 4 : 6
+      }, options );
 
-    ContainerSetModel.call( this, options );
+      super( options );
 
-    // @public {boolean} - Whether to allow the display of the fraction as a mixed number
-    this.allowMixedNumbers = allowMixedNumbers;
+      // @public {boolean} - Whether to allow the display of the fraction as a mixed number
+      this.allowMixedNumbers = allowMixedNumbers;
 
-    // @public {Property.<boolean>} - Whether to show mixed numbers or not
-    this.showMixedNumbersProperty = new BooleanProperty( false );
+      // @public {Property.<boolean>} - Whether to show mixed numbers or not
+      this.showMixedNumbersProperty = new BooleanProperty( false );
+    }
   }
 
-  fractionsCommon.register( 'IntroModel', IntroModel );
-
-  return inherit( ContainerSetModel, IntroModel );
+  return fractionsCommon.register( 'IntroModel', IntroModel );
 } );

@@ -9,29 +9,25 @@ define( require => {
   'use strict';
 
   // modules
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
-  /**
-   * @constructor
-   * @extends {Object}
-   *
-   * @param {number} denominator
-   */
-  function Piece( denominator ) {
+  class Piece {
+    /**
+     * @param {number} denominator
+     */
+    constructor( denominator ) {
 
-    // @private {number} - If the denominator would ever change, this piece would just cease to exist.
-    this.denominator = denominator;
+      // @private {number} - If the denominator would ever change, this piece would just cease to exist.
+      this.denominator = denominator;
 
-    // @public {Cell|null} - Where this piece started
-    this.originCell = null;
+      // @public {Cell|null} - Where this piece started
+      this.originCell = null;
 
-    // @public {Cell|null} - Where this piece will end up. If set to a cell, it will change the cell appearance when the
-    // piece goes away.
-    this.destinationCell = null;
+      // @public {Cell|null} - Where this piece will end up. If set to a cell, it will change the cell appearance when
+      // the piece goes away.
+      this.destinationCell = null;
+    }
   }
 
-  fractionsCommon.register( 'Piece', Piece );
-
-  return inherit( Object, Piece );
+  return fractionsCommon.register( 'Piece', Piece );
 } );

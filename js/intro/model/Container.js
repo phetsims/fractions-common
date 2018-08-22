@@ -9,65 +9,53 @@ define( require => {
   'use strict';
 
   // modules
-  var Cell = require( 'FRACTIONS_COMMON/intro/model/Cell' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var NumberProperty = require( 'AXON/NumberProperty' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
+  const Cell = require( 'FRACTIONS_COMMON/intro/model/Cell' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
+  const ObservableArray = require( 'AXON/ObservableArray' );
 
-  /**
-   * @constructor
-   * @extends {Object}
-   */
-  function Container() {
-    var self = this;
+  class Container {
+    constructor() {
+      // @public {ObservableArray.<Cell>}
+      this.cells = new ObservableArray();
 
-    // @public {ObservableArray.<Cell>}
-    this.cells = new ObservableArray();
+      // @public {Property.<boolean>} - How many cells are logically filled?
+      this.filledCellCountProperty = new NumberProperty( 0 );
 
-    // @public {Property.<boolean>} - How many cells are logically filled?
-    this.filledCellCountProperty = new NumberProperty( 0 );
+      // Called when a fill property changes
+      const fillChange = filled => {
+        this.filledCellCountProperty.value += filled ? 1 : -1;
+      };
 
-    // Called when a fill property changes
-    function fillChange( filled ) {
-      self.filledCellCountProperty.value += filled ? 1 : -1;
+      // When a cell is added, listen to when its fill changes
+      this.cells.addItemAddedListener( cell => {
+        // If it's already filled, increment
+        if ( cell.isFilledProperty.value ) {
+          this.filledCellCountProperty.value += 1;
+        }
+        cell.isFilledProperty.lazyLink( fillChange );
+      } );
+
+      // When a cell is removed, stop listening to its fill changes
+      this.cells.addItemRemovedListener( cell => {
+        cell.isFilledProperty.unlink( fillChange );
+
+        // If it's filled, decrement
+        if ( cell.isFilledProperty.value ) {
+          this.filledCellCountProperty.value -= 1;
+        }
+      } );
     }
 
-    // When a cell is added, listen to when its fill changes
-    this.cells.addItemAddedListener( function( cell ) {
-      // If it's already filled, increment
-      if ( cell.isFilledProperty.value ) {
-        self.filledCellCountProperty.value += 1;
-      }
-      cell.isFilledProperty.lazyLink( fillChange );
-    } );
-
-    // When a cell is removed, stop listening to its fill changes
-    this.cells.addItemRemovedListener( function( cell ) {
-      cell.isFilledProperty.unlink( fillChange );
-
-      // If it's filled, decrement
-      if ( cell.isFilledProperty.value ) {
-        self.filledCellCountProperty.value -= 1;
-      }
-    } );
-  }
-
-  fractionsCommon.register( 'Container', Container );
-
-  return inherit( Object, Container, {
     /**
      * Adds a certain number of empty cells.
      * @public
      *
      * @param {number} quantity
      */
-    addCells: function( quantity ) {
-      var self = this;
-      _.times( quantity, function() {
-        self.cells.push( new Cell( self, self.cells.length ) );
-      } );
-    },
+    addCells( quantity ) {
+      _.times( quantity, () => this.cells.push( new Cell( this, this.cells.length ) ) );
+    }
 
     /**
      * Removes a certain number of cells, attempting to redistribute any filled ones to empty cells.
@@ -76,16 +64,15 @@ define( require => {
      * @param {number} quantity
      * @returns {number} - The number of filled cells removed that couldn't be handled by filling another empty cell.
      */
-    removeCells: function( quantity ) {
-      var self = this;
-      var removedCount = 0;
+    removeCells( quantity ) {
+      let removedCount = 0;
 
-      _.times( quantity, function() {
-        var removedCell = self.cells.pop();
+      _.times( quantity, () => {
+        const removedCell = this.cells.pop();
 
         // If the removed cell is filled, we want to find another cell to fill
         if ( removedCell.isFilledProperty.value ) {
-          var cell = self.getNextEmptyCell();
+          const cell = this.getNextEmptyCell();
 
           if ( cell ) {
             cell.fill();
@@ -97,7 +84,7 @@ define( require => {
       } );
 
       return removedCount;
-    },
+    }
 
     /**
      * Finds the next empty cell (looking at the smallest indices first).
@@ -105,7 +92,7 @@ define( require => {
      *
      * @returns {Cell|null}
      */
-    getNextEmptyCell: function() {
+    getNextEmptyCell() {
       // forwards order
       for ( var i = 0; i < this.cells.length; i++ ) {
         var cell = this.cells.get( i );
@@ -114,7 +101,7 @@ define( require => {
         }
       }
       return null;
-    },
+    }
 
     /**
      * Finds the next filled cell (looking at the largest indices first).
@@ -122,7 +109,7 @@ define( require => {
      *
      * @returns {Cell|null}
      */
-    getNextFilledCell: function() {
+    getNextFilledCell() {
       // backwards order
       for ( var i = this.cells.length - 1; i >= 0; i-- ) {
         var cell = this.cells.get( i );
@@ -132,5 +119,7 @@ define( require => {
       }
       return null;
     }
-  } );
+  }
+
+  return fractionsCommon.register( 'Container', Container );
 } );
