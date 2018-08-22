@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * Enumerates strategies for turning ShapePartition + Fraction => FilledPartition
+ * Different ways a fraction can be shown.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -12,9 +12,8 @@ define( require => {
   const Enumeration = require( 'FRACTIONS_COMMON/common/enum/Enumeration' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
-  return fractionsCommon.register( 'FillType', new Enumeration( [
-    'SEQUENTIAL',
-    'MIXED', // when number of shapes > 1, first shape will be completely filled and the 2nd shape will be random
-    'RANDOM'
+  return fractionsCommon.register( 'FractionDisplayType', new Enumeration( [
+    'IMPROPER', // e.g. 3/2
+    'MIXED' // e.g. 1 1/2
   ] ) );
 } );

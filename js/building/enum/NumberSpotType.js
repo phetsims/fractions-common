@@ -9,30 +9,17 @@ define( require => {
   'use strict';
 
   // modules
+  const Enumeration = require( 'FRACTIONS_COMMON/common/enum/Enumeration' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
-  const NumberSpotType = {
-    WHOLE: 'WHOLE',
-    NUMERATOR: 'NUMERATOR',
-    DENOMINATOR: 'DENOMINATOR'
-  };
-
-  fractionsCommon.register( 'NumberSpotType', NumberSpotType );
-
-  // @public {Array.<NumberSpotType>} - All values the enumeration can take.
-  NumberSpotType.VALUES = [
-    NumberSpotType.WHOLE,
-    NumberSpotType.NUMERATOR,
-    NumberSpotType.DENOMINATOR
-  ];
-
-  // TODO: doc
-  NumberSpotType.getTypes = function( isMixedNumber ) {
-    return isMixedNumber ? [ NumberSpotType.WHOLE, NumberSpotType.NUMERATOR, NumberSpotType.DENOMINATOR ] : [ NumberSpotType.NUMERATOR, NumberSpotType.DENOMINATOR ];
-  };
-
-  // verify that enum is immutable, without the runtime penalty in production code
-  if ( assert ) { Object.freeze( NumberSpotType ); }
-
-  return NumberSpotType;
+  return fractionsCommon.register( 'NumberSpotType', new Enumeration( [
+    'WHOLE',
+    'NUMERATOR',
+    'DENOMINATOR'
+  ], NumberSpotType => {
+    // TODO: doc
+    NumberSpotType.getTypes = function( isMixedNumber ) {
+      return isMixedNumber ? [ NumberSpotType.WHOLE, NumberSpotType.NUMERATOR, NumberSpotType.DENOMINATOR ] : [ NumberSpotType.NUMERATOR, NumberSpotType.DENOMINATOR ];
+    };
+  } ) );
 } );

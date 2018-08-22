@@ -9,24 +9,11 @@ define( require => {
   'use strict';
 
   // modules
+  const Enumeration = require( 'FRACTIONS_COMMON/common/enum/Enumeration' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
-  // TODO: Use this more
-  const BuildingType = {
-    SHAPE: 'SHAPE',
-    NUMBER: 'NUMBER'
-  };
-
-  fractionsCommon.register( 'BuildingType', BuildingType );
-
-  // @public {Array.<BuildingType>} - All values the enumeration can take.
-  BuildingType.VALUES = [
-    BuildingType.SHAPE,
-    BuildingType.NUMBER
-  ];
-
-  // verify that enum is immutable, without the runtime penalty in production code
-  if ( assert ) { Object.freeze( BuildingType ); }
-
-  return BuildingType;
+  return fractionsCommon.register( 'BuildingType', new Enumeration( [
+    'SHAPE',
+    'NUMBER'
+  ] ) );
 } );
