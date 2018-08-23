@@ -9,11 +9,12 @@ define( require => {
   'use strict';
 
   // modules
+  const AdjustableFractionNode = require( 'FRACTIONS_COMMON/intro/view/AdjustableFractionNode' );
+  const AlignBox = require( 'SCENERY/nodes/AlignBox' );
   const BeakerSceneNode = require( 'FRACTIONS_COMMON/intro/view/BeakerSceneNode' );
   const CakeSceneNode = require( 'FRACTIONS_COMMON/intro/view/CakeSceneNode' );
   const CircularSceneNode = require( 'FRACTIONS_COMMON/intro/view/CircularSceneNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const FractionWithSpinners = require( 'FRACTIONS_COMMON/intro/view/FractionWithSpinners' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberLineSceneNode = require( 'FRACTIONS_COMMON/intro/view/NumberLineSceneNode' );
   const NumberProperty = require( 'AXON/NumberProperty' );
@@ -116,9 +117,11 @@ define( require => {
         }
       } );
 
-      // @protected {Node}
-      this.fractionWithSpinners = new FractionWithSpinners( model.numeratorProperty, model.denominatorProperty, model.containerCountProperty );
-      this.addChild( this.fractionWithSpinners );
+      this.addChild( new AlignBox( new AdjustableFractionNode( model.numeratorProperty, model.denominatorProperty, model.containerCountProperty ), {
+        alignBounds: this.layoutBounds,
+        xAlign: 'right',
+        margin: 10 // TODO: layout padding consistently
+      } ) );
 
       // @protected {Node}
       this.resetAllButton = new ResetAllButton( {

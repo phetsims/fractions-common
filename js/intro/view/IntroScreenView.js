@@ -67,8 +67,7 @@ define( require => {
       this.viewContainer.translation = new Vector2( this.representationPanel.centerX, this.representationPanel.bottom + 60 );
       // TODO: factor out bucket offset?
       this.bucketContainer.translation = new Vector2( this.representationPanel.centerX, this.layoutBounds.bottom - 120 );
-      this.fractionWithSpinners.rightCenter = this.layoutBounds.rightCenter.plusXY( -margin, 0 );
-      mixedNumbersCheckbox.rightTop = new Vector2( this.layoutBounds.right - margin, this.fractionWithSpinners.bottom + 40 );
+      mixedNumbersCheckbox.rightBottom = new Vector2( this.layoutBounds.right - margin, this.resetAllButton.top - 40 );
       mixedFractionNode.leftCenter = this.layoutBounds.leftCenter.plusXY( margin, 0 );
     }
   }

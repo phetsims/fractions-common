@@ -12,7 +12,6 @@ define( require => {
   var Dimension2 = require( 'DOT/Dimension2' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Range = require( 'DOT/Range' );
 
   return fractionsCommon.register( 'IntroConstants', {
 
@@ -27,9 +26,6 @@ define( require => {
 
     // constants for Cake
     CAKE_HEIGHT: 120,
-
-    // @public {Range}
-    DENOMINATOR_RANGE: new Range( 1, 8 ),
 
     // @public {Dimension2}
     VERTICAL_RECTANGULAR_SIZE: new Dimension2( 130, 185 ),
