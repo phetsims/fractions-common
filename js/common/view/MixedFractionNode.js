@@ -100,7 +100,7 @@ define( require => {
     }
 
     /**
-     * Returns the current whole-number part of the the mixed fraction.
+     * Returns the current whole-number part of the mixed fraction.
      * @public
      *
      * @returns {number|null}
@@ -124,7 +124,7 @@ define( require => {
     }
 
     /**
-     * Returns the current numerator part of the the mixed fraction.
+     * Returns the current numerator part of the mixed fraction.
      * @public
      *
      * @returns {number|null}
@@ -148,7 +148,7 @@ define( require => {
     }
 
     /**
-     * Returns the current denominator part of the the mixed fraction.
+     * Returns the current denominator part of the mixed fraction.
      * @public
      *
      * @returns {number|null}
