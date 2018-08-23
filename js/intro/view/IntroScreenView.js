@@ -16,7 +16,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
-  const ContainerCountSpinner = require( 'FRACTIONS_COMMON/intro/view/ContainerCountSpinner' );
+  const MaxNode = require( 'FRACTIONS_COMMON/intro/view/MaxNode' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Text = require( 'SCENERY/nodes/Text' );
@@ -43,14 +43,11 @@ define( require => {
       this.addChild( mixedFractionNode );
       model.showMixedNumbersProperty.linkAttribute( mixedFractionNode, 'visible' );
 
-      const maxPanel = new Panel( new AlignBox( new ContainerCountSpinner( model.containerCountProperty, {
-        right: this.layoutBounds.right - 20,
-        top: this.layoutBounds.top + 25
-      } ), {
+      const maxPanel = new Panel( new AlignBox( new MaxNode( model.containerCountProperty ), {
         group: this.representationPanel.alignGroup
       } ), {
         fill: FractionsCommonColorProfile.panelBackgroundProperty,
-        xMargin: 12,
+        xMargin: 16,
         yMargin: 10
       } );
       this.addChild( maxPanel );
