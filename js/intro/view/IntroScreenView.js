@@ -12,13 +12,14 @@ define( require => {
   const AlignBox = require( 'SCENERY/nodes/AlignBox' );
   const Checkbox = require( 'SUN/Checkbox' );
   const ContainerSetScreenView = require( 'FRACTIONS_COMMON/intro/view/ContainerSetScreenView' );
-  const FractionNode = require( 'FRACTIONS_COMMON/intro/view/FractionNode' );
+  const FractionDisplayType = require( 'FRACTIONS_COMMON/common/enum/FractionDisplayType' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const MaxNode = require( 'FRACTIONS_COMMON/intro/view/MaxNode' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const PropertyFractionNode = require( 'FRACTIONS_COMMON/common/view/PropertyFractionNode' );
   const Text = require( 'SCENERY/nodes/Text' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -33,14 +34,15 @@ define( require => {
       super( model );
 
       // @private {Node}
-      const mixedFractionNode = new FractionNode( model.numeratorProperty, model.denominatorProperty, {
-        fractionRepresentation: 'mixed',
-        wholeFont: new PhetFont( 150 ),
-        font: new PhetFont( 110 ),
-        dividingLineLength: 50,
-        dividingLineWidth: 10
+      const mixedFractionNode = new PropertyFractionNode( model.numeratorProperty, model.denominatorProperty, {
+        type: FractionDisplayType.MIXED,
+        scale: 2
       } );
-      this.addChild( mixedFractionNode );
+      this.addChild( new AlignBox( mixedFractionNode, {
+        alignBounds: this.layoutBounds,
+        xAlign: 'left',
+        margin: 10 // TODO: consistent margin
+      } ) );
       model.showMixedNumbersProperty.linkAttribute( mixedFractionNode, 'visible' );
 
       const maxPanel = new Panel( new AlignBox( new MaxNode( model.containerCountProperty ), {
@@ -68,7 +70,6 @@ define( require => {
       // TODO: factor out bucket offset?
       this.bucketContainer.translation = new Vector2( this.representationPanel.centerX, this.layoutBounds.bottom - 120 );
       mixedNumbersCheckbox.rightBottom = new Vector2( this.layoutBounds.right - margin, this.resetAllButton.top - 40 );
-      mixedFractionNode.leftCenter = this.layoutBounds.leftCenter.plusXY( margin, 0 );
     }
   }
 

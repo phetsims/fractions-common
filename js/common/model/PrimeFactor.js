@@ -68,7 +68,5 @@ define( require => {
     }
   }
 
-  fractionsCommon.register( 'PrimeFactor', PrimeFactor );
-
-  return PrimeFactor;
+  return fractionsCommon.register( 'PrimeFactor', PrimeFactor );
 } );
