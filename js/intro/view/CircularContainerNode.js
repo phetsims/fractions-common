@@ -14,7 +14,6 @@ define( require => {
   var DerivedProperty = require( 'AXON/DerivedProperty' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var IntroConstants = require( 'FRACTIONS_COMMON/intro/IntroConstants' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
@@ -41,7 +40,7 @@ define( require => {
     this.options = options;
 
     // @public
-    this.circleRadius = this.options.isIcon ? IntroConstants.CIRCULAR_RADIUS / 4 : IntroConstants.CIRCULAR_RADIUS;
+    this.circleRadius = this.options.isIcon ? CircleNode.RADIUS / 4 : CircleNode.RADIUS;
 
     // @private
     this.container = container;

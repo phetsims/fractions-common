@@ -13,7 +13,6 @@ define( require => {
   var Dimension2 = require( 'DOT/Dimension2' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var IntroConstants = require( 'FRACTIONS_COMMON/intro/IntroConstants' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var RectangleNode = require( 'FRACTIONS_COMMON/intro/view/RectangleNode' );
@@ -49,7 +48,7 @@ define( require => {
     this.options = options;
 
     // determine to the height and width to use when drawing the vertical or horizontal representation.
-    this.rectangle = this.options.rectangleOrientation === 'horizontal' ? IntroConstants.HORIZONTAL_RECTANGULAR_SIZE : IntroConstants.VERTICAL_RECTANGULAR_SIZE;
+    this.rectangle = this.options.rectangleOrientation === 'horizontal' ? RectangleNode.HORIZONTAL_RECTANGULAR_SIZE : RectangleNode.VERTICAL_RECTANGULAR_SIZE;
 
     if ( options.isIcon ) {
       this.rectangle = new Dimension2( this.rectangle.width / 4, this.rectangle.height / 4 );

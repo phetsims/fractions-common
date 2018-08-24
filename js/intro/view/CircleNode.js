@@ -11,7 +11,6 @@ define( require => {
   // modules
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var IntroConstants = require( 'FRACTIONS_COMMON/intro/IntroConstants' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
@@ -52,7 +51,7 @@ define( require => {
     if ( denominator > 1 ) {
       shape.moveTo( 0, 0 );
     }
-    var circleRadius = options.isIcon ? IntroConstants.CIRCULAR_RADIUS / 4 : IntroConstants.CIRCULAR_RADIUS;
+    var circleRadius = options.isIcon ? CircleNode.RADIUS / 4 : CircleNode.RADIUS;
     shape.arc( 0, 0, circleRadius, startAngle, endAngle, false ).close();
 
     Node.call( this );
@@ -66,7 +65,7 @@ define( require => {
     this.addChild( this.foregroundSector );
 
     // @public {Vector2}
-    this.midpointOffset = denominator === 1 ? Vector2.ZERO : Vector2.createPolar( IntroConstants.CIRCULAR_RADIUS / 2, this.angleUnit / 2 + startAngle );
+    this.midpointOffset = denominator === 1 ? Vector2.ZERO : Vector2.createPolar( CircleNode.RADIUS / 2, this.angleUnit / 2 + startAngle );
   }
 
   fractionsCommon.register( 'CircleNode', CircleNode );
@@ -83,7 +82,7 @@ define( require => {
         this.backgroundSector.rotation = angle;
         this.backgroundSector.x = this.foregroundSector.x + 5;
       }
-      this.midpointOffset = this.denominator === 1 ? Vector2.ZERO : Vector2.createPolar( IntroConstants.CIRCULAR_RADIUS / 2, this.angleUnit / 2 + angle );
+      this.midpointOffset = this.denominator === 1 ? Vector2.ZERO : Vector2.createPolar( CircleNode.RADIUS / 2, this.angleUnit / 2 + angle );
     },
     /**
      *
@@ -93,5 +92,8 @@ define( require => {
     getCircleRotation: function() {
       return this.foregroundSector.rotation;
     }
+  }, {
+    // @public {number}
+    RADIUS: 75
   } );
 } );

@@ -13,7 +13,6 @@ define( require => {
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var IntroConstants = require( 'FRACTIONS_COMMON/intro/IntroConstants' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Shape = require( 'KITE/Shape' );
@@ -52,7 +51,7 @@ define( require => {
   function CakeContainerNode( container, cellDownCallback, options ) {
 
     options = _.extend( {
-      maxHeight: IntroConstants.CAKE_HEIGHT  // height of the image
+      maxHeight: CakeNode.CAKE_HEIGHT  // height of the image
     }, options );
 
     // @private

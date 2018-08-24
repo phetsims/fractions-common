@@ -16,10 +16,10 @@ define( require => {
   var Circle = require( 'SCENERY/nodes/Circle' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var IntroConstants = require( 'FRACTIONS_COMMON/intro/IntroConstants' );
   var Line = require( 'SCENERY/nodes/Line' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Shape = require( 'KITE/Shape' );
@@ -33,6 +33,9 @@ define( require => {
   var MARKER_CIRCLE_RADIUS = 12;
   var ARROW_LENGTH = 30;
   var ARROW_VERTICAL_OFFSET = 10;
+  var NUMBER_LINE_WIDTH = 975;
+  var MAJOR_TICK_LENGTH = 80;
+  var MINOR_TICK_LENGTH = 40;
 
   /**
    * @param {Property.<number>} numeratorProperty
@@ -61,7 +64,7 @@ define( require => {
 
     // main Number line
     // the point (0,0) is set as the origin of the number line
-    var mainNumberLine = new Line( 0, 0, IntroConstants.NUMBER_LINE_WIDTH, 0, {
+    var mainNumberLine = new Line( 0, 0, NUMBER_LINE_WIDTH, 0, {
       stroke: 'black',
       lineWidth: 3,
       strokePickable: true,
@@ -81,7 +84,7 @@ define( require => {
     var numbersNode = new Node();
 
     // distance between 0 and 1 on the number Line
-    var segmentLength = IntroConstants.NUMBER_LINE_WIDTH / containerCountProperty.range.max;
+    var segmentLength = NUMBER_LINE_WIDTH / containerCountProperty.range.max;
 
     // Updates the minor and major ticks as well as the main number line
     var updateTicksMultilink = Property.multilink( [ containerCountProperty, denominatorProperty ], function( max, denominator ) {
@@ -104,13 +107,13 @@ define( require => {
 
         // major tick line width varies for even and odd number of units
         var shape = i % 2 === 0 ? evenMajorTicksShape : oddMajorTicksShape;
-        shape.moveTo( i * segmentLength, -IntroConstants.MAJOR_TICK_LENGTH / 2 )
-          .verticalLineTo( IntroConstants.MAJOR_TICK_LENGTH / 2 );
+        shape.moveTo( i * segmentLength, -MAJOR_TICK_LENGTH / 2 )
+          .verticalLineTo( MAJOR_TICK_LENGTH / 2 );
 
         numbersNode.addChild( new Text( i, {
-          font: IntroConstants.NUMBER_LINE_FONT,
+          font: new PhetFont( 40 ),
           centerX: i * segmentLength,
-          top: IntroConstants.MAJOR_TICK_LENGTH / 2,
+          top: MAJOR_TICK_LENGTH / 2,
           rotation: -options.rotation // rotate the opposite way than this node so that the text is right side up.
         } ) );
       }
@@ -132,8 +135,8 @@ define( require => {
           // if true make a symmetric tick if false make half of a tick in the direction of choosing
           // determine if the tick need to be on one side or both side
           var isSymmetric = ( j % multiplicationFactor === 0 );
-          minorTicksShape.moveTo( j * minorTickSeparation, isSymmetric ? -IntroConstants.MINOR_TICK_LENGTH / 2 : 0 )
-            .verticalLineTo( IntroConstants.MINOR_TICK_LENGTH / 2 );
+          minorTicksShape.moveTo( j * minorTickSeparation, isSymmetric ? -MINOR_TICK_LENGTH / 2 : 0 )
+            .verticalLineTo( MINOR_TICK_LENGTH / 2 );
         }
       }
       minorTicksPath.setShape( minorTicksShape );
@@ -163,7 +166,7 @@ define( require => {
     // highlighter region for the marker
     var highlighterRectangle = new Rectangle( {
       rectWidth: MARKER_CIRCLE_RADIUS * 2,
-      rectHeight: IntroConstants.MAJOR_TICK_LENGTH + HIGHLIGHTER_PADDING_HEIGHT,
+      rectHeight: MAJOR_TICK_LENGTH + HIGHLIGHTER_PADDING_HEIGHT,
       fill: 'yellow',
       center: Vector2.ZERO
     } );
@@ -174,7 +177,7 @@ define( require => {
       markerCircle.centerX = segmentLength * numerator / denominator;
 
       var tickLength = ( numerator / denominator % 1 === 0 ) ?
-                       IntroConstants.MAJOR_TICK_LENGTH : IntroConstants.MINOR_TICK_LENGTH;
+                       MAJOR_TICK_LENGTH : MINOR_TICK_LENGTH;
 
       // Enables or Disables the ArrowNode
       if ( options.displayArrow ) {

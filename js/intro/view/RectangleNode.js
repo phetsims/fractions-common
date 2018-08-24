@@ -9,9 +9,9 @@ define( require => {
   'use strict';
 
   // modules
+  var Dimension2 = require( 'DOT/Dimension2' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var IntroConstants = require( 'FRACTIONS_COMMON/intro/IntroConstants' );
   var Node = require( 'SCENERY/nodes/Node' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
@@ -32,13 +32,13 @@ define( require => {
       },
       options );
 
-    var rectangle = IntroConstants.VERTICAL_RECTANGULAR_SIZE;
+    var rectangle = RectangleNode.VERTICAL_RECTANGULAR_SIZE;
     var rectangleWidth = rectangle.width;
     var rectangleHeight = rectangle.height / denominator;
 
     // determine the size of the rectangle size and pieces in th bucket depend upon the representation
     if ( options.rectangleOrientation === 'horizontal' ) {
-      rectangle = IntroConstants.HORIZONTAL_RECTANGULAR_SIZE;
+      rectangle = RectangleNode.HORIZONTAL_RECTANGULAR_SIZE;
       rectangleWidth = rectangle.width / denominator;
       rectangleHeight = rectangle.height;
     }
@@ -81,5 +81,9 @@ define( require => {
 
   fractionsCommon.register( 'RectangleNode', RectangleNode );
 
-  return inherit( Node, RectangleNode );
+  return inherit( Node, RectangleNode, {}, {
+    // @public {Dimension2}
+    VERTICAL_RECTANGULAR_SIZE: new Dimension2( 130, 185 ),
+    HORIZONTAL_RECTANGULAR_SIZE: new Dimension2( 300, 50 )
+  } );
 } );

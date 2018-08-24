@@ -12,7 +12,6 @@ define( require => {
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var IntroConstants = require( 'FRACTIONS_COMMON/intro/IntroConstants' );
   var Vector2 = require( 'DOT/Vector2' );
 
   // images
@@ -77,7 +76,7 @@ define( require => {
     assert && assert( index < denominator );
 
     options = _.extend( {
-      maxHeight: IntroConstants.CAKE_HEIGHT  // height of the image
+      maxHeight: CakeNode.CAKE_HEIGHT  // height of the image
     }, options );
 
     // @private {number}
@@ -123,6 +122,9 @@ define( require => {
           Vector2.createPolar( this.height / 4, -2 * Math.PI * (index + 1 / 2) / this.denominator ) );
       }
     }
+  }, {
+    // @public {number}
+    CAKE_HEIGHT: 120
   } );
 } );
 

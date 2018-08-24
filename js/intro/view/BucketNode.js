@@ -21,7 +21,6 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const HBox = require( 'SCENERY/nodes/HBox' );
-  const IntroConstants = require( 'FRACTIONS_COMMON/intro/IntroConstants' );
   const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberProperty = require( 'AXON/NumberProperty' );
@@ -130,7 +129,7 @@ define( require => {
           break;
         case Representation.BEAKER:
           bucketIcon = new BeakerNode( 1, denominatorProperty.value, {
-            fullHeight: IntroConstants.BEAKER_HEIGHT / 4,
+            fullHeight: BeakerNode.BEAKER_HEIGHT / 4,
             xRadius: 10,
             yRadius: 3
           } );
