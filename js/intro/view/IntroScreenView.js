@@ -36,7 +36,6 @@ define( require => {
     constructor( model ) {
       super( model );
 
-      // @private {Node}
       const mixedFractionNode = new PropertyFractionNode( model.numeratorProperty, model.denominatorProperty, {
         type: FractionDisplayType.MIXED,
         scale: 2
@@ -48,30 +47,48 @@ define( require => {
       } ) );
       model.showMixedNumbersProperty.linkAttribute( mixedFractionNode, 'visible' );
 
-      const maxPanel = new Panel( new AlignBox( new MaxNode( model.containerCountProperty ), {
+      // "Max" panel
+      this.addChild( new Panel( new AlignBox( new MaxNode( model.containerCountProperty ), {
         group: this.representationPanel.alignGroup
       } ), {
         fill: FractionsCommonColorProfile.panelBackgroundProperty,
         xMargin: 16,
-        yMargin: 10
-      } );
-      this.addChild( maxPanel );
+        yMargin: 10,
+        right: this.layoutBounds.right - MARGIN,
+        top: this.layoutBounds.top + MARGIN
+      } ) );
 
-      const mixedNumbersCheckbox = new Checkbox( new Text( mixedNumberString, { font: new PhetFont( 26 ) } ), model.showMixedNumbersProperty, {
-        boxWidth: 30
-      } );
       if ( model.allowMixedNumbers ) {
-        this.addChild( mixedNumbersCheckbox );
+        const label = new Text( mixedNumberString, { font: new PhetFont( 26 ) } );
+        this.addChild( new Checkbox( label, model.showMixedNumbersProperty, {
+          boxWidth: 30,
+          right: this.layoutBounds.right - MARGIN,
+          bottom: this.resetAllButton.top - 40
+        } ) );
       }
+    }
 
-      // layout
-      this.resetAllButton.rightBottom = this.layoutBounds.rightBottom.plusXY( -MARGIN, -MARGIN );
-      this.representationPanel.leftTop = this.layoutBounds.leftTop.plusXY( MARGIN + ( model.allowMixedNumbers ? 100 : 0 ), MARGIN );
-      maxPanel.rightTop = this.layoutBounds.rightTop.plusXY( -MARGIN, MARGIN );
-      this.viewContainer.translation = new Vector2( this.representationPanel.centerX, this.representationPanel.bottom + 60 );
-      // TODO: factor out bucket offset?
-      this.bucketContainer.translation = new Vector2( this.representationPanel.centerX, this.layoutBounds.bottom - 120 );
-      mixedNumbersCheckbox.rightBottom = new Vector2( this.layoutBounds.right - MARGIN, this.resetAllButton.top - 40 );
+    /**
+     * Subclasses should position the representation panel properly.
+     * @protected
+     * @override
+     *
+     * @param {Node} representationPanel
+     */
+    layoutRepresentationPanel( representationPanel ) {
+      representationPanel.leftTop = this.layoutBounds.leftTop.plusXY( MARGIN + ( this.model.allowMixedNumbers ? 100 : 0 ), MARGIN );
+    }
+
+    /**
+     * Subclasses should position the view container properly.
+     * @protected
+     * @override
+     *
+     * @param {Node} viewContainer
+     * @param {Node} representationPanel
+     */
+    layoutViewContainer( viewContainer, representationPanel ) {
+      viewContainer.translation = new Vector2( representationPanel.centerX, representationPanel.bottom + 60 );
     }
   }
 

@@ -24,13 +24,30 @@ define( require => {
     constructor( model ) {
       super( model );
 
-      // layout
-      this.resetAllButton.rightBottom = this.layoutBounds.rightBottom.plusXY( -MARGIN, -MARGIN );
-      this.representationPanel.leftTop = this.layoutBounds.leftTop.plusXY( MARGIN, MARGIN );
+      // TODO: Will have other content here in a bit
+    }
 
-      this.viewContainer.translation = new Vector2( this.representationPanel.centerX, this.representationPanel.bottom + 20 );
-      // TODO: factor out bucket offset?
-      this.bucketContainer.translation = new Vector2( this.representationPanel.centerX, this.layoutBounds.bottom - 120 );
+    /**
+     * Subclasses should position the representation panel properly.
+     * @protected
+     * @override
+     *
+     * @param {Node} representationPanel
+     */
+    layoutRepresentationPanel( representationPanel ) {
+      representationPanel.leftTop = this.layoutBounds.leftTop.plusXY( MARGIN, MARGIN );
+    }
+
+    /**
+     * Subclasses should position the view container properly.
+     * @protected
+     * @override
+     *
+     * @param {Node} viewContainer
+     * @param {Node} representationPanel
+     */
+    layoutViewContainer( viewContainer, representationPanel ) {
+      viewContainer.translation = new Vector2( representationPanel.centerX, representationPanel.bottom + 20 );
     }
   }
 

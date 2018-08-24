@@ -26,6 +26,9 @@ define( require => {
   const ScreenView = require( 'JOIST/ScreenView' );
   const Vector2 = require( 'DOT/Vector2' );
 
+  // constants
+  const MARGIN = FractionsCommonConstants.PANEL_MARGIN;
+
   class ContainerSetScreenView extends ScreenView {
     /**
      * @param {ContainerSetModel} model
@@ -34,6 +37,9 @@ define( require => {
       super( {
         preventFit: true
       } );
+
+      // @private {ContainerSetModel}
+      this.model = model;
 
       // @protected {Node}
       this.representationPanel = new RepresentationPanel( model.representationProperty, model.representations );
@@ -121,16 +127,23 @@ define( require => {
       this.addChild( new AlignBox( new AdjustableFractionNode( model.numeratorProperty, model.denominatorProperty, model.containerCountProperty ), {
         alignBounds: this.layoutBounds,
         xAlign: 'right',
-        margin: FractionsCommonConstants.PANEL_MARGIN
+        margin: MARGIN
       } ) );
 
       // @protected {Node}
       this.resetAllButton = new ResetAllButton( {
         listener() {
           model.reset();
-        }
+        },
+        right: this.layoutBounds.right - MARGIN,
+        bottom: this.layoutBounds.bottom - MARGIN
       } );
       this.addChild( this.resetAllButton );
+
+      // Layout
+      this.layoutRepresentationPanel( this.representationPanel );
+      this.layoutViewContainer( this.viewContainer, this.representationPanel );
+      this.bucketContainer.translation = new Vector2( this.representationPanel.centerX, this.layoutBounds.bottom - 120 );
     }
 
     /**
@@ -141,6 +154,27 @@ define( require => {
      */
     step( dt ) {
       this.currentView.step( dt );
+    }
+
+    /**
+     * Subclasses should position the representation panel properly.
+     * @protected
+     *
+     * @param {Node} representationPanel
+     */
+    layoutRepresentationPanel( representationPanel ) {
+      throw new Error( 'abstract' );
+    }
+
+    /**
+     * Subclasses should position the view container properly.
+     * @protected
+     *
+     * @param {Node} viewContainer
+     * @param {Node} representationPanel
+     */
+    layoutViewContainer( viewContainer, representationPanel ) {
+      throw new Error( 'abstract' );
     }
   }
 
