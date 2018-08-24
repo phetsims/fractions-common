@@ -49,7 +49,7 @@ define( require => {
 
       // "Max" panel
       this.addChild( new Panel( new AlignBox( new MaxNode( model.containerCountProperty ), {
-        group: this.representationPanel.alignGroup
+        group: this.topAlignGroup
       } ), {
         fill: FractionsCommonColorProfile.panelBackgroundProperty,
         xMargin: 16,

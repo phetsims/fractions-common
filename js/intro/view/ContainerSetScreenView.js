@@ -11,17 +11,20 @@ define( require => {
   // modules
   const AdjustableFractionNode = require( 'FRACTIONS_COMMON/intro/view/AdjustableFractionNode' );
   const AlignBox = require( 'SCENERY/nodes/AlignBox' );
+  const AlignGroup = require( 'SCENERY/nodes/AlignGroup' );
   const BeakerSceneNode = require( 'FRACTIONS_COMMON/intro/view/BeakerSceneNode' );
   const CakeSceneNode = require( 'FRACTIONS_COMMON/intro/view/CakeSceneNode' );
   const CircularSceneNode = require( 'FRACTIONS_COMMON/intro/view/CircularSceneNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberLineSceneNode = require( 'FRACTIONS_COMMON/intro/view/NumberLineSceneNode' );
   const NumberProperty = require( 'AXON/NumberProperty' );
+  const Panel = require( 'SUN/Panel' );
   const RectangularSceneNode = require( 'FRACTIONS_COMMON/intro/view/RectangularSceneNode' );
   const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
-  const RepresentationPanel = require( 'FRACTIONS_COMMON/intro/view/RepresentationPanel' );
+  const RepresentationRadioButtonGroup = require( 'FRACTIONS_COMMON/intro/view/RepresentationRadioButtonGroup' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const ScreenView = require( 'JOIST/ScreenView' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -41,8 +44,17 @@ define( require => {
       // @private {ContainerSetModel}
       this.model = model;
 
+      // @protected {AlignGroup}
+      this.topAlignGroup = new AlignGroup( { matchHorizontal: false } );
+
       // @protected {Node}
-      this.representationPanel = new RepresentationPanel( model.representationProperty, model.representations );
+      this.representationPanel = new Panel( new AlignBox( new RepresentationRadioButtonGroup( model.representationProperty, model.representations ), {
+        group: this.topAlignGroup
+      } ), {
+        fill: FractionsCommonColorProfile.panelBackgroundProperty,
+        xMargin: 10,
+        yMargin: 10
+      } );
       this.addChild( this.representationPanel );
 
       // @protected {Node}
