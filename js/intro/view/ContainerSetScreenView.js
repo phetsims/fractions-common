@@ -41,29 +41,26 @@ define( require => {
         preventFit: true
       } );
 
-      // @private {ContainerSetModel}
+      // @protected {ContainerSetModel}
       this.model = model;
 
       // @protected {AlignGroup}
       this.topAlignGroup = new AlignGroup( { matchHorizontal: false } );
 
-      // @protected {Node}
-      this.representationPanel = new Panel( new AlignBox( new RepresentationRadioButtonGroup( model.representationProperty, model.representations ), {
+      const representationPanel = new Panel( new AlignBox( new RepresentationRadioButtonGroup( model.representationProperty, model.representations ), {
         group: this.topAlignGroup
       } ), {
         fill: FractionsCommonColorProfile.panelBackgroundProperty,
         xMargin: 10,
         yMargin: 10
       } );
-      this.addChild( this.representationPanel );
 
-      // @protected {Node}
-      this.bucketContainer = new Node();
-      this.addChild( this.bucketContainer );
+      const bucketContainer = new Node();
+      const viewContainer = new Node();
 
-      // @protected {Node}
-      this.viewContainer = new Node();
-      this.addChild( this.viewContainer );
+      this.addChild( representationPanel );
+      this.addChild( bucketContainer );
+      this.addChild( viewContainer );
 
       // @private {Node|null} the visual representation of the container set
       this.currentView = null;
@@ -74,8 +71,8 @@ define( require => {
         model.completeAllPieces();
 
         if ( this.currentView ) {
-          this.viewContainer.removeAllChildren();
-          this.bucketContainer.removeAllChildren();
+          viewContainer.removeAllChildren();
+          bucketContainer.removeAllChildren();
           this.currentView.dispose();
         }
 
@@ -125,13 +122,13 @@ define( require => {
         }
         if ( this.currentView ) {
           // add the chosen visual representation to the scene graph
-          this.viewContainer.addChild( this.currentView );
+          viewContainer.addChild( this.currentView );
           if ( this.currentView.pieceLayer ) {
             // TODO: egad, why are we doing this? Also when do pieces need to be behind?
-            this.viewContainer.addChild( this.currentView.pieceLayer );
+            viewContainer.addChild( this.currentView.pieceLayer );
           }
           if ( this.currentView.bucketNode ) {
-            this.bucketContainer.addChild( this.currentView.bucketNode );
+            bucketContainer.addChild( this.currentView.bucketNode );
           }
         }
       } );
@@ -153,9 +150,9 @@ define( require => {
       this.addChild( this.resetAllButton );
 
       // Layout
-      this.layoutRepresentationPanel( this.representationPanel );
-      this.layoutViewContainer( this.viewContainer, this.representationPanel );
-      this.bucketContainer.translation = new Vector2( this.representationPanel.centerX, this.layoutBounds.bottom - 120 );
+      this.layoutRepresentationPanel( representationPanel );
+      this.layoutViewContainer( viewContainer, representationPanel );
+      bucketContainer.translation = new Vector2( representationPanel.centerX, this.layoutBounds.bottom - 120 );
     }
 
     /**

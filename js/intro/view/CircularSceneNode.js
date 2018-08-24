@@ -20,7 +20,7 @@ define( require => {
    * @constructor
    * @extends {CellSceneNode}
    *
-   * @param {ContainerSetScreenView} model
+   * @param {ContainerSetModel} model
    * @param {function} getBucketLocation - function(): Vector2, gives the location of the bucket when called
    * @param {Object} [options]
    */

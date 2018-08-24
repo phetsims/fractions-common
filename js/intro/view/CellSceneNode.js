@@ -23,7 +23,7 @@ define( require => {
    * @constructor
    * @extends {Node}
    *
-   * @param {ContainerSetScreenView} model
+   * @param {ContainerSetModel} model
    * @param {function} getBucketLocation - function(): Vector2, gives the location of the bucket when called
    * @param {Object} [options]
    */
@@ -36,7 +36,7 @@ define( require => {
       verticalOffset: 0
     }, options );
 
-    // @private {ContainerSetScreenView}
+    // @private {ContainerSetModel}
     this.model = model;
 
     // @private {function}
