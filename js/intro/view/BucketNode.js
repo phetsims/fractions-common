@@ -9,33 +9,32 @@ define( require => {
   'use strict';
 
   // modules
-  var BeakerNode = require( 'FRACTIONS_COMMON/intro/view/BeakerNode' );
-  var Bucket = require( 'PHETCOMMON/model/Bucket' );
-  var BucketFront = require( 'SCENERY_PHET/bucket/BucketFront' );
-  var BucketHole = require( 'SCENERY_PHET/bucket/BucketHole' );
-  var CakeContainerNode = require( 'FRACTIONS_COMMON/intro/view/CakeContainerNode' );
-  var Circle = require( 'SCENERY/nodes/Circle' );
-  var CircularContainerNode = require( 'FRACTIONS_COMMON/intro/view/CircularContainerNode' );
-  var Container = require( 'FRACTIONS_COMMON/intro/model/Container' );
-  var Dimension2 = require( 'DOT/Dimension2' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var IntroConstants = require( 'FRACTIONS_COMMON/intro/IntroConstants' );
-  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var NumberProperty = require( 'AXON/NumberProperty' );
-  var PropertyFractionNode = require( 'FRACTIONS_COMMON/common/view/PropertyFractionNode' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/RectangularContainerNode' );
-  var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const BeakerNode = require( 'FRACTIONS_COMMON/intro/view/BeakerNode' );
+  const Bucket = require( 'PHETCOMMON/model/Bucket' );
+  const BucketFront = require( 'SCENERY_PHET/bucket/BucketFront' );
+  const BucketHole = require( 'SCENERY_PHET/bucket/BucketHole' );
+  const CakeContainerNode = require( 'FRACTIONS_COMMON/intro/view/CakeContainerNode' );
+  const Circle = require( 'SCENERY/nodes/Circle' );
+  const CircularContainerNode = require( 'FRACTIONS_COMMON/intro/view/CircularContainerNode' );
+  const Container = require( 'FRACTIONS_COMMON/intro/model/Container' );
+  const Dimension2 = require( 'DOT/Dimension2' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
+  const IntroConstants = require( 'FRACTIONS_COMMON/intro/IntroConstants' );
+  const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
+  const PropertyFractionNode = require( 'FRACTIONS_COMMON/common/view/PropertyFractionNode' );
+  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/RectangularContainerNode' );
+  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var IDENTITY_TRANSFORM = ModelViewTransform2.createIdentity();
-
-  var PIECE_OFFSET_POSITIONS = [
-
+  const IDENTITY_TRANSFORM = ModelViewTransform2.createIdentity();
+  // TODO: Uhh, not constant? Need to do some cleanup
+  let PIECE_OFFSET_POSITIONS = [
     // Offsets used for initial position of pieces, relative to bucket hole center. Empirically determined.
     new Vector2( 90, 4 ),
     new Vector2( -85, 5 ),
@@ -46,157 +45,157 @@ define( require => {
     new Vector2( 90, 5 )
   ];
 
-  /**
-   * @param {Property.<number>} denominatorProperty
-   * @param {function} startPieceDrag
-   * @param {function} createCellNode
-   * @param {Property.<Representation>} representationProperty
-   * @param {Object} [options]
-   * @constructor
-   */
-  function BucketNode( denominatorProperty, startPieceDrag, createCellNode, representationProperty, options ) {
+  class BucketNode extends Node {
+    /**
+     * @param {Property.<number>} denominatorProperty
+     * @param {function} startPieceDrag
+     * @param {function} createCellNode
+     * @param {Property.<Representation>} representationProperty
+     * @param {Object} [options]
+     */
+    constructor( denominatorProperty, startPieceDrag, createCellNode, representationProperty, options ) {
 
-    options = _.extend( {}, options );
+      options = _.extend( {}, options );
 
-    // model of the bucket
-    var bucket = new Bucket( {
-      baseColor: '#8eb7f2',
-      size: new Dimension2( 355, 125 ),
-      invertY: true
-    } );
-
-    // creates bucketNode front
-    var bucketFront = new BucketFront( bucket, IDENTITY_TRANSFORM );
-
-    // creates hole of bucketNode
-    var bucketHole = new BucketHole( bucket, IDENTITY_TRANSFORM );
-
-    // creates icon Container
-    var iconContainer = new Container();
-
-    // fills one cell according to denominator property
-    iconContainer.addCells( denominatorProperty.value );
-    iconContainer.cells.get( 0 ).fill();
-
-    // creates icon specific to representationProperty
-    switch( representationProperty.value ) {
-      case Representation.CIRCLE:
-        var bucketIcon = new CircularContainerNode( iconContainer, function() {}, {
-          isIcon: true
-        } );
-        var bucketIconBackground = new Circle( bucketIcon.radius, { fill: 'white', center: bucketIcon.center } );
-        break;
-      case Representation.HORIZONTAL_BAR:
-        bucketIcon = new RectangularContainerNode( iconContainer, function() {}, {
-          rectangleOrientation: 'horizontal',
-          isIcon: true
-        } );
-        bucketIconBackground = new Rectangle( 0, 0, bucketIcon.width, bucketIcon.height, 0, 0, {
-          fill: 'white',
-          center: bucketIcon.center
-        } );
-        PIECE_OFFSET_POSITIONS = [
-
-          // Offsets used for initial position of pieces, relative to bucket hole center. Empirically determined.
-          new Vector2( -12, 9 ),
-          new Vector2( 0, 0 ),
-          new Vector2( 12, 7 )
-        ];
-        break;
-      case Representation.VERTICAL_BAR:
-        bucketIcon = new RectangularContainerNode( iconContainer, function() {}, {
-          rectangleOrientation: 'vertical',
-          isIcon: true
-        } );
-        bucketIconBackground = new Rectangle( 0, 0, bucketIcon.width, bucketIcon.height, 0, 0, {
-          fill: 'white',
-          center: bucketIcon.center
-        } );
-        PIECE_OFFSET_POSITIONS = [
-
-          // Offsets used for initial position of pieces, relative to bucket hole center. Empirically determined.
-          new Vector2( -70, 5 ),
-          new Vector2( -40, 9 ),
-          new Vector2( 0, 0 ),
-          new Vector2( 37, 7 ),
-          new Vector2( 75, 5 )
-        ];
-        break;
-      case Representation.CAKE:
-        bucketIcon = new CakeContainerNode( iconContainer, function() {}, {
-          maxHeight: 50
-        } );
-        bucketIconBackground = new Node();
-        break;
-      case Representation.BEAKER:
-        bucketIcon = new BeakerNode( 1, denominatorProperty.value, {
-          fullHeight: IntroConstants.BEAKER_HEIGHT / 4,
-          xRadius: 10,
-          yRadius: 3
-        } );
-        bucketIconBackground = new Node();
-        break;
-      default:
-        throw new Error( 'Unknown representation: ' + representationProperty.value );
-    }
-
-    // layer to hold all the static cell nodes in the bucket
-    var staticLayer = new Node();
-
-    denominatorProperty.link( function( denominator ) {
-      // take denominator, and the length of the icon container
-      // find the difference add/remove that many cells from the container
-      var difference = denominator - iconContainer.cells.length;
-      if ( difference > 0 ) {
-
-        //add cells
-        iconContainer.addCells( difference );
-      }
-      else if ( difference < 0 ) {
-
-        //remove cells
-        iconContainer.removeCells( -difference );
-      }
-
-      staticLayer.removeAllChildren();
-
-      // places pieces in bucket dependent on defined vectors
-      PIECE_OFFSET_POSITIONS.forEach( function( position ) {
-        var staticCellNode = createCellNode( denominator, 0, { center: position.plus( bucketHole.center ) } );
-        staticLayer.addChild( staticCellNode );
+      // model of the bucket
+      const bucket = new Bucket( {
+        baseColor: FractionsCommonColorProfile.introBucketBackgroundProperty,
+        size: new Dimension2( 355, 125 ),
+        invertY: true
       } );
-    } );
 
-    // mathematical fraction 1/Denominator
-    const fractionIconNode = new PropertyFractionNode( new NumberProperty( 1 ), denominatorProperty, {
-      scale: 0.7
-    } );
+      // creates bucketNode front
+      const bucketFront = new BucketFront( bucket, IDENTITY_TRANSFORM );
 
-    // arrange bucketIcon and background into one node
-    var bucketIconNode = new Node( { children: [ bucketIconBackground, bucketIcon ] } );
+      // creates hole of bucketNode
+      const bucketHole = new BucketHole( bucket, IDENTITY_TRANSFORM );
 
-    var label = new HBox( {
-      align: 'center',
-      spacing: 20,
-      children: [ bucketIconNode, fractionIconNode ]
-    } );
+      // creates icon Container
+      const iconContainer = new Container();
 
-    bucketFront.setLabel( label );
+      // fills one cell according to denominator property
+      iconContainer.addCells( denominatorProperty.value );
+      iconContainer.cells.get( 0 ).fill();
 
-    options.children = [ bucketHole, staticLayer, bucketFront ];
-    Node.call( this, options );
+      // creates icon specific to representationProperty
+      // TODO: cleanup
+      switch ( representationProperty.value ) {
+        case Representation.CIRCLE:
+          var bucketIcon = new CircularContainerNode( iconContainer, () => {}, {
+            isIcon: true
+          } );
+          var bucketIconBackground = new Circle( bucketIcon.radius, { fill: 'white', center: bucketIcon.center } );
+          break;
+        case Representation.HORIZONTAL_BAR:
+          bucketIcon = new RectangularContainerNode( iconContainer, () => {}, {
+            rectangleOrientation: 'horizontal',
+            isIcon: true
+          } );
+          bucketIconBackground = new Rectangle( 0, 0, bucketIcon.width, bucketIcon.height, 0, 0, {
+            fill: 'white',
+            center: bucketIcon.center
+          } );
+          PIECE_OFFSET_POSITIONS = [
 
-    // add listener to the bucket and static pieces
-    [ bucketHole, staticLayer, bucketFront ].forEach( function( node ) {
-      node.addInputListener( {
-        down: function( event ) {
-          startPieceDrag( event );
+            // Offsets used for initial position of pieces, relative to bucket hole center. Empirically determined.
+            new Vector2( -12, 9 ),
+            new Vector2( 0, 0 ),
+            new Vector2( 12, 7 )
+          ];
+          break;
+        case Representation.VERTICAL_BAR:
+          bucketIcon = new RectangularContainerNode( iconContainer, () => {}, {
+            rectangleOrientation: 'vertical',
+            isIcon: true
+          } );
+          bucketIconBackground = new Rectangle( 0, 0, bucketIcon.width, bucketIcon.height, 0, 0, {
+            fill: 'white',
+            center: bucketIcon.center
+          } );
+          PIECE_OFFSET_POSITIONS = [
+
+            // Offsets used for initial position of pieces, relative to bucket hole center. Empirically determined.
+            new Vector2( -70, 5 ),
+            new Vector2( -40, 9 ),
+            new Vector2( 0, 0 ),
+            new Vector2( 37, 7 ),
+            new Vector2( 75, 5 )
+          ];
+          break;
+        case Representation.CAKE:
+          bucketIcon = new CakeContainerNode( iconContainer, () => {}, {
+            maxHeight: 50
+          } );
+          bucketIconBackground = new Node();
+          break;
+        case Representation.BEAKER:
+          bucketIcon = new BeakerNode( 1, denominatorProperty.value, {
+            fullHeight: IntroConstants.BEAKER_HEIGHT / 4,
+            xRadius: 10,
+            yRadius: 3
+          } );
+          bucketIconBackground = new Node();
+          break;
+        default:
+          throw new Error( 'Unknown representation: ' + representationProperty.value );
+      }
+
+      // layer to hold all the static cell nodes in the bucket
+      var staticLayer = new Node();
+
+      denominatorProperty.link( denominator => {
+        // take denominator, and the length of the icon container
+        // find the difference add/remove that many cells from the container
+        var difference = denominator - iconContainer.cells.length;
+        if ( difference > 0 ) {
+
+          //add cells
+          iconContainer.addCells( difference );
         }
+        else if ( difference < 0 ) {
+
+          //remove cells
+          iconContainer.removeCells( -difference );
+        }
+
+        staticLayer.removeAllChildren();
+
+        // places pieces in bucket dependent on defined vectors
+        PIECE_OFFSET_POSITIONS.forEach( function( position ) {
+          var staticCellNode = createCellNode( denominator, 0, { center: position.plus( bucketHole.center ) } );
+          staticLayer.addChild( staticCellNode );
+        } );
       } );
-    } );
+
+      bucketFront.setLabel( new HBox( {
+        align: 'center',
+        spacing: 20,
+        children: [
+          new Node( {
+            children: [
+              bucketIconBackground,
+              bucketIcon
+            ]
+          } ),
+          new PropertyFractionNode( new NumberProperty( 1 ), denominatorProperty, {
+            scale: 0.7
+          } )
+        ]
+      } ) );
+
+      options.children = [ bucketHole, staticLayer, bucketFront ];
+      super( options );
+
+      // add listener to the bucket and static pieces
+      [ bucketHole, staticLayer, bucketFront ].forEach( function( node ) {
+        node.addInputListener( {
+          down: function( event ) {
+            startPieceDrag( event );
+          }
+        } );
+      } );
+    }
   }
 
-  fractionsCommon.register( 'BucketNode', BucketNode );
-
-  return inherit( Node, BucketNode );
+  return fractionsCommon.register( 'BucketNode', BucketNode );
 } );

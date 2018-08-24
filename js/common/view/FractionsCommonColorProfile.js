@@ -26,6 +26,8 @@ define( require => {
     introScreenBackground: { default: Color.WHITE },
     otherScreenBackground: { default: new Color( 235, 251, 251 ) },
 
+    introBucketBackground: { default: new Color( '#8eb7f2' ) },
+
     // TODO: Is this only on intro?
     panelBackground: { default: new Color( 230, 230, 230 ) },
     shapePieceStroke: { default: Color.BLACK },
