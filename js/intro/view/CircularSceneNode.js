@@ -10,8 +10,8 @@ define( require => {
 
   // modules
   var CellSceneNode = require( 'FRACTIONS_COMMON/intro/view/CellSceneNode' );
-  var CircleNode = require( 'FRACTIONS_COMMON/intro/view/CircleNode' );
   var CircularContainerNode = require( 'FRACTIONS_COMMON/intro/view/CircularContainerNode' );
+  var CircularNode = require( 'FRACTIONS_COMMON/intro/view/CircularNode' );
   var CircularPieceNode = require( 'FRACTIONS_COMMON/intro/view/CircularPieceNode' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -60,11 +60,11 @@ define( require => {
      * @param {number} denominator
      * @param {number} index
      * @param {Object} [options]
-     * @returns {CircleNode}
+     * @returns {CircularNode}
      * @public
      */
     createCellNode: function( denominator, index, options ) {
-      return new CircleNode( denominator, index, options );
+      return new CircularNode( denominator, index, options );
     }
   } );
 } );

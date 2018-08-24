@@ -24,7 +24,7 @@ define( require => {
    * @param {number} index
    * @param {Object} [options]
    */
-  function CircleNode( denominator, index, options ) {
+  function CircularNode( denominator, index, options ) {
     assert && assert( index < denominator );
 
     options = _.extend( {
@@ -51,7 +51,7 @@ define( require => {
     if ( denominator > 1 ) {
       shape.moveTo( 0, 0 );
     }
-    var circleRadius = options.isIcon ? CircleNode.RADIUS / 4 : CircleNode.RADIUS;
+    var circleRadius = options.isIcon ? CircularNode.RADIUS / 4 : CircularNode.RADIUS;
     shape.arc( 0, 0, circleRadius, startAngle, endAngle, false ).close();
 
     Node.call( this );
@@ -65,12 +65,12 @@ define( require => {
     this.addChild( this.foregroundSector );
 
     // @public {Vector2}
-    this.midpointOffset = denominator === 1 ? Vector2.ZERO : Vector2.createPolar( CircleNode.RADIUS / 2, this.angleUnit / 2 + startAngle );
+    this.midpointOffset = denominator === 1 ? Vector2.ZERO : Vector2.createPolar( CircularNode.RADIUS / 2, this.angleUnit / 2 + startAngle );
   }
 
-  fractionsCommon.register( 'CircleNode', CircleNode );
+  fractionsCommon.register( 'CircularNode', CircularNode );
 
-  return inherit( Node, CircleNode, {
+  return inherit( Node, CircularNode, {
     /**
      *
      * @param {number} angle
@@ -82,7 +82,7 @@ define( require => {
         this.backgroundSector.rotation = angle;
         this.backgroundSector.x = this.foregroundSector.x + 5;
       }
-      this.midpointOffset = this.denominator === 1 ? Vector2.ZERO : Vector2.createPolar( CircleNode.RADIUS / 2, this.angleUnit / 2 + angle );
+      this.midpointOffset = this.denominator === 1 ? Vector2.ZERO : Vector2.createPolar( CircularNode.RADIUS / 2, this.angleUnit / 2 + angle );
     },
     /**
      *

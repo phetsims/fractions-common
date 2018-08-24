@@ -9,7 +9,7 @@ define( require => {
   'use strict';
 
   // modules
-  var CircleNode = require( 'FRACTIONS_COMMON/intro/view/CircleNode' );
+  var CircularNode = require( 'FRACTIONS_COMMON/intro/view/CircularNode' );
   var Easing = require( 'TWIXT/Easing' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -28,7 +28,7 @@ define( require => {
   function CircularPieceNode( piece, finishedAnimatingCallback, droppedCallback ) {
 
     // @private TODO note more than just node, has midpointOffset variable
-    this.graphic = new CircleNode( piece.denominator, 0, { dropShadow: true } );
+    this.graphic = new CircularNode( piece.denominator, 0, { dropShadow: true } );
 
     // @private (convenience variable)
     this.angleUnit = 2 * Math.PI / piece.denominator;

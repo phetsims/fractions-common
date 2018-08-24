@@ -10,7 +10,7 @@ define( require => {
 
   // modules
   var Circle = require( 'SCENERY/nodes/Circle' );
-  var CircleNode = require( 'FRACTIONS_COMMON/intro/view/CircleNode' );
+  var CircularNode = require( 'FRACTIONS_COMMON/intro/view/CircularNode' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -40,7 +40,7 @@ define( require => {
     this.options = options;
 
     // @public
-    this.circleRadius = this.options.isIcon ? CircleNode.RADIUS / 4 : CircleNode.RADIUS;
+    this.circleRadius = this.options.isIcon ? CircularNode.RADIUS / 4 : CircularNode.RADIUS;
 
     // @private
     this.container = container;
@@ -63,7 +63,7 @@ define( require => {
     // @private {function}
     this.rebuildListener = this.rebuild.bind( this );
 
-    // @private {Array.<CircleNode>}
+    // @private {Array.<CircularNode>}
     this.cellNodes = [];
 
     container.cells.lengthProperty.link( this.rebuildListener );
@@ -108,7 +108,7 @@ define( require => {
         (function() {
           var cell = self.container.cells.get( i );
 
-          var cellNode = new CircleNode( denominator, i, self.options );
+          var cellNode = new CircularNode( denominator, i, self.options );
           self.cellNodes.push( cellNode );
           self.addChild( cellNode );
           cellNode.cursor = 'pointer';
