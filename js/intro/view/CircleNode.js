@@ -1,4 +1,4 @@
-// Copyright 2017, University of Colorado Boulder
+// Copyright 2018, University of Colorado Boulder
 
 /**
  * Scenery Node for the representation of a sector of a circle (a.k.a as a pie slice)

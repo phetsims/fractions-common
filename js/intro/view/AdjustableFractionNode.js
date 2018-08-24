@@ -1,4 +1,4 @@
-// Copyright 2017, University of Colorado Boulder
+// Copyright 2018, University of Colorado Boulder
 
 /**
  * Scenery node for the visual representation of a fraction with up/down spinners for numerator/denominator

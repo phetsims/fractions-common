@@ -1,4 +1,4 @@
-// Copyright 2017, University of Colorado Boulder
+// Copyright 2018, University of Colorado Boulder
 
 /**
  * Scenery Node for displaying bucketNode and pieces in bucketNode slice in fractions-intro
