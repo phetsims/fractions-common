@@ -18,7 +18,6 @@ define( require => {
   var CircularContainerNode = require( 'FRACTIONS_COMMON/intro/view/CircularContainerNode' );
   var Container = require( 'FRACTIONS_COMMON/intro/model/Container' );
   var Dimension2 = require( 'DOT/Dimension2' );
-  var FractionNode = require( 'FRACTIONS_COMMON/intro/view/FractionNode' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -26,7 +25,7 @@ define( require => {
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Node = require( 'SCENERY/nodes/Node' );
   var NumberProperty = require( 'AXON/NumberProperty' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  var PropertyFractionNode = require( 'FRACTIONS_COMMON/common/view/PropertyFractionNode' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/RectangularContainerNode' );
   var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
@@ -169,10 +168,8 @@ define( require => {
     } );
 
     // mathematical fraction 1/Denominator
-    var fractionIconNode = new FractionNode( new NumberProperty( 1 ), denominatorProperty, {
-      font: new PhetFont( 20 ),
-      dividingLineLength: 15,
-      dividingLineWidth: 2
+    const fractionIconNode = new PropertyFractionNode( new NumberProperty( 1 ), denominatorProperty, {
+      scale: 0.7
     } );
 
     // arrange bucketIcon and background into one node
