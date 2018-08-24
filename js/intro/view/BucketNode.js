@@ -167,7 +167,6 @@ define( require => {
       } );
 
       bucketFront.setLabel( new HBox( {
-        align: 'center',
         spacing: 20,
         children: [
           new Node( {
