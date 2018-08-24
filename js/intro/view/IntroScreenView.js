@@ -26,6 +26,9 @@ define( require => {
   // strings
   const mixedNumberString = require( 'string!FRACTIONS_COMMON/mixedNumber' );
 
+  // constants
+  const MARGIN = FractionsCommonConstants.PANEL_MARGIN;
+
   class IntroScreenView extends ContainerSetScreenView {
     /**
      * @param {IntroModel} model
@@ -41,7 +44,7 @@ define( require => {
       this.addChild( new AlignBox( mixedFractionNode, {
         alignBounds: this.layoutBounds,
         xAlign: 'left',
-        margin: 10 // TODO: consistent margin
+        margin: MARGIN
       } ) );
       model.showMixedNumbersProperty.linkAttribute( mixedFractionNode, 'visible' );
 
@@ -62,14 +65,13 @@ define( require => {
       }
 
       // layout
-      const margin = FractionsCommonConstants.PANEL_MARGIN;
-      this.resetAllButton.rightBottom = this.layoutBounds.rightBottom.plusXY( -margin, -margin );
-      this.representationPanel.leftTop = this.layoutBounds.leftTop.plusXY( margin + ( model.allowMixedNumbers ? 100 : 0 ), margin );
-      maxPanel.rightTop = this.layoutBounds.rightTop.plusXY( -margin, margin );
+      this.resetAllButton.rightBottom = this.layoutBounds.rightBottom.plusXY( -MARGIN, -MARGIN );
+      this.representationPanel.leftTop = this.layoutBounds.leftTop.plusXY( MARGIN + ( model.allowMixedNumbers ? 100 : 0 ), MARGIN );
+      maxPanel.rightTop = this.layoutBounds.rightTop.plusXY( -MARGIN, MARGIN );
       this.viewContainer.translation = new Vector2( this.representationPanel.centerX, this.representationPanel.bottom + 60 );
       // TODO: factor out bucket offset?
       this.bucketContainer.translation = new Vector2( this.representationPanel.centerX, this.layoutBounds.bottom - 120 );
-      mixedNumbersCheckbox.rightBottom = new Vector2( this.layoutBounds.right - margin, this.resetAllButton.top - 40 );
+      mixedNumbersCheckbox.rightBottom = new Vector2( this.layoutBounds.right - MARGIN, this.resetAllButton.top - 40 );
     }
   }
 

@@ -15,6 +15,7 @@ define( require => {
   const CakeSceneNode = require( 'FRACTIONS_COMMON/intro/view/CakeSceneNode' );
   const CircularSceneNode = require( 'FRACTIONS_COMMON/intro/view/CircularSceneNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberLineSceneNode = require( 'FRACTIONS_COMMON/intro/view/NumberLineSceneNode' );
   const NumberProperty = require( 'AXON/NumberProperty' );
@@ -120,7 +121,7 @@ define( require => {
       this.addChild( new AlignBox( new AdjustableFractionNode( model.numeratorProperty, model.denominatorProperty, model.containerCountProperty ), {
         alignBounds: this.layoutBounds,
         xAlign: 'right',
-        margin: 10 // TODO: layout padding consistently
+        margin: FractionsCommonConstants.PANEL_MARGIN
       } ) );
 
       // @protected {Node}

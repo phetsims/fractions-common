@@ -14,6 +14,9 @@ define( require => {
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Vector2 = require( 'DOT/Vector2' );
 
+  // constants
+  const MARGIN = FractionsCommonConstants.PANEL_MARGIN;
+
   class EqualityLabScreenView extends ContainerSetScreenView {
     /**
      * @param {EqualityLabModel} model
@@ -22,9 +25,9 @@ define( require => {
       super( model );
 
       // layout
-      const margin = FractionsCommonConstants.PANEL_MARGIN;
-      this.resetAllButton.rightBottom = this.layoutBounds.rightBottom.plusXY( -margin, -margin );
-      this.representationPanel.leftTop = this.layoutBounds.leftTop.plusXY( margin, margin );
+      this.resetAllButton.rightBottom = this.layoutBounds.rightBottom.plusXY( -MARGIN, -MARGIN );
+      this.representationPanel.leftTop = this.layoutBounds.leftTop.plusXY( MARGIN, MARGIN );
+
       this.viewContainer.translation = new Vector2( this.representationPanel.centerX, this.representationPanel.bottom + 20 );
       // TODO: factor out bucket offset?
       this.bucketContainer.translation = new Vector2( this.representationPanel.centerX, this.layoutBounds.bottom - 120 );
