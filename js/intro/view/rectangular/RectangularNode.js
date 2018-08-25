@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * draw the rectangle
+ * Displays a rectangular slice of area.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -9,80 +9,88 @@ define( require => {
   'use strict';
 
   // modules
-  var Dimension2 = require( 'DOT/Dimension2' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const Dimension2 = require( 'DOT/Dimension2' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
 
-  /**
-   * @constructor
-   * @extends {Node}
-   *
-   * @param {number} denominator
-   * @param {Object} [options]
-   */
-  function RectangularNode( denominator, options ) {
+  class RectangularNode extends Node {
+    /**
+     * @param {number} denominator
+     * @param {Object} [options]
+     */
+    constructor( denominator, options ) {
 
-    options = _.extend( {
-      dropShadow: false,
-      dropShadowOffset: 5,
-      rectangleOrientation: 'vertical',
-      isIcon: false
-    }, options );
+      options = _.extend( {
+        dropShadow: false,
+        dropShadowOffset: 5,
+        rectangleOrientation: 'vertical',
+        isIcon: false
+      }, options );
 
-    var rectangle = RectangularNode.VERTICAL_RECTANGULAR_SIZE;
-    var rectangleWidth = rectangle.width;
-    var rectangleHeight = rectangle.height / denominator;
+      var rectangle = RectangularNode.VERTICAL_RECTANGULAR_SIZE;
+      var rectangleWidth = rectangle.width;
+      var rectangleHeight = rectangle.height / denominator;
 
-    // determine the size of the rectangle size and pieces in th bucket depend upon the representation
-    if ( options.rectangleOrientation === 'horizontal' ) {
-      rectangle = RectangularNode.HORIZONTAL_RECTANGULAR_SIZE;
-      rectangleWidth = rectangle.width / denominator;
-      rectangleHeight = rectangle.height;
-    }
+      // determine the size of the rectangle size and pieces in th bucket depend upon the representation
+      if ( options.rectangleOrientation === 'horizontal' ) {
+        rectangle = RectangularNode.HORIZONTAL_RECTANGULAR_SIZE;
+        rectangleWidth = rectangle.width / denominator;
+        rectangleHeight = rectangle.height;
+      }
 
-    //executes condition if the isIcon is true
-    if ( options.isIcon ) {
-      rectangleHeight /= 4;
-      rectangleWidth /= 4;
-    }
-    var foregroundRectangle = new Rectangle( {
-      rectWidth: rectangleWidth,
-      rectHeight: rectangleHeight,
-
-      // determine the color depend upon representation
-      fill: options.rectangleOrientation === 'horizontal' ? '#ED4344' : '#FFE600',
-      stroke: 'black',
-      lineWidth: options.isIcon ? 1 : 3
-    } );
-
-    options.children = [ foregroundRectangle ];
-
-    // creates dropShadow
-    if ( options.dropShadow ) {
-      var backgroundRectangle = new Rectangle( {
-        center: foregroundRectangle.center.plusXY( options.dropShadowOffset, options.dropShadowOffset ),
+      //executes condition if the isIcon is true
+      if ( options.isIcon ) {
+        rectangleHeight /= 4;
+        rectangleWidth /= 4;
+      }
+      var foregroundRectangle = new Rectangle( {
         rectWidth: rectangleWidth,
         rectHeight: rectangleHeight,
-        fill: 'black',
-        lineWidth: 2
+
+        // determine the color depend upon representation
+        fill: options.rectangleOrientation === 'horizontal' ? '#ED4344' : '#FFE600',
+        stroke: 'black',
+        lineWidth: options.isIcon ? 1 : 3
       } );
 
-      options.children = [ backgroundRectangle, foregroundRectangle ];
+      options.children = [ foregroundRectangle ];
+
+      // creates dropShadow
+      if ( options.dropShadow ) {
+        var backgroundRectangle = new Rectangle( {
+          center: foregroundRectangle.center.plusXY( options.dropShadowOffset, options.dropShadowOffset ),
+          rectWidth: rectangleWidth,
+          rectHeight: rectangleHeight,
+          fill: 'black',
+          lineWidth: 2
+        } );
+
+        options.children = [ backgroundRectangle, foregroundRectangle ];
+      }
+
+      super( options );
+
+      // @public {Vector2}
+      this.midpointOffset = this.center;
     }
 
-    Node.call( this, options );
+    /**
+     * The size of vertical rectangular nodes.
+     * @public
+     *
+     * @returns {Dimension2}
+     */
+    static get VERTICAL_RECTANGULAR_SIZE() { return new Dimension2( 130, 185 ); }
 
-    // @public {Vector2}
-    this.midpointOffset = this.center;
+    /**
+     * The size of horizontal rectangular nodes.
+     * @public
+     *
+     * @returns {Dimension2}
+     */
+    static get HORIZONTAL_RECTANGULAR_SIZE() { return new Dimension2( 300, 50 ); }
   }
 
-  fractionsCommon.register( 'RectangularNode', RectangularNode );
-
-  return inherit( Node, RectangularNode, {}, {
-    // @public {Dimension2}
-    VERTICAL_RECTANGULAR_SIZE: new Dimension2( 130, 185 ),
-    HORIZONTAL_RECTANGULAR_SIZE: new Dimension2( 300, 50 )
-  } );
+  return fractionsCommon.register( 'RectangularNode', RectangularNode );
 } );

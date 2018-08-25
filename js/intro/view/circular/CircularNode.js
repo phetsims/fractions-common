@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * Scenery Node for the representation of a sector of a circle (a.k.a as a pie slice)
+ * Displays a circular slice.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -9,91 +9,94 @@ define( require => {
   'use strict';
 
   // modules
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var Shape = require( 'KITE/Shape' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Path = require( 'SCENERY/nodes/Path' );
+  const Shape = require( 'KITE/Shape' );
+  const Vector2 = require( 'DOT/Vector2' );
 
-  /**
-   * @constructor
-   * @extends {Node}
-   *
-   * @param {number} denominator
-   * @param {number} index
-   * @param {Object} [options]
-   */
-  function CircularNode( denominator, index, options ) {
-    assert && assert( index < denominator );
+  class CircularNode extends Node {
+    /**
+     * @param {number} denominator
+     * @param {number} index
+     * @param {Object} [options]
+     */
+    constructor( denominator, index, options ) {
 
-    options = _.extend( {
-      fill: 'rgb(140, 198, 61)',
-      stroke: 'black',
-      dropShadow: false,
-      dropShadowOffset: 5,
-      lineWidth: 2,
-      isIcon: false
-    }, options );
-    options.lineWidth = options.isIcon ? 1 : 2;
+      assert && assert( index < denominator );
 
-    // @private
-    this.denominator = denominator;
-    this.angleUnit = 2 * Math.PI / denominator;
+      options = _.extend( {
+        fill: 'rgb(140, 198, 61)',
+        stroke: 'black',
+        dropShadow: false,
+        dropShadowOffset: 5,
+        lineWidth: 2,
+        isIcon: false
+      }, options );
+      options.lineWidth = options.isIcon ? 1 : 2;
 
-    // @private {boolean}
-    this.dropShadow = options.dropShadow;
+      super();
 
-    var startAngle = index * this.angleUnit;
-    var endAngle = startAngle + this.angleUnit;
+      // @private
+      this.denominator = denominator;
+      this.angleUnit = 2 * Math.PI / denominator;
 
-    var shape = new Shape();
-    if ( denominator > 1 ) {
-      shape.moveTo( 0, 0 );
+      // @private {boolean}
+      this.dropShadow = options.dropShadow;
+
+      var startAngle = index * this.angleUnit;
+      var endAngle = startAngle + this.angleUnit;
+
+      var shape = new Shape();
+      if ( denominator > 1 ) {
+        shape.moveTo( 0, 0 );
+      }
+      var circleRadius = options.isIcon ? CircularNode.DEFAULT_RADIUS / 4 : CircularNode.DEFAULT_RADIUS;
+      shape.arc( 0, 0, circleRadius, startAngle, endAngle, false ).close();
+
+      this.foregroundSector = new Path( shape, options );
+      if ( this.dropShadow ) {
+        this.backgroundSector = new Path( shape, { fill: 'black' } );
+        this.backgroundSector.center = this.foregroundSector.center.plusScalar( options.dropShadowOffset );
+        this.addChild( this.backgroundSector );
+      }
+      this.addChild( this.foregroundSector );
+
+      // @public {Vector2}
+      this.midpointOffset = denominator === 1 ? Vector2.ZERO : Vector2.createPolar( CircularNode.DEFAULT_RADIUS / 2, this.angleUnit / 2 + startAngle );
     }
-    var circleRadius = options.isIcon ? CircularNode.RADIUS / 4 : CircularNode.RADIUS;
-    shape.arc( 0, 0, circleRadius, startAngle, endAngle, false ).close();
 
-    Node.call( this );
-
-    this.foregroundSector = new Path( shape, options );
-    if ( this.dropShadow ) {
-      this.backgroundSector = new Path( shape, { fill: 'black' } );
-      this.backgroundSector.center = this.foregroundSector.center.plusScalar( options.dropShadowOffset );
-      this.addChild( this.backgroundSector );
-    }
-    this.addChild( this.foregroundSector );
-
-    // @public {Vector2}
-    this.midpointOffset = denominator === 1 ? Vector2.ZERO : Vector2.createPolar( CircularNode.RADIUS / 2, this.angleUnit / 2 + startAngle );
-  }
-
-  fractionsCommon.register( 'CircularNode', CircularNode );
-
-  return inherit( Node, CircularNode, {
     /**
      *
      * @param {number} angle
      * @public
      */
-    rotateCircle: function( angle ) {
+    rotateCircle( angle ) {
       this.foregroundSector.rotation = angle;
       if ( this.dropShadow ) {
         this.backgroundSector.rotation = angle;
         this.backgroundSector.x = this.foregroundSector.x + 5;
       }
-      this.midpointOffset = this.denominator === 1 ? Vector2.ZERO : Vector2.createPolar( CircularNode.RADIUS / 2, this.angleUnit / 2 + angle );
-    },
+      this.midpointOffset = this.denominator === 1 ? Vector2.ZERO : Vector2.createPolar( CircularNode.DEFAULT_RADIUS / 2, this.angleUnit / 2 + angle );
+    }
+
     /**
      *
      * @returns {number}
      * @public
      */
-    getCircleRotation: function() {
+    getCircleRotation() {
       return this.foregroundSector.rotation;
     }
-  }, {
-    // @public {number}
-    RADIUS: 75
-  } );
+
+    /**
+     * The normal radius.
+     * @public
+     *
+     * @returns {number}
+     */
+    static get DEFAULT_RADIUS() { return 75; }
+  }
+
+  return fractionsCommon.register( 'CircularNode', CircularNode );
 } );

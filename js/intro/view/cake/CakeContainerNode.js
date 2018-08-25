@@ -49,7 +49,7 @@ define( require => {
       super();
 
       options = _.extend( {
-        maxHeight: CakeNode.CAKE_HEIGHT  // height of the image
+        maxHeight: CakeNode.DEFAULT_CAKE_HEIGHT  // height of the image
       }, options );
 
       // @private

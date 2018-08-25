@@ -33,7 +33,7 @@ define( require => {
         isIcon: false
       }, options );
 
-      const circleRadius = options.isIcon ? CircularNode.RADIUS / 4 : CircularNode.RADIUS;
+      const circleRadius = options.isIcon ? CircularNode.DEFAULT_RADIUS / 4 : CircularNode.DEFAULT_RADIUS;
 
       super( circleRadius, {
         lineWidth: options.isIcon ? 2 : 3

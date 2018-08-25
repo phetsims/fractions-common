@@ -131,7 +131,7 @@ define( require => {
           break;
         case Representation.BEAKER:
           bucketIcon = new BeakerNode( 1, denominatorProperty.value, {
-            fullHeight: BeakerNode.BEAKER_HEIGHT / 4,
+            fullHeight: BeakerNode.DEFAULT_BEAKER_HEIGHT / 4,
             xRadius: 10,
             yRadius: 3
           } );

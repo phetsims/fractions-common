@@ -27,6 +27,10 @@ define( require => {
     otherScreenBackground: { default: new Color( 235, 251, 251 ) },
 
     introBucketBackground: { default: new Color( '#8eb7f2' ) },
+    emptyBeaker: { default: new Color( 150, 150, 150, 0.15 ) },
+    waterSide: { default: new Color( 30, 163, 255, 0.8 ) },
+    waterTop: { default: new Color( 30, 163, 255, 0.8 ) },
+    beakerShine: { default: new Color( 255, 255, 255, 0.7 ) },
 
     // TODO: Is this only on intro?
     panelBackground: { default: new Color( 230, 230, 230 ) },
