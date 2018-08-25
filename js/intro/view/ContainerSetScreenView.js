@@ -20,7 +20,6 @@ define( require => {
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberLineSceneNode = require( 'FRACTIONS_COMMON/intro/view/NumberLineSceneNode' );
-  const NumberProperty = require( 'AXON/NumberProperty' );
   const Panel = require( 'SUN/Panel' );
   const RectangularSceneNode = require( 'FRACTIONS_COMMON/intro/view/RectangularSceneNode' );
   const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
@@ -113,12 +112,10 @@ define( require => {
         else if ( representation === Representation.NUMBER_LINE ) {
 
           // TODO: find a more general way to lay out the numberLine than reversing the action of the container
-          this.currentView = new NumberLineSceneNode(
-            model.numeratorProperty,
-            model.denominatorProperty,
-            model.containerCountProperty,
-            new NumberProperty( 1 ), { x: 25 - this.layoutBounds.centerX, y: 60 }
-          );
+          this.currentView = new NumberLineSceneNode( model, {
+            x: 25 - this.layoutBounds.centerX,
+            y: 60
+          } );
         }
         if ( this.currentView ) {
           // add the chosen visual representation to the scene graph

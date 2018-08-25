@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: Doc
+ * Scene for the cake representation
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -9,63 +9,54 @@ define( require => {
   'use strict';
 
   // modules
-  var CakeContainerNode = require( 'FRACTIONS_COMMON/intro/view/CakeContainerNode' );
-  var CakeNode = require( 'FRACTIONS_COMMON/intro/view/CakeNode' );
-  var CakePieceNode = require( 'FRACTIONS_COMMON/intro/view/CakePieceNode' );
-  var CellSceneNode = require( 'FRACTIONS_COMMON/intro/view/CellSceneNode' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
+  const CakeContainerNode = require( 'FRACTIONS_COMMON/intro/view/CakeContainerNode' );
+  const CakeNode = require( 'FRACTIONS_COMMON/intro/view/CakeNode' );
+  const CakePieceNode = require( 'FRACTIONS_COMMON/intro/view/CakePieceNode' );
+  const CellSceneNode = require( 'FRACTIONS_COMMON/intro/view/CellSceneNode' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
-  /**
-   * @constructor
-   * @extends {CellSceneNode}
-   *
-   * @param {ContainerSetModel} model
-   * @param {function} getBucketLocation - function(): Vector2, gives the location of the bucket when called
-   * @param {Object} [options]
-   */
-  function CakeSceneNode( model, getBucketLocation, options ) {
-
-    CellSceneNode.call( this, model, getBucketLocation, options );
-  }
-
-  fractionsCommon.register( 'CakeSceneNode', CakeSceneNode );
-
-  return inherit( CellSceneNode, CakeSceneNode, {
+  class CakeSceneNode extends CellSceneNode {
     /**
-     * create a cake container that holds a cake plate and the cakeNodes
+     * Creates the container node for the given type of cell.
+     * @public
+     * @override
+     *
      * @param {Container} container
      * @param {Function} cellDownCallback
-     * @returns {CakeContainerNode}
-     * @public
+     * @returns {Node}
      */
-    createContainerNode: function( container, cellDownCallback ) {
+    createContainerNode( container, cellDownCallback ) {
       return new CakeContainerNode( container, cellDownCallback );
-    },
+    }
 
     /**
-     * create a cake piece node
+     * Creates the piece node for the given type of cell.
+     * @public
+     * @override
+     *
      * @param {Piece} piece
      * @param {Function} finishedAnimatingCallback
      * @param {Function} droppedCallback
-     * @returns {CakePieceNode}
-     * @public
+     * @returns {Node}
      */
-    createPieceNode: function( piece, finishedAnimatingCallback, droppedCallback ) {
+    createPieceNode( piece, finishedAnimatingCallback, droppedCallback ) {
       return new CakePieceNode( piece, finishedAnimatingCallback, droppedCallback );
-    },
+    }
 
     /**
-     * Creates a cell node of a cake aka slice
+     * Creates the cell node for the given type of cell.
+     * @public
+     * @override
      *
      * @param {number} denominator
      * @param {number} index
      * @param {Object} [options]
-     * @returns {CakeNode}
-     * @public
+     * @returns {Node}
      */
-    createCellNode: function( denominator, index, options ) {
+    createCellNode( denominator, index, options ) {
       return new CakeNode( denominator, index, options );
     }
-  } );
+  }
+
+  return fractionsCommon.register( 'CakeSceneNode', CakeSceneNode );
 } );

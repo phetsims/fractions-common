@@ -72,12 +72,12 @@ define( require => {
   fractionsCommon.register( 'BeakerPieceNode', BeakerPieceNode );
 
   return inherit( Node, BeakerPieceNode, {
-
     /**
      * Steps forward in time.
-     *
-     * @param {number} dt - timeStep in seconds
      * @public
+     * @override
+     *
+     * @param {number} dt
      */
     step: function( dt ) {
       if ( this.isUserControlled ) {

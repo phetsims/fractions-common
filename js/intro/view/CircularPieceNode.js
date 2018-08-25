@@ -48,9 +48,11 @@ define( require => {
 
   return inherit( PieceNode, CircularPieceNode, {
     /**
-     * forwards the position of this node in time
-     * @param {number} dt - time step in seconds
+     * Steps forward in time.
      * @public
+     * @override
+     *
+     * @param {number} dt
      */
     step: function( dt ) {
       if ( this.isUserControlled ) {

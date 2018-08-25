@@ -102,9 +102,9 @@ define( require => {
   return inherit( Node, CellSceneNode, {
     /**
      * Steps forward in time.
-     *
-     * @param {number} dt - time step
      * @public
+     *
+     * @param {number} dt
      */
     step: function( dt ) {
       var self = this;

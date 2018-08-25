@@ -9,67 +9,66 @@ define( require => {
   'use strict';
 
   // modules
-  var Easing = require( 'TWIXT/Easing' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var PieceNode = require( 'FRACTIONS_COMMON/intro/view/PieceNode' );
-  var RectangleNode = require( 'FRACTIONS_COMMON/intro/view/RectangleNode' );
+  const Easing = require( 'TWIXT/Easing' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const PieceNode = require( 'FRACTIONS_COMMON/intro/view/PieceNode' );
+  const RectangleNode = require( 'FRACTIONS_COMMON/intro/view/RectangleNode' );
 
-  /**
-   * @constructor
-   * @extends {Node}
-   *
-   * @param {Piece} piece
-   * @param {function} finishedAnimatingCallback - Called as function( {Piece} ) with the piece to finish animating.
-   * @param {function} droppedCallback - Called as function( {Piece} )
-   * @param {Object} [options]
-   */
-  function RectangularPieceNode( piece, finishedAnimatingCallback, droppedCallback, options ) {
+  class RectangularPieceNode extends PieceNode {
+    /**
+     * @param {Piece} piece
+     * @param {function} finishedAnimatingCallback - Called as function( {Piece} ) with the piece to finish animating.
+     * @param {function} droppedCallback - Called as function( {Piece} )
+     * @param {Object} [options]
+     */
+    constructor( piece, finishedAnimatingCallback, droppedCallback, options ) {
 
-    // @private TODO note more than just node, has midpointOffset variable
-    options = _.extend( options, { dropShadow: true } );
+      // @private TODO note more than just node, has midpointOffset variable
+      // TODO: uhhh...?
+      options = _.extend( options, {
+        dropShadow: true
+      } );
 
-    // @private
-    this.graphic = new RectangleNode( piece.denominator, options );
+      const graphic = new RectangleNode( piece.denominator, options );
 
-    PieceNode.call( this, piece, finishedAnimatingCallback, droppedCallback, {
-      graphic: this.graphic
-    } );
+      super( piece, finishedAnimatingCallback, droppedCallback, {
+        graphic
+      } );
 
-  }
-
-  fractionsCommon.register( 'RectangularPieceNode', RectangularPieceNode );
-
-  return inherit( Node, RectangularPieceNode, {
+      // @private {RectangleNode} -- TODO: don't have to do this?
+      this.graphic = graphic;
+    }
 
     /**
-     *  Returns midpoint of rectangular piece
+     * Returns the midpoint of the piece
+     * @public
+     * @override
      *
      * @returns {Vector2}
-     * @public
      */
-    getMidpoint: function() {
+    getMidpoint() {
       return this.localToParentPoint( this.graphic.midpointOffset );
-    },
+    }
 
     /**
-     * Sets midpoint of rectangular piece
+     * Sets the midpoint of the piece
+     * @protected TODO: check visibility
      *
      * @param {Vector2} midpoint
-     * @private
      */
-    setMidpoint: function( midpoint ) {
+    setMidpoint( midpoint ) {
       this.translation = this.translation.plus( midpoint.minus( this.localToParentPoint( this.graphic.midpointOffset ) ) );
-    },
+    }
 
     /**
-     * Steps piece through multiple small animations as it approaches its destination cell
+     * Steps forward in time.
+     * @public
+     * @override
      *
      * @param {number} dt
-     * @public
      */
-    step: function( dt ) {
+    step( dt ) {
       if ( this.isUserControlled ) {
         return;
       }
@@ -83,7 +82,7 @@ define( require => {
         var easedRatio = Easing.QUADRATIC_IN_OUT.value( this.ratio );
         this.setMidpoint( this.originProperty.value.blend( this.destinationProperty.value, easedRatio ) );
       }
-    },
+    }
 
     /**
      * Placeholder for a method which orients the piece as it approaches its destination
@@ -92,18 +91,20 @@ define( require => {
      * @param {number} dt
      * @public
      */
-    orient: function( closestCell, dt ) {
+    orient( closestCell, dt ) {
 
-    },
+    }
 
     /**
      * Interrupts all input on rectangular pieces, disposes of those pieces
      * @public
      */
-    dispose: function() {
+    dispose() {
       this.interruptSubtreeInput();
 
       Node.prototype.dispose.call( this );
     }
-  } );
+  }
+
+  return fractionsCommon.register( 'RectangularPieceNode', RectangularPieceNode );
 } );

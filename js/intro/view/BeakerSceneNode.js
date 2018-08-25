@@ -90,9 +90,10 @@ define( require => {
   return inherit( Node, BeakerSceneNode, {
     /**
      * Steps forward in time.
-     *
-     * @param {number} dt - time step in seconds
      * @public
+     * @override
+     *
+     * @param {number} dt
      */
     step: function( dt ) {
       _.each( this.pieceNodes.slice(), function( pieceNode ) {

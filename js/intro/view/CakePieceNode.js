@@ -68,8 +68,10 @@ define( require => {
 
     /**
      * Steps forward in time.
-     * @param {number} dt - in seconds
      * @public
+     * @override
+     *
+     * @param {number} dt
      */
     step: function( dt ) {
       if ( this.isUserControlled ) {

@@ -109,6 +109,16 @@ define( require => {
     },
 
     /**
+     * Steps forward in time.
+     * @public
+     *
+     * @param {number} dt
+     */
+    step( dt ) {
+      throw new Error( 'unimplemented' );
+    },
+
+    /**
      * dispose of the links for garbage collection
      * @public
      */
