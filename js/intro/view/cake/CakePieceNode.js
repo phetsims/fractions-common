@@ -1,70 +1,67 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * The cake variant of a piece node.
  *
  * @author Martin Veillette (Berea College)
+ * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 define( require => {
   'use strict';
 
   // modules
-  var CakeNode = require( 'FRACTIONS_COMMON/intro/view/cake/CakeNode' );
-  var Easing = require( 'TWIXT/Easing' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var PieceNode = require( 'FRACTIONS_COMMON/intro/view/PieceNode' );
+  const CakeNode = require( 'FRACTIONS_COMMON/intro/view/cake/CakeNode' );
+  const Easing = require( 'TWIXT/Easing' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const PieceNode = require( 'FRACTIONS_COMMON/intro/view/PieceNode' );
 
-  /**
-   * @constructor
-   * @extends {Node}
-   *
-   * TODO: there is a lot of duplication here
-   *
-   * @param {Piece} piece
-   * @param {function} finishedAnimatingCallback - Called as function( {Piece} ) with the piece to finish animating.
-   * @param {function} droppedCallback - Called as function( {Piece} )
-   */
-  function CakePieceNode( piece, finishedAnimatingCallback, droppedCallback ) {
+  class CakePieceNode extends PieceNode {
+    /**
+     * TODO: there is a lot of duplication here
+     *
+     * @param {Piece} piece
+     * @param {function} finishedAnimatingCallback - Called as function( {Piece} ) with the piece to finish animating.
+     * @param {function} droppedCallback - Called as function( {Piece} )
+     */
+    constructor( piece, finishedAnimatingCallback, droppedCallback ) {
+      // TODO: a lot of this is duplicated
 
-    // @private TODO note more than just node, has midpointOffset variable
-    this.graphic = new CakeNode( piece.denominator, 0 );
+      const graphic = new CakeNode( piece.denominator, 0 );
 
-    // cake specific
-    var originCell = piece.originCell;
-    if ( originCell ) {
-      this.graphic.setCakeIndex( originCell.index );
+      super( piece, finishedAnimatingCallback, droppedCallback, {
+        graphic: graphic
+      } );
+
+      // @private TODO note more than just node, has midpointOffset variable
+      this.graphic = graphic;
+
+      // cake specific
+      var originCell = piece.originCell;
+      if ( originCell ) {
+        this.graphic.setCakeIndex( originCell.index );
+      }
+      // cake specific
+      var destinationCell = piece.destinationCell;
+      if ( destinationCell ) {
+        this.graphic.setCakeIndex( destinationCell.index );
+      }
     }
-    // cake specific
-    var destinationCell = piece.destinationCell;
-    if ( destinationCell ) {
-      this.graphic.setCakeIndex( destinationCell.index );
-    }
 
-    PieceNode.call( this, piece, finishedAnimatingCallback, droppedCallback, {
-      graphic: this.graphic
-    } );
-  }
-
-  fractionsCommon.register( 'CakePieceNode', CakePieceNode );
-
-  return inherit( Node, CakePieceNode, {
     /**
      * @returns {Vector2}
      * @public
      */
-    getMidpoint: function() {
+    getMidpoint() {
       return this.localToParentPoint( this.graphic.midpointOffset );
-    },
+    }
 
     /**
      * @param {Vector2} midpoint
      * @public
      */
-    setMidpoint: function( midpoint ) {
+    setMidpoint( midpoint ) {
       this.translation = this.translation.plus( midpoint.minus( this.localToParentPoint( this.graphic.midpointOffset ) ) );
-    },
+    }
 
     /**
      * Steps forward in time.
@@ -73,7 +70,7 @@ define( require => {
      *
      * @param {number} dt
      */
-    step: function( dt ) {
+    step( dt ) {
       if ( this.isUserControlled ) {
         return;
       }
@@ -88,18 +85,24 @@ define( require => {
         var easedRatio = Easing.QUADRATIC_IN_OUT.value( this.ratio );
         this.setMidpoint( this.originProperty.value.blend( this.destinationProperty.value, easedRatio ) );
       }
-    },
+    }
+
     /**
-     * orients the piece to fit the cell
+     * Orients the piece to match the closest cell.
+     * @public
+     * @override
      *
      * @param {Cell} closestCell
-     * @param {number} dt - in seconds
-     * @public
+     * @param {number} dt
      */
-    orient: function( closestCell, dt ) {
+    orient( closestCell, dt ) {
+      super.orient( closestCell, dt );
+
       var midpoint = this.getMidpoint();
       this.graphic.setCakeIndex( closestCell.index );
       this.setMidpoint( midpoint );
     }
-  } );
+  }
+
+  return fractionsCommon.register( 'CakePieceNode', CakePieceNode );
 } );

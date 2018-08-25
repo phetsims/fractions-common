@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: Doc
+ * Scene for the rectangular representation
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -9,71 +9,41 @@ define( require => {
   'use strict';
 
   // modules
-  var CellSceneNode = require( 'FRACTIONS_COMMON/intro/view/CellSceneNode' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularContainerNode' );
-  var RectangularNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularNode' );
-  var RectangularPieceNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularPieceNode' );
+  const CellSceneNode = require( 'FRACTIONS_COMMON/intro/view/CellSceneNode' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularContainerNode' );
+  const RectangularNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularNode' );
+  const RectangularPieceNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularPieceNode' );
 
-  /**
-   * @constructor
-   * @extends {CellSceneNode}
-   *
-   * @param {ContainerSetScreenView} model
-   * @param {function} getBucketLocation - function(): Vector2, gives the location of the bucket when called
-   * @param {Object} [options]
-   */
-  function RectangularSceneNode( model, getBucketLocation, options ) {
-    // TODO: Don't do this! And don't pass in to children!
-    this.options = options;
-    CellSceneNode.call( this, model, getBucketLocation, options );
+  class RectangularSceneNode extends CellSceneNode {
+    /**
+     * @param {ContainerSetScreenView} model
+     * @param {function} getBucketLocation - function(): Vector2, gives the location of the bucket when called
+     * @param {Object} [options]
+     */
+    constructor( model, getBucketLocation, options ) {
+      assert && assert( options.rectangleOrientation );
+
+      const rectangleOrientation = options.rectangleOrientation;
+
+      super( model, getBucketLocation, _.extend( {
+        createContainerNode( container, cellDownCallback ) {
+          return new RectangularContainerNode( container, cellDownCallback, {
+            rectangleOrientation
+          } );
+        },
+        createPieceNode( piece, finishedAnimatingCallback, droppedCallback ) {
+          return new RectangularPieceNode( piece, finishedAnimatingCallback, droppedCallback );
+        },
+        createCellNode( denominator, index, options ) {
+          return new RectangularNode( denominator, {
+            dropShadow: false,
+            rectangleOrientation
+          } );
+        }
+      }, options ) );
+    }
   }
 
-  fractionsCommon.register( 'RectangularSceneNode', RectangularSceneNode );
-
-  return inherit( CellSceneNode, RectangularSceneNode, {
-
-    /**
-     * Creates a Container Node with a specific callback function
-     *
-     * @param {Node} container
-     * @param {function} cellDownCallback
-     * @returns {RectangularContainerNode}
-     * @public
-     */
-    createContainerNode: function( container, cellDownCallback ) {
-      return new RectangularContainerNode( container, cellDownCallback, {
-        rectangleOrientation: this.options.rectangleOrientation
-      } );
-    },
-
-    /**
-     * Creates a piece Node with a specific callback function and finished animation callback
-     *
-     * @param {Node} piece
-     * @param {function} finishedAnimatingCallback
-     * @param {function} droppedCallback
-     * @returns {RectangularPieceNode}
-     * @public
-     */
-    createPieceNode: function( piece, finishedAnimatingCallback, droppedCallback ) {
-      return new RectangularPieceNode( piece, finishedAnimatingCallback, droppedCallback, this.options );
-    },
-
-    /**
-     * Creates a rectangular Cell
-     *
-     * @param {number} denominator
-     * @param {number} index
-     * @param {Object} [options]
-     * @returns {RectangularNode}
-     * @public
-     */
-    createCellNode: function( denominator, index, options ) {
-      options = _.extend( this.options, options, { dropShadow: false } );
-      return new RectangularNode( denominator, options );
-    }
-
-  } );
+  return fractionsCommon.register( 'RectangularSceneNode', RectangularSceneNode );
 } );

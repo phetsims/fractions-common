@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: Doc
+ * Scene for the beaker representation
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -9,85 +9,77 @@ define( require => {
   'use strict';
 
   // modules
-  var AlignBox = require( 'SCENERY/nodes/AlignBox' );
-  var arrayRemove = require( 'PHET_CORE/arrayRemove' );
-  var BeakerContainerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerContainerNode' );
-  var BeakerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerNode' );
-  var BeakerPieceNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerPieceNode' );
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var BucketNode = require( 'FRACTIONS_COMMON/intro/view/BucketNode' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
+  const AlignBox = require( 'SCENERY/nodes/AlignBox' );
+  const arrayRemove = require( 'PHET_CORE/arrayRemove' );
+  const BeakerContainerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerContainerNode' );
+  const BeakerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerNode' );
+  const BeakerPieceNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerPieceNode' );
+  const Bounds2 = require( 'DOT/Bounds2' );
+  const BucketNode = require( 'FRACTIONS_COMMON/intro/view/BucketNode' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const SceneNode = require( 'FRACTIONS_COMMON/intro/view/SceneNode' );
 
-  /**
-   * @constructor
-   * @extends {Node}
-   *
-   * TODO: EGADS, REFACTOR OUT THE COMMON STUFF!
-   *
-   * @param {ContainerSetModel} model
-   * @param {function} getBucketLocation - function(): Vector2, gives the location of the bucket when called
-   */
-  function BeakerSceneNode( model, getBucketLocation ) {
+  class BeakerSceneNode extends SceneNode {
+    /**
+     * TODO: EGADS, REFACTOR OUT THE COMMON STUFF!
+     *
+     * @param {ContainerSetModel} model
+     * @param {function} getBucketLocation - function(): Vector2, gives the location of the bucket when called
+     */
+    constructor( model, getBucketLocation ) {
 
-    // @private
-    this.model = model;
+      super( model );
 
-    // @private {function}
-    this.getBucketLocation = getBucketLocation;
+      // @private
+      this.model = model;
 
-    // @private {Node}
-    this.containerLayer = new HBox( {
-      spacing: 35
-    } );
+      // @private {function}
+      this.getBucketLocation = getBucketLocation;
 
-    // @private {Node}
-    this.pieceLayer = new Node();
+      // @private {Node}
+      this.containerLayer = new HBox( {
+        spacing: 35
+      } );
 
-    // @private {Array.<CircularContainerNode>}
-    this.containerNodes = [];
+      // @private {Node}
+      this.pieceLayer = new Node();
 
-    // @private {Array.<*>} TODO improve doc type
-    this.pieceNodes = [];
+      // @private {Array.<CircularContainerNode>}
+      this.containerNodes = [];
 
-    // @private {function}
-    this.addListener = this.addContainer.bind( this );
-    this.removeListener = this.removeContainer.bind( this );
-    this.pieceAddedListener = this.onPieceAdded.bind( this );
-    this.pieceRemovedListener = this.onPieceRemoved.bind( this );
-    this.clearListener = this.onClearChange.bind( this );
+      // @private {Array.<*>} TODO improve doc type
+      this.pieceNodes = [];
 
-    model.containers.addItemAddedListener( this.addListener );
-    model.containers.addItemRemovedListener( this.removeListener );
-    model.pieces.addItemAddedListener( this.pieceAddedListener );
-    model.pieces.addItemRemovedListener( this.pieceRemovedListener );
-    model.denominatorProperty.lazyLink( this.clearListener );
-    model.containerCountProperty.lazyLink( this.clearListener );
+      // @private {function}
+      this.addListener = this.addContainer.bind( this );
+      this.removeListener = this.removeContainer.bind( this );
+      this.pieceAddedListener = this.onPieceAdded.bind( this );
+      this.pieceRemovedListener = this.onPieceRemoved.bind( this );
+      this.clearListener = this.onClearChange.bind( this );
 
-    // Initial setup
-    model.containers.forEach( this.addListener );
+      model.containers.addItemAddedListener( this.addListener );
+      model.containers.addItemRemovedListener( this.removeListener );
+      model.pieces.addItemAddedListener( this.pieceAddedListener );
+      model.pieces.addItemRemovedListener( this.pieceRemovedListener );
+      model.denominatorProperty.lazyLink( this.clearListener );
+      model.containerCountProperty.lazyLink( this.clearListener );
 
-    // @public {BucketNode} - TODO: better way?
-    this.bucketNode = new BucketNode( model.denominatorProperty, this.startBeakerDrag.bind( this ), this.createBeakerNode.bind( this ), model.representationProperty );
+      // Initial setup
+      model.containers.forEach( this.addListener );
 
-    // TODO: cleanup
-    Node.call( this, {
-      children: [
-        new AlignBox( this.containerLayer, {
-          alignBounds: Bounds2.point( 0, 10 ),
+      // @public {BucketNode} - TODO: better way?
+      this.bucketNode = new BucketNode( model.denominatorProperty, this.startBeakerDrag.bind( this ), this.createBeakerNode.bind( this ), model.representationProperty );
 
-          // aligns the containerNodes with respect to the top
-          yAlign: 'top'
-        } )
-      ]
-    } );
-  }
+      this.addChild( new AlignBox( this.containerLayer, {
+        alignBounds: Bounds2.point( 0, 10 ),
 
-  fractionsCommon.register( 'BeakerSceneNode', BeakerSceneNode );
+        // aligns the containerNodes with respect to the top
+        yAlign: 'top'
+      } ) );
+    }
 
-  return inherit( Node, BeakerSceneNode, {
     /**
      * Steps forward in time.
      * @public
@@ -95,22 +87,22 @@ define( require => {
      *
      * @param {number} dt
      */
-    step: function( dt ) {
+    step( dt ) {
       _.each( this.pieceNodes.slice(), function( pieceNode ) {
         if ( !pieceNode.isUserControlled ) {
           pieceNode.step( dt );
         }
       } );
-    },
+    }
 
     /**
      * @private
      */
-    onClearChange: function() {
+    onClearChange() {
       this.pieceLayer.interruptSubtreeInput();
       this.pieceLayer.removeAllChildren();
       this.pieceNodes = [];
-    },
+    }
 
     /**
      * returns the closest cell
@@ -118,7 +110,7 @@ define( require => {
      * @param {number} [threshold]
      * @returns {Cell}
      */
-    getClosestCell: function( midpoint, threshold ) {
+    getClosestCell( midpoint, threshold ) {
       var self = this;
 
       var closestCell = null;
@@ -136,7 +128,7 @@ define( require => {
         } );
       } );
       return closestCell;
-    },
+    }
 
     /**
      * returns the midpoint associated with the cell
@@ -144,14 +136,14 @@ define( require => {
      * @returns {Vector2}
      * @public
      */
-    getCellMidpoint: function( cell ) {
+    getCellMidpoint( cell ) {
       var containerNode = _.find( this.containerNodes, function( containerNode ) {
         return containerNode.container === cell.container;
       } );
       //TODO: proper coordinate transform
       var matrix = containerNode.getUniqueTrail().getMatrixTo( this.pieceLayer.getUniqueTrail() );
       return matrix.timesVector2( containerNode.getMidpointByIndex( cell.index ) );
-    },
+    }
 
     /**
      * callback whenever a piece is added
@@ -159,7 +151,7 @@ define( require => {
      * @param {Piece} piece
      * @private
      */
-    onPieceAdded: function( piece ) {
+    onPieceAdded( piece ) {
       // TODO: CHECK THIS, it looks.... like a very overloaded copy of CellSceneNode's
       var self = this;
 
@@ -208,7 +200,7 @@ define( require => {
       else {
         this.model.completePiece( piece ); // don't animate piece
       }
-    },
+    }
 
     /**
      * create a beaker piece node
@@ -218,9 +210,9 @@ define( require => {
      * @returns {BeakerPieceNode}
      * @public
      */
-    createPieceNode: function( denominator, finishedAnimatingCallback, droppedCallback ) {
+    createPieceNode( denominator, finishedAnimatingCallback, droppedCallback ) {
       return new BeakerPieceNode( denominator, finishedAnimatingCallback, droppedCallback );
-    },
+    }
 
     /**
      * callback whenever a piece is remove
@@ -228,7 +220,7 @@ define( require => {
      * @param {Piece} piece
      * @private
      */
-    onPieceRemoved: function( piece ) {
+    onPieceRemoved( piece ) {
 
       if ( this.createPieceNode ) {
         var pieceNode = _.find( this.pieceNodes, function( pieceNode ) {
@@ -237,7 +229,7 @@ define( require => {
         arrayRemove( this.pieceNodes, pieceNode );
         this.pieceLayer.removeChild( pieceNode );
       }
-    },
+    }
 
     /**
      * handles when a beaker piece is dropped
@@ -245,14 +237,12 @@ define( require => {
      * @param {BeakerPieceNode} pieceNode
      * @private
      */
-    onBeakerDropped: function( pieceNode ) {
-      var self = this;
-
+    onBeakerDropped( pieceNode ) {
       var closestContainer = null;
       var closestDistance = 150;
 
-      _.each( this.containerNodes, function( containerNode ) {
-        var matrix = containerNode.getUniqueTrail().getMatrixTo( self.pieceLayer.getUniqueTrail() );
+      _.each( this.containerNodes, containerNode => {
+        var matrix = containerNode.getUniqueTrail().getMatrixTo( this.pieceLayer.getUniqueTrail() );
         var position = matrix.timesVector2( containerNode.localBounds.center );
         var distance = pieceNode.center.distance( position );
         var container = containerNode.container;
@@ -277,7 +267,7 @@ define( require => {
         pieceNode.destinationProperty.value = this.getBucketLocation();
         pieceNode.isUserControlled = false;
       }
-    },
+    }
 
     /**
      * Called when a beaker piece or cell is dragged
@@ -285,11 +275,10 @@ define( require => {
      * @param {Event} event
      * @private
      */
-    startBeakerDrag: function( event ) {
-      var self = this;
+    startBeakerDrag( event ) {
       var piece = this.model.grabFromBucket();
-      var pieceNode = this.createPieceNode( this.model.denominatorProperty.value, function( pieceNode ) {
-        self.model.completePiece( pieceNode.piece );
+      var pieceNode = this.createPieceNode( this.model.denominatorProperty.value, pieceNode => {
+        this.model.completePiece( pieceNode.piece );
       }, this.onBeakerDropped.bind( this ) );
       pieceNode.piece = piece;
 
@@ -299,7 +288,7 @@ define( require => {
       pieceNode.isUserControlled = true;
       pieceNode.center = pieceNode.globalToParentPoint( event.pointer.point );
       pieceNode.dragListener.startDrag( event );
-    },
+    }
 
     /**
      * Handles when a user drags a cell from a displayed container.
@@ -308,7 +297,7 @@ define( require => {
      * @param {Event} event
      * @private
      */
-    onExistingCellDragStart: function( container, event ) {
+    onExistingCellDragStart( container, event ) {
       this.model.changeNumeratorManually( -1 );
       var filledCell = container.getNextFilledCell();
       if ( filledCell.appearsFilledProperty.value ) {
@@ -320,7 +309,7 @@ define( require => {
         this.model.pieces.remove( pieceOnWay );
       }
       this.startBeakerDrag( event );
-    },
+    }
 
     /**
      * Creates a beaker Node with 1/D
@@ -331,11 +320,11 @@ define( require => {
      * @returns {BeakerNode}
      * @public
      */
-    createBeakerNode: function( denominator, index, options ) {
+    createBeakerNode( denominator, index, options ) {
 
       // the numerator is set to one
       return new BeakerNode( 1, denominator, options );
-    },
+    }
 
     /**
      * adds a container when max is increased
@@ -343,16 +332,16 @@ define( require => {
      * @param {Container} container
      * @private
      */
-    addContainer: function( container ) {
+    addContainer( container ) {
       var self = this;
 
-      var containerNode = new BeakerContainerNode( container, function( event ) {
+      var containerNode = new BeakerContainerNode( container, event => {
         self.onExistingCellDragStart( container, event );
       } );
 
       this.containerNodes.push( containerNode );
       this.containerLayer.addChild( containerNode );
-    },
+    }
 
     /**
      * removes a container when max is decreased
@@ -360,24 +349,21 @@ define( require => {
      * @param {Container} container
      * @private
      */
-    removeContainer: function( container ) {
-      var containerNode = _.find( this.containerNodes, function( containerNode ) {
-        return containerNode.container === container;
-      } );
+    removeContainer( container ) {
+      // TODO: factor out find
+      const containerNode = _.find( this.containerNodes, containerNode => containerNode.container === container );
 
       this.containerLayer.removeChild( containerNode );
       arrayRemove( this.containerNodes, containerNode );
       containerNode.dispose();
-    },
+    }
 
     /**
      * dispose of the links for garbage collection
      * @public
      */
-    dispose: function() {
-      _.each( this.containerNodes, function( containerNode ) {
-        containerNode.dispose();
-      } );
+    dispose() {
+      this.containerNodes.forEach( containerNode => containerNode.dispose () );
 
       this.model.containers.removeItemAddedListener( this.addListener );
       this.model.containers.removeItemRemovedListener( this.removeListener );
@@ -386,7 +372,9 @@ define( require => {
       this.model.denominatorProperty.unlink( this.clearListener );
       this.model.containerCountProperty.unlink( this.clearListener );
 
-      Node.prototype.dispose.call( this );
+      super.dispose();
     }
-  } );
+  }
+
+  return fractionsCommon.register( 'BeakerSceneNode', BeakerSceneNode );
 } );

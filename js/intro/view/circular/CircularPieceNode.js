@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * make the pieces for the circle and handle the animation
+ * The circular variant of a piece node.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -9,44 +9,39 @@ define( require => {
   'use strict';
 
   // modules
-  var CircularNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularNode' );
-  var Easing = require( 'TWIXT/Easing' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var PieceNode = require( 'FRACTIONS_COMMON/intro/view/PieceNode' );
+  const CircularNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularNode' );
+  const Easing = require( 'TWIXT/Easing' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const PieceNode = require( 'FRACTIONS_COMMON/intro/view/PieceNode' );
 
-  /**
-   * @constructor
-   * @extends {Node}
-   *
-   * TODO: dedup with RectangularPieceNode
-   *
-   * @param {Piece} piece
-   * @param {function} finishedAnimatingCallback - Called as function( {Piece} ) with the piece to finish animating.
-   * @param {function} droppedCallback - Called as function( {Piece} )
-   */
-  function CircularPieceNode( piece, finishedAnimatingCallback, droppedCallback ) {
+  class CircularPieceNode extends PieceNode {
+    /**
+     * TODO: dedup with RectangularPieceNode
+     *
+     * @param {Piece} piece
+     * @param {function} finishedAnimatingCallback - Called as function( {Piece} ) with the piece to finish animating.
+     * @param {function} droppedCallback - Called as function( {Piece} )
+     */
+    constructor( piece, finishedAnimatingCallback, droppedCallback ) {
+      const graphic = new CircularNode( piece.denominator, 0, { dropShadow: true } );
 
-    // @private TODO note more than just node, has midpointOffset variable
-    this.graphic = new CircularNode( piece.denominator, 0, { dropShadow: true } );
+      super( piece, finishedAnimatingCallback, droppedCallback, {
+        graphic: graphic
+      } );
 
-    // @private (convenience variable)
-    this.angleUnit = 2 * Math.PI / piece.denominator;
+      // @private TODO note more than just node, has midpointOffset variable
+      this.graphic = graphic;
 
-    PieceNode.call( this, piece, finishedAnimatingCallback, droppedCallback, {
-      graphic: this.graphic
-    } );
+      // @private (convenience variable)
+      this.angleUnit = 2 * Math.PI / piece.denominator;
 
-    // circle specific
-    var originCell = piece.originCell;
-    if ( originCell ) {
-      this.graphic.rotateCircle( originCell.index * this.angleUnit );
+      // circle specific
+      var originCell = piece.originCell;
+      if ( originCell ) {
+        this.graphic.rotateCircle( originCell.index * this.angleUnit );
+      }
     }
-  }
 
-  fractionsCommon.register( 'CircularPieceNode', CircularPieceNode );
-
-  return inherit( PieceNode, CircularPieceNode, {
     /**
      * Steps forward in time.
      * @public
@@ -54,7 +49,7 @@ define( require => {
      *
      * @param {number} dt
      */
-    step: function( dt ) {
+    step( dt ) {
       if ( this.isUserControlled ) {
         return;
       }
@@ -80,15 +75,19 @@ define( require => {
         var easedRatio = Easing.QUADRATIC_IN_OUT.value( this.ratio );
         this.setMidpoint( this.originProperty.value.blend( this.destinationProperty.value, easedRatio ) );
       }
-    },
+    }
 
     /**
-     * orients the piece to fit the cell
+     * Orients the piece to match the closest cell.
+     * @public
+     * @override
+     *
      * @param {Cell} closestCell
      * @param {number} dt
-     * @public
      */
-    orient: function( closestCell, dt ) {
+    orient( closestCell, dt ) {
+      super.orient( closestCell, dt );
+
       var originRotation = this.graphic.getCircleRotation();
       var targetRotation = closestCell.index * this.angleUnit;
 
@@ -109,5 +108,7 @@ define( require => {
 
       this.setMidpoint( midpoint );
     }
-  } );
+  }
+
+  return fractionsCommon.register( 'CircularPieceNode', CircularPieceNode );
 } );

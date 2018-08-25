@@ -1,7 +1,9 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * Scene with the number-line representation. TODO: cleanup docs
+ * Scene for the number-line representation
+ *
+ * TODO: clean up docs
  * The number line with adjustable ticks
  * In a horizontal orientation, the number line goes from left to right, whereas it is
  * go from bottom to up in vertical orientation.

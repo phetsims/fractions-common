@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * create a piece to drag or animate to a container
+ * The rectangular variant of a piece node.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -11,7 +11,6 @@ define( require => {
   // modules
   const Easing = require( 'TWIXT/Easing' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const Node = require( 'SCENERY/nodes/Node' );
   const PieceNode = require( 'FRACTIONS_COMMON/intro/view/PieceNode' );
   const RectangularNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularNode' );
 
@@ -38,6 +37,8 @@ define( require => {
 
       // @private {RectangularNode} -- TODO: don't have to do this?
       this.graphic = graphic;
+
+      this.mutate( options );
     }
 
     /**
@@ -85,24 +86,13 @@ define( require => {
     }
 
     /**
-     * Placeholder for a method which orients the piece as it approaches its destination
-     *
-     * @param {Cell} closestCell
-     * @param {number} dt
-     * @public
-     */
-    orient( closestCell, dt ) {
-
-    }
-
-    /**
      * Interrupts all input on rectangular pieces, disposes of those pieces
      * @public
      */
     dispose() {
       this.interruptSubtreeInput();
 
-      Node.prototype.dispose.call( this );
+      super.dispose();
     }
   }
 

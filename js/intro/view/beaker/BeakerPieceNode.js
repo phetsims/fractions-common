@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * create a piece to drag or animate to a container
+ * The beaker variant of a piece node.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -9,69 +9,60 @@ define( require => {
   'use strict';
 
   // modules
-  var BeakerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerNode' );
-  var Easing = require( 'TWIXT/Easing' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Property = require( 'AXON/Property' );
-  var SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const BeakerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerNode' );
+  const Easing = require( 'TWIXT/Easing' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Property = require( 'AXON/Property' );
+  const SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
+  const Vector2 = require( 'DOT/Vector2' );
 
-  /**
-   * @constructor
-   * @extends {Node}
-   *
-   * TODO: dedup if necessary?
-   *
-   * @param {number} denominator
-   * @param {function} finishedAnimatingCallback - Called as function( {BeakerPieceNode} )
-   * @param {function} droppedCallback - Called as function( {BeakerPieceNode} )
-   */
-  function BeakerPieceNode( denominator, finishedAnimatingCallback, droppedCallback ) {
-    BeakerNode.call( this, 1, denominator );
+  class BeakerPieceNode extends BeakerNode {
+    /**
+     * TODO: dedup if necessary?
+     *
+     * @param {number} denominator
+     * @param {function} finishedAnimatingCallback - Called as function( {BeakerPieceNode} )
+     * @param {function} droppedCallback - Called as function( {BeakerPieceNode} )
+     */
+    constructor( denominator, finishedAnimatingCallback, droppedCallback ) {
+      super( 1, denominator );
 
-    var self = this;
+      // @private
+      this.finishedAnimatingCallback = finishedAnimatingCallback;
 
-    // @private
-    this.finishedAnimatingCallback = finishedAnimatingCallback;
+      // @public {Property.<Vector2>}
+      this.originProperty = new Property( Vector2.ZERO );
+      this.destinationProperty = new Property( Vector2.ZERO );
 
-    // @public {Property.<Vector2>}
-    this.originProperty = new Property( Vector2.ZERO );
-    this.destinationProperty = new Property( Vector2.ZERO );
+      // @public {boolean}
+      this.isUserControlled = false;
 
-    // @public {boolean}
-    this.isUserControlled = false;
+      // @private {number} - Animation progress, from 0 to 1.
+      this.ratio = 0;
 
-    // @private {number} - Animation progress, from 0 to 1.
-    this.ratio = 0;
+      this.originProperty.lazyLink( origin => {
+        this.ratio = 0;
+        this.center = origin;
+      } );
+      this.destinationProperty.lazyLink( () => {
+        this.ratio = 0;
+      } );
 
-    this.originProperty.lazyLink( function( origin ) {
-      self.ratio = 0;
-      self.center = origin;
-    } );
-    this.destinationProperty.lazyLink( function() {
-      self.ratio = 0;
-    } );
+      // @public
+      var initialOffset;
+      this.dragListener = new SimpleDragHandler( {
+        start: event => {
+          initialOffset = this.getCenter().minus( this.globalToParentPoint( event.pointer.point ) );
+        },
+        drag: event => {
+          this.setCenter( this.globalToParentPoint( event.pointer.point ).plus( initialOffset ) );
+        },
+        end: () => {
+          droppedCallback( this );
+        }
+      } );
+    }
 
-    // @public
-    var initialOffset;
-    this.dragListener = new SimpleDragHandler( {
-      start: function( event ) {
-        initialOffset = self.getCenter().minus( self.globalToParentPoint( event.pointer.point ) );
-      },
-      drag: function( event ) {
-        self.setCenter( self.globalToParentPoint( event.pointer.point ).plus( initialOffset ) );
-      },
-      end: function() {
-        droppedCallback( self );
-      }
-    } );
-  }
-
-  fractionsCommon.register( 'BeakerPieceNode', BeakerPieceNode );
-
-  return inherit( Node, BeakerPieceNode, {
     /**
      * Steps forward in time.
      * @public
@@ -79,7 +70,7 @@ define( require => {
      *
      * @param {number} dt
      */
-    step: function( dt ) {
+    step( dt ) {
       if ( this.isUserControlled ) {
         return;
       }
@@ -94,5 +85,7 @@ define( require => {
         this.setCenter( this.originProperty.value.blend( this.destinationProperty.value, easedRatio ) );
       }
     }
-  } );
+  }
+
+  return fractionsCommon.register( 'BeakerPieceNode', BeakerPieceNode );
 } );

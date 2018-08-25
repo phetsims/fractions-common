@@ -25,12 +25,11 @@ define( require => {
   function RectangularNode( denominator, options ) {
 
     options = _.extend( {
-        dropShadow: false,
-        dropShadowOffset: 5,
-        rectangleOrientation: 'vertical',
-        isIcon: false
-      },
-      options );
+      dropShadow: false,
+      dropShadowOffset: 5,
+      rectangleOrientation: 'vertical',
+      isIcon: false
+    }, options );
 
     var rectangle = RectangularNode.VERTICAL_RECTANGULAR_SIZE;
     var rectangleWidth = rectangle.width;

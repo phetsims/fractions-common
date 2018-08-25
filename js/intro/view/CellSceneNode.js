@@ -9,117 +9,128 @@ define( require => {
   'use strict';
 
   // modules
-  var AlignBox = require( 'SCENERY/nodes/AlignBox' );
-  var arrayRemove = require( 'PHET_CORE/arrayRemove' );
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var BucketNode = require( 'FRACTIONS_COMMON/intro/view/BucketNode' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
+  const AlignBox = require( 'SCENERY/nodes/AlignBox' );
+  const arrayRemove = require( 'PHET_CORE/arrayRemove' );
+  const Bounds2 = require( 'DOT/Bounds2' );
+  const BucketNode = require( 'FRACTIONS_COMMON/intro/view/BucketNode' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const SceneNode = require( 'FRACTIONS_COMMON/intro/view/SceneNode' );
+  const VBox = require( 'SCENERY/nodes/VBox' );
 
-  /**
-   * @constructor
-   * @extends {Node}
-   *
-   * @param {ContainerSetModel} model
-   * @param {function} getBucketLocation - function(): Vector2, gives the location of the bucket when called
-   * @param {Object} [options]
-   */
-  function CellSceneNode( model, getBucketLocation, options ) {
-    assert && assert( typeof getBucketLocation === 'function' );
+  class CellSceneNode extends SceneNode {
+    /**
+     * @param {ContainerSetModel} model
+     * @param {function} getBucketLocation - function(): Vector2, gives the location of the bucket when called
+     * @param {Object} config
+     */
+    constructor( model, getBucketLocation, config ) {
+      assert && assert( typeof getBucketLocation === 'function' );
 
-    options = _.extend( {
-      horizontalSpacing: 10, // horizontal spacing between adjacent containers
-      verticalSpacing: 10, // vertical spacing between containers
-      verticalOffset: 0
-    }, options );
+      config = _.extend( {
+        // {function} - function( {Node} container, {function} cellDownCallback ): {Node}
+        createContainerNode: null,
 
-    // @private {ContainerSetModel}
-    this.model = model;
+        // {function} - function( {Node} piece, {function} finishedAnimatingCallback, {function} droppedCallback ): {Node}
+        createPieceNode: null,
 
-    // @private {function}
-    this.getBucketLocation = getBucketLocation;
+        // {function} - function( {number} denominator, {number} index, {Object} options ): {Node}
+        createCellNode: null,
 
-    // @private {number}
-    this.horizontalSpacing = options.horizontalSpacing;
+        // {number} - optional
+        horizontalSpacing: 10, // horizontal spacing between adjacent containers
+        verticalSpacing: 10, // vertical spacing between containers
+        verticalOffset: 0
+      }, config );
 
-    // @private {VBox}
-    this.containerLayer = new VBox( {
-      spacing: options.verticalSpacing,
+      super( model );
 
-      // left align containerHBoxes
-      align: 'left'
-    } );
+      // {function} - Creation functions from subtypes (here since we can't use the inherit pattern)
+      this.createContainerNode = config.createContainerNode;
+      this.createPieceNode = config.createPieceNode;
+      this.createCellNode = config.createCellNode;
 
-    // @private {Node}
-    this.pieceLayer = new Node();
+      // @private {function}
+      this.getBucketLocation = getBucketLocation;
 
-    // @private {Array.<*>}
-    this.containerNodes = [];
+      // @private {number}
+      this.horizontalSpacing = config.horizontalSpacing;
 
-    // @private {Array.<*>} TODO improve doc type
-    this.pieceNodes = [];
+      // @private {VBox}
+      this.containerLayer = new VBox( {
+        spacing: config.verticalSpacing,
+        align: 'left'
+      } );
 
-    //@private {Array.<HBox>}
-    this.containerHBoxes = [];
+      // @private {Node}
+      this.pieceLayer = new Node();
 
-    // @private {function}
-    this.addListener = this.addContainer.bind( this );
-    this.removeListener = this.removeContainer.bind( this );
-    this.pieceAddedListener = this.onPieceAdded.bind( this );
-    this.pieceRemovedListener = this.onPieceRemoved.bind( this );
+      // @private {Array.<*>}
+      this.containerNodes = [];
 
-    model.containers.addItemAddedListener( this.addListener );
-    model.containers.addItemRemovedListener( this.removeListener );
-    model.pieces.addItemAddedListener( this.pieceAddedListener );
-    model.pieces.addItemRemovedListener( this.pieceRemovedListener );
+      // @private {Array.<PieceNode>}
+      this.pieceNodes = [];
 
-    // Initial setup
-    model.containers.forEach( this.addListener );
+      //@private {Array.<HBox>}
+      this.containerHBoxes = [];
 
-    // @public {BucketNode} - TODO: better way?
-    this.bucketNode = new BucketNode( model.denominatorProperty, this.onBucketDragStart.bind( this ),
-                                      this.createCellNode.bind( this ), model.representationProperty );
+      // @private {function}
+      this.addListener = this.addContainer.bind( this );
+      this.removeListener = this.removeContainer.bind( this );
+      this.pieceAddedListener = this.onPieceAdded.bind( this );
+      this.pieceRemovedListener = this.onPieceRemoved.bind( this );
 
-    // TODO: cleanup
-    Node.call( this, {
-      children: [
-        new AlignBox( this.containerLayer, {
-          //TODO: WTF? This is tiny?
-          alignBounds: Bounds2.point( 0, options.verticalOffset ),
+      model.containers.addItemAddedListener( this.addListener );
+      model.containers.addItemRemovedListener( this.removeListener );
+      model.pieces.addItemAddedListener( this.pieceAddedListener );
+      model.pieces.addItemRemovedListener( this.pieceRemovedListener );
 
-          // aligns the containerNodes with respect to the top
-          yAlign: 'top'
-        } )
-      ]
-    } );
-  }
+      // Initial setup
+      model.containers.forEach( this.addListener );
 
-  fractionsCommon.register( 'CellSceneNode', CellSceneNode );
+      // @public {BucketNode} - TODO: better way?
+      this.bucketNode = new BucketNode( model.denominatorProperty, this.onBucketDragStart.bind( this ),
+                                        this.createCellNode.bind( this ), model.representationProperty );
 
-  return inherit( Node, CellSceneNode, {
+      this.addChild( new AlignBox( this.containerLayer, {
+        //TODO: WTF? This is tiny?
+        alignBounds: Bounds2.point( 0, config.verticalOffset ),
+
+        // aligns the containerNodes with respect to the top
+        yAlign: 'top'
+      } ) );
+    }
+
     /**
      * Steps forward in time.
      * @public
      *
      * @param {number} dt
      */
-    step: function( dt ) {
-      var self = this;
-
-      _.each( this.pieceNodes.slice(), function( pieceNode ) {
+    step( dt ) {
+      this.pieceNodes.slice().forEach( pieceNode => {
         pieceNode.step( dt );
 
         if ( pieceNode.isUserControlled ) {
-          var closestCell = self.getClosestCell( pieceNode.getMidpoint() );
+          const closestCell = this.getClosestCell( pieceNode.getMidpoint() );
           if ( closestCell ) {
             pieceNode.orient( closestCell, dt );
           }
         }
       } );
-    },
+    }
+
+    /**
+     * Orients the piece to match the closest cell.
+     * @public
+     *
+     * @param {Cell} closestCell
+     * @param {number} dt
+     */
+    orient( closestCell, dt ) {
+      // Implementations can customize
+    }
 
     /**
      * returns the closest cell
@@ -127,16 +138,14 @@ define( require => {
      * @param {number} [threshold]
      * @returns {Cell}
      */
-    getClosestCell: function( midpoint, threshold ) {
-      var self = this;
-
-      var closestCell = null;
-      var closestDistance = (threshold === undefined) ? Number.POSITIVE_INFINITY : 100;
-      this.model.containers.forEach( function( container ) {
-        container.cells.forEach( function( cell ) {
+    getClosestCell( midpoint, threshold ) {
+      let closestCell = null;
+      let closestDistance = (threshold === undefined) ? Number.POSITIVE_INFINITY : 100;
+      this.model.containers.forEach( container => {
+        container.cells.forEach( cell => {
           if ( !cell.isFilledProperty.value ) {
-            var cellMidpoint = self.getCellMidpoint( cell );
-            var distance = cellMidpoint.distance( midpoint );
+            const cellMidpoint = this.getCellMidpoint( cell );
+            const distance = cellMidpoint.distance( midpoint );
             if ( distance < closestDistance ) {
               closestDistance = distance;
               closestCell = cell;
@@ -145,7 +154,7 @@ define( require => {
         } );
       } );
       return closestCell;
-    },
+    }
 
     /**
      * returns the midpoint associated with the cell
@@ -153,47 +162,43 @@ define( require => {
      * @returns {Vector2}
      * @public
      */
-    getCellMidpoint: function( cell ) {
-      var containerNode = _.find( this.containerNodes, function( containerNode ) {
-        return containerNode.container === cell.container;
-      } );
+    getCellMidpoint( cell ) {
+      const containerNode = _.find( this.containerNodes, containerNode => containerNode.container === cell.container );
       //TODO: proper coordinate transform
-      var matrix = containerNode.getUniqueTrail().getMatrixTo( this.pieceLayer.getUniqueTrail() );
+      const matrix = containerNode.getUniqueTrail().getMatrixTo( this.pieceLayer.getUniqueTrail() );
       return matrix.timesVector2( containerNode.getMidpointByIndex( cell.index ) );
-    },
+    }
 
     /**
      * callback whenever a piece is added
      * @param {Piece} piece
      * @private
      */
-    onPieceAdded: function( piece ) {
-      var self = this;
-
+    onPieceAdded( piece ) {
       //TODO: support on all
       if ( this.createPieceNode ) {
-        var pieceNode = this.createPieceNode( piece,
-          function() {
-            self.model.completePiece( piece );
+        const pieceNode = this.createPieceNode( piece,
+          () => {
+            this.model.completePiece( piece );
           },
-          function() {
-            var currentMidpoint = pieceNode.getMidpoint();
+          () => {
+            const currentMidpoint = pieceNode.getMidpoint();
 
-            var closestCell = self.getClosestCell( currentMidpoint, 100 );
+            const closestCell = this.getClosestCell( currentMidpoint, 100 );
 
             pieceNode.isUserControlled = false;
             pieceNode.originProperty.value = currentMidpoint;
 
             if ( closestCell ) {
-              pieceNode.destinationProperty.value = self.getCellMidpoint( closestCell );
-              self.model.targetPieceToCell( piece, closestCell );
+              pieceNode.destinationProperty.value = this.getCellMidpoint( closestCell );
+              this.model.targetPieceToCell( piece, closestCell );
             }
             else {
-              pieceNode.destinationProperty.value = self.getBucketLocation();
+              pieceNode.destinationProperty.value = this.getBucketLocation();
             }
           } );
 
-        var originCell = piece.originCell;
+        const originCell = piece.originCell;
         if ( originCell ) {
           pieceNode.originProperty.value = this.getCellMidpoint( originCell );
         }
@@ -201,7 +206,7 @@ define( require => {
           pieceNode.originProperty.value = this.getBucketLocation();
         }
 
-        var destinationCell = piece.destinationCell;
+        const destinationCell = piece.destinationCell;
         if ( destinationCell ) {
           pieceNode.destinationProperty.value = this.getCellMidpoint( destinationCell );
         }
@@ -215,7 +220,7 @@ define( require => {
       else {
         this.model.completePiece( piece );
       }
-    },
+    }
 
     /**
      * callback whenever a piece is remove
@@ -223,32 +228,29 @@ define( require => {
      * @param {Piece} piece
      * @private
      */
-    onPieceRemoved: function( piece ) {
+    onPieceRemoved( piece ) {
       //TODO: support on all
       if ( this.createPieceNode ) {
-        var pieceNode = _.find( this.pieceNodes, function( pieceNode ) {
-          return pieceNode.piece === piece;
-        } );
+        const pieceNode = _.find( this.pieceNodes, pieceNode => pieceNode.piece === piece );
         arrayRemove( this.pieceNodes, pieceNode );
         this.pieceLayer.removeChild( pieceNode );
       }
-    },
+    }
 
     /**
      * callback on start event when grabbing piece from bucketNode
      * @param {Event} event
      * @private
      */
-    onBucketDragStart: function( event ) {
-      var piece = this.model.grabFromBucket();
-      var pieceNode = _.find( this.pieceNodes, function( pieceNode ) {
-        return pieceNode.piece === piece;
-      } );
+    onBucketDragStart( event ) {
+      const piece = this.model.grabFromBucket();
+      // TODO: factor out function for the find
+      const pieceNode = _.find( this.pieceNodes, pieceNode => pieceNode.piece === piece );
 
       pieceNode.originProperty.value = this.globalToLocalPoint( event.pointer.point );
       pieceNode.isUserControlled = true;
       pieceNode.dragListener.startDrag( event );
-    },
+    }
 
     /**
      * Handles when a user drags a cell from a displayed container.
@@ -257,43 +259,31 @@ define( require => {
      * @param {Event} event
      * @private
      */
-    onExistingCellDragStart: function( cell, event ) {
-      var piece = this.model.grabCell( cell );
-      var pieceNode = _.find( this.pieceNodes, function( pieceNode ) {
-        return pieceNode.piece === piece;
-      } );
+    onExistingCellDragStart( cell, event ) {
+      const piece = this.model.grabCell( cell );
+      const pieceNode = _.find( this.pieceNodes, pieceNode => pieceNode.piece === piece );
 
       pieceNode.originProperty.value = this.getCellMidpoint( cell );
       pieceNode.isUserControlled = true;
       pieceNode.dragListener.startDrag( event );
-    },
-
-    /**
-     * This function should be overridden by the parent method
-     * @param {Container} container
-     * @param {Function} cellDownCallback
-     * @private
-     */
-    createContainerNode: function( container, cellDownCallback ) {
-      throw new Error( 'abstract method' );
-    },
+    }
 
     /**
      * add a container node to the scene graph
      * @param {Container} container
      * @private
      */
-    addContainer: function( container ) {
+    addContainer( container ) {
 
-      var containerNode = this.createContainerNode( container, this.onExistingCellDragStart.bind( this ) );
+      const containerNode = this.createContainerNode( container, this.onExistingCellDragStart.bind( this ) );
 
-      var currentContainerNodesLength = this.containerNodes.length;
+      const currentContainerNodesLength = this.containerNodes.length;
 
       this.containerNodes.push( containerNode );
 
       // creates new HBox within containerLayer dependent on VBox container
       if ( currentContainerNodesLength % this.model.containerCountProperty.range.max === 0 ) {
-        var containerHBox = new HBox( {
+        const containerHBox = new HBox( {
           spacing: this.horizontalSpacing,
           align: 'top'
         } );
@@ -304,50 +294,49 @@ define( require => {
       // adds the new containerNode at the end of containerHboxes array
       this.containerHBoxes[ this.containerHBoxes.length - 1 ].addChild( containerNode );
 
-    },
+    }
 
     /**
      * remove a container node from the scene graph
      * @param {Container} container
      * @private
      */
-    removeContainer: function( container ) {
-      var containerNode = _.find( this.containerNodes, function( containerNode ) {
-        return containerNode.container === container;
-      } );
+    removeContainer( container ) {
+      // TODO: factor out find
+      const containerNode = _.find( this.containerNodes, containerNode => containerNode.container === container );
 
       arrayRemove( this.containerNodes, containerNode );
 
       // removes the last containerNode within the containerHBox Array
       this.containerHBoxes[ this.containerHBoxes.length - 1 ].removeChild( containerNode );
 
-      var currentContainerLength = this.containerNodes.length;
+      const currentContainerLength = this.containerNodes.length;
       if ( currentContainerLength % this.model.containerCountProperty.range.max === 0 ) {
 
         // removes the last HBox within containerLayer
-        var containerHBoxRemoved = this.containerHBoxes.pop();
+        const containerHBoxRemoved = this.containerHBoxes.pop();
         this.containerLayer.removeChild( containerHBoxRemoved );
       }
 
       containerNode.dispose();
-    },
+    }
 
     /**
      * dispose of the links for garbage collection
      *
      * @public
      */
-    dispose: function() {
-      _.each( this.containerNodes, function( containerNode ) {
-        containerNode.dispose();
-      } );
+    dispose() {
+      this.containerNodes.forEach( containerNode => containerNode.dispose () );
 
       this.model.containers.removeItemAddedListener( this.addListener );
       this.model.containers.removeItemRemovedListener( this.removeListener );
       this.model.pieces.removeItemAddedListener( this.pieceAddedListener );
       this.model.pieces.removeItemRemovedListener( this.pieceRemovedListener );
 
-      Node.prototype.dispose.call( this );
+      super.dispose();
     }
-  } );
+  }
+
+  return fractionsCommon.register( 'CellSceneNode', CellSceneNode );
 } );

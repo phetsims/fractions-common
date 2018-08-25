@@ -17,44 +17,22 @@ define( require => {
 
   class CircularSceneNode extends CellSceneNode {
     /**
-     * Creates the container node for the given type of cell.
-     * @public
-     * @override
-     *
-     * @param {Container} container
-     * @param {Function} cellDownCallback
-     * @returns {Node}
-     */
-    createContainerNode( container, cellDownCallback ) {
-      return new CircularContainerNode( container, cellDownCallback );
-    }
-
-    /**
-     * Creates the piece node for the given type of cell.
-     * @public
-     * @override
-     *
-     * @param {Piece} piece
-     * @param {Function} finishedAnimatingCallback
-     * @param {Function} droppedCallback
-     * @returns {Node}
-     */
-    createPieceNode( piece, finishedAnimatingCallback, droppedCallback ) {
-      return new CircularPieceNode( piece, finishedAnimatingCallback, droppedCallback );
-    }
-
-    /**
-     * Creates the cell node for the given type of cell.
-     * @public
-     * @override
-     *
-     * @param {number} denominator
-     * @param {number} index
+     * @param {ContainerSetScreenView} model
+     * @param {function} getBucketLocation - function(): Vector2, gives the location of the bucket when called
      * @param {Object} [options]
-     * @returns {Node}
      */
-    createCellNode( denominator, index, options ) {
-      return new CircularNode( denominator, index, options );
+    constructor( model, getBucketLocation, options ) {
+      super( model, getBucketLocation, _.extend( {
+        createContainerNode( container, cellDownCallback ) {
+          return new CircularContainerNode( container, cellDownCallback );
+        },
+        createPieceNode( piece, finishedAnimatingCallback, droppedCallback ) {
+          return new CircularPieceNode( piece, finishedAnimatingCallback, droppedCallback );
+        },
+        createCellNode( denominator, index, options ) {
+          return new CircularNode( denominator, index, options );
+        }
+      }, options ) );
     }
   }
 
