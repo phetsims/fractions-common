@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * Scenery node for the visual representation of a fraction with up/down spinners for numerator/denominator
+ * Displays a fraction with up/down spinners for both the numerator and denominator.
  *
  * @author Michael Moorer (Berea College)
  * @author Vincent Davis (Berea College)

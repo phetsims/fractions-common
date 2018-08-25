@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * Base type for displaying a piece.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -125,7 +125,7 @@ define( require => {
     }
 
     /**
-     * dispose of the links for garbage collection
+     * Releases references.
      * @public
      */
     dispose() {

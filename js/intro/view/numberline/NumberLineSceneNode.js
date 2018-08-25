@@ -259,8 +259,7 @@ define( require => {
     }
 
     /**
-     * dispose of the links for garbage collection
-     *
+     * Releases references.
      * @public
      */
     dispose() {

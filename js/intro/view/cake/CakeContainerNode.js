@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * Node for cake containers
+ * Container for the cake representation
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -9,25 +9,24 @@ define( require => {
   'use strict';
 
   // modules
-  var CakeNode = require( 'FRACTIONS_COMMON/intro/view/cake/CakeNode' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var Image = require( 'SCENERY/nodes/Image' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var Shape = require( 'KITE/Shape' );
+  const CakeNode = require( 'FRACTIONS_COMMON/intro/view/cake/CakeNode' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Image = require( 'SCENERY/nodes/Image' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Path = require( 'SCENERY/nodes/Path' );
+  const Shape = require( 'KITE/Shape' );
 
   // images
-  var cake_grid_1Image = require( 'image!FRACTIONS_COMMON/cake_grid_1.png' );
-  var cake_grid_2Image = require( 'image!FRACTIONS_COMMON/cake_grid_2.png' );
-  var cake_grid_3Image = require( 'image!FRACTIONS_COMMON/cake_grid_3.png' );
-  var cake_grid_4Image = require( 'image!FRACTIONS_COMMON/cake_grid_4.png' );
-  var cake_grid_5Image = require( 'image!FRACTIONS_COMMON/cake_grid_5.png' );
-  var cake_grid_6Image = require( 'image!FRACTIONS_COMMON/cake_grid_6.png' );
-  var cake_grid_7Image = require( 'image!FRACTIONS_COMMON/cake_grid_7.png' );
-  var cake_grid_8Image = require( 'image!FRACTIONS_COMMON/cake_grid_8.png' );
+  const cake_grid_1Image = require( 'image!FRACTIONS_COMMON/cake_grid_1.png' );
+  const cake_grid_2Image = require( 'image!FRACTIONS_COMMON/cake_grid_2.png' );
+  const cake_grid_3Image = require( 'image!FRACTIONS_COMMON/cake_grid_3.png' );
+  const cake_grid_4Image = require( 'image!FRACTIONS_COMMON/cake_grid_4.png' );
+  const cake_grid_5Image = require( 'image!FRACTIONS_COMMON/cake_grid_5.png' );
+  const cake_grid_6Image = require( 'image!FRACTIONS_COMMON/cake_grid_6.png' );
+  const cake_grid_7Image = require( 'image!FRACTIONS_COMMON/cake_grid_7.png' );
+  const cake_grid_8Image = require( 'image!FRACTIONS_COMMON/cake_grid_8.png' );
 
-  var cakeGridImageArray = [
+  const cakeGridImageArray = [
     cake_grid_1Image,
     cake_grid_2Image,
     cake_grid_3Image,
@@ -38,65 +37,58 @@ define( require => {
     cake_grid_8Image
   ];
 
-  /**
-   * @constructor
-   * @extends {Node}
-   *
-   * TODO: factor out common things with RectangularContainerNode and CircularContainerNode
-   *
-   * @param {Container} container
-   * @param {function} cellDownCallback TODO doc, function( event )
-   * @param {Object} [options]
-   */
-  function CakeContainerNode( container, cellDownCallback, options ) {
+  class CakeContainerNode extends Node {
+    /**
+     * TODO: factor out common things with RectangularContainerNode and CircularContainerNode
+     *
+     * @param {Container} container
+     * @param {function} cellDownCallback TODO doc, function( event )
+     * @param {Object} [options]
+     */
+    constructor( container, cellDownCallback, options ) {
+      super();
 
-    options = _.extend( {
-      maxHeight: CakeNode.CAKE_HEIGHT  // height of the image
-    }, options );
+      options = _.extend( {
+        maxHeight: CakeNode.CAKE_HEIGHT  // height of the image
+      }, options );
 
-    // @private
-    // TODO: don't do this. Egad, are we passing it to children?
-    this.options = options;
+      // @private
+      // TODO: don't do this. Egad, are we passing it to children?
+      this.options = options;
 
-    // @private
-    this.container = container;
+      // @private
+      this.container = container;
 
-    // @private
-    this.cellDownCallback = cellDownCallback;
+      // @private
+      this.cellDownCallback = cellDownCallback;
 
-    // @private {Image} create grid image of the cake with the appropriate number of cells
-    this.gridImage = new Image( cakeGridImageArray[ container.cells.lengthProperty.value - 1 ],
-      { maxHeight: this.options.maxHeight } );
+      // @private {Image} create grid image of the cake with the appropriate number of cells
+      this.gridImage = new Image( cakeGridImageArray[ container.cells.lengthProperty.value - 1 ],
+        { maxHeight: this.options.maxHeight } );
 
-    // create white background for the cake.
-    // The shape of the ellipse is determined empirically based on the image
-    var cakeGridBase = new Path( Shape.ellipse(
-      this.gridImage.width / 2,
-      this.gridImage.height * 0.635,
-      this.gridImage.width * 0.364,
-      this.gridImage.height * 0.277, 0 ), {
-      fill: 'white'
-    } );
+      // create white background for the cake.
+      // The shape of the ellipse is determined empirically based on the image
+      var cakeGridBase = new Path( Shape.ellipse(
+        this.gridImage.width / 2,
+        this.gridImage.height * 0.635,
+        this.gridImage.width * 0.364,
+        this.gridImage.height * 0.277, 0 ), {
+        fill: 'white'
+      } );
 
-    // @private {Node} Node layer to hold the cake slices with the correct z-order
-    this.cakeLayers = new Node();
+      // @private {Node} Node layer to hold the cake slices with the correct z-order
+      this.cakeLayers = new Node();
 
-    Node.call( this, {
-      children: [ cakeGridBase, this.gridImage, this.cakeLayers ]
-    } );
+      this.children = [ cakeGridBase, this.gridImage, this.cakeLayers ];
 
-    // @private {function}
-    this.rebuildListener = this.rebuild.bind( this );
+      // @private {function}
+      this.rebuildListener = this.rebuild.bind( this );
 
-    // @private {Array.<CakeNode>}
-    this.cellNodes = [];
+      // @private {Array.<CakeNode>}
+      this.cellNodes = [];
 
-    container.cells.lengthProperty.link( this.rebuildListener );
-  }
-
-  fractionsCommon.register( 'CakeContainerNode', CakeContainerNode );
-
-  return inherit( Node, CakeContainerNode, {
+      container.cells.lengthProperty.link( this.rebuildListener );
+    }
 
     /**
      *
@@ -104,19 +96,17 @@ define( require => {
      * @returns {Vector2}
      * @public
      */
-    getMidpointByIndex: function( index ) {
+    getMidpointByIndex( index ) {
       var node = this.cellNodes[ index ];
 
       return node.translation.plus( node.midpointOffset );
-    },
+    }
 
     /**
      * rebuild the container
      * @private
      */
-    rebuild: function() {
-      var self = this;
-
+    rebuild() {
       this.removeCellNodes();
 
       var denominator = this.container.cells.length;
@@ -130,47 +120,45 @@ define( require => {
       // {Image[]} array of cake slices arranged in z-order from back to front
       var slicesImage = [];
 
-      for ( var i = 0; i < denominator; i++ ) {
-        (function() {
-          var cell = self.container.cells.get( i );
+      for ( let i = 0; i < denominator; i++ ) {
+        var cell = this.container.cells.get( i );
 
-          // {integer} order of the slice, higher value indicates a higher z value
-          var zOrder = zLayerArray[ i ];
+        // {integer} order of the slice, higher value indicates a higher z value
+        var zOrder = zLayerArray[ i ];
 
-          // place the cakeImage in the z ordered array
-          var cellNode = new CakeNode( denominator, i, self.options );
-          slicesImage[ zOrder ] = cellNode;
+        // place the cakeImage in the z ordered array TODO: omg no this.options!
+        var cellNode = new CakeNode( denominator, i, this.options );
+        slicesImage[ zOrder ] = cellNode;
 
-          self.cellNodes.push( cellNode );
-          cellNode.cursor = 'pointer';
-          cellNode.addInputListener( {
-            down: function( event ) {
-              self.cellDownCallback( cell, event );
-            }
-          } );
+        this.cellNodes.push( cellNode );
+        cellNode.cursor = 'pointer';
+        cellNode.addInputListener( {
+          down: event => {
+            this.cellDownCallback( cell, event );
+          }
+        } );
 
-          // TODO: don't do it this way
-          cellNode.cell = cell;
-          cellNode.visibilityListener = cell.appearsFilledProperty.linkAttribute( cellNode, 'visible' );
-        })();
+        // TODO: don't do it this way
+        cellNode.cell = cell;
+        cellNode.visibilityListener = cell.appearsFilledProperty.linkAttribute( cellNode, 'visible' );
       }
       // remove all missing cakeImage from slicesImage array
       slicesImage = slicesImage.filter( function( n ) { return n !== undefined; } );
 
-      self.cakeLayers.setChildren( slicesImage );
-    },
+      this.cakeLayers.setChildren( slicesImage );
+    }
 
     /** updates cells array and removes links when denominator is decreased
      *
      * @private
      */
-    removeCellNodes: function() {
+    removeCellNodes() {
       while ( this.cellNodes.length ) {
         var cellNode = this.cellNodes.pop();
         cellNode.cell.appearsFilledProperty.unlink( cellNode.visibilityListener );
         this.cakeLayers.removeChild( cellNode );
       }
-    },
+    }
 
     /**
      * Each array corresponds to the z layers of the cake slices
@@ -182,7 +170,7 @@ define( require => {
      * @returns {number[]}
      * @private
      */
-    zLayerOrder: function( denominator ) {
+    zLayerOrder( denominator ) {
       switch( denominator ) {
         case 1:
           return [ 0 ];
@@ -203,17 +191,19 @@ define( require => {
         default:
           throw new Error( 'Unknown denominator: ' + denominator );
       }
-    },
+    }
 
     /**
-     * dispose of the links for garbage collection
-     *
+     * Releases references.
      * @public
      */
-    dispose: function() {
+    dispose() {
       this.removeCellNodes();
       this.container.cells.lengthProperty.unlink( this.rebuildListener );
-      Node.prototype.dispose.call( this );
+
+      super.dispose();
     }
-  } );
+  }
+
+  return fractionsCommon.register( 'CakeContainerNode', CakeContainerNode );
 } );

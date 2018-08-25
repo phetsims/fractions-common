@@ -2,8 +2,9 @@
 
 /**
  * Scenery Node for displaying cake slices in fractions-intro
- * @author Martin Veillette (Berea College)
  *
+ * @author Martin Veillette (Berea College)
+ * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 define( require => {
   'use strict';

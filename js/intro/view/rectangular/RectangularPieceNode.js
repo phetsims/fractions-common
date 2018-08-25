@@ -86,7 +86,7 @@ define( require => {
     }
 
     /**
-     * Interrupts all input on rectangular pieces, disposes of those pieces
+     * Releases references.
      * @public
      */
     dispose() {

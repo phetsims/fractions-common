@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * Shows scenes that are based off of cells.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -322,8 +322,7 @@ define( require => {
     }
 
     /**
-     * dispose of the links for garbage collection
-     *
+     * Releases references.
      * @public
      */
     dispose() {

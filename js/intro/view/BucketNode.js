@@ -1,8 +1,10 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * Scenery Node for displaying bucketNode and pieces in bucketNode slice in fractions-intro
+ * Displays a bucket of pieces.
+ *
  * @author Vincent Davis (Berea College)
+ * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
 define( require => {

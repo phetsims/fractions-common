@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * Create a container of beaker
+ * Container for the beaker representation
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -9,81 +9,71 @@ define( require => {
   'use strict';
 
   // modules
-  var BeakerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerNode' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Property = require( 'AXON/Property' );
+  const BeakerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerNode' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Property = require( 'AXON/Property' );
 
-  /**
-   * @constructor
-   * @extends {Node}
-   *
-   * TODO: factor out common things with the other container nodes
-   *
-   * @param {Container} container
-   * @param {function} cellDownCallback TODO doc, function( event )
-   */
-  function BeakerContainerNode( container, cellDownCallback ) {
-    var self = this;
+  class BeakerContainerNode extends Node {
+    /**
+     * TODO: factor out common things with the other container nodes
+     *
+     * @param {Container} container
+     * @param {function} cellDownCallback TODO doc, function( event )
+     */
+    constructor( container, cellDownCallback ) {
+      super();
 
-    Node.call( this );
+      // @private
+      this.container = container;
 
-    // @private
-    this.container = container;
+      // @private
+      this.cellDownCallback = cellDownCallback;
 
-    // @private
-    this.cellDownCallback = cellDownCallback;
+      // @private {Multilink}
+      this.multilink = Property.multilink( [ container.filledCellCountProperty, container.cells.lengthProperty ], ( numerator, denominator ) => {
+        // Sanity, if these get modified out of order (very possible)
+        numerator = Math.min( numerator, denominator );
 
-    // @private {Multilink}
-    this.multilink = Property.multilink( [ container.filledCellCountProperty, container.cells.lengthProperty ], function( numerator, denominator ) {
-      // Sanity, if these get modified out of order (very possible)
-      numerator = Math.min( numerator, denominator );
+        this.children = [
+          new BeakerNode( numerator, denominator )
+        ];
+      } );
 
-      self.children = [
-        new BeakerNode( numerator, denominator )
-      ];
-    } );
+      // @private
+      this.cursorListener = this.updateCursor.bind( this );
 
-    // @private
-    this.cursorListener = this.updateCursor.bind( this );
+      container.filledCellCountProperty.link( this.cursorListener );
 
-    container.filledCellCountProperty.link( this.cursorListener );
-
-    this.addInputListener( {
-      down: function( event ) {
-        if ( container.filledCellCountProperty.value > 0 ) {
-          cellDownCallback( event );
+      this.addInputListener( {
+        down: function( event ) {
+          if ( container.filledCellCountProperty.value > 0 ) {
+            cellDownCallback( event );
+          }
         }
-      }
-    } );
+      } );
 
-    this.midPointOffset = this.center;
-  }
-
-  fractionsCommon.register( 'BeakerContainerNode', BeakerContainerNode );
-
-  return inherit( Node, BeakerContainerNode, {
+      this.midPointOffset = this.center;
+    }
 
     /**
      * @private
      */
-    updateCursor: function() {
+    updateCursor() {
       this.cursor = this.container.filledCellCountProperty.value > 0 ? 'pointer' : null;
-    },
+    }
 
     /**
-     * dispose of the links for garbage collection
-     *
+     * Releases references.
      * @public
      */
-    dispose: function() {
+    dispose() {
       this.multilink.dispose();
 
       this.container.filledCellCountProperty.unlink( this.cursorListener );
 
-      Node.prototype.dispose.call( this );
-    },
+      super.dispose();
+    }
 
     /**
      * Return the midpoint offset of this node
@@ -92,9 +82,10 @@ define( require => {
      * @returns {Vector2}
      * @public
      */
-    getMidpointByIndex: function( index ) {
+    getMidpointByIndex( index ) {
       return this.midPointOffset;
     }
+  }
 
-  } );
+  return fractionsCommon.register( 'BeakerContainerNode', BeakerContainerNode );
 } );
