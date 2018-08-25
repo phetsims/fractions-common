@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * Scene for the circular representation
+ * Scene for the cake representation
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -9,13 +9,13 @@ define( require => {
   'use strict';
 
   // modules
+  const CakeContainerNode = require( 'FRACTIONS_COMMON/intro/view/cake/CakeContainerNode' );
+  const CakeNode = require( 'FRACTIONS_COMMON/intro/view/cake/CakeNode' );
+  const CakePieceNode = require( 'FRACTIONS_COMMON/intro/view/cake/CakePieceNode' );
   const CellSceneNode = require( 'FRACTIONS_COMMON/intro/view/CellSceneNode' );
-  const CircularContainerNode = require( 'FRACTIONS_COMMON/intro/view/CircularContainerNode' );
-  const CircularNode = require( 'FRACTIONS_COMMON/intro/view/CircularNode' );
-  const CircularPieceNode = require( 'FRACTIONS_COMMON/intro/view/CircularPieceNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
-  class CircularSceneNode extends CellSceneNode {
+  class CakeSceneNode extends CellSceneNode {
     /**
      * Creates the container node for the given type of cell.
      * @public
@@ -26,7 +26,7 @@ define( require => {
      * @returns {Node}
      */
     createContainerNode( container, cellDownCallback ) {
-      return new CircularContainerNode( container, cellDownCallback );
+      return new CakeContainerNode( container, cellDownCallback );
     }
 
     /**
@@ -40,7 +40,7 @@ define( require => {
      * @returns {Node}
      */
     createPieceNode( piece, finishedAnimatingCallback, droppedCallback ) {
-      return new CircularPieceNode( piece, finishedAnimatingCallback, droppedCallback );
+      return new CakePieceNode( piece, finishedAnimatingCallback, droppedCallback );
     }
 
     /**
@@ -54,9 +54,9 @@ define( require => {
      * @returns {Node}
      */
     createCellNode( denominator, index, options ) {
-      return new CircularNode( denominator, index, options );
+      return new CakeNode( denominator, index, options );
     }
   }
 
-  return fractionsCommon.register( 'CircularSceneNode', CircularSceneNode );
+  return fractionsCommon.register( 'CakeSceneNode', CakeSceneNode );
 } );

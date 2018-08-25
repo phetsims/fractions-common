@@ -9,13 +9,13 @@ define( require => {
   'use strict';
 
   // modules
-  const BeakerNode = require( 'FRACTIONS_COMMON/intro/view/BeakerNode' );
+  const BeakerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerNode' );
   const Bucket = require( 'PHETCOMMON/model/Bucket' );
   const BucketFront = require( 'SCENERY_PHET/bucket/BucketFront' );
   const BucketHole = require( 'SCENERY_PHET/bucket/BucketHole' );
-  const CakeContainerNode = require( 'FRACTIONS_COMMON/intro/view/CakeContainerNode' );
+  const CakeContainerNode = require( 'FRACTIONS_COMMON/intro/view/cake/CakeContainerNode' );
   const Circle = require( 'SCENERY/nodes/Circle' );
-  const CircularContainerNode = require( 'FRACTIONS_COMMON/intro/view/CircularContainerNode' );
+  const CircularContainerNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularContainerNode' );
   const Container = require( 'FRACTIONS_COMMON/intro/model/Container' );
   const Dimension2 = require( 'DOT/Dimension2' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
@@ -26,7 +26,7 @@ define( require => {
   const NumberProperty = require( 'AXON/NumberProperty' );
   const PropertyFractionNode = require( 'FRACTIONS_COMMON/common/view/PropertyFractionNode' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  const RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/RectangularContainerNode' );
+  const RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularContainerNode' );
   const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   const Vector2 = require( 'DOT/Vector2' );
 

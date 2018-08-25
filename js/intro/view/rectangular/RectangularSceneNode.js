@@ -12,9 +12,9 @@ define( require => {
   var CellSceneNode = require( 'FRACTIONS_COMMON/intro/view/CellSceneNode' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var RectangleNode = require( 'FRACTIONS_COMMON/intro/view/RectangleNode' );
-  var RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/RectangularContainerNode' );
-  var RectangularPieceNode = require( 'FRACTIONS_COMMON/intro/view/RectangularPieceNode' );
+  var RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularContainerNode' );
+  var RectangularNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularNode' );
+  var RectangularPieceNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularPieceNode' );
 
   /**
    * @constructor
@@ -67,12 +67,12 @@ define( require => {
      * @param {number} denominator
      * @param {number} index
      * @param {Object} [options]
-     * @returns {RectangleNode}
+     * @returns {RectangularNode}
      * @public
      */
     createCellNode: function( denominator, index, options ) {
       options = _.extend( this.options, options, { dropShadow: false } );
-      return new RectangleNode( denominator, options );
+      return new RectangularNode( denominator, options );
     }
 
   } );

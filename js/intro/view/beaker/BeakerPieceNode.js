@@ -9,7 +9,7 @@ define( require => {
   'use strict';
 
   // modules
-  var BeakerNode = require( 'FRACTIONS_COMMON/intro/view/BeakerNode' );
+  var BeakerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerNode' );
   var Easing = require( 'TWIXT/Easing' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );

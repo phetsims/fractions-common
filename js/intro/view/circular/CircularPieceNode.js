@@ -9,7 +9,7 @@ define( require => {
   'use strict';
 
   // modules
-  var CircularNode = require( 'FRACTIONS_COMMON/intro/view/CircularNode' );
+  var CircularNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularNode' );
   var Easing = require( 'TWIXT/Easing' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );

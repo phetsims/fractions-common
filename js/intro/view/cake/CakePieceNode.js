@@ -9,7 +9,7 @@ define( require => {
   'use strict';
 
   // modules
-  var CakeNode = require( 'FRACTIONS_COMMON/intro/view/CakeNode' );
+  var CakeNode = require( 'FRACTIONS_COMMON/intro/view/cake/CakeNode' );
   var Easing = require( 'TWIXT/Easing' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );

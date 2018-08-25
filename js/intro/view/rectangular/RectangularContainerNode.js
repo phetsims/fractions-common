@@ -15,7 +15,7 @@ define( require => {
   var inherit = require( 'PHET_CORE/inherit' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var RectangleNode = require( 'FRACTIONS_COMMON/intro/view/RectangleNode' );
+  var RectangularNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularNode' );
   var Shape = require( 'KITE/Shape' );
 
   /**
@@ -48,7 +48,7 @@ define( require => {
     this.options = options;
 
     // determine to the height and width to use when drawing the vertical or horizontal representation.
-    this.rectangle = this.options.rectangleOrientation === 'horizontal' ? RectangleNode.HORIZONTAL_RECTANGULAR_SIZE : RectangleNode.VERTICAL_RECTANGULAR_SIZE;
+    this.rectangle = this.options.rectangleOrientation === 'horizontal' ? RectangularNode.HORIZONTAL_RECTANGULAR_SIZE : RectangularNode.VERTICAL_RECTANGULAR_SIZE;
 
     if ( options.isIcon ) {
       this.rectangle = new Dimension2( this.rectangle.width / 4, this.rectangle.height / 4 );
@@ -68,7 +68,7 @@ define( require => {
     // @private {function}
     this.rebuildListener = this.rebuild.bind( this );
 
-    // @private {Array.<RectangleNode>}
+    // @private {Array.<RectangularNode>}
     this.cellNodes = [];
 
     container.cells.lengthProperty.link( this.rebuildListener );
@@ -102,7 +102,7 @@ define( require => {
       for ( var i = 0; i < denominator; i++ ) {
         (function() {
           var cell = self.container.cells.get( i );
-          var cellNode = new RectangleNode( denominator, self.options );
+          var cellNode = new RectangularNode( denominator, self.options );
           self.cellNodes.push( cellNode );
           self.addChild( cellNode );
           cellNode.cursor = 'pointer';

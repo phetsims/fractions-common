@@ -11,9 +11,9 @@ define( require => {
   // modules
   var AlignBox = require( 'SCENERY/nodes/AlignBox' );
   var arrayRemove = require( 'PHET_CORE/arrayRemove' );
-  var BeakerContainerNode = require( 'FRACTIONS_COMMON/intro/view/BeakerContainerNode' );
-  var BeakerNode = require( 'FRACTIONS_COMMON/intro/view/BeakerNode' );
-  var BeakerPieceNode = require( 'FRACTIONS_COMMON/intro/view/BeakerPieceNode' );
+  var BeakerContainerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerContainerNode' );
+  var BeakerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerNode' );
+  var BeakerPieceNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerPieceNode' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var BucketNode = require( 'FRACTIONS_COMMON/intro/view/BucketNode' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );

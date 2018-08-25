@@ -10,7 +10,7 @@ define( require => {
 
   // modules
   var Circle = require( 'SCENERY/nodes/Circle' );
-  var CircularNode = require( 'FRACTIONS_COMMON/intro/view/CircularNode' );
+  var CircularNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularNode' );
   var DerivedProperty = require( 'AXON/DerivedProperty' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var inherit = require( 'PHET_CORE/inherit' );

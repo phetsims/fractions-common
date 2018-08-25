@@ -13,7 +13,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Node = require( 'SCENERY/nodes/Node' );
   const PieceNode = require( 'FRACTIONS_COMMON/intro/view/PieceNode' );
-  const RectangleNode = require( 'FRACTIONS_COMMON/intro/view/RectangleNode' );
+  const RectangularNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularNode' );
 
   class RectangularPieceNode extends PieceNode {
     /**
@@ -30,13 +30,13 @@ define( require => {
         dropShadow: true
       } );
 
-      const graphic = new RectangleNode( piece.denominator, options );
+      const graphic = new RectangularNode( piece.denominator, options );
 
       super( piece, finishedAnimatingCallback, droppedCallback, {
         graphic
       } );
 
-      // @private {RectangleNode} -- TODO: don't have to do this?
+      // @private {RectangularNode} -- TODO: don't have to do this?
       this.graphic = graphic;
     }
 

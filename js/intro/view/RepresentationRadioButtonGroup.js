@@ -10,7 +10,7 @@ define( require => {
   'use strict';
 
   // modules
-  const BeakerNode = require( 'FRACTIONS_COMMON/intro/view/BeakerNode' );
+  const BeakerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerNode' );
   const Circle = require( 'SCENERY/nodes/Circle' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Image = require( 'SCENERY/nodes/Image' );

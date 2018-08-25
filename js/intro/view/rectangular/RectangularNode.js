@@ -22,7 +22,7 @@ define( require => {
    * @param {number} denominator
    * @param {Object} [options]
    */
-  function RectangleNode( denominator, options ) {
+  function RectangularNode( denominator, options ) {
 
     options = _.extend( {
         dropShadow: false,
@@ -32,13 +32,13 @@ define( require => {
       },
       options );
 
-    var rectangle = RectangleNode.VERTICAL_RECTANGULAR_SIZE;
+    var rectangle = RectangularNode.VERTICAL_RECTANGULAR_SIZE;
     var rectangleWidth = rectangle.width;
     var rectangleHeight = rectangle.height / denominator;
 
     // determine the size of the rectangle size and pieces in th bucket depend upon the representation
     if ( options.rectangleOrientation === 'horizontal' ) {
-      rectangle = RectangleNode.HORIZONTAL_RECTANGULAR_SIZE;
+      rectangle = RectangularNode.HORIZONTAL_RECTANGULAR_SIZE;
       rectangleWidth = rectangle.width / denominator;
       rectangleHeight = rectangle.height;
     }
@@ -79,9 +79,9 @@ define( require => {
     this.midpointOffset = this.center;
   }
 
-  fractionsCommon.register( 'RectangleNode', RectangleNode );
+  fractionsCommon.register( 'RectangularNode', RectangularNode );
 
-  return inherit( Node, RectangleNode, {}, {
+  return inherit( Node, RectangularNode, {}, {
     // @public {Dimension2}
     VERTICAL_RECTANGULAR_SIZE: new Dimension2( 130, 185 ),
     HORIZONTAL_RECTANGULAR_SIZE: new Dimension2( 300, 50 )
