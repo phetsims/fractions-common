@@ -88,6 +88,8 @@ define( require => {
      * @param {number} dt
      */
     step( dt ) {
+      super.step( dt );
+
       _.each( this.pieceNodes.slice(), function( pieceNode ) {
         if ( !pieceNode.isUserControlled ) {
           pieceNode.step( dt );

@@ -22,12 +22,9 @@ define( require => {
   class CellSceneNode extends SceneNode {
     /**
      * @param {ContainerSetModel} model
-     * @param {function} getBucketLocation - function(): Vector2, gives the location of the bucket when called
      * @param {Object} config
      */
-    constructor( model, getBucketLocation, config ) {
-      assert && assert( typeof getBucketLocation === 'function' );
-
+    constructor( model, config ) {
       config = _.extend( {
         // {function} - function( {Node} container, {function} cellDownCallback ): {Node}
         createContainerNode: null,
@@ -38,11 +35,19 @@ define( require => {
         // {function} - function( {number} denominator, {number} index, {Object} options ): {Node}
         createCellNode: null,
 
+        // {function} - function(): {Vector2} - gives the location of the bucket when called
+        getBucketLocation: null,
+
         // {number} - optional
         horizontalSpacing: 10, // horizontal spacing between adjacent containers
         verticalSpacing: 10, // vertical spacing between containers
         verticalOffset: 0
       }, config );
+
+      assert && assert( typeof config.createContainerNode === 'function' );
+      assert && assert( typeof config.createPieceNode === 'function' );
+      assert && assert( typeof config.createCellNode === 'function' );
+      assert && assert( typeof config.getBucketLocation === 'function' );
 
       super( model );
 
@@ -52,7 +57,7 @@ define( require => {
       this.createCellNode = config.createCellNode;
 
       // @private {function}
-      this.getBucketLocation = getBucketLocation;
+      this.getBucketLocation = config.getBucketLocation;
 
       // @private {number}
       this.horizontalSpacing = config.horizontalSpacing;
@@ -105,10 +110,13 @@ define( require => {
     /**
      * Steps forward in time.
      * @public
+     * @override
      *
      * @param {number} dt
      */
     step( dt ) {
+      super.step( dt );
+
       this.pieceNodes.slice().forEach( pieceNode => {
         pieceNode.step( dt );
 

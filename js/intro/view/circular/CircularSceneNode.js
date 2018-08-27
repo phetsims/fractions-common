@@ -18,11 +18,10 @@ define( require => {
   class CircularSceneNode extends CellSceneNode {
     /**
      * @param {ContainerSetScreenView} model
-     * @param {function} getBucketLocation - function(): Vector2, gives the location of the bucket when called
      * @param {Object} [options]
      */
-    constructor( model, getBucketLocation, options ) {
-      super( model, getBucketLocation, _.extend( {
+    constructor( model, options ) {
+      super( model, _.extend( {
         createContainerNode( container, cellDownCallback ) {
           return new CircularContainerNode( container, cellDownCallback );
         },

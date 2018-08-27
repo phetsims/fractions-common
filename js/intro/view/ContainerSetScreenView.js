@@ -84,17 +84,20 @@ define( require => {
         // Should this be a switch statement? TODO: yes. cleanup
         this.currentView = null;
         if ( representation === Representation.CIRCLE ) {
-          this.currentView = new CircularSceneNode( model, getBucketLocation, {
+          this.currentView = new CircularSceneNode( model, {
+            getBucketLocation,
             verticalOffset: 10
           } );
         }
         else if ( representation === Representation.VERTICAL_BAR ) {
-          this.currentView = new RectangularSceneNode( model, getBucketLocation, {
+          this.currentView = new RectangularSceneNode( model, {
+            getBucketLocation,
             rectangleOrientation: 'vertical'
           } );
         }
         else if ( representation === Representation.HORIZONTAL_BAR ) {
-          this.currentView = new RectangularSceneNode( model, getBucketLocation, {
+          this.currentView = new RectangularSceneNode( model, {
+            getBucketLocation,
             rectangleOrientation: 'horizontal',
             maxHorizontalContainers: 3,
             verticalOffset: 40
@@ -104,7 +107,8 @@ define( require => {
           this.currentView = new BeakerSceneNode( model, getBucketLocation );
         }
         else if ( representation === Representation.CAKE ) {
-          this.currentView = new CakeSceneNode( model, getBucketLocation, {
+          this.currentView = new CakeSceneNode( model, {
+            getBucketLocation,
             verticalOffset: 30,
             horizontalSpacing: -20
           } );
