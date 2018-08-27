@@ -45,6 +45,8 @@ define( require => {
         rectangleWidth /= 4;
       }
       var foregroundRectangle = new Rectangle( {
+        rectX: -rectangleWidth / 2,
+        rectY: -rectangleHeight / 2,
         rectWidth: rectangleWidth,
         rectHeight: rectangleHeight,
 
@@ -70,9 +72,6 @@ define( require => {
       }
 
       super( options );
-
-      // @public {Vector2}
-      this.midpointOffset = this.center;
     }
 
     /**

@@ -12,6 +12,7 @@ define( require => {
   // modules
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Image = require( 'SCENERY/nodes/Image' );
+  const Node = require( 'SCENERY/nodes/Node' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // images
@@ -63,8 +64,7 @@ define( require => {
     [ cake_8_1Image, cake_8_2Image, cake_8_3Image, cake_8_4Image, cake_8_5Image, cake_8_6Image, cake_8_7Image, cake_8_8Image ]
   ];
 
-  // TODO: Don't subtype image (so we can get the origin a bit nicer)
-  class CakeNode extends Image {
+  class CakeNode extends Node {
     /**
      * @param {number} denominator
      * @param {number} index
@@ -78,15 +78,17 @@ define( require => {
         maxHeight: CakeNode.DEFAULT_CAKE_HEIGHT  // height of the image
       }, options );
 
-      super( cakeImageArray[ denominator - 1 ][ index ], options );
+      super();
+
+      // @private {Image}
+      this.imageNode = new Image( cakeImageArray[ denominator - 1 ][ index ] );
+      this.addChild( this.imageNode );
 
       // @private {number}
       this.denominator = denominator;
 
-      // @private {Vector2} - Center of the cake plate, empirically determined
-      this.imageCenter = new Vector2( this.width / 2, this.height * 0.55 );
-
-      this.setMidpointOffset( index );
+      this.setCakeIndex( index );
+      this.mutate( options );
     }
 
     /**
@@ -96,27 +98,23 @@ define( require => {
      * @param {number} index
      */
     setCakeIndex( index ) {
-      this.setImage( cakeImageArray[ this.denominator - 1 ][ index ] );
-      this.setMidpointOffset( index );
-    }
+      this.imageNode.setImage( cakeImageArray[ this.denominator - 1 ][ index ] );
 
-    /**
-     * Sets the midpoint of the cake.
-     * @private
-     *
-     * @param {number} index
-     */
-    setMidpointOffset( index ) {
+      // Center of the cake plate, empirically determined
+      const imageCenter = new Vector2( this.imageNode.width / 2, this.imageNode.height * 0.55 );
+
       if ( this.denominator === 1 ) {
-        this.midpointOffset = this.imageCenter;
+        this.imageNode.translation = imageCenter.negated();
       }
       else if ( this.denominator === 2 ) {
-        this.midpointOffset = this.imageCenter.plus(
-          Vector2.createPolar( this.height / 4, -2 * Math.PI * index / this.denominator ) );
+        this.imageNode.translation = imageCenter.plus(
+          Vector2.createPolar( this.height / 4, -2 * Math.PI * index / this.denominator ) ).negated();
       }
       else {
-        this.midpointOffset = this.imageCenter.plus(
-          Vector2.createPolar( this.height / 4, -2 * Math.PI * ( index + 1 / 2 ) / this.denominator ) );
+        this.imageNode.translation = imageCenter.plus( Vector2.createPolar(
+          this.height / 4,
+          -2 * Math.PI * ( index + 1 / 2 ) / this.denominator
+        ) ).negated();
       }
     }
 

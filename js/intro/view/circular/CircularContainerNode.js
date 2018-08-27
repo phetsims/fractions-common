@@ -74,16 +74,14 @@ define( require => {
     }
 
     /**
-     * get midpoint of a particular piece by index
+     * Returns the midpoint offset for the given child node at the specified index.
+     * @public
      *
      * @param {number} index
      * @returns {Vector2}
-     * @public
      */
     getMidpointByIndex( index ) {
-      var node = this.cellNodes[ index ];
-
-      return node.translation.plus( node.midpointOffset );
+      return this.cellNodes[ index ].translation;
     }
 
     /**

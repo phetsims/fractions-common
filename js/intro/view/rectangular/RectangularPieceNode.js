@@ -33,27 +33,6 @@ define( require => {
     }
 
     /**
-     * Returns the midpoint of the piece
-     * @public
-     * @override
-     *
-     * @returns {Vector2}
-     */
-    getMidpoint() {
-      return this.localToParentPoint( this.graphic.midpointOffset );
-    }
-
-    /**
-     * Sets the midpoint of the piece
-     * @protected TODO: check visibility
-     *
-     * @param {Vector2} midpoint
-     */
-    setMidpoint( midpoint ) {
-      this.translation = this.translation.plus( midpoint.minus( this.localToParentPoint( this.graphic.midpointOffset ) ) );
-    }
-
-    /**
      * Steps forward in time.
      * @public
      * @override

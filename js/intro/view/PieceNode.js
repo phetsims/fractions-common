@@ -3,6 +3,9 @@
 /**
  * Base type for displaying a piece.
  *
+ * NOTE: The graphics of a piece are set up so that its logical "center" (that it may rotate around or corresponds to
+ * its best "drag" location) will be at its origin.
+ *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 define( require => {
@@ -86,22 +89,23 @@ define( require => {
     }
 
     /**
-     * gets the mid point of this piece
-     * @returns {Vector2}
+     * Returns the midpoint of the piece (in the parent's coordinate bounds).
      * @public
+     *
+     * @returns {Vector2}
      */
     getMidpoint() {
-      // TODO: Use centroids?
-      return this.localToParentPoint( this.graphic.midpointOffset );
+      return this.localToParentPoint( Vector2.ZERO );
     }
 
     /**
-     * sets the midpoint of this piece
+     * Translates the piece by moving its midpoint.
+     * @protected
+     *
      * @param {Vector2} midpoint
-     * @private
      */
     setMidpoint( midpoint ) {
-      this.translation = this.translation.plus( midpoint.minus( this.localToParentPoint( this.graphic.midpointOffset ) ) );
+      this.translation = this.translation.plus( midpoint.minus( this.localToParentPoint( Vector2.ZERO ) ) );
     }
 
     /**

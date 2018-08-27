@@ -76,16 +76,14 @@ define( require => {
     }
 
     /**
-     * Returns midpoint of cell based off its index
-     *
-     * @param {number} index - the index of the cell
-     * @returns {Vector2}
+     * Returns the midpoint offset for the given child node at the specified index.
      * @public
+     *
+     * @param {number} index
+     * @returns {Vector2}
      */
     getMidpointByIndex( index ) {
-      var node = this.cellNodes[ index ];
-
-      return node.translation.plus( node.midpointOffset );
+      return this.cellNodes[ index ].translation; // TODO: This can be factored out?
     }
 
     /**
@@ -107,11 +105,11 @@ define( require => {
           }
         } );
         if ( this.options.rectangleOrientation === 'horizontal' ) {
-          cellNode.x = this.rectangle.width * i / denominator;
+          cellNode.x = this.rectangle.width * ( i + 0.5 ) / denominator;
         }
         else {
           var sortedIndex = denominator - i - 1;
-          cellNode.y = this.rectangle.height * sortedIndex / denominator;
+          cellNode.y = this.rectangle.height * ( sortedIndex + 0.5 ) / denominator;
         }
 
         // TODO: don't do it this way

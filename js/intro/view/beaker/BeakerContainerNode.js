@@ -13,6 +13,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Property = require( 'AXON/Property' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   class BeakerContainerNode extends Node {
     /**
@@ -52,9 +53,6 @@ define( require => {
           }
         }
       } );
-
-      // TODO: examine all midpointOffsets
-      this.midpointOffset = this.center;
     }
 
     /**
@@ -84,7 +82,7 @@ define( require => {
      * @public
      */
     getMidpointByIndex( index ) {
-      return this.midpointOffset;
+      return Vector2.ZERO;
     }
   }
 

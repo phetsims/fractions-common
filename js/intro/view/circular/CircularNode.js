@@ -26,7 +26,7 @@ define( require => {
       assert && assert( index < denominator );
 
       options = _.extend( {
-        fill: 'rgb(140, 198, 61)',
+        fill: 'rgb(140, 198, 61)', // TODO: clean up how we are getting this!
         stroke: 'black',
         dropShadow: false,
         dropShadowOffset: 5,
@@ -37,7 +37,7 @@ define( require => {
 
       super();
 
-      // @private
+      // @private {number}
       this.denominator = denominator;
       this.angleUnit = 2 * Math.PI / denominator;
 
@@ -54,16 +54,19 @@ define( require => {
       var circleRadius = options.isIcon ? CircularNode.DEFAULT_RADIUS / 4 : CircularNode.DEFAULT_RADIUS;
       shape.arc( 0, 0, circleRadius, startAngle, endAngle, false ).close();
 
+      // @private {Node}
+      this.container = new Node();
+      this.addChild( this.container );
+
       this.foregroundSector = new Path( shape, options );
       if ( this.dropShadow ) {
         this.backgroundSector = new Path( shape, { fill: 'black' } );
         this.backgroundSector.center = this.foregroundSector.center.plusScalar( options.dropShadowOffset );
-        this.addChild( this.backgroundSector );
+        this.container.addChild( this.backgroundSector );
       }
-      this.addChild( this.foregroundSector );
+      this.container.addChild( this.foregroundSector );
 
-      // @public {Vector2}
-      this.midpointOffset = denominator === 1 ? Vector2.ZERO : Vector2.createPolar( CircularNode.DEFAULT_RADIUS / 2, this.angleUnit / 2 + startAngle );
+      this.rotateCircle( startAngle );
     }
 
     /**
@@ -77,7 +80,11 @@ define( require => {
         this.backgroundSector.rotation = angle;
         this.backgroundSector.x = this.foregroundSector.x + 5;
       }
-      this.midpointOffset = this.denominator === 1 ? Vector2.ZERO : Vector2.createPolar( CircularNode.DEFAULT_RADIUS / 2, this.angleUnit / 2 + angle );
+
+      this.container.translation = this.denominator === 1 ? Vector2.ZERO : Vector2.createPolar(
+        CircularNode.DEFAULT_RADIUS / 2,
+        this.angleUnit / 2 + angle + Math.PI
+      );
     }
 
     /**

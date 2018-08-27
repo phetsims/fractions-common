@@ -43,22 +43,6 @@ define( require => {
     }
 
     /**
-     * @returns {Vector2}
-     * @public
-     */
-    getMidpoint() {
-      return this.localToParentPoint( this.graphic.midpointOffset );
-    }
-
-    /**
-     * @param {Vector2} midpoint
-     * @public
-     */
-    setMidpoint( midpoint ) {
-      this.translation = this.translation.plus( midpoint.minus( this.localToParentPoint( this.graphic.midpointOffset ) ) );
-    }
-
-    /**
      * Steps forward in time.
      * @public
      * @override
