@@ -33,6 +33,8 @@ define( require => {
   const Util = require( 'DOT/Util' );
   const Vector2 = require( 'DOT/Vector2' );
 
+  // TODO: Get rid of SimpleDragHandler usage
+
   // constants
   const HIGHLIGHTER_PADDING_HEIGHT = 5;
   const MARKER_CIRCLE_RADIUS = 12;

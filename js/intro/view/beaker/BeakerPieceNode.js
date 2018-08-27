@@ -12,54 +12,17 @@ define( require => {
   const BeakerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerNode' );
   const Easing = require( 'TWIXT/Easing' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const Property = require( 'AXON/Property' );
-  const SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
-  const Vector2 = require( 'DOT/Vector2' );
+  const PieceNode = require( 'FRACTIONS_COMMON/intro/view/PieceNode' );
 
-  class BeakerPieceNode extends BeakerNode {
+  class BeakerPieceNode extends PieceNode {
     /**
-     * TODO: dedup if necessary?
-     *
-     * @param {number} denominator
+     * @param {Piece} piece
      * @param {function} finishedAnimatingCallback - Called as function( {BeakerPieceNode} )
      * @param {function} droppedCallback - Called as function( {BeakerPieceNode} )
      */
-    constructor( denominator, finishedAnimatingCallback, droppedCallback ) {
-      super( 1, denominator );
-
-      // @private
-      this.finishedAnimatingCallback = finishedAnimatingCallback;
-
-      // @public {Property.<Vector2>}
-      this.originProperty = new Property( Vector2.ZERO );
-      this.destinationProperty = new Property( Vector2.ZERO );
-
-      // @public {boolean}
-      this.isUserControlled = false;
-
-      // @private {number} - Animation progress, from 0 to 1.
-      this.ratio = 0;
-
-      this.originProperty.lazyLink( origin => {
-        this.ratio = 0;
-        this.center = origin;
-      } );
-      this.destinationProperty.lazyLink( () => {
-        this.ratio = 0;
-      } );
-
-      // @public
-      var initialOffset;
-      this.dragListener = new SimpleDragHandler( {
-        start: event => {
-          initialOffset = this.getCenter().minus( this.globalToParentPoint( event.pointer.point ) );
-        },
-        drag: event => {
-          this.setCenter( this.globalToParentPoint( event.pointer.point ).plus( initialOffset ) );
-        },
-        end: () => {
-          droppedCallback( this );
-        }
+    constructor( piece, finishedAnimatingCallback, droppedCallback ) {
+      super( piece, finishedAnimatingCallback, droppedCallback, {
+        graphic: new BeakerNode( 1, piece.denominator )
       } );
     }
 
@@ -71,6 +34,7 @@ define( require => {
      * @param {number} dt
      */
     step( dt ) {
+      // TODO: check step methods for duplication
       if ( this.isUserControlled ) {
         return;
       }

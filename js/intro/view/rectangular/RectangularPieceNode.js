@@ -22,21 +22,12 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( piece, finishedAnimatingCallback, droppedCallback, options ) {
-
-      // @private TODO note more than just node, has midpointOffset variable
-      // TODO: uhhh...?
-      options = _.extend( options, {
-        dropShadow: true
-      } );
-
-      const graphic = new RectangularNode( piece.denominator, options );
-
       super( piece, finishedAnimatingCallback, droppedCallback, {
-        graphic
+        // TODO: don't pass options down like this
+        graphic: new RectangularNode( piece.denominator, _.extend( {
+          dropShadow: true
+        }, options ) )
       } );
-
-      // @private {RectangularNode} -- TODO: don't have to do this?
-      this.graphic = graphic;
 
       this.mutate( options );
     }

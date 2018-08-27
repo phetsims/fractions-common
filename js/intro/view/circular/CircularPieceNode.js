@@ -23,14 +23,9 @@ define( require => {
      * @param {function} droppedCallback - Called as function( {Piece} )
      */
     constructor( piece, finishedAnimatingCallback, droppedCallback ) {
-      const graphic = new CircularNode( piece.denominator, 0, { dropShadow: true } );
-
       super( piece, finishedAnimatingCallback, droppedCallback, {
-        graphic: graphic
+        graphic: new CircularNode( piece.denominator, 0, { dropShadow: true } )
       } );
-
-      // @private TODO note more than just node, has midpointOffset variable
-      this.graphic = graphic;
 
       // @private (convenience variable)
       this.angleUnit = 2 * Math.PI / piece.denominator;

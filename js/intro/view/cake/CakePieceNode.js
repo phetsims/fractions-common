@@ -26,14 +26,9 @@ define( require => {
     constructor( piece, finishedAnimatingCallback, droppedCallback ) {
       // TODO: a lot of this is duplicated
 
-      const graphic = new CakeNode( piece.denominator, 0 );
-
       super( piece, finishedAnimatingCallback, droppedCallback, {
-        graphic: graphic
+        graphic: new CakeNode( piece.denominator, 0 )
       } );
-
-      // @private TODO note more than just node, has midpointOffset variable
-      this.graphic = graphic;
 
       // cake specific
       var originCell = piece.originCell;

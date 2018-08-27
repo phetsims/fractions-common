@@ -15,10 +15,10 @@ define( require => {
   const SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   const Vector2 = require( 'DOT/Vector2' );
 
+  // TODO: Get rid of SimpleDragHandler usage
+
   class PieceNode extends Node {
     /**
-     * TODO: CHeck duplication with BeakerPieceNode
-     *
      * @param {Piece} piece
      * @param {function} finishedAnimatingCallback - Called as function( {Piece} ) with the piece to finish animating.
      * @param {function} droppedCallback - Called as function( {Piece} )
@@ -26,6 +26,7 @@ define( require => {
      */
     constructor( piece, finishedAnimatingCallback, droppedCallback, options ) {
       options = _.extend( {
+        // TODO: better way of handling default. rename to config
         graphic: new Node()
       }, options );
 
@@ -33,11 +34,12 @@ define( require => {
         children: [ options.graphic ]
       } );
 
-      // @private {Piece}
+      // TODO: check visibilities, things are not as they seem
+
+      // @public {Piece} - Accessed from elsewhere
       this.piece = piece;
 
-      // this will be created by the <representation>PieceNode itself
-      // @private {Node}
+      // @protected {Node}
       this.graphic = options.graphic;
 
       // @protected (read-only) {function}

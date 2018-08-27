@@ -53,7 +53,8 @@ define( require => {
         }
       } );
 
-      this.midPointOffset = this.center;
+      // TODO: examine all midpointOffsets
+      this.midpointOffset = this.center;
     }
 
     /**
@@ -83,7 +84,7 @@ define( require => {
      * @public
      */
     getMidpointByIndex( index ) {
-      return this.midPointOffset;
+      return this.midpointOffset;
     }
   }
 

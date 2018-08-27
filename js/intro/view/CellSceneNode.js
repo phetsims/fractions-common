@@ -121,7 +121,7 @@ define( require => {
         pieceNode.step( dt );
 
         if ( pieceNode.isUserControlled ) {
-          const closestCell = this.getClosestCell( pieceNode.getMidpoint() );
+          const closestCell = this.getClosestCell( pieceNode.getMidpoint(), 100 );
           if ( closestCell ) {
             pieceNode.orient( closestCell, dt );
           }
@@ -141,14 +141,16 @@ define( require => {
     }
 
     /**
-     * returns the closest cell
+     * Returns the closest cell, or null if none are within the threshold.
+     * @public
+     *
      * @param {Vector2} midpoint
      * @param {number} [threshold]
-     * @returns {Cell}
+     * @returns {Cell|null}
      */
     getClosestCell( midpoint, threshold ) {
       let closestCell = null;
-      let closestDistance = (threshold === undefined) ? Number.POSITIVE_INFINITY : 100;
+      let closestDistance = threshold;
       this.model.containers.forEach( container => {
         container.cells.forEach( cell => {
           if ( !cell.isFilledProperty.value ) {

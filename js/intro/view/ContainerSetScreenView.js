@@ -104,7 +104,9 @@ define( require => {
           } );
         }
         else if ( representation === Representation.BEAKER ) {
-          this.currentView = new BeakerSceneNode( model, getBucketLocation );
+          this.currentView = new BeakerSceneNode( model, {
+            getBucketLocation
+          } );
         }
         else if ( representation === Representation.CAKE ) {
           this.currentView = new CakeSceneNode( model, {
