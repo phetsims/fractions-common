@@ -133,6 +133,23 @@ define( require => {
       }
       return null;
     }
+
+    /**
+     * Finds the next cell that appears filled (looking at the largest indices first).
+     * @public
+     *
+     * @returns {Cell|null}
+     */
+    getNextAppearsFilledCell() {
+      // backwards order
+      for ( var i = this.cells.length - 1; i >= 0; i-- ) {
+        var cell = this.cells.get( i );
+        if ( cell.appearsFilledProperty.value ) {
+          return cell;
+        }
+      }
+      return null;
+    }
   }
 
   return fractionsCommon.register( 'Container', Container );

@@ -44,12 +44,12 @@ define( require => {
       // @private
       this.cursorListener = this.updateCursor.bind( this );
 
-      container.filledCellCountProperty.link( this.cursorListener );
+      container.appearsFilledCellCountProperty.link( this.cursorListener );
 
       this.addInputListener( {
         down: function( event ) {
-          if ( container.filledCellCountProperty.value > 0 ) {
-            cellDownCallback( container.getNextFilledCell(), event );
+          if ( container.appearsFilledCellCountProperty.value > 0 ) {
+            cellDownCallback( container.getNextAppearsFilledCell(), event );
           }
         }
       } );
@@ -59,7 +59,7 @@ define( require => {
      * @private
      */
     updateCursor() {
-      this.cursor = this.container.filledCellCountProperty.value > 0 ? 'pointer' : null;
+      this.cursor = this.container.appearsFilledCellCountProperty.value > 0 ? 'pointer' : null;
     }
 
     /**
@@ -69,7 +69,7 @@ define( require => {
     dispose() {
       this.multilink.dispose();
 
-      this.container.filledCellCountProperty.unlink( this.cursorListener );
+      this.container.appearsFilledCellCountProperty.unlink( this.cursorListener );
 
       super.dispose();
     }
