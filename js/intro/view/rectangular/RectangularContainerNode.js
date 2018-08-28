@@ -92,10 +92,10 @@ define( require => {
      */
     rebuild() {
       this.removeCellNodes();
-      var denominator = this.container.cells.length;
+      const denominator = this.container.cells.length;
       for ( let i = 0; i < denominator; i++ ) {
-        var cell = this.container.cells.get( i );
-        var cellNode = new RectangularNode( denominator, this.options );
+        const cell = this.container.cells.get( i );
+        const cellNode = new RectangularNode( denominator, this.options );
         this.cellNodes.push( cellNode );
         this.addChild( cellNode );
         cellNode.cursor = 'pointer';
@@ -108,7 +108,7 @@ define( require => {
           cellNode.x = this.rectangle.width * ( i + 0.5 ) / denominator;
         }
         else {
-          var sortedIndex = denominator - i - 1;
+          const sortedIndex = denominator - i - 1;
           cellNode.y = this.rectangle.height * ( sortedIndex + 0.5 ) / denominator;
         }
 
@@ -120,18 +120,18 @@ define( require => {
       if ( this.options.rectangleOrientation === 'vertical' ) {
 
         // sets the shape of the dividing lines between cells
-        var cellDividersShape = new Shape();
-        var cellHeight = this.rectangle.height / denominator;
-        for ( var j = 1; j < denominator; j++ ) {
+        const cellDividersShape = new Shape();
+        const cellHeight = this.rectangle.height / denominator;
+        for ( let j = 1; j < denominator; j++ ) {
           cellDividersShape.moveTo( 0, j * cellHeight ).horizontalLineToRelative( this.rectangle.width );
         }
         this.cellDividersPath.setShape( cellDividersShape );
       }
       else {
         // sets the shape of the dividing lines between cells
-        cellDividersShape = new Shape();
-        var cellWidth = this.rectangle.width / denominator;
-        for ( var x = 1; x < denominator; x++ ) {
+        const cellDividersShape = new Shape();
+        const cellWidth = this.rectangle.width / denominator;
+        for ( let x = 1; x < denominator; x++ ) {
           cellDividersShape.moveTo( x * cellWidth, 0 ).verticalLineToRelative( this.rectangle.height );
         }
         this.cellDividersPath.setShape( cellDividersShape );

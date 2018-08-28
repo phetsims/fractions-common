@@ -91,21 +91,21 @@ define( require => {
     rebuild() {
       this.removeCellNodes();
 
-      var cellDividersShape = new Shape();
+      const cellDividersShape = new Shape();
 
-      var denominator = this.container.cells.length;
+      const denominator = this.container.cells.length;
 
       // disregard segment for denominator equal to 1
-      var cellDividersLength = ( denominator > 1 ) ? this.circleRadius : 0;
+      const cellDividersLength = ( denominator > 1 ) ? this.circleRadius : 0;
 
       // creates an angle between the cells of a circle node that corresponds to the denominator value
-      var cellDividersAngle = 2 * Math.PI / denominator;
+      const cellDividersAngle = 2 * Math.PI / denominator;
 
       for ( let i = 0; i < denominator; i++ ) {
-        var cell = this.container.cells.get( i );
+        const cell = this.container.cells.get( i );
 
         // TODO: YIKES, OPTIONS
-        var cellNode = new CircularNode( denominator, i, this.options );
+        const cellNode = new CircularNode( denominator, i, this.options );
         cellNode.translation = cellNode.getContainerOffset();
         this.cellNodes.push( cellNode );
         this.addChild( cellNode );
@@ -121,7 +121,7 @@ define( require => {
         cellNode.visibilityListener = cell.appearsFilledProperty.linkAttribute( cellNode, 'visible' );
 
         // positions and draws the polar coordinate of the dividing line between cells
-        var edgePosition = Vector2.createPolar( cellDividersLength, i * cellDividersAngle );
+        const edgePosition = Vector2.createPolar( cellDividersLength, i * cellDividersAngle );
         if ( cellDividersLength ) {
           // Workaround for https://github.com/phetsims/scenery/issues/750
           cellDividersShape.moveToPoint( edgePosition ).lineToPoint( edgePosition.normalized().timesScalar( 0.01 ) );

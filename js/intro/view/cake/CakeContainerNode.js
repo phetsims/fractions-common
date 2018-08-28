@@ -90,7 +90,6 @@ define( require => {
       container.cells.lengthProperty.link( this.rebuildListener );
     }
 
-
     /**
      * Returns the midpoint offset for the given child node at the specified index.
      * @public
@@ -109,25 +108,25 @@ define( require => {
     rebuild() {
       this.removeCellNodes();
 
-      var denominator = this.container.cells.length;
+      const denominator = this.container.cells.length;
 
       // update the grid image
       this.gridImage.setImage( cakeGridImageArray[ denominator - 1 ] );
 
       // {number[]} an array indicating the appropriate z order of a slice of cake, see zLayerOrder method for more details
-      var zLayerArray = this.zLayerOrder( denominator );
+      const zLayerArray = this.zLayerOrder( denominator );
 
       // {Image[]} array of cake slices arranged in z-order from back to front
-      var slicesImage = [];
+      const slicesImage = [];
 
       for ( let i = 0; i < denominator; i++ ) {
-        var cell = this.container.cells.get( i );
+        const cell = this.container.cells.get( i );
 
         // {integer} order of the slice, higher value indicates a higher z value
-        var zOrder = zLayerArray[ i ];
+        const zOrder = zLayerArray[ i ];
 
         // place the cakeImage in the z ordered array TODO: omg no this.options!
-        var cellNode = new CakeNode( denominator, i, this.options );
+        const cellNode = new CakeNode( denominator, i, this.options );
         slicesImage[ zOrder ] = cellNode;
 
         this.cellNodes.push( cellNode );
@@ -142,10 +141,9 @@ define( require => {
         cellNode.cell = cell;
         cellNode.visibilityListener = cell.appearsFilledProperty.linkAttribute( cellNode, 'visible' );
       }
-      // remove all missing cakeImage from slicesImage array
-      slicesImage = slicesImage.filter( function( n ) { return n !== undefined; } );
 
-      this.cakeLayers.setChildren( slicesImage );
+      // remove all missing cakeImage from slicesImage array
+      this.cakeLayers.setChildren( slicesImage.filter( n => n !== undefined ) );
     }
 
     /** updates cells array and removes links when denominator is decreased
