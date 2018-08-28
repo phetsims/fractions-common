@@ -32,7 +32,7 @@ define( require => {
       this.cellDownCallback = cellDownCallback;
 
       // @private {Multilink}
-      this.multilink = Property.multilink( [ container.filledCellCountProperty, container.cells.lengthProperty ], ( numerator, denominator ) => {
+      this.multilink = Property.multilink( [ container.appearsFilledCellCountProperty, container.cells.lengthProperty ], ( numerator, denominator ) => {
         // Sanity, if these get modified out of order (very possible)
         numerator = Math.min( numerator, denominator );
 

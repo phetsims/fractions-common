@@ -22,9 +22,15 @@ define( require => {
       // @public {Property.<boolean>} - How many cells are logically filled?
       this.filledCellCountProperty = new NumberProperty( 0 );
 
+      // @public {Property.<boolean>} - How many cells appear filled?
+      this.appearsFilledCellCountProperty = new NumberProperty( 0 );
+
       // Called when a fill property changes
-      const fillChange = filled => {
+      const filledChange = filled => {
         this.filledCellCountProperty.value += filled ? 1 : -1;
+      };
+      const appearsfilledChange = filled => {
+        this.appearsFilledCellCountProperty.value += filled ? 1 : -1;
       };
 
       // When a cell is added, listen to when its fill changes
@@ -33,16 +39,24 @@ define( require => {
         if ( cell.isFilledProperty.value ) {
           this.filledCellCountProperty.value += 1;
         }
-        cell.isFilledProperty.lazyLink( fillChange );
+        if ( cell.appearsFilledProperty.value ) {
+          this.appearsFilledCellCountProperty.value += 1;
+        }
+        cell.isFilledProperty.lazyLink( filledChange );
+        cell.appearsFilledProperty.lazyLink( appearsfilledChange );
       } );
 
       // When a cell is removed, stop listening to its fill changes
       this.cells.addItemRemovedListener( cell => {
-        cell.isFilledProperty.unlink( fillChange );
+        cell.isFilledProperty.unlink( filledChange );
+        cell.appearsFilledProperty.unlink( appearsfilledChange );
 
         // If it's filled, decrement
         if ( cell.isFilledProperty.value ) {
           this.filledCellCountProperty.value -= 1;
+        }
+        if ( cell.appearsFilledProperty.value ) {
+          this.appearsFilledCellCountProperty.value -= 1;
         }
       } );
     }
