@@ -44,15 +44,14 @@ define( require => {
       // @private {boolean}
       this.dropShadow = options.dropShadow;
 
-      var startAngle = index * this.angleUnit;
-      var endAngle = startAngle + this.angleUnit;
-
       var shape = new Shape();
       if ( denominator > 1 ) {
         shape.moveTo( 0, 0 );
       }
-      var circleRadius = options.isIcon ? CircularNode.DEFAULT_RADIUS / 4 : CircularNode.DEFAULT_RADIUS;
-      shape.arc( 0, 0, circleRadius, startAngle, endAngle, false ).close();
+
+      // @private {number}
+      this.circleRadius = options.isIcon ? CircularNode.DEFAULT_RADIUS / 4 : CircularNode.DEFAULT_RADIUS;
+      shape.arc( 0, 0, this.circleRadius, 0, this.angleUnit, false ).close();
 
       // @private {Node}
       this.container = new Node();
@@ -66,24 +65,35 @@ define( require => {
       }
       this.container.addChild( this.foregroundSector );
 
-      this.rotateCircle( startAngle );
+      // @private {number}
+      this.rotationAngle = 0;
+      this.setRotationAngle( index * this.angleUnit );
     }
 
     /**
+     * Rotates the displayed circular arc to a specific angle (recentering along the centeroid, and handling the shadow)
+     * @public
      *
      * @param {number} angle
-     * @public
      */
-    rotateCircle( angle ) {
+    setRotationAngle( angle ) {
+      this.rotationAngle = angle;
       this.foregroundSector.rotation = angle;
       if ( this.dropShadow ) {
         this.backgroundSector.rotation = angle;
         this.backgroundSector.x = this.foregroundSector.x + 5;
       }
+      this.container.translation = this.getContainerOffset().negated();
+    }
 
-      this.container.translation = this.denominator === 1 ? Vector2.ZERO : Vector2.createPolar(
-        CircularNode.DEFAULT_RADIUS / 2,
-        this.angleUnit / 2 + angle + Math.PI
+    getContainerOffset() {
+      // From https://en.wikipedia.org/wiki/List_of_centroids
+      const alpha = Math.PI / this.denominator;
+      const centroidRadius = ( 2 / 3 ) * this.circleRadius * Math.sin( alpha ) / alpha;
+
+      return Vector2.createPolar(
+        centroidRadius,
+        this.angleUnit / 2 + this.rotationAngle
       );
     }
 

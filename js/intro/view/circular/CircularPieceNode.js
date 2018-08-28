@@ -33,7 +33,7 @@ define( require => {
       // circle specific
       var originCell = piece.originCell;
       if ( originCell ) {
-        this.graphic.rotateCircle( originCell.index * this.angleUnit );
+        this.graphic.setRotationAngle( originCell.index * this.angleUnit );
       }
     }
 
@@ -65,7 +65,7 @@ define( require => {
         if ( targetRotation - originRotation > Math.PI ) {
           targetRotation -= 2 * Math.PI;
         }
-        this.graphic.rotateCircle( ( 1 - this.ratio ) * this.originRotation + this.ratio * targetRotation );
+        this.graphic.setRotationAngle( ( 1 - this.ratio ) * this.originRotation + this.ratio * targetRotation );
 
         var easedRatio = Easing.QUADRATIC_IN_OUT.value( this.ratio );
         this.setMidpoint( this.originProperty.value.blend( this.destinationProperty.value, easedRatio ) );
@@ -95,10 +95,10 @@ define( require => {
 
       var rotationAmount = 5 * dt;
       if ( targetRotation > originRotation ) {
-        this.graphic.rotateCircle( Math.min( targetRotation, originRotation + rotationAmount ) );
+        this.graphic.setRotationAngle( Math.min( targetRotation, originRotation + rotationAmount ) );
       }
       else if ( targetRotation < originRotation ) {
-        this.graphic.rotateCircle( Math.max( targetRotation, originRotation - rotationAmount ) );
+        this.graphic.setRotationAngle( Math.max( targetRotation, originRotation - rotationAmount ) );
       }
 
       this.setMidpoint( midpoint );

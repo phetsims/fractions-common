@@ -99,12 +99,14 @@ define( require => {
       var cellDividersLength = ( denominator > 1 ) ? this.circleRadius : 0;
 
       // creates an angle between the cells of a circle node that corresponds to the denominator value
-      var cellDividersAngle = ( Math.PI * 2 ) / (denominator);
+      var cellDividersAngle = 2 * Math.PI / denominator;
 
       for ( let i = 0; i < denominator; i++ ) {
         var cell = this.container.cells.get( i );
 
+        // TODO: YIKES, OPTIONS
         var cellNode = new CircularNode( denominator, i, this.options );
+        cellNode.translation = cellNode.getContainerOffset();
         this.cellNodes.push( cellNode );
         this.addChild( cellNode );
         cellNode.cursor = 'pointer';
