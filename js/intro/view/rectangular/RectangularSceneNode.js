@@ -32,7 +32,9 @@ define( require => {
           } );
         },
         createPieceNode( piece, finishedAnimatingCallback, droppedCallback ) {
-          return new RectangularPieceNode( piece, finishedAnimatingCallback, droppedCallback );
+          return new RectangularPieceNode( piece, finishedAnimatingCallback, droppedCallback, {
+            rectangleOrientation
+          } );
         },
         createCellNode( denominator, index, options ) {
           return new RectangularNode( denominator, {
