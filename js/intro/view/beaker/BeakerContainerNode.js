@@ -49,7 +49,7 @@ define( require => {
       this.addInputListener( {
         down: function( event ) {
           if ( container.filledCellCountProperty.value > 0 ) {
-            cellDownCallback( event );
+            cellDownCallback( container.getNextFilledCell(), event );
           }
         }
       } );
