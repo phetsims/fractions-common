@@ -9,16 +9,18 @@ define( require => {
   'use strict';
 
   // modules
+  const Bounds2 = require( 'DOT/Bounds2' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const Dimension2 = require( 'DOT/Dimension2' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Node = require( 'SCENERY/nodes/Node' );
   const Path = require( 'SCENERY/nodes/Path' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const RectangularNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularNode' );
   const Shape = require( 'KITE/Shape' );
 
   // TODO: OMFG don't extent rectangle :/
-  class RectangularContainerNode extends Rectangle {
+  class RectangularContainerNode extends Node {
     /**
      * @param {Container} container
      * @param {function} cellDownCallback TODO doc, function( event )
@@ -30,9 +32,9 @@ define( require => {
         isIcon: false
       }, options );
 
-      super( {
-        lineWidth: options.isIcon ? 2 : 3
-      } );
+      assert && assert( options.rectangleOrientation === 'horizontal' || options.rectangleOrientation === 'vertical' );
+
+      super();
 
       // @private
       this.container = container;
@@ -52,19 +54,25 @@ define( require => {
       // determine to the height and width to use when drawing the vertical or horizontal representation.
       // TODO: omg WROST NAMMM. dimension? Doc it
       // TODO: AND WTF do an enumeration
-      this.rectangle = options.rectangleOrientation === 'horizontal' ? RectangularNode.HORIZONTAL_RECTANGULAR_SIZE : RectangularNode.VERTICAL_RECTANGULAR_SIZE;
-
+      this.rectangle = options.rectangleOrientation === 'horizontal'
+        ? RectangularNode.HORIZONTAL_RECTANGULAR_SIZE
+        : RectangularNode.VERTICAL_RECTANGULAR_SIZE;
       if ( options.isIcon ) {
         this.rectangle = new Dimension2( this.rectangle.width / 4, this.rectangle.height / 4 );
       }
-
-      // TODO: can we do this earlier?
-      this.rectSize = this.rectangle;
-      this.stroke = this.strokeProperty;
+      console.log( this.rectangle.toString() );
 
       // @private {Path} creates the path for the dividing lines between cells
       this.cellDividersPath = new Path( null, { stroke: this.strokeProperty } );
       this.addChild( this.cellDividersPath );
+
+      // @private {Rectangle}
+      this.backgroundRectangle = new Rectangle( {
+        lineWidth: options.isIcon ? 2 : 3,
+        stroke: this.strokeProperty,
+        rectBounds: Bounds2.point( 0, 0 ).dilatedXY( this.rectangle.width / 2, this.rectangle.height / 2 )
+      } );
+      this.addChild( this.backgroundRectangle );
 
       // @private {function}
       this.rebuildListener = this.rebuild.bind( this );
@@ -93,6 +101,12 @@ define( require => {
     rebuild() {
       this.removeCellNodes();
       const denominator = this.container.cells.length;
+      const cellWidth = this.rectangle.width / denominator;
+      const cellHeight = this.rectangle.height / denominator;
+
+      const mapCellX = index => ( index - ( denominator - 1 ) / 2 ) * cellWidth;
+      const mapCellY = index => ( ( denominator - 1 ) / 2 - index ) * cellHeight;
+
       for ( let i = 0; i < denominator; i++ ) {
         const cell = this.container.cells.get( i );
         const cellNode = new RectangularNode( denominator, this.options );
@@ -105,11 +119,10 @@ define( require => {
           }
         } );
         if ( this.options.rectangleOrientation === 'horizontal' ) {
-          cellNode.x = this.rectangle.width * ( i + 0.5 ) / denominator;
+          cellNode.x = mapCellX( i );
         }
         else {
-          const sortedIndex = denominator - i - 1;
-          cellNode.y = this.rectangle.height * ( sortedIndex + 0.5 ) / denominator;
+          cellNode.y = mapCellY( i );
         }
 
         // TODO: don't do it this way
@@ -121,18 +134,16 @@ define( require => {
 
         // sets the shape of the dividing lines between cells
         const cellDividersShape = new Shape();
-        const cellHeight = this.rectangle.height / denominator;
-        for ( let j = 1; j < denominator; j++ ) {
-          cellDividersShape.moveTo( 0, j * cellHeight ).horizontalLineToRelative( this.rectangle.width );
+        for ( let i = 0; i < denominator; i++ ) {
+          cellDividersShape.moveTo( -this.rectangle.width / 2, mapCellY( i + 0.5 ) ).horizontalLineToRelative( this.rectangle.width );
         }
         this.cellDividersPath.setShape( cellDividersShape );
       }
       else {
         // sets the shape of the dividing lines between cells
         const cellDividersShape = new Shape();
-        const cellWidth = this.rectangle.width / denominator;
-        for ( let x = 1; x < denominator; x++ ) {
-          cellDividersShape.moveTo( x * cellWidth, 0 ).verticalLineToRelative( this.rectangle.height );
+        for ( let i = 0; i < denominator; i++ ) {
+          cellDividersShape.moveTo( mapCellX( i + 0.5 ), -this.rectangle.height / 2 ).verticalLineToRelative( this.rectangle.height );
         }
         this.cellDividersPath.setShape( cellDividersShape );
       }

@@ -43,7 +43,6 @@ define( require => {
 
       // @private
       this.cursorListener = this.updateCursor.bind( this );
-
       container.appearsFilledCellCountProperty.link( this.cursorListener );
 
       this.addInputListener( {
