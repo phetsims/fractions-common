@@ -80,7 +80,7 @@ define( require => {
      *
      * @returns {Dimension2}
      */
-    static get VERTICAL_RECTANGULAR_SIZE() { return new Dimension2( 110, 185 ); }
+    static get VERTICAL_RECTANGULAR_SIZE() { return new Dimension2( 120, 185 ); }
 
     /**
      * The size of horizontal rectangular nodes.
@@ -88,7 +88,7 @@ define( require => {
      *
      * @returns {Dimension2}
      */
-    static get HORIZONTAL_RECTANGULAR_SIZE() { return new Dimension2( 230, 50 ); }
+    static get HORIZONTAL_RECTANGULAR_SIZE() { return new Dimension2( 250, 50 ); }
   }
 
   return fractionsCommon.register( 'RectangularNode', RectangularNode );

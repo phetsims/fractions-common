@@ -112,7 +112,7 @@ define( require => {
      *
      * @returns {number}
      */
-    static get DEFAULT_RADIUS() { return 55; }
+    static get DEFAULT_RADIUS() { return 63; }
   }
 
   return fractionsCommon.register( 'CircularNode', CircularNode );

@@ -13,11 +13,12 @@ define( require => {
   const CircularNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularNode' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Node = require( 'SCENERY/nodes/Node' );
   const Path = require( 'SCENERY/nodes/Path' );
   const Shape = require( 'KITE/Shape' );
   const Vector2 = require( 'DOT/Vector2' );
 
-  class CircularContainerNode extends Circle {
+  class CircularContainerNode extends Node {
     /**
      * TODO: factor out common things with RectangularContainerNode
      *
@@ -30,21 +31,18 @@ define( require => {
     constructor( container, cellDownCallback, options ) {
 
       options = _.extend( {
+        // TODO: can't we just scale down the icons?
         isIcon: false
       }, options );
 
-      const circleRadius = options.isIcon ? CircularNode.DEFAULT_RADIUS / 4 : CircularNode.DEFAULT_RADIUS;
-
-      super( circleRadius, {
-        lineWidth: options.isIcon ? 2 : 3
-      } );
+      super();
 
       // @public
       // TODO: Don't do this! And don't pass in to children!
       this.options = options;
 
       // @public
-      this.circleRadius = circleRadius;
+      this.circleRadius = options.isIcon ? CircularNode.DEFAULT_RADIUS / 4 : CircularNode.DEFAULT_RADIUS;
 
       // @private
       this.container = container;
@@ -58,7 +56,11 @@ define( require => {
         return count > 0 ? 'black' : 'gray';
       } );
 
-      this.stroke = this.strokeProperty;
+      this.addChild( new Circle( this.circleRadius, {
+        lineWidth: options.isIcon ? 2 : 3,
+        stroke: this.strokeProperty
+      } ) );
+      this.localBounds = this.localBounds;
 
       // @private {Path} creates the path for the dividing lines between cells
       this.cellDividersPath = new Path( null, { stroke: this.strokeProperty } );
