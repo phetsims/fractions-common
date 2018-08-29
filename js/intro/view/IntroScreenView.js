@@ -21,7 +21,6 @@ define( require => {
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const PropertyFractionNode = require( 'FRACTIONS_COMMON/common/view/PropertyFractionNode' );
   const Text = require( 'SCENERY/nodes/Text' );
-  const Vector2 = require( 'DOT/Vector2' );
 
   // strings
   const mixedNumberString = require( 'string!FRACTIONS_COMMON/mixedNumber' );
@@ -36,21 +35,6 @@ define( require => {
     constructor( model ) {
       super( model );
 
-      const mixedFractionNode = new PropertyFractionNode( model.numeratorProperty, model.denominatorProperty, {
-        type: FractionDisplayType.MIXED,
-        scale: 2,
-
-        maxWhole: model.containerCountProperty.range.max,
-        maxNumerator: model.denominatorProperty.range.max - 1,
-        maxDenominator: model.denominatorProperty.range.max
-      } );
-      this.addChild( new AlignBox( mixedFractionNode, {
-        alignBounds: this.layoutBounds,
-        xAlign: 'left',
-        margin: MARGIN
-      } ) );
-      model.showMixedNumbersProperty.linkAttribute( mixedFractionNode, 'visible' );
-
       // "Max" panel
       this.addChild( new Panel( new AlignBox( new MaxNode( model.containerCountProperty ), {
         group: this.topAlignGroup
@@ -63,6 +47,18 @@ define( require => {
       } ) );
 
       if ( model.allowMixedNumbers ) {
+        // @private {Node}
+        this.mixedFractionNode = new PropertyFractionNode( model.numeratorProperty, model.denominatorProperty, {
+          type: FractionDisplayType.MIXED,
+          scale: 2,
+
+          maxWhole: model.containerCountProperty.range.max,
+          maxNumerator: model.denominatorProperty.range.max - 1,
+          maxDenominator: model.denominatorProperty.range.max
+        } );
+        this.addChild( this.mixedFractionNode );
+        model.showMixedNumbersProperty.linkAttribute( this.mixedFractionNode, 'visible' );
+
         const label = new Text( mixedNumberString, { font: new PhetFont( 26 ) } );
         this.addChild( new Checkbox( label, model.showMixedNumbersProperty, {
           boxWidth: 30,
@@ -70,29 +66,25 @@ define( require => {
           bottom: this.resetAllButton.top - 40
         } ) );
       }
-    }
 
-    /**
-     * Subclasses should position the representation panel properly.
-     * @protected
-     * @override
-     *
-     * @param {Node} representationPanel
-     */
-    layoutRepresentationPanel( representationPanel ) {
-      representationPanel.leftTop = this.layoutBounds.leftTop.plusXY( MARGIN + ( this.model.allowMixedNumbers ? 100 : 0 ), MARGIN );
-    }
+      // layout
+      const centerY = this.layoutBounds.centerY;
+      this.adjustableFractionNode.right = this.layoutBounds.right - MARGIN;
+      this.adjustableFractionNode.centerY = centerY;
+      if ( this.mixedFractionNode ) {
+        this.mixedFractionNode.left = this.layoutBounds.left + MARGIN;
+        this.mixedFractionNode.centerY = centerY;
+      }
 
-    /**
-     * Subclasses should position the view container properly.
-     * @protected
-     * @override
-     *
-     * @param {Node} viewContainer
-     * @param {Node} representationPanel
-     */
-    layoutViewContainer( viewContainer, representationPanel ) {
-      viewContainer.translation = new Vector2( representationPanel.centerX, representationPanel.bottom + 60 );
+      this.representationPanel.top = this.layoutBounds.top + MARGIN;
+      const left = this.model.allowMixedNumbers ? this.mixedFractionNode.right : this.layoutBounds.left;
+      const right = this.adjustableFractionNode.left;
+      const centerX = ( left + right ) / 2;
+      this.representationPanel.centerX = centerX;
+      this.viewContainer.x = centerX;
+      this.viewContainer.y = centerY;
+      this.bucketContainer.centerX = centerX;
+      this.bucketContainer.bottom = this.layoutBounds.bottom - MARGIN;
     }
   }
 

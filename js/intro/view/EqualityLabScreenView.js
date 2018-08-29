@@ -12,7 +12,6 @@ define( require => {
   const ContainerSetScreenView = require( 'FRACTIONS_COMMON/intro/view/ContainerSetScreenView' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
-  const Vector2 = require( 'DOT/Vector2' );
 
   // constants
   const MARGIN = FractionsCommonConstants.PANEL_MARGIN;
@@ -24,30 +23,18 @@ define( require => {
     constructor( model ) {
       super( model );
 
+      // layout
+      const centerY = this.layoutBounds.centerY;
+      this.adjustableFractionNode.right = this.layoutBounds.right - MARGIN;
+      this.adjustableFractionNode.centerY = centerY;
+      this.representationPanel.top = this.layoutBounds.top + MARGIN;
+      this.representationPanel.left = MARGIN; // TODO: Will be different
+      this.viewContainer.x = this.representationPanel.centerX;
+      this.viewContainer.y = this.representationPanel.bottom + 20; // TODO????
+      this.bucketContainer.centerX = this.representationPanel.centerX;
+      this.bucketContainer.bottom = this.layoutBounds.bottom - MARGIN;
+
       // TODO: Will have other content here in a bit
-    }
-
-    /**
-     * Subclasses should position the representation panel properly.
-     * @protected
-     * @override
-     *
-     * @param {Node} representationPanel
-     */
-    layoutRepresentationPanel( representationPanel ) {
-      representationPanel.leftTop = this.layoutBounds.leftTop.plusXY( MARGIN, MARGIN );
-    }
-
-    /**
-     * Subclasses should position the view container properly.
-     * @protected
-     * @override
-     *
-     * @param {Node} viewContainer
-     * @param {Node} representationPanel
-     */
-    layoutViewContainer( viewContainer, representationPanel ) {
-      viewContainer.translation = new Vector2( representationPanel.centerX, representationPanel.bottom + 20 );
     }
   }
 

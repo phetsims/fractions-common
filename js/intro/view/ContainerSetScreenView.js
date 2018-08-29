@@ -46,7 +46,8 @@ define( require => {
       // @protected {AlignGroup}
       this.topAlignGroup = new AlignGroup( { matchHorizontal: false } );
 
-      const representationPanel = new Panel( new AlignBox( new RepresentationRadioButtonGroup( model.representationProperty, model.representations ), {
+      // @protected {Node}
+      this.representationPanel = new Panel( new AlignBox( new RepresentationRadioButtonGroup( model.representationProperty, model.representations ), {
         group: this.topAlignGroup
       } ), {
         fill: FractionsCommonColorProfile.panelBackgroundProperty,
@@ -54,12 +55,9 @@ define( require => {
         yMargin: 10
       } );
 
-      const bucketContainer = new Node();
-      const viewContainer = new Node();
-
-      this.addChild( representationPanel );
-      this.addChild( bucketContainer );
-      this.addChild( viewContainer );
+      // @protected {Node}
+      this.bucketContainer = new Node();
+      this.viewContainer = new Node();
 
       // @private {Node|null} the visual representation of the container set
       this.currentView = null;
@@ -70,8 +68,8 @@ define( require => {
         model.completeAllPieces();
 
         if ( this.currentView ) {
-          viewContainer.removeAllChildren();
-          bucketContainer.removeAllChildren();
+          this.viewContainer.removeAllChildren();
+          this.bucketContainer.removeAllChildren();
           this.currentView.dispose();
         }
 
@@ -125,22 +123,19 @@ define( require => {
         }
         if ( this.currentView ) {
           // add the chosen visual representation to the scene graph
-          viewContainer.addChild( this.currentView );
+          this.viewContainer.addChild( this.currentView );
           if ( this.currentView.pieceLayer ) {
             // TODO: egad, why are we doing this? Also when do pieces need to be behind?
-            viewContainer.addChild( this.currentView.pieceLayer );
+            this.viewContainer.addChild( this.currentView.pieceLayer );
           }
           if ( this.currentView.bucketNode ) {
-            bucketContainer.addChild( this.currentView.bucketNode );
+            this.bucketContainer.addChild( this.currentView.bucketNode );
           }
         }
       } );
 
-      this.addChild( new AlignBox( new AdjustableFractionNode( model.numeratorProperty, model.denominatorProperty, model.containerCountProperty ), {
-        alignBounds: this.layoutBounds,
-        xAlign: 'right',
-        margin: MARGIN
-      } ) );
+      // @protected {Node}
+      this.adjustableFractionNode = new AdjustableFractionNode( model.numeratorProperty, model.denominatorProperty, model.containerCountProperty );
 
       // @protected {Node}
       this.resetAllButton = new ResetAllButton( {
@@ -150,12 +145,22 @@ define( require => {
         right: this.layoutBounds.right - MARGIN,
         bottom: this.layoutBounds.bottom - MARGIN
       } );
-      this.addChild( this.resetAllButton );
 
-      // Layout
-      this.layoutRepresentationPanel( representationPanel );
-      this.layoutViewContainer( viewContainer, representationPanel );
-      bucketContainer.translation = new Vector2( representationPanel.centerX, this.layoutBounds.bottom - 120 );
+      this.children = [
+        this.representationPanel,
+        this.bucketContainer,
+        this.viewContainer,
+        this.adjustableFractionNode,
+        this.resetAllButton
+      ];
+    }
+
+    /**
+     * Sets up the initial layout of the screen view. Should be done once all initialization is complete.
+     * @protected
+     */
+    initializeLayout() {
+
     }
 
     /**
@@ -166,27 +171,6 @@ define( require => {
      */
     step( dt ) {
       this.currentView.step( dt );
-    }
-
-    /**
-     * Subclasses should position the representation panel properly.
-     * @protected
-     *
-     * @param {Node} representationPanel
-     */
-    layoutRepresentationPanel( representationPanel ) {
-      throw new Error( 'abstract' );
-    }
-
-    /**
-     * Subclasses should position the view container properly.
-     * @protected
-     *
-     * @param {Node} viewContainer
-     * @param {Node} representationPanel
-     */
-    layoutViewContainer( viewContainer, representationPanel ) {
-      throw new Error( 'abstract' );
     }
   }
 
