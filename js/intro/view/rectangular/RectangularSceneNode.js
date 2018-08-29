@@ -22,31 +22,31 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( model, options ) {
-      assert && assert( options.rectangleOrientation );
+      assert && assert( RectangularOrientation.is( options.rectangularOrientation ) );
 
-      const rectangleOrientation = options.rectangleOrientation;
+      const rectangularOrientation = options.rectangularOrientation;
       const maxContainers = model.containerCountProperty.range.max;
 
       super( model, _.extend( {
         createContainerNode( container, cellDownCallback ) {
           return new RectangularContainerNode( container, cellDownCallback, {
-            rectangleOrientation
+            rectangularOrientation
           } );
         },
         createPieceNode( piece, finishedAnimatingCallback, droppedCallback ) {
           return new RectangularPieceNode( piece, finishedAnimatingCallback, droppedCallback, {
-            rectangleOrientation
+            rectangularOrientation
           } );
         },
         createCellNode( denominator, index, options ) {
           return new RectangularNode( denominator, {
             dropShadow: false,
-            rectangleOrientation
+            rectangularOrientation
           } );
         },
 
         // TODO: enumeration
-        maxContainersPerRow: rectangleOrientation === RectangularOrientation.VERTICAL ? maxContainers / 2 : maxContainers
+        maxContainersPerRow: rectangularOrientation === RectangularOrientation.HORIZONTAL ? maxContainers / 2 : maxContainers
       }, options ) );
     }
   }

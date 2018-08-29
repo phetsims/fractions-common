@@ -28,9 +28,12 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( container, cellDownCallback, options ) {
-      assert && assert( RectangularOrientation.is( options.rectangleOrientation ) );
+      assert && assert( RectangularOrientation.is( options.rectangularOrientation ) );
 
       super();
+
+      // @private {RectangularOrientation}
+      this.rectangularOrientation = options.rectangularOrientation;
 
       // @private
       this.container = container;
@@ -44,13 +47,10 @@ define( require => {
         return count > 0 ? 'black' : 'gray';
       } );
 
-      // TODO: Don't do this! And don't pass in to children!
-      this.options = options;
-
       // determine to the height and width to use when drawing the vertical or horizontal representation.
       // TODO: omg WROST NAMMM. dimension? Doc it
       // TODO: AND WTF do an enumeration
-      this.rectangle = RectangularNode.getSize( options.rectangleOrientation );
+      this.rectangle = RectangularNode.getSize( options.rectangularOrientation );
 
       // @private {Path} creates the path for the dividing lines between cells
       this.cellDividersPath = new Path( null, { stroke: this.strokeProperty } );
@@ -101,7 +101,9 @@ define( require => {
 
       for ( let i = 0; i < denominator; i++ ) {
         const cell = this.container.cells.get( i );
-        const cellNode = new RectangularNode( denominator, this.options );
+        const cellNode = new RectangularNode( denominator, {
+          rectangularOrientation: this.rectangularOrientation
+        } );
         this.cellNodes.push( cellNode );
         this.addChild( cellNode );
         cellNode.cursor = 'pointer';
@@ -110,8 +112,7 @@ define( require => {
             this.cellDownCallback( cell, event );
           }
         } );
-        // TODO: don't do this.options
-        if ( this.options.rectangleOrientation === RectangularOrientation.HORIZONTAL ) {
+        if ( this.rectangularOrientation === RectangularOrientation.HORIZONTAL ) {
           cellNode.x = mapCellX( i );
         }
         else {
@@ -123,7 +124,7 @@ define( require => {
         cellNode.visibilityListener = cell.appearsFilledProperty.linkAttribute( cellNode, 'visible' );
       }
 
-      if ( this.options.rectangleOrientation === RectangularOrientation.VERTICAL ) {
+      if ( this.rectangularOrientation === RectangularOrientation.VERTICAL ) {
 
         // sets the shape of the dividing lines between cells
         const cellDividersShape = new Shape();

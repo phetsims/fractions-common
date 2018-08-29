@@ -88,7 +88,7 @@ define( require => {
           break;
         case Representation.HORIZONTAL_BAR:
           bucketIcon = new RectangularContainerNode( iconContainer, () => {}, {
-            rectangleOrientation: RectangularOrientation.HORIZONTAL
+            rectangularOrientation: RectangularOrientation.HORIZONTAL
           } );
           bucketIconBackground = new Rectangle( 0, 0, bucketIcon.width, bucketIcon.height, 0, 0, {
             fill: 'white',
@@ -104,7 +104,7 @@ define( require => {
           break;
         case Representation.VERTICAL_BAR:
           bucketIcon = new RectangularContainerNode( iconContainer, () => {}, {
-            rectangleOrientation: RectangularOrientation.VERTICAL
+            rectangularOrientation: RectangularOrientation.VERTICAL
           } );
           bucketIconBackground = new Rectangle( 0, 0, bucketIcon.width, bucketIcon.height, 0, 0, {
             fill: 'white',

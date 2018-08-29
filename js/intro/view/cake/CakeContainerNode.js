@@ -49,10 +49,6 @@ define( require => {
       super();
 
       // @private
-      // TODO: don't do this. Egad, are we passing it to children?
-      this.options = options;
-
-      // @private
       this.container = container;
 
       // @private
@@ -128,7 +124,7 @@ define( require => {
         // {integer} order of the slice, higher value indicates a higher z value
         const zOrder = zLayerArray[ i ];
 
-        // place the cakeImage in the z ordered array TODO: omg no this.options!
+        // place the cakeImage in the z ordered array
         const cellNode = new CakeNode( denominator, i );
         cellNode.translation = cellNode.getOffset();
         slicesImage[ zOrder ] = cellNode;

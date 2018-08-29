@@ -90,13 +90,13 @@ define( require => {
         else if ( representation === Representation.VERTICAL_BAR ) {
           this.currentView = new RectangularSceneNode( model, {
             getBucketLocation,
-            rectangleOrientation: RectangularOrientation.VERTICAL
+            rectangularOrientation: RectangularOrientation.VERTICAL
           } );
         }
         else if ( representation === Representation.HORIZONTAL_BAR ) {
           this.currentView = new RectangularSceneNode( model, {
             getBucketLocation,
-            rectangleOrientation: RectangularOrientation.HORIZONTAL,
+            rectangularOrientation: RectangularOrientation.HORIZONTAL,
             maxHorizontalContainers: 3
           } );
         }

@@ -30,18 +30,18 @@ define( require => {
 
       options = _.extend( {
         dropShadow: false,
-        rectangleOrientation: RectangularOrientation.VERTICAL_SIZE
+        rectangularOrientation: RectangularOrientation.VERTICAL_SIZE
       }, options );
 
       assert && assert( typeof options.dropShadow === 'boolean' );
-      assert && assert( RectangularOrientation.is( options.rectangleOrientation ) );
+      assert && assert( RectangularOrientation.is( options.rectangularOrientation ) );
 
       super();
 
-      const size = RectangularNode.getSize( options.rectangleOrientation );
+      const size = RectangularNode.getSize( options.rectangularOrientation );
       let rectWidth = size.width;
       let rectHeight = size.height;
-      if ( options.rectangleOrientation === RectangularOrientation.VERTICAL ) {
+      if ( options.rectangularOrientation === RectangularOrientation.VERTICAL ) {
         rectHeight /= denominator;
       }
       else {
@@ -55,7 +55,7 @@ define( require => {
         rectHeight,
 
         // determine the color depend upon representation
-        fill: options.rectangleOrientation === RectangularOrientation.HORIZONTAL ? '#ED4344' : '#FFE600',
+        fill: options.rectangularOrientation === RectangularOrientation.HORIZONTAL ? '#ED4344' : '#FFE600',
         stroke: 'black'
       } );
 
