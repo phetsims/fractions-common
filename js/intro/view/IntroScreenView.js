@@ -38,7 +38,11 @@ define( require => {
 
       const mixedFractionNode = new PropertyFractionNode( model.numeratorProperty, model.denominatorProperty, {
         type: FractionDisplayType.MIXED,
-        scale: 2
+        scale: 2,
+
+        maxWhole: model.containerCountProperty.range.max,
+        maxNumerator: model.denominatorProperty.range.max - 1,
+        maxDenominator: model.denominatorProperty.range.max
       } );
       this.addChild( new AlignBox( mixedFractionNode, {
         alignBounds: this.layoutBounds,

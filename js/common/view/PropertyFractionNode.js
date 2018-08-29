@@ -52,7 +52,7 @@ define( require => {
       this.denominator = this.denominatorProperty.value;
 
       if ( this.type === FractionDisplayType.MIXED ) {
-        this.whole = Math.floor( this.numeratorProperty.value / this.denominatorProperty.value ) || null;
+        this.whole = Math.floor( this.numeratorProperty.value / this.denominatorProperty.value );
         this.numerator = this.numeratorProperty.value % this.denominatorProperty.value;
       }
       else {

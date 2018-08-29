@@ -25,9 +25,9 @@ define( require => {
 
   class AdjustableFractionNode extends HBox {
     /**
-     * @param {Property.<number>} numeratorProperty
-     * @param {Property.<number>} denominatorProperty
-     * @param {Property.<number>} containerCountProperty
+     * @param {NumberProperty} numeratorProperty
+     * @param {NumberProperty} denominatorProperty
+     * @param {NumberProperty} containerCountProperty
      * @param {Object} [options]
      */
     constructor( numeratorProperty, denominatorProperty, containerCountProperty, options ) {
@@ -44,7 +44,10 @@ define( require => {
         children: [
           new PropertyFractionNode( numeratorProperty, denominatorProperty, {
             type: options.type,
-            scale: 3
+            scale: 3,
+
+            maxNumerator: numeratorProperty.range.max,
+            maxDenominator: denominatorProperty.range.max
           } ),
           new VBox( {
             spacing: 30,

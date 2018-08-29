@@ -9,6 +9,8 @@ define( require => {
   'use strict';
 
   // modules
+  const AlignBox = require( 'SCENERY/nodes/AlignBox' );
+  const Bounds2 = require( 'DOT/Bounds2' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const Line = require( 'SCENERY/nodes/Line' );
@@ -29,7 +31,13 @@ define( require => {
         // {number|null} - Empty if null
         whole: null,
         numerator: null,
-        denominator: null
+        denominator: null,
+
+        // {number|null} - If provided, it will ensure that spacing is provided from 0 up to the specified number for
+        // that slot
+        maxWhole: null,
+        maxNumerator: null,
+        maxDenominator: null
       }, options );
 
       // @private {Text}
@@ -43,6 +51,24 @@ define( require => {
         font: new PhetFont( 30 )
       } );
 
+      const maxTextBounds = ( textNode, maxNumber ) => {
+        return _.reduce( _.range( 0, maxNumber + 1 ), ( bounds, number ) => {
+          textNode.text = number;
+          return bounds.union( textNode.bounds );
+        }, Bounds2.NOTHING );
+      };
+
+      // @private {Node}
+      this.wholeContainer = options.maxWhole ? new AlignBox( this.wholeText, {
+        alignBounds: maxTextBounds( this.wholeText, options.maxWhole )
+      } ) : this.wholeText;
+      this.numeratorContainer = options.maxNumerator ? new AlignBox( this.numeratorText, {
+        alignBounds: maxTextBounds( this.numeratorText, options.maxNumerator )
+      } ) : this.numeratorText;
+      this.denominatorContainer = options.maxDenominator ? new AlignBox( this.denominatorText, {
+        alignBounds: maxTextBounds( this.denominatorText, options.maxDenominator )
+      } ) : this.denominatorText;
+
       // @private {Line}
       this.lineNode = new Line( 0, 0, 10, 0, {
         stroke: 'black',
@@ -51,7 +77,7 @@ define( require => {
 
       // @private {VBox}
       this.vbox = new VBox( {
-        children: [ this.numeratorText, this.lineNode, this.denominatorText ],
+        children: [ this.numeratorContainer, this.lineNode, this.denominatorContainer ],
         spacing: 1
       } );
 
@@ -75,14 +101,14 @@ define( require => {
       const hasDenominator = this._denominator !== null;
 
       this.children = [
-        ...( hasWhole ? [ this.wholeText ] : [] ),
+        ...( hasWhole ? [ this.wholeContainer ] : [] ),
         ...( hasNumerator || hasDenominator ? [ this.vbox ] : [] )
       ];
       this.wholeText.text = hasWhole ? this._whole : ' ';
       this.numeratorText.text = hasNumerator ? this._numerator : ' ';
       this.denominatorText.text = hasDenominator ? this._denominator : ' ';
 
-      this.lineNode.x2 = Math.max( this.numeratorText.width, this.denominatorText.width ) + 2;
+      this.lineNode.x2 = Math.max( this.numeratorContainer.width, this.denominatorContainer.width ) + 2;
     }
 
     /**

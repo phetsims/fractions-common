@@ -28,7 +28,8 @@ define( require => {
         initialNumerator: 0,
         initialDenominator: 1,
         initialContainerCount: 1,
-        maxContainers: 6
+        maxContainers: 6,
+        maxDenominator: 8
       }, options );
 
       // @public {Array.<Representation>}
@@ -39,10 +40,16 @@ define( require => {
 
       // @public {Property.<number>} - If a fraction is N/D, the numerator is the N.
       // NOTE: All internal changes to this property should be done through changeNumeratorManually.
-      this.numeratorProperty = new NumberProperty( options.initialNumerator );
+      this.numeratorProperty = new NumberProperty( options.initialNumerator, {
+        range: new Range( 0, options.maxContainers * options.maxDenominator ),
+        numberType: 'Integer'
+      } );
 
       // @public {Property.<number>} - If a fraction is N/D, the numerator is the D
-      this.denominatorProperty = new NumberProperty( options.initialDenominator );
+      this.denominatorProperty = new NumberProperty( options.initialDenominator, {
+        range: new Range( 1, options.maxDenominator ),
+        numberType: 'Integer'
+      } );
 
       // @public {NumberProperty} - What is the maximum value the fraction can have?
       this.containerCountProperty = new NumberProperty( options.initialContainerCount, {
