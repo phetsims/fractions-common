@@ -68,7 +68,7 @@ define( require => {
       }
 
       // layout
-      const centerY = this.layoutBounds.centerY;
+      const centerY = this.layoutBounds.centerY - 30;
       this.adjustableFractionNode.right = this.layoutBounds.right - MARGIN;
       this.adjustableFractionNode.centerY = centerY;
       if ( this.mixedFractionNode ) {
