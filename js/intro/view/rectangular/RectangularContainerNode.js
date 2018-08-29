@@ -12,6 +12,7 @@ define( require => {
   const Bounds2 = require( 'DOT/Bounds2' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Path = require( 'SCENERY/nodes/Path' );
@@ -59,6 +60,7 @@ define( require => {
       // @private {Rectangle}
       this.backgroundRectangle = new Rectangle( {
         lineWidth: FractionsCommonConstants.INTRO_CONTAINER_LINE_WIDTH,
+        fill: FractionsCommonColorProfile.introContainerBackgroundProperty,
         stroke: this.strokeProperty,
         rectBounds: Bounds2.point( 0, 0 ).dilatedXY( this.rectangle.width / 2, this.rectangle.height / 2 )
       } );

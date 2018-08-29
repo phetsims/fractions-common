@@ -13,6 +13,7 @@ define( require => {
   const CircularNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularNode' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Path = require( 'SCENERY/nodes/Path' );
@@ -49,6 +50,7 @@ define( require => {
 
       this.addChild( new Circle( this.circleRadius, {
         lineWidth: FractionsCommonConstants.INTRO_CONTAINER_LINE_WIDTH,
+        fill: FractionsCommonColorProfile.introContainerBackgroundProperty,
         stroke: this.strokeProperty
       } ) );
       this.localBounds = this.localBounds;
