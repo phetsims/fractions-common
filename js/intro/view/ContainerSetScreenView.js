@@ -111,12 +111,7 @@ define( require => {
           } );
         }
         else if ( representation === Representation.NUMBER_LINE ) {
-
-          // TODO: find a more general way to lay out the numberLine than reversing the action of the container
-          this.currentView = new NumberLineSceneNode( model, {
-            x: 25 - this.layoutBounds.centerX,
-            y: 60
-          } );
+          this.currentView = new NumberLineSceneNode( model );
         }
         if ( this.currentView ) {
           // add the chosen visual representation to the scene graph
