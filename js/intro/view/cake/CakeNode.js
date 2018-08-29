@@ -10,6 +10,7 @@ define( require => {
   'use strict';
 
   // modules
+  const Bounds2 = require( 'DOT/Bounds2' );
   const Dimension2 = require( 'DOT/Dimension2' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Image = require( 'SCENERY/nodes/Image' );
@@ -66,7 +67,8 @@ define( require => {
     [ cake_8_1Image, cake_8_2Image, cake_8_3Image, cake_8_4Image, cake_8_5Image, cake_8_6Image, cake_8_7Image, cake_8_8Image ]
   ];
   const CAKE_IMAGE_SIZE = new Dimension2( 219, 166 );
-  const CAKE_DEFAULT_SCALE = 140 / CAKE_IMAGE_SIZE.height;
+  const CAKE_IMAGE_BOUNDS = new Bounds2(  25, 10, 194, 154 );
+  const CAKE_DEFAULT_SCALE = 130 / CAKE_IMAGE_SIZE.height;
   const SCALED_CAKE_IMAGE_SIZE = new Dimension2(
     CAKE_DEFAULT_SCALE * CAKE_IMAGE_SIZE.width,
     CAKE_DEFAULT_SCALE * CAKE_IMAGE_SIZE.height
@@ -87,7 +89,8 @@ define( require => {
 
       // @private {Image}
       this.imageNode = new Image( cakeImageArray[ denominator - 1 ][ index ], {
-        scale: CAKE_DEFAULT_SCALE
+        scale: CAKE_DEFAULT_SCALE,
+        localBounds: CAKE_IMAGE_BOUNDS
       } );
       this.addChild( this.imageNode );
 
@@ -142,6 +145,9 @@ define( require => {
 
   // @public {Vector2}
   CakeNode.CAKE_OFFSET = CAKE_OFFSET;
+
+  // @public {Bounds2}
+  CakeNode.CAKE_IMAGE_BOUNDS = CAKE_IMAGE_BOUNDS;
 
   return CakeNode;
 } );

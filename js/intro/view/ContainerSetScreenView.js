@@ -83,8 +83,7 @@ define( require => {
         this.currentView = null;
         if ( representation === Representation.CIRCLE ) {
           this.currentView = new CircularSceneNode( model, {
-            getBucketLocation,
-            verticalOffset: 10
+            getBucketLocation
           } );
         }
         else if ( representation === Representation.VERTICAL_BAR ) {
@@ -97,8 +96,7 @@ define( require => {
           this.currentView = new RectangularSceneNode( model, {
             getBucketLocation,
             rectangleOrientation: 'horizontal',
-            maxHorizontalContainers: 3,
-            verticalOffset: 40
+            maxHorizontalContainers: 3
           } );
         }
         else if ( representation === Representation.BEAKER ) {
@@ -108,9 +106,7 @@ define( require => {
         }
         else if ( representation === Representation.CAKE ) {
           this.currentView = new CakeSceneNode( model, {
-            getBucketLocation,
-            verticalOffset: 30,
-            horizontalSpacing: -20
+            getBucketLocation
           } );
         }
         else if ( representation === Representation.NUMBER_LINE ) {

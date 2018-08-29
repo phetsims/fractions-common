@@ -61,17 +61,19 @@ define( require => {
       // @private {Image} create grid image of the cake with the appropriate number of cells
       this.gridImage = new Image( cakeGridImageArray[ container.cells.lengthProperty.value - 1 ], {
         scale: CakeNode.CAKE_DEFAULT_SCALE,
+        localBounds: CakeNode.CAKE_IMAGE_BOUNDS,
         translation: CakeNode.CAKE_OFFSET.negated()
       } );
 
       // create white background for the cake.
       // The shape of the ellipse is determined empirically based on the image
       var cakeGridBase = new Path( Shape.ellipse(
-        this.gridImage.width / 2,
-        this.gridImage.height * 0.635,
-        this.gridImage.width * 0.364,
-        this.gridImage.height * 0.277, 0 ), {
+        CakeNode.CAKE_IMAGE_SIZE.width * 0.501,
+        CakeNode.CAKE_IMAGE_SIZE.height * 0.641,
+        CakeNode.CAKE_IMAGE_SIZE.width * 0.364,
+        CakeNode.CAKE_IMAGE_SIZE.height * 0.276, 0 ), {
         fill: 'white',
+        scale: CakeNode.CAKE_DEFAULT_SCALE,
         translation: CakeNode.CAKE_OFFSET.negated()
       } );
 

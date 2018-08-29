@@ -9,15 +9,14 @@ define( require => {
   'use strict';
 
   // modules
-  const AlignBox = require( 'SCENERY/nodes/AlignBox' );
   const arrayRemove = require( 'PHET_CORE/arrayRemove' );
-  const Bounds2 = require( 'DOT/Bounds2' );
   const BucketNode = require( 'FRACTIONS_COMMON/intro/view/BucketNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const Node = require( 'SCENERY/nodes/Node' );
   const SceneNode = require( 'FRACTIONS_COMMON/intro/view/SceneNode' );
   const VBox = require( 'SCENERY/nodes/VBox' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   class CellSceneNode extends SceneNode {
     /**
@@ -40,10 +39,6 @@ define( require => {
         getBucketLocation: null,
 
         // {number} - optional
-        horizontalSpacing: 10, // horizontal spacing between adjacent containers
-        verticalOffset: 0, // TODO: improved vertical alignment,
-
-        // {number} - optional
         maxContainersPerRow: model.containerCountProperty.range.max
       }, config );
 
@@ -60,9 +55,6 @@ define( require => {
 
       // @private {function}
       this.getBucketLocation = config.getBucketLocation;
-
-      // @private {number}
-      this.horizontalSpacing = config.horizontalSpacing;
 
       // @private {VBox}
       this.containerLayer = new VBox( {
@@ -103,13 +95,9 @@ define( require => {
       this.bucketNode = new BucketNode( model.denominatorProperty, this.onBucketDragStart.bind( this ),
                                         config.createCellNode, model.representationProperty );
 
-      this.addChild( new AlignBox( this.containerLayer, {
-        //TODO: WTF? This is tiny?
-        alignBounds: Bounds2.point( 0, config.verticalOffset ),
-
-        // aligns the containerNodes with respect to the top
-        yAlign: 'top'
-      } ) );
+      this.children = [
+        this.containerLayer
+      ];
     }
 
     /**
@@ -300,7 +288,7 @@ define( require => {
       // creates new HBox within containerLayer dependent on VBox container
       if ( currentContainerNodesLength % this.maxContainersPerRow === 0 ) {
         const containerHBox = new HBox( {
-          spacing: this.horizontalSpacing,
+          spacing: 10,
           align: 'top'
         } );
         this.containerHBoxes.push( containerHBox );
@@ -310,6 +298,7 @@ define( require => {
       // adds the new containerNode at the end of containerHboxes array
       this.containerHBoxes[ this.containerHBoxes.length - 1 ].addChild( containerNode );
 
+      this.updateLayout();
     }
 
     /**
@@ -337,6 +326,14 @@ define( require => {
       }
 
       containerNode.dispose();
+
+      this.updateLayout();
+    }
+
+    updateLayout() {
+      if ( this.containerLayer.bounds.isValid() ) {
+        this.containerLayer.center = Vector2.ZERO;
+      }
     }
 
     /**
