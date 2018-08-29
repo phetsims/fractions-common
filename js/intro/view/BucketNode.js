@@ -11,7 +11,7 @@ define( require => {
   'use strict';
 
   // modules
-  const BeakerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerNode' );
+  const BeakerContainerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerContainerNode' );
   const Bucket = require( 'PHETCOMMON/model/Bucket' );
   const BucketFront = require( 'SCENERY_PHET/bucket/BucketFront' );
   const BucketHole = require( 'SCENERY_PHET/bucket/BucketHole' );
@@ -96,7 +96,7 @@ define( require => {
           return new CakeContainerNode( iconContainer, () => {} );
         },
         [ Representation.BEAKER ]() {
-          return new BeakerNode( 1, denominatorProperty.value );
+          return new BeakerContainerNode( iconContainer, () => {} );
         }
       };
 
