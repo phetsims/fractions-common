@@ -10,11 +10,11 @@ define( require => {
 
   // modules
   const Bounds2 = require( 'DOT/Bounds2' );
+  const ContainerNode = require( 'FRACTIONS_COMMON/intro/view/ContainerNode' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
-  const Node = require( 'SCENERY/nodes/Node' );
   const Path = require( 'SCENERY/nodes/Path' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const RectangularNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularNode' );
@@ -22,7 +22,7 @@ define( require => {
   const Shape = require( 'KITE/Shape' );
 
   // TODO: ContainerNode supertype?
-  class RectangularContainerNode extends Node {
+  class RectangularContainerNode extends ContainerNode {
     /**
      * @param {Container} container
      * @param {function} cellDownCallback TODO doc, function( event )
@@ -31,16 +31,10 @@ define( require => {
     constructor( container, cellDownCallback, options ) {
       assert && assert( RectangularOrientation.is( options.rectangularOrientation ) );
 
-      super();
+      super( container, cellDownCallback );
 
       // @private {RectangularOrientation}
       this.rectangularOrientation = options.rectangularOrientation;
-
-      // @private
-      this.container = container;
-
-      // @private
-      this.cellDownCallback = cellDownCallback;
 
       // @private {Property.<string>}
       // TODO: FFS, dispose it

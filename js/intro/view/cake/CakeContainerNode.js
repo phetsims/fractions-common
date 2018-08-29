@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   const CakeNode = require( 'FRACTIONS_COMMON/intro/view/cake/CakeNode' );
+  const ContainerNode = require( 'FRACTIONS_COMMON/intro/view/ContainerNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Image = require( 'SCENERY/nodes/Image' );
   const Node = require( 'SCENERY/nodes/Node' );
@@ -37,7 +38,7 @@ define( require => {
     cake_grid_8Image
   ];
 
-  class CakeContainerNode extends Node {
+  class CakeContainerNode extends ContainerNode {
     /**
      * TODO: factor out common things with RectangularContainerNode and CircularContainerNode
      *
@@ -46,13 +47,7 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( container, cellDownCallback, options ) {
-      super();
-
-      // @private
-      this.container = container;
-
-      // @private
-      this.cellDownCallback = cellDownCallback;
+      super( container, cellDownCallback );
 
       // @private {Image} create grid image of the cake with the appropriate number of cells
       this.gridImage = new Image( cakeGridImageArray[ container.cells.lengthProperty.value - 1 ], {

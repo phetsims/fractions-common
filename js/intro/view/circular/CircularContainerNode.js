@@ -11,16 +11,16 @@ define( require => {
   // modules
   const Circle = require( 'SCENERY/nodes/Circle' );
   const CircularNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularNode' );
+  const ContainerNode = require( 'FRACTIONS_COMMON/intro/view/ContainerNode' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
-  const Node = require( 'SCENERY/nodes/Node' );
   const Path = require( 'SCENERY/nodes/Path' );
   const Shape = require( 'KITE/Shape' );
   const Vector2 = require( 'DOT/Vector2' );
 
-  class CircularContainerNode extends Node {
+  class CircularContainerNode extends ContainerNode {
     /**
      * TODO: factor out common things with RectangularContainerNode
      *
@@ -31,16 +31,10 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( container, cellDownCallback, options ) {
-      super();
+      super( container, cellDownCallback );
 
       // @public
       this.circleRadius = CircularNode.RADIUS;
-
-      // @private
-      this.container = container;
-
-      // @private
-      this.cellDownCallback = cellDownCallback;
 
       // TODO: fix disposal?
       // @private {Property.<string>} TODO factor out?

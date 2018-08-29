@@ -10,12 +10,12 @@ define( require => {
 
   // modules
   const BeakerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerNode' );
+  const ContainerNode = require( 'FRACTIONS_COMMON/intro/view/ContainerNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const Node = require( 'SCENERY/nodes/Node' );
   const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
 
-  class BeakerContainerNode extends Node {
+  class BeakerContainerNode extends ContainerNode {
     /**
      * TODO: factor out common things with the other container nodes
      *
@@ -24,13 +24,7 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( container, cellDownCallback, options ) {
-      super();
-
-      // @private
-      this.container = container;
-
-      // @private
-      this.cellDownCallback = cellDownCallback;
+      super( container, cellDownCallback);
 
       // @private {Multilink}
       this.multilink = Property.multilink( [ container.appearsFilledCellCountProperty, container.cells.lengthProperty ], ( numerator, denominator ) => {
