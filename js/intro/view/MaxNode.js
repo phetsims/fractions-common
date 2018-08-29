@@ -14,7 +14,6 @@ define( require => {
   const Bounds2 = require( 'DOT/Bounds2' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const RoundNumberSpinner = require( 'FRACTIONS_COMMON/intro/view/RoundNumberSpinner' );
@@ -41,7 +40,7 @@ define( require => {
 
       // Figure out what the largest bounds are for the readout
       const maxReadoutBounds = Bounds2.NOTHING.copy();
-      for ( let n = 1; n <= FractionsCommonConstants.MAX_SHAPE_CONTAINERS; n++ ) {
+      for ( let n = 1; n <= containerCountProperty.range.max; n++ ) {
         readoutText.text = n;
         maxReadoutBounds.includeBounds( readoutText.bounds );
       }

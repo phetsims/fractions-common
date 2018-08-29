@@ -24,6 +24,7 @@ define( require => {
       assert && assert( options.rectangleOrientation );
 
       const rectangleOrientation = options.rectangleOrientation;
+      const maxContainers = model.containerCountProperty.range.max;
 
       super( model, _.extend( {
         createContainerNode( container, cellDownCallback ) {
@@ -41,7 +42,10 @@ define( require => {
             dropShadow: false,
             rectangleOrientation
           } );
-        }
+        },
+
+        // TODO: enumeration
+        maxContainersPerRow: rectangleOrientation === 'horizontal' ? maxContainers / 2 : maxContainers
       }, options ) );
     }
   }

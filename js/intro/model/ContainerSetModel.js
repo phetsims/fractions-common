@@ -28,7 +28,6 @@ define( require => {
         initialNumerator: 0,
         initialDenominator: 1,
         initialContainerCount: 1,
-        minContainers: 1,
         maxContainers: 6
       }, options );
 
@@ -47,7 +46,7 @@ define( require => {
 
       // @public {NumberProperty} - What is the maximum value the fraction can have?
       this.containerCountProperty = new NumberProperty( options.initialContainerCount, {
-        range: new Range( options.minContainers, options.maxContainers ),
+        range: new Range( 1, options.maxContainers ),
         numberType: 'Integer'
       } );
 

@@ -60,7 +60,6 @@ define( require => {
       if ( options.isIcon ) {
         this.rectangle = new Dimension2( this.rectangle.width / 4, this.rectangle.height / 4 );
       }
-      console.log( this.rectangle.toString() );
 
       // @private {Path} creates the path for the dividing lines between cells
       this.cellDividersPath = new Path( null, { stroke: this.strokeProperty } );

@@ -33,6 +33,7 @@ define( require => {
         createPieceNode: null,
 
         // {function} - function( {number} denominator, {number} index, {Object} options ): {Node}
+        // Used to create individual cells to be displayed in the bucket.
         createCellNode: null,
 
         // {function} - function(): {Vector2} - gives the location of the bucket when called
@@ -40,8 +41,10 @@ define( require => {
 
         // {number} - optional
         horizontalSpacing: 10, // horizontal spacing between adjacent containers
-        verticalSpacing: 10, // vertical spacing between containers
-        verticalOffset: 0
+        verticalOffset: 0, // TODO: improved vertical alignment,
+
+        // {number} - optional
+        maxContainersPerRow: model.containerCountProperty.range.max
       }, config );
 
       assert && assert( typeof config.createContainerNode === 'function' );
@@ -54,7 +57,6 @@ define( require => {
       // {function} - Creation functions from subtypes (here since we can't use the inherit pattern)
       this.createContainerNode = config.createContainerNode;
       this.createPieceNode = config.createPieceNode;
-      this.createCellNode = config.createCellNode;
 
       // @private {function}
       this.getBucketLocation = config.getBucketLocation;
@@ -64,7 +66,7 @@ define( require => {
 
       // @private {VBox}
       this.containerLayer = new VBox( {
-        spacing: config.verticalSpacing,
+        spacing: 10,
         align: 'left'
       } );
 
@@ -79,6 +81,9 @@ define( require => {
 
       //@private {Array.<HBox>}
       this.containerHBoxes = [];
+
+      // @private {number}
+      this.maxContainersPerRow = config.maxContainersPerRow;
 
       // @private {function}
       this.addListener = this.addContainer.bind( this );
@@ -96,7 +101,7 @@ define( require => {
 
       // @public {BucketNode} - TODO: better way?
       this.bucketNode = new BucketNode( model.denominatorProperty, this.onBucketDragStart.bind( this ),
-                                        this.createCellNode.bind( this ), model.representationProperty );
+                                        config.createCellNode, model.representationProperty );
 
       this.addChild( new AlignBox( this.containerLayer, {
         //TODO: WTF? This is tiny?
@@ -173,6 +178,7 @@ define( require => {
      * @public
      */
     getCellMidpoint( cell ) {
+      // TODO: some cleanup here would be good. Doesn't have to be this inefficient when called from getClosestCell
       const containerNode = _.find( this.containerNodes, containerNode => containerNode.container === cell.container );
       //TODO: proper coordinate transform
       const matrix = containerNode.getUniqueTrail().getMatrixTo( this.pieceLayer.getUniqueTrail() );
@@ -292,7 +298,7 @@ define( require => {
       this.containerNodes.push( containerNode );
 
       // creates new HBox within containerLayer dependent on VBox container
-      if ( currentContainerNodesLength % this.model.containerCountProperty.range.max === 0 ) {
+      if ( currentContainerNodesLength % this.maxContainersPerRow === 0 ) {
         const containerHBox = new HBox( {
           spacing: this.horizontalSpacing,
           align: 'top'
@@ -315,13 +321,15 @@ define( require => {
       // TODO: factor out find
       const containerNode = _.find( this.containerNodes, containerNode => containerNode.container === container );
 
+      // TODO: Definitely need to redo some of this, especially if containers are removed out-of-order?
+
       arrayRemove( this.containerNodes, containerNode );
 
       // removes the last containerNode within the containerHBox Array
       this.containerHBoxes[ this.containerHBoxes.length - 1 ].removeChild( containerNode );
 
       const currentContainerLength = this.containerNodes.length;
-      if ( currentContainerLength % this.model.containerCountProperty.range.max === 0 ) {
+      if ( currentContainerLength % this.maxContainersPerRow === 0 ) {
 
         // removes the last HBox within containerLayer
         const containerHBoxRemoved = this.containerHBoxes.pop();
