@@ -96,8 +96,7 @@ define( require => {
         else if ( representation === Representation.HORIZONTAL_BAR ) {
           this.currentView = new RectangularSceneNode( model, {
             getBucketLocation,
-            rectangularOrientation: RectangularOrientation.HORIZONTAL,
-            maxHorizontalContainers: 3
+            rectangularOrientation: RectangularOrientation.HORIZONTAL
           } );
         }
         else if ( representation === Representation.BEAKER ) {

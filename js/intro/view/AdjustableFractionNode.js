@@ -16,12 +16,8 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const PropertyFractionNode = require( 'FRACTIONS_COMMON/common/view/PropertyFractionNode' );
-  const Range = require( 'DOT/Range' );
   const RoundNumberSpinner = require( 'FRACTIONS_COMMON/intro/view/RoundNumberSpinner' );
   const VBox = require( 'SCENERY/nodes/VBox' );
-
-  // constants
-  const DENOMINATOR_RANGE = new Range( 1, 8 );
 
   class AdjustableFractionNode extends HBox {
     /**
@@ -66,10 +62,10 @@ define( require => {
               new RoundNumberSpinner(
                 denominatorProperty,
                 new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
-                  return ( denominator + 1 ) <= DENOMINATOR_RANGE.max;
+                  return ( denominator + 1 ) <= denominatorProperty.range.max;
                 } ),
                 new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
-                  return ( denominator - 1 ) >= DENOMINATOR_RANGE.min && numerator / ( denominator - 1 ) <= containerCount;
+                  return ( denominator - 1 ) >= denominatorProperty.range.min && numerator / ( denominator - 1 ) <= containerCount;
                 } )
               )
             ]

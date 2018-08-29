@@ -24,16 +24,22 @@ define( require => {
       super( model );
 
       // layout
-      const centerY = this.layoutBounds.centerY;
-      this.adjustableFractionNode.right = this.layoutBounds.right - MARGIN;
-      this.adjustableFractionNode.centerY = centerY;
+      this.bucketContainer.left = this.layoutBounds.left + MARGIN;
+      this.adjustableFractionNode.left = this.bucketContainer.right + MARGIN;
+      this.representationPanel.right = this.adjustableFractionNode.right;
+
       this.representationPanel.top = this.layoutBounds.top + MARGIN;
-      this.representationPanel.left = MARGIN; // TODO: Will be different
-      this.viewContainer.x = this.representationPanel.centerX;
-      this.viewContainer.y = this.representationPanel.bottom + 20; // TODO????
-      this.bucketContainer.centerX = this.representationPanel.centerX;
+
+      const centerY = this.layoutBounds.centerY - 40;
+      this.viewContainer.y = centerY;
+
+      // TODO: vertical alignment
+      this.adjustableFractionNode.bottom = this.layoutBounds.bottom - MARGIN;
       this.bucketContainer.bottom = this.layoutBounds.bottom - MARGIN;
 
+      model.representationProperty.link( () => {
+        this.viewContainer.right = this.representationPanel.right;
+      } );
       // TODO: Will have other content here in a bit
     }
   }

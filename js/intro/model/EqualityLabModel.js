@@ -9,10 +9,11 @@ define( require => {
   'use strict';
 
   // modules
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const ContainerSetModel = require( 'FRACTIONS_COMMON/intro/model/ContainerSetModel' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const NumberProperty = require( 'AXON/NumberProperty' );
-  const Property = require( 'AXON/Property' );
+  const Range = require( 'DOT/Range' );
   const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
 
   class EqualityLabModel extends ContainerSetModel {
@@ -20,14 +21,19 @@ define( require => {
       super( {
         representations: [ Representation.CIRCLE, Representation.HORIZONTAL_BAR, Representation.VERTICAL_BAR, Representation.BEAKER ],
         initialContainerCount: 4,
-        maxContainers: 4
+        maxContainers: 4,
+        maxDenominator: 6,
+        isCompact: true
       } );
 
-      // @public {Property.<Representation>} - Representation of the noninteractive fraction display for equivalence.
-      this.parallelRepresentationProperty = new Property( Representation.CIRCLE );
+      // @public {Property.<boolean>} - Whether the right side should show a number line instead of the normal
+      // representation.
+      this.showNumberLineProperty = new BooleanProperty( false );
 
       // @public {Property.<number>} - The multiplier used to construct the "parallel" fraction
-      this.multiplierProperty = new NumberProperty( 1 );
+      this.multiplierProperty = new NumberProperty( 2, {
+        range: new Range( 1, 3 )
+      } );
     }
 
     /**
@@ -36,7 +42,7 @@ define( require => {
      * @override
      */
     reset() {
-      this.parallelRepresentationProperty.reset();
+      this.showNumberLineProperty.reset();
       this.multiplierProperty.reset();
 
       ContainerSetModel.prototype.reset.call( this );

@@ -45,8 +45,16 @@ define( require => {
           } );
         },
 
-        // TODO: enumeration
-        maxContainersPerRow: rectangularOrientation === RectangularOrientation.HORIZONTAL ? maxContainers / 2 : maxContainers
+        maxContainersPerRow: {
+          [ RectangularOrientation.HORIZONTAL ]: {
+            false: maxContainers / 2,
+            true: 1
+          },
+          [ RectangularOrientation.VERTICAL ]: {
+            false: maxContainers,
+            true: 4
+          }
+        }[ rectangularOrientation ][ model.isCompact ]
       }, options ) );
     }
   }

@@ -29,7 +29,10 @@ define( require => {
         initialDenominator: 1,
         initialContainerCount: 1,
         maxContainers: 6,
-        maxDenominator: 8
+        maxDenominator: 8,
+
+        // {boolean} - If true, we use more rows for containers (to fit in things like Equality Lab)
+        isCompact: false
       }, options );
 
       // @public {Array.<Representation>}
@@ -56,6 +59,9 @@ define( require => {
         range: new Range( 1, options.maxContainers ),
         numberType: 'Integer'
       } );
+
+      // @public {boolean}
+      this.isCompact = options.isCompact;
 
       // @public {ObservableArray.<Container>}
       this.containers = new ObservableArray();

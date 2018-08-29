@@ -21,6 +21,8 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( model, options ) {
+      const maxContainers = model.containerCountProperty.range.max;
+
       super( model, _.extend( {
         createContainerNode( container, cellDownCallback ) {
           return new CircularContainerNode( container, cellDownCallback );
@@ -30,7 +32,8 @@ define( require => {
         },
         createCellNode( denominator, index, options ) {
           return new CircularNode( denominator, index, options );
-        }
+        },
+        maxContainersPerRow: model.isCompact ? 2 : maxContainers
       }, options ) );
     }
   }
