@@ -11,8 +11,14 @@ define( require => {
   // modules
   const Dimension2 = require( 'DOT/Dimension2' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/RectangularOrientation' );
+
+  // constants
+  const HORIZONTAL_SIZE = new Dimension2( 250, 50 );
+  const VERTICAL_SIZE = new Dimension2( 120, 185 );
 
   class RectangularNode extends Node {
     /**
@@ -20,75 +26,73 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( denominator, options ) {
+      assert && assert( typeof denominator === 'number' );
 
       options = _.extend( {
         dropShadow: false,
-        dropShadowOffset: 5,
-        rectangleOrientation: 'vertical',
-        isIcon: false
+        rectangleOrientation: RectangularOrientation.VERTICAL_SIZE
       }, options );
 
-      var rectangle = RectangularNode.VERTICAL_RECTANGULAR_SIZE;
-      var rectangleWidth = rectangle.width;
-      var rectangleHeight = rectangle.height / denominator;
+      assert && assert( typeof options.dropShadow === 'boolean' );
+      assert && assert( RectangularOrientation.is( options.rectangleOrientation ) );
 
-      // determine the size of the rectangle size and pieces in th bucket depend upon the representation
-      if ( options.rectangleOrientation === 'horizontal' ) {
-        rectangle = RectangularNode.HORIZONTAL_RECTANGULAR_SIZE;
-        rectangleWidth = rectangle.width / denominator;
-        rectangleHeight = rectangle.height;
+      super();
+
+      const size = RectangularNode.getSize( options.rectangleOrientation );
+      let rectWidth = size.width;
+      let rectHeight = size.height;
+      if ( options.rectangleOrientation === RectangularOrientation.VERTICAL ) {
+        rectHeight /= denominator;
+      }
+      else {
+        rectWidth /= denominator;
       }
 
-      //executes condition if the isIcon is true
-      if ( options.isIcon ) {
-        rectangleHeight /= 4;
-        rectangleWidth /= 4;
-      }
-      var foregroundRectangle = new Rectangle( {
-        rectX: -rectangleWidth / 2,
-        rectY: -rectangleHeight / 2,
-        rectWidth: rectangleWidth,
-        rectHeight: rectangleHeight,
+      var mainRectangle = new Rectangle( {
+        rectX: -rectWidth / 2,
+        rectY: -rectHeight / 2,
+        rectWidth,
+        rectHeight,
 
         // determine the color depend upon representation
-        fill: options.rectangleOrientation === 'horizontal' ? '#ED4344' : '#FFE600',
-        stroke: 'black',
-        lineWidth: options.isIcon ? 1 : 3
+        fill: options.rectangleOrientation === RectangularOrientation.HORIZONTAL ? '#ED4344' : '#FFE600',
+        stroke: 'black'
       } );
 
-      options.children = [ foregroundRectangle ];
+      var shadowRectangle = new Rectangle( {
+        center: mainRectangle.center.plusScalar( FractionsCommonConstants.INTRO_DROP_SHADOW_OFFSET ),
+        rectWidth,
+        rectHeight,
+        fill: 'black'
+      } );
 
-      // creates dropShadow
-      if ( options.dropShadow ) {
-        var backgroundRectangle = new Rectangle( {
-          center: foregroundRectangle.center.plusXY( options.dropShadowOffset, options.dropShadowOffset ),
-          rectWidth: rectangleWidth,
-          rectHeight: rectangleHeight,
-          fill: 'black',
-          lineWidth: 2
-        } );
+      this.children = [
+        ...( options.dropShadow ? [
+          shadowRectangle
+        ] : [] ),
+        mainRectangle
+      ];
 
-        options.children = [ backgroundRectangle, foregroundRectangle ];
-      }
-
-      super( options );
+      this.mutate( options );
     }
 
     /**
-     * The size of vertical rectangular nodes.
+     * Returns the size of the rectangle for a given orientation.
      * @public
      *
+     * @param {RectangularOrientation}
      * @returns {Dimension2}
      */
-    static get VERTICAL_RECTANGULAR_SIZE() { return new Dimension2( 120, 185 ); }
+    static getSize( orientation ) {
+      assert && assert( RectangularOrientation.is( orientation ) );
 
-    /**
-     * The size of horizontal rectangular nodes.
-     * @public
-     *
-     * @returns {Dimension2}
-     */
-    static get HORIZONTAL_RECTANGULAR_SIZE() { return new Dimension2( 250, 50 ); }
+      if ( orientation === RectangularOrientation.VERTICAL ) {
+        return VERTICAL_SIZE;
+      }
+      else {
+        return HORIZONTAL_SIZE;
+      }
+    }
   }
 
   return fractionsCommon.register( 'RectangularNode', RectangularNode );

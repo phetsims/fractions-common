@@ -21,6 +21,7 @@ define( require => {
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberLineSceneNode = require( 'FRACTIONS_COMMON/intro/view/numberline/NumberLineSceneNode' );
   const Panel = require( 'SUN/Panel' );
+  const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/RectangularOrientation' );
   const RectangularSceneNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularSceneNode' );
   const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   const RepresentationRadioButtonGroup = require( 'FRACTIONS_COMMON/intro/view/RepresentationRadioButtonGroup' );
@@ -89,13 +90,13 @@ define( require => {
         else if ( representation === Representation.VERTICAL_BAR ) {
           this.currentView = new RectangularSceneNode( model, {
             getBucketLocation,
-            rectangleOrientation: 'vertical'
+            rectangleOrientation: RectangularOrientation.VERTICAL
           } );
         }
         else if ( representation === Representation.HORIZONTAL_BAR ) {
           this.currentView = new RectangularSceneNode( model, {
             getBucketLocation,
-            rectangleOrientation: 'horizontal',
+            rectangleOrientation: RectangularOrientation.HORIZONTAL,
             maxHorizontalContainers: 3
           } );
         }

@@ -29,6 +29,7 @@ define( require => {
   const PropertyFractionNode = require( 'FRACTIONS_COMMON/common/view/PropertyFractionNode' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularContainerNode' );
+  const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/RectangularOrientation' );
   const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -82,15 +83,12 @@ define( require => {
       // TODO: cleanup
       switch ( representationProperty.value ) {
         case Representation.CIRCLE:
-          var bucketIcon = new CircularContainerNode( iconContainer, () => {}, {
-            isIcon: true
-          } );
+          var bucketIcon = new CircularContainerNode( iconContainer, () => {} );
           var bucketIconBackground = new Circle( bucketIcon.radius, { fill: 'white', center: bucketIcon.center } );
           break;
         case Representation.HORIZONTAL_BAR:
           bucketIcon = new RectangularContainerNode( iconContainer, () => {}, {
-            rectangleOrientation: 'horizontal',
-            isIcon: true
+            rectangleOrientation: RectangularOrientation.HORIZONTAL
           } );
           bucketIconBackground = new Rectangle( 0, 0, bucketIcon.width, bucketIcon.height, 0, 0, {
             fill: 'white',
@@ -106,8 +104,7 @@ define( require => {
           break;
         case Representation.VERTICAL_BAR:
           bucketIcon = new RectangularContainerNode( iconContainer, () => {}, {
-            rectangleOrientation: 'vertical',
-            isIcon: true
+            rectangleOrientation: RectangularOrientation.VERTICAL
           } );
           bucketIconBackground = new Rectangle( 0, 0, bucketIcon.width, bucketIcon.height, 0, 0, {
             fill: 'white',

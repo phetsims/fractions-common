@@ -55,6 +55,10 @@ define( require => {
     SHAPE_COLLECTION_SCALE: 0.6,
     NUMBER_COLLECTION_SCALE: 0.7,
 
+    // {number}
+    INTRO_DROP_SHADOW_OFFSET: 5,
+    INTRO_CONTAINER_LINE_WIDTH: 2,
+
     NUM_LEVELS: 10
   };
 

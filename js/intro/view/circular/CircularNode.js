@@ -10,6 +10,8 @@ define( require => {
 
   // modules
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
+  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Path = require( 'SCENERY/nodes/Path' );
   const Shape = require( 'KITE/Shape' );
@@ -22,18 +24,13 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( denominator, index, options ) {
-
+      assert && assert( typeof denominator === 'number' );
+      assert && assert( typeof index === 'number' );
       assert && assert( index < denominator );
 
       options = _.extend( {
-        fill: 'rgb(140, 198, 61)', // TODO: clean up how we are getting this!
-        stroke: 'black',
-        dropShadow: false,
-        dropShadowOffset: 5,
-        lineWidth: 2,
-        isIcon: false
+        dropShadow: false
       }, options );
-      options.lineWidth = options.isIcon ? 1 : 2;
 
       super();
 
@@ -41,33 +38,34 @@ define( require => {
       this.denominator = denominator;
       this.angleUnit = 2 * Math.PI / denominator;
 
-      // @private {boolean}
-      this.dropShadow = options.dropShadow;
-
       var shape = new Shape();
       if ( denominator > 1 ) {
         shape.moveTo( 0, 0 );
       }
-
-      // @private {number}
-      this.circleRadius = options.isIcon ? CircularNode.DEFAULT_RADIUS / 4 : CircularNode.DEFAULT_RADIUS;
-      shape.arc( 0, 0, this.circleRadius, 0, this.angleUnit, false ).close();
+      shape.arc( 0, 0, CircularNode.RADIUS, 0, this.angleUnit, false ).close();
 
       // @private {Node}
       this.container = new Node();
       this.addChild( this.container );
 
-      this.foregroundSector = new Path( shape, options );
-      if ( this.dropShadow ) {
-        this.backgroundSector = new Path( shape, { fill: 'black' } );
-        this.backgroundSector.center = this.foregroundSector.center.plusScalar( options.dropShadowOffset );
-        this.container.addChild( this.backgroundSector );
+      // @private {Node}
+      this.primaryPath = new Path( shape, {
+        fill: FractionsCommonColorProfile.introCircleFillProperty,
+        stroke: 'black'
+      } );
+      if ( options.dropShadow ) {
+        // @private {Node}
+        this.shadowPath = new Path( shape, { fill: 'black' } );
+        this.shadowPath.center = this.primaryPath.center.plusScalar( FractionsCommonConstants.INTRO_DROP_SHADOW_OFFSET );
+        this.container.addChild( this.shadowPath );
       }
-      this.container.addChild( this.foregroundSector );
+      this.container.addChild( this.primaryPath );
 
       // @private {number}
       this.rotationAngle = 0;
       this.setRotationAngle( index * this.angleUnit );
+
+      this.mutate( options );
     }
 
     /**
@@ -78,18 +76,24 @@ define( require => {
      */
     setRotationAngle( angle ) {
       this.rotationAngle = angle;
-      this.foregroundSector.rotation = angle;
-      if ( this.dropShadow ) {
-        this.backgroundSector.rotation = angle;
-        this.backgroundSector.x = this.foregroundSector.x + 5;
+      this.primaryPath.rotation = angle;
+      if ( this.shadowPath ) {
+        this.shadowPath.rotation = angle;
+        this.shadowPath.x = this.primaryPath.x + 5;
       }
       this.container.translation = this.getContainerOffset().negated();
     }
 
+    /**
+     * Returns the translation from the center of the container (based on the centroid of the swept arc).
+     * @public
+     *
+     * @returns {Vector2}
+     */
     getContainerOffset() {
       // From https://en.wikipedia.org/wiki/List_of_centroids
       const alpha = Math.PI / this.denominator;
-      const centroidRadius = ( 2 / 3 ) * this.circleRadius * Math.sin( alpha ) / alpha;
+      const centroidRadius = ( 2 / 3 ) * CircularNode.RADIUS * Math.sin( alpha ) / alpha;
 
       return Vector2.createPolar(
         centroidRadius,
@@ -103,7 +107,7 @@ define( require => {
      * @public
      */
     getCircleRotation() {
-      return this.foregroundSector.rotation;
+      return this.primaryPath.rotation;
     }
 
     /**
@@ -112,7 +116,7 @@ define( require => {
      *
      * @returns {number}
      */
-    static get DEFAULT_RADIUS() { return 63; }
+    static get RADIUS() { return 63; }
   }
 
   return fractionsCommon.register( 'CircularNode', CircularNode );

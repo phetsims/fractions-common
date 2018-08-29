@@ -21,8 +21,9 @@ define( require => {
      *
      * @param {Container} container
      * @param {function} cellDownCallback TODO doc, function( event )
+     * @param {Object} [options]
      */
-    constructor( container, cellDownCallback ) {
+    constructor( container, cellDownCallback, options ) {
       super();
 
       // @private
@@ -52,6 +53,8 @@ define( require => {
           }
         }
       } );
+
+      this.mutate( options );
     }
 
     /**

@@ -13,6 +13,7 @@ define( require => {
   const CircularNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularNode' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Path = require( 'SCENERY/nodes/Path' );
   const Shape = require( 'KITE/Shape' );
@@ -29,20 +30,10 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( container, cellDownCallback, options ) {
-
-      options = _.extend( {
-        // TODO: can't we just scale down the icons?
-        isIcon: false
-      }, options );
-
       super();
 
       // @public
-      // TODO: Don't do this! And don't pass in to children!
-      this.options = options;
-
-      // @public
-      this.circleRadius = options.isIcon ? CircularNode.DEFAULT_RADIUS / 4 : CircularNode.DEFAULT_RADIUS;
+      this.circleRadius = CircularNode.RADIUS;
 
       // @private
       this.container = container;
@@ -57,7 +48,7 @@ define( require => {
       } );
 
       this.addChild( new Circle( this.circleRadius, {
-        lineWidth: options.isIcon ? 2 : 3,
+        lineWidth: FractionsCommonConstants.INTRO_CONTAINER_LINE_WIDTH,
         stroke: this.strokeProperty
       } ) );
       this.localBounds = this.localBounds;
@@ -73,6 +64,8 @@ define( require => {
       this.cellNodes = [];
 
       container.cells.lengthProperty.link( this.rebuildListener );
+
+      this.mutate( options );
     }
 
     /**
@@ -107,7 +100,7 @@ define( require => {
         const cell = this.container.cells.get( i );
 
         // TODO: YIKES, OPTIONS
-        const cellNode = new CircularNode( denominator, i, this.options );
+        const cellNode = new CircularNode( denominator, i );
         cellNode.translation = cellNode.getContainerOffset();
         this.cellNodes.push( cellNode );
         this.addChild( cellNode );

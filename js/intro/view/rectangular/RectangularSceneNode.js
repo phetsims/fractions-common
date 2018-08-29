@@ -13,6 +13,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularContainerNode' );
   const RectangularNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularNode' );
+  const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/RectangularOrientation' );
   const RectangularPieceNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularPieceNode' );
 
   class RectangularSceneNode extends CellSceneNode {
@@ -45,7 +46,7 @@ define( require => {
         },
 
         // TODO: enumeration
-        maxContainersPerRow: rectangleOrientation === 'horizontal' ? maxContainers / 2 : maxContainers
+        maxContainersPerRow: rectangleOrientation === RectangularOrientation.VERTICAL ? maxContainers / 2 : maxContainers
       }, options ) );
     }
   }

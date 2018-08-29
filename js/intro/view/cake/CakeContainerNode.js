@@ -89,6 +89,8 @@ define( require => {
       this.cellNodes = [];
 
       container.cells.lengthProperty.link( this.rebuildListener );
+
+      this.mutate( options );
     }
 
     /**

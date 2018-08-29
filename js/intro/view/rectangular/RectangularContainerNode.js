@@ -11,15 +11,16 @@ define( require => {
   // modules
   const Bounds2 = require( 'DOT/Bounds2' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
-  const Dimension2 = require( 'DOT/Dimension2' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Path = require( 'SCENERY/nodes/Path' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const RectangularNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularNode' );
+  const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/RectangularOrientation' );
   const Shape = require( 'KITE/Shape' );
 
-  // TODO: OMFG don't extent rectangle :/
+  // TODO: ContainerNode supertype?
   class RectangularContainerNode extends Node {
     /**
      * @param {Container} container
@@ -27,12 +28,7 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( container, cellDownCallback, options ) {
-
-      options = _.extend( {
-        isIcon: false
-      }, options );
-
-      assert && assert( options.rectangleOrientation === 'horizontal' || options.rectangleOrientation === 'vertical' );
+      assert && assert( RectangularOrientation.is( options.rectangleOrientation ) );
 
       super();
 
@@ -54,12 +50,7 @@ define( require => {
       // determine to the height and width to use when drawing the vertical or horizontal representation.
       // TODO: omg WROST NAMMM. dimension? Doc it
       // TODO: AND WTF do an enumeration
-      this.rectangle = options.rectangleOrientation === 'horizontal'
-        ? RectangularNode.HORIZONTAL_RECTANGULAR_SIZE
-        : RectangularNode.VERTICAL_RECTANGULAR_SIZE;
-      if ( options.isIcon ) {
-        this.rectangle = new Dimension2( this.rectangle.width / 4, this.rectangle.height / 4 );
-      }
+      this.rectangle = RectangularNode.getSize( options.rectangleOrientation );
 
       // @private {Path} creates the path for the dividing lines between cells
       this.cellDividersPath = new Path( null, { stroke: this.strokeProperty } );
@@ -67,7 +58,7 @@ define( require => {
 
       // @private {Rectangle}
       this.backgroundRectangle = new Rectangle( {
-        lineWidth: options.isIcon ? 2 : 3,
+        lineWidth: FractionsCommonConstants.INTRO_CONTAINER_LINE_WIDTH,
         stroke: this.strokeProperty,
         rectBounds: Bounds2.point( 0, 0 ).dilatedXY( this.rectangle.width / 2, this.rectangle.height / 2 )
       } );
@@ -80,6 +71,8 @@ define( require => {
       this.cellNodes = [];
 
       container.cells.lengthProperty.link( this.rebuildListener );
+
+      this.mutate( options );
     }
 
     /**
@@ -117,7 +110,8 @@ define( require => {
             this.cellDownCallback( cell, event );
           }
         } );
-        if ( this.options.rectangleOrientation === 'horizontal' ) {
+        // TODO: don't do this.options
+        if ( this.options.rectangleOrientation === RectangularOrientation.HORIZONTAL ) {
           cellNode.x = mapCellX( i );
         }
         else {
@@ -129,7 +123,7 @@ define( require => {
         cellNode.visibilityListener = cell.appearsFilledProperty.linkAttribute( cellNode, 'visible' );
       }
 
-      if ( this.options.rectangleOrientation === 'vertical' ) {
+      if ( this.options.rectangleOrientation === RectangularOrientation.VERTICAL ) {
 
         // sets the shape of the dividing lines between cells
         const cellDividersShape = new Shape();
@@ -158,14 +152,6 @@ define( require => {
         cellNode.cell.appearsFilledProperty.unlink( cellNode.visibilityListener );
         this.removeChild( cellNode );
       }
-    }
-
-    /**
-     * creates Rectangular Node with one fill cell
-     * @public
-     */
-    isIcon() {
-      this.container.cells.fill();
     }
 
     /**
