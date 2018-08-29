@@ -23,7 +23,9 @@ define( require => {
       super( model );
 
       // @private {NumberLineNode}
-      this.numberLineNode = new NumberLineNode( model.numeratorProperty, model.denominatorProperty, model.containerCountProperty );
+      this.numberLineNode = new NumberLineNode( model.numeratorProperty, model.denominatorProperty, model.containerCountProperty, {
+        interactive: true
+      } );
       this.addChild( this.numberLineNode );
     }
 

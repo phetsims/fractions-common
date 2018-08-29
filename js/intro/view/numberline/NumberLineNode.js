@@ -9,7 +9,9 @@ define( require => {
   'use strict';
 
   // modules
+  const Bounds2 = require( 'DOT/Bounds2' );
   const Circle = require( 'SCENERY/nodes/Circle' );
+  const DragListener = require( 'SCENERY/listeners/DragListener' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const Line = require( 'SCENERY/nodes/Line' );
@@ -21,6 +23,7 @@ define( require => {
   const Property = require( 'AXON/Property' );
   const Shape = require( 'KITE/Shape' );
   const Text = require( 'SCENERY/nodes/Text' );
+  const Util = require( 'DOT/Util' );
 
   class NumberLineNode extends Node {
     /**
@@ -55,9 +58,11 @@ define( require => {
         minorTickLength: 40,
         evenMajorLineWidth: 5,
         oddMajorLineWidth: 3,
-        minorTickLineWidth: 1,
+        minorTickLineWidth: 2,
         axisLineWidth: 3,
         markerRadius: 12,
+        highlightLineWidth: 18,
+        highlightExtension: 8,
 
         // {ColorDef}
         markerFill: FractionsCommonColorProfile.introCircleFillProperty,
@@ -113,12 +118,45 @@ define( require => {
         lineWidth: 3
       } );
 
+      const highlightNode = new Line( {
+        stroke: FractionsCommonColorProfile.introNumberLineHighlightProperty,
+        lineWidth: options.highlightLineWidth
+      } );
+
+      const hitTargetNode = new Node( {
+        cursor: 'pointer'
+      } );
+      if ( options.interactive ) {
+        const setApproximateValue = n => {
+          const idealNumerator = Util.roundSymmetric( n * denominatorProperty.value );
+          const restrictedNumerator = Math.min( idealNumerator, denominatorProperty.value * containerCountProperty.value );
+          numeratorProperty.value = numeratorProperty.range.constrainValue( restrictedNumerator );
+        };
+
+        // @private {DragListener}
+        this.dragListener = new DragListener( {
+          applyOffset: false,
+          start( event, listener ) {
+            setApproximateValue( listener.parentPoint.x / options.unitSize );
+          },
+          drag( event, listener ) {
+            setApproximateValue( listener.parentPoint.x / options.unitSize );
+          }
+        } );
+        hitTargetNode.addInputListener( this.dragListener );
+      }
+
       // @private {function}
       this.containerCountListener = containerCount => {
+        const width = containerCount * options.unitSize;
         majorTickNodes.forEach( ( node, index ) => {
           node.visible = index <= containerCount;
         } );
-        axisNode.x2 = containerCount * options.unitSize;
+        axisNode.x2 = width;
+
+        const hitBounds = new Bounds2( 0, -options.majorTickLength / 2, width, options.majorTickLength / 2 );
+        hitTargetNode.mouseArea = hitBounds.dilated( 5 );
+        hitTargetNode.touchArea = hitBounds.dilated( 10 );
       };
       this.containerCountProperty.link( this.containerCountListener );
 
@@ -161,15 +199,23 @@ define( require => {
 
       // @private {Multilink}
       this.markerMultilink = Property.multilink( [ numeratorProperty, denominatorProperty ], ( numerator, denominator ) => {
-        markerNode.x = options.unitSize * numerator / denominator;
+        const x = options.unitSize * numerator / denominator;
+        const tickY = ( ( numerator % denominator === 0 ) ? options.majorTickLength : options.minorTickLength ) / 2;
+        markerNode.x = x;
+        highlightNode.x1 = x;
+        highlightNode.x2 = x;
+        highlightNode.y1 = -tickY - options.highlightExtension;
+        highlightNode.y2 = tickY + options.highlightExtension;
       } );
 
       this.children = [
+        highlightNode,
         axisNode,
         minorTicksNode,
         multipliedTicksNode,
         ...majorTickNodes,
-        markerNode
+        markerNode,
+        hitTargetNode
       ];
 
       this.x = -containerCountProperty.range.max * options.unitSize / 2;
@@ -187,6 +233,7 @@ define( require => {
       this.minorTickMultilink.dispose();
       this.multipliedTickMultilink.dispose();
       this.markerMultilink.dispose();
+      this.dragListener.dispose();
 
       super.dispose();
     }

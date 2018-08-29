@@ -29,6 +29,7 @@ define( require => {
     introBucketBackground: { default: new Color( '#8eb7f2' ) },
     introContainerBackground: { default: Color.WHITE },
     introCircleFill: { default: new Color( 140, 198, 61 ) },
+    introNumberLineHighlight: { default: Color.YELLOW },
     emptyBeaker: { default: new Color( 150, 150, 150, 0.15 ) },
     waterSide: { default: new Color( 30, 163, 255, 0.8 ) },
     waterTop: { default: new Color( 30, 163, 255, 0.8 ) },
