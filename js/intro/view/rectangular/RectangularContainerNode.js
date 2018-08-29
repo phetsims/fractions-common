@@ -21,7 +21,6 @@ define( require => {
   const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/RectangularOrientation' );
   const Shape = require( 'KITE/Shape' );
 
-  // TODO: ContainerNode supertype?
   class RectangularContainerNode extends ContainerNode {
     /**
      * @param {Container} container
