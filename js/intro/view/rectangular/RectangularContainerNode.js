@@ -53,18 +53,26 @@ define( require => {
       // TODO: AND WTF do an enumeration
       this.rectangle = RectangularNode.getSize( options.rectangularOrientation );
 
+      const rectBounds = Bounds2.point( 0, 0 ).dilatedXY( this.rectangle.width / 2, this.rectangle.height / 2 );
+
+      // @private {Rectangle}
+      this.backgroundRectangle = new Rectangle( {
+        fill: FractionsCommonColorProfile.introContainerBackgroundProperty,
+        rectBounds
+      } );
+      this.addChild( this.backgroundRectangle );
+
       // @private {Path} creates the path for the dividing lines between cells
       this.cellDividersPath = new Path( null, { stroke: this.strokeProperty } );
       this.addChild( this.cellDividersPath );
 
       // @private {Rectangle}
-      this.backgroundRectangle = new Rectangle( {
+      this.borderRectangle = new Rectangle( {
         lineWidth: FractionsCommonConstants.INTRO_CONTAINER_LINE_WIDTH,
-        fill: FractionsCommonColorProfile.introContainerBackgroundProperty,
         stroke: this.strokeProperty,
-        rectBounds: Bounds2.point( 0, 0 ).dilatedXY( this.rectangle.width / 2, this.rectangle.height / 2 )
+        rectBounds
       } );
-      this.addChild( this.backgroundRectangle );
+      this.addChild( this.borderRectangle );
 
       // @private {function}
       this.rebuildListener = this.rebuild.bind( this );
