@@ -48,10 +48,6 @@ define( require => {
     constructor( container, cellDownCallback, options ) {
       super();
 
-      options = _.extend( {
-        maxHeight: CakeNode.DEFAULT_CAKE_HEIGHT  // height of the image
-      }, options );
-
       // @private
       // TODO: don't do this. Egad, are we passing it to children?
       this.options = options;
@@ -63,8 +59,10 @@ define( require => {
       this.cellDownCallback = cellDownCallback;
 
       // @private {Image} create grid image of the cake with the appropriate number of cells
-      this.gridImage = new Image( cakeGridImageArray[ container.cells.lengthProperty.value - 1 ],
-        { maxHeight: this.options.maxHeight } );
+      this.gridImage = new Image( cakeGridImageArray[ container.cells.lengthProperty.value - 1 ], {
+        scale: CakeNode.CAKE_DEFAULT_SCALE,
+        translation: CakeNode.CAKE_OFFSET.negated()
+      } );
 
       // create white background for the cake.
       // The shape of the ellipse is determined empirically based on the image
@@ -73,7 +71,8 @@ define( require => {
         this.gridImage.height * 0.635,
         this.gridImage.width * 0.364,
         this.gridImage.height * 0.277, 0 ), {
-        fill: 'white'
+        fill: 'white',
+        translation: CakeNode.CAKE_OFFSET.negated()
       } );
 
       // @private {Node} Node layer to hold the cake slices with the correct z-order
@@ -126,7 +125,8 @@ define( require => {
         const zOrder = zLayerArray[ i ];
 
         // place the cakeImage in the z ordered array TODO: omg no this.options!
-        const cellNode = new CakeNode( denominator, i, this.options );
+        const cellNode = new CakeNode( denominator, i );
+        cellNode.translation = cellNode.getOffset();
         slicesImage[ zOrder ] = cellNode;
 
         this.cellNodes.push( cellNode );

@@ -10,6 +10,7 @@ define( require => {
   'use strict';
 
   // modules
+  const Dimension2 = require( 'DOT/Dimension2' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Image = require( 'SCENERY/nodes/Image' );
   const Node = require( 'SCENERY/nodes/Node' );
@@ -53,6 +54,7 @@ define( require => {
   const cake_8_7Image = require( 'image!FRACTIONS_COMMON/cake_8_7.png' );
   const cake_8_8Image = require( 'image!FRACTIONS_COMMON/cake_8_8.png' );
 
+  // constants
   const cakeImageArray = [
     [ cake_1_1Image ],
     [ cake_2_1Image, cake_2_2Image ],
@@ -63,6 +65,14 @@ define( require => {
     [ cake_7_1Image, cake_7_2Image, cake_7_3Image, cake_7_4Image, cake_7_5Image, cake_7_6Image, cake_7_7Image ],
     [ cake_8_1Image, cake_8_2Image, cake_8_3Image, cake_8_4Image, cake_8_5Image, cake_8_6Image, cake_8_7Image, cake_8_8Image ]
   ];
+  const CAKE_IMAGE_SIZE = new Dimension2( 219, 166 );
+  const CAKE_DEFAULT_SCALE = 140 / CAKE_IMAGE_SIZE.height;
+  const SCALED_CAKE_IMAGE_SIZE = new Dimension2(
+    CAKE_DEFAULT_SCALE * CAKE_IMAGE_SIZE.width,
+    CAKE_DEFAULT_SCALE * CAKE_IMAGE_SIZE.height
+  );
+  // The determined center of the cake images (determined empirically)
+  const CAKE_OFFSET = new Vector2( 0.5 * SCALED_CAKE_IMAGE_SIZE.width, 0.55 * SCALED_CAKE_IMAGE_SIZE.height );
 
   class CakeNode extends Node {
     /**
@@ -71,17 +81,14 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( denominator, index, options ) {
-
       assert && assert( index < denominator );
-
-      options = _.extend( {
-        maxHeight: CakeNode.DEFAULT_CAKE_HEIGHT  // height of the image
-      }, options );
 
       super();
 
       // @private {Image}
-      this.imageNode = new Image( cakeImageArray[ denominator - 1 ][ index ] );
+      this.imageNode = new Image( cakeImageArray[ denominator - 1 ][ index ], {
+        scale: CAKE_DEFAULT_SCALE
+      } );
       this.addChild( this.imageNode );
 
       // @private {number}
@@ -89,6 +96,11 @@ define( require => {
 
       this.setCakeIndex( index );
       this.mutate( options );
+    }
+
+    // TODO: doc
+    getOffset() {
+      return this.imageNode.translation.negated().minus( CAKE_OFFSET );
     }
 
     /**
@@ -101,7 +113,7 @@ define( require => {
       this.imageNode.setImage( cakeImageArray[ this.denominator - 1 ][ index ] );
 
       // Center of the cake plate, empirically determined
-      const imageCenter = new Vector2( this.imageNode.width / 2, this.imageNode.height * 0.55 );
+      const imageCenter = CAKE_OFFSET;
 
       if ( this.denominator === 1 ) {
         this.imageNode.translation = imageCenter.negated();
@@ -117,15 +129,19 @@ define( require => {
         ) ).negated();
       }
     }
-
-    /**
-     * The normal height of a cake slice.
-     * @public
-     *
-     * @returns {number}
-     */
-    static get DEFAULT_CAKE_HEIGHT() { return 120; }
   }
 
-  return fractionsCommon.register( 'CakeNode', CakeNode );
+  fractionsCommon.register( 'CakeNode', CakeNode );
+
+  // @public {Dimension2}
+  CakeNode.CAKE_IMAGE_SIZE = CAKE_IMAGE_SIZE;
+  CakeNode.SCALED_CAKE_IMAGE_SIZE = SCALED_CAKE_IMAGE_SIZE;
+
+  // @public {number}
+  CakeNode.CAKE_DEFAULT_SCALE = CAKE_DEFAULT_SCALE;
+
+  // @public {Vector2}
+  CakeNode.CAKE_OFFSET = CAKE_OFFSET;
+
+  return CakeNode;
 } );
