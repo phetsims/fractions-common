@@ -26,8 +26,8 @@ define( require => {
      */
     constructor( model, options ) {
       super( model, _.extend( {
-        createContainerNode( container, cellDownCallback ) {
-          return new CakeContainerNode( container, cellDownCallback );
+        createContainerNode( container, options ) {
+          return new CakeContainerNode( container, options );
         },
         createPieceNode( piece, finishedAnimatingCallback, droppedCallback ) {
           return new CakePieceNode( piece, finishedAnimatingCallback, droppedCallback );

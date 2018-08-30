@@ -26,7 +26,7 @@ define( require => {
      */
     constructor( model, config ) {
       config = _.extend( {
-        // {function} - function( {Node} container, {function} cellDownCallback ): {Node}
+        // {function} - function( {Node} container, {Object} [options] ): {Node}
         createContainerNode: null,
 
         // {function} - function( {Node} piece, {function} finishedAnimatingCallback, {function} droppedCallback ): {Node}
@@ -280,7 +280,9 @@ define( require => {
      */
     addContainer( container ) {
 
-      const containerNode = this.createContainerNode( container, this.onExistingCellDragStart.bind( this ) );
+      const containerNode = this.createContainerNode( container, {
+        cellDownCallback: this.onExistingCellDragStart.bind( this )
+      } );
 
       const currentContainerNodesLength = this.containerNodes.length;
 

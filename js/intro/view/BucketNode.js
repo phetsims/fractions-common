@@ -80,23 +80,23 @@ define( require => {
 
       const iconCreator = {
         [ Representation.CIRCLE ]() {
-          return new CircularContainerNode( iconContainer, () => {} );
+          return new CircularContainerNode( iconContainer );
         },
         [ Representation.HORIZONTAL_BAR ]() {
-          return new RectangularContainerNode( iconContainer, () => {}, {
+          return new RectangularContainerNode( iconContainer, {
             rectangularOrientation: RectangularOrientation.HORIZONTAL
           } );
         },
         [ Representation.VERTICAL_BAR ]() {
-          return new RectangularContainerNode( iconContainer, () => {}, {
+          return new RectangularContainerNode( iconContainer, {
             rectangularOrientation: RectangularOrientation.VERTICAL
           } );
         },
         [ Representation.CAKE ]() {
-          return new CakeContainerNode( iconContainer, () => {} );
+          return new CakeContainerNode( iconContainer );
         },
         [ Representation.BEAKER ]() {
-          return new BeakerContainerNode( iconContainer, () => {} );
+          return new BeakerContainerNode( iconContainer );
         }
       };
 

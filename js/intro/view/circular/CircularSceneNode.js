@@ -26,8 +26,8 @@ define( require => {
       const maxContainers = model.containerCountProperty.range.max;
 
       super( model, _.extend( {
-        createContainerNode( container, cellDownCallback ) {
-          return new CircularContainerNode( container, cellDownCallback );
+        createContainerNode( container, options ) {
+          return new CircularContainerNode( container, options );
         },
         createPieceNode( piece, finishedAnimatingCallback, droppedCallback ) {
           return new CircularPieceNode( piece, finishedAnimatingCallback, droppedCallback );
@@ -51,7 +51,7 @@ define( require => {
       iconContainer.addCells( 1 );
       iconContainer.cells.get( 0 ).fill();
 
-      return new CircularContainerNode( iconContainer, () => {}, {
+      return new CircularContainerNode( iconContainer, {
         scale: 30 / 63,
         colorOverride: useEqualityLabColor ? FractionsCommonColorProfile.equalityLabColorProperty : null
       } );

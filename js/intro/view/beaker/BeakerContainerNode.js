@@ -20,11 +20,10 @@ define( require => {
      * TODO: factor out common things with the other container nodes
      *
      * @param {Container} container
-     * @param {function} cellDownCallback TODO doc, function( event )
      * @param {Object} [options]
      */
-    constructor( container, cellDownCallback, options ) {
-      super( container, cellDownCallback, options );
+    constructor( container, options ) {
+      super( container, options );
 
       // @private {Multilink}
       this.multilink = Property.multilink( [ container.appearsFilledCellCountProperty, container.cells.lengthProperty ], ( numerator, denominator ) => {
@@ -43,9 +42,9 @@ define( require => {
       container.appearsFilledCellCountProperty.link( this.cursorListener );
 
       this.addInputListener( {
-        down: function( event ) {
+        down: event => {
           if ( container.appearsFilledCellCountProperty.value > 0 ) {
-            cellDownCallback( container.getNextAppearsFilledCell(), event );
+            this.cellDownCallback( container.getNextAppearsFilledCell(), event );
           }
         }
       } );

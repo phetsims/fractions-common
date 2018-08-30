@@ -180,27 +180,27 @@ define( require => {
 
           // TODO: some cleanup
           if ( representation === Representation.CIRCLE ) {
-            containerNodes = containers.map( container => new CircularContainerNode( container, () => {}, {
+            containerNodes = containers.map( container => new CircularContainerNode( container, {
               colorOverride
             } ) );
             multipliedViewContainer.addChild( spacedBox( 2, containerNodes ) );
           }
           else if ( representation === Representation.HORIZONTAL_BAR ) {
-            containerNodes = containers.map( container => new RectangularContainerNode( container, () => {}, {
+            containerNodes = containers.map( container => new RectangularContainerNode( container, {
               rectangularOrientation: RectangularOrientation.HORIZONTAL,
               colorOverride
             } ) );
             multipliedViewContainer.addChild( spacedBox( 1, containerNodes ) );
           }
           else if ( representation === Representation.VERTICAL_BAR ) {
-            containerNodes = containers.map( container => new RectangularContainerNode( container, () => {}, {
+            containerNodes = containers.map( container => new RectangularContainerNode( container, {
               rectangularOrientation: RectangularOrientation.VERTICAL,
               colorOverride
             } ) );
             multipliedViewContainer.addChild( spacedBox( 4, containerNodes ) );
           }
           else if ( representation === Representation.BEAKER ) {
-            containerNodes = containers.map( container => new BeakerContainerNode( container, () => {}, {
+            containerNodes = containers.map( container => new BeakerContainerNode( container, {
               colorOverride: FractionsCommonColorProfile.equalityLabWaterProperty
             } ) );
             multipliedViewContainer.addChild( spacedBox( 4, containerNodes ) );

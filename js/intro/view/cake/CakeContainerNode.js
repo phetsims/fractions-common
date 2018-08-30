@@ -43,11 +43,10 @@ define( require => {
      * TODO: factor out common things with RectangularContainerNode and CircularContainerNode
      *
      * @param {Container} container
-     * @param {function} cellDownCallback TODO doc, function( event )
      * @param {Object} [options]
      */
-    constructor( container, cellDownCallback, options ) {
-      super( container, cellDownCallback, options );
+    constructor( container, options ) {
+      super( container, options );
 
       // @private {Image} create grid image of the cake with the appropriate number of cells
       this.gridImage = new Image( cakeGridImageArray[ container.cells.lengthProperty.value - 1 ], {

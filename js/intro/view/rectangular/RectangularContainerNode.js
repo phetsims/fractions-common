@@ -24,13 +24,12 @@ define( require => {
   class RectangularContainerNode extends ContainerNode {
     /**
      * @param {Container} container
-     * @param {function} cellDownCallback TODO doc, function( event )
      * @param {Object} [options]
      */
-    constructor( container, cellDownCallback, options ) {
+    constructor( container, options ) {
       assert && assert( RectangularOrientation.is( options.rectangularOrientation ) );
 
-      super( container, cellDownCallback, options );
+      super( container, options );
 
       // @private {RectangularOrientation}
       this.rectangularOrientation = options.rectangularOrientation;

@@ -23,8 +23,8 @@ define( require => {
      */
     constructor( model, options ) {
       super( model, _.extend( {
-        createContainerNode( container, cellDownCallback ) {
-          return new BeakerContainerNode( container, cellDownCallback );
+        createContainerNode( container, options ) {
+          return new BeakerContainerNode( container, options );
         },
         createPieceNode( piece, finishedAnimatingCallback, droppedCallback ) {
           return new BeakerPieceNode( piece, finishedAnimatingCallback, droppedCallback );

@@ -30,10 +30,10 @@ define( require => {
       const maxContainers = model.containerCountProperty.range.max;
 
       super( model, _.extend( {
-        createContainerNode( container, cellDownCallback ) {
-          return new RectangularContainerNode( container, cellDownCallback, {
+        createContainerNode( container, options ) {
+          return new RectangularContainerNode( container, _.extend( {
             rectangularOrientation
-          } );
+          }, options ) );
         },
         createPieceNode( piece, finishedAnimatingCallback, droppedCallback ) {
           return new RectangularPieceNode( piece, finishedAnimatingCallback, droppedCallback, {
@@ -73,7 +73,7 @@ define( require => {
       iconContainer.addCells( 1 );
       iconContainer.cells.get( 0 ).fill();
 
-      return new RectangularContainerNode( iconContainer, () => {}, {
+      return new RectangularContainerNode( iconContainer, {
         rectangularOrientation,
         scale: 0.32,
         colorOverride: useEqualityLabColor ? FractionsCommonColorProfile.equalityLabColorProperty : null
