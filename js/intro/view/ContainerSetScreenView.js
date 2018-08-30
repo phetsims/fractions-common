@@ -36,10 +36,15 @@ define( require => {
     /**
      * @param {ContainerSetModel} model
      */
-    constructor( model ) {
+    constructor( model, options ) {
       super( {
         preventFit: true
       } );
+
+      options = _.extend( {
+        // {boolean} - Passed to AdjustableFractionNode
+        spinnersOnRight: true
+      }, options );
 
       // @protected {ContainerSetModel}
       this.model = model;
@@ -126,7 +131,9 @@ define( require => {
       } );
 
       // @protected {Node}
-      this.adjustableFractionNode = new AdjustableFractionNode( model.numeratorProperty, model.denominatorProperty, model.containerCountProperty );
+      this.adjustableFractionNode = new AdjustableFractionNode( model.numeratorProperty, model.denominatorProperty, model.containerCountProperty, {
+        spinnersOnRight: options.spinnersOnRight
+      } );
 
       // @protected {Node}
       this.resetAllButton = new ResetAllButton( {

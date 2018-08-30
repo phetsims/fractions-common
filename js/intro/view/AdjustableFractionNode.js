@@ -29,47 +29,57 @@ define( require => {
     constructor( numeratorProperty, denominatorProperty, containerCountProperty, options ) {
       options = _.extend( {
         // {FractionDisplayType}
-        type: FractionDisplayType.IMPROPER
+        type: FractionDisplayType.IMPROPER,
+
+        // {boolean} - If false, the spinners will be to the left
+        spinnersOnRight: true
       }, options );
 
       // convenience variable
-      var properties = [ numeratorProperty, denominatorProperty, containerCountProperty ];
+      const properties = [ numeratorProperty, denominatorProperty, containerCountProperty ];
+
+      const fractionNode = new PropertyFractionNode( numeratorProperty, denominatorProperty, {
+        type: options.type,
+        scale: 3,
+
+        maxNumerator: numeratorProperty.range.max,
+        maxDenominator: denominatorProperty.range.max
+      } );
+
+      const spinnersNode = new VBox( {
+        spacing: 30,
+        children: [
+          // Numerator
+          new RoundNumberSpinner(
+            numeratorProperty,
+            new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
+              return ( numerator + 1 ) / denominator <= containerCount;
+            } ),
+            new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
+              return ( numerator - 1 ) >= 0;
+            } )
+          ),
+          // Denominator
+          new RoundNumberSpinner(
+            denominatorProperty,
+            new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
+              return ( denominator + 1 ) <= denominatorProperty.range.max;
+            } ),
+            new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
+              return ( denominator - 1 ) >= denominatorProperty.range.min && numerator / ( denominator - 1 ) <= containerCount;
+            } )
+          )
+        ]
+      } );
 
       super( _.extend( {
         spacing: 10,
-        children: [
-          new PropertyFractionNode( numeratorProperty, denominatorProperty, {
-            type: options.type,
-            scale: 3,
-
-            maxNumerator: numeratorProperty.range.max,
-            maxDenominator: denominatorProperty.range.max
-          } ),
-          new VBox( {
-            spacing: 30,
-            children: [
-              // Numerator
-              new RoundNumberSpinner(
-                numeratorProperty,
-                new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
-                  return ( numerator + 1 ) / denominator <= containerCount;
-                } ),
-                new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
-                  return ( numerator - 1 ) >= 0;
-                } )
-              ),
-              // Denominator
-              new RoundNumberSpinner(
-                denominatorProperty,
-                new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
-                  return ( denominator + 1 ) <= denominatorProperty.range.max;
-                } ),
-                new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
-                  return ( denominator - 1 ) >= denominatorProperty.range.min && numerator / ( denominator - 1 ) <= containerCount;
-                } )
-              )
-            ]
-          } )
+        children: options.spinnersOnRight ? [
+          fractionNode,
+          spinnersNode
+        ] : [
+          spinnersNode,
+          fractionNode
         ]
       }, options ) );
     }

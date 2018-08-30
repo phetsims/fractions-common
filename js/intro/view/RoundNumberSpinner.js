@@ -28,15 +28,19 @@ define( require => {
       assert && assert( increaseEnabledProperty instanceof Property );
       assert && assert( decreaseEnabledProperty instanceof Property );
 
+      options = _.extend( {
+        baseColor: FractionsCommonColorProfile.yellowRoundArrowButtonProperty
+      }, options );
+
       const increaseButton = new RoundArrowButton( {
-        mutableBaseColor: FractionsCommonColorProfile.yellowRoundArrowButtonProperty,
+        mutableBaseColor: options.baseColor,
         enabledProperty: increaseEnabledProperty,
         listener: () => {
           numberProperty.value++;
         }
       } );
       const decreaseButton = new RoundArrowButton( {
-        mutableBaseColor: FractionsCommonColorProfile.yellowRoundArrowButtonProperty,
+        mutableBaseColor: options.baseColor,
         arrowRotation: Math.PI,
         enabledProperty: decreaseEnabledProperty,
         listener: () => {
