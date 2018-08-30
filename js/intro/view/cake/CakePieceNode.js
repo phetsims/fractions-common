@@ -30,12 +30,12 @@ define( require => {
       } );
 
       // cake specific
-      var originCell = piece.originCell;
+      const originCell = piece.originCell;
       if ( originCell ) {
         this.graphic.setCakeIndex( originCell.index );
       }
       // cake specific
-      var destinationCell = piece.destinationCell;
+      const destinationCell = piece.destinationCell;
       if ( destinationCell ) {
         this.graphic.setCakeIndex( destinationCell.index );
       }
@@ -52,7 +52,7 @@ define( require => {
     orient( closestCell, dt ) {
       super.orient( closestCell, dt );
 
-      var midpoint = this.getMidpoint();
+      const midpoint = this.getMidpoint();
       this.graphic.setCakeIndex( closestCell.index );
       this.setMidpoint( midpoint );
     }

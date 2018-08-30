@@ -95,7 +95,7 @@ define( require => {
       this.changeNumeratorManually( -1 );
       cell.empty();
 
-      var piece = new Piece( this.denominatorProperty.value );
+      const piece = new Piece( this.denominatorProperty.value );
       piece.originCell = cell;
       this.pieces.push( piece );
       return piece;
@@ -108,7 +108,7 @@ define( require => {
      * @returns {Piece} - The created piece that the user will start dragging
      */
     grabFromBucket() {
-      var piece = new Piece( this.denominatorProperty.value );
+      const piece = new Piece( this.denominatorProperty.value );
       this.pieces.push( piece );
       return piece;
     }
@@ -148,7 +148,7 @@ define( require => {
      * @param {Piece} piece
      */
     completePiece( piece ) {
-      var destinationCell = piece.destinationCell;
+      const destinationCell = piece.destinationCell;
       if ( destinationCell ) {
         destinationCell.fillWithPiece( piece );
       }
@@ -184,13 +184,13 @@ define( require => {
      * @param {boolean} animate - Whether the cell should animate into place (if false, will be instant)
      */
     fillNextCell( animate ) {
-      for ( var i = 0; i < this.containers.length; i++ ) {
-        var container = this.containers.get( i );
-        var cell = container.getNextEmptyCell();
+      for ( let i = 0; i < this.containers.length; i++ ) {
+        const container = this.containers.get( i );
+        const cell = container.getNextEmptyCell();
 
         if ( cell ) {
           if ( animate ) {
-            var piece = new Piece( this.denominatorProperty.value );
+            const piece = new Piece( this.denominatorProperty.value );
             cell.targetWithPiece( piece );
             this.pieces.push( piece );
           }
@@ -211,13 +211,13 @@ define( require => {
      * @param {boolean} animate - Whether the cell should animate to the bucketNode (if false, will be instant)
      */
     emptyNextCell( animate ) {
-      for ( var i = this.containers.length - 1; i >= 0; i-- ) {
-        var container = this.containers.get( i );
+      for ( let i = this.containers.length - 1; i >= 0; i-- ) {
+        const container = this.containers.get( i );
 
-        var cell = container.getNextFilledCell();
+        const cell = container.getNextFilledCell();
         if ( cell ) {
           // If something was animating to this cell, finish the animation first
-          var targetedPiece = cell.targetedPiece;
+          const targetedPiece = cell.targetedPiece;
           if ( targetedPiece ) {
             this.completePiece( targetedPiece );
           }
@@ -225,7 +225,7 @@ define( require => {
           cell.empty();
 
           if ( animate && !targetedPiece ) {
-            var newPiece = new Piece( this.denominatorProperty.value );
+            const newPiece = new Piece( this.denominatorProperty.value );
             newPiece.originCell = cell;
             this.pieces.push( newPiece );
           }
@@ -248,12 +248,12 @@ define( require => {
       // So we don't have to worry about animating to different places
       this.completeAllPieces();
 
-      var change = Math.abs( newMax - oldMax );
+      const change = Math.abs( newMax - oldMax );
       _.times( change, () => {
 
         // Increases are simple, just add a container.
         if ( newMax > oldMax ) {
-          var container = new Container();
+          const container = new Container();
           container.addCells( this.denominatorProperty.value );
           this.containers.push( container );
         }
@@ -261,19 +261,19 @@ define( require => {
         else {
 
           // find the container to be removed
-          var lastContainer = this.containers.get( this.containers.length - 1 );
+          const lastContainer = this.containers.get( this.containers.length - 1 );
 
           // filled cells in the last container
-          var displacedCellsCount = lastContainer.filledCellCountProperty.value;
+          const displacedCellsCount = lastContainer.filledCellCountProperty.value;
 
           // number of filled cells in the other containers (excluding the last container)
-          var filledCells = this.getFilledCellCount() - displacedCellsCount;
+          const filledCells = this.getFilledCellCount() - displacedCellsCount;
 
           // number of empty cells in the other containers
-          var availableCellsCount = lastContainer.cells.length * newMax - filledCells;
+          const availableCellsCount = lastContainer.cells.length * newMax - filledCells;
 
           // the number of  filled cells to transfer from last container to the other containers
-          var keptCellsCount = Math.min( availableCellsCount, displacedCellsCount );
+          const keptCellsCount = Math.min( availableCellsCount, displacedCellsCount );
 
           // add up fill
           _.times( keptCellsCount, () => {
@@ -283,7 +283,7 @@ define( require => {
           // handle the extra filled cells when all the other containers are filled
           if ( displacedCellsCount > availableCellsCount ) {
 
-            var overflowCellsCount = displacedCellsCount - availableCellsCount;
+            const overflowCellsCount = displacedCellsCount - availableCellsCount;
             _.times( overflowCellsCount, () => {
               this.emptyNextCell( true );
             } );
@@ -310,7 +310,7 @@ define( require => {
         return;
       }
 
-      var change = Math.abs( newNumerator - oldNumerator );
+      const change = Math.abs( newNumerator - oldNumerator );
       _.times( change, () => {
         if ( newNumerator > oldNumerator ) {
           this.fillNextCell( true );
@@ -332,7 +332,7 @@ define( require => {
       // So we don't have to worry about animating to different places
       this.completeAllPieces();
 
-      var change = Math.abs( newDenominator - oldDenominator );
+      const change = Math.abs( newDenominator - oldDenominator );
 
       // Add empty cells to every container on an increase.
       if ( newDenominator > oldDenominator ) {
@@ -342,7 +342,7 @@ define( require => {
       }
       // Rearrange filled cells on a decrease.
       else {
-        var removedCount = 0;
+        let removedCount = 0;
         this.containers.forEach( container => {
           removedCount += container.removeCells( change );
         } );

@@ -75,7 +75,7 @@ define( require => {
       } );
 
       // @public
-      var initialOffset;
+      let initialOffset;
       this.dragListener = new SimpleDragHandler( {
         start: event => {
           initialOffset = this.getMidpoint().minus( this.globalToParentPoint( event.pointer.point ) );
@@ -135,7 +135,7 @@ define( require => {
       else {
         this.beforeMidpointSet();
 
-        var easedRatio = Easing.QUADRATIC_IN_OUT.value( this.ratio );
+        const easedRatio = Easing.QUADRATIC_IN_OUT.value( this.ratio );
         this.setMidpoint( this.originProperty.value.blend( this.destinationProperty.value, easedRatio ) );
       }
     }

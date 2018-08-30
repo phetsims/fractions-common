@@ -130,7 +130,7 @@ define( require => {
      */
     removeCellNodes() {
       while ( this.cellNodes.length ) {
-        var cellNode = this.cellNodes.pop();
+        const cellNode = this.cellNodes.pop();
         cellNode.cell.appearsFilledProperty.unlink( cellNode.visibilityListener );
         this.removeChild( cellNode );
       }

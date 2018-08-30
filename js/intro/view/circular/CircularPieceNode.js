@@ -30,7 +30,7 @@ define( require => {
       this.angleUnit = 2 * Math.PI / piece.denominator;
 
       // circle specific
-      var originCell = piece.originCell;
+      const originCell = piece.originCell;
       if ( originCell ) {
         this.graphic.setRotationAngle( originCell.index * this.angleUnit );
       }
@@ -43,10 +43,10 @@ define( require => {
      */
     beforeMidpointSet() {
       // rotate before centering
-      var destinationCell = this.piece.destinationCell;
+      const destinationCell = this.piece.destinationCell;
 
-      var originRotation = this.originRotation;
-      var targetRotation = destinationCell ? destinationCell.index * this.angleUnit : 0;
+      const originRotation = this.originRotation;
+      let targetRotation = destinationCell ? destinationCell.index * this.angleUnit : 0;
 
       // Hack to get closest rotation AND deduplicate this code
       if ( targetRotation - originRotation > Math.PI ) {
@@ -66,17 +66,17 @@ define( require => {
     orient( closestCell, dt ) {
       super.orient( closestCell, dt );
 
-      var originRotation = this.graphic.getCircleRotation();
-      var targetRotation = closestCell.index * this.angleUnit;
+      const originRotation = this.graphic.getCircleRotation();
+      let targetRotation = closestCell.index * this.angleUnit;
 
       // Hack to get closest rotation AND deduplicate this code
       if ( targetRotation - originRotation > Math.PI ) {
         targetRotation -= 2 * Math.PI;
       }
 
-      var midpoint = this.getMidpoint();
+      const midpoint = this.getMidpoint();
 
-      var rotationAmount = 5 * dt;
+      const rotationAmount = 5 * dt;
       if ( targetRotation > originRotation ) {
         this.graphic.setRotationAngle( Math.min( targetRotation, originRotation + rotationAmount ) );
       }

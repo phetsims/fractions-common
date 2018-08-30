@@ -103,12 +103,12 @@ define( require => {
       const iconNode = iconCreator[ representationProperty.value ]();
 
       // layer to hold all the static cell nodes in the bucket
-      var staticLayer = new Node();
+      const staticLayer = new Node();
 
       denominatorProperty.link( denominator => {
         // take denominator, and the length of the icon container
         // find the difference add/remove that many cells from the container
-        var difference = denominator - iconContainer.cells.length;
+        const difference = denominator - iconContainer.cells.length;
         if ( difference > 0 ) {
 
           //add cells

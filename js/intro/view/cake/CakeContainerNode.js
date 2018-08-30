@@ -57,7 +57,7 @@ define( require => {
 
       // create white background for the cake.
       // The shape of the ellipse is determined empirically based on the image
-      var cakeGridBase = new Path( Shape.ellipse(
+      const cakeGridBase = new Path( Shape.ellipse(
         CakeNode.CAKE_IMAGE_SIZE.width * 0.501,
         CakeNode.CAKE_IMAGE_SIZE.height * 0.641,
         CakeNode.CAKE_IMAGE_SIZE.width * 0.364,
@@ -146,7 +146,7 @@ define( require => {
      */
     removeCellNodes() {
       while ( this.cellNodes.length ) {
-        var cellNode = this.cellNodes.pop();
+        const cellNode = this.cellNodes.pop();
         cellNode.cell.appearsFilledProperty.unlink( cellNode.visibilityListener );
         this.cakeLayers.removeChild( cellNode );
       }

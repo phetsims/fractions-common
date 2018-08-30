@@ -56,7 +56,7 @@ define( require => {
         ? FractionsCommonColorProfile.introHorizontalBarProperty
         : FractionsCommonColorProfile.introVerticalBarProperty;
 
-      var mainRectangle = new Rectangle( {
+      const mainRectangle = new Rectangle( {
         rectX: -rectWidth / 2,
         rectY: -rectHeight / 2,
         rectWidth,
@@ -65,7 +65,7 @@ define( require => {
         stroke: 'black'
       } );
 
-      var shadowRectangle = new Rectangle( {
+      const shadowRectangle = new Rectangle( {
         center: mainRectangle.center.plusScalar( FractionsCommonConstants.INTRO_DROP_SHADOW_OFFSET ),
         rectWidth,
         rectHeight,

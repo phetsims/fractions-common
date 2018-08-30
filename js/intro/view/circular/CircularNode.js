@@ -41,7 +41,7 @@ define( require => {
       this.denominator = denominator;
       this.angleUnit = 2 * Math.PI / denominator;
 
-      var shape = new Shape();
+      const shape = new Shape();
       if ( denominator > 1 ) {
         shape.moveTo( 0, 0 );
       }

@@ -108,8 +108,8 @@ define( require => {
      */
     getNextEmptyCell() {
       // forwards order
-      for ( var i = 0; i < this.cells.length; i++ ) {
-        var cell = this.cells.get( i );
+      for ( let i = 0; i < this.cells.length; i++ ) {
+        const cell = this.cells.get( i );
         if ( !cell.isFilledProperty.value ) {
           return cell;
         }
@@ -125,8 +125,8 @@ define( require => {
      */
     getNextFilledCell() {
       // backwards order
-      for ( var i = this.cells.length - 1; i >= 0; i-- ) {
-        var cell = this.cells.get( i );
+      for ( let i = this.cells.length - 1; i >= 0; i-- ) {
+        const cell = this.cells.get( i );
         if ( cell.isFilledProperty.value ) {
           return cell;
         }
@@ -142,8 +142,8 @@ define( require => {
      */
     getNextAppearsFilledCell() {
       // backwards order
-      for ( var i = this.cells.length - 1; i >= 0; i-- ) {
-        var cell = this.cells.get( i );
+      for ( let i = this.cells.length - 1; i >= 0; i-- ) {
+        const cell = this.cells.get( i );
         if ( cell.appearsFilledProperty.value ) {
           return cell;
         }
