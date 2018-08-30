@@ -33,6 +33,20 @@ define( require => {
         }
       }, options ) );
     }
+
+    /**
+     * Returns the icon node to be used for this representation.
+     * @public
+     *
+     * @returns {Node}
+     */
+    static getIcon() {
+      return new BeakerNode( 1, 1, {
+        yRadius: 4.5,
+        xRadius: 15,
+        fullHeight: 55
+      } );
+    }
   }
 
   return fractionsCommon.register( 'BeakerSceneNode', BeakerSceneNode );

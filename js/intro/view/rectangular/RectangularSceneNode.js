@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   const CellSceneNode = require( 'FRACTIONS_COMMON/intro/view/CellSceneNode' );
+  const Container = require( 'FRACTIONS_COMMON/intro/model/Container' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularContainerNode' );
   const RectangularNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularNode' );
@@ -56,6 +57,24 @@ define( require => {
           }
         }[ rectangularOrientation ][ model.isCompact ]
       }, options ) );
+    }
+
+    /**
+     * Returns the icon node to be used for this representation.
+     * @public
+     *
+     * @param {RectangularOrientation} rectangularOrientation
+     * @returns {Node}
+     */
+    static getIcon( rectangularOrientation ) {
+      const iconContainer = new Container();
+      iconContainer.addCells( 1 );
+      iconContainer.cells.get( 0 ).fill();
+
+      return new RectangularContainerNode( iconContainer, () => {}, {
+        rectangularOrientation,
+        scale: 0.32
+      } );
     }
   }
 

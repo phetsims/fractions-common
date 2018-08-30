@@ -14,6 +14,10 @@ define( require => {
   const CakePieceNode = require( 'FRACTIONS_COMMON/intro/view/cake/CakePieceNode' );
   const CellSceneNode = require( 'FRACTIONS_COMMON/intro/view/CellSceneNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Image = require( 'SCENERY/nodes/Image' );
+
+  // images
+  const cakeImage = require( 'image!FRACTIONS_COMMON/cake_1_1.png' );
 
   class CakeSceneNode extends CellSceneNode {
     /**
@@ -32,6 +36,18 @@ define( require => {
           return new CakeNode( denominator, index, options );
         }
       }, options ) );
+    }
+
+    /**
+     * Returns the icon node to be used for this representation.
+     * @public
+     *
+     * @returns {Node}
+     */
+    static getIcon() {
+      return new Image( cakeImage, {
+        maxHeight: 75
+      } );
     }
   }
 
