@@ -209,7 +209,8 @@ define( require => {
             const multipliedNumberLine = new NumberLineNode( model.numeratorProperty, model.denominatorProperty, model.containerCountProperty, {
               multiplierProperty: model.multiplierProperty,
               orientation: NumberLineOrientation.VERTICAL,
-              unitSize: 60
+              unitSize: 60,
+              markerFill: colorOverride
             } );
             containerNodes = [ multipliedNumberLine ];
             multipliedViewContainer.addChild( multipliedNumberLine );
