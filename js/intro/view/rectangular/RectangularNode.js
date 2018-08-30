@@ -11,6 +11,7 @@ define( require => {
   // modules
   const Dimension2 = require( 'DOT/Dimension2' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
@@ -30,7 +31,10 @@ define( require => {
 
       options = _.extend( {
         dropShadow: false,
-        rectangularOrientation: RectangularOrientation.VERTICAL_SIZE
+        rectangularOrientation: RectangularOrientation.VERTICAL_SIZE,
+
+        // {ColorDef} - If non-null, it will override the given color
+        colorOverride: null
       }, options );
 
       assert && assert( typeof options.dropShadow === 'boolean' );
@@ -48,14 +52,16 @@ define( require => {
         rectWidth /= denominator;
       }
 
+      const defaultColor = options.rectangularOrientation === RectangularOrientation.HORIZONTAL
+        ? FractionsCommonColorProfile.introHorizontalBarProperty
+        : FractionsCommonColorProfile.introVerticalBarProperty;
+
       var mainRectangle = new Rectangle( {
         rectX: -rectWidth / 2,
         rectY: -rectHeight / 2,
         rectWidth,
         rectHeight,
-
-        // determine the color depend upon representation
-        fill: options.rectangularOrientation === RectangularOrientation.HORIZONTAL ? '#ED4344' : '#FFE600',
+        fill: options.colorOverride ? options.colorOverride : defaultColor,
         stroke: 'black'
       } );
 

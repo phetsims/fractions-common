@@ -30,7 +30,7 @@ define( require => {
      */
     constructor( container, cellDownCallback, options ) {
       // TODO: cellDownCallback move to option
-      super( container, cellDownCallback );
+      super( container, cellDownCallback, options );
 
       // @public
       this.circleRadius = CircularNode.RADIUS;
@@ -95,7 +95,9 @@ define( require => {
         const cell = this.container.cells.get( i );
 
         // TODO: YIKES, OPTIONS
-        const cellNode = new CircularNode( denominator, i );
+        const cellNode = new CircularNode( denominator, i, {
+          colorOverride: this.colorOverride
+        } );
         cellNode.translation = cellNode.getContainerOffset();
         this.cellNodes.push( cellNode );
         this.addChild( cellNode );

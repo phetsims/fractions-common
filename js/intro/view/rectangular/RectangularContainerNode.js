@@ -30,7 +30,7 @@ define( require => {
     constructor( container, cellDownCallback, options ) {
       assert && assert( RectangularOrientation.is( options.rectangularOrientation ) );
 
-      super( container, cellDownCallback );
+      super( container, cellDownCallback, options );
 
       // @private {RectangularOrientation}
       this.rectangularOrientation = options.rectangularOrientation;
@@ -105,7 +105,8 @@ define( require => {
       for ( let i = 0; i < denominator; i++ ) {
         const cell = this.container.cells.get( i );
         const cellNode = new RectangularNode( denominator, {
-          rectangularOrientation: this.rectangularOrientation
+          rectangularOrientation: this.rectangularOrientation,
+          colorOverride: this.colorOverride
         } );
         this.cellNodes.push( cellNode );
         this.addChild( cellNode );

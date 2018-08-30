@@ -24,7 +24,7 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( container, cellDownCallback, options ) {
-      super( container, cellDownCallback);
+      super( container, cellDownCallback, options );
 
       // @private {Multilink}
       this.multilink = Property.multilink( [ container.appearsFilledCellCountProperty, container.cells.lengthProperty ], ( numerator, denominator ) => {
@@ -32,7 +32,9 @@ define( require => {
         numerator = Math.min( numerator, denominator );
 
         this.children = [
-          new BeakerNode( numerator, denominator )
+          new BeakerNode( numerator, denominator, {
+            colorOverride: this.colorOverride
+          } )
         ];
       } );
 

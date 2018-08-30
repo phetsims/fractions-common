@@ -47,7 +47,7 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( container, cellDownCallback, options ) {
-      super( container, cellDownCallback );
+      super( container, cellDownCallback, options );
 
       // @private {Image} create grid image of the cake with the appropriate number of cells
       this.gridImage = new Image( cakeGridImageArray[ container.cells.lengthProperty.value - 1 ], {

@@ -17,15 +17,24 @@ define( require => {
      * @param {Container} container
      * @param {function} cellDownCallback - function( {Cell} cell, {Event} event ) - Should be called when a cell is
      *                                      pressed by a pointer.
+     * @param {Object} [options]
      */
-    constructor( container, cellDownCallback ) {
+    constructor( container, cellDownCallback, options ) {
+
+      options = _.extend( {
+        colorOverride: null
+      }, options );
+
       super();
 
       // @public {Container}
       this.container = container;
 
-      // @protected {function}
+      // @protected {function} - TODO: move this to options
       this.cellDownCallback = cellDownCallback;
+
+      // @protected {ColorDef}
+      this.colorOverride = options.colorOverride;
     }
   }
 

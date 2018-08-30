@@ -29,7 +29,10 @@ define( require => {
       assert && assert( index < denominator );
 
       options = _.extend( {
-        dropShadow: false
+        dropShadow: false,
+
+        // {ColorDef} - If non-null, it will override the given color
+        colorOverride: null
       }, options );
 
       super();
@@ -50,7 +53,7 @@ define( require => {
 
       // @private {Node}
       this.primaryPath = new Path( shape, {
-        fill: FractionsCommonColorProfile.introCircleFillProperty,
+        fill: options.colorOverride ? options.colorOverride : FractionsCommonColorProfile.introCircleFillProperty,
         stroke: 'black'
       } );
       if ( options.dropShadow ) {
