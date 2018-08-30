@@ -10,7 +10,6 @@ define( require => {
 
   // modules
   const CircularNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularNode' );
-  const Easing = require( 'TWIXT/Easing' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const PieceNode = require( 'FRACTIONS_COMMON/intro/view/PieceNode' );
 
@@ -38,38 +37,22 @@ define( require => {
     }
 
     /**
-     * Steps forward in time.
-     * @public
+     * Handles operations in step() before midpoint is set.
+     * @protected
      * @override
-     *
-     * @param {number} dt
      */
-    step( dt ) {
-      if ( this.isUserControlled ) {
-        return;
+    beforeMidpointSet() {
+      // rotate before centering
+      var destinationCell = this.piece.destinationCell;
+
+      var originRotation = this.originRotation;
+      var targetRotation = destinationCell ? destinationCell.index * this.angleUnit : 0;
+
+      // Hack to get closest rotation AND deduplicate this code
+      if ( targetRotation - originRotation > Math.PI ) {
+        targetRotation -= 2 * Math.PI;
       }
-
-      // Smaller animations are somewhat faster
-      this.ratio = Math.min( 1, this.ratio + dt * 20 / Math.sqrt( this.originProperty.value.distance( this.destinationProperty.value ) ) );
-      if ( this.ratio === 1 ) {
-        this.finishedAnimatingCallback();
-      }
-      else {
-        // rotate before centering
-        var destinationCell = this.piece.destinationCell;
-
-        var originRotation = this.originRotation;
-        var targetRotation = destinationCell ? destinationCell.index * this.angleUnit : 0;
-
-        // Hack to get closest rotation AND deduplicate this code
-        if ( targetRotation - originRotation > Math.PI ) {
-          targetRotation -= 2 * Math.PI;
-        }
-        this.graphic.setRotationAngle( ( 1 - this.ratio ) * this.originRotation + this.ratio * targetRotation );
-
-        var easedRatio = Easing.QUADRATIC_IN_OUT.value( this.ratio );
-        this.setMidpoint( this.originProperty.value.blend( this.destinationProperty.value, easedRatio ) );
-      }
+      this.graphic.setRotationAngle( ( 1 - this.ratio ) * this.originRotation + this.ratio * targetRotation );
     }
 
     /**

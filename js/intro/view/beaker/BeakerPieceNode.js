@@ -10,7 +10,6 @@ define( require => {
 
   // modules
   const BeakerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerNode' );
-  const Easing = require( 'TWIXT/Easing' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const PieceNode = require( 'FRACTIONS_COMMON/intro/view/PieceNode' );
 
@@ -24,30 +23,6 @@ define( require => {
       super( piece, finishedAnimatingCallback, droppedCallback, {
         graphic: new BeakerNode( 1, piece.denominator )
       } );
-    }
-
-    /**
-     * Steps forward in time.
-     * @public
-     * @override
-     *
-     * @param {number} dt
-     */
-    step( dt ) {
-      // TODO: check step methods for duplication
-      if ( this.isUserControlled ) {
-        return;
-      }
-
-      // Smaller animations are somewhat faster
-      this.ratio = Math.min( 1, this.ratio + dt * 20 / Math.sqrt( this.originProperty.value.distance( this.destinationProperty.value ) ) );
-      if ( this.ratio === 1 ) {
-        this.finishedAnimatingCallback( this );
-      }
-      else {
-        var easedRatio = Easing.QUADRATIC_IN_OUT.value( this.ratio );
-        this.setCenter( this.originProperty.value.blend( this.destinationProperty.value, easedRatio ) );
-      }
     }
   }
 

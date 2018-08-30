@@ -9,7 +9,6 @@ define( require => {
   'use strict';
 
   // modules
-  const Easing = require( 'TWIXT/Easing' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const PieceNode = require( 'FRACTIONS_COMMON/intro/view/PieceNode' );
   const RectangularNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularNode' );
@@ -30,29 +29,6 @@ define( require => {
       } );
 
       this.mutate( options );
-    }
-
-    /**
-     * Steps forward in time.
-     * @public
-     * @override
-     *
-     * @param {number} dt
-     */
-    step( dt ) {
-      if ( this.isUserControlled ) {
-        return;
-      }
-
-      // Smaller animations are somewhat faster
-      this.ratio = Math.min( 1, this.ratio + dt * 20 / Math.sqrt( this.originProperty.value.distance( this.destinationProperty.value ) ) );
-      if ( this.ratio === 1 ) {
-        this.finishedAnimatingCallback();
-      }
-      else {
-        var easedRatio = Easing.QUADRATIC_IN_OUT.value( this.ratio );
-        this.setMidpoint( this.originProperty.value.blend( this.destinationProperty.value, easedRatio ) );
-      }
     }
 
     /**

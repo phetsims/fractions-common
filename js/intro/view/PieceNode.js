@@ -12,6 +12,7 @@ define( require => {
   'use strict';
 
   // modules
+  const Easing = require( 'TWIXT/Easing' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Property = require( 'AXON/Property' );
@@ -109,14 +110,34 @@ define( require => {
     }
 
     /**
+     * Handles operations in step() before midpoint is set.
+     * @protected
+     */
+    beforeMidpointSet() {
+    }
+
+    /**
      * Steps forward in time.
      * @public
      *
      * @param {number} dt
      */
     step( dt ) {
-      // TODO: just override instead of abstract (call parent step)
-      throw new Error( 'unimplemented' );
+      if ( this.isUserControlled ) {
+        return;
+      }
+
+      // Smaller animations are somewhat faster
+      this.ratio = Math.min( 1, this.ratio + dt * 60 / Math.sqrt( this.originProperty.value.distance( this.destinationProperty.value ) ) );
+      if ( this.ratio === 1 ) {
+        this.finishedAnimatingCallback( this );
+      }
+      else {
+        this.beforeMidpointSet();
+
+        var easedRatio = Easing.QUADRATIC_IN_OUT.value( this.ratio );
+        this.setMidpoint( this.originProperty.value.blend( this.destinationProperty.value, easedRatio ) );
+      }
     }
 
     /**
