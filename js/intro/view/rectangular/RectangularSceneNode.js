@@ -12,6 +12,7 @@ define( require => {
   const CellSceneNode = require( 'FRACTIONS_COMMON/intro/view/CellSceneNode' );
   const Container = require( 'FRACTIONS_COMMON/intro/model/Container' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularContainerNode' );
   const RectangularNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularNode' );
   const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/RectangularOrientation' );
@@ -64,16 +65,18 @@ define( require => {
      * @public
      *
      * @param {RectangularOrientation} rectangularOrientation
+     * @param {boolean} [useEqualityLabColor]
      * @returns {Node}
      */
-    static getIcon( rectangularOrientation ) {
+    static getIcon( rectangularOrientation, useEqualityLabColor ) {
       const iconContainer = new Container();
       iconContainer.addCells( 1 );
       iconContainer.cells.get( 0 ).fill();
 
       return new RectangularContainerNode( iconContainer, () => {}, {
         rectangularOrientation,
-        scale: 0.32
+        scale: 0.32,
+        colorOverride: useEqualityLabColor ? FractionsCommonColorProfile.equalityLabColorProperty : null
       } );
     }
   }

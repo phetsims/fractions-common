@@ -78,10 +78,10 @@ define( require => {
       this.addChild( multiplierSpinner );
 
       // TODO: alternates!
-      const circularIcon = CircularSceneNode.getIcon();
-      const horizontalIcon = RectangularSceneNode.getIcon( RectangularOrientation.HORIZONTAL );
-      const verticalIcon = RectangularSceneNode.getIcon( RectangularOrientation.VERTICAL );
-      const beakerIcon = BeakerSceneNode.getIcon();
+      const circularIcon = CircularSceneNode.getIcon( true );
+      const horizontalIcon = RectangularSceneNode.getIcon( RectangularOrientation.HORIZONTAL, true );
+      const verticalIcon = RectangularSceneNode.getIcon( RectangularOrientation.VERTICAL, true );
+      const beakerIcon = BeakerSceneNode.getIcon( true );
       const variableIcon = new Node( {
         children: [
           circularIcon,

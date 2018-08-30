@@ -14,6 +14,7 @@ define( require => {
   const BeakerPieceNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerPieceNode' );
   const CellSceneNode = require( 'FRACTIONS_COMMON/intro/view/CellSceneNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
 
   class BeakerSceneNode extends CellSceneNode {
     /**
@@ -38,13 +39,15 @@ define( require => {
      * Returns the icon node to be used for this representation.
      * @public
      *
+     * @param {boolean} [useEqualityLabColor]
      * @returns {Node}
      */
-    static getIcon() {
+    static getIcon( useEqualityLabColor ) {
       return new BeakerNode( 1, 1, {
         yRadius: 4.5,
         xRadius: 15,
-        fullHeight: 55
+        fullHeight: 55,
+        colorOverride: useEqualityLabColor ? FractionsCommonColorProfile.equalityLabWaterProperty : null
       } );
     }
   }

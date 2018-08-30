@@ -15,6 +15,7 @@ define( require => {
   const CircularPieceNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularPieceNode' );
   const Container = require( 'FRACTIONS_COMMON/intro/model/Container' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
 
   class CircularSceneNode extends CellSceneNode {
     /**
@@ -42,15 +43,17 @@ define( require => {
      * Returns the icon node to be used for this representation.
      * @public
      *
+     * @param {boolean} [useEqualityLabColor]
      * @returns {Node}
      */
-    static getIcon() {
+    static getIcon( useEqualityLabColor ) {
       const iconContainer = new Container();
       iconContainer.addCells( 1 );
       iconContainer.cells.get( 0 ).fill();
 
       return new CircularContainerNode( iconContainer, () => {}, {
-        scale: 30 / 63
+        scale: 30 / 63,
+        colorOverride: useEqualityLabColor ? FractionsCommonColorProfile.equalityLabColorProperty : null
       } );
     }
   }

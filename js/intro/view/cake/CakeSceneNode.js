@@ -42,6 +42,7 @@ define( require => {
      * Returns the icon node to be used for this representation.
      * @public
      *
+     * @param {boolean} useEqualityLabColor
      * @returns {Node}
      */
     static getIcon() {
