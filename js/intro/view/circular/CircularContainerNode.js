@@ -41,7 +41,8 @@ define( require => {
         return count > 0 ? 'black' : 'gray';
       } );
 
-      this.addChild( new Circle( this.circleRadius, {
+      // Extend by 0.5 so that our cell fills don't overlap our border
+      this.addChild( new Circle( this.circleRadius + 0.5, {
         lineWidth: FractionsCommonConstants.INTRO_CONTAINER_LINE_WIDTH,
         fill: FractionsCommonColorProfile.introContainerBackgroundProperty,
         stroke: this.strokeProperty

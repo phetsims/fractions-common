@@ -63,7 +63,7 @@ define( require => {
       this.borderRectangle = new Rectangle( {
         lineWidth: FractionsCommonConstants.INTRO_CONTAINER_LINE_WIDTH,
         stroke: this.strokeProperty,
-        rectBounds
+        rectBounds: rectBounds.dilated( 0.5 ) // Extend by 0.5 so that our cell fills don't overlap our border
       } );
       this.addChild( this.borderRectangle );
 
