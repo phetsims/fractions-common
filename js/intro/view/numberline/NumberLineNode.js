@@ -218,7 +218,14 @@ define( require => {
         hitTargetNode
       ];
 
-      this.x = -containerCountProperty.range.max * options.unitSize / 2;
+      // TODO: cleanup
+      if ( options.orientation === NumberLineOrientation.VERTICAL ) {
+        this.rotation = -Math.PI / 2;
+        this.y = containerCountProperty.range.max * options.unitSize / 2;
+      }
+      else {
+        this.x = -containerCountProperty.range.max * options.unitSize / 2;
+      }
 
       this.mutate( options );
     }
@@ -233,7 +240,7 @@ define( require => {
       this.minorTickMultilink.dispose();
       this.multipliedTickMultilink.dispose();
       this.markerMultilink.dispose();
-      this.dragListener.dispose();
+      this.dragListener && this.dragListener.dispose();
 
       super.dispose();
     }

@@ -23,6 +23,8 @@ define( require => {
   const IntroRadioButtonGroup = require( 'FRACTIONS_COMMON/intro/view/IntroRadioButtonGroup' );
   const MathSymbols = require( 'SCENERY_PHET/MathSymbols' );
   const Node = require( 'SCENERY/nodes/Node' );
+  const NumberLineNode = require( 'FRACTIONS_COMMON/intro/view/numberline/NumberLineNode' );
+  const NumberLineOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/NumberLineOrientation' );
   const NumberLineSceneNode = require( 'FRACTIONS_COMMON/intro/view/numberline/NumberLineSceneNode' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
@@ -202,6 +204,15 @@ define( require => {
               colorOverride: FractionsCommonColorProfile.equalityLabWaterProperty
             } ) );
             multipliedViewContainer.addChild( spacedBox( 4, containerNodes ) );
+          }
+          else if ( representation === Representation.NUMBER_LINE ) {
+            const multipliedNumberLine = new NumberLineNode( model.numeratorProperty, model.denominatorProperty, model.containerCountProperty, {
+              multiplierProperty: model.multiplierProperty,
+              orientation: NumberLineOrientation.VERTICAL,
+              unitSize: 60
+            } );
+            containerNodes = [ multipliedNumberLine ];
+            multipliedViewContainer.addChild( multipliedNumberLine );
           }
 
           if ( multipliedViewContainer.bounds.isValid() ) {
