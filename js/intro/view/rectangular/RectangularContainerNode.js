@@ -35,9 +35,12 @@ define( require => {
       this.rectangularOrientation = options.rectangularOrientation;
 
       // @private {Property.<string>}
-      // TODO: FFS, dispose it
-      this.strokeProperty = new DerivedProperty( [ container.filledCellCountProperty ], function( count ) {
-        return count > 0 ? 'black' : 'gray';
+      this.strokeProperty = new DerivedProperty( [
+        container.filledCellCountProperty,
+        FractionsCommonColorProfile.introContainerActiveBorderProperty,
+        FractionsCommonColorProfile.introContainerInactiveBorderProperty
+      ], ( count, activeColor, inactiveColor ) => {
+        return count > 0 ? activeColor : inactiveColor;
       } );
 
       // determine to the height and width to use when drawing the vertical or horizontal representation.
@@ -165,6 +168,7 @@ define( require => {
     dispose() {
       this.removeCellNodes();
       this.container.cells.lengthProperty.unlink( this.rebuildListener );
+      this.strokeProperty.dispose();
 
       Rectangle.prototype.dispose.call( this );
     }

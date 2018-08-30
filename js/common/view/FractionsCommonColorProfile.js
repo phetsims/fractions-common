@@ -27,6 +27,8 @@ define( require => {
     otherScreenBackground: { default: new Color( 235, 251, 251 ) },
 
     introBucketBackground: { default: new Color( '#8eb7f2' ) },
+    introContainerActiveBorder: { default: new Color( 'black' ) },
+    introContainerInactiveBorder: { default: new Color( 'gray' ) },
     introContainerBackground: { default: Color.WHITE },
     introNumberLineHighlight: { default: Color.YELLOW },
     introCircleFill: { default: new Color( 140, 198, 61 ) },

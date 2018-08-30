@@ -33,10 +33,13 @@ define( require => {
       // @public
       this.circleRadius = CircularNode.RADIUS;
 
-      // TODO: fix disposal?
-      // @private {Property.<string>} TODO factor out?
-      this.strokeProperty = new DerivedProperty( [ container.filledCellCountProperty ], function( count ) {
-        return count > 0 ? 'black' : 'gray';
+      // @private {Property.<string>}
+      this.strokeProperty = new DerivedProperty( [
+        container.filledCellCountProperty,
+        FractionsCommonColorProfile.introContainerActiveBorderProperty,
+        FractionsCommonColorProfile.introContainerInactiveBorderProperty
+      ], ( count, activeColor, inactiveColor ) => {
+        return count > 0 ? activeColor : inactiveColor;
       } );
 
       // Extend by 0.5 so that our cell fills don't overlap our border
@@ -140,6 +143,7 @@ define( require => {
     dispose() {
       this.removeCellNodes();
       this.container.cells.lengthProperty.unlink( this.rebuildListener );
+      this.strokeProperty.dispose();
 
       super.dispose();
     }

@@ -123,9 +123,10 @@ define( require => {
         staticLayer.removeAllChildren();
 
         // places pieces in bucket dependent on defined vectors
-        PIECE_OFFSET_POSITIONS.forEach( function( position ) {
-          var staticCellNode = createCellNode( denominator, 0, { center: position.plus( bucketHole.center ) } );
-          staticLayer.addChild( staticCellNode );
+        PIECE_OFFSET_POSITIONS.forEach( position => {
+          staticLayer.addChild( createCellNode( denominator, 0, {
+            center: position.plus( bucketHole.center )
+          } ) );
         } );
       } );
 
@@ -149,9 +150,9 @@ define( require => {
       super( options );
 
       // add listener to the bucket and static pieces
-      [ bucketHole, staticLayer, bucketFront ].forEach( function( node ) {
+      [ bucketHole, staticLayer, bucketFront ].forEach( node => {
         node.addInputListener( {
-          down: function( event ) {
+          down: event => {
             startPieceDrag( event );
           }
         } );
