@@ -13,6 +13,7 @@ define( require => {
   const Container = require( 'FRACTIONS_COMMON/intro/model/Container' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Node = require( 'SCENERY/nodes/Node' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   class ContainerNode extends Node {
     /**
@@ -44,6 +45,17 @@ define( require => {
 
       // @protected {function}
       this.cellDownCallback = options.cellDownCallback;
+    }
+
+    /**
+     * Return the midpoint offset of this node.
+     * @public
+     *
+     * @param {number} index
+     * @returns {Vector2}
+     */
+    getMidpointByIndex( index ) {
+      return Vector2.ZERO;
     }
   }
 

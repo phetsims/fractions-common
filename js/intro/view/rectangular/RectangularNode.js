@@ -9,6 +9,7 @@ define( require => {
   'use strict';
 
   // modules
+  const ColorDef = require( 'SCENERY/util/ColorDef' );
   const Dimension2 = require( 'DOT/Dimension2' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
@@ -30,7 +31,10 @@ define( require => {
       assert && assert( typeof denominator === 'number' );
 
       options = _.extend( {
+        // {boolean} - If true, this node will have a permanent drop shadow added
         dropShadow: false,
+
+        // {RectangularOrientation}
         rectangularOrientation: RectangularOrientation.VERTICAL_SIZE,
 
         // {ColorDef} - If non-null, it will override the given color
@@ -39,6 +43,7 @@ define( require => {
 
       assert && assert( typeof options.dropShadow === 'boolean' );
       assert && assert( RectangularOrientation.is( options.rectangularOrientation ) );
+      assert && assert( ColorDef.isColorDef( options.colorOverride ) );
 
       super();
 

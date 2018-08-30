@@ -10,10 +10,9 @@ define( require => {
 
   // modules
   const CakeNode = require( 'FRACTIONS_COMMON/intro/view/cake/CakeNode' );
-  const ContainerNode = require( 'FRACTIONS_COMMON/intro/view/ContainerNode' );
+  const CellContainerNode = require( 'FRACTIONS_COMMON/intro/view/CellContainerNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Image = require( 'SCENERY/nodes/Image' );
-  const Node = require( 'SCENERY/nodes/Node' );
   const Path = require( 'SCENERY/nodes/Path' );
   const Shape = require( 'KITE/Shape' );
 
@@ -27,6 +26,7 @@ define( require => {
   const cake_grid_7Image = require( 'image!FRACTIONS_COMMON/cake_grid_7.png' );
   const cake_grid_8Image = require( 'image!FRACTIONS_COMMON/cake_grid_8.png' );
 
+  // constants
   const cakeGridImageArray = [
     cake_grid_1Image,
     cake_grid_2Image,
@@ -37,27 +37,28 @@ define( require => {
     cake_grid_7Image,
     cake_grid_8Image
   ];
+  // The order of indices for visual layering (for each denominator)
+  const layerOrder = {
+    1: [ 0 ],
+    2: [ 1, 0 ],
+    3: [ 0, 1, 2 ],
+    4: [ 0, 1, 2, 3 ],
+    5: [ 1, 0, 2, 4, 3 ],
+    6: [ 1, 0, 2, 3, 5, 4 ],
+    7: [ 1, 0, 2, 3, 4, 6, 5 ],
+    8: [ 1, 0, 2, 3, 4, 5, 7, 6 ]
+  };
 
-  class CakeContainerNode extends ContainerNode {
+  class CakeContainerNode extends CellContainerNode {
     /**
-     * TODO: factor out common things with RectangularContainerNode and CircularContainerNode
-     *
      * @param {Container} container
      * @param {Object} [options]
      */
     constructor( container, options ) {
       super( container, options );
 
-      // @private {Image} create grid image of the cake with the appropriate number of cells
-      this.gridImage = new Image( cakeGridImageArray[ container.cells.lengthProperty.value - 1 ], {
-        scale: CakeNode.CAKE_DEFAULT_SCALE,
-        localBounds: CakeNode.CAKE_IMAGE_BOUNDS,
-        translation: CakeNode.CAKE_OFFSET.negated()
-      } );
-
-      // create white background for the cake.
       // The shape of the ellipse is determined empirically based on the image
-      const cakeGridBase = new Path( Shape.ellipse(
+      this.addChild( new Path( Shape.ellipse(
         CakeNode.CAKE_IMAGE_SIZE.width * 0.501,
         CakeNode.CAKE_IMAGE_SIZE.height * 0.641,
         CakeNode.CAKE_IMAGE_SIZE.width * 0.364,
@@ -65,135 +66,54 @@ define( require => {
         fill: 'white',
         scale: CakeNode.CAKE_DEFAULT_SCALE,
         translation: CakeNode.CAKE_OFFSET.negated()
+      } ) );
+
+      // @private {Image} create grid image of the cake with the appropriate number of cells
+      this.gridImage = new Image( cakeGridImageArray[ container.cells.lengthProperty.value - 1 ], {
+        scale: CakeNode.CAKE_DEFAULT_SCALE,
+        localBounds: CakeNode.CAKE_IMAGE_BOUNDS,
+        translation: CakeNode.CAKE_OFFSET.negated()
       } );
+      this.addChild( this.gridImage );
 
-      // @private {Node} Node layer to hold the cake slices with the correct z-order
-      this.cakeLayers = new Node();
-
-      this.children = [ cakeGridBase, this.gridImage, this.cakeLayers ];
-
-      // @private {function}
-      this.rebuildListener = this.rebuild.bind( this );
-
-      // @private {Array.<CakeNode>}
-      this.cellNodes = [];
-
-      container.cells.lengthProperty.link( this.rebuildListener );
-
+      this.rebuild();
       this.mutate( options );
     }
 
     /**
-     * Returns the midpoint offset for the given child node at the specified index.
-     * @public
-     *
-     * @param {number} index
-     * @returns {Vector2}
-     */
-    getMidpointByIndex( index ) {
-      return this.cellNodes[ index ].translation;
-    }
-
-    /**
-     * rebuild the container
-     * @private
+     * Rebuilds the full container (required when the number of cells changes).
+     * @protected
+     * @override
      */
     rebuild() {
-      this.removeCellNodes();
+      super.rebuild();
 
       const denominator = this.container.cells.length;
 
       // update the grid image
       this.gridImage.setImage( cakeGridImageArray[ denominator - 1 ] );
 
-      // {number[]} an array indicating the appropriate z order of a slice of cake, see zLayerOrder method for more details
-      const zLayerArray = this.zLayerOrder( denominator );
-
-      // {Image[]} array of cake slices arranged in z-order from back to front
-      const slicesImage = [];
-
       for ( let i = 0; i < denominator; i++ ) {
-        const cell = this.container.cells.get( i );
+        const index = layerOrder[ denominator ][ i ];
+        const cell = this.container.cells.get( index );
 
-        // {integer} order of the slice, higher value indicates a higher z value
-        const zOrder = zLayerArray[ i ];
-
-        // place the cakeImage in the z ordered array
-        const cellNode = new CakeNode( denominator, i );
+        const cellNode = new CakeNode( denominator, index );
         cellNode.translation = cellNode.getOffset();
-        slicesImage[ zOrder ] = cellNode;
 
-        this.cellNodes.push( cellNode );
-        cellNode.cursor = 'pointer';
-        cellNode.addInputListener( {
-          down: event => {
-            this.cellDownCallback( cell, event );
-          }
-        } );
-
-        // TODO: don't do it this way
-        cellNode.cell = cell;
-        cellNode.visibilityListener = cell.appearsFilledProperty.linkAttribute( cellNode, 'visible' );
-      }
-
-      // remove all missing cakeImage from slicesImage array
-      this.cakeLayers.setChildren( slicesImage.filter( n => n !== undefined ) );
-    }
-
-    /** updates cells array and removes links when denominator is decreased
-     *
-     * @private
-     */
-    removeCellNodes() {
-      while ( this.cellNodes.length ) {
-        const cellNode = this.cellNodes.pop();
-        cellNode.cell.appearsFilledProperty.unlink( cellNode.visibilityListener );
-        this.cakeLayers.removeChild( cellNode );
+        this.addCellNode( cell, cellNode );
       }
     }
 
     /**
-     * Each array corresponds to the z layers of the cake slices
-     * The higher the value in the array, the higher the z-order level
-     * For instance for a denominator of 2, the array [1,0] indicates that
-     * the 0th element has a z value of 1 and is on top of the 1st element whose z value is 0
-
-     * @param {number} denominator
-     * @returns {number[]}
-     * @private
-     */
-    zLayerOrder( denominator ) {
-      switch( denominator ) {
-        case 1:
-          return [ 0 ];
-        case 2:
-          return [ 1, 0 ];
-        case 3:
-          return [ 0, 1, 2 ];
-        case 4:
-          return [ 0, 1, 2, 3 ];
-        case 5:
-          return [ 1, 0, 2, 4, 3 ];
-        case 6:
-          return [ 1, 0, 2, 3, 5, 4 ];
-        case 7:
-          return [ 1, 0, 2, 3, 4, 6, 5 ];
-        case 8:
-          return [ 1, 0, 2, 3, 4, 5, 7, 6 ];
-        default:
-          throw new Error( 'Unknown denominator: ' + denominator );
-      }
-    }
-
-    /**
-     * Releases references.
+     * Return the midpoint offset of this node.
      * @public
+     * @override
+     *
+     * @param {number} index
+     * @returns {Vector2}
      */
-    dispose() {
-      this.removeCellNodes();
-      this.container.cells.lengthProperty.unlink( this.rebuildListener );
-
-      super.dispose();
+    getMidpointByIndex( index ) {
+      return this.cellEntries[ layerOrder[ this.container.cells.length ][ index ] ].node.translation;
     }
   }
 

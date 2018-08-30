@@ -9,10 +9,9 @@ define( require => {
   'use strict';
 
   // modules
+  const CellContainerNode = require( 'FRACTIONS_COMMON/intro/view/CellContainerNode' );
   const Circle = require( 'SCENERY/nodes/Circle' );
   const CircularNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularNode' );
-  const ContainerNode = require( 'FRACTIONS_COMMON/intro/view/ContainerNode' );
-  const DerivedProperty = require( 'AXON/DerivedProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
@@ -20,10 +19,8 @@ define( require => {
   const Shape = require( 'KITE/Shape' );
   const Vector2 = require( 'DOT/Vector2' );
 
-  class CircularContainerNode extends ContainerNode {
+  class CircularContainerNode extends CellContainerNode {
     /**
-     * TODO: factor out common things with RectangularContainerNode
-     *
      * @param {Container} container
      * @param {Object} [options]
      */
@@ -32,15 +29,6 @@ define( require => {
 
       // @public
       this.circleRadius = CircularNode.RADIUS;
-
-      // @private {Property.<string>}
-      this.strokeProperty = new DerivedProperty( [
-        container.filledCellCountProperty,
-        FractionsCommonColorProfile.introContainerActiveBorderProperty,
-        FractionsCommonColorProfile.introContainerInactiveBorderProperty
-      ], ( count, activeColor, inactiveColor ) => {
-        return count > 0 ? activeColor : inactiveColor;
-      } );
 
       // Extend by 0.5 so that our cell fills don't overlap our border
       this.addChild( new Circle( this.circleRadius + 0.5, {
@@ -54,34 +42,17 @@ define( require => {
       this.cellDividersPath = new Path( null, { stroke: this.strokeProperty } );
       this.addChild( this.cellDividersPath );
 
-      // @private {function}
-      this.rebuildListener = this.rebuild.bind( this );
-
-      // @private {Array.<CircularNode>}
-      this.cellNodes = [];
-
-      container.cells.lengthProperty.link( this.rebuildListener );
-
+      this.rebuild();
       this.mutate( options );
     }
 
     /**
-     * Returns the midpoint offset for the given child node at the specified index.
-     * @public
-     *
-     * @param {number} index
-     * @returns {Vector2}
-     */
-    getMidpointByIndex( index ) {
-      return this.cellNodes[ index ].translation;
-    }
-
-    /**
-     * redraw all the container on the screen
-     * @private
+     * Rebuilds the full container (required when the number of cells changes).
+     * @protected
+     * @override
      */
     rebuild() {
-      this.removeCellNodes();
+      super.rebuild();
 
       const cellDividersShape = new Shape();
 
@@ -101,18 +72,8 @@ define( require => {
           colorOverride: this.colorOverride
         } );
         cellNode.translation = cellNode.getContainerOffset();
-        this.cellNodes.push( cellNode );
-        this.addChild( cellNode );
-        cellNode.cursor = 'pointer';
-        cellNode.addInputListener( {
-          down: event => {
-            this.cellDownCallback( cell, event );
-          }
-        } );
 
-        // TODO: don't do it this way
-        cellNode.cell = cell;
-        cellNode.visibilityListener = cell.appearsFilledProperty.linkAttribute( cellNode, 'visible' );
+        this.addCellNode( cell, cellNode );
 
         // positions and draws the polar coordinate of the dividing line between cells
         const edgePosition = Vector2.createPolar( cellDividersLength, i * cellDividersAngle );
@@ -122,30 +83,6 @@ define( require => {
         }
       }
       this.cellDividersPath.setShape( cellDividersShape );
-    }
-
-    /**
-     * Remove all the cells in the array and detach their listeners
-     * @private
-     */
-    removeCellNodes() {
-      while ( this.cellNodes.length ) {
-        const cellNode = this.cellNodes.pop();
-        cellNode.cell.appearsFilledProperty.unlink( cellNode.visibilityListener );
-        this.removeChild( cellNode );
-      }
-    }
-
-    /**
-     * Releases references.
-     * @public
-     */
-    dispose() {
-      this.removeCellNodes();
-      this.container.cells.lengthProperty.unlink( this.rebuildListener );
-      this.strokeProperty.dispose();
-
-      super.dispose();
     }
   }
 

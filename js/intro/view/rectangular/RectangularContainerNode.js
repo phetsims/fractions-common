@@ -10,8 +10,8 @@ define( require => {
 
   // modules
   const Bounds2 = require( 'DOT/Bounds2' );
-  const ContainerNode = require( 'FRACTIONS_COMMON/intro/view/ContainerNode' );
-  const DerivedProperty = require( 'AXON/DerivedProperty' );
+  const CellContainerNode = require( 'FRACTIONS_COMMON/intro/view/CellContainerNode' );
+  const Container = require( 'FRACTIONS_COMMON/intro/model/Container' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
@@ -21,12 +21,18 @@ define( require => {
   const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/RectangularOrientation' );
   const Shape = require( 'KITE/Shape' );
 
-  class RectangularContainerNode extends ContainerNode {
+  class RectangularContainerNode extends CellContainerNode {
     /**
      * @param {Container} container
      * @param {Object} [options]
      */
     constructor( container, options ) {
+      assert && assert( container instanceof Container );
+
+      options = _.extend( {
+        rectangularOrientation: RectangularOrientation.VERTICAL_SIZE
+      }, options );
+
       assert && assert( RectangularOrientation.is( options.rectangularOrientation ) );
 
       super( container, options );
@@ -34,21 +40,10 @@ define( require => {
       // @private {RectangularOrientation}
       this.rectangularOrientation = options.rectangularOrientation;
 
-      // @private {Property.<string>}
-      this.strokeProperty = new DerivedProperty( [
-        container.filledCellCountProperty,
-        FractionsCommonColorProfile.introContainerActiveBorderProperty,
-        FractionsCommonColorProfile.introContainerInactiveBorderProperty
-      ], ( count, activeColor, inactiveColor ) => {
-        return count > 0 ? activeColor : inactiveColor;
-      } );
+      // @private {Dimension2} - The full size of the rectangle to use
+      this.size = RectangularNode.getSize( options.rectangularOrientation );
 
-      // determine to the height and width to use when drawing the vertical or horizontal representation.
-      // TODO: omg WROST NAMMM. dimension? Doc it
-      // TODO: AND WTF do an enumeration
-      this.rectangle = RectangularNode.getSize( options.rectangularOrientation );
-
-      const rectBounds = Bounds2.point( 0, 0 ).dilatedXY( this.rectangle.width / 2, this.rectangle.height / 2 );
+      const rectBounds = Bounds2.point( 0, 0 ).dilatedXY( this.size.width / 2, this.size.height / 2 );
 
       // @private {Rectangle}
       this.backgroundRectangle = new Rectangle( {
@@ -57,7 +52,7 @@ define( require => {
       } );
       this.addChild( this.backgroundRectangle );
 
-      // @private {Path} creates the path for the dividing lines between cells
+      // @private {Path}
       this.cellDividersPath = new Path( null, { stroke: this.strokeProperty } );
       this.addChild( this.cellDividersPath );
 
@@ -69,37 +64,21 @@ define( require => {
       } );
       this.addChild( this.borderRectangle );
 
-      // @private {function}
-      this.rebuildListener = this.rebuild.bind( this );
-
-      // @private {Array.<RectangularNode>}
-      this.cellNodes = [];
-
-      container.cells.lengthProperty.link( this.rebuildListener );
-
+      this.rebuild();
       this.mutate( options );
     }
 
     /**
-     * Returns the midpoint offset for the given child node at the specified index.
-     * @public
-     *
-     * @param {number} index
-     * @returns {Vector2}
-     */
-    getMidpointByIndex( index ) {
-      return this.cellNodes[ index ].translation; // TODO: This can be factored out?
-    }
-
-    /**
-     * Redraws Rectangular Containers on screen view when the denominator is changed
-     * @private
+     * Rebuilds the full container (required when the number of cells changes).
+     * @protected
+     * @override
      */
     rebuild() {
-      this.removeCellNodes();
+      super.rebuild();
+
       const denominator = this.container.cells.length;
-      const cellWidth = this.rectangle.width / denominator;
-      const cellHeight = this.rectangle.height / denominator;
+      const cellWidth = this.size.width / denominator;
+      const cellHeight = this.size.height / denominator;
 
       const mapCellX = index => ( index - ( denominator - 1 ) / 2 ) * cellWidth;
       const mapCellY = index => ( ( denominator - 1 ) / 2 - index ) * cellHeight;
@@ -110,14 +89,6 @@ define( require => {
           rectangularOrientation: this.rectangularOrientation,
           colorOverride: this.colorOverride
         } );
-        this.cellNodes.push( cellNode );
-        this.addChild( cellNode );
-        cellNode.cursor = 'pointer';
-        cellNode.addInputListener( {
-          down: event => {
-            this.cellDownCallback( cell, event );
-          }
-        } );
         if ( this.rectangularOrientation === RectangularOrientation.HORIZONTAL ) {
           cellNode.x = mapCellX( i );
         }
@@ -125,17 +96,14 @@ define( require => {
           cellNode.y = mapCellY( i );
         }
 
-        // TODO: don't do it this way
-        cellNode.cell = cell;
-        cellNode.visibilityListener = cell.appearsFilledProperty.linkAttribute( cellNode, 'visible' );
+        this.addCellNode( cell, cellNode );
       }
 
       if ( this.rectangularOrientation === RectangularOrientation.VERTICAL ) {
-
         // sets the shape of the dividing lines between cells
         const cellDividersShape = new Shape();
         for ( let i = 0; i < denominator; i++ ) {
-          cellDividersShape.moveTo( -this.rectangle.width / 2, mapCellY( i + 0.5 ) ).horizontalLineToRelative( this.rectangle.width );
+          cellDividersShape.moveTo( -this.size.width / 2, mapCellY( i + 0.5 ) ).horizontalLineToRelative( this.size.width );
         }
         this.cellDividersPath.setShape( cellDividersShape );
       }
@@ -143,34 +111,10 @@ define( require => {
         // sets the shape of the dividing lines between cells
         const cellDividersShape = new Shape();
         for ( let i = 0; i < denominator; i++ ) {
-          cellDividersShape.moveTo( mapCellX( i + 0.5 ), -this.rectangle.height / 2 ).verticalLineToRelative( this.rectangle.height );
+          cellDividersShape.moveTo( mapCellX( i + 0.5 ), -this.size.height / 2 ).verticalLineToRelative( this.size.height );
         }
         this.cellDividersPath.setShape( cellDividersShape );
       }
-    }
-
-    /**
-     * Empties cellsNode array, removes all cell from the scene and unlinks them from visibility listeners
-     * @private
-     */
-    removeCellNodes() {
-      while ( this.cellNodes.length ) {
-        const cellNode = this.cellNodes.pop();
-        cellNode.cell.appearsFilledProperty.unlink( cellNode.visibilityListener );
-        this.removeChild( cellNode );
-      }
-    }
-
-    /**
-     * Releases references.
-     * @public
-     */
-    dispose() {
-      this.removeCellNodes();
-      this.container.cells.lengthProperty.unlink( this.rebuildListener );
-      this.strokeProperty.dispose();
-
-      Rectangle.prototype.dispose.call( this );
     }
   }
 

@@ -29,11 +29,14 @@ define( require => {
       assert && assert( index < denominator );
 
       options = _.extend( {
+        // {boolean} - If true, this node will have a permanent drop shadow added
         dropShadow: false,
 
         // {ColorDef} - If non-null, it will override the given color
         colorOverride: null
       }, options );
+
+      assert && assert( typeof options.dropShadow === 'boolean' );
 
       super();
 

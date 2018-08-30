@@ -13,12 +13,9 @@ define( require => {
   const ContainerNode = require( 'FRACTIONS_COMMON/intro/view/ContainerNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Property = require( 'AXON/Property' );
-  const Vector2 = require( 'DOT/Vector2' );
 
   class BeakerContainerNode extends ContainerNode {
     /**
-     * TODO: factor out common things with the other container nodes
-     *
      * @param {Container} container
      * @param {Object} [options]
      */
@@ -69,17 +66,6 @@ define( require => {
       this.container.appearsFilledCellCountProperty.unlink( this.cursorListener );
 
       super.dispose();
-    }
-
-    /**
-     * Return the midpoint offset of this node
-     *
-     * @param {number} index
-     * @returns {Vector2}
-     * @public
-     */
-    getMidpointByIndex( index ) {
-      return Vector2.ZERO;
     }
   }
 
