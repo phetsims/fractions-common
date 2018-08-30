@@ -18,13 +18,13 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const IntroRadioButtonGroup = require( 'FRACTIONS_COMMON/intro/view/IntroRadioButtonGroup' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberLineSceneNode = require( 'FRACTIONS_COMMON/intro/view/numberline/NumberLineSceneNode' );
   const Panel = require( 'SUN/Panel' );
   const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/RectangularOrientation' );
   const RectangularSceneNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularSceneNode' );
   const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
-  const RepresentationRadioButtonGroup = require( 'FRACTIONS_COMMON/intro/view/RepresentationRadioButtonGroup' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const ScreenView = require( 'JOIST/ScreenView' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -52,8 +52,35 @@ define( require => {
       // @protected {AlignGroup}
       this.topAlignGroup = new AlignGroup( { matchHorizontal: false } );
 
+      const representationRadioButtonGroup = new IntroRadioButtonGroup( model.representationProperty, [
+        {
+          value: Representation.CIRCLE,
+          node: CircularSceneNode.getIcon()
+        },
+        {
+          value: Representation.HORIZONTAL_BAR,
+          node: RectangularSceneNode.getIcon( RectangularOrientation.HORIZONTAL )
+        },
+        {
+          value: Representation.VERTICAL_BAR,
+          node: RectangularSceneNode.getIcon( RectangularOrientation.VERTICAL )
+        },
+        {
+          value: Representation.BEAKER,
+          node: BeakerSceneNode.getIcon()
+        },
+        {
+          value: Representation.CAKE,
+          node: CakeSceneNode.getIcon()
+        },
+        {
+          value: Representation.NUMBER_LINE,
+          node: NumberLineSceneNode.getIcon()
+        }
+      ].filter( item => _.includes( model.representations, item.value ) ) );
+
       // @protected {Node}
-      this.representationPanel = new Panel( new AlignBox( new RepresentationRadioButtonGroup( model.representationProperty, model.representations ), {
+      this.representationPanel = new Panel( new AlignBox( representationRadioButtonGroup, {
         group: this.topAlignGroup
       } ), {
         fill: FractionsCommonColorProfile.panelBackgroundProperty,
