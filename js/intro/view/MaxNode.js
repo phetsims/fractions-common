@@ -36,7 +36,7 @@ define( require => {
       }, options );
 
       const maxText = new Text( representationMaxString, { font: new PhetFont( 24 ) } );
-      const readoutText = new Text( '', { font: new PhetFont( 24 ) } );
+      const readoutText = new Text( '', { font: new PhetFont( 34 ) } );
 
       // Figure out what the largest bounds are for the readout
       const maxReadoutBounds = Bounds2.NOTHING.copy();
