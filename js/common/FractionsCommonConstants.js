@@ -58,6 +58,7 @@ define( require => {
     // {number}
     INTRO_DROP_SHADOW_OFFSET: 5,
     INTRO_CONTAINER_LINE_WIDTH: 2,
+    INTRO_CONTAINER_SPACING: 10,
 
     NUM_LEVELS: 10
   };

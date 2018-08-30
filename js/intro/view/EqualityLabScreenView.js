@@ -11,24 +11,29 @@ define( require => {
   // modules
   const AlignBox = require( 'SCENERY/nodes/AlignBox' );
   const BeakerSceneNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerSceneNode' );
+  const CircularContainerNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularContainerNode' );
   const CircularSceneNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularSceneNode' );
   const ContainerSetScreenView = require( 'FRACTIONS_COMMON/intro/view/ContainerSetScreenView' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
   const IntroRadioButtonGroup = require( 'FRACTIONS_COMMON/intro/view/IntroRadioButtonGroup' );
   const MathSymbols = require( 'SCENERY_PHET/MathSymbols' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberLineSceneNode = require( 'FRACTIONS_COMMON/intro/view/numberline/NumberLineSceneNode' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const Property = require( 'AXON/Property' );
   const PropertyFractionNode = require( 'FRACTIONS_COMMON/common/view/PropertyFractionNode' );
   const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/RectangularOrientation' );
   const RectangularSceneNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularSceneNode' );
   const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   const RoundNumberSpinner = require( 'FRACTIONS_COMMON/intro/view/RoundNumberSpinner' );
   const Text = require( 'SCENERY/nodes/Text' );
+  const VBox = require( 'SCENERY/nodes/VBox' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // constants
   const MARGIN = FractionsCommonConstants.PANEL_MARGIN;
@@ -111,6 +116,11 @@ define( require => {
       } );
       this.addChild( showNumberLinePanel );
 
+      const multipliedViewContainer = new Node( {
+        pickable: false
+      } );
+      this.addChild( multipliedViewContainer );
+
       // layout
       this.bucketContainer.left = this.layoutBounds.left + MARGIN;
       this.adjustableFractionNode.left = this.bucketContainer.right + MARGIN;
@@ -125,6 +135,7 @@ define( require => {
 
       const centerY = this.layoutBounds.centerY - 40;
       this.viewContainer.y = centerY;
+      multipliedViewContainer.y = centerY;
 
       // TODO: vertical alignment
       this.bucketContainer.bottom = this.layoutBounds.bottom - MARGIN;
@@ -136,7 +147,48 @@ define( require => {
       model.representationProperty.link( () => {
         this.viewContainer.right = this.representationPanel.right;
       } );
-      // TODO: Will have other content here in a bit
+
+      let containerNodes = [];
+      let lastRepresentation = null;
+
+      Property.multilink( [ model.representationProperty, model.showNumberLineProperty ], ( representation, showNumberLine ) => {
+        representation = showNumberLine ? Representation.NUMBER_LINE : representation;
+        if ( representation !== lastRepresentation ) {
+          containerNodes.forEach( containerNode => containerNode.dispose() );
+          containerNodes = [];
+          multipliedViewContainer.children.forEach( child => child.dispose() );
+          lastRepresentation = representation;
+
+          // TODO: some cleanup
+          if ( representation === Representation.CIRCLE ) {
+            containerNodes = model.multipliedContainers.getArray().map( container => new CircularContainerNode( container, () => {} ) );
+            multipliedViewContainer.addChild( new VBox( {
+              center: Vector2.ZERO,
+              spacing: FractionsCommonConstants.INTRO_CONTAINER_SPACING,
+              children: [
+                new HBox( {
+                  spacing: FractionsCommonConstants.INTRO_CONTAINER_SPACING,
+                  children: [
+                    containerNodes[ 0 ],
+                    containerNodes[ 1 ]
+                  ]
+                } ),
+                new HBox( {
+                  spacing: FractionsCommonConstants.INTRO_CONTAINER_SPACING,
+                  children: [
+                    containerNodes[ 2 ],
+                    containerNodes[ 3 ]
+                  ]
+                } )
+              ]
+            } ) );
+          }
+
+          if ( multipliedViewContainer.bounds.isValid() ) {
+            multipliedViewContainer.left = multipliedFractionNode.left;
+          }
+        }
+      } );
     }
   }
 

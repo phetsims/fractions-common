@@ -24,13 +24,12 @@ define( require => {
     /**
      * TODO: factor out common things with RectangularContainerNode
      *
-     * TODO: Don't inherit Circle :/
-     *
      * @param {Container} container
      * @param {function} cellDownCallback TODO doc, function( event )
      * @param {Object} [options]
      */
     constructor( container, cellDownCallback, options ) {
+      // TODO: cellDownCallback move to option
       super( container, cellDownCallback );
 
       // @public

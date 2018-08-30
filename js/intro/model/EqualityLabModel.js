@@ -12,6 +12,7 @@ define( require => {
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const ContainerSetModel = require( 'FRACTIONS_COMMON/intro/model/ContainerSetModel' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const MultipliedContainer = require( 'FRACTIONS_COMMON/intro/model/MultipliedContainer' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Range = require( 'DOT/Range' );
   const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
@@ -34,6 +35,9 @@ define( require => {
       this.multiplierProperty = new NumberProperty( 2, {
         range: new Range( 1, 3 )
       } );
+
+      // @public {ObservableArray.<Container>}
+      this.multipliedContainers = this.containers.map( container => new MultipliedContainer( container, this.multiplierProperty ) );
     }
 
     /**

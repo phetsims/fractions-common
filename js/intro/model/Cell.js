@@ -60,6 +60,20 @@ define( require => {
     }
 
     /**
+     * Switches between a fully empty or full cell (with no piece incoming)
+     * @public
+     *
+     * @param {boolean} filled
+     */
+    setFilled( filled ) {
+      assert && assert( typeof filled === 'boolean' );
+      assert && assert( this.isFilledProperty.value === this.appearsFilledProperty.value && !this.targetedPiece );
+
+      this.isFilledProperty.value = filled;
+      this.appearsFilledProperty.value = filled;
+    }
+
+    /**
      * "Fills" the cell by noting that this piece will now be animating to us.
      * @public
      *

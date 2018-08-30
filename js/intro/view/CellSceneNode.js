@@ -12,6 +12,7 @@ define( require => {
   const arrayRemove = require( 'PHET_CORE/arrayRemove' );
   const BucketNode = require( 'FRACTIONS_COMMON/intro/view/BucketNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const Node = require( 'SCENERY/nodes/Node' );
   const SceneNode = require( 'FRACTIONS_COMMON/intro/view/SceneNode' );
@@ -58,7 +59,7 @@ define( require => {
 
       // @private {VBox}
       this.containerLayer = new VBox( {
-        spacing: 10,
+        spacing: FractionsCommonConstants.INTRO_CONTAINER_SPACING,
         align: 'left'
       } );
 
@@ -288,7 +289,7 @@ define( require => {
       // creates new HBox within containerLayer dependent on VBox container
       if ( currentContainerNodesLength % this.maxContainersPerRow === 0 ) {
         const containerHBox = new HBox( {
-          spacing: 10,
+          spacing: FractionsCommonConstants.INTRO_CONTAINER_SPACING,
           align: 'top'
         } );
         this.containerHBoxes.push( containerHBox );
@@ -341,7 +342,7 @@ define( require => {
      * @public
      */
     dispose() {
-      this.containerNodes.forEach( containerNode => containerNode.dispose () );
+      this.containerNodes.forEach( containerNode => containerNode.dispose() );
 
       this.model.containers.removeItemAddedListener( this.addListener );
       this.model.containers.removeItemRemovedListener( this.removeListener );
