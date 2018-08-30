@@ -22,7 +22,6 @@ define( require => {
      */
     constructor( piece, finishedAnimatingCallback, droppedCallback, options ) {
       super( piece, finishedAnimatingCallback, droppedCallback, {
-        // TODO: don't pass options down like this
         graphic: new RectangularNode( piece.denominator, _.extend( {
           dropShadow: true
         }, options ) )

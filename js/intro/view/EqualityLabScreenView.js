@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   const AlignBox = require( 'SCENERY/nodes/AlignBox' );
+  const BeakerContainerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerContainerNode' );
   const BeakerSceneNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerSceneNode' );
   const CircularContainerNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularContainerNode' );
   const CircularSceneNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularSceneNode' );
@@ -27,6 +28,7 @@ define( require => {
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Property = require( 'AXON/Property' );
   const PropertyFractionNode = require( 'FRACTIONS_COMMON/common/view/PropertyFractionNode' );
+  const RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularContainerNode' );
   const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/RectangularOrientation' );
   const RectangularSceneNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularSceneNode' );
   const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
@@ -151,6 +153,17 @@ define( require => {
       let containerNodes = [];
       let lastRepresentation = null;
 
+      function spacedBox( numPerRow, nodes ) {
+        return new VBox( {
+          center: Vector2.ZERO,
+          spacing: FractionsCommonConstants.INTRO_CONTAINER_SPACING,
+          children: _.chunk( nodes, numPerRow ).map( rowNodes => new HBox( {
+            spacing: FractionsCommonConstants.INTRO_CONTAINER_SPACING,
+            children: rowNodes
+          } ) )
+        } );
+      }
+
       Property.multilink( [ model.representationProperty, model.showNumberLineProperty ], ( representation, showNumberLine ) => {
         representation = showNumberLine ? Representation.NUMBER_LINE : representation;
         if ( representation !== lastRepresentation ) {
@@ -159,29 +172,28 @@ define( require => {
           multipliedViewContainer.children.forEach( child => child.dispose() );
           lastRepresentation = representation;
 
+          const containers = model.multipliedContainers.getArray();
+
           // TODO: some cleanup
           if ( representation === Representation.CIRCLE ) {
-            containerNodes = model.multipliedContainers.getArray().map( container => new CircularContainerNode( container, () => {} ) );
-            multipliedViewContainer.addChild( new VBox( {
-              center: Vector2.ZERO,
-              spacing: FractionsCommonConstants.INTRO_CONTAINER_SPACING,
-              children: [
-                new HBox( {
-                  spacing: FractionsCommonConstants.INTRO_CONTAINER_SPACING,
-                  children: [
-                    containerNodes[ 0 ],
-                    containerNodes[ 1 ]
-                  ]
-                } ),
-                new HBox( {
-                  spacing: FractionsCommonConstants.INTRO_CONTAINER_SPACING,
-                  children: [
-                    containerNodes[ 2 ],
-                    containerNodes[ 3 ]
-                  ]
-                } )
-              ]
+            containerNodes = containers.map( container => new CircularContainerNode( container, () => {} ) );
+            multipliedViewContainer.addChild( spacedBox( 2, containerNodes ) );
+          }
+          else if ( representation === Representation.HORIZONTAL_BAR ) {
+            containerNodes = containers.map( container => new RectangularContainerNode( container, () => {}, {
+              rectangularOrientation: RectangularOrientation.HORIZONTAL
             } ) );
+            multipliedViewContainer.addChild( spacedBox( 1, containerNodes ) );
+          }
+          else if ( representation === Representation.VERTICAL_BAR ) {
+            containerNodes = containers.map( container => new RectangularContainerNode( container, () => {}, {
+              rectangularOrientation: RectangularOrientation.VERTICAL
+            } ) );
+            multipliedViewContainer.addChild( spacedBox( 4, containerNodes ) );
+          }
+          else if ( representation === Representation.BEAKER ) {
+            containerNodes = containers.map( container => new BeakerContainerNode( container, () => {} ) );
+            multipliedViewContainer.addChild( spacedBox( 4, containerNodes ) );
           }
 
           if ( multipliedViewContainer.bounds.isValid() ) {
