@@ -37,18 +37,27 @@ define( require => {
         // that slot
         maxWhole: null,
         maxNumerator: null,
-        maxDenominator: null
+        maxDenominator: null,
+
+        // {ColorDef}
+        wholeFill: 'black',
+        numeratorFill: 'black',
+        denominatorFill: 'black',
+        separatorFill: 'black'
       }, options );
 
       // @private {Text}
       this.wholeText = new Text( '1', {
-        font: new PhetFont( 50 )
+        font: new PhetFont( 50 ),
+        fill: options.wholeFill
       } );
       this.numeratorText = new Text( '1', {
-        font: new PhetFont( 30 )
+        font: new PhetFont( 30 ),
+        fill: options.numeratorFill
       } );
       this.denominatorText = new Text( '1', {
-        font: new PhetFont( 30 )
+        font: new PhetFont( 30 ),
+        fill: options.denominatorFill
       } );
 
       const maxTextBounds = ( textNode, maxNumber ) => {
@@ -71,7 +80,7 @@ define( require => {
 
       // @private {Line}
       this.lineNode = new Line( 0, 0, 10, 0, {
-        stroke: 'black',
+        stroke: options.separatorFill,
         lineWidth: 2
       } );
 

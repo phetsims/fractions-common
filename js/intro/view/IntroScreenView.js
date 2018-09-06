@@ -12,11 +12,13 @@ define( require => {
   const AlignBox = require( 'SCENERY/nodes/AlignBox' );
   const Checkbox = require( 'SUN/Checkbox' );
   const ContainerSetScreenView = require( 'FRACTIONS_COMMON/intro/view/ContainerSetScreenView' );
+  const DerivedProperty = require( 'AXON/DerivedProperty' );
   const FractionDisplayType = require( 'FRACTIONS_COMMON/common/enum/FractionDisplayType' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const MaxNode = require( 'FRACTIONS_COMMON/intro/view/MaxNode' );
+  const MixedFractionNode = require( 'FRACTIONS_COMMON/common/view/MixedFractionNode' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const PropertyFractionNode = require( 'FRACTIONS_COMMON/common/view/PropertyFractionNode' );
@@ -47,14 +49,46 @@ define( require => {
       } ) );
 
       if ( model.allowMixedNumbers ) {
-        // @private {Node}
-        this.mixedFractionNode = new PropertyFractionNode( model.numeratorProperty, model.denominatorProperty, {
+
+        // Use a "weaker" / grayer color when showing 0/x
+        const partialFractionColorProperty = new DerivedProperty( [
+          model.numeratorProperty,
+          model.denominatorProperty,
+          FractionsCommonColorProfile.mixedFractionStrongProperty,
+          FractionsCommonColorProfile.mixedFractionWeakProperty
+        ], ( numerator, denominator, strongColor, weakColor ) => {
+          return numerator % denominator === 0 ? weakColor : strongColor;
+        } );
+
+        // Separate options/fraction created since we need to grab the "maximum" bounds to do proper layout. Can't use
+        // "starting" bounds, since it's at 0 and would be smaller.
+        const fractionNodeOptions = {
           type: FractionDisplayType.MIXED,
-          scale: 2,
+          simplify: true,
 
           maxWhole: model.containerCountProperty.range.max,
           maxNumerator: model.denominatorProperty.range.max - 1,
-          maxDenominator: model.denominatorProperty.range.max
+          maxDenominator: model.denominatorProperty.range.max,
+
+          wholeFill: FractionsCommonColorProfile.mixedFractionStrongProperty,
+          numeratorFill: partialFractionColorProperty,
+          denominatorFill: partialFractionColorProperty,
+          separatorFill: partialFractionColorProperty,
+
+          // Node options
+          scale: 2
+        };
+        const maxFractionNodeBounds = new MixedFractionNode( _.extend( {}, fractionNodeOptions, {
+          whole: 0,
+          numerator: 0,
+          denominator: 0,
+          simplify: false
+        } ) ).bounds;
+
+        // @private {Node}
+        this.mixedFractionNode = new AlignBox( new PropertyFractionNode( model.numeratorProperty, model.denominatorProperty, fractionNodeOptions ), {
+          alignBounds: maxFractionNodeBounds,
+          xAlign: 'right'
         } );
         this.addChild( this.mixedFractionNode );
         model.showMixedNumbersProperty.linkAttribute( this.mixedFractionNode, 'visible' );

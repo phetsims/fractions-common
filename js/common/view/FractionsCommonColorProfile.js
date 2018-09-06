@@ -38,6 +38,9 @@ define( require => {
     water: { default: new Color( 30, 163, 255, 0.8 ) },
     beakerShine: { default: new Color( 255, 255, 255, 0.7 ) },
 
+    mixedFractionStrong: { default: Color.BLACK },
+    mixedFractionWeak: { default: new Color( 170, 170, 170 ) },
+
     equalityLabColor: { default: new Color( 254, 112, 212 ) },
     equalityLabWater: { default: new Color( 254, 112, 212, 0.8 ) },
 
