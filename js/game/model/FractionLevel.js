@@ -181,6 +181,22 @@ define( require => {
     }
 
     /**
+     * Returns a list of numbers required exactly for the given fractions (for number challenges), but multiplied by
+     * a given factor.
+     * @public
+     *
+     * @param {Array.<Fraction>}
+     * @param {number} multiplier
+     * @returns {Array.<number>}
+     */
+    static multipliedNumbers( fractions, multiplier ) {
+      return _.flatten( fractions.map( fraction => [
+        fraction.numerator * multiplier,
+        fraction.denominator * multiplier
+      ] ) ).filter( _.identity );
+    }
+
+    /**
      * Returns a list of numbers required exactly for the given fractions (for number challenges).
      * @public
      *
@@ -640,7 +656,7 @@ define( require => {
         new Fraction( 1, 3 ),
         new Fraction( 2, 3 )
       ] );
-      const pieceNumbers = [ 1, 1, 2, 2, 3, 3 ];
+      const pieceNumbers = FractionLevel.exactNumbers( targetFractions );
       const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.PIES, targetFractions, COLORS_3, FillType.SEQUENTIAL );
 
       return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
@@ -677,7 +693,10 @@ define( require => {
      * Creates a challenge for (unmixed) numbers level 3.
      * @public
      *
-     * TODO: Check design/source
+     * Design doc:
+     * -- All targets “six flowers”
+     * -- Range ⅙ to ⅚
+     * -- cards available to allow multiple solutions.  For instance, 2/6, could be represented as ⅓
      *
      * @param {number} levelNumber
      * @returns {FractionChallenge}
@@ -688,12 +707,11 @@ define( require => {
       ];
 
       const numerators = choose( 3, inclusive( 1, 5 ) );
-      const pieceNumbers = _.includes( numerators, 5 ) ? [
-        1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 9, 9, 9
-      ] : [
-        1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 6, 6, 9, 9, 9
-      ];
       const targetFractions = numerators.map( n => new Fraction( n, 6 ) );
+      const pieceNumbers = [
+        ...FractionLevel.exactNumbers( targetFractions ),
+        ...FractionLevel.multipliedNumbers( choose( 2, targetFractions ), 2 )
+      ];
       const shapeTargets = FractionLevel.targetsFromFractions( shapePartitions, targetFractions, COLORS_3, FillType.SEQUENTIAL );
 
       return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
@@ -703,7 +721,10 @@ define( require => {
      * Creates a challenge for (unmixed) numbers level 4.
      * @public
      *
-     * TODO: Check design/source
+     * Design doc:
+     * -- All triangles seems good,
+     * -- numerator and denominator able to range from 1-9
+     * -- just enough cards to complete targets
      *
      * @param {number} levelNumber
      * @returns {FractionChallenge}
@@ -725,7 +746,12 @@ define( require => {
      * Creates a challenge for (unmixed) numbers level 5.
      * @public
      *
-     * TODO: Check design/source
+     * Design doc:
+     * - numerator able to range from 1-9, and denominator able to range from 1-9, with the number less than 1
+     * - all representations possible (circle, "9 and 4 square", bars, triangles, 6 flower, perhaps regular polygons), I
+     * - all cards available to fulfill challenges in the most straightforward way, for instance a 4/5 representation
+     *   has a 4 and a 5 available.
+     * --just enough cards to complete targets
      *
      * @param {number} levelNumber
      * @returns {FractionChallenge}
