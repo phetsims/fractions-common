@@ -190,13 +190,13 @@ define( require => {
         // "Build a Fraction" Numbers level 6
         new FractionLevel( 6, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level6Property, FractionLevel.level6Numbers ),
         // "Build a Fraction" Numbers level 7
-        new FractionLevel( 7, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level7Property, placeholderNumberChallengeGenerator( 4, false ) ),
+        new FractionLevel( 7, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level7Property, FractionLevel.level7Numbers ),
         // "Build a Fraction" Numbers level 8
-        new FractionLevel( 8, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level8Property, placeholderNumberChallengeGenerator( 4, false ) ),
+        new FractionLevel( 8, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level8Property, FractionLevel.level8Numbers ),
         // "Build a Fraction" Numbers level 9
-        new FractionLevel( 9, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level9Property, placeholderNumberChallengeGenerator( 4, false ) ),
+        new FractionLevel( 9, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level9Property, FractionLevel.level9Numbers ),
         // "Build a Fraction" Numbers level 10
-        new FractionLevel( 10, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level10Property, placeholderNumberChallengeGenerator( 4, false ) )
+        new FractionLevel( 10, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level10Property, FractionLevel.level10Numbers )
       ];
 
       assert && assert( this.shapeLevels.length === FractionsCommonConstants.NUM_LEVELS );
