@@ -40,10 +40,10 @@ define( require => {
     FractionsCommonColorProfile.level2Property,
     FractionsCommonColorProfile.level3Property
   ];
-  // const COLORS_4 = [
-  //   ...COLORS_3,
-  //   FractionsCommonColorProfile.level4Property
-  // ];
+  const COLORS_4 = [
+    ...COLORS_3,
+    FractionsCommonColorProfile.level4Property
+  ];
 
   class FractionLevel {
     /**
@@ -186,14 +186,33 @@ define( require => {
      * @public
      *
      * @param {Array.<Fraction>}
-     * @param {number} multiplier
      * @returns {Array.<number>}
      */
-    static multipliedNumbers( fractions, multiplier ) {
-      return _.flatten( fractions.map( fraction => [
-        fraction.numerator * multiplier,
-        fraction.denominator * multiplier
-      ] ) ).filter( _.identity );
+    static multipliedNumbers( fractions ) {
+      return _.flatten( fractions.map( fraction => {
+        const multiplier = sample( [ 2, 3 ] );
+        return [
+          fraction.numerator * multiplier,
+          fraction.denominator * multiplier
+        ];
+      } ) ).filter( _.identity );
+    }
+
+    /**
+     * Returns a list of numbers required exactly for the given fractions (for number challenges), but with a certain
+     * quantity of them multiplied by a random factor.
+     * @public
+     *
+     * @param {Array.<Fraction>}
+     * @param {number} quantity
+     * @returns {Array.<number>}
+     */
+    static withMultipliedNumbers( fractions, quantity ) {
+      const shuffledFractions = shuffle( fractions );
+      return [
+        ...FractionLevel.exactNumbers( shuffledFractions.slice( 0, fractions.length - quantity ) ),
+        ...FractionLevel.multipliedNumbers( shuffledFractions.slice( fractions.length - quantity, fractions.length ) )
+      ];
     }
 
     /**
@@ -229,7 +248,7 @@ define( require => {
     static targetsFromPartitions( shapePartitions, colors, denominatorToNumerator, fillType ) {
       colors = shuffle( colors );
       return shapePartitions.map( ( shapePartition, index ) => {
-        const denominator = shapePartition.shapes.length;
+        const denominator = shapePartition.length;
         return ShapeTarget.fill( shapePartition, new Fraction( denominatorToNumerator( denominator ), denominator ), colors[ index ], fillType );
       } );
     }
@@ -710,7 +729,7 @@ define( require => {
       const targetFractions = numerators.map( n => new Fraction( n, 6 ) );
       const pieceNumbers = [
         ...FractionLevel.exactNumbers( targetFractions ),
-        ...FractionLevel.multipliedNumbers( choose( 2, targetFractions ), 2 )
+        ...FractionLevel.multipliedNumbers( choose( 2, targetFractions ) )
       ];
       const shapeTargets = FractionLevel.targetsFromFractions( shapePartitions, targetFractions, COLORS_3, FillType.SEQUENTIAL );
 
@@ -759,6 +778,28 @@ define( require => {
     static level5Numbers( levelNumber ) {
       const shapeTargets = FractionLevel.targetsFromPartitions( choose( 3, ShapePartition.GAME_PARTITIONS ), COLORS_3, d => sample( inclusive( 1, d ) ), FillType.SEQUENTIAL );
       const pieceNumbers = FractionLevel.exactNumbers( shapeTargets.map( target => target.fraction ) );
+
+      return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
+    }
+
+    /**
+     * Creates a challenge for (unmixed) numbers level 6.
+     * @public
+     *
+     * Design doc:
+     * -- 4 targets from this level forward
+     * -- Same as level 5, but now random fill is possible
+     * -- card constraints at this point, so at least one of the representations only has cards available to match it
+     *    with a "nonobvious fraction".  For instance if 3/9 appears, and 5/9 appears, we have 1(5) and 1(9), but not
+     *    2(9), so that 1/3 would need to be used to match.
+     *
+     * @param {number} levelNumber
+     * @returns {FractionChallenge}
+     */
+    static level6Numbers( levelNumber ) {
+      // TODO: allow random fills
+      const shapeTargets = FractionLevel.targetsFromPartitions( choose( 4, ShapePartition.GAME_PARTITIONS ), COLORS_4, d => sample( inclusive( 1, d ) ), FillType.SEQUENTIAL );
+      const pieceNumbers = FractionLevel.withMultipliedNumbers( shapeTargets.map( target => target.fraction ), 1 );
 
       return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
     }

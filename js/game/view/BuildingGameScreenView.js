@@ -51,7 +51,7 @@ define( require => {
   var SIDE_MARGIN = 10;
 
   function select( shapePartitions, quantity ) {
-    return _.find( shapePartitions, shapePartition => shapePartition.shapes.length === quantity );
+    return _.find( shapePartitions, shapePartition => shapePartition.length === quantity );
   }
   const LEVEL_SHAPE_PARTITIONS = [
     select( ShapePartition.PIES, 1 ),

@@ -23,7 +23,7 @@ define( require => {
     constructor( shapePartition, fills, color ) {
       assert && assert( shapePartition instanceof ShapePartition );
       assert && assert( Array.isArray( fills ) );
-      assert && assert( fills.length === shapePartition.shapes.length );
+      assert && assert( fills.length === shapePartition.length );
       assert && fills.forEach( fill => assert( typeof fill === 'boolean' ) );
 
       // @public {ShapePartition}
@@ -85,7 +85,7 @@ define( require => {
 
       while ( Fraction.ZERO.isLessThan( fraction ) ) {
         result.push( new FilledPartition( shapePartition, shapePartition.shapes.map( ( _, index ) => {
-          return index < fraction.numerator * ( shapePartition.shapes.length / fraction.denominator );
+          return index < fraction.numerator * ( shapePartition.length / fraction.denominator );
         } ), color ) );
         fraction = fraction.minus( Fraction.ONE );
       }
@@ -103,7 +103,7 @@ define( require => {
      * @returns {Array.<FilledPartition>}
      */
     static randomFill( shapePartition, fraction, color ) {
-      const numSlicesPerPartition = shapePartition.shapes.length;
+      const numSlicesPerPartition = shapePartition.length;
       const numFilledSlices = fraction.numerator * ( numSlicesPerPartition / fraction.denominator );
       const numPartitions = Math.ceil( fraction.getValue() );
       const numTotalSlices = numPartitions * numSlicesPerPartition;

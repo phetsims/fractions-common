@@ -24,6 +24,9 @@ define( require => {
       // @public {Array.<Shape>}
       this.shapes = shapes;
 
+      // @public {number} - TODO: Use this!!!
+      this.length = shapes.length;
+
       // @public {Shape}
       this.outlineShape = Shape.union( shapes );
 
@@ -61,7 +64,7 @@ define( require => {
      * @returns {Array.<ShapePartition>}
      */
     static supportsDenominator( shapePartitions, denominator ) {
-      return shapePartitions.filter( shapePartition => shapePartition.shapes.length === denominator );
+      return shapePartitions.filter( shapePartition => shapePartition.length === denominator );
     }
 
     /**
@@ -73,7 +76,7 @@ define( require => {
      * @returns {Array.<ShapePartition>}
      */
     static supportsDivisibleDenominator( shapePartitions, denominator ) {
-      return shapePartitions.filter( shapePartition => shapePartition.shapes.length % denominator === 0 );
+      return shapePartitions.filter( shapePartition => shapePartition.length % denominator === 0 );
     }
 
     /**
@@ -453,12 +456,13 @@ define( require => {
 
   const RESCALE_SIZE = 4000;
   const MAX_PIECES = 10;
+  const LIMITED_MAX_PIECES = 6; // For certain types, we want to limit the quantity for visibility
 
   // @public {Array.<ShapePartition>}
   ShapePartition.PIES = _.range( 1, MAX_PIECES + 1 ).map( quantity => ShapePartition.createPie( quantity ).rescaled( RESCALE_SIZE ) );
   ShapePartition.POLYGONS = _.range( 3, MAX_PIECES + 1 ).map( quantity => ShapePartition.createPolygon( quantity ).rescaled( RESCALE_SIZE ) );
-  ShapePartition.HORIZONTAL_BARS = _.range( 1, MAX_PIECES + 1 ).map( quantity => ShapePartition.createHorizontalBars( quantity ).rescaled( RESCALE_SIZE ) );
-  ShapePartition.VERTICAL_BARS = _.range( 1, MAX_PIECES + 1 ).map( quantity => ShapePartition.createVerticalBars( quantity ).rescaled( RESCALE_SIZE ) );
+  ShapePartition.HORIZONTAL_BARS = _.range( 1, LIMITED_MAX_PIECES + 1 ).map( quantity => ShapePartition.createHorizontalBars( quantity ).rescaled( RESCALE_SIZE ) );
+  ShapePartition.VERTICAL_BARS = _.range( 1, LIMITED_MAX_PIECES + 1 ).map( quantity => ShapePartition.createVerticalBars( quantity ).rescaled( RESCALE_SIZE ) );
   ShapePartition.INTERLEAVED_LS = [
     ShapePartition.createInterleavedL( 1, 1 ),
     ShapePartition.createInterleavedL( 2, 1 ),
