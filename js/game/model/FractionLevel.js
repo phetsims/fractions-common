@@ -106,12 +106,27 @@ define( require => {
       return shuffle( items ).slice( 0, quantity );
     }
 
+    /**
+     * Returns a list of unit (1/x) fractions from a list of fractions, such that each (A/B) is converted to Ax (1/B).
+     * @private
+     *
+     * @param {Array.<Fraction>} fractions
+     * @returns {Array.<Fraction>}
+     */
     static unitFractions( fractions ) {
       return _.flatten( fractions.map( fraction => {
         return repeat( fraction.numerator, new Fraction( 1, fraction.denominator ) );
       } ) );
     }
 
+    /**
+     * Returns a list of unit (1/x) fractions from a list of fractions (handling mixed fractions), such that
+     * each (A B/C) is converted to Ax (1/1) and Bx (1/C).
+     * @private
+     *
+     * @param {Array.<Fraction>} fractions
+     * @returns {Array.<Fraction>}
+     */
     static straightforwardFractions( fractions ) {
       return _.flatten( fractions.map( fraction => {
         const whole = Math.floor( fraction.getValue() );
@@ -122,9 +137,8 @@ define( require => {
       } ) );
     }
 
-    // TODO: substituteSubdividedCardsExact same as substituteSubdividedCards
-
     // note createCardsSameNumberEachType from Java
+    // TODO: get rid of this?
     static maxNumeratorUnitFractions( fractions ) {
       const maxNumerator = Math.max( ...fractions.map( f => f.numerator ) );
       return _.flatten( fractions.map( f => repeat( maxNumerator, new Fraction( 1, f.denominator ) ) ) );
@@ -234,22 +248,53 @@ define( require => {
       } ) ).filter( _.identity );
     }
 
+    /**
+     * Creates ShapeTargets from a list of fractions, finding matching shape partitions.
+     * @private
+     *
+     * @param {Array.<ShapePartition>} shapePartitions
+     * @param {Array.<Fraction>} fractions
+     * @param {Array.<ColorDef>} colors
+     * @param {FillType|null} fillType - If null, will have the chance of being sequential or random.
+     * @param {boolean} [allowSubdivision] - If true, it could use a partition with e.g. 9 shapes for a denominator of 3
+     * @returns {Array.<ShapeTarget>}
+     */
     static targetsFromFractions( shapePartitions, fractions, colors, fillType, allowSubdivision = false ) {
       colors = shuffle( colors );
       return fractions.map( ( fraction, index ) => {
         const potentialPartitions = allowSubdivision
           ? ShapePartition.supportsDivisibleDenominator( shapePartitions, fraction.denominator )
           : ShapePartition.supportsDenominator( shapePartitions, fraction.denominator );
+        // TODO: any cleaner way to do this?
+        const concreteFillType = fillType ? fillType : sample( [
+          FillType.SEQUENTIAL,
+          FillType.MIXED
+        ] );
 
-        return ShapeTarget.fill( sample( potentialPartitions ), fraction, colors[ index ], fillType );
+        return ShapeTarget.fill( sample( potentialPartitions ), fraction, colors[ index ], concreteFillType );
       } );
     }
 
+    /**
+     * Creates ShapeTargets from a list of shapePartitions (randomly selecting the partitions and THEN determining the
+     * numerator from the partition's denominator).
+     * @private
+     *
+     * @param {Array.<ShapePartition>} shapePartitions
+     * @param {Array.<ColorDef>} colors
+     * @param {function} denominatorToNumerator- function( {number} denominator ): {number}
+     * @param {FillType|null} fillType - If null, will have the chance of being sequential or random.
+     * @returns {Array.<ShapeTarget>}
+     */
     static targetsFromPartitions( shapePartitions, colors, denominatorToNumerator, fillType ) {
       colors = shuffle( colors );
       return shapePartitions.map( ( shapePartition, index ) => {
         const denominator = shapePartition.length;
-        return ShapeTarget.fill( shapePartition, new Fraction( denominatorToNumerator( denominator ), denominator ), colors[ index ], fillType );
+        const concreteFillType = fillType ? fillType : sample( [
+          FillType.SEQUENTIAL,
+          FillType.MIXED
+        ] );
+        return ShapeTarget.fill( shapePartition, new Fraction( denominatorToNumerator( denominator ), denominator ), colors[ index ], concreteFillType );
       } );
     }
 
@@ -661,7 +706,10 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- {1:1/2, 2:1/2, 2:1/4} as the targets
+     * -- Wholes, 1/2's, and 1/4's to complete targets
+     * -- as before refreshing will randomly reorder targets, and choose between circles/rectangles
+     * -- a few extra pieces to allow multiple pathways to a solution (for instance, 2 halves that could form a whole)
      *
      * @param {number} levelNumber
      * @param {ColorDef} color
@@ -683,7 +731,9 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- Targets with 1 or 2 as whole number, fractional portion from the set {1/2, 1/3, 2/3, ¼, ¾}
+     * -- Wholes, 1/2's, 1/3's, and 1/4's
+     * -- a few extra pieces to allow multiple pathways to a solution
      *
      * @param {number} levelNumber
      * @param {ColorDef} color
@@ -705,7 +755,8 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- All targets 1, 2, or 3, as whole number, fractional portion from the set {1/2, 1/3, 2/3, 1/4, 3/4, 1/6, 5/6}
+     * -- a few extra pieces to allow multiple pathways to a solution
      *
      * @param {number} levelNumber
      * @param {ColorDef} color
@@ -727,7 +778,11 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- All targets the same
+     * -- 1, 2, or 3, as whole number, fractional portion from the set {1/2, 1/3, 2/3, ¼, ¾}
+     * -- Pieces constrained so only enough pieces to complete targets.
+     * -- Force some wholes to be built from fractional portions.  So if all targets were {1:1/2}, only 1 or 2 whole
+     *    pieces would be available
      *
      * @param {number} levelNumber
      * @param {ColorDef} color
@@ -749,7 +804,10 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- Targets with 1, 2, or 3, as whole number, fractional portion from the set {1/2, 1/3, 2/3, ¼, ¾, 1/5, 2/5, 3/5,
+     *    4/5, 1/6, 5/6, 1/7, 2/7, 3/7, 4/7, 5/7, 6/7, 1/8, 3/8, 5/8, 7/8}
+     * -- A few more cards than needed, but at least one target must be constructed with "nontrivial" pieces.  For
+     *    instance {1:1/3} only have two 1/6 pieces available for building
      *
      * @param {number} levelNumber
      * @param {ColorDef} color
@@ -771,7 +829,11 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- Targets with 1, 2, or 3, as whole number, fractional portion from the set {1/2, 1/3, 2/3, 1/6, 5/6} or {1/2,
+     *    ¼, ¾, 1/8, 3/8, 5/8, 7/8}
+     * -- Pieces will be wholes, and either {1/2's and 1/6's} or {1/2's and 1/8's}
+     * -- Only enough pieces to fulfill targets.  Pieces chosen to minimize small pieces, so for instance if 5/8 is a
+     *    fractional portion it will be built with a 1/2 and a 1/8 piece.
      *
      * @param {number} levelNumber
      * @param {ColorDef} color
@@ -794,7 +856,11 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * --Top two targets are the same, bottom two targets are the same
+     * -- Targets with 1, 2, or 3, as whole number, fractional portion from the set {1/2, 1/3, 2/3, ¼, ¾, 1/6, 5/6, 1/8,
+     *    3/8, 5/8, 7/8}
+     * -- Only enough pieces to fulfill targets. One of each of the top and bottom targets require "nontrivial" pieces
+     *    to build the solution.
      *
      * @param {number} levelNumber
      * @param {ColorDef} color
@@ -817,7 +883,10 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- Targets with 1, 2, or 3, as whole number, fractional portion from the set {1/2, 1/3, 2/3, ¼, ¾, 1/5, 2/5, 3/5,
+     *    4/5, 1/6, 5/6}
+     * -- Only enough pieces to fulfill targets
+     * -- At least 2 targets require "nontrivial" pieces
      *
      * @param {number} levelNumber
      * @param {ColorDef} color
@@ -840,7 +909,7 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- Same as level 8, but now all 4 targets must be built with some "nontrivial pieces"
      *
      * @param {number} levelNumber
      * @param {ColorDef} color
@@ -863,7 +932,7 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- Same as level 9, but fractional portion from the set {1/2, 1/3, 2/3, ¼, ¾, 1/6, 5/6, 1/8, 3/8, 5/8, 7/8}
      *
      * @param {number} levelNumber
      * @param {ColorDef} color
@@ -1022,8 +1091,7 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level6Numbers( levelNumber ) {
-      // TODO: allow random fills
-      const shapeTargets = FractionLevel.targetsFromPartitions( choose( 4, ShapePartition.GAME_PARTITIONS ), COLORS_4, d => sample( inclusive( 1, d ) ), FillType.SEQUENTIAL );
+      const shapeTargets = FractionLevel.targetsFromPartitions( choose( 4, ShapePartition.GAME_PARTITIONS ), COLORS_4, d => sample( inclusive( 1, d ) ), null );
       const pieceNumbers = FractionLevel.withMultipliedNumbers( shapeTargets.map( target => target.fraction ), 1 );
 
       return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
@@ -1034,7 +1102,16 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- Top two representations are equivalent, and bottom 2 representations are equivalent but still numbers less
+     *    than 1
+     * -- A built in check to draw a different fraction for the top 2 and the bottom 2
+     * -- Possible fractions sets from which to draw 2 each {1/2, 2/4, 3/6}, {1/3, 2/6, 3/9}, {2/3, 4/6, 3/9},
+     *    {1/4, 2/8}, {3/4, 6/8}
+     * -- The representations are both be equal, for instance, 2 pies divided the same, and two bars divided the same,
+     *    so that the learning goal is focused on the same exact picture can be represented by 2 different fractions.
+     *    Always displaying the simplified fraction as the picture.
+     * -- Cards constrained, so for instance if {1/2, 3/6} is drawn for the top pair and {3/4, 6/8} drawn for the
+     *    bottom, we would have 1(1), 1(2), 2(3), 1(4), 2(6), 1(8)
      *
      * @param {number} levelNumber
      * @returns {FractionChallenge}
@@ -1052,7 +1129,10 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- Introduce double representations at this level (numbers greater than 1)
+     * -- 8 cards, 4 each of 2 numbers
+     * -- randomly choose from  {2/3, 3/2, 2/2, 3/3}, {2/4, 4/2, 2/2, 4/4}, {3/4,4/3, 3/3, 4/4}, {3/5, 5/3, 3/3, 5/5},
+     *    {3/6, 6/3, 3/3, 6/6}
      *
      * @param {number} levelNumber
      * @returns {FractionChallenge}
@@ -1070,7 +1150,9 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- Representations both less than 1 and greater than 1
+     * -- All representations possible
+     * -- No card constraints (as in straightforward matching of number and picture possible)
      *
      * @param {number} levelNumber
      * @returns {FractionChallenge}
@@ -1088,7 +1170,9 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- Same as level  9 but with card constraints
+     * -- One or two representations use a prime number scale factor for each to generate the cards, for instance if
+     * one of the  representations was 4/3, we use the scale factor (3/3), and we would need a 12 and a 9 card.
      *
      * @param {number} levelNumber
      * @returns {FractionChallenge}
@@ -1106,7 +1190,10 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- Circles as targets
+     * -- {1:1/2, 2:1/2, 3:1/4} as the challenges
+     * -- just enough cards to complete targets
+     * -- As before, refreshing will randomly reorder, recolor
      *
      * @param {number} levelNumber
      * @returns {FractionChallenge}
@@ -1124,7 +1211,9 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- Circles or Rectangles as targets, but all targets are the same shape
+     * -- 1, 2, or 3, as whole number
+     * -- Fractional portion from the set {1/2, 1/3, 2/3, ¼, ¾}
      *
      * @param {number} levelNumber
      * @returns {FractionChallenge}
@@ -1142,7 +1231,10 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- All targets shaped like “six flowers”
+     * -- 1, 2, or 3, as whole number
+     * -- Fractional portion from the set {1/2, 1/3, 2/3, 1/6, 5/6}
+     * -- So, if a “six flower” is showing 3/6, we will want a 1 and 2 card in the deck
      *
      * @param {number} levelNumber
      * @returns {FractionChallenge}
@@ -1160,7 +1252,9 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- All triangles
+     * -- 1, 2, or 3, as whole number
+     * -- Fractional portion from the set {1/2, 1/3, 2/3, ¼, ¾, 1/9, 2/9, 4/9, 5/9, 7/9, 8/9}
      *
      * @param {number} levelNumber
      * @returns {FractionChallenge}
@@ -1178,7 +1272,11 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- All representations possible, but each target is only one type of representation
+     * -- 1, 2, or 3, as whole number
+     * -- Fractional portion from the set {1/2, 1/3, 2/3, ¼, ¾, 1/5, 2/5, 3/5, 4/5, 1/6, 5/6, 1/7, 2/7, 3/7, 4/7, 5/7,
+     *    6/7, 1/8, 3/8, 5/8, 7/8, 1/9, 2/9, 4/9, 5/9, 7/9, 8/9}
+     * -- 2 of the representations match cards exactly, 1 of the representations requires simplifying to a solution
      *
      * @param {number} levelNumber
      * @returns {FractionChallenge}
@@ -1196,7 +1294,10 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- Same as level 5 (now with 4 targets)
+     * -- Random fill now possible, so for instance {2:1/4} could be represented by 2 full circles with a partially
+     *    filled circle in between them.  As in, we do not need to strictly fill from left to right.
+     * -- 2 of the representations require simplifying
      *
      * @param {number} levelNumber
      * @returns {FractionChallenge}
@@ -1214,7 +1315,10 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- Top two representations are equivalent in magnitude, and bottom 2 representations are equivalent in magnitude
+     * -- For instance if the top two representations are {1:1/2}, the first  representation could be a full circle and
+     *    a half circle divided in halves, and the second circle could be a full circle and a half circle divide in
+     *    fourths.
      *
      * @param {number} levelNumber
      * @returns {FractionChallenge}
@@ -1232,7 +1336,8 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- Same as level 6
+     * -- All 4 representations require simplifying
      *
      * @param {number} levelNumber
      * @returns {FractionChallenge}
@@ -1250,7 +1355,10 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- All representations, random fill, and simplifying possible
+     * -- Now representations within the targets can have different divisions, do this for 2 of the targets
+     * -- So, for instance if {1:3/4} is being represented by circles, the first circle could be divided in ¼’s and the
+     *    second circle divided in 1/8’s, with pieces randomly distributed between the two circles.
      *
      * @param {number} levelNumber
      * @returns {FractionChallenge}
@@ -1268,7 +1376,7 @@ define( require => {
      * @public
      *
      * Design doc:
-     * TODO
+     * -- Same as level 9, but now all 4 targets can have different internal divisions in representations.
      *
      * @param {number} levelNumber
      * @returns {FractionChallenge}
