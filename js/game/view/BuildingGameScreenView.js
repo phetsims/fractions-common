@@ -13,6 +13,7 @@ define( require => {
   const AlignGroup = require( 'SCENERY/nodes/AlignGroup' );
   const BackButton = require( 'SCENERY_PHET/buttons/BackButton' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const Bounds2 = require( 'DOT/Bounds2' );
   const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const Easing = require( 'TWIXT/Easing' );
@@ -26,6 +27,7 @@ define( require => {
   const HBox = require( 'SCENERY/nodes/HBox' );
   const inherit = require( 'PHET_CORE/inherit' );
   const LevelSelectionButton = require( 'VEGAS/LevelSelectionButton' );
+  const MixedFractionNode = require( 'FRACTIONS_COMMON/common/view/MixedFractionNode' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
@@ -65,6 +67,7 @@ define( require => {
     select( ShapePartition.GRIDS, 9 ),
     ShapePartition.FIVE_POINT
   ];
+  const ICON_DESIGN_BOUNDS = new Bounds2( 0, 0, 90, 129 );
 
   /**
    * @constructor
@@ -77,27 +80,37 @@ define( require => {
 
     ScreenView.call( this );
 
-    var textAlignGroup = new AlignGroup();
-    var iconAlignGroup = new AlignGroup();
-
     function createLevelIcon( level ) {
       var label = new Text( StringUtils.fillIn( levelTitlePatternString, {
         number: level.number
       } ), {
-        font: new PhetFont( 20 )
+        font: new PhetFont( 18 ),
+        maxWidth: ICON_DESIGN_BOUNDS.width
       } );
 
       var icon;
-      if ( !model.hasMixedNumbers && level.buildingType === BuildingType.NUMBER ) {
-        var stack = new NumberStack( level.number, level.number );
-        for ( var i = 0; i < level.number; i++ ) {
-          stack.numberPieces.push( new NumberPiece( level.number ) );
+      if ( level.buildingType === BuildingType.NUMBER ) {
+        if ( !model.hasMixedNumbers ) {
+          var stack = new NumberStack( level.number, level.number );
+          for ( var i = 0; i < level.number; i++ ) {
+            stack.numberPieces.push( new NumberPiece( level.number ) );
+          }
+          icon = new NumberStackNode( stack, {
+            scale: 0.75
+          } );
         }
-        icon = new NumberStackNode( stack, {
-
-        } );
+        else {
+          const hasFraction = level.number > 1;
+          icon = new MixedFractionNode( {
+            whole: level.number,
+            numerator: hasFraction ? 1 : null,
+            denominator: hasFraction ? level.number : null,
+            scale: 0.9
+          } );
+        }
       }
       else {
+        // unmixed max width ~106, mixed ~217
         let shapePartition = LEVEL_SHAPE_PARTITIONS[ level.number - 1 ];
         // There's a different shape for non-mixed level 10
         if ( level.number === 10 && !model.hasMixedNumbers ) {
@@ -111,16 +124,28 @@ define( require => {
         ];
         icon = new HBox( {
           spacing: 5,
-          children: filledPartitions.map( filledPartition => new FilledPartitionNode( filledPartition ) )
+          children: filledPartitions.map( filledPartition => new FilledPartitionNode( filledPartition ) ),
+          scale: model.hasMixedNumbers ? 0.4 : 0.8
         } );
       }
 
-      return new VBox( {
-        children: [
-          new AlignBox( label, { group: textAlignGroup } ),
-          new AlignBox( icon, { group: iconAlignGroup, bottomMargin: 10 } )
-        ],
-        spacing: 20
+      label.centerX = ICON_DESIGN_BOUNDS.centerX;
+      label.top = ICON_DESIGN_BOUNDS.top;
+
+      const iconContainer = new Node( {
+        children: [ icon ],
+        maxWidth: ICON_DESIGN_BOUNDS.width
+      } );
+
+      iconContainer.centerX = ICON_DESIGN_BOUNDS.centerX;
+      iconContainer.centerY = ( label.bottom + ICON_DESIGN_BOUNDS.bottom ) / 2;
+
+      assert && assert( ICON_DESIGN_BOUNDS.containsBounds( label.bounds ), 'Sanity check for level icon layout' );
+      assert && assert( ICON_DESIGN_BOUNDS.containsBounds( iconContainer.bounds ), 'Sanity check for level icon layout' );
+
+      return new Node( {
+        children: [ label, iconContainer ],
+        localBounds: ICON_DESIGN_BOUNDS
       } );
     }
 
