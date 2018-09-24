@@ -26,13 +26,16 @@ define( require => {
         graphic: new CircularNode( piece.denominator, 0, { dropShadow: true } )
       } );
 
-      // @private (convenience variable)
-      this.angleUnit = 2 * Math.PI / piece.denominator;
+      // @private {number} (convenience variable)
+      this.angleUnit = -2 * Math.PI / piece.denominator;
 
       // circle specific
       const originCell = piece.originCell;
       if ( originCell ) {
         this.graphic.setRotationAngle( originCell.index * this.angleUnit );
+      }
+      else {
+        this.graphic.setRotationAngle( this.graphic.bucketRotation );
       }
     }
 
@@ -46,11 +49,14 @@ define( require => {
       const destinationCell = this.piece.destinationCell;
 
       const originRotation = this.originRotation;
-      let targetRotation = destinationCell ? destinationCell.index * this.angleUnit : 0;
+      let targetRotation = destinationCell ? destinationCell.index * this.angleUnit : this.graphic.bucketRotation;
 
       // Hack to get closest rotation AND deduplicate this code
       if ( targetRotation - originRotation > Math.PI ) {
         targetRotation -= 2 * Math.PI;
+      }
+      if ( targetRotation - originRotation < -Math.PI ) {
+        targetRotation += 2 * Math.PI;
       }
       this.graphic.setRotationAngle( ( 1 - this.ratio ) * this.originRotation + this.ratio * targetRotation );
     }
@@ -72,6 +78,9 @@ define( require => {
       // Hack to get closest rotation AND deduplicate this code
       if ( targetRotation - originRotation > Math.PI ) {
         targetRotation -= 2 * Math.PI;
+      }
+      if ( targetRotation - originRotation < -Math.PI ) {
+        targetRotation += 2 * Math.PI;
       }
 
       const midpoint = this.getMidpoint();

@@ -16,15 +16,11 @@ define( require => {
 
   class CakePieceNode extends PieceNode {
     /**
-     * TODO: there is a lot of duplication here
-     *
      * @param {Piece} piece
      * @param {function} finishedAnimatingCallback - Called as function( {Piece} ) with the piece to finish animating.
      * @param {function} droppedCallback - Called as function( {Piece} )
      */
     constructor( piece, finishedAnimatingCallback, droppedCallback ) {
-      // TODO: a lot of this is duplicated
-
       super( piece, finishedAnimatingCallback, droppedCallback, {
         graphic: new CakeNode( piece.denominator, 0 )
       } );

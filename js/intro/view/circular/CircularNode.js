@@ -42,13 +42,16 @@ define( require => {
 
       // @private {number}
       this.denominator = denominator;
-      this.angleUnit = 2 * Math.PI / denominator;
+      this.angleUnit = -2 * Math.PI / denominator;
+      this.bucketRotation = denominator === 1 ? 0 : ( Math.PI / 2 - this.angleUnit / 2 );
 
       const shape = new Shape();
       if ( denominator > 1 ) {
-        shape.moveTo( 0, 0 );
+        shape.moveTo( 0, 0 ).arc( 0, 0, CircularNode.RADIUS, 0, this.angleUnit, true ).close();
       }
-      shape.arc( 0, 0, CircularNode.RADIUS, 0, this.angleUnit, false ).close();
+      else {
+        shape.circle( 0, 0, CircularNode.RADIUS );
+      }
 
       // @private {Node}
       this.container = new Node();

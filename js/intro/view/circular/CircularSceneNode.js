@@ -33,7 +33,9 @@ define( require => {
           return new CircularPieceNode( piece, finishedAnimatingCallback, droppedCallback );
         },
         createCellNode( denominator, index, options ) {
-          return new CircularNode( denominator, index, options );
+          const circularNode = new CircularNode( denominator, index, options );
+          circularNode.setRotationAngle( circularNode.bucketRotation );
+          return circularNode;
         },
         maxContainersPerRow: model.isCompact ? 2 : maxContainers
       }, options ) );
