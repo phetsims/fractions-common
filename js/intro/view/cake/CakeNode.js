@@ -58,7 +58,7 @@ define( require => {
   // constants
   const cakeImageArray = [
     [ cake_1_1Image ],
-    [ cake_2_1Image, cake_2_2Image ],
+    [ cake_2_2Image, cake_2_1Image ],
     [ cake_3_1Image, cake_3_2Image, cake_3_3Image ],
     [ cake_4_1Image, cake_4_2Image, cake_4_3Image, cake_4_4Image ],
     [ cake_5_1Image, cake_5_2Image, cake_5_3Image, cake_5_4Image, cake_5_5Image ],
@@ -123,7 +123,7 @@ define( require => {
       }
       else if ( this.denominator === 2 ) {
         this.imageNode.translation = imageCenter.plus(
-          Vector2.createPolar( this.height / 4, -2 * Math.PI * index / this.denominator ) ).negated();
+          Vector2.createPolar( this.height / 4, -2 * Math.PI * ( 1 - index ) / this.denominator ) ).negated();
       }
       else {
         this.imageNode.translation = imageCenter.plus( Vector2.createPolar(
