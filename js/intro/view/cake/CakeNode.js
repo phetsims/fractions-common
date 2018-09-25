@@ -12,9 +12,13 @@ define( require => {
   // modules
   const Bounds2 = require( 'DOT/Bounds2' );
   const Dimension2 = require( 'DOT/Dimension2' );
+  const EllipticalArc = require( 'KITE/segments/EllipticalArc' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Image = require( 'SCENERY/nodes/Image' );
+  const Line = require( 'KITE/segments/Line' );
   const Node = require( 'SCENERY/nodes/Node' );
+  const Ray2 = require( 'DOT/Ray2' );
+  const Shape = require( 'KITE/Shape' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // images
@@ -76,6 +80,39 @@ define( require => {
   // The determined center of the cake images (determined empirically)
   const CAKE_OFFSET = new Vector2( 0.5 * SCALED_CAKE_IMAGE_SIZE.width, 0.55 * SCALED_CAKE_IMAGE_SIZE.height );
 
+  const BASE_ELLIPSE_CENTER = new Vector2( CAKE_IMAGE_SIZE.width * 0.501, CAKE_IMAGE_SIZE.height * 0.641 );
+  const BASE_ELLIPSE_RADII = new Vector2( CAKE_IMAGE_SIZE.width * 0.364, CAKE_IMAGE_SIZE.height * 0.276 );
+  const BASE_ELLIPSE_OFFSET_CENTER = BASE_ELLIPSE_CENTER.plusXY( 0, -0.07 * CAKE_IMAGE_SIZE.height );
+  const BASE_ASPECT = 0.565;
+
+  const MID_ELLIPSE_CENTER = new Vector2( CAKE_IMAGE_SIZE.width * 0.501, CAKE_IMAGE_SIZE.height * 0.42 );
+  const MID_ELLIPSE_RADII = new Vector2( CAKE_IMAGE_SIZE.width * 0.38, CAKE_IMAGE_SIZE.height * 0.25 );
+  const MID_ELLIPSE_OFFSET_CENTER = MID_ELLIPSE_CENTER.plusXY( 0, -0.06 * CAKE_IMAGE_SIZE.height );
+  const MID_ASPECT = 0.46;
+
+  const TOP_ELLIPSE_CENTER = new Vector2( CAKE_IMAGE_SIZE.width * 0.501, CAKE_IMAGE_SIZE.height * 0.365 );
+  const TOP_ELLIPSE_RADII = new Vector2( CAKE_IMAGE_SIZE.width * 0.355, CAKE_IMAGE_SIZE.height * 0.215 );
+  const TOP_ELLIPSE_OFFSET_CENTER = TOP_ELLIPSE_CENTER.plusXY( 0, -0.04 * CAKE_IMAGE_SIZE.height );
+  const TOP_ASPECT = 0.42;
+
+  const BASE_ELLIPSE = new EllipticalArc(
+    BASE_ELLIPSE_CENTER,
+    BASE_ELLIPSE_RADII.x,
+    BASE_ELLIPSE_RADII.y,
+    0, 0, 2 * Math.PI, false );
+
+  const MID_ELLIPSE = new EllipticalArc(
+    MID_ELLIPSE_CENTER,
+    MID_ELLIPSE_RADII.x,
+    MID_ELLIPSE_RADII.y,
+    0, 0, 2 * Math.PI, false );
+
+  const TOP_ELLIPSE = new EllipticalArc(
+    TOP_ELLIPSE_CENTER,
+    TOP_ELLIPSE_RADII.x,
+    TOP_ELLIPSE_RADII.y,
+    0, 0, 2 * Math.PI, false );
+
   class CakeNode extends Node {
     /**
      * @param {number} denominator
@@ -131,10 +168,50 @@ define( require => {
           -2 * Math.PI * ( index + 1 / 2 ) / this.denominator
         ) ).negated();
       }
+
+      const cakeShape = CakeNode.CAKE_SHAPES[ this.denominator - 1 ][ index ];
+      this.imageNode.mouseArea = cakeShape;
+      this.imageNode.touchArea = cakeShape;
+    }
+
+    // TODO: deduplicate and doc
+
+    static getStartAngle( denominator, index ) {
+      return 2 * Math.PI * index / denominator + ( denominator === 2 ? 0.5 * Math.PI : 0 );
+    }
+
+    static getEndAngle( denominator, index ) {
+      return 2 * Math.PI * ( index + 1 ) / denominator + ( denominator === 2 ? 0.5 * Math.PI : 0 );
+    }
+
+    static ellipseIntersect( angle, ellipse, offsetCenter, aspect ) {
+      const direction = Vector2.createPolar( 1, angle ).componentTimes( new Vector2( 1, aspect ) ).normalized();
+      const intersections = ellipse.intersection( new Ray2( offsetCenter, direction ) );
+      return intersections[ 0 ];
+    }
+
+    static getBaseIntersection( angle ) {
+      const direction = Vector2.createPolar( 1, angle ).componentTimes( new Vector2( 1, BASE_ASPECT ) ).normalized();
+      const intersections = CakeNode.BASE_ELLIPSE.intersection( new Ray2( CakeNode.BASE_ELLIPSE_OFFSET_CENTER, direction ) );
+      return intersections[ 0 ];
+    }
+
+    static getMidIntersection( angle ) {
+      const direction = Vector2.createPolar( 1, angle ).componentTimes( new Vector2( 1, MID_ASPECT ) ).normalized();
+      const intersections = CakeNode.MID_ELLIPSE.intersection( new Ray2( CakeNode.MID_ELLIPSE_OFFSET_CENTER, direction ) );
+      return intersections[ 0 ];
+    }
+
+    static getTopIntersection( angle ) {
+      const direction = Vector2.createPolar( 1, angle ).componentTimes( new Vector2( 1, TOP_ASPECT ) ).normalized();
+      const intersections = CakeNode.TOP_ELLIPSE.intersection( new Ray2( CakeNode.TOP_ELLIPSE_OFFSET_CENTER, direction ) );
+      return intersections[ 0 ];
     }
   }
 
   fractionsCommon.register( 'CakeNode', CakeNode );
+
+  // TODO: can we use these below references directly?
 
   // @public {Dimension2}
   CakeNode.CAKE_IMAGE_SIZE = CAKE_IMAGE_SIZE;
@@ -148,6 +225,94 @@ define( require => {
 
   // @public {Bounds2}
   CakeNode.CAKE_IMAGE_BOUNDS = CAKE_IMAGE_BOUNDS;
+
+  // @public {Shape}
+  CakeNode.BASE_ELLIPSE = BASE_ELLIPSE;
+  CakeNode.MID_ELLIPSE = MID_ELLIPSE;
+  CakeNode.TOP_ELLIPSE = TOP_ELLIPSE;
+
+  // @public {Vector2}
+  CakeNode.BASE_ELLIPSE_OFFSET_CENTER = BASE_ELLIPSE_OFFSET_CENTER;
+  CakeNode.MID_ELLIPSE_OFFSET_CENTER = MID_ELLIPSE_OFFSET_CENTER;
+  CakeNode.TOP_ELLIPSE_OFFSET_CENTER = TOP_ELLIPSE_OFFSET_CENTER;
+
+  // @public {Array.<Array.<Shape>>} - TODO: consider precomputing these in a SVG string'ed form so we have faster loads.
+  CakeNode.CAKE_SHAPES = _.range( 1, 9 ).map( denominator => {
+    return _.range( 0, denominator ).map( index => {
+      const shapes = [];
+
+      const angleA = -CakeNode.getStartAngle( denominator, index );
+      const angleB = -CakeNode.getEndAngle( denominator, index );
+
+      function addPie( ellipse, offsetCenter, aspect ) {
+        // TODO: factor out! Maybe just pass in intersection function
+        function intersect( angle ) {
+          const direction = Vector2.createPolar( 1, angle ).componentTimes( new Vector2( 1, aspect ) ).normalized();
+          const intersections = ellipse.intersection( new Ray2( offsetCenter, direction ) );
+          return intersections[ 0 ];
+        }
+
+        const topSegments = [];
+        if ( denominator === 1 ) {
+          topSegments.push( ellipse );
+        }
+        else {
+          const intersectionA = intersect( angleA );
+          const intersectionB = intersect( angleB );
+
+          if ( intersectionA.t > intersectionB.t ) {
+            topSegments.push( ellipse.slice( intersectionB.t, intersectionA.t ) );
+          }
+          else {
+            topSegments.push( ellipse.slice( intersectionB.t, 1 ) );
+            topSegments.push( ellipse.slice( 0, intersectionA.t ) );
+          }
+          topSegments.push( new Line( intersectionA.point, offsetCenter ) );
+          topSegments.push( new Line( offsetCenter, intersectionB.point ) );
+        }
+        shapes.push( Shape.segments( topSegments, true ) );
+      }
+      addPie( TOP_ELLIPSE, TOP_ELLIPSE_OFFSET_CENTER, TOP_ASPECT );
+      addPie( MID_ELLIPSE, MID_ELLIPSE_OFFSET_CENTER, MID_ASPECT );
+      addPie( BASE_ELLIPSE, BASE_ELLIPSE_OFFSET_CENTER, BASE_ASPECT );
+
+      // Interior
+      if ( denominator > 1 ) {
+        [ angleA, angleB ].forEach( angle => {
+          if ( Math.abs( angle ) !== Math.PI / 2 ) {
+            shapes.push( Shape.polygon( [
+              BASE_ELLIPSE_OFFSET_CENTER,
+              TOP_ELLIPSE_OFFSET_CENTER,
+              CakeNode.getTopIntersection( angle ).point,
+              ...( Math.sin( angle ) > -0.2 ? [ CakeNode.getMidIntersection( angle ).point ] : [] ),
+              CakeNode.getBaseIntersection( angle ).point
+            ] ) );
+          }
+        } );
+      }
+
+      if ( angleA > -Math.PI && angleB < -Math.PI ) {
+        shapes.push( Shape.polygon( [
+          // TODO: Fix KITE CAG, remove 0.99
+          BASE_ELLIPSE.positionAt( 0.5 ).timesScalar( 0.99 ),
+          MID_ELLIPSE.positionAt( 0.5 ).timesScalar( 0.99 ),
+          MID_ELLIPSE_OFFSET_CENTER,
+          BASE_ELLIPSE_OFFSET_CENTER
+        ] ) );
+      }
+
+      if ( denominator === 1 || ( denominator === 2 && index === 1 ) ) {
+        console.log( angleA, angleB );
+        shapes.push( Shape.polygon( [
+          BASE_ELLIPSE_OFFSET_CENTER,
+          MID_ELLIPSE.positionAt( 0 ).timesScalar( 0.99 ),
+          BASE_ELLIPSE.positionAt( 0 ).timesScalar( 0.99 )
+        ] ) );
+      }
+
+      return Shape.union( shapes );
+    } );
+  } );
 
   return CakeNode;
 } );

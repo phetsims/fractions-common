@@ -13,9 +13,7 @@ define( require => {
   const CellContainerNode = require( 'FRACTIONS_COMMON/intro/view/CellContainerNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Path = require( 'SCENERY/nodes/Path' );
-  const Ray2 = require( 'DOT/Ray2' );
   const Shape = require( 'KITE/Shape' );
-  const Vector2 = require( 'DOT/Vector2' );
 
   // The order of indices for visual layering (for each denominator)
   const layerOrder = {
@@ -28,12 +26,6 @@ define( require => {
     7: [ 1, 0, 2, 3, 4, 6, 5 ],
     8: [ 1, 0, 2, 3, 4, 5, 7, 6 ]
   };
-  const ellipse = Shape.ellipse(
-    CakeNode.CAKE_IMAGE_SIZE.width * 0.501,
-    CakeNode.CAKE_IMAGE_SIZE.height * 0.641,
-    CakeNode.CAKE_IMAGE_SIZE.width * 0.364,
-    CakeNode.CAKE_IMAGE_SIZE.height * 0.276, 0 ).makeImmutable();
-  const ellipseOffsetCenter = ellipse.bounds.center.plusXY( 0, -0.07 * CakeNode.CAKE_IMAGE_SIZE.height );
 
   class CakeContainerNode extends CellContainerNode {
     /**
@@ -44,7 +36,7 @@ define( require => {
       super( container, options );
 
       // The shape of the ellipse is determined empirically based on the image
-      this.addChild( new Path( ellipse, {
+      this.addChild( new Path( Shape.segments( [ CakeNode.BASE_ELLIPSE ], true ).makeImmutable(), {
         fill: 'white',
         stroke: this.strokeProperty,
         scale: CakeNode.CAKE_DEFAULT_SCALE,
@@ -75,13 +67,9 @@ define( require => {
       const denominator = this.container.cells.length;
 
       const gridShape = new Shape();
-      const rotation = denominator === 2 ? 0.5 * Math.PI : 0;
       for ( let i = 0; i < denominator; i++ ) {
-        const angle = 2 * Math.PI * ( i / denominator ) + rotation;
-        const direction = Vector2.createPolar( 1, angle ).componentTimes( new Vector2( 1, 0.565 ) ).normalized();
-        const intersections = ellipse.intersection( new Ray2( ellipseOffsetCenter, direction ) );
-        const endPoint = intersections[ 0 ].point;
-        gridShape.moveToPoint( ellipseOffsetCenter.blend( endPoint, 0.001 ) ); // Work around chrome crash
+        const endPoint = CakeNode.getBaseIntersection( CakeNode.getStartAngle( denominator, i ) ).point;
+        gridShape.moveToPoint( CakeNode.BASE_ELLIPSE_OFFSET_CENTER.blend( endPoint, 0.001 ) ); // Work around chrome crash
         gridShape.lineToPoint( endPoint );
       }
       this.gridPath.shape = denominator > 1 ? gridShape : null;
