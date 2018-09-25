@@ -191,21 +191,15 @@ define( require => {
     }
 
     static getBaseIntersection( angle ) {
-      const direction = Vector2.createPolar( 1, angle ).componentTimes( new Vector2( 1, BASE_ASPECT ) ).normalized();
-      const intersections = CakeNode.BASE_ELLIPSE.intersection( new Ray2( CakeNode.BASE_ELLIPSE_OFFSET_CENTER, direction ) );
-      return intersections[ 0 ];
+      return CakeNode.ellipseIntersect( angle, BASE_ELLIPSE, BASE_ELLIPSE_OFFSET_CENTER, BASE_ASPECT );
     }
 
     static getMidIntersection( angle ) {
-      const direction = Vector2.createPolar( 1, angle ).componentTimes( new Vector2( 1, MID_ASPECT ) ).normalized();
-      const intersections = CakeNode.MID_ELLIPSE.intersection( new Ray2( CakeNode.MID_ELLIPSE_OFFSET_CENTER, direction ) );
-      return intersections[ 0 ];
+      return CakeNode.ellipseIntersect( angle, MID_ELLIPSE, MID_ELLIPSE_OFFSET_CENTER, MID_ASPECT );
     }
 
     static getTopIntersection( angle ) {
-      const direction = Vector2.createPolar( 1, angle ).componentTimes( new Vector2( 1, TOP_ASPECT ) ).normalized();
-      const intersections = CakeNode.TOP_ELLIPSE.intersection( new Ray2( CakeNode.TOP_ELLIPSE_OFFSET_CENTER, direction ) );
-      return intersections[ 0 ];
+      return CakeNode.ellipseIntersect( angle, TOP_ELLIPSE, TOP_ELLIPSE_OFFSET_CENTER, TOP_ASPECT );
     }
   }
 
@@ -236,29 +230,26 @@ define( require => {
   CakeNode.MID_ELLIPSE_OFFSET_CENTER = MID_ELLIPSE_OFFSET_CENTER;
   CakeNode.TOP_ELLIPSE_OFFSET_CENTER = TOP_ELLIPSE_OFFSET_CENTER;
 
-  // @public {Array.<Array.<Shape>>} - TODO: consider precomputing these in a SVG string'ed form so we have faster loads.
+  // @public {Array.<Array.<Shape>>} - 2D areas that cover the entire cake (for accurate touch/mouse areas)
+  // TODO: consider precomputing these in a SVG string'ed form so we have faster loads.
   CakeNode.CAKE_SHAPES = _.range( 1, 9 ).map( denominator => {
     return _.range( 0, denominator ).map( index => {
-      const shapes = [];
+      const shapes = []; // We'll union all of these shapes
+
+      // TODO: A bit of docs
 
       const angleA = -CakeNode.getStartAngle( denominator, index );
       const angleB = -CakeNode.getEndAngle( denominator, index );
 
+      // Adds a pie-shaped wedge (flat) to the list of shapes. We'll do this for all three vertical "layers"
       function addPie( ellipse, offsetCenter, aspect ) {
-        // TODO: factor out! Maybe just pass in intersection function
-        function intersect( angle ) {
-          const direction = Vector2.createPolar( 1, angle ).componentTimes( new Vector2( 1, aspect ) ).normalized();
-          const intersections = ellipse.intersection( new Ray2( offsetCenter, direction ) );
-          return intersections[ 0 ];
-        }
-
         const topSegments = [];
         if ( denominator === 1 ) {
           topSegments.push( ellipse );
         }
         else {
-          const intersectionA = intersect( angleA );
-          const intersectionB = intersect( angleB );
+          const intersectionA = CakeNode.ellipseIntersect( angleA, ellipse, offsetCenter, aspect );
+          const intersectionB = CakeNode.ellipseIntersect( angleB, ellipse, offsetCenter, aspect );
 
           if ( intersectionA.t > intersectionB.t ) {
             topSegments.push( ellipse.slice( intersectionB.t, intersectionA.t ) );
@@ -310,7 +301,7 @@ define( require => {
         ] ) );
       }
 
-      return Shape.union( shapes );
+      return Shape.union( shapes ).makeImmutable();
     } );
   } );
 
