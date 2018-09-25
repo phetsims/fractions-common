@@ -293,7 +293,6 @@ define( require => {
       }
 
       if ( denominator === 1 || ( denominator === 2 && index === 1 ) ) {
-        console.log( angleA, angleB );
         shapes.push( Shape.polygon( [
           BASE_ELLIPSE_OFFSET_CENTER,
           MID_ELLIPSE.positionAt( 0 ).timesScalar( 0.99 ),
