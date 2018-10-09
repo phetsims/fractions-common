@@ -29,6 +29,8 @@ define( require => {
      * @param {Object} [options}]
      */
     constructor( representation, options ) {
+      var self = this;
+
       options = _.extend( {
         returnPieceListener: null,
 
@@ -74,8 +76,11 @@ define( require => {
       // @public {Animator}
       this.animator = new Animator( this.positionProperty, new NumberProperty( 0 ), this.scaleProperty, new NumberProperty( 0 ), this.isAnimatingProperty );
 
-      this.shapeContainers.addItemAddedListener( this.changedEmitter.emit.bind( this.changedEmitter ) );
-      this.shapeContainers.addItemRemovedListener( this.changedEmitter.emit.bind( this.changedEmitter ) );
+      var emitChanged = function() {
+        self.changedEmitter.emit();
+      };
+      this.shapeContainers.addItemAddedListener( emitChanged );
+      this.shapeContainers.addItemRemovedListener( emitChanged );
 
       // Always want at least one container
       this.increaseContainerCount();

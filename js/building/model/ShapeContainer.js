@@ -62,8 +62,11 @@ define( require => {
         this.totalFractionProperty.value = this.totalFractionProperty.value.minus( shapePiece.fraction ).reduced();
       } );
 
-      this.shapePieces.addItemAddedListener( changedEmitter.emit.bind( changedEmitter ) );
-      this.shapePieces.addItemRemovedListener( changedEmitter.emit.bind( changedEmitter ) );
+      var emitChanged = function() {
+        changedEmitter.emit();
+      };
+      this.shapePieces.addItemAddedListener( emitChanged );
+      this.shapePieces.addItemRemovedListener( emitChanged );
     }
 
     /**
