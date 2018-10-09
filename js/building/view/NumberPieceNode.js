@@ -96,13 +96,15 @@ define( require => {
       targetNode: this,
       transform: options.modelViewTransform,
       locationProperty: numberPiece.positionProperty,
-      isUserControlledProperty: numberPiece.isUserControlledProperty,
       start: function( event ) {
         wasTouch = event.pointer instanceof Touch;
       },
       end: function() {
         options.dropListener && options.dropListener( wasTouch );
       }
+    } );
+    this.dragListener.isUserControlledProperty.link( function( controlled ) {
+      numberPiece.isUserControlledProperty.value = controlled;
     } );
 
     this.mutate( options );
