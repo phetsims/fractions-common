@@ -9,7 +9,7 @@ define( require => {
   'use strict';
 
   // modules
-  const Enumeration = require( 'FRACTIONS_COMMON/common/enum/Enumeration' );
+  const Enumeration = require( 'PHET_CORE/Enumeration' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Vector2 = require( 'DOT/Vector2' );
 
