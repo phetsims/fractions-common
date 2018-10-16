@@ -105,7 +105,7 @@ define( require => {
     static randomFill( shapePartition, fraction, color ) {
       const numSlicesPerPartition = shapePartition.length;
       const numFilledSlices = fraction.numerator * ( numSlicesPerPartition / fraction.denominator );
-      const numPartitions = Math.ceil( fraction.getValue() );
+      const numPartitions = Math.ceil( fraction.value );
       const numTotalSlices = numPartitions * numSlicesPerPartition;
       const fills = phet.joist.random.shuffle( [
         ..._.times( numFilledSlices, () => true ),

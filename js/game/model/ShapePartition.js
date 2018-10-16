@@ -370,7 +370,7 @@ define( require => {
 
       return new ShapePartition( _.flatten( _.range( 0, rows ).map( row => {
         return _.range( 0, columns ).map( column => {
-          return Shape.rect( column, row, 1, 1 );
+          return Shape.rect( column / columns, row / rows, 1 / columns, 1 / rows );
         } );
       } ) ), PartitionType.GRID );
     }
@@ -455,7 +455,7 @@ define( require => {
   fractionsCommon.register( 'ShapePartition', ShapePartition );
 
   const RESCALE_SIZE = 4000;
-  const MAX_PIECES = 10;
+  const MAX_PIECES = 12;
   const LIMITED_MAX_PIECES = 6; // For certain types, we want to limit the quantity for visibility
 
   // @public {Array.<ShapePartition>}
@@ -486,6 +486,14 @@ define( require => {
     ...ShapePartition.HORIZONTAL_BARS,
     ...ShapePartition.VERTICAL_BARS
   ];
+
+  // @public {Array.<ShapePartition>}
+  const gridSizes = [ 1, 2, 3, 4, 5, 7, 11 ];
+  ShapePartition.UNIVERSAL_GRIDS = _.flatten( gridSizes.map( rows => gridSizes.filter( columns => {
+    return rows * columns <= MAX_PIECES;
+  } ).map( columns => {
+    return ShapePartition.createGrid( rows, columns ).rescaled( RESCALE_SIZE );
+  } ) ) );
 
   // @public {Array.<ShapePartition>}
   ShapePartition.GAME_PARTITIONS = [

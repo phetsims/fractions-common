@@ -78,7 +78,7 @@ define( require => {
       this.representation = hasCircles ? Representation.CIRCLE : ( hasBars ? Representation.VERTICAL_BAR : null );
 
       // @public {number}
-      this.maxTargetWholes = Math.ceil( Math.max( ...targets.map( target => target.fraction.getValue() ) ) );
+      this.maxTargetWholes = Math.ceil( Math.max( ...targets.map( target => target.fraction.value ) ) );
 
       // @public {number}
       this.maxNumber = Math.max( ...numberPieces.map( numberPiece => numberPiece.number ) );

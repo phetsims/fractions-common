@@ -68,7 +68,7 @@ define( require => {
 
     assert && assert( !this.positioned || this.modelViewTransform, 'Positioned ShapePieceNodes need a MVT' );
 
-    var fractionValue = shapePiece.fraction.getValue();
+    var fractionValue = shapePiece.fraction.value;
     assert && assert( fractionValue <= 1 );
 
     // @private {Node|null}

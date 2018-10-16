@@ -130,7 +130,7 @@ define( require => {
     }
 
     orientTowardsContainer( closestContainer, dt ) {
-      this.targetRotationProperty.value = -2 * Math.PI * closestContainer.totalFractionProperty.value.getValue();
+      this.targetRotationProperty.value = -2 * Math.PI * closestContainer.totalFractionProperty.value.value;
 
       this.dampedHarmonicTimeElapsed += dt;
       this.rotationProperty.value = this.trueTargetRotation + this.dampedHarmonic.getValue( this.dampedHarmonicTimeElapsed );

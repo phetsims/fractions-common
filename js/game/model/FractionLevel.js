@@ -11,6 +11,7 @@ define( require => {
   // modules
   const CollectionFinder = require( 'FRACTIONS_COMMON/game/model/CollectionFinder' );
   const DynamicProperty = require( 'AXON/DynamicProperty' );
+  const FilledPartition = require( 'FRACTIONS_COMMON/game/model/FilledPartition' );
   const FillType = require( 'FRACTIONS_COMMON/game/enum/FillType' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const FractionChallenge = require( 'FRACTIONS_COMMON/game/model/FractionChallenge' );
@@ -35,6 +36,9 @@ define( require => {
     // default denominators to match the Java search
     denominators: inclusive( 1, 8 ).map( PrimeFactorization.factor )
   } );
+  const collectionFinder12 = new CollectionFinder( {
+    denominators: inclusive( 1, 12 ).map( PrimeFactorization.factor )
+  } );
   const COLORS_3 = [
     FractionsCommonColorProfile.level1Property,
     FractionsCommonColorProfile.level2Property,
@@ -44,7 +48,17 @@ define( require => {
     ...COLORS_3,
     FractionsCommonColorProfile.level4Property
   ];
-  // A commonly-used list of fractions to pick from for mixed numbers.
+
+  // common lists of fractions needed
+  const expandableMixedNumbersFractions = _.flatten( inclusive( 1, 3 ).map( whole => {
+    return [
+      new Fraction( 1, 2 ),
+      new Fraction( 1, 3 ),
+      new Fraction( 2, 3 ),
+      new Fraction( 1, 4 ),
+      new Fraction( 3, 4 )
+    ].map( f => f.plusInteger( whole ) );
+  } ) );
   const mixedNumbersFractions = _.flatten( inclusive( 1, 3 ).map( whole => {
     return [
       new Fraction( 1, 2 ),
@@ -75,6 +89,13 @@ define( require => {
       new Fraction( 7, 9 ),
       new Fraction( 8, 9 )
     ].map( f => f.plusInteger( whole ) );
+  } ) );
+  const allMixedNumberFractions = _.flatten( inclusive( 1, 3 ).map( whole => {
+    return _.flatten( inclusive( 2, 8 ).map( denominator => {
+      return inclusive( 1, denominator - 1 ).map( numerator => {
+        return new Fraction( numerator, denominator ).plusInteger( whole );
+      } );
+    } ) );
   } ) );
 
   class FractionLevel {
@@ -161,7 +182,7 @@ define( require => {
      */
     static straightforwardFractions( fractions ) {
       return _.flatten( fractions.map( fraction => {
-        const whole = Math.floor( fraction.getValue() );
+        const whole = Math.floor( fraction.value );
         return [
           ...repeat( whole, new Fraction( 1, 1 ) ),
           ...repeat( fraction.numerator - whole * fraction.denominator, new Fraction( 1, fraction.denominator ) )
@@ -270,7 +291,7 @@ define( require => {
      */
     static exactMixedNumbers( fractions ) {
       return _.flatten( fractions.map( fraction => {
-        const whole = Math.floor( fraction.getValue() );
+        const whole = Math.floor( fraction.value );
         fraction = fraction.minus( new Fraction( whole, 1 ) );
         return [
           whole,
@@ -290,7 +311,7 @@ define( require => {
      */
     static multipliedMixedNumbers( fractions ) {
       return _.flatten( fractions.map( fraction => {
-        const whole = Math.floor( fraction.getValue() );
+        const whole = Math.floor( fraction.value );
         fraction = fraction.minus( new Fraction( whole, 1 ) );
 
         const multiplier = sample( [ 2, 3 ] );
@@ -369,6 +390,35 @@ define( require => {
         ] );
         return ShapeTarget.fill( shapePartition, new Fraction( denominatorToNumerator( denominator ), denominator ), colors[ index ], concreteFillType );
       } );
+    }
+
+    /**
+     * Returns a difficult (varying denominator, random fill) shape target for a given fraction.
+     * @private
+     *
+     * @param {Array.<ShapePartition>} shapePartitions
+     * @param {Fraction} fraction
+     * @param {ColorDef} color
+     * @returns {ShapeTarget}
+     */
+    static difficultMixedShapeTarget( shapePartitions, fraction, color ) {
+      const wholeCount = Math.ceil( fraction.value );
+
+      // Need to filter the collections so we don't end up needing too many whole sections
+      const collections = collectionFinder12.search( fraction, {
+        maxNonzeroCount: 4
+      } ).filter( collection => _.sum( collection.fractions.map( f => Math.ceil( f.value ) ) ) <= wholeCount );
+
+      const maxNondivisible = _.max( collections.map( collection => collection.nondivisibleCount ) );
+      // Don't always force the "most difficult" since that might be one or two options.
+      const difficultCollections = collections.filter( collection => collection.nondivisibleCount >= maxNondivisible - 1 );
+      const collection = sample( difficultCollections );
+
+      return new ShapeTarget( fraction, shuffle( _.flatten( collection.fractions.map( subFraction => {
+        const shapePartition = sample( ShapePartition.supportsDenominator( shapePartitions, subFraction.denominator ) );
+        // TODO: even more random? This one tries to fill in wholes where possible
+        return FilledPartition.randomFill( shapePartition, subFraction, color );
+      } ) ) ) );
     }
 
     /**
@@ -1296,15 +1346,7 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level2NumbersMixed( levelNumber ) {
-      const fractions = choose( 3, _.flatten( inclusive( 1, 3 ).map( whole => {
-        return [
-          new Fraction( 1, 2 ),
-          new Fraction( 1, 3 ),
-          new Fraction( 2, 3 ),
-          new Fraction( 1, 4 ),
-          new Fraction( 3, 4 )
-        ].map( f => f.plusInteger( whole ) );
-      } ) ) );
+      const fractions = choose( 3, expandableMixedNumbersFractions );
       const shapePartitions = sample( [
         ShapePartition.PIES,
         ShapePartition.HORIZONTAL_BARS
@@ -1440,9 +1482,21 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level7NumbersMixed( levelNumber ) {
-      // TODO: IMPLEMENT! THIS IS NOT THE ACTUAL IMPLEMENTATION --- STUB!
-      const shapeTargets = FractionLevel.targetsFromPartitions( choose( 4, ShapePartition.GAME_PARTITIONS ), COLORS_4, d => sample( inclusive( d + 1, 4 * d ) ), FillType.SEQUENTIAL );
-      const pieceNumbers = FractionLevel.withMultipliedNumbers( shapeTargets.map( target => target.fraction ), 1 );
+      const baseFractions = choose( 2, expandableMixedNumbersFractions );
+      const multipliers = [
+        new Fraction( 2, 2 ),
+        new Fraction( 3, 3 )
+      ];
+      const fractions = [
+        ...shuffle( [ baseFractions[ 0 ], baseFractions[ 0 ].times( sample( multipliers ) ) ] ),
+        ...shuffle( [ baseFractions[ 1 ], baseFractions[ 1 ].times( sample( multipliers ) ) ] )
+      ];
+
+      const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.GAME_PARTITIONS, fractions, COLORS_4, FillType.SEQUENTIAL );
+      const pieceNumbers = [
+        ...FractionLevel.exactMixedNumbers( baseFractions ),
+        ...FractionLevel.exactMixedNumbers( baseFractions )
+      ];
 
       return FractionChallenge.createNumberChallenge( levelNumber, true, shapeTargets, pieceNumbers );
     }
@@ -1481,9 +1535,22 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level9NumbersMixed( levelNumber ) {
-      // TODO: IMPLEMENT! THIS IS NOT THE ACTUAL IMPLEMENTATION --- STUB!
-      const shapeTargets = FractionLevel.targetsFromPartitions( choose( 4, ShapePartition.GAME_PARTITIONS ), COLORS_4, d => sample( inclusive( d + 1, 4 * d ) ), FillType.SEQUENTIAL );
-      const pieceNumbers = FractionLevel.withMultipliedNumbers( shapeTargets.map( target => target.fraction ), 1 );
+      const fractions = choose( 4, allMixedNumberFractions );
+
+      const shapeTargets = shuffle( fractions.map( ( fraction, index ) => {
+        const color = COLORS_4[ index ];
+        const shapePartitions = sample( [
+          ShapePartition.PIES,
+          ShapePartition.UNIVERSAL_GRIDS
+        ] );
+        if ( index < 2 ) {
+          return FractionLevel.difficultMixedShapeTarget( shapePartitions, fraction, color );
+        }
+        else {
+          return ShapeTarget.randomFill( sample( ShapePartition.supportsDenominator( shapePartitions, fraction.denominator ) ), fraction, color );
+        }
+      } ) );
+      const pieceNumbers = FractionLevel.exactMixedNumbers( fractions );
 
       return FractionChallenge.createNumberChallenge( levelNumber, true, shapeTargets, pieceNumbers );
     }
@@ -1499,9 +1566,17 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level10NumbersMixed( levelNumber ) {
-      // TODO: IMPLEMENT! THIS IS NOT THE ACTUAL IMPLEMENTATION --- STUB!
-      const shapeTargets = FractionLevel.targetsFromPartitions( choose( 4, ShapePartition.GAME_PARTITIONS ), COLORS_4, d => sample( inclusive( d + 1, 4 * d ) ), FillType.SEQUENTIAL );
-      const pieceNumbers = FractionLevel.withMultipliedNumbers( shapeTargets.map( target => target.fraction ), 1 );
+      const fractions = choose( 4, allMixedNumberFractions );
+      const colors = shuffle( COLORS_4 );
+
+      const shapeTargets = fractions.map( ( fraction, index ) => {
+        const shapePartitions = sample( [
+          ShapePartition.PIES,
+          ShapePartition.UNIVERSAL_GRIDS
+        ] );
+        return FractionLevel.difficultMixedShapeTarget( shapePartitions, fraction, colors[ index ] );
+      } );
+      const pieceNumbers = FractionLevel.multipliedMixedNumbers( fractions );
 
       return FractionChallenge.createNumberChallenge( levelNumber, true, shapeTargets, pieceNumbers );
     }

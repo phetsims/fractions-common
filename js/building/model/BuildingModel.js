@@ -236,7 +236,7 @@ define( require => {
           var shapePiece = shapeContainer.shapePieces.pop();
 
           // TODO: Better determination of the position, including with centroid and rotation offsets
-          var shapeMatrix = ShapeContainer.getShapeMatrix( shapeContainer.totalFractionProperty.value.getValue(), shapePiece.fraction, shapePiece.representation );
+          var shapeMatrix = ShapeContainer.getShapeMatrix( shapeContainer.totalFractionProperty.value.value, shapePiece.fraction, shapePiece.representation );
           var containerPoint = shapeGroup.positionProperty.value.plus( shapeContainer.offset );
           shapePiece.positionProperty.value = containerPoint.plus( shapeMatrix.timesVector2( Vector2.ZERO ) );
           shapePiece.rotationProperty.value = shapeMatrix.rotation;

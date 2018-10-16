@@ -118,7 +118,7 @@ define( require => {
      * @param {number} dt
      */
     orientTowardsContainer( closestContainer, dt ) {
-      this.targetRotationProperty.value = -2 * Math.PI * closestContainer.totalFractionProperty.value.getValue();
+      this.targetRotationProperty.value = -2 * Math.PI * closestContainer.totalFractionProperty.value.value;
 
       this.dampedHarmonicTimeElapsed += dt;
       this.rotationProperty.value = this.trueTargetRotation + this.dampedHarmonic.getValue( this.dampedHarmonicTimeElapsed );
@@ -133,11 +133,11 @@ define( require => {
      * @returns {Vector2}
      */
     static getSweptCentroid( fraction ) {
-      if ( fraction.getValue() === 1 ) {
+      if ( fraction.value === 1 ) {
         return Vector2.ZERO;
       }
       else {
-        var positiveAngle = fraction.getValue() * 2 * Math.PI;
+        var positiveAngle = fraction.value * 2 * Math.PI;
 
         // Compute the centroid for a circular sector
         var radius = FractionsCommonConstants.SHAPE_SIZE / 2;

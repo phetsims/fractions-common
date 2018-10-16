@@ -63,6 +63,16 @@ define( require => {
     }
 
     /**
+     * Returns how many of the fractions's numerators are not divisible by the denominators (won't simplify to x/1).
+     * @public
+     *
+     * @returns {number}
+     */
+    get nondivisibleCount() {
+      return _.sum( this.quantities.map( ( quantity, index ) => quantity % ( index + 1 ) === 0 ? 0 : 1 ) );
+    }
+
+    /**
      * Returns a value based on the lexicographic order of the two collections, used for sorting.
      * @public
      *

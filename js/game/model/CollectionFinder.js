@@ -121,7 +121,11 @@ define( require => {
 
         // {number} - The maximum possible quantity total including all denominators (so e.g. if maxTotalQuantity:4,
         // the finder will never report 2 halves and 3 thirds).
-        maxTotalQuantity = Number.POSITIVE_INFINITY
+        maxTotalQuantity = Number.POSITIVE_INFINITY,
+
+        // {number} - The maximum total number of non-zero coefficients allowed. For example if maxNonzeroCount:2,
+        // the finder will never report three non-zero numerators for different denominators.
+        maxNonzeroCount = Number.POSITIVE_INFINITY
       } = options || {};
 
       const self = this;
@@ -140,7 +144,7 @@ define( require => {
         return results;
       }
 
-      ( function recur( index, remainder, totalCount ) {
+      ( function recur( index, remainder, totalCount, nonzeroCount ) {
         // TODO: handle last index differently, since we don't need to search/iterate
         const entry = entries[ index ];
         const maxCoefficient = Math.min( maxQuantity, Math.floor( remainder / entry.inverseNumber ), maxTotalQuantity - totalCount );
@@ -176,15 +180,16 @@ define( require => {
                 break;
               }
             }
+            const nextNonzeroCount = nonzeroCount + ( coefficient > 0 ? 1 : 0 );
 
-            if ( constraintsSatisfied ) {
-              recur( index + 1, subRemainder, totalCount + coefficient );
+            if ( constraintsSatisfied && nextNonzeroCount <= maxNonzeroCount ) {
+              recur( index + 1, subRemainder, totalCount + coefficient, nextNonzeroCount );
             }
 
             coefficients.pop();
           }
         }
-      } )( 0, r, 0 );
+      } )( 0, r, 0, 0 );
 
       return results;
     }
@@ -227,7 +232,7 @@ define( require => {
 
         for ( let coefficient = 0; coefficient <= maxQuantity; coefficient++ ) {
           const subRemainder = remainder.minus( new Fraction( coefficient, denominator ) );
-          if ( subRemainder.getValue() < 0 || coefficient + totalCount > maxTotalQuantity ) {
+          if ( subRemainder.value < 0 || coefficient + totalCount > maxTotalQuantity ) {
             break;
           }
 

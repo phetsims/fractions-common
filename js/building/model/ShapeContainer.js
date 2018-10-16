@@ -121,7 +121,7 @@ define( require => {
         if ( currentShapePiece === shapePiece ) {
           return rotation;
         }
-        rotation += currentShapePiece.fraction.getValue();
+        rotation += currentShapePiece.fraction.value;
       }
       throw new Error( 'ShapePiece not found' );
     }
@@ -139,7 +139,7 @@ define( require => {
         }
       }
       else if ( representation === Representation.VERTICAL_BAR ) {
-        const centralValue = startingRatio + fraction.getValue() / 2;
+        const centralValue = startingRatio + fraction.value / 2;
         return Matrix3.translation( Util.linear( 0, 1, ShapePiece.VERTICAL_BAR_BOUNDS.minX, ShapePiece.VERTICAL_BAR_BOUNDS.maxX, centralValue ), 0 );
       }
       else {
