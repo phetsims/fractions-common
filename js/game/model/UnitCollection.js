@@ -73,6 +73,64 @@ define( require => {
     }
 
     /**
+     * Determines how many "whole groups" are required to fit this unit collection. This is essentially the question of
+     * how many pie-shaped containers do you need to fit all of the "unit fraction" pie slices in this collection.
+     * This can be more than the "ceiling" of the fraction, e.g. 1/2 + 1/3 + 1/4 + 1/5 + 5/7 (~1.9976) which needs to be
+     * split into 3 "whole groups" to fit the slices.
+     * @public
+     *
+     * @returns {Array.<Array.<Fraction>>}
+     */
+    get compactRequiredGroups() {
+      let bestGroups = null;
+      let bestCount = Number.POSITIVE_INFINITY;
+
+      const fractions = this.unitFractions;
+
+      const groups = [];
+      const sums = [];
+
+      function recur( i ) {
+        if ( i === fractions.length ) {
+          if ( groups.length < bestCount ) {
+            bestCount = groups.length;
+            bestGroups = groups.map( group => group.slice() );
+          }
+        }
+        else {
+          const fraction = fractions[ i ];
+
+          // Adding to existing groups
+          for ( let j = 0; j < groups.length; j++ ) {
+            const oldSum = sums[ j ];
+            const newSum = oldSum.plus( fraction );
+            if ( !Fraction.ONE.isLessThan( newSum ) ) {
+              sums[ j ] = newSum;
+              groups[ j ].push( fraction );
+
+              recur( i + 1 );
+
+              groups[ j ].pop();
+              sums[ j ] = oldSum;
+            }
+          }
+
+          // Adding a new group
+          groups.push( [ fraction ] );
+          sums.push( fraction );
+
+          recur( i + 1 );
+
+          groups.pop();
+          sums.pop();
+        }
+      }
+      recur( 0 );
+
+      return bestGroups;
+    }
+
+    /**
      * Returns a value based on the lexicographic order of the two collections, used for sorting.
      * @public
      *

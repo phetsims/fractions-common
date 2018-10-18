@@ -256,7 +256,8 @@ define( require => {
       // Make a copy of all fractions, so we have unique instances (for down below)
       fractions = fractions.map( f => f.copy() );
 
-      const fractionsToChange = choose( Math.min( options.quantity, fractions.length ), fractions.filter( f => f.denominator <= options.maxDenominator ) );
+      const availableFractions = fractions.filter( f => f.denominator <= options.maxDenominator );
+      const fractionsToChange = choose( Math.min( options.quantity, availableFractions.length ), availableFractions );
       const otherFractions = arrayDifference( fractions, fractionsToChange );
 
       return [
@@ -472,6 +473,45 @@ define( require => {
       } );
     }
 
+    // TODO: sharing code
+    static difficultSplit( fraction, maxNonzeroCount = 5 ) {
+      const wholeCount = Math.ceil( fraction.value );
+      const fullWholeCount = Math.floor( fraction.value );
+      const remainder = fraction.minusInteger( Math.floor( fraction.value ) );
+
+      // Need to filter the collections so we don't end up needing too many whole sections
+      const collections = shuffle( collectionFinder12.search( fraction, {
+        maxNonzeroCount: maxNonzeroCount,
+        maxTotalQuantity: fullWholeCount + remainder.numerator + 5,
+        maxQuantity: Math.max( fraction.denominator - 1, 4 )
+      } ) );
+
+      // Because of performance, just grab up to the first 40 legal collections
+      const legalCollections = [];
+      for ( let i = 0; i < collections.length; i++ ) {
+        const collection = collections[ i ];
+        if ( collection.compactRequiredGroups.length <= wholeCount ) {
+          legalCollections.push( collection );
+        }
+        if ( legalCollections.length === 40 ) {
+          break;
+        }
+      }
+      // TODO: see if this is the best workaround
+      // const legalCollections = collections.filter( collection => collection.compactRequiredGroups.length <= wholeCount );
+
+      const maxNondivisible = _.max( legalCollections.map( collection => collection.nondivisibleCount ) );
+
+      // Don't always force the "most difficult" since that might be one or two options.
+      const difficultCollections = legalCollections.filter( collection => collection.nondivisibleCount >= maxNondivisible - 1 );
+      const collection = sample( difficultCollections );
+
+      // Break apart wholes
+      return FractionLevel.simpleSplitFractions( collection.unitFractions, {
+        maxDenominator: 1
+      } );
+    }
+
     /**
      * Returns a difficult (varying denominator, random fill) shape target for a given fraction.
      * @private
@@ -581,10 +621,6 @@ define( require => {
      * > Like level 2, but now fractions ranging from 1/1 to 6/6, and with "whole" pieces available.
      * > Number of pieces of each fraction allowing for multiple solutions
      *
-     * TODO: Descriptions do NOT note anything about the "max numerator" selection. It's also conceivable that three
-     * of the same numerator could be selected, thus NOT being like level2 (not two ways to make one) since it would
-     * have the exact number of needed pieces.
-     *
      * @param {number} levelNumber
      * @param {ColorDef} color
      * @returns {FractionChallenge}
@@ -594,7 +630,10 @@ define( require => {
         return inclusive( 1, d ).map( n => new Fraction( n, d ) );
       } ) ) );
 
-      const pieceFractions = FractionLevel.maxNumeratorUnitFractions( targetFractions );
+      const pieceFractions = [
+        ...FractionLevel.unitFractions( targetFractions ),
+        ..._.flatten( targetFractions.map( f => FractionLevel.interestingFractions( f, 2 ) ) )
+      ];
 
       return FractionChallenge.createShapeChallenge( levelNumber, false, color, targetFractions, pieceFractions );
     }
@@ -613,9 +652,6 @@ define( require => {
      * > All 3 targets the same, 2 possible target values {1/2, 1/1}.
      * > No "whole" pieces available
      * > constrain one of the targets so that two different sizes must be used.
-     *
-     * TODO: The 3rd statement "constrain one of the targets so that two different sizes must be used" is false for the
-     * "half" version - Use 1/2 for one, 2/4 for another and 3/6 for the last.
      *
      * @param {number} levelNumber
      * @param {ColorDef} color
@@ -636,13 +672,13 @@ define( require => {
         ];
       }
       else {
-        // Java halfLevel4
+        // Java halfLevel4, but custom-modified to have the constraint satisfied
         targetFractions = repeat( 3, new Fraction( 1, 2 ) );
         pieceFractions = [
           new Fraction( 1, 2 ),
           ...repeat( 3, new Fraction( 1, 3 ) ),
           ...repeat( 3, new Fraction( 1, 4 ) ),
-          ...repeat( 3, new Fraction( 1, 6 ) )
+          ...repeat( 2, new Fraction( 1, 6 ) )
         ];
       }
 
@@ -666,9 +702,6 @@ define( require => {
      * > - all pieces available to fulfill targets in the most straightforward way (so for instance if 3/8 appears there
      * >   will 3 1/8 pieces)
      *
-     * TODO: No note about the addition of the "extra" possibly-nonintuitive pieces in either doc. Should that be
-     * removed?
-     *
      * @param {number} levelNumber
      * @param {ColorDef} color
      * @returns {FractionChallenge}
@@ -677,10 +710,7 @@ define( require => {
       const targetFractions = choose( 3, inclusive( 1, 8 ) ).map( denominator => {
         return new Fraction( nextIntBetween( 1, denominator ), denominator );
       } );
-      const pieceFractions = [
-        ...FractionLevel.unitFractions( targetFractions ),
-        ...FractionLevel.interestingFractions( sample( targetFractions ) )
-      ];
+      const pieceFractions = FractionLevel.unitFractions( targetFractions );
 
       return FractionChallenge.createShapeChallenge( levelNumber, false, color, targetFractions, pieceFractions );
     }
@@ -759,9 +789,6 @@ define( require => {
      * > -- Shape pieces constrained so that for instance if 1/2 and 1/2 appears for the top targets, a 1/2 piece might
      * >    be available but the other one will need to be made with a 1/4 and 1/4, or a 1/3 and a 1/6 or such.
      *
-     * TODO: I see no explicit guarantee of the "having to make things using other shapes", it may work out to be
-     * easier than expected.
-     *
      * @param {number} levelNumber
      * @param {ColorDef} color
      * @returns {FractionChallenge}
@@ -816,8 +843,6 @@ define( require => {
      * > -- Enough pieces available to match targets in "obvious ways"...so if 5/4 is a target a whole piece is
      * >    available and a 1/4 piece available for numbers larger than 1, uses only 1/2's or 1/4's on this level
      *
-     * TODO: The "obvious" way may not exist for here, since we use "interesting" fractions.
-     *
      * @param {number} levelNumber
      * @param {ColorDef} color
      * @returns {FractionChallenge}
@@ -828,7 +853,7 @@ define( require => {
         ...choose( 2, [ new Fraction( 2, 3 ), new Fraction( 3, 4 ), new Fraction( 2, 5 ), new Fraction( 3, 5 ), new Fraction( 4, 5 ) ] )
       ] );
 
-      const pieceFractions = _.flatten( targetFractions.map( f => FractionLevel.interestingFractions( f ) ) );
+      const pieceFractions = FractionLevel.straightforwardFractions( targetFractions );
 
       return FractionChallenge.createShapeChallenge( levelNumber, false, color, targetFractions, pieceFractions );
     }
@@ -847,8 +872,6 @@ define( require => {
      * >   target is greater than one, no "wholes" should be available.  So if 5/4 is a target it would need to be
      * >   built from something like 2 half pieces and a quarter piece
      *
-     * TODO: This is literally the same implementation as level 8
-     *
      * @param {number} levelNumber
      * @param {ColorDef} color
      * @returns {FractionChallenge}
@@ -859,9 +882,15 @@ define( require => {
         ...choose( 2, [ new Fraction( 2, 3 ), new Fraction( 3, 4 ), new Fraction( 2, 5 ), new Fraction( 3, 5 ), new Fraction( 4, 5 ) ] )
       ] );
 
-      const pieceFractions = _.flatten( targetFractions.map( f => FractionLevel.interestingFractions( f ) ) );
+      const pieceFractions = [
+        ...FractionLevel.simpleSplitFractions( FractionLevel.straightforwardFractions( targetFractions.slice( 0, 2 ) ), {
+          maxDenominator: 1
+        } ),
+        ...FractionLevel.difficultSplit( targetFractions[ 2 ] ),
+        ...FractionLevel.difficultSplit( targetFractions[ 3 ] )
+      ];
 
-      return FractionChallenge.createShapeChallenge( levelNumber, false, color, targetFractions, pieceFractions );
+      return FractionChallenge.createShapeChallenge( levelNumber, false, color, shuffle( targetFractions ), pieceFractions );
     }
 
     /**
@@ -882,9 +911,6 @@ define( require => {
      * >   target must be built from 3 or more pieces as a way to constrain the pieces given. So for instance something
      * >   like 4/3 would have to be built by something like 1(half) + 2(quarters) + (1/3)
      *
-     * TODO: Technically whole pieces COULD be available? Would need to generate some. Also, there is no guarantee that
-     * shapes are "fully" interesting?
-     *
      * @param {number} levelNumber
      * @param {ColorDef} color
      * @returns {FractionChallenge}
@@ -899,7 +925,7 @@ define( require => {
       ] );
       const targetFractions = [ fractions[ 0 ], fractions[ 0 ], fractions[ 1 ], fractions[ 1 ] ];
 
-      const pieceFractions = _.flatten( targetFractions.map( f => FractionLevel.interestingFractions( f ) ) );
+      const pieceFractions = _.flatten( targetFractions.map( f => FractionLevel.difficultSplit( f ) ) );
 
       return FractionChallenge.createShapeChallenge( levelNumber, false, color, targetFractions, pieceFractions );
     }
