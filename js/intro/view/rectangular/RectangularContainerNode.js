@@ -81,7 +81,7 @@ define( require => {
       const cellHeight = this.size.height / denominator;
 
       const mapCellX = index => ( index - ( denominator - 1 ) / 2 ) * cellWidth;
-      const mapCellY = index => ( ( denominator - 1 ) / 2 - index ) * cellHeight;
+      const mapCellY = index => ( index - ( denominator - 1 ) / 2 ) * cellHeight;
 
       for ( let i = 0; i < denominator; i++ ) {
         const cell = this.container.cells.get( i );
