@@ -172,6 +172,7 @@ define( require => {
       const cakeShape = CakeNode.CAKE_SHAPES[ this.denominator - 1 ][ index ];
       this.imageNode.mouseArea = cakeShape;
       this.imageNode.touchArea = cakeShape;
+      this.imageNode.localBounds = cakeShape.bounds;
     }
 
     // TODO: deduplicate and doc

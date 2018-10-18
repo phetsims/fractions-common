@@ -26,24 +26,14 @@ define( require => {
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const PropertyFractionNode = require( 'FRACTIONS_COMMON/common/view/PropertyFractionNode' );
+  const Random = require( 'DOT/Random' );
   const RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularContainerNode' );
   const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/RectangularOrientation' );
   const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
-  const Vector2 = require( 'DOT/Vector2' );
 
   // constants
   const IDENTITY_TRANSFORM = ModelViewTransform2.createIdentity();
-  // TODO: Uhh, not constant? Need to do some cleanup
-  let PIECE_OFFSET_POSITIONS = [
-    // Offsets used for initial position of pieces, relative to bucket hole center. Empirically determined.
-    new Vector2( 90, 4 ),
-    new Vector2( -85, 5 ),
-    new Vector2( -40, 9 ),
-    new Vector2( 0, 0 ),
-    new Vector2( 37, 7 ),
-    new Vector2( 75, 5 ),
-    new Vector2( 90, 5 )
-  ];
+  const BUCKET_WIDTH = 355;
 
   // TODO: piece layout improvements
   class BucketNode extends Node {
@@ -61,7 +51,7 @@ define( require => {
       // model of the bucket
       const bucket = new Bucket( {
         baseColor: FractionsCommonColorProfile.introBucketBackgroundProperty,
-        size: new Dimension2( 355, 125 ),
+        size: new Dimension2( BUCKET_WIDTH, 125 ),
         invertY: true
       } );
 
@@ -78,7 +68,9 @@ define( require => {
       iconContainer.addCells( denominatorProperty.value );
       iconContainer.cells.get( 0 ).fill();
 
-      const iconCreator = {
+      const representation = representationProperty.value;
+
+      const iconNode = {
         [ Representation.CIRCLE ]() {
           return new CircularContainerNode( iconContainer );
         },
@@ -98,9 +90,31 @@ define( require => {
         [ Representation.BEAKER ]() {
           return new BeakerContainerNode( iconContainer );
         }
-      };
+      }[ representation ]();
 
-      const iconNode = iconCreator[ representationProperty.value ]();
+      const availableCellWidth = {
+        [ Representation.CIRCLE ]() { return 330; },
+        [ Representation.HORIZONTAL_BAR ]() { return 320; },
+        [ Representation.VERTICAL_BAR ]() { return 280; },
+        [ Representation.CAKE ]() { return 310; },
+        [ Representation.BEAKER ]() { return 300; }
+      }[ representation ]();
+
+      const verticalCellOffset = {
+        [ Representation.CIRCLE ]() { return height => -12 + height / 6; },
+        [ Representation.HORIZONTAL_BAR ]() { return height => 5; },
+        [ Representation.VERTICAL_BAR ]() { return height => 14 - height / 7; },
+        [ Representation.CAKE ]() { return height => 0; },
+        [ Representation.BEAKER ]() { return height => -10; }
+      }[ representation ]();
+
+      const cellQuantity = {
+        [ Representation.CIRCLE ]() { return 16; },
+        [ Representation.HORIZONTAL_BAR ]() { return 16; },
+        [ Representation.VERTICAL_BAR ]() { return 16; },
+        [ Representation.CAKE ]() { return 8; },
+        [ Representation.BEAKER ]() { return 8; }
+      }[ representation ]();
 
       // layer to hold all the static cell nodes in the bucket
       const staticLayer = new Node();
@@ -120,14 +134,29 @@ define( require => {
           iconContainer.removeCells( -difference );
         }
 
-        staticLayer.removeAllChildren();
-
-        // places pieces in bucket dependent on defined vectors
-        PIECE_OFFSET_POSITIONS.forEach( position => {
-          staticLayer.addChild( createCellNode( denominator, 0, {
-            center: position.plus( bucketHole.center )
-          } ) );
+        const cellNode = createCellNode( denominator, 0, {} );
+        const bounds = representation === Representation.CAKE ? cellNode.bounds : cellNode.getSafeTransformedVisibleBounds();
+        const random = new Random( {
+          seed: 4 // https://xkcd.com/221/
         } );
+
+        const left = -availableCellWidth / 2 + bounds.width / 2;
+        const right = availableCellWidth / 2 - bounds.width / 2;
+
+        const numSections = cellQuantity;
+        const children = [];
+        for ( let i = 0; i < numSections; i++ ) {
+          // stochastic within its rectangle, so there is a more consistent layout
+          const sectionLeft = left + ( right - left ) * i / numSections;
+          const sectionRight = left + ( right - left ) * ( i + 1 ) / numSections;
+          const x = sectionLeft + ( sectionRight - sectionLeft ) * random.nextDouble();
+          const y = ( random.nextDouble() - 0.5 ) * 20 + verticalCellOffset( bounds.height );
+          children.push( new Node( {
+            children: [ cellNode ],
+            translation: bucketHole.center.plusXY( x, y ).minus( bounds.center )
+          } ) );
+        }
+        staticLayer.children = random.shuffle( children );
       } );
 
       bucketFront.setLabel( new HBox( {
