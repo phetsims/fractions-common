@@ -9,6 +9,7 @@ define( require => {
   'use strict';
 
   // modules
+  const Color = require( 'SCENERY/util/Color' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Matrix3 = require( 'DOT/Matrix3' );
   const PartitionType = require( 'FRACTIONS_COMMON/game/enum/PartitionType' );
@@ -94,11 +95,11 @@ define( require => {
       const shapes = [];
       if ( quantity > 1 ) {
         for ( let i = 0; i < quantity; i++ ) {
-          const startAngle = 2 * Math.PI * i / quantity - Math.PI / 2;
-          const endAngle = 2 * Math.PI * ( i + 1 ) / quantity - Math.PI / 2;
+          const startAngle = -2 * Math.PI * i / quantity;
+          const endAngle = -2 * Math.PI * ( i + 1 ) / quantity;
           const shape = new Shape()
             .moveTo( 0, 0 )
-            .arc( 0, 0, radius, startAngle, endAngle, false )
+            .arc( 0, 0, radius, startAngle, endAngle, true )
             .close();
           shapes.push( shape );
         }
@@ -119,14 +120,30 @@ define( require => {
     static createPolygon( quantity ) {
       assert && assert( quantity >= 3 && quantity % 1 === 0 );
 
-      const offset = -Math.PI / 2 + ( ( quantity % 2 === 0 ) ? ( -Math.PI / quantity ) : 0 );
+      const initialPoints = _.range( 0, quantity ).map( i => Vector2.createPolar( 1, -2 * Math.PI * i / quantity ) );
+      const sorted = _.sortBy( initialPoints, 'y' );
+      const bottomPoint = sorted[ sorted.length - 1 ];
+      const nextToBottomPoint = sorted[ sorted.length - 2 ];
+      let offset = 0;
+
+      // Ignore it if our "base" is already horizontal
+      if ( Math.abs( bottomPoint.y - nextToBottomPoint.y ) > 1e-6 ) {
+
+        // If it's straight down
+        if ( Math.abs( bottomPoint.x ) < 1e-6 ) {
+          offset = Math.PI / quantity;
+        }
+        else {
+          offset = -bottomPoint.plus( nextToBottomPoint ).angle() + Math.PI / 2;
+        }
+      }
 
       return new ShapePartition(
         _.range( 0, quantity ).map( i => Shape.polygon( [
-          Vector2.ZERO,
-          Vector2.createPolar( 1, 2 * Math.PI * i / quantity + offset ),
-          Vector2.createPolar( 1, 2 * Math.PI * ( i + 1 ) / quantity + offset )
-        ] ) ),
+        Vector2.ZERO,
+        Vector2.createPolar( 1, -2 * Math.PI * i / quantity + offset ),
+        Vector2.createPolar( 1, -2 * Math.PI * ( i + 1 ) / quantity + offset )
+      ] ) ),
         PartitionType.POLYGON
       );
     }
@@ -247,16 +264,6 @@ define( require => {
     static createTetris() {
       return new ShapePartition( [
         Shape.polygon( [
-          new Vector2( 0, 0 ),
-          new Vector2( 3, 0 ),
-          new Vector2( 3, 1 ),
-          new Vector2( 2, 1 ),
-          new Vector2( 2, 2 ),
-          new Vector2( 1, 2 ),
-          new Vector2( 1, 1 ),
-          new Vector2( 0, 1 )
-        ] ),
-        Shape.polygon( [
           new Vector2( 3, 0 ),
           new Vector2( 4, 0 ),
           new Vector2( 4, 3 ),
@@ -267,14 +274,14 @@ define( require => {
           new Vector2( 3, 1 )
         ] ),
         Shape.polygon( [
-          new Vector2( 4, 3 ),
-          new Vector2( 4, 4 ),
-          new Vector2( 1, 4 ),
-          new Vector2( 1, 3 ),
-          new Vector2( 2, 3 ),
+          new Vector2( 0, 0 ),
+          new Vector2( 3, 0 ),
+          new Vector2( 3, 1 ),
+          new Vector2( 2, 1 ),
           new Vector2( 2, 2 ),
-          new Vector2( 3, 2 ),
-          new Vector2( 3, 3 )
+          new Vector2( 1, 2 ),
+          new Vector2( 1, 1 ),
+          new Vector2( 0, 1 )
         ] ),
         Shape.polygon( [
           new Vector2( 0, 4 ),
@@ -285,6 +292,16 @@ define( require => {
           new Vector2( 2, 3 ),
           new Vector2( 1, 3 ),
           new Vector2( 1, 4 )
+        ] ),
+        Shape.polygon( [
+          new Vector2( 4, 3 ),
+          new Vector2( 4, 4 ),
+          new Vector2( 1, 4 ),
+          new Vector2( 1, 3 ),
+          new Vector2( 2, 3 ),
+          new Vector2( 2, 2 ),
+          new Vector2( 3, 2 ),
+          new Vector2( 3, 3 )
         ] )
       ], PartitionType.TETRIS );
     }
@@ -302,6 +319,10 @@ define( require => {
       assert && assert( numPetals >= 3 && numPetals % 1 === 0 );
       assert && assert( typeof split === 'boolean' );
 
+      function polar( magnitude, angle ) {
+        return Vector2.createPolar( magnitude, -angle - Math.PI / 2 + ( split ? 0 : ( -Math.PI / numPetals ) ) );
+      }
+
       const halfAngle = Math.PI / numPetals;
       return new ShapePartition( _.flatten( _.range( 0, numPetals ).map( i => {
         const baseAngle = 2 * Math.PI * i / numPetals - Math.PI / 2;
@@ -309,22 +330,22 @@ define( require => {
           return [
             Shape.polygon( [
               Vector2.ZERO,
-              Vector2.createPolar( tipDistance, baseAngle ),
-              Vector2.createPolar( 1, baseAngle + halfAngle )
+              polar( tipDistance, baseAngle ),
+              polar( 1, baseAngle + halfAngle )
             ] ),
             Shape.polygon( [
               Vector2.ZERO,
-              Vector2.createPolar( 1, baseAngle + halfAngle ),
-              Vector2.createPolar( tipDistance, baseAngle + 2 * halfAngle )
+              polar( 1, baseAngle + halfAngle ),
+              polar( tipDistance, baseAngle + 2 * halfAngle )
             ] )
           ];
         }
         else {
           return [ Shape.polygon( [
             Vector2.ZERO,
-            Vector2.createPolar( 1, baseAngle - halfAngle ),
-            Vector2.createPolar( tipDistance, baseAngle ),
-            Vector2.createPolar( 1, baseAngle + halfAngle )
+            polar( 1, baseAngle - halfAngle ),
+            polar( tipDistance, baseAngle ),
+            polar( 1, baseAngle + halfAngle )
           ] ) ];
         }
       } ) ), PartitionType.FLOWER );
@@ -434,7 +455,7 @@ define( require => {
         new Vector2( 0, y ),
         new Vector2( -x, y / 2 ),
         new Vector2( -x, -y / 2 )
-      ];
+      ].map( v => v.rotated( -Math.PI / 3 ).componentTimes( new Vector2( -1, 1 ) ) );
 
       for ( let ring = radius; ring >= 1; ring-- ) {
         for ( let dir = 0; dir < 6; dir++ ) {
@@ -449,6 +470,53 @@ define( require => {
       shapes.push( hexShape );
 
       return new ShapePartition( shapes, PartitionType.HONEYCOMB );
+    }
+
+    // TODO: remove or doc
+    static debugReport( partitions ) {
+      const size = 100;
+      const columns = 8;
+      const rows = Math.ceil( partitions.length / columns );
+
+      const canvas = document.createElement( 'canvas' );
+      canvas.width = size * columns;
+      canvas.height = size * rows;
+      const context = canvas.getContext( '2d' );
+
+      const colorA = new Color( 'red' );
+      const colorB = new Color( 'cyan' );
+
+      for ( let i = 0; i < partitions.length; i++ ) {
+        const partition = partitions[ i ];
+        const column = i % columns;
+        const row = Math.floor( i / columns );
+
+        context.save();
+        context.translate( ( 0.5 + column ) * size, ( 0.5 + row ) * size );
+        context.scale( size / 130, size / 130 );
+        context.translate( -partition.outlineShape.bounds.centerX, -partition.outlineShape.bounds.centerY );
+
+        partition.shapes.forEach( ( shape, index ) => {
+          context.beginPath();
+          shape.writeToContext( context );
+          context.fillStyle = colorA.blend( colorB, ( index / ( partition.shapes.length - 1 ) ) || 0 ).toCSS();
+          context.fill();
+
+          context.strokeStyle = 'black';
+          context.lineWidth = 0.5;
+          context.stroke();
+        } );
+
+        context.beginPath();
+        partition.outlineShape.writeToContext( context );
+        context.strokeStyle = 'black';
+        context.lineWidth = 1;
+        context.stroke();
+
+        context.restore();
+      }
+
+      return canvas.toDataURL();
     }
   }
 
