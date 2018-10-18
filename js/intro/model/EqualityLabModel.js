@@ -24,7 +24,8 @@ define( require => {
         initialContainerCount: 4,
         maxContainers: 4,
         maxDenominator: 6,
-        isCompact: true
+        isCompact: true,
+        bucketWidth: 310
       } );
 
       // @public {Property.<boolean>} - Whether the right side should show a number line instead of the normal

@@ -94,7 +94,7 @@ define( require => {
 
       // @public {BucketNode} - TODO: better way?
       this.bucketNode = new BucketNode( model.denominatorProperty, this.onBucketDragStart.bind( this ),
-                                        config.createCellNode, model.representationProperty );
+                                        config.createCellNode, model.representationProperty, { bucketWidth: model.bucketWidth } );
 
       this.children = [
         this.containerLayer

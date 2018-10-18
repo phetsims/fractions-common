@@ -33,7 +33,6 @@ define( require => {
 
   // constants
   const IDENTITY_TRANSFORM = ModelViewTransform2.createIdentity();
-  const BUCKET_WIDTH = 355;
 
   // TODO: piece layout improvements
   class BucketNode extends Node {
@@ -46,12 +45,14 @@ define( require => {
      */
     constructor( denominatorProperty, startPieceDrag, createCellNode, representationProperty, options ) {
 
-      options = _.extend( {}, options );
+      options = _.extend( {
+        bucketWidth: 355
+      }, options );
 
       // model of the bucket
       const bucket = new Bucket( {
         baseColor: FractionsCommonColorProfile.introBucketBackgroundProperty,
-        size: new Dimension2( BUCKET_WIDTH, 125 ),
+        size: new Dimension2( options.bucketWidth, 125 ),
         invertY: true
       } );
 
@@ -93,11 +94,11 @@ define( require => {
       }[ representation ]();
 
       const availableCellWidth = {
-        [ Representation.CIRCLE ]() { return 330; },
-        [ Representation.HORIZONTAL_BAR ]() { return 320; },
-        [ Representation.VERTICAL_BAR ]() { return 280; },
-        [ Representation.CAKE ]() { return 310; },
-        [ Representation.BEAKER ]() { return 300; }
+        [ Representation.CIRCLE ]() { return options.bucketWidth - 25; },
+        [ Representation.HORIZONTAL_BAR ]() { return options.bucketWidth - 35; },
+        [ Representation.VERTICAL_BAR ]() { return options.bucketWidth - 75; },
+        [ Representation.CAKE ]() { return options.bucketWidth - 45; },
+        [ Representation.BEAKER ]() { return options.bucketWidth - 55; }
       }[ representation ]();
 
       const verticalCellOffset = {

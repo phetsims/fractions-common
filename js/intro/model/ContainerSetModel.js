@@ -30,6 +30,7 @@ define( require => {
         initialContainerCount: 1,
         maxContainers: 6,
         maxDenominator: 8,
+        bucketWidth: 355,
 
         // {boolean} - If true, we use more rows for containers (to fit in things like Equality Lab)
         isCompact: false
@@ -62,6 +63,9 @@ define( require => {
 
       // @public {boolean}
       this.isCompact = options.isCompact;
+
+      // @public {number}
+      this.bucketWidth = options.bucketWidth;
 
       // @public {ObservableArray.<Container>}
       this.containers = new ObservableArray();
