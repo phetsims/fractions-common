@@ -31,6 +31,10 @@ define( require => {
   const Target = require( 'FRACTIONS_COMMON/game/model/Target' );
   const Vector2 = require( 'DOT/Vector2' );
 
+  // global
+  let isDoingResetGeneration = false;
+  let resetTypes = [];
+
   class FractionChallenge extends BuildingModel {
     /**
      * @param {number} levelNumber
@@ -294,6 +298,36 @@ define( require => {
     }
 
     /**
+     * There is a desired "pseudorandom" generation for the first 4 shape levels, which should have a "nice" mix of
+     * pie and bar. This should change on every "initial" or "reset" generation (where all 4 are generated), but
+     * if only one is generated then it should be random.
+     * @public
+     *
+     * Call this before generation when it's initial/reset.
+     */
+    static beginFullGeneration() {
+      isDoingResetGeneration = true;
+      resetTypes = [
+        ...phet.joist.random.shuffle( [
+          ChallengeType.PIE,
+          ChallengeType.BAR
+        ] ),
+        ...phet.joist.random.shuffle( [
+          ChallengeType.PIE,
+          ChallengeType.BAR
+        ] )
+      ];
+    }
+
+    /**
+     * Call this after generation when it's initial/reset, see beginFullGeneration()
+     * @public
+     */
+    static endFullGeneration() {
+      isDoingResetGeneration = false;
+    }
+
+    /**
      * Creates a FractionChallenge for a "Shape" level.
      * @public
      *
@@ -313,7 +347,11 @@ define( require => {
       assert && assert( Array.isArray( pieceFractions ) );
       assert && pieceFractions.forEach( fraction => assert( fraction instanceof Fraction ) );
 
-      const type = phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+      // Pseudorandom start for the first 4 levels
+      const type = ( levelNumber >= 1 && levelNumber <= 4 && isDoingResetGeneration )
+        ? resetTypes[ levelNumber - 1 ]
+        : phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+
       const representation = type === ChallengeType.PIE ? Representation.CIRCLE : Representation.VERTICAL_BAR;
       const targets = targetFractions.map( f => new Target( f ) );
       const shapePieces = pieceFractions.map( f => new ShapePiece( f, representation, color ) );

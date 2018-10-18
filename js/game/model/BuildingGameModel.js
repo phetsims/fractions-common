@@ -12,6 +12,7 @@ define( require => {
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
   const DynamicProperty = require( 'AXON/DynamicProperty' );
+  const FractionChallenge = require( 'FRACTIONS_COMMON/game/model/FractionChallenge' );
   const FractionLevel = require( 'FRACTIONS_COMMON/game/model/FractionLevel' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
@@ -26,6 +27,8 @@ define( require => {
 
       // @public {boolean}
       this.hasMixedNumbers = hasMixedNumbers;
+
+      FractionChallenge.beginFullGeneration();
 
       // @public {FractionLevel}
       this.shapeLevels = hasMixedNumbers ? [
@@ -117,6 +120,8 @@ define( require => {
         new FractionLevel( 10, 4, BuildingType.NUMBER, FractionsCommonColorProfile.level10Property, FractionLevel.level10Numbers )
       ];
 
+      FractionChallenge.endFullGeneration();
+
       assert && assert( this.shapeLevels.length === FractionsCommonConstants.NUM_LEVELS );
       assert && assert( this.numberLevels.length === FractionsCommonConstants.NUM_LEVELS );
 
@@ -164,8 +169,13 @@ define( require => {
     reset() {
       this.levelProperty.reset();
       this.soundEnabledProperty.reset();
+
+      FractionChallenge.beginFullGeneration();
+
       this.shapeLevels.forEach( function( level ) { level.reset(); } );
       this.numberLevels.forEach( function( level ) { level.reset(); } );
+
+      FractionChallenge.endFullGeneration();
     }
   }
 
