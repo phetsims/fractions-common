@@ -79,9 +79,14 @@ define( require => {
      * split into 3 "whole groups" to fit the slices.
      * @public
      *
-     * @returns {Array.<Array.<Fraction>>}
+     * @param {number} [maximumCount] - The maximum number of groups that should be allowed at all. Don't consider any
+     *                                  other options.
+     * @param {number} [acceptableThreshold] - If provided, this will return the very first set of groups that only has
+     *                                         this many groups or less (so we don't have to compute more than is
+     *                                         necessary)
+     * @returns {Array.<Array.<Fraction>>|null}
      */
-    get compactRequiredGroups() {
+    getCompactRequiredGroups( maximumCount = Number.POSITIVE_INFINITY, acceptableThreshold = Number.POSITIVE_INFINITY ) {
       let bestGroups = null;
       let bestCount = Number.POSITIVE_INFINITY;
 
@@ -91,6 +96,11 @@ define( require => {
       const sums = [];
 
       function recur( i ) {
+        // If our current groups meet our "abort threshold", bail immediately
+        if ( bestGroups && bestCount <= acceptableThreshold ) {
+          return;
+        }
+
         if ( i === fractions.length ) {
           if ( groups.length < bestCount ) {
             bestCount = groups.length;
@@ -116,13 +126,15 @@ define( require => {
           }
 
           // Adding a new group
-          groups.push( [ fraction ] );
-          sums.push( fraction );
+          if ( groups.length < maximumCount ) {
+            groups.push( [ fraction ] );
+            sums.push( fraction );
 
-          recur( i + 1 );
+            recur( i + 1 );
 
-          groups.pop();
-          sums.pop();
+            groups.pop();
+            sums.pop();
+          }
         }
       }
       recur( 0 );

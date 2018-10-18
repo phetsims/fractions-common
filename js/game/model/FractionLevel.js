@@ -239,11 +239,24 @@ define( require => {
         // {number} - The maximum denominator to consider for a split (any larger denominators will be ignored)
         maxDenominator: 6,
 
-        // {Array.<Array.<Fraction>>} - Partitions that add up to 1
+        // {Array.<Array.<Fraction>>} - Partitions that add up to 1, in a distribution that will evenly create denominators
         splits: [
           [
             new Fraction( 1, 2 ),
             new Fraction( 1, 2 )
+          ],
+          [
+            new Fraction( 1, 2 ),
+            new Fraction( 1, 2 )
+          ],
+          [
+            new Fraction( 1, 2 ),
+            new Fraction( 1, 2 )
+          ],
+          [
+            new Fraction( 1, 3 ),
+            new Fraction( 1, 3 ),
+            new Fraction( 1, 3 )
           ],
           [
             new Fraction( 1, 3 ),
@@ -490,7 +503,8 @@ define( require => {
       const legalCollections = [];
       for ( let i = 0; i < collections.length; i++ ) {
         const collection = collections[ i ];
-        if ( collection.compactRequiredGroups.length <= wholeCount ) {
+        const compactRequiredGroups = collection.getCompactRequiredGroups( wholeCount, wholeCount );
+        if ( compactRequiredGroups !== null && compactRequiredGroups.length <= wholeCount ) {
           legalCollections.push( collection );
         }
         if ( legalCollections.length === 40 ) {
@@ -498,7 +512,7 @@ define( require => {
         }
       }
       // TODO: see if this is the best workaround
-      // const legalCollections = collections.filter( collection => collection.compactRequiredGroups.length <= wholeCount );
+      // const legalCollections = collections.filter( collection => collection.getCompactRequiredGroups().length <= wholeCount );
 
       const maxNondivisible = _.max( legalCollections.map( collection => collection.nondivisibleCount ) );
 
@@ -1268,9 +1282,7 @@ define( require => {
         ].map( f => f.plusInteger( whole ) );
       } ) ) );
 
-      const pieceFractions = FractionLevel.fullSplitFractions( FractionLevel.straightforwardFractions( targetFractions ), {
-        quantity: 10
-      } );
+      const pieceFractions = _.flatten( targetFractions.map( f => FractionLevel.difficultSplit( f ) ) );
 
       return FractionChallenge.createShapeChallenge( levelNumber, true, color, targetFractions, pieceFractions );
     }
@@ -1303,9 +1315,7 @@ define( require => {
         ].map( f => f.plusInteger( whole ) );
       } ) ) );
 
-      const pieceFractions = FractionLevel.fullSplitFractions( FractionLevel.straightforwardFractions( targetFractions ), {
-        quantity: 10
-      } );
+      const pieceFractions = _.flatten( targetFractions.map( f => FractionLevel.difficultSplit( f ) ) );
 
       return FractionChallenge.createShapeChallenge( levelNumber, true, color, targetFractions, pieceFractions );
     }
