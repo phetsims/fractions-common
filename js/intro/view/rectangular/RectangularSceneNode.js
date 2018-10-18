@@ -24,7 +24,7 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( model, options ) {
-      assert && assert( RectangularOrientation.is( options.rectangularOrientation ) );
+      assert && assert( RectangularOrientation.includes( options.rectangularOrientation ) );
 
       const rectangularOrientation = options.rectangularOrientation;
       const maxContainers = model.containerCountProperty.range.max;

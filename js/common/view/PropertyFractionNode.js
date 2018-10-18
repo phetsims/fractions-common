@@ -28,7 +28,7 @@ define( require => {
         simplify: false
       }, options );
 
-      assert && assert( FractionDisplayType.is( options.type ) );
+      assert && assert( FractionDisplayType.includes( options.type ) );
       assert && assert( typeof options.simplify === 'boolean' );
 
       super( options );

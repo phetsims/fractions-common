@@ -42,7 +42,7 @@ define( require => {
       }, options );
 
       assert && assert( typeof options.dropShadow === 'boolean' );
-      assert && assert( RectangularOrientation.is( options.rectangularOrientation ) );
+      assert && assert( RectangularOrientation.includes( options.rectangularOrientation ) );
       assert && assert( ColorDef.isColorDef( options.colorOverride ) );
 
       super();
@@ -95,7 +95,7 @@ define( require => {
      * @returns {Dimension2}
      */
     static getSize( orientation ) {
-      assert && assert( RectangularOrientation.is( orientation ) );
+      assert && assert( RectangularOrientation.includes( orientation ) );
 
       if ( orientation === RectangularOrientation.VERTICAL ) {
         return VERTICAL_SIZE;

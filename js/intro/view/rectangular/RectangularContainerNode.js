@@ -33,7 +33,7 @@ define( require => {
         rectangularOrientation: RectangularOrientation.VERTICAL_SIZE
       }, options );
 
-      assert && assert( RectangularOrientation.is( options.rectangularOrientation ) );
+      assert && assert( RectangularOrientation.includes( options.rectangularOrientation ) );
 
       super( container, options );
 
