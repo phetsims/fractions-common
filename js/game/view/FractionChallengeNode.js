@@ -192,6 +192,8 @@ define( require => {
       this.levelText.top = layoutBounds.top + PANEL_MARGIN;
       const verticalCenter = ( this.levelText.bottom + this.panel.top ) / 2;
       const center = new Vector2( horizontalCenter, verticalCenter );
+      // @public {Vector2}
+      this.challengeCenter = center;
       this.levelCompleteNode.center = center;
 
       // @public {ModelViewTransform2}

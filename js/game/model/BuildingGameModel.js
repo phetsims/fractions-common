@@ -12,6 +12,7 @@ define( require => {
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
   const DynamicProperty = require( 'AXON/DynamicProperty' );
+  const Emitter = require( 'AXON/Emitter' );
   const FractionChallenge = require( 'FRACTIONS_COMMON/game/model/FractionChallenge' );
   const FractionLevel = require( 'FRACTIONS_COMMON/game/model/FractionLevel' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
@@ -135,6 +136,26 @@ define( require => {
 
       // @public {Property.<boolean>}
       this.soundEnabledProperty = new BooleanProperty( true );
+
+      // @public {Emitter}
+      this.allLevelsCompleteEmitter = new Emitter();
+
+      this.shapeLevels.forEach( shapeLevel => {
+        shapeLevel.scoreProperty.lazyLink( () => {
+          const numMissing = _.sum( this.shapeLevels.map( shapeLevel => shapeLevel.scoreProperty.value - shapeLevel.numTargets ) );
+          if ( numMissing === 0 ) {
+            this.allLevelsCompleteEmitter.emit();
+          }
+        } );
+      } );
+      this.numberLevels.forEach( numberLevel => {
+        numberLevel.scoreProperty.lazyLink( () => {
+          const numMissing = _.sum( this.numberLevels.map( numberLevel => numberLevel.scoreProperty.value - numberLevel.numTargets ) );
+          if ( numMissing === 0 ) {
+            this.allLevelsCompleteEmitter.emit();
+          }
+        } );
+      } );
     }
 
     /**

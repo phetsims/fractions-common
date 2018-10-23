@@ -11,14 +11,17 @@ define( require => {
   // modules
   const AlignBox = require( 'SCENERY/nodes/AlignBox' );
   const AlignGroup = require( 'SCENERY/nodes/AlignGroup' );
+  const AllLevelsCompletedNode = require( 'VEGAS/AllLevelsCompletedNode' );
   const BackButton = require( 'SCENERY_PHET/buttons/BackButton' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Bounds2 = require( 'DOT/Bounds2' );
   const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const Easing = require( 'TWIXT/Easing' );
+  const FaceNode = require( 'SCENERY_PHET/FaceNode' );
   const FilledPartition = require( 'FRACTIONS_COMMON/game/model/FilledPartition' );
   const FilledPartitionNode = require( 'FRACTIONS_COMMON/game/view/FilledPartitionNode' );
+  const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const FractionChallengeNode = require( 'FRACTIONS_COMMON/game/view/FractionChallengeNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
@@ -30,16 +33,23 @@ define( require => {
   const MixedFractionNode = require( 'FRACTIONS_COMMON/common/view/MixedFractionNode' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
+  const NumberPieceNode = require( 'FRACTIONS_COMMON/building/view/NumberPieceNode' );
   const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
   const NumberStackNode = require( 'FRACTIONS_COMMON/building/view/NumberStackNode' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const platform = require( 'PHET_CORE/platform' );
   const RefreshButton = require( 'SCENERY_PHET/buttons/RefreshButton' );
+  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
+  const RewardNode = require( 'VEGAS/RewardNode' );
   const RoundArrowButton = require( 'FRACTIONS_COMMON/common/view/RoundArrowButton' );
   const ScoreDisplayStars = require( 'VEGAS/ScoreDisplayStars' );
   const ScreenView = require( 'JOIST/ScreenView' );
   const ShapePartition = require( 'FRACTIONS_COMMON/game/model/ShapePartition' );
+  const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
+  const ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
   const SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
+  const StarNode = require( 'SCENERY_PHET/StarNode' );
   const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   const Text = require( 'SCENERY/nodes/Text' );
   const TransitionNode = require( 'TWIXT/TransitionNode' );
@@ -196,6 +206,9 @@ define( require => {
     // @private {Node} - The "left" half of the sliding layer, displayed first
     this.levelSelectionLayer = new Node();
 
+    const challengeBackground = new Node();
+    const challengeForeground = new Node();
+
     // @orivate {TransitionNode}
     this.levelSelectionTransitionNode = new TransitionNode( this.visibleBoundsProperty, {
       content: leftLevelSelectionNode,
@@ -234,10 +247,19 @@ define( require => {
         const nextLevelCallback = challenge.levelNumber < FractionsCommonConstants.NUM_LEVELS ? model.nextLevel.bind( model ) : null;
         const challengeNode = new FractionChallengeNode( challenge, this.layoutBounds, this.gameAudioPlayer, nextLevelCallback );
         lastChallengeNode = challengeNode;
+        if ( allLevelsCompletedNode ) {
+          allLevelsCompletedNode.center = challengeNode.challengeCenter;
+        }
+
+        // Reparent these, since we don't want to leak memory
+        challengeBackground.detach();
+        challengeForeground.detach();
+
         // TODO: don't need wrapper, include somehow? (maybe put the things in the challenge node?)
         // TODO: Or have a transition between a challenge OR the two level select screens!!!!!!!!!
         const wrapper = new Node( {
           children: [
+            challengeBackground,
             new VBox( {
               spacing: SIDE_MARGIN,
               top: this.layoutBounds.top + SIDE_MARGIN,
@@ -259,7 +281,8 @@ define( require => {
                 } )
               ]
             } ),
-            challengeNode
+            challengeNode,
+            challengeForeground
           ]
         } );
         if ( oldChallenge && oldChallenge.refreshedChallenge === challenge ) {
@@ -334,6 +357,43 @@ define( require => {
     } ), { group: bottomAlignGroup } );
     this.levelSelectionLayer.addChild( slidingLevelSelectionNode );
 
+    const allLevelsCompletedNode = new AllLevelsCompletedNode( () => {
+      // Go back to the level selection
+      model.levelProperty.value = null;
+    }, {
+      center: this.layoutBounds.center,
+      visible: false
+    } );
+    challengeForeground.addChild( allLevelsCompletedNode );
+
+    model.allLevelsCompleteEmitter.addListener( () => {
+      if ( !platform.mobileSafari ) {
+        // @private {RewardNode}
+        this.rewardNode = new RewardNode( {
+          nodes: RewardNode.createRandomNodes( [
+            ..._.times( 7, () => new StarNode() ),
+            ..._.times( 7, () => new FaceNode( 40, { headStroke: 'black' } ) ),
+            ..._.range( 1, 10 ).map( n => new NumberPieceNode( new NumberPiece( n ) ) ),
+            ..._.range( 1, 5 ).map( n => new ShapePieceNode( new ShapePiece( new Fraction( 1, n ), Representation.CIRCLE, FractionsCommonColorProfile.labCircleFillProperty ), { rotation: phet.joist.random.nextDouble() * 2 * Math.PI } ) ),
+            ..._.range( 1, 5 ).map( n => new ShapePieceNode( new ShapePiece( new Fraction( 1, n ), Representation.VERTICAL_BAR, FractionsCommonColorProfile.labBarFillProperty ) ) )
+          ], 150 )
+        } );
+        challengeBackground.addChild( this.rewardNode );
+      }
+      allLevelsCompletedNode.visible = true;
+
+      const doneListener = () => {
+        model.levelProperty.unlink( doneListener );
+
+        if ( this.rewardNode ) {
+          this.rewardNode.dispose();
+          this.rewardNode = null;
+        }
+        allLevelsCompletedNode.visible = false;
+      };
+      model.levelProperty.lazyLink( doneListener );
+    } );
+
     var soundToggleButton = new AlignBox( new SoundToggleButton( model.soundEnabledProperty, {
       touchAreaXDilation: 10,
       touchAreaYDilation: 10,
@@ -369,6 +429,7 @@ define( require => {
      * @param {number} dt
      */
     step: function( dt ) {
+      this.rewardNode && this.rewardNode.visible && this.rewardNode.step( dt );
       this.levelSelectionTransitionNode.step( dt );
       this.mainTransitionNode.step( dt );
     },
