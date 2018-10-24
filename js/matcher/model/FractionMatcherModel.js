@@ -1,7 +1,7 @@
 // Copyright 2013-2017, University of Colorado Boulder
 
 /**
- * Model container for the game screen.
+ * The main model for the matcher screens.
  *
  * @author Anton Ulyanov, Andrey Zelenkov (Mlearner)
  */
@@ -13,78 +13,68 @@ define( require => {
   const Emitter = require( 'AXON/Emitter' );
   const FractionMatcherView = require( 'FRACTIONS_COMMON/matcher/view/FractionMatcherView' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const inherit = require( 'PHET_CORE/inherit' );
-  const LevelModel = require( 'FRACTIONS_COMMON/matcher/model/LevelModel' );
+  const MatcherLevel = require( 'FRACTIONS_COMMON/matcher/model/MatcherLevel' );
   const MixedNumbersConstants = require( 'FRACTIONS_COMMON/matcher/model/MixedNumbersConstants' );
   const Property = require( 'AXON/Property' );
-  const Sound = require( 'VIBE/Sound' );
 
-  // sounds
-  const correctAudio = require( 'sound!VEGAS/ding.mp3' );
-  const wrongAudio = require( 'sound!VEGAS/boing.mp3' );
+  class FractionMatcherModel {
+    /**
+     * @param {boolean} hasMixedNumbers
+     */
+    constructor( hasMixedNumbers ) {
+      assert && assert( typeof hasMixedNumbers === 'boolean' );
 
-  /**
-   * @param {boolean} isMixedNumbers
-   * @constructor
-   */
-  function FractionMatcherModel( isMixedNumbers ) {
-    var self = this;
-    // TODO: rename to hasMixedNumbers?
-    this.isMixedNumbers = isMixedNumbers;
+      // @public {boolean}
+      this.hasMixedNumbers = hasMixedNumbers;
 
-    // dimensions of the model's space
-    this.width = FractionMatcherView.LAYOUT_BOUNDS.width;
-    this.height = FractionMatcherView.LAYOUT_BOUNDS.height;
+      // dimensions of the model's space
+      // TODO: Don't do this.
+      this.width = FractionMatcherView.LAYOUT_BOUNDS.width;
+      this.height = FractionMatcherView.LAYOUT_BOUNDS.height;
 
-    this.constants = isMixedNumbers ? new MixedNumbersConstants() : new Constants();
-    this.colorScheme = [ this.constants.COLORS.LIGHT_BLUE, this.constants.COLORS.LIGHT_GREEN, this.constants.COLORS.LIGHT_RED ];
-    this.toSimplify = isMixedNumbers;
-    this.ANIMATION_TIME = 500;
-    this.MAXIMUM_PAIRS = 6;
-    this.MAX_POINTS_PER_GAME_LEVEL = 12;
+      this.constants = hasMixedNumbers ? new MixedNumbersConstants() : new Constants();
+      this.colorScheme = [ this.constants.COLORS.LIGHT_BLUE, this.constants.COLORS.LIGHT_GREEN, this.constants.COLORS.LIGHT_RED ];
+      this.toSimplify = hasMixedNumbers;
+      this.ANIMATION_TIME = 500;
+      this.MAXIMUM_PAIRS = 6;
+      this.MAX_POINTS_PER_GAME_LEVEL = 12;
 
-    this.sounds = {
-      correct: new Sound( correctAudio ),
-      incorrect: new Sound( wrongAudio )
-    };
+      this.levels = [];
+      this.highScores = [];
+      this.bestTimes = [];
 
-    this.levels = [];
-    this.highScores = [];
-    this.bestTimes = [];
+      this.currentLevelProperty = new Property( 0 );
+      this.isTimerProperty = new Property( false );
 
-    this.currentLevelProperty = new Property( 0 );
-    this.isTimerProperty = new Property( false );
+      this.stepEmitter = new Emitter();
 
-    this.stepEmitter = new Emitter();
+      this.constants.LEVEL_DESCRIPTION.forEach( ( levelDescription, index ) => {
+        this.levels.push( new MatcherLevel( this, levelDescription, index + 1 ) );
+        this.highScores.push( new Property( 0 ) );
+        this.bestTimes.push( new Property( null ) );
+      } );
+    }
 
-    this.constants.LEVEL_DESCRIPTION.forEach( function( levelDescription, index ) {
-      self.levels.push( new LevelModel( self, levelDescription, index + 1 ) );
-      self.highScores.push( new Property( 0 ) );
-      self.bestTimes.push( new Property( null ) );
-    } );
-  }
-
-  fractionsCommon.register( 'FractionMatcherModel', FractionMatcherModel );
-
-  return inherit( Object, FractionMatcherModel, {
-
-    // Resets all model elements
-    reset: function() {
+    /**
+     * Resets the model.
+     * @public
+     */
+    reset() {
       this.currentLevelProperty.reset();
       this.isTimerProperty.reset();
-      this.highScores.forEach( function( highScore ) {
-        highScore.reset();
-      } );
-      this.levels.forEach( function( levelModel ) {
-        levelModel.reset();
-      } );
-      this.bestTimes.forEach( function( bestTime ) {
-        bestTime.reset();
-      } );
-      Sound.audioEnabledProperty.reset();
-    },
+      this.highScores.forEach( highScore => highScore.reset() );
+      this.levels.forEach( levelModel => levelModel.reset() );
+      this.bestTimes.forEach( bestTime => bestTime.reset() );
+    }
 
-    step: function( dt ) {
+    /**
+     * Steps forward in time.
+     * @public
+     *
+     * @param {number} dt
+     */
+    step( dt ) {
+      // TODO: actually have the level object (as normal)
       if ( this.currentLevelProperty.get() > 0 ) {
         this.levels[ this.currentLevelProperty.get() - 1 ].step( dt );
       }
@@ -92,5 +82,7 @@ define( require => {
       //Signify that a step occurred: used in animating the RewardNodes
       this.stepEmitter.emit1( dt );
     }
-  } );
+  }
+
+  return fractionsCommon.register( 'FractionMatcherModel', FractionMatcherModel );
 } );

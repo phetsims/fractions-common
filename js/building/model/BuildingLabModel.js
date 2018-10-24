@@ -119,6 +119,10 @@ define( require => {
       this.selectedGroupProperty.value = numberSpot.numberGroup;
     }
 
+    /**
+     * Resets the model.
+     * @public
+     */
     reset() {
       this.topRepresentationProperty.reset();
 

@@ -12,12 +12,12 @@ define( require => {
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
   /**
-   *  @param {string}  type of shape (PIES, HORIZONTAL_BARS, etc)
-   *  @param {Fraction} fraction of shape
-   *  @param {number} scaleFactor multiply numerator and denominator by scaleFactor
-   *  @param {string} fill color of shape
-   *  @param {FillType} fillType of filling piece(SEQUENTIAL, MIXED, etc)
-   *  @param {boolean} toSimplify whether we must show shape in form of 13/5 or 2 3/5
+   * @param {string}  type of shape (PIES, HORIZONTAL_BARS, etc)
+   * @param {Fraction} fraction of shape
+   * @param {number} scaleFactor multiply numerator and denominator by scaleFactor
+   * @param {string} fill color of shape
+   * @param {FillType} fillType of filling piece(SEQUENTIAL, MIXED, etc)
+   * @param {boolean} toSimplify whether we must show shape in form of 13/5 or 2 3/5
    */
   function SingleShapeModel( type, fraction, scaleFactor, fill, fillType, toSimplify ) {
     this.x = 0;

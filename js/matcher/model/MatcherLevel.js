@@ -9,50 +9,59 @@ define( require => {
   'use strict';
 
   // modules
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var FractionsCommonQueryParameters = require( 'FRACTIONS_COMMON/common/FractionsCommonQueryParameters' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Property = require( 'AXON/Property' );
-  var SingleShapeModel = require( 'FRACTIONS_COMMON/matcher/model/SingleShapeModel' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonQueryParameters = require( 'FRACTIONS_COMMON/common/FractionsCommonQueryParameters' );
+  const Property = require( 'AXON/Property' );
+  const SingleShapeModel = require( 'FRACTIONS_COMMON/matcher/model/SingleShapeModel' );
+  const Sound = require( 'VIBE/Sound' );
 
-  /**
-   * @param gameModel
-   * @param levelDescription
-   * @param {number} levelNumber 1-based level that is displayed to the user (starts at 1, not zero)
-   * @constructor
-   */
-  function LevelModel( gameModel, levelDescription, levelNumber ) {
-    this.gameModel = gameModel;
-    this.levelNumber = levelNumber;
-    this.levelDescription = levelDescription;
+  // sounds
+  const correctAudio = require( 'sound!VEGAS/ding.mp3' );
+  const wrongAudio = require( 'sound!VEGAS/boing.mp3' );
 
-    this.scoreProperty = new Property( 0 );
-    this.timeProperty = new Property( 0 );
-    this.stepScoreProperty = new Property( 2 );
-    this.answersProperty = new Property( [] );//shapes, which moved to answer zone
-    this.lastPairProperty = new Property( [ -1, -1 ] );//pair of shapes on scales, user can't compare the same pair two times
-    this.lastChangedZoneProperty = new Property( -1 );//when showing correct answer, change only last dragged shape position
-    this.shapesProperty = new Property( [] ); //array of SingleShapeModels
-    this.canDragProperty = new Property( true );
-    this.buttonStatusProperty = new Property( 'none' );// ['none','ok','check','tryAgain','showAnswer']
+  // constants
+  const correctSound = new Sound( correctAudio );
+  const incorrectSound = new Sound( wrongAudio );
 
-    this.dropZone = []; //contains indexes of shapes, which are placed in current zone, -1 if empty
+  class MatcherLevel {
+    /**
+     * @param gameModel
+     * @param levelDescription
+     * @param {number} levelNumber 1-based level that is displayed to the user (starts at 1, not zero)
+     */
+    constructor( gameModel, levelDescription, levelNumber ) {
+      this.gameModel = gameModel;
+      this.levelNumber = levelNumber;
+      this.levelDescription = levelDescription;
 
-    for ( var i = 0; i < 2 * this.gameModel.MAXIMUM_PAIRS; i++ ) {
-      this.dropZone[ i ] = -1;
+      this.scoreProperty = new Property( 0 );
+      this.timeProperty = new Property( 0 );
+      this.stepScoreProperty = new Property( 2 );
+      this.answersProperty = new Property( [] );//shapes, which moved to answer zone
+      this.lastPairProperty = new Property( [ -1, -1 ] );//pair of shapes on scales, user can't compare the same pair two times
+      this.lastChangedZoneProperty = new Property( -1 );//when showing correct answer, change only last dragged shape position
+      this.shapesProperty = new Property( [] ); //array of SingleShapeModels
+      this.canDragProperty = new Property( true );
+      this.buttonStatusProperty = new Property( 'none' );// ['none','ok','check','tryAgain','showAnswer']
+
+      this.dropZone = []; //contains indexes of shapes, which are placed in current zone, -1 if empty
+
+      for ( var i = 0; i < 2 * this.gameModel.MAXIMUM_PAIRS; i++ ) {
+        this.dropZone[ i ] = -1;
+      }
+
+      //two more dropZones 12 and 13 - scales
+      this.dropZone.push( -1 );
+      this.dropZone.push( -1 );
+
+      this.generateLevel();
     }
 
-    //two more dropZones 12 and 13 - scales
-    this.dropZone.push( -1 );
-    this.dropZone.push( -1 );
-
-    this.generateLevel();
-  }
-
-  fractionsCommon.register( 'LevelModel', LevelModel );
-
-  inherit( Object, LevelModel, {
-    reset: function() {
+    /**
+     * Resets the model.
+     * @public
+     */
+    reset() {
       this.scoreProperty.reset();
       this.timeProperty.reset();
       this.stepScoreProperty.reset();
@@ -68,14 +77,22 @@ define( require => {
       }
       this.answersProperty.value = [];
       this.lastPairProperty.value = [ -1, -1 ];
-    },
-    step: function( dt ) {
+    }
 
-      //Always increase time, even when the timer is hidden because the timer should be shown at any time, see https://github.com/phetsims/fraction-matcher/issues/57
+    /**
+     * Steps forward in time.
+     * @public
+     *
+     * @param {number} dt
+     */
+    step( dt ) {
+      // Always increase time, even when the timer is hidden because the timer should be shown at any time, see
+      // https://github.com/phetsims/fraction-matcher/issues/57
       this.timeProperty.value += dt;
-    },
+    }
+
     // return filtered shapes set for the selected denominator, from java model
-    filterShapes: function( shapes, d ) {
+    filterShapes( shapes, d ) {
       var arr = [];
       //rules if shape_type can be used for denominator d
       var map = {
@@ -101,9 +118,10 @@ define( require => {
       } );
 
       return arr;
-    },
+    }
+
     // generate new level
-    generateLevel: function() {
+    generateLevel() {
       var fractions = phet.joist.random.shuffle( this.levelDescription.fractions.slice( 0 ) ).splice( 0, this.gameModel.MAXIMUM_PAIRS ); //get random MAXIMUM_PAIRS fractions
       var numericScaleFactors = this.levelDescription.numericScaleFactors.slice( 0 ); //scaleFactors to multiply fractions
       var numberType = 'NUMBER';
@@ -145,8 +163,9 @@ define( require => {
       }
 
       this.shapesProperty.value = newShapes;
-    },
-    answerButton: function( buttonName ) {
+    }
+
+    answerButton( buttonName ) {
       var self = this;
       switch( buttonName ) { //['none','ok','check','tryAgain','showAnswer']
         case 'ok':
@@ -163,12 +182,12 @@ define( require => {
             //answer correct
             this.buttonStatusProperty.value = 'ok';
             self.scoreProperty.value += self.stepScoreProperty.value;
-            self.gameModel.sounds.correct.play();
+            correctSound.play();
             this.canDragProperty.value = false;
           }
           else {
             //answer incorrect
-            self.gameModel.sounds.incorrect.play();
+            incorrectSound.play();
             self.stepScoreProperty.value--;
             this.buttonStatusProperty.value = (self.stepScoreProperty.value) ? 'tryAgain' : 'showAnswer';
             this.canDragProperty.value = this.buttonStatusProperty.value === 'tryAgain';
@@ -185,11 +204,12 @@ define( require => {
         default:
           throw new Error( 'invalid buttonName: ' + buttonName );
       }
-    },
-    isShapesEqual: function( shape1, shape2 ) {
+    }
+
+    isShapesEqual( shape1, shape2 ) {
       return Math.abs( shape1.getValue() - shape2.getValue() ) < 0.001;
     }
-  } );
+  }
 
-  return LevelModel;
+  return fractionsCommon.register( 'MatcherLevel', MatcherLevel );
 } );

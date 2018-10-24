@@ -54,7 +54,7 @@ define( require => {
 
   /**
    *
-   * @param {LevelModel} model
+   * @param {MatcherLevel} model
    * @param levelsContainer
    * @param layoutBounds
    * @param {Emitter} stepEmitter - used for animating the RewardNode

@@ -184,7 +184,7 @@ define( require => {
     }
 
     /**
-     * Resets the entire model.
+     * Resets the model.
      * @public
      */
     reset() {

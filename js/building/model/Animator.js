@@ -112,6 +112,12 @@ define( require => {
       }
     }
 
+    /**
+     * Steps forward in time.
+     * @public
+     *
+     * @param {number} dt
+     */
     step( dt ) {
       if ( this.isAnimatingProperty.value ) {
         this.ratio = Math.min( 1, this.ratio + dt * this.animationSpeed );

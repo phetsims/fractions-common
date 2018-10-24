@@ -163,6 +163,12 @@ define( require => {
       return _.some( this.spots, spot => spot.pieceProperty.value !== null );
     }
 
+    /**
+     * Steps forward in time.
+     * @public
+     *
+     * @param {number} dt
+     */
     step( dt ) {
       this.animator.step( dt );
     }

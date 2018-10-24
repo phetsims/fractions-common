@@ -347,6 +347,10 @@ define( require => {
       }
     }
 
+    /**
+     * Resets the model.
+     * @public
+     */
     reset() {
       this.shapeGroups.forEach( shapeGroup => {
         shapeGroup.animator.endAnimation();
@@ -373,6 +377,12 @@ define( require => {
       this.draggedNumberPieces.reset();
     }
 
+    /**
+     * Steps forward in time.
+     * @public
+     *
+     * @param {number} dt
+     */
     step( dt ) {
       var self = this;
 

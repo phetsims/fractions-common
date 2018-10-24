@@ -26,17 +26,16 @@ define( require => {
   var levelNumberString = require( 'string!FRACTIONS_COMMON/levelNumber' );
   var mixedNumbersChooseYourLevelString = require( 'string!FRACTIONS_COMMON/mixedNumbersChooseYourLevel' );
 
-  //constants
+  // constants
   var NUM_STARS_ON_BUTTON = 3; //number of stars on StartLevelButton
   var BUTTONS_PER_LINE = 4; //number on buttons in a single row
   var FONT = new PhetFont( { size: 14, weight: 'bold' } );
 
   function LevelSelectButtonsAndTitleNode( model, options ) {
-    assert && assert( typeof model.isMixedNumbers !== 'undefined', 'Should declare whether it is mixed numbers or not.' );
-    var mixedNumber = model.isMixedNumbers;
+    var hasMixedNumbers = model.hasMixedNumbers;
 
     var vBoxChildren = [];
-    vBoxChildren.push( new Text( mixedNumber ? mixedNumbersChooseYourLevelString : fractionsChooseYourLevelString, {
+    vBoxChildren.push( new Text( hasMixedNumbers ? mixedNumbersChooseYourLevelString : fractionsChooseYourLevelString, {
       font: new PhetFont( {
         size: 28,
         family: HomeScreenView.TITLE_FONT_FAMILY
@@ -89,7 +88,7 @@ define( require => {
         x: 0,
         y: -5,
         type: shape.type,
-        numerator: mixedNumber ? index + 2 : index + 1,
+        numerator: hasMixedNumbers ? index + 2 : index + 1,
         denominator: index + 1,
         value: index + 1,
         fill: shape.color,
