@@ -73,6 +73,9 @@ define( require => {
       // @public {Property.<boolean>}
       this.isAnimatingProperty = new BooleanProperty( false );
 
+      // @public {Property.<Target|null>}
+      this.hoveringTargetProperty = new Property( null );
+
       // @public {Animator}
       this.animator = new Animator( this.positionProperty, new NumberProperty( 0 ), this.scaleProperty, new NumberProperty( 0 ), this.isAnimatingProperty );
 
@@ -81,6 +84,12 @@ define( require => {
       };
       this.shapeContainers.addItemAddedListener( emitChanged );
       this.shapeContainers.addItemRemovedListener( emitChanged );
+
+      // Keep our hover target up-to-date
+      this.hoveringTargetProperty.lazyLink( ( newTarget, oldTarget ) => {
+        oldTarget && oldTarget.hoveringGroups.remove( this );
+        newTarget && newTarget.hoveringGroups.push( this );
+      } );
 
       // Always want at least one container
       this.increaseContainerCount();

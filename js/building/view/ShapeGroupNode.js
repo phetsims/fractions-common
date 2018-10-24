@@ -52,6 +52,7 @@ define( require => {
       isIcon: false, // TODO: cleanup?
       hasButtons: true,
       isSelectedProperty: new BooleanProperty( true ), // takes ownership, will dispose at the end
+      dragListener: null,
       dropListener: null,
       selectListener: null,
       removeLastListener: null,
@@ -237,6 +238,9 @@ define( require => {
         start: function( event ) {
           options.selectListener && options.selectListener();
           self.moveToFront();
+        },
+        drag: function( event ) {
+          options.dragListener && options.dragListener();
         },
         end: function( event ) {
           options.dropListener && options.dropListener();

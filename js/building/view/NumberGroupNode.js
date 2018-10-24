@@ -40,6 +40,7 @@ define( require => {
 
     var self = this;
 
+    // TODO: cleanup
     options = _.extend( {
       // {boolean} - For pieces placed in stacks/containers, we don't care about the positionProperty. In addition,
       // pieces in stacks/containers ALSO care about not showing up when the piece is user-controlled or animating.
@@ -54,6 +55,7 @@ define( require => {
       // {ModelViewTransform2|null}
       modelViewTransform: null,
 
+      dragListener: null, // TODO: naming for this!
       dropListener: null,
       selectListener: null,
       removeLastListener: null,
@@ -201,6 +203,9 @@ define( require => {
         start: function( event ) {
           options.selectListener && options.selectListener();
           self.moveToFront();
+        },
+        drag: function( event ) {
+          options.dragListener && options.dragListener();
         },
         end: function( event ) {
           options.dropListener && options.dropListener();

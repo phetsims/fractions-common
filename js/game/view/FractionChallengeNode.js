@@ -247,7 +247,23 @@ define( require => {
       var shapeGroupNode = new ShapeGroupNode( shapeGroup, {
         dragBoundsProperty: this.shapeDragBoundsProperty,
         modelViewTransform: this.modelViewTransform,
+        dragListener: () => {
+          // TODO: reduce duplication here
+          const modelPoints = shapeGroup.centerPoints;
+          const viewPoints = modelPoints.map( modelPoint => this.modelViewTransform.modelToViewPosition( modelPoint ) );
+          const targetBounds = this.targetsContainer.bounds.dilated( 10 );
+          if ( _.some( viewPoints, viewPoint => targetBounds.containsPoint( viewPoint ) ) ) {
+            const closestTarget = this.challenge.findClosestTarget( modelPoints );
+            shapeGroup.hoveringTargetProperty.value = closestTarget;
+          }
+          else {
+            shapeGroup.hoveringTargetProperty.value = null;
+          }
+        },
         dropListener: () => {
+          // TODO: handle the "cancel" properly
+          shapeGroup.hoveringTargetProperty.value = null;
+
           const modelPoints = shapeGroup.centerPoints;
           const viewPoints = modelPoints.map( modelPoint => this.modelViewTransform.modelToViewPosition( modelPoint ) );
           const targetBounds = this.targetsContainer.bounds.dilated( 10 );
@@ -292,7 +308,23 @@ define( require => {
         dragBoundsProperty: this.numberDragBoundsProperty,
         modelViewTransform: this.modelViewTransform,
 
+        dragListener: () => {
+          // TODO: reduce duplication here
+          const modelPoints = numberGroup.centerPoints;
+          const viewPoints = modelPoints.map( modelPoint => this.modelViewTransform.modelToViewPosition( modelPoint ) );
+          const targetBounds = this.targetsContainer.bounds.dilated( 10 );
+          if ( _.some( viewPoints, viewPoint => targetBounds.containsPoint( viewPoint ) ) ) {
+            const closestTarget = this.challenge.findClosestTarget( modelPoints );
+            numberGroup.hoveringTargetProperty.value = closestTarget;
+          }
+          else {
+            numberGroup.hoveringTargetProperty.value = null;
+          }
+        },
         dropListener: () => {
+          // TODO: handle the "cancel" properly
+          numberGroup.hoveringTargetProperty.value = null;
+
           // TODO: factor out with shape stuff above
           const modelPoints = numberGroup.centerPoints;
           const viewPoints = modelPoints.map( modelPoint => this.modelViewTransform.modelToViewPosition( modelPoint ) );

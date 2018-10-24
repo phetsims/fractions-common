@@ -46,6 +46,7 @@ define( require => {
 
   // TODO: double-digit support
 
+  // TODO: Supertype for ShapeGroup/NumberGroup
   class NumberGroup {
     /**
      * @param {boolean} isMixedNumber
@@ -99,6 +100,9 @@ define( require => {
       // @public {Property.<boolean>}
       this.isAnimatingProperty = new BooleanProperty( false );
 
+      // @public {Property.<Target|null>}
+      this.hoveringTargetProperty = new Property( null );
+
       // @public {Animator}
       this.animator = new Animator( this.positionProperty, new NumberProperty( 0 ), this.scaleProperty, new NumberProperty( 0 ), this.isAnimatingProperty );
 
@@ -108,6 +112,12 @@ define( require => {
       // @private {function}
       this.spotAllowedListener = this.updateAllowedSpots.bind( this );
       this.activeNumberRangeProperty.link( this.spotAllowedListener );
+
+      // Keep our hover target up-to-date
+      this.hoveringTargetProperty.lazyLink( ( oldTarget, newTarget ) => {
+        oldTarget && oldTarget.hoveringGroups.remove( this );
+        newTarget && newTarget.hoveringGroups.push( this );
+      } );
 
       // @public {boolean} TODO
       this.disposed = false;
