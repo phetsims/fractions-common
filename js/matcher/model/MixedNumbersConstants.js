@@ -1,4 +1,4 @@
-// Copyright 2014-2017, University of Colorado Boulder
+// Copyright 2018, University of Colorado Boulder
 
 /**
  * General constants for Mixed Number Game, extends Constants.  See https://github.com/phetsims/fraction-matcher/issues/43

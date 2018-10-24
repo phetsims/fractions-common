@@ -1,4 +1,4 @@
-// Copyright 2013-2017, University of Colorado Boulder
+// Copyright 2018, University of Colorado Boulder
 
 /**
  * Abstract shape for the 'Build a Fraction' sim.

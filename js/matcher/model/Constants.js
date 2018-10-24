@@ -1,4 +1,4 @@
-// Copyright 2013-2017, University of Colorado Boulder
+// Copyright 2018, University of Colorado Boulder
 
 /**
  * General constants for Fraction Matcher.  While constants, they are extended by MixedNumberConstants, so they should be instantiated
