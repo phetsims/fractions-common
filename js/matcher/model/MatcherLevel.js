@@ -9,8 +9,10 @@ define( require => {
   'use strict';
 
   // modules
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonQueryParameters = require( 'FRACTIONS_COMMON/common/FractionsCommonQueryParameters' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
   const Property = require( 'AXON/Property' );
   const SingleShapeModel = require( 'FRACTIONS_COMMON/matcher/model/SingleShapeModel' );
   const Sound = require( 'VIBE/Sound' );
@@ -34,14 +36,22 @@ define( require => {
       this.levelNumber = levelNumber;
       this.levelDescription = levelDescription;
 
-      this.scoreProperty = new Property( 0 );
-      this.timeProperty = new Property( 0 );
-      this.stepScoreProperty = new Property( 2 );
+      // @public {Property.<number>}
+      this.scoreProperty = new NumberProperty( 0 );
+      this.highScoreProperty = new NumberProperty( 0 );
+
+      // @public {Property.<number>}
+      this.timeProperty = new NumberProperty( 0 );
+
+      // @public {Property.<number|null>}
+      this.bestTimeProperty = new Property( null );
+
+      this.stepScoreProperty = new NumberProperty( 2 );
       this.answersProperty = new Property( [] );//shapes, which moved to answer zone
       this.lastPairProperty = new Property( [ -1, -1 ] );//pair of shapes on scales, user can't compare the same pair two times
       this.lastChangedZoneProperty = new Property( -1 );//when showing correct answer, change only last dragged shape position
       this.shapesProperty = new Property( [] ); //array of SingleShapeModels
-      this.canDragProperty = new Property( true );
+      this.canDragProperty = new BooleanProperty( true );
       this.buttonStatusProperty = new Property( 'none' );// ['none','ok','check','tryAgain','showAnswer']
 
       this.dropZone = []; //contains indexes of shapes, which are placed in current zone, -1 if empty
@@ -50,7 +60,7 @@ define( require => {
         this.dropZone[ i ] = -1;
       }
 
-      //two more dropZones 12 and 13 - scales
+      // two more dropZones 12 and 13 - scales
       this.dropZone.push( -1 );
       this.dropZone.push( -1 );
 
@@ -77,6 +87,16 @@ define( require => {
       }
       this.answersProperty.value = [];
       this.lastPairProperty.value = [ -1, -1 ];
+    }
+
+    /**
+     * Resets things that are generally persistent for other types of resets.
+     * TODO: Improved way. Challenge object would be ideal.
+     * @public
+     */
+    resetHistory() {
+      this.highScoreProperty.reset();
+      this.bestTimeProperty.reset();
     }
 
     /**

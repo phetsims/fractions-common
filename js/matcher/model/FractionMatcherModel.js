@@ -40,8 +40,6 @@ define( require => {
       this.MAX_POINTS_PER_GAME_LEVEL = 12;
 
       this.levels = [];
-      this.highScores = [];
-      this.bestTimes = [];
 
       this.currentLevelProperty = new Property( 0 );
       this.isTimerProperty = new Property( false );
@@ -50,8 +48,6 @@ define( require => {
 
       this.constants.LEVEL_DESCRIPTION.forEach( ( levelDescription, index ) => {
         this.levels.push( new MatcherLevel( this, levelDescription, index + 1 ) );
-        this.highScores.push( new Property( 0 ) );
-        this.bestTimes.push( new Property( null ) );
       } );
     }
 
@@ -62,9 +58,10 @@ define( require => {
     reset() {
       this.currentLevelProperty.reset();
       this.isTimerProperty.reset();
-      this.highScores.forEach( highScore => highScore.reset() );
-      this.levels.forEach( levelModel => levelModel.reset() );
-      this.bestTimes.forEach( bestTime => bestTime.reset() );
+      this.levels.forEach( level => {
+        level.reset();
+        level.resetHistory();
+      } );
     }
 
     /**

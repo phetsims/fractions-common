@@ -23,6 +23,8 @@ define( require => {
   const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   const Vector2 = require( 'DOT/Vector2' );
 
+  let globalID = 0;
+
   class ShapePiece {
     /**
      * @param {Fraction} fraction
@@ -35,6 +37,8 @@ define( require => {
       assert && assert( color instanceof Property );
 
       var self = this;
+
+      this.id = globalID++;
 
       // @public {Fraction}
       this.fraction = fraction;

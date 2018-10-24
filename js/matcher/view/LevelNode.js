@@ -434,11 +434,11 @@ define( require => {
         if ( this.model.answersProperty.value.length === this.model.gameModel.MAXIMUM_PAIRS * 2 || debugRewards ) {
 
           var completedTime = this.model.timeProperty.value;
-          var lastBestForThisLevel = this.model.gameModel.bestTimes[ this.model.levelNumber - 1 ].get();
+          var lastBestForThisLevel = this.model.bestTimeProperty.value;
           var newBestTime = false;
           if ( this.model.scoreProperty.value === 12 && (lastBestForThisLevel === null || completedTime < lastBestForThisLevel) ) {
             newBestTime = true;
-            this.model.gameModel.bestTimes[ this.model.levelNumber - 1 ].set( completedTime );
+            this.model.bestTimeProperty.value = completedTime;
           }
 
           //If a perfect score, show the reward node
@@ -490,14 +490,17 @@ define( require => {
               new LevelCompletedNode( this.model.levelNumber, this.model.scoreProperty.value, 12, 3, this.model.gameModel.isTimerProperty.get(), completedTime, lastBestForThisLevel, newBestTime,
                 function() {
                   var model = self.model;
-                  model.gameModel.highScores[ model.levelNumber - 1 ].set( Math.max( model.gameModel.highScores[ model.levelNumber - 1 ].get(), model.scoreProperty.value ) );
+                  model.highScoreProperty.value = Math.max( model.highScoreProperty.value, model.scoreProperty.value );
                   model.gameModel.currentLevelProperty.set( 0 );
                   model.reset();
                   self.generateNewLevel();
-                  self.rewardNode && self.rewardNode.stop();
+
+                  if ( self.rewardNode ) {
+                    self.rewardNode.stop();
+                    self.rewardNode.detach();
+                  }
 
                   //TODO: only detach after animation transition away complete?
-                  self.rewardNode.detach();
                   self.rewardNode = null;
                 }, {
                   centerX: this.model.gameModel.width / 2,

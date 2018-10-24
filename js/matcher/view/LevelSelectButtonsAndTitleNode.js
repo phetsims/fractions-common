@@ -106,7 +106,7 @@ define( require => {
     var hBoxChildren = [];
     shapes.forEach( function( shape, index ) {
       hBoxChildren.push(
-        new LevelSelectionButton( createButtonContent( shape, index ), model.highScores[ index ], {
+        new LevelSelectionButton( createButtonContent( shape, index ), model.levels[ index ].highScoreProperty, {
           scoreDisplayOptions: {
             numberOfStars: NUM_STARS_ON_BUTTON,
             perfectScore: model.MAX_POINTS_PER_GAME_LEVEL

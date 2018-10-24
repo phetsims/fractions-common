@@ -224,12 +224,14 @@ define( require => {
 
       challenge.activeShapePieces.addItemAddedListener( this.addShapePieceListener );
       challenge.activeShapePieces.addItemRemovedListener( this.removeShapePieceListener );
+      challenge.activeShapePieces.forEach( this.addShapePieceListener );
 
       // @private {Array.<NumberPieceNode>}
       this.numberPieceNodes = []; // TODO: interrupt on reset
 
       challenge.activeNumberPieces.addItemAddedListener( this.addNumberPieceListener );
       challenge.activeNumberPieces.addItemRemovedListener( this.removeNumberPieceListener );
+      challenge.activeNumberPieces.forEach( this.addNumberPieceListener );
     }
 
     playCollectedSound() {
