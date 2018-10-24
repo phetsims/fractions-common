@@ -94,6 +94,10 @@ define( require => {
         // TODO: cleanup?
         if ( this.groupNode ) {
           const group = target.groupProperty.value;
+
+          // If the group hasn't fully completed its animation, then force it to complete early.
+          group.animator.endAnimation();
+
           target.groupProperty.value = null;
           if ( challenge.hasShapes ) {
             challenge.shapeGroups.push( group );

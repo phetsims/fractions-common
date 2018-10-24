@@ -64,6 +64,14 @@ define( require => {
         useDeepEquality: true
       } );
 
+      // Check for duplicates
+      if ( assert ) {
+        this.activeShapePieces.addItemAddedListener( () => {
+          const array = this.activeShapePieces.getArray();
+          assert( array.length === _.uniq( array ).length, 'Duplicate items should not be added to activeShapePieces' );
+        } );
+      }
+
       var rangeListener = this.updateDraggedNumberRange.bind( this );
       this.draggedNumberPieces.addItemAddedListener( rangeListener );
       this.draggedNumberPieces.addItemRemovedListener( rangeListener );
@@ -234,6 +242,9 @@ define( require => {
         var shapeContainer = shapeGroup.shapeContainers.get( i );
         if ( shapeContainer.shapePieces.length ) {
           var shapePiece = shapeContainer.shapePieces.pop();
+
+          // If the piece hasn't arrived yet, just complete the animation
+          shapePiece.animator.endAnimation();
 
           // TODO: Better determination of the position, including with centroid and rotation offsets
           var shapeMatrix = ShapeContainer.getShapeMatrix( shapeContainer.totalFractionProperty.value.value, shapePiece.fraction, shapePiece.representation );
