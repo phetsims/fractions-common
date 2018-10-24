@@ -140,8 +140,7 @@ define( require => {
 
       // @private {Node}
       this.targetsContainer = new VBox( {
-        // TODO: unhook from panel_margin?
-        spacing: PANEL_MARGIN + 2,
+        spacing: 0,
         align: 'left',
         children: this.targetNodes
       } );

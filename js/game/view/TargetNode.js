@@ -14,8 +14,10 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const GradientRectangle = require( 'FRACTIONS_COMMON/common/view/GradientRectangle' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const MixedFractionNode = require( 'FRACTIONS_COMMON/common/view/MixedFractionNode' );
+  const Node = require( 'SCENERY/nodes/Node' );
   const NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
   const NumberGroupNode = require( 'FRACTIONS_COMMON/building/view/NumberGroupNode' );
   const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
@@ -76,15 +78,34 @@ define( require => {
         } );
       }
 
-      // @private {Rectangle}
-      this.container = new Rectangle( 0, 0, this.placeholder.width + ( challenge.hasShapes ? 20 : challenge.hasMixedTargets ? 60 : 80 ), 100, {
+      this.background = new Rectangle( 0, 0, this.placeholder.width + ( challenge.hasShapes ? 20 : challenge.hasMixedTargets ? 60 : 80 ), 100, {
         cornerRadius: CORNER_RADIUS,
         fill: FractionsCommonColorProfile.collectionBackgroundProperty,
         stroke: FractionsCommonColorProfile.collectionBorderProperty
       } );
 
+      // @private {GradientRectangle}
+      this.highlight = new GradientRectangle( {
+        fill: 'yellow'
+      } );
+      this.highlight.rectBounds = this.background.bounds.eroded( 5 );
+      this.highlight.extension = 0.5;
+      this.highlight.margin = 10;
+      this.highlightListener = hoveringCount => {
+        this.highlight.visible = hoveringCount > 0;
+      };
+      this.target.hoveringGroups.lengthProperty.link( this.highlightListener );
+
+      // @private {Rectangle}
+      this.container = new Node( {
+        children: [
+          this.highlight,
+          this.background
+        ]
+      } );
+
       // @private {Vector2}
-      this.groupCenter = this.container.center.plusXY( 0, challenge.hasShapes ? 10 : 0 );
+      this.groupCenter = this.background.center.plusXY( 0, challenge.hasShapes ? 10 : 0 );
 
       // @private {Node|null}
       this.groupNode = null;
@@ -110,7 +131,7 @@ define( require => {
         }
       }, {
         cornerRadius: CORNER_RADIUS - CORNER_OFFSET,
-        leftTop: this.container.leftTop.plus( new Vector2( CORNER_OFFSET, CORNER_OFFSET ) )
+        leftTop: this.background.leftTop.plus( new Vector2( CORNER_OFFSET, CORNER_OFFSET ) )
       } );
       this.container.addChild( this.returnButton );
 
@@ -191,6 +212,7 @@ define( require => {
      */
     dispose() {
       this.target.groupProperty.unlink( this.groupListener );
+      this.target.hoveringGroups.lengthProperty.unlink( this.highlightListener );
 
       this.groupNode && this.groupNode.dispose();
 
