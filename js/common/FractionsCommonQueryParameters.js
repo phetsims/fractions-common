@@ -7,13 +7,13 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
-  var FractionsCommonQueryParameters = QueryStringMachine.getAll( {
+  const FractionsCommonQueryParameters = QueryStringMachine.getAll( {
     /**
      * Hack level one on the fractions screen to only show shapes, and only show shapes that can be displayed with the
      * denominator given by this query parameter. The numerator is between 1 and 6 (see Level 1 in model/Constants.js).
@@ -27,7 +27,5 @@ define( function( require ) {
     }
   } );
 
-  fractionsCommon.register( 'FractionsCommonQueryParameters', FractionsCommonQueryParameters );
-
-  return FractionsCommonQueryParameters;
+  return fractionsCommon.register( 'FractionsCommonQueryParameters', FractionsCommonQueryParameters );
 } );

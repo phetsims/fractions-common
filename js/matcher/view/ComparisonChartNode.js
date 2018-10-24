@@ -7,7 +7,7 @@
  * @author Anton Ulyanov (Mlearner)
  */
 
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules

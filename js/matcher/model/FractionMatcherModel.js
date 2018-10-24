@@ -5,30 +5,29 @@
  *
  * @author Anton Ulyanov, Andrey Zelenkov (Mlearner)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  var Constants = require( 'FRACTIONS_COMMON/matcher/model/Constants' );
-  var Emitter = require( 'AXON/Emitter' );
-  var FractionMatcherView = require( 'FRACTIONS_COMMON/matcher/view/FractionMatcherView' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var LevelModel = require( 'FRACTIONS_COMMON/matcher/model/LevelModel' );
-  var MixedNumbersConstants = require( 'FRACTIONS_COMMON/matcher/model/MixedNumbersConstants' );
-  var Property = require( 'AXON/Property' );
-  var Sound = require( 'VIBE/Sound' );
+  const Constants = require( 'FRACTIONS_COMMON/matcher/model/Constants' );
+  const Emitter = require( 'AXON/Emitter' );
+  const FractionMatcherView = require( 'FRACTIONS_COMMON/matcher/view/FractionMatcherView' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const LevelModel = require( 'FRACTIONS_COMMON/matcher/model/LevelModel' );
+  const MixedNumbersConstants = require( 'FRACTIONS_COMMON/matcher/model/MixedNumbersConstants' );
+  const Property = require( 'AXON/Property' );
+  const Sound = require( 'VIBE/Sound' );
 
   // sounds
-  var correctAudio = require( 'sound!VEGAS/ding.mp3' );
-  var wrongAudio = require( 'sound!VEGAS/boing.mp3' );
+  const correctAudio = require( 'sound!VEGAS/ding.mp3' );
+  const wrongAudio = require( 'sound!VEGAS/boing.mp3' );
 
   /**
-   * @param {string} game
    * @param {boolean} isMixedNumbers
    * @constructor
    */
-  function FractionMatcherModel( game, isMixedNumbers ) {
+  function FractionMatcherModel( isMixedNumbers ) {
     var self = this;
     // TODO: rename to hasMixedNumbers?
     this.isMixedNumbers = isMixedNumbers;
@@ -37,8 +36,6 @@ define( function( require ) {
     this.width = FractionMatcherView.LAYOUT_BOUNDS.width;
     this.height = FractionMatcherView.LAYOUT_BOUNDS.height;
 
-    // TODO: is this... just a title string?
-    this.game = game;
     this.constants = isMixedNumbers ? new MixedNumbersConstants() : new Constants();
     this.colorScheme = [ this.constants.COLORS.LIGHT_BLUE, this.constants.COLORS.LIGHT_GREEN, this.constants.COLORS.LIGHT_RED ];
     this.toSimplify = isMixedNumbers;
