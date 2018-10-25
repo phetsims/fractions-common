@@ -11,7 +11,7 @@ define( require => {
   // modules
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Matrix3 = require( 'DOT/Matrix3' );
-  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
   const Stack = require( 'FRACTIONS_COMMON/building/model/Stack' );
 
@@ -19,7 +19,7 @@ define( require => {
     /**
      * @param {Fraction} fraction
      * @param {number} layoutQuantity
-     * @param {Representation} representation
+     * @param {BuildingRepresentation} representation
      * @param {ColorDef} color
      * @param {boolean} [isMutable]
      */
@@ -29,7 +29,7 @@ define( require => {
       // @public {Fraction}
       this.fraction = fraction;
 
-      // @public {Representation}
+      // @public {BuildingRepresentation}
       this.representation = representation;
 
       // @public {ColorDef}
@@ -44,12 +44,12 @@ define( require => {
      * @public
      *
      * @param {Fraction} fraction
-     * @param {Representation} representation
+     * @param {BuildingRepresentation} representation
      * @param {number} index
      * @returns {Matrix3}
      */
     static getShapeMatrix( fraction, representation, index ) {
-      return Matrix3.translationFromVector( Representation.getOffset( representation, index ) ).timesMatrix( ShapeContainer.getShapeMatrix( 0, fraction, representation ) );
+      return Matrix3.translationFromVector( BuildingRepresentation.getOffset( representation, index ) ).timesMatrix( ShapeContainer.getShapeMatrix( 0, fraction, representation ) );
     }
   }
 

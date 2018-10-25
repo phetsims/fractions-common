@@ -19,7 +19,7 @@ define( require => {
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Property = require( 'AXON/Property' );
   const Range = require( 'DOT/Range' );
-  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
   const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
   const ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
@@ -410,7 +410,7 @@ define( require => {
         shapePiece.step( dt );
 
         // Don't compute the closest for ALL pieces, that would hurt performance.
-        if ( shapePiece.representation === Representation.CIRCLE && shapePiece.isUserControlledProperty.value ) {
+        if ( shapePiece.representation === BuildingRepresentation.PIE && shapePiece.isUserControlledProperty.value ) {
           var closestContainer = self.closestDroppableShapeContainer( shapePiece, Number.POSITIVE_INFINITY );
           if ( closestContainer ) {
             shapePiece.orientTowardsContainer( closestContainer, dt );

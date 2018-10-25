@@ -15,7 +15,7 @@ define( require => {
   const Matrix3 = require( 'DOT/Matrix3' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Property = require( 'AXON/Property' );
-  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   const Util = require( 'DOT/Util' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -27,7 +27,7 @@ define( require => {
      * @param {ShapeGroup} shapeGroup -- Should we just pass this through in general? Or get rid of the reference and
      *                                   simplify our "find the container" logic? Or provide as null? TODO
      * @param {Property.<number>} partitionDenominatorProperty
-     * @param {Representation} representation
+     * @param {BuildingRepresentation} representation
      * @param {Emitter} changedEmitter
      * @param {Vector2} offset - Offset from the ShapeGroup's origin
      */
@@ -39,7 +39,7 @@ define( require => {
       // @public {Property.<number>}
       this.partitionDenominatorProperty = partitionDenominatorProperty;
 
-      // @public {Representation}
+      // @public {BuildingRepresentation}
       this.representation = representation;
 
       // @public {Emitter}
@@ -96,10 +96,10 @@ define( require => {
       // Subtract off our local offset
       const localPoint = scratchVector.set( point ).subtract( this.offset );
 
-      if ( this.representation === Representation.CIRCLE ) {
+      if ( this.representation === BuildingRepresentation.PIE ) {
         return Math.max( 0, localPoint.magnitude() - FractionsCommonConstants.SHAPE_SIZE / 2 );
       }
-      else if ( this.representation === Representation.VERTICAL_BAR ) {
+      else if ( this.representation === BuildingRepresentation.BAR ) {
         return Math.sqrt( ShapePiece.VERTICAL_BAR_BOUNDS.minimumDistanceToPointSquared( localPoint ) );
       }
       else {
@@ -128,7 +128,7 @@ define( require => {
 
     // TODO: doc
     static getShapeMatrix( startingRatio, fraction, representation ) {
-      if ( representation === Representation.CIRCLE ) {
+      if ( representation === BuildingRepresentation.PIE ) {
         if ( fraction.equals( Fraction.ONE ) ) {
           return Matrix3.IDENTITY;
         }
@@ -138,7 +138,7 @@ define( require => {
           return Matrix3.rotation2( angle ).timesMatrix( Matrix3.translationFromVector( centroid ) );
         }
       }
-      else if ( representation === Representation.VERTICAL_BAR ) {
+      else if ( representation === BuildingRepresentation.BAR ) {
         const centralValue = startingRatio + fraction.value / 2;
         return Matrix3.translation( Util.linear( 0, 1, ShapePiece.VERTICAL_BAR_BOUNDS.minX, ShapePiece.VERTICAL_BAR_BOUNDS.maxX, centralValue ), 0 );
       }

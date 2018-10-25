@@ -22,6 +22,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const HBox = require( 'SCENERY/nodes/HBox' );
+  const IntroRepresentation = require( 'FRACTIONS_COMMON/intro/enum/IntroRepresentation' );
   const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberProperty = require( 'AXON/NumberProperty' );
@@ -29,7 +30,6 @@ define( require => {
   const Random = require( 'DOT/Random' );
   const RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularContainerNode' );
   const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/RectangularOrientation' );
-  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
 
   // constants
   const IDENTITY_TRANSFORM = ModelViewTransform2.createIdentity();
@@ -40,7 +40,7 @@ define( require => {
      * @param {Property.<number>} denominatorProperty
      * @param {function} startPieceDrag
      * @param {function} createCellNode
-     * @param {Property.<Representation>} representationProperty
+     * @param {Property.<IntroRepresentation>} representationProperty
      * @param {Object} [options]
      */
     constructor( denominatorProperty, startPieceDrag, createCellNode, representationProperty, options ) {
@@ -72,49 +72,49 @@ define( require => {
       const representation = representationProperty.value;
 
       const iconNode = {
-        [ Representation.CIRCLE ]() {
+        [ IntroRepresentation.CIRCLE ]() {
           return new CircularContainerNode( iconContainer );
         },
-        [ Representation.HORIZONTAL_BAR ]() {
+        [ IntroRepresentation.HORIZONTAL_BAR ]() {
           return new RectangularContainerNode( iconContainer, {
             rectangularOrientation: RectangularOrientation.HORIZONTAL
           } );
         },
-        [ Representation.VERTICAL_BAR ]() {
+        [ IntroRepresentation.VERTICAL_BAR ]() {
           return new RectangularContainerNode( iconContainer, {
             rectangularOrientation: RectangularOrientation.VERTICAL
           } );
         },
-        [ Representation.CAKE ]() {
+        [ IntroRepresentation.CAKE ]() {
           return new CakeContainerNode( iconContainer );
         },
-        [ Representation.BEAKER ]() {
+        [ IntroRepresentation.BEAKER ]() {
           return new BeakerContainerNode( iconContainer );
         }
       }[ representation ]();
 
       const availableCellWidth = {
-        [ Representation.CIRCLE ]() { return options.bucketWidth - 25; },
-        [ Representation.HORIZONTAL_BAR ]() { return options.bucketWidth - 35; },
-        [ Representation.VERTICAL_BAR ]() { return options.bucketWidth - 75; },
-        [ Representation.CAKE ]() { return options.bucketWidth - 45; },
-        [ Representation.BEAKER ]() { return options.bucketWidth - 55; }
+        [ IntroRepresentation.CIRCLE ]() { return options.bucketWidth - 25; },
+        [ IntroRepresentation.HORIZONTAL_BAR ]() { return options.bucketWidth - 35; },
+        [ IntroRepresentation.VERTICAL_BAR ]() { return options.bucketWidth - 75; },
+        [ IntroRepresentation.CAKE ]() { return options.bucketWidth - 45; },
+        [ IntroRepresentation.BEAKER ]() { return options.bucketWidth - 55; }
       }[ representation ]();
 
       const verticalCellOffset = {
-        [ Representation.CIRCLE ]() { return height => -12 + height / 6; },
-        [ Representation.HORIZONTAL_BAR ]() { return height => 5; },
-        [ Representation.VERTICAL_BAR ]() { return height => 14 - height / 7; },
-        [ Representation.CAKE ]() { return height => 0; },
-        [ Representation.BEAKER ]() { return height => -10; }
+        [ IntroRepresentation.CIRCLE ]() { return height => -12 + height / 6; },
+        [ IntroRepresentation.HORIZONTAL_BAR ]() { return height => 5; },
+        [ IntroRepresentation.VERTICAL_BAR ]() { return height => 14 - height / 7; },
+        [ IntroRepresentation.CAKE ]() { return height => 0; },
+        [ IntroRepresentation.BEAKER ]() { return height => -10; }
       }[ representation ]();
 
       const cellQuantity = {
-        [ Representation.CIRCLE ]() { return 16; },
-        [ Representation.HORIZONTAL_BAR ]() { return 16; },
-        [ Representation.VERTICAL_BAR ]() { return 16; },
-        [ Representation.CAKE ]() { return 8; },
-        [ Representation.BEAKER ]() { return 8; }
+        [ IntroRepresentation.CIRCLE ]() { return 16; },
+        [ IntroRepresentation.HORIZONTAL_BAR ]() { return 16; },
+        [ IntroRepresentation.VERTICAL_BAR ]() { return 16; },
+        [ IntroRepresentation.CAKE ]() { return 8; },
+        [ IntroRepresentation.BEAKER ]() { return 8; }
       }[ representation ]();
 
       // layer to hold all the static cell nodes in the bucket
@@ -136,7 +136,7 @@ define( require => {
         }
 
         const cellNode = createCellNode( denominator, 0, {} );
-        const bounds = representation === Representation.CAKE ? cellNode.bounds : cellNode.getSafeTransformedVisibleBounds();
+        const bounds = representation === IntroRepresentation.CAKE ? cellNode.bounds : cellNode.getSafeTransformedVisibleBounds();
         const random = new Random( {
           seed: 4 // https://xkcd.com/221/
         } );

@@ -20,7 +20,7 @@ define( require => {
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  var BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   var Shape = require( 'KITE/Shape' );
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
@@ -62,7 +62,7 @@ define( require => {
     } );
 
     // Background
-    if ( shapeContainer.representation === Representation.CIRCLE ) {
+    if ( shapeContainer.representation === BuildingRepresentation.PIE ) {
       this.addChild( new Circle( CIRCLE_RADIUS, {
         fill: FractionsCommonColorProfile.shapeContainerFillProperty
       } ) );
@@ -89,7 +89,7 @@ define( require => {
         pickable: false
       } ) );
     }
-    else if ( shapeContainer.representation === Representation.VERTICAL_BAR ) {
+    else if ( shapeContainer.representation === BuildingRepresentation.BAR ) {
       var barBounds = ShapePiece.VERTICAL_BAR_BOUNDS;
       this.addChild( Rectangle.bounds( barBounds, {
         fill: FractionsCommonColorProfile.shapeContainerFillProperty

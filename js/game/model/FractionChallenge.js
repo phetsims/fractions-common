@@ -22,7 +22,7 @@ define( require => {
   const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
   const Property = require( 'AXON/Property' );
-  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
   const ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
   const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
@@ -57,8 +57,9 @@ define( require => {
 
       super();
 
-      const hasCircles = _.some( shapePieces, piece => piece.representation === Representation.CIRCLE );
-      const hasBars = _.some( shapePieces, piece => piece.representation === Representation.VERTICAL_BAR );
+      // TODO: PIE/BAR terminology. look for other "circles" cases
+      const hasCircles = _.some( shapePieces, piece => piece.representation === BuildingRepresentation.PIE );
+      const hasBars = _.some( shapePieces, piece => piece.representation === BuildingRepresentation.BAR );
       const hasNumbers = !!numberPieces.length;
 
       assert && assert( hasCircles + hasBars + hasNumbers === 1, 'We only support one for now' );
@@ -78,8 +79,8 @@ define( require => {
       // @public {boolean}
       this.hasShapes = hasBars || hasCircles;
 
-      // @public {Representation|null}
-      this.representation = hasCircles ? Representation.CIRCLE : ( hasBars ? Representation.VERTICAL_BAR : null );
+      // @public {BuildingRepresentation|null}
+      this.representation = hasCircles ? BuildingRepresentation.PIE : ( hasBars ? BuildingRepresentation.BAR : null );
 
       // @public {number}
       this.maxTargetWholes = Math.ceil( Math.max( ...targets.map( target => target.fraction.value ) ) );
@@ -115,10 +116,10 @@ define( require => {
       } );
 
       if ( hasCircles ) {
-        this.shapeGroupStacks.push( new ShapeGroupStack( targets.length, Representation.CIRCLE ) );
+        this.shapeGroupStacks.push( new ShapeGroupStack( targets.length, BuildingRepresentation.PIE ) );
       }
       if ( hasBars ) {
-        this.shapeGroupStacks.push( new ShapeGroupStack( targets.length, Representation.VERTICAL_BAR ) );
+        this.shapeGroupStacks.push( new ShapeGroupStack( targets.length, BuildingRepresentation.BAR ) );
       }
       if ( hasNumbers ) {
         this.numberGroupStacks.push( new NumberGroupStack( targets.length, this.hasMixedTargets ) );
@@ -168,10 +169,10 @@ define( require => {
 
       const initialGroups = [];
       if ( hasCircles ) {
-        initialGroups.push( this.addShapeGroup( Representation.CIRCLE, this.maxTargetWholes ) );
+        initialGroups.push( this.addShapeGroup( BuildingRepresentation.PIE, this.maxTargetWholes ) );
       }
       if ( hasBars ) {
-        initialGroups.push( this.addShapeGroup( Representation.VERTICAL_BAR, this.maxTargetWholes ) );
+        initialGroups.push( this.addShapeGroup( BuildingRepresentation.BAR, this.maxTargetWholes ) );
       }
       if ( hasNumbers ) {
         initialGroups.push( this.addNumberGroup( this.hasMixedTargets ) );
@@ -352,7 +353,7 @@ define( require => {
         ? resetTypes[ levelNumber - 1 ]
         : phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
 
-      const representation = type === ChallengeType.PIE ? Representation.CIRCLE : Representation.VERTICAL_BAR;
+      const representation = type === ChallengeType.PIE ? BuildingRepresentation.PIE : BuildingRepresentation.BAR;
       const targets = targetFractions.map( f => new Target( f ) );
       const shapePieces = pieceFractions.map( f => new ShapePiece( f, representation, color ) );
       return new FractionChallenge( levelNumber, type, hasMixedTargets, targets, shapePieces, [] );

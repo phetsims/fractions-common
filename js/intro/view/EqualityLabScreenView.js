@@ -21,6 +21,7 @@ define( require => {
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const IntroRadioButtonGroup = require( 'FRACTIONS_COMMON/intro/view/IntroRadioButtonGroup' );
+  const IntroRepresentation = require( 'FRACTIONS_COMMON/intro/enum/IntroRepresentation' );
   const MathSymbols = require( 'SCENERY_PHET/MathSymbols' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberLineNode = require( 'FRACTIONS_COMMON/intro/view/numberline/NumberLineNode' );
@@ -33,7 +34,6 @@ define( require => {
   const RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularContainerNode' );
   const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/RectangularOrientation' );
   const RectangularSceneNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularSceneNode' );
-  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   const RoundNumberSpinner = require( 'FRACTIONS_COMMON/intro/view/RoundNumberSpinner' );
   const Text = require( 'SCENERY/nodes/Text' );
   const VBox = require( 'SCENERY/nodes/VBox' );
@@ -93,10 +93,10 @@ define( require => {
         ]
       } );
       model.representationProperty.link( representation => {
-        circularIcon.visible = representation === Representation.CIRCLE;
-        horizontalIcon.visible = representation === Representation.HORIZONTAL_BAR;
-        verticalIcon.visible = representation === Representation.VERTICAL_BAR;
-        beakerIcon.visible = representation === Representation.BEAKER;
+        circularIcon.visible = representation === IntroRepresentation.CIRCLE;
+        horizontalIcon.visible = representation === IntroRepresentation.HORIZONTAL_BAR;
+        verticalIcon.visible = representation === IntroRepresentation.VERTICAL_BAR;
+        beakerIcon.visible = representation === IntroRepresentation.BEAKER;
       } );
 
       const showNumberLineNode = new IntroRadioButtonGroup( model.showNumberLineProperty, [
@@ -167,7 +167,7 @@ define( require => {
       }
 
       Property.multilink( [ model.representationProperty, model.showNumberLineProperty ], ( representation, showNumberLine ) => {
-        representation = showNumberLine ? Representation.NUMBER_LINE : representation;
+        representation = showNumberLine ? IntroRepresentation.NUMBER_LINE : representation;
         if ( representation !== lastRepresentation ) {
           containerNodes.forEach( containerNode => containerNode.dispose() );
           containerNodes = [];
@@ -179,33 +179,33 @@ define( require => {
           const colorOverride = FractionsCommonColorProfile.equalityLabColorProperty;
 
           // TODO: some cleanup
-          if ( representation === Representation.CIRCLE ) {
+          if ( representation === IntroRepresentation.CIRCLE ) {
             containerNodes = containers.map( container => new CircularContainerNode( container, {
               colorOverride
             } ) );
             multipliedViewContainer.addChild( spacedBox( 2, containerNodes ) );
           }
-          else if ( representation === Representation.HORIZONTAL_BAR ) {
+          else if ( representation === IntroRepresentation.HORIZONTAL_BAR ) {
             containerNodes = containers.map( container => new RectangularContainerNode( container, {
               rectangularOrientation: RectangularOrientation.HORIZONTAL,
               colorOverride
             } ) );
             multipliedViewContainer.addChild( spacedBox( 1, containerNodes ) );
           }
-          else if ( representation === Representation.VERTICAL_BAR ) {
+          else if ( representation === IntroRepresentation.VERTICAL_BAR ) {
             containerNodes = containers.map( container => new RectangularContainerNode( container, {
               rectangularOrientation: RectangularOrientation.VERTICAL,
               colorOverride
             } ) );
             multipliedViewContainer.addChild( spacedBox( 4, containerNodes ) );
           }
-          else if ( representation === Representation.BEAKER ) {
+          else if ( representation === IntroRepresentation.BEAKER ) {
             containerNodes = containers.map( container => new BeakerContainerNode( container, {
               colorOverride: FractionsCommonColorProfile.equalityLabWaterProperty
             } ) );
             multipliedViewContainer.addChild( spacedBox( 4, containerNodes ) );
           }
-          else if ( representation === Representation.NUMBER_LINE ) {
+          else if ( representation === IntroRepresentation.NUMBER_LINE ) {
             const multipliedNumberLine = new NumberLineNode( model.numeratorProperty, model.denominatorProperty, model.containerCountProperty, {
               multiplierProperty: model.multiplierProperty,
               orientation: NumberLineOrientation.VERTICAL,

@@ -19,7 +19,7 @@ define( require => {
   var Path = require( 'SCENERY/nodes/Path' );
   var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  var BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   var Shape = require( 'KITE/Shape' );
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var Touch = require( 'SCENERY/input/Touch' );
@@ -82,7 +82,7 @@ define( require => {
     var shadowOptions = {
       fill: FractionsCommonColorProfile.shapeShadowProperty
     };
-    if ( shapePiece.representation === Representation.CIRCLE ) {
+    if ( shapePiece.representation === BuildingRepresentation.PIE ) {
       if ( fractionValue === 1 ) {
         this.viewNode = new Circle( CIRCLE_RADIUS, nodeOptions );
         this.shadowNode = new Circle( CIRCLE_RADIUS, shadowOptions ); // TODO: conditionally create?
@@ -97,7 +97,7 @@ define( require => {
         this.shadowNode = new Path( sliceShape, shadowOptions );
       }
     }
-    else if ( shapePiece.representation === Representation.VERTICAL_BAR ) {
+    else if ( shapePiece.representation === BuildingRepresentation.BAR ) {
       var width = fractionValue * BAR_WIDTH;
       this.viewNode = new Rectangle( -width / 2, -BAR_HEIGHT / 2, width, BAR_HEIGHT, nodeOptions );
       this.shadowNode = new Rectangle( -width / 2, -BAR_HEIGHT / 2, width, BAR_HEIGHT, shadowOptions );

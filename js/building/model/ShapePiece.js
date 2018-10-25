@@ -20,7 +20,7 @@ define( require => {
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Property = require( 'AXON/Property' );
-  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const Vector2 = require( 'DOT/Vector2' );
 
   let globalID = 0;
@@ -28,12 +28,12 @@ define( require => {
   class ShapePiece {
     /**
      * @param {Fraction} fraction
-     * @param {Representation} representation
+     * @param {BuildingRepresentation} representation
      * @param {ColorDef} color
      */
     constructor( fraction, representation, color ) {
       assert && assert( fraction instanceof Fraction );
-      assert && assert( Representation.SHAPE_VALUES.includes( representation ) );
+      assert && assert( BuildingRepresentation.VALUES.includes( representation ) );
       assert && assert( color instanceof Property );
 
       var self = this;
@@ -43,7 +43,7 @@ define( require => {
       // @public {Fraction}
       this.fraction = fraction;
 
-      // @public {Representation}
+      // @public {BuildingRepresentation}
       this.representation = representation;
 
       // @public {ColorDef}

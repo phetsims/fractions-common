@@ -17,7 +17,7 @@ define( require => {
   const inherit = require( 'PHET_CORE/inherit' );
   const Path = require( 'SCENERY/nodes/Path' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const Shape = require( 'KITE/Shape' );
   const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   const ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
@@ -56,7 +56,7 @@ define( require => {
     var separatorShape = new Shape();
 
     // Background
-    if ( shapeStack.representation === Representation.CIRCLE ) {
+    if ( shapeStack.representation === BuildingRepresentation.PIE ) {
       this.addChild( new Circle( CIRCLE_RADIUS, {
         fill: FractionsCommonColorProfile.shapeStackFillProperty
       } ) );
@@ -74,7 +74,7 @@ define( require => {
         stroke: FractionsCommonColorProfile.shapeStackStrokeProperty
       } ) );
     }
-    else if ( shapeStack.representation === Representation.VERTICAL_BAR ) {
+    else if ( shapeStack.representation === BuildingRepresentation.BAR ) {
       // TODO: Share separator code
       var barBounds = ShapePiece.VERTICAL_BAR_BOUNDS;
       this.addChild( Rectangle.bounds( barBounds, {

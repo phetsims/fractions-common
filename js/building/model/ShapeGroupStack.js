@@ -10,19 +10,19 @@ define( require => {
 
   // modules
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const Stack = require( 'FRACTIONS_COMMON/building/model/Stack' );
 
   class ShapeGroupStack extends Stack {
     /**
      * @param {number} layoutQuantity
-     * @param {Representation} representation
+     * @param {BuildingRepresentation} representation
      * @param {boolean} [isMutable]
      */
     constructor( layoutQuantity, representation, isMutable = true ) {
       super( layoutQuantity, isMutable );
 
-      // @public {Representation}
+      // @public {BuildingRepresentation}
       this.representation = representation;
 
       // @public {ObservableArray.<ShapeGroup>} - NOTE: These should only ever be popped/pushed.
@@ -32,15 +32,15 @@ define( require => {
     /**
      * Returns the desired visual offset of an item in the stack from the base.
      *
-     * @param {Representation} representation
+     * @param {BuildingRepresentation} representation
      * @param {number} index
      * @returns {Vector2}
      */
     static getOffset( representation, index ) {
-      assert && assert( _.includes( Representation.SHAPE_VALUES, representation ) );
+      assert && assert( _.includes( BuildingRepresentation.VALUES, representation ) );
       assert && assert( typeof index === 'number' );
 
-      return Representation.getOffset( representation, index );
+      return BuildingRepresentation.getOffset( representation, index );
     }
   }
 

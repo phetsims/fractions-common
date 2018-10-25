@@ -39,7 +39,7 @@ define( require => {
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const platform = require( 'PHET_CORE/platform' );
   const RefreshButton = require( 'SCENERY_PHET/buttons/RefreshButton' );
-  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const RewardNode = require( 'VEGAS/RewardNode' );
   const RoundArrowButton = require( 'FRACTIONS_COMMON/common/view/RoundArrowButton' );
@@ -374,8 +374,8 @@ define( require => {
             ..._.times( 7, () => new StarNode() ),
             ..._.times( 7, () => new FaceNode( 40, { headStroke: 'black' } ) ),
             ..._.range( 1, 10 ).map( n => new NumberPieceNode( new NumberPiece( n ) ) ),
-            ..._.range( 1, 5 ).map( n => new ShapePieceNode( new ShapePiece( new Fraction( 1, n ), Representation.CIRCLE, FractionsCommonColorProfile.labCircleFillProperty ), { rotation: phet.joist.random.nextDouble() * 2 * Math.PI } ) ),
-            ..._.range( 1, 5 ).map( n => new ShapePieceNode( new ShapePiece( new Fraction( 1, n ), Representation.VERTICAL_BAR, FractionsCommonColorProfile.labBarFillProperty ) ) )
+            ..._.range( 1, 5 ).map( n => new ShapePieceNode( new ShapePiece( new Fraction( 1, n ), BuildingRepresentation.PIE, FractionsCommonColorProfile.labCircleFillProperty ), { rotation: phet.joist.random.nextDouble() * 2 * Math.PI } ) ),
+            ..._.range( 1, 5 ).map( n => new ShapePieceNode( new ShapePiece( new Fraction( 1, n ), BuildingRepresentation.BAR, FractionsCommonColorProfile.labBarFillProperty ) ) )
           ], 150 )
         } );
         challengeBackground.addChild( this.rewardNode );

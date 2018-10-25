@@ -24,7 +24,7 @@ define( require => {
   var ObservableArray = require( 'AXON/ObservableArray' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Property = require( 'AXON/Property' );
-  var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  var BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   var ReturnButton = require( 'FRACTIONS_COMMON/building/view/ReturnButton' );
   var RoundArrowButton = require( 'FRACTIONS_COMMON/common/view/RoundArrowButton' );
   var RoundPushButton = require( 'SUN/buttons/RoundPushButton' );
@@ -173,7 +173,7 @@ define( require => {
         spacing: CONTAINER_PADDING,
         children: [ this.decreasePartitionCountButton, this.increasePartitionCountButton ],
         // TODO: improve? This is safe, given we can't trust container bounds
-        top: ( shapeGroup.representation === Representation.VERTICAL_BAR ? FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT : FractionsCommonConstants.SHAPE_SIZE ) / 2 + CONTAINER_PADDING - 3,
+        top: ( shapeGroup.representation === BuildingRepresentation.BAR ? FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT : FractionsCommonConstants.SHAPE_SIZE ) / 2 + CONTAINER_PADDING - 3,
         centerX: 0
       } ) );
     }
@@ -181,7 +181,7 @@ define( require => {
     // @private {Node}
     this.returnButton = new ReturnButton( options.removeLastListener, {
       // TODO: Make it computational
-      rightBottom: shapeGroup.representation === Representation.VERTICAL_BAR ? new Vector2( -50, -75 / 2 ) : new Vector2( -36, -36 )
+      rightBottom: shapeGroup.representation === BuildingRepresentation.BAR ? new Vector2( -50, -75 / 2 ) : new Vector2( -36, -36 )
     } );
 
     var undoArrowContainer = new Node();
@@ -266,7 +266,7 @@ define( require => {
     updateDragBounds: function() {
       var safeBounds = this.controlLayer.bounds.union( this.returnButton.bounds ); // undo button not always in the control layer
 
-      var containerTop = -( this.shapeGroup.representation === Representation.CIRCLE ? FractionsCommonConstants.SHAPE_SIZE : FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT ) / 2;
+      var containerTop = -( this.shapeGroup.representation === BuildingRepresentation.PIE ? FractionsCommonConstants.SHAPE_SIZE : FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT ) / 2;
       safeBounds = safeBounds.withMinY( Math.min( safeBounds.top, containerTop ) );
       this.dragBoundsProperty.value = this.generalDragBoundsProperty.value.withOffsets( safeBounds.left, safeBounds.top, -safeBounds.right, -safeBounds.bottom );
     },

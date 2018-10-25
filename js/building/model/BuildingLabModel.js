@@ -19,7 +19,7 @@ define( require => {
   const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
   const Property = require( 'AXON/Property' );
-  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
   const ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
   const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
@@ -40,16 +40,16 @@ define( require => {
       // @public {boolean}
       this.allowMixedNumbers = allowMixedNumbers;
 
-      // @public {Property.<Representation>}
-      this.topRepresentationProperty = new Property( Representation.CIRCLE );
+      // @public {Property.<BuildingRepresentation>}
+      this.topRepresentationProperty = new Property( BuildingRepresentation.PIE );
 
       // @public {Property.<ShapeGroup|NumberGroup|null>} - We'll only show controls for this shape group
       this.selectedGroupProperty = new Property( null );
 
       // Shape stacks
       [
-        { representation: Representation.CIRCLE, color: FractionsCommonColorProfile.labCircleFillProperty },
-        { representation: Representation.VERTICAL_BAR, color: FractionsCommonColorProfile.labBarFillProperty }
+        { representation: BuildingRepresentation.PIE, color: FractionsCommonColorProfile.labCircleFillProperty },
+        { representation: BuildingRepresentation.BAR, color: FractionsCommonColorProfile.labBarFillProperty }
       ].forEach( ( { representation, color } ) => {
         _.range( 1, 9 ).forEach( denominator => {
           var stack = new ShapeStack( new Fraction( 1, denominator ), PIECE_LAYOUT_QUANTITY, representation, color, false );
@@ -68,8 +68,8 @@ define( require => {
       } );
 
       // Non-mutable stacks
-      this.shapeGroupStacks.push( new ShapeGroupStack( GROUP_LAYOUT_QUANTITY, Representation.CIRCLE, false ) );
-      this.shapeGroupStacks.push( new ShapeGroupStack( GROUP_LAYOUT_QUANTITY, Representation.VERTICAL_BAR, false ) );
+      this.shapeGroupStacks.push( new ShapeGroupStack( GROUP_LAYOUT_QUANTITY, BuildingRepresentation.PIE, false ) );
+      this.shapeGroupStacks.push( new ShapeGroupStack( GROUP_LAYOUT_QUANTITY, BuildingRepresentation.BAR, false ) );
       this.numberGroupStacks.push( new NumberGroupStack( GROUP_LAYOUT_QUANTITY, false, false ) );
       this.numberGroupStacks.push( new NumberGroupStack( GROUP_LAYOUT_QUANTITY, true, false ) );
 
@@ -129,7 +129,7 @@ define( require => {
       BuildingModel.prototype.reset.call( this );
 
       // Initial state
-      var shapeGroup = this.addShapeGroup( Representation.CIRCLE );
+      var shapeGroup = this.addShapeGroup( BuildingRepresentation.PIE );
       shapeGroup.positionProperty.value = new Vector2( 170, 0 );
       this.selectedGroupProperty.value = shapeGroup;
 

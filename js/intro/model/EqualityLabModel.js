@@ -12,15 +12,15 @@ define( require => {
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const ContainerSetModel = require( 'FRACTIONS_COMMON/intro/model/ContainerSetModel' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const IntroRepresentation = require( 'FRACTIONS_COMMON/intro/enum/IntroRepresentation' );
   const MultipliedContainer = require( 'FRACTIONS_COMMON/intro/model/MultipliedContainer' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Range = require( 'DOT/Range' );
-  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
 
   class EqualityLabModel extends ContainerSetModel {
     constructor() {
       super( {
-        representations: [ Representation.CIRCLE, Representation.HORIZONTAL_BAR, Representation.VERTICAL_BAR, Representation.BEAKER ],
+        representations: [ IntroRepresentation.CIRCLE, IntroRepresentation.HORIZONTAL_BAR, IntroRepresentation.VERTICAL_BAR, IntroRepresentation.BEAKER ],
         initialContainerCount: 4,
         maxContainers: 4,
         maxDenominator: 6,

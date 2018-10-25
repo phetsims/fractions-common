@@ -29,7 +29,7 @@ define( require => {
 
     StackNode.call( this, shapeGroupStack );
 
-    // @private {Representation}
+    // @private {BuildingRepresentation}
     this.representation = shapeGroupStack.representation;
 
     // @private {Node}

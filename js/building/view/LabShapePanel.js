@@ -19,7 +19,7 @@ define( require => {
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
-  var Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
+  var BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
   var StackNodesBox = require( 'FRACTIONS_COMMON/building/view/StackNodesBox' );
@@ -50,8 +50,8 @@ define( require => {
     }
 
     // @private {StackNodesBox}
-    this.circleBox = createBox( Representation.CIRCLE );
-    this.barBox = createBox( Representation.VERTICAL_BAR );
+    this.circleBox = createBox( BuildingRepresentation.PIE );
+    this.barBox = createBox( BuildingRepresentation.BAR );
 
     var boxContainer = new Node( {
       children: [
@@ -60,20 +60,20 @@ define( require => {
       ]
     } );
 
-    // @private {Property.<Representation>}
+    // @private {Property.<BuildingRepresentation>}
     this.representationProperty = model.topRepresentationProperty;
 
     // TODO: Move all this code out to a named panel?
     var representationSelectionNode = new MutableOptionsNode( RadioButtonGroup, [ this.representationProperty, [
       {
-        value: Representation.CIRCLE,
-        node: new ShapePieceNode( new ShapePiece( Fraction.ONE, Representation.CIRCLE, FractionsCommonColorProfile.labCircleFillProperty ), {
+        value: BuildingRepresentation.PIE,
+        node: new ShapePieceNode( new ShapePiece( Fraction.ONE, BuildingRepresentation.PIE, FractionsCommonColorProfile.labCircleFillProperty ), {
           scale: 0.3
         } )
       },
       {
-        value: Representation.VERTICAL_BAR,
-        node: new ShapePieceNode( new ShapePiece( Fraction.ONE, Representation.VERTICAL_BAR, FractionsCommonColorProfile.labBarFillProperty ), {
+        value: BuildingRepresentation.BAR,
+        node: new ShapePieceNode( new ShapePiece( Fraction.ONE, BuildingRepresentation.BAR, FractionsCommonColorProfile.labBarFillProperty ), {
           scale: 0.3
         } )
       }
@@ -97,8 +97,8 @@ define( require => {
       } ) ].concat( [ boxContainer ] )
     } );
     this.representationProperty.link( function( representation ) {
-      self.circleBox.visible = representation === Representation.CIRCLE;
-      self.barBox.visible = representation === Representation.VERTICAL_BAR;
+      self.circleBox.visible = representation === BuildingRepresentation.PIE;
+      self.barBox.visible = representation === BuildingRepresentation.BAR;
     } );
 
     // TODO: background color customizable

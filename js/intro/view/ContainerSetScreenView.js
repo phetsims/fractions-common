@@ -19,12 +19,12 @@ define( require => {
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const IntroRadioButtonGroup = require( 'FRACTIONS_COMMON/intro/view/IntroRadioButtonGroup' );
+  const IntroRepresentation = require( 'FRACTIONS_COMMON/intro/enum/IntroRepresentation' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberLineSceneNode = require( 'FRACTIONS_COMMON/intro/view/numberline/NumberLineSceneNode' );
   const Panel = require( 'SUN/Panel' );
   const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/RectangularOrientation' );
   const RectangularSceneNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularSceneNode' );
-  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const ScreenView = require( 'JOIST/ScreenView' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -54,27 +54,27 @@ define( require => {
 
       const representationRadioButtonGroup = new IntroRadioButtonGroup( model.representationProperty, [
         {
-          value: Representation.CIRCLE,
+          value: IntroRepresentation.CIRCLE,
           node: CircularSceneNode.getIcon()
         },
         {
-          value: Representation.HORIZONTAL_BAR,
+          value: IntroRepresentation.HORIZONTAL_BAR,
           node: RectangularSceneNode.getIcon( RectangularOrientation.HORIZONTAL )
         },
         {
-          value: Representation.VERTICAL_BAR,
+          value: IntroRepresentation.VERTICAL_BAR,
           node: RectangularSceneNode.getIcon( RectangularOrientation.VERTICAL )
         },
         {
-          value: Representation.BEAKER,
+          value: IntroRepresentation.BEAKER,
           node: BeakerSceneNode.getIcon()
         },
         {
-          value: Representation.CAKE,
+          value: IntroRepresentation.CAKE,
           node: CakeSceneNode.getIcon()
         },
         {
-          value: Representation.NUMBER_LINE,
+          value: IntroRepresentation.NUMBER_LINE,
           node: NumberLineSceneNode.getIcon()
         }
       ].filter( item => _.includes( model.representations, item.value ) ) );
@@ -114,34 +114,34 @@ define( require => {
 
         // Should this be a switch statement? TODO: yes. cleanup
         this.currentView = null;
-        if ( representation === Representation.CIRCLE ) {
+        if ( representation === IntroRepresentation.CIRCLE ) {
           this.currentView = new CircularSceneNode( model, {
             getBucketLocation
           } );
         }
-        else if ( representation === Representation.VERTICAL_BAR ) {
+        else if ( representation === IntroRepresentation.VERTICAL_BAR ) {
           this.currentView = new RectangularSceneNode( model, {
             getBucketLocation,
             rectangularOrientation: RectangularOrientation.VERTICAL
           } );
         }
-        else if ( representation === Representation.HORIZONTAL_BAR ) {
+        else if ( representation === IntroRepresentation.HORIZONTAL_BAR ) {
           this.currentView = new RectangularSceneNode( model, {
             getBucketLocation,
             rectangularOrientation: RectangularOrientation.HORIZONTAL
           } );
         }
-        else if ( representation === Representation.BEAKER ) {
+        else if ( representation === IntroRepresentation.BEAKER ) {
           this.currentView = new BeakerSceneNode( model, {
             getBucketLocation
           } );
         }
-        else if ( representation === Representation.CAKE ) {
+        else if ( representation === IntroRepresentation.CAKE ) {
           this.currentView = new CakeSceneNode( model, {
             getBucketLocation
           } );
         }
-        else if ( representation === Representation.NUMBER_LINE ) {
+        else if ( representation === IntroRepresentation.NUMBER_LINE ) {
           this.currentView = new NumberLineSceneNode( model );
         }
         if ( this.currentView ) {

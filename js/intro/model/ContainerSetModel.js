@@ -11,12 +11,12 @@ define( require => {
   // modules
   const Container = require( 'FRACTIONS_COMMON/intro/model/Container' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const IntroRepresentation = require( 'FRACTIONS_COMMON/intro/enum/IntroRepresentation' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Piece = require( 'FRACTIONS_COMMON/intro/model/Piece' );
   const Property = require( 'AXON/Property' );
   const Range = require( 'DOT/Range' );
-  const Representation = require( 'FRACTIONS_COMMON/common/enum/Representation' );
 
   class ContainerSetModel {
     /**
@@ -24,7 +24,7 @@ define( require => {
      */
     constructor( options ) {
       options = _.extend( {
-        representations: Representation.VALUES,
+        representations: IntroRepresentation.VALUES,
         initialNumerator: 0,
         initialDenominator: 1,
         initialContainerCount: 1,
@@ -36,11 +36,11 @@ define( require => {
         isCompact: false
       }, options );
 
-      // @public {Array.<Representation>}
+      // @public {Array.<IntroRepresentation>}
       this.representations = options.representations;
 
-      // @public {Property.<Representation>}
-      this.representationProperty = new Property( Representation.CIRCLE );
+      // @public {Property.<IntroRepresentation>}
+      this.representationProperty = new Property( IntroRepresentation.CIRCLE );
 
       // @public {Property.<number>} - If a fraction is N/D, the numerator is the N.
       // NOTE: All internal changes to this property should be done through changeNumeratorManually.
