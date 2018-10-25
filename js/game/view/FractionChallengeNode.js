@@ -273,6 +273,7 @@ define( require => {
             if ( closestTarget.groupProperty.value === null && shapeGroup.totalFraction.reduced().equals( closestTarget.fraction.reduced() ) ) {
               this.challenge.collectShapeGroup( shapeGroup, closestTarget );
               this.playCollectedSound();
+              shapeGroup.hoveringTargetProperty.value = null;
             }
             else {
               this.challenge.centerShapeGroup( shapeGroup );
@@ -335,6 +336,7 @@ define( require => {
             if ( closestTarget.groupProperty.value === null && numberGroup.totalFraction.reduced().equals( closestTarget.fraction.reduced() ) ) {
               this.challenge.collectNumberGroup( numberGroup, closestTarget );
               this.playCollectedSound();
+              numberGroup.hoveringTargetProperty.value = null;
             }
             else {
               this.challenge.centerNumberGroup( numberGroup );
