@@ -139,7 +139,7 @@ define( require => {
         positioned: true,
         modelViewTransform: self.modelViewTransform,
         dropListener: function( wasTouch ) {
-          model.shapePieceDropped( shapePiece, wasTouch ? 50 : 0 );
+          model.shapePieceDropped( shapePiece, wasTouch ? 100 : 50 );
         }
       } );
       self.shapePieceNodes.push( shapePieceNode );

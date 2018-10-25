@@ -367,7 +367,7 @@ define( require => {
         positioned: true,
         modelViewTransform: this.modelViewTransform,
         dropListener: wasTouch => {
-          this.challenge.shapePieceDropped( shapePiece, wasTouch ? 50 : 0 );
+          this.challenge.shapePieceDropped( shapePiece, wasTouch ? 100 : 50 );
         }
       } );
       this.shapePieceNodes.push( shapePieceNode );
