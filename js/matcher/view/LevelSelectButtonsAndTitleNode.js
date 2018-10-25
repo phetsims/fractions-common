@@ -23,7 +23,7 @@ define( require => {
 
   // strings
   var fractionsChooseYourLevelString = require( 'string!FRACTIONS_COMMON/fractionsChooseYourLevel' );
-  var levelNumberString = require( 'string!FRACTIONS_COMMON/levelNumber' );
+  var labelLevelString = require( 'string!VEGAS/label.level' );
   var mixedNumbersChooseYourLevelString = require( 'string!FRACTIONS_COMMON/mixedNumbersChooseYourLevel' );
 
   // constants
@@ -95,7 +95,7 @@ define( require => {
         width: shape.width ? shape.width : 60,
         height: shape.height ? shape.height : 60
       } );
-      var textNode = new Text( StringUtils.format( levelNumberString, index + 1 ), {
+      var textNode = new Text( StringUtils.format( labelLevelString, index + 1 ), {
         maxWidth: iconNode.width,
         font: FONT,
         centerX: 0

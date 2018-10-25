@@ -38,13 +38,13 @@ define( require => {
   var cheerAudio = require( 'sound!VEGAS/cheer.mp3' );
 
   // strings
-  var checkString = require( 'string!FRACTIONS_COMMON/check' );
-  var levelNumberString = require( 'string!FRACTIONS_COMMON/levelNumber' );
+  var checkString = require( 'string!VEGAS/check' );
+  var labelLevelString = require( 'string!VEGAS/label.level' );
   var okString = require( 'string!FRACTIONS_COMMON/ok' );
-  var scoreNumberString = require( 'string!FRACTIONS_COMMON/scoreNumber' );
-  var showAnswerString = require( 'string!FRACTIONS_COMMON/showAnswer' );
+  var labelScoreString = require( 'string!VEGAS/label.score' );
+  var showAnswerString = require( 'string!VEGAS/showAnswer' );
   var timeNumberSecString = require( 'string!FRACTIONS_COMMON/timeNumberSec' );
-  var tryAgainString = require( 'string!FRACTIONS_COMMON/tryAgain' );
+  var tryAgainString = require( 'string!VEGAS/tryAgain' );
 
   //Toggle this to true to make the rewards show after any shape comparison, for debugging
   var debugRewards = false;
@@ -72,19 +72,19 @@ define( require => {
     this.model = model;
 
     //drawing labels at the right
-    var levelLabel = new Text( StringUtils.format( levelNumberString, model.levelNumber ), {
+    var levelLabel = new Text( StringUtils.format( labelLevelString, model.levelNumber ), {
       font: new PhetFont( {
         size: 12,
         weight: 'bold'
       } )
     } );
-    var scoreLabel = new Text( StringUtils.format( scoreNumberString, 0 ), {
+    var scoreLabel = new Text( StringUtils.format( labelScoreString, 0 ), {
       font: new PhetFont( {
         size: 12,
         weight: 'bold'
       } )
     } );
-    var timeLabel = new Text( StringUtils.format( scoreNumberString, 0 ), {
+    var timeLabel = new Text( StringUtils.format( labelScoreString, 0 ), {
       font: new PhetFont( {
         size: 12,
         weight: 'bold'
@@ -307,7 +307,7 @@ define( require => {
 
     //update score
     model.scoreProperty.link( function( newScore ) {
-      scoreLabel.text = StringUtils.format( scoreNumberString, newScore );
+      scoreLabel.text = StringUtils.format( labelScoreString, newScore );
       vBox.right = model.gameModel.width - margin;
     } );
 
