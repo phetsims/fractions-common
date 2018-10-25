@@ -17,7 +17,10 @@ define( require => {
     'NUMERATOR',
     'DENOMINATOR'
   ], NumberSpotType => {
-    // TODO: doc
+    /**
+     * @param {boolean} isMixedNumber
+     * @returns {Array.<NumberSpotType>} - Shows the number spots available for whether mixed numbers are an option.
+     */
     NumberSpotType.getTypes = function( isMixedNumber ) {
       return isMixedNumber ? [ NumberSpotType.WHOLE, NumberSpotType.NUMERATOR, NumberSpotType.DENOMINATOR ] : [ NumberSpotType.NUMERATOR, NumberSpotType.DENOMINATOR ];
     };

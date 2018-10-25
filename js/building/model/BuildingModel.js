@@ -103,13 +103,33 @@ define( require => {
       return _.find( this.numberStacks, stack => stack.number === numberPiece.number ) || null;
     }
 
+    /**
+     * Returns the index to which pieces should animate to in the shape stack.
+     * @protected
+     *
+     * @param {ShapeStack} shapeStack
+     * @returns {number}
+     */
+    getShapeStackIndex( shapeStack ) {
+      return 1;
+    }
+
+    /**
+     * Returns the index to which pieces should animate to in the number stack.
+     * @protected
+     *
+     * @param {NumberStack} numberStack
+     * @returns {number}
+     */
+    getNumberStackIndex( numberStack ) {
+      return 1;
+    }
+
     returnActiveShapePiece( shapePiece ) {
       var self = this;
 
       var shapeStack = this.findMatchingShapeStack( shapePiece );
-
-      // TODO: Don't use hard-coded constant (index 1) for game screens
-      var shapeMatrix = ShapeStack.getShapeMatrix( shapePiece.fraction, shapePiece.representation, 1 );
+      var shapeMatrix = ShapeStack.getShapeMatrix( shapePiece.fraction, shapePiece.representation, this.getShapeStackIndex( shapeStack ) );
       var position = shapeStack.positionProperty.value.plus( shapeMatrix.timesVector2( Vector2.ZERO ).timesScalar( FractionsCommonConstants.SHAPE_BUILD_SCALE ) );
       var speed = 40 / Math.sqrt( position.distance( shapePiece.positionProperty.value ) );
       shapePiece.animator.animateTo( position, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, 0, shapeStack.positionProperty, Easing.QUADRATIC_IN, speed, () => {
@@ -124,9 +144,7 @@ define( require => {
       var self = this;
 
       var numberStack = this.findMatchingNumberStack( numberPiece );
-
-      // TODO: Don't use hard-coded constant (index 1) for game screens
-      var offset = NumberStack.getOffset( 1 );
+      var offset = NumberStack.getOffset( this.getNumberStackIndex( numberStack ) );
       var position = numberStack.positionProperty.value.plus( offset.timesScalar( FractionsCommonConstants.NUMBER_BUILD_SCALE ) );
       var speed = 40 / Math.sqrt( position.distance( numberPiece.positionProperty.value ) );
       numberPiece.animator.animateTo( position, 0, 1, 0, numberStack.positionProperty, Easing.QUADRATIC_IN, speed, () => {

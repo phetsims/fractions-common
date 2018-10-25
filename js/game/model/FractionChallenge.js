@@ -299,6 +299,30 @@ define( require => {
     }
 
     /**
+     * Returns the index to which pieces should animate to in the shape stack.
+     * @protected
+     * @override
+     *
+     * @param {ShapeStack} shapeStack
+     * @returns {number}
+     */
+    getShapeStackIndex( shapeStack ) {
+      return shapeStack.shapePieces.length;
+    }
+
+    /**
+     * Returns the index to which pieces should animate to in the number stack.
+     * @protected
+     * @override
+     *
+     * @param {NumberStack} numberStack
+     * @returns {number}
+     */
+    getNumberStackIndex( numberStack ) {
+      return numberStack.numberPieces.length + 1;
+    }
+
+    /**
      * There is a desired "pseudorandom" generation for the first 4 shape levels, which should have a "nice" mix of
      * pie and bar. This should change on every "initial" or "reset" generation (where all 4 are generated), but
      * if only one is generated then it should be random.

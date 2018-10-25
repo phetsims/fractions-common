@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * In a building situation, whether shapes or numbers are included.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
