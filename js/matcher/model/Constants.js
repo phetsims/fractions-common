@@ -14,31 +14,11 @@ define( require => {
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonQueryParameters = require( 'FRACTIONS_COMMON/common/FractionsCommonQueryParameters' );
-  var PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
-
-  //colors
-  var COLORS = {
-    LIGHT_GREEN: 'rgb(140,198,63)',
-    LIGHT_BLUE: PhetColorScheme.PHET_LOGO_BLUE, //to match the PhET Logo
-    LIGHT_RED: 'rgb(233,69,69)',
-    LIGHT_PINK: 'rgb(255,175,175)',
-    ORANGE: 'rgb(255,200,0)',
-    YELLOW: PhetColorScheme.PHET_LOGO_YELLOW, //to match the PhET Logo
-    GREEN: 'rgb(0,255,0)',
-    PINK: 'rgb(255,0,255)'
-  };
-  COLORS.CIRCLE_COLOR = COLORS.LIGHT_GREEN;
-  COLORS.HORIZONTAL_SLICE_COLOR = COLORS.LIGHT_RED;
-  COLORS.VERTICAL_SLICE_COLOR = COLORS.LIGHT_BLUE;
-  COLORS.NUMBER_LINE = COLORS.LIGHT_GREEN;
 
   //list of all possible shapes
   var SHAPES = [ 'PIES', 'HORIZONTAL_BARS', 'VERTICAL_BARS', 'PLUSES', 'GRID', 'PYRAMID', 'POLYGON', 'TETRIS', 'FLOWER', 'LETTER_L_SHAPES', 'INTERLEAVED_L_SHAPES', 'RING_OF_HEXAGONS', 'NINJA_STAR' ];
 
   function Constants() {
-    // color constants
-    this.COLORS = COLORS;
-
     // shapes type constants
     this.SHAPES = SHAPES;
 

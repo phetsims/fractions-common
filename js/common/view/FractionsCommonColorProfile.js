@@ -12,6 +12,7 @@ define( require => {
   const Color = require( 'SCENERY/util/Color' );
   const ColorProfile = require( 'SCENERY_PHET/ColorProfile' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
 
   // Colors from the Java version
   const LIGHT_RED = new Color( 233, 69, 69 );
@@ -83,6 +84,10 @@ define( require => {
     shapeRed: { default: LIGHT_RED },
     shapeOrange: { default: LIGHT_ORANGE },
     shapePink: { default: LIGHT_PINK },
+    shapeMagenta: { default: new Color( 'magenta' ) },
+    shapeYellow: { default: PhetColorScheme.PHET_LOGO_YELLOW },
+    shapeLighterPink: { default: new Color( 255, 175, 175 ) },
+    shapeStrongGreen: { default: new Color( 0, 2550, 0 ) },
 
     level1: { default: LIGHT_RED },
     level2: { default: LIGHT_BLUE },

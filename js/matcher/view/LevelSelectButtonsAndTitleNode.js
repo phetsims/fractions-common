@@ -11,6 +11,7 @@ define( require => {
 
   // modules
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HomeScreenView = require( 'JOIST/HomeScreenView' );
   var inherit = require( 'PHET_CORE/inherit' );
@@ -43,42 +44,41 @@ define( require => {
       maxWidth: 618
     } ) );
 
-    var colors = model.constants.COLORS;
     var shapes = [
       {
         type: 'PIES',
-        color: colors.LIGHT_RED
+        color: FractionsCommonColorProfile.shapeRedProperty
       },
       {
         type: 'HORIZONTAL_BARS',
-        color: colors.LIGHT_GREEN
+        color: FractionsCommonColorProfile.shapeGreenProperty
       },
       {
         type: 'VERTICAL_BARS',
-        color: colors.LIGHT_BLUE
+        color: FractionsCommonColorProfile.shapeBlueProperty
       },
       {
         type: 'LETTER_L_SHAPES',
-        color: colors.ORANGE,
+        color: FractionsCommonColorProfile.shapeOrangeProperty,
         height: 75
       },
       {
         type: 'POLYGON',
-        color: colors.PINK
+        color: FractionsCommonColorProfile.shapeMagentaProperty
       },
       {
         type: 'FLOWER',
-        color: colors.YELLOW,
+        color: FractionsCommonColorProfile.shapeYellowProperty,
         width: 65,
         height: 65
       },
       {
         type: 'RING_OF_HEXAGONS',
-        color: colors.LIGHT_PINK
+        color: FractionsCommonColorProfile.shapeLighterPinkProperty
       },
       {
         type: 'NINJA_STAR',
-        color: colors.GREEN
+        color: FractionsCommonColorProfile.shapeStrongGreenProperty
       }
     ];
 

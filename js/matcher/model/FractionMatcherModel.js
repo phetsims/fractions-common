@@ -13,6 +13,7 @@ define( require => {
   const Emitter = require( 'AXON/Emitter' );
   const FractionMatcherView = require( 'FRACTIONS_COMMON/matcher/view/FractionMatcherView' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const MatcherLevel = require( 'FRACTIONS_COMMON/matcher/model/MatcherLevel' );
   const MixedNumbersConstants = require( 'FRACTIONS_COMMON/matcher/model/MixedNumbersConstants' );
   const Property = require( 'AXON/Property' );
@@ -33,7 +34,11 @@ define( require => {
       this.height = FractionMatcherView.LAYOUT_BOUNDS.height;
 
       this.constants = hasMixedNumbers ? new MixedNumbersConstants() : new Constants();
-      this.colorScheme = [ this.constants.COLORS.LIGHT_BLUE, this.constants.COLORS.LIGHT_GREEN, this.constants.COLORS.LIGHT_RED ];
+      this.colorScheme = [
+        FractionsCommonColorProfile.shapeBlueProperty,
+        FractionsCommonColorProfile.shapeGreenProperty,
+        FractionsCommonColorProfile.shapeRedProperty
+      ];
       this.toSimplify = hasMixedNumbers;
       this.ANIMATION_TIME = 500;
       this.MAXIMUM_PAIRS = 6;

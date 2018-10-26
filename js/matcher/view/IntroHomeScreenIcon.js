@@ -9,8 +9,8 @@ define( require => {
   'use strict';
 
   // modules
-  var Constants = require( 'FRACTIONS_COMMON/matcher/model/Constants' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var inherit = require( 'PHET_CORE/inherit' );
   var NumericShape = require( 'FRACTIONS_COMMON/matcher/shapes/NumericShape' );
@@ -32,7 +32,7 @@ define( require => {
       numerator: 1,
       denominator: 2,
       value: 0.5,
-      fill: new Constants().COLORS.LIGHT_BLUE,
+      fill: FractionsCommonColorProfile.shapeBlueProperty,
       width: 180,
       height: 180
     } );
