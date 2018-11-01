@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * An HBox of stack views, with logic for proper alignment and mouse/touch areas. 
+ * An HBox of stack views, with logic for proper alignment and mouse/touch areas.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -59,21 +59,16 @@ define( require => {
         }
       } );
 
-      // @private {Array.<DragListener>} - For disposal
-      this.dragListeners = [];
-
       // @private {Array.<function>} - For disposal
       this.lengthListeners = [];
 
       // @private {Array.<Node>} - We want to create custom-area targets for each stack that when clicked will activate
       // the "press" of the stack.
       this.stackTargets = this.stackNodes.map( stackNode => {
-        const dragListener = DragListener.createForwardingListener( event => pressCallback( event, stackNode.stack ) );
-        this.dragListeners.push( dragListener );
         const stackTarget = new Node( {
           children: [ stackNode ],
           cursor: 'pointer',
-          inputListeners: [ dragListener ]
+          inputListeners: [ DragListener.createForwardingListener( event => pressCallback( event, stackNode.stack ) ) ]
         } );
         stackTarget.layoutBounds = stackNode.localToParentBounds( stackNode.layoutBounds );
 
@@ -132,7 +127,6 @@ define( require => {
         stackNode.stack.array.lengthProperty.unlink( this.lengthListeners[ index ] );
         stackNode.dispose();
       } );
-      this.dragListeners.forEach( dragListener => dragListener.dispose() );
 
       super.dispose();
     }

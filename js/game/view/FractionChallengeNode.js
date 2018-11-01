@@ -54,7 +54,7 @@ define( require => {
     constructor( challenge, layoutBounds, gameAudioPlayer, nextLevelCallback ) {
       super();
 
-      // @private
+      // @private {FractionChallenge}
       this.challenge = challenge;
 
       // @private {GameAudioPlayer}
@@ -150,16 +150,19 @@ define( require => {
         font: new PhetFont( { size: 30, weight: 'bold' } )
       } );
 
+      // @private {TextPushButton}
+      this.nextLevelButton = new TextPushButton( nextString, {
+        listener: nextLevelCallback,
+        baseColor: PhetColorScheme.BUTTON_YELLOW,
+        font: new PhetFont( 24 )
+      } );
+
       // @private {Node}
       this.levelCompleteNode = new VBox( {
         spacing: 10,
         children: [
           new FaceNode( 180 ),
-          ...( nextLevelCallback ? [ new TextPushButton( nextString, {
-            listener: nextLevelCallback,
-            baseColor: PhetColorScheme.BUTTON_YELLOW,
-            font: new PhetFont( 24 )
-          } ) ] : [] )
+          ...( nextLevelCallback ? [ this.nextLevelButton ] : [] )
         ]
       } );
 
@@ -419,7 +422,13 @@ define( require => {
 
       this.challenge.scoreProperty.unlink( this.levelCompleteListener );
 
+      this.nextLevelButton.dispose();
       this.targetNodes.forEach( targetNode => targetNode.dispose() );
+      this.shapeGroupNodes.forEach( shapeGroupNode => shapeGroupNode.dispose() );
+      this.numberGroupNodes.forEach( numberGroupNode => numberGroupNode.dispose() );
+      this.shapePieceNodes.forEach( shapePieceNode => shapePieceNode.dispose() );
+      this.numberPieceNodes.forEach( numberPieceNode => numberPieceNode.dispose() );
+      this.panel.dispose();
 
       super.dispose();
     }

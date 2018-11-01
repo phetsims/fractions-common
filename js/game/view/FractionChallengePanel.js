@@ -26,7 +26,6 @@ define( require => {
         ...challenge.numberGroupStacks
       ], pressCallback );
 
-      // TODO: background color customizable
       super( box, {
         xMargin: 20
       } );
@@ -43,6 +42,17 @@ define( require => {
      */
     updateModelLocations( modelViewTransform ) {
       this.box.updateModelLocations( modelViewTransform, this );
+    }
+
+    /**
+     * Releases references.
+     * @public
+     * @override
+     */
+    dispose() {
+      this.box.dispose();
+
+      super.dispose();
     }
   }
 
