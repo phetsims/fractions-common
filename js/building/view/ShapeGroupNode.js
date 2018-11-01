@@ -197,7 +197,6 @@ define( require => {
       };
       this.shapeGroup.isAnimatingProperty.link( this.visibilityListener );
 
-      // TODO: Presumably won't need an unlink, since our lifetimes are the same
       if ( !options.isIcon ) {
         // @private {function}
         this.positionListener = position => {
@@ -310,6 +309,7 @@ define( require => {
 
       this.shapeContainerNodes.remove( shapeContainerNode );
       this.shapeContainerLayer.removeChild( shapeContainerNode );
+      shapeContainerNode.dispose();
       this.updateRightButtonPosition();
     }
 
@@ -319,6 +319,7 @@ define( require => {
      * @override
      */
     dispose() {
+      this.shapeContainerNodes.forEach( shapeContainer => shapeContainer.dispose() );
       this.shapeGroup.changedEmitter.removeListener( this.updateVisibilityListener );
       this.shapeGroup.isAnimatingProperty.unlink( this.visibilityListener );
       this.shapeGroup.shapeContainers.lengthProperty.unlink( this.addRemoveVisibleListener );
