@@ -59,8 +59,11 @@ define( require => {
         }
       } );
 
-      // @private {Array.<DragListener>}
+      // @private {Array.<DragListener>} - For disposal
       this.dragListeners = [];
+
+      // @private {Array.<function>} - For disposal
+      this.lengthListeners = [];
 
       // @private {Array.<Node>} - We want to create custom-area targets for each stack that when clicked will activate
       // the "press" of the stack.
@@ -75,9 +78,12 @@ define( require => {
         stackTarget.layoutBounds = stackNode.localToParentBounds( stackNode.layoutBounds );
 
         // Shouldn't be pickable when it has no elements.
-        stackNode.stack.array.lengthProperty.link( length => {
+        const lengthListener = length => {
           stackTarget.pickable = length === 0 ? false : null;
-        } );
+        };
+        this.lengthListeners.push( lengthListener );
+        stackNode.stack.array.lengthProperty.link( lengthListener );
+
         return stackTarget;
       } );
 
@@ -122,7 +128,10 @@ define( require => {
      * @override
      */
     dispose() {
-      this.stackNodes.forEach( stackNode => stackNode.dispose() );
+      this.stackNodes.forEach( ( stackNode, index ) => {
+        stackNode.stack.array.lengthProperty.unlink( this.lengthListeners[ index ] );
+        stackNode.dispose();
+      } );
       this.dragListeners.forEach( dragListener => dragListener.dispose() );
 
       super.dispose();

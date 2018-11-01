@@ -122,10 +122,12 @@ define( require => {
         baseColor: FractionsCommonColorProfile.redRoundArrowButtonProperty
       } );
 
-      shapeGroup.shapeContainers.lengthProperty.link( numShapeContainers => {
+      // @private {function}
+      this.addRemoveVisibleListener = numShapeContainers => {
         this.addContainerButton.visible = numShapeContainers < shapeGroup.maxContainers;
         this.removeContainerButton.visible = numShapeContainers > 1;
-      } );
+      };
+      this.shapeGroup.shapeContainers.lengthProperty.link( this.addRemoveVisibleListener );
 
       // @private {Node}
       this.rightButtonBox = new VBox( {
@@ -197,22 +199,29 @@ define( require => {
 
       // TODO: Presumably won't need an unlink, since our lifetimes are the same
       if ( !options.isIcon ) {
-        // TODO: proper disposal handling!
-        shapeGroup.positionProperty.link( position => {
+        // @private {function}
+        this.positionListener = position => {
           this.translation = options.modelViewTransform.modelToViewPosition( position );
-        } );
-        shapeGroup.scaleProperty.link( scale => {
+        };
+        this.shapeGroup.positionProperty.link( this.positionListener );
+
+        // @private {function}
+        this.scaleListener = scale => {
           this.setScaleMagnitude( scale );
-        } );
+        };
+        this.shapeGroup.scaleProperty.link( this.scaleListener );
 
         // Don't allow touching once we start animating
-        shapeGroup.isAnimatingProperty.link( isAnimating => {
+        // @private {function}
+        this.isAnimatingListener = isAnimating => {
           this.pickable = !isAnimating;
-        } );
+        };
+        this.shapeGroup.isAnimatingProperty.link( this.isAnimatingListener );
 
         // @private {Property.<Bounds2>}
         this.dragBoundsProperty = new Property( Bounds2.NOTHING );
 
+        // @private {function}
         this.dragBoundsListener = this.updateDragBounds.bind( this );
         this.generalDragBoundsProperty.link( this.dragBoundsListener );
 
@@ -312,6 +321,11 @@ define( require => {
     dispose() {
       this.shapeGroup.changedEmitter.removeListener( this.updateVisibilityListener );
       this.shapeGroup.isAnimatingProperty.unlink( this.visibilityListener );
+      this.shapeGroup.shapeContainers.lengthProperty.unlink( this.addRemoveVisibleListener );
+      this.positionListener && this.shapeGroup.positionProperty.unlink( this.positionListener );
+      this.scaleListener && this.shapeGroup.scaleProperty.unlink( this.scaleListener );
+      this.isAnimatingListener && this.shapeGroup.isAnimatingProperty.unlink( this.isAnimatingListener );
+      this.generalDragBoundsProperty && this.generalDragBoundsProperty.unlink( this.dragBoundsListener );
 
       this.shapeGroup.shapeContainers.removeItemAddedListener( this.addShapeContainerListener );
       this.shapeGroup.shapeContainers.removeItemRemovedListener( this.removeShapeContainerListener );
@@ -322,7 +336,6 @@ define( require => {
       this.removeContainerButton.dispose();
       this.returnButton.dispose();
       this.isSelectedProperty.dispose();
-      this.generalDragBoundsProperty && this.generalDragBoundsProperty.unlink( this.dragBoundsListener );
       this.dragListener && this.dragListener.dispose();
 
       super.dispose();

@@ -245,9 +245,9 @@ define( require => {
     dispose() {
       this.numberGroup.isAnimatingProperty.unlink( this.visibilityListener );
       this.numberGroup.isCompleteProperty.unlink( this.completeVisibilityListener );
-      this.numberGroup.positionProperty.unlink( this.positionListener );
-      this.numberGroup.scaleProperty.unlink( this.scaleListener );
-      this.numberGroup.isAnimatingProperty.unlink( this.isAnimatingListener );
+      this.positionListener && this.numberGroup.positionProperty.unlink( this.positionListener );
+      this.scaleListener && this.numberGroup.scaleProperty.unlink( this.scaleListener );
+      this.isAnimatingListener && this.numberGroup.isAnimatingProperty.unlink( this.isAnimatingListener );
       this.itemsToDispose.forEach( item => item.dispose() );
 
       super.dispose();
