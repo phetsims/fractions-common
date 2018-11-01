@@ -11,6 +11,7 @@ define( require => {
   // modules
   const Animator = require( 'FRACTIONS_COMMON/building/model/Animator' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const Emitter = require( 'AXON/Emitter' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
@@ -19,7 +20,6 @@ define( require => {
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Property = require( 'AXON/Property' );
   const Range = require( 'DOT/Range' );
-  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
   const Vector2 = require( 'DOT/Vector2' );
 

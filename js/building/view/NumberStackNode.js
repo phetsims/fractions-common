@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * View for a NumberStack.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -11,52 +11,37 @@ define( require => {
   // modules
   const arrayRemove = require( 'PHET_CORE/arrayRemove' );
   const Bounds2 = require( 'DOT/Bounds2' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var NumberPieceNode = require( 'FRACTIONS_COMMON/building/view/NumberPieceNode' );
-  var NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
-  var StackNode = require( 'FRACTIONS_COMMON/building/view/StackNode' );
+  const NumberPieceNode = require( 'FRACTIONS_COMMON/building/view/NumberPieceNode' );
+  const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
+  const StackNode = require( 'FRACTIONS_COMMON/building/view/StackNode' );
 
-  /**
-   * @constructor
-   * @extends {StackNode}
-   *
-   * @param {NumberStack} numberStack
-   * @param {Object} [options]
-   */
-  function NumberStackNode( numberStack, options ) {
-    assert && assert( numberStack instanceof NumberStack );
-
-    StackNode.call( this, numberStack );
-
-    // @public {NumberStack} TODO: consider using this.stack
-    this.numberStack = numberStack;
-
-    // @private {Array.<NumberPieceNode>}
-    this.numberPieceNodes = [];
-
-    // NOTE: Stacks and their nodes should be persistent, no need to unlink
-    numberStack.numberPieces.addItemAddedListener( this.addNumberPiece.bind( this ) );
-    numberStack.numberPieces.addItemRemovedListener( this.removeNumberPiece.bind( this ) );
-    numberStack.numberPieces.forEach( this.addNumberPiece.bind( this ) );
-
-    // @public {Bounds2}
-    this.layoutBounds = this.computeLayoutBounds();
-
-    this.mutate( options );
-  }
-
-  fractionsCommon.register( 'NumberStackNode', NumberStackNode );
-
-  return inherit( StackNode, NumberStackNode, {
+  class NumberStackNode extends StackNode {
     /**
-     * Returns the ideal layout bounds for this node (that should be used for layout).
-     * @public
-     *
-     * @returns {Bounds2}
+     * @param {NumberStack} numberStack
+     * @param {Object} [options]
      */
-    computeLayoutBounds() {
+    constructor( numberStack, options ) {
+      assert && assert( numberStack instanceof NumberStack );
+
+      super( numberStack );
+
+      // @public {NumberStack} TODO: consider using this.stack (for all 4 types)
+      this.numberStack = numberStack;
+
+      // @private {Array.<NumberPieceNode>}
+      this.numberPieceNodes = [];
+
+      // @private {function}
+      this.numberPieceAddedListener = this.addNumberPiece.bind( this );
+      this.numberPieceRemovedListener = this.removeNumberPiece.bind( this );
+
+      this.stack.numberPieces.addItemAddedListener( this.numberPieceAddedListener );
+      this.stack.numberPieces.addItemRemovedListener( this.numberPieceRemovedListener );
+      this.stack.numberPieces.forEach( this.numberPieceAddedListener );
+
+      // Inform about our available layout bounds
       const bounds = Bounds2.NOTHING.copy();
       const numberPiece = new NumberPiece( this.numberStack.number );
       const numberPieceNode = new NumberPieceNode( numberPiece );
@@ -65,8 +50,10 @@ define( require => {
         bounds.includeBounds( numberPieceNode.bounds );
       }
       numberPieceNode.dispose();
-      return bounds;
-    },
+      this.layoutBounds = bounds;
+
+      this.mutate( options );
+    }
 
     /**
      * Adds a NumberPiece's view
@@ -74,16 +61,16 @@ define( require => {
      *
      * @param {NumberPiece} numberPiece
      */
-    addNumberPiece: function( numberPiece ) {
+    addNumberPiece( numberPiece ) {
       assert && assert( numberPiece.number === this.numberStack.number );
 
-      var index = this.numberPieceNodes.length;
-      var numberPieceNode = new NumberPieceNode( numberPiece, {
+      const index = this.numberPieceNodes.length;
+      const numberPieceNode = new NumberPieceNode( numberPiece, {
         translation: NumberStack.getOffset( index )
       } );
       this.numberPieceNodes.push( numberPieceNode );
       this.addChild( numberPieceNode );
-    },
+    }
 
     /**
      * Removes a NumberPiece's view
@@ -91,8 +78,8 @@ define( require => {
      *
      * @param {NumberPiece} numberPiece
      */
-    removeNumberPiece: function( numberPiece ) {
-      var numberPieceNode = _.find( this.numberPieceNodes, function( numberPieceNode ) {
+    removeNumberPiece( numberPiece ) {
+      const numberPieceNode = _.find( this.numberPieceNodes, numberPieceNode => {
         return numberPieceNode.numberPiece === numberPiece;
       } );
       assert && assert( numberPieceNode );
@@ -101,5 +88,20 @@ define( require => {
       this.removeChild( numberPieceNode );
       numberPieceNode.dispose();
     }
-  } );
+
+    /**
+     * Releases references.
+     * @public
+     * @override
+     */
+    dispose() {
+      this.numberPieceNodes.forEach( numberPieceNode => numberPieceNode.dispose() );
+      this.stack.numberPieces.removeItemAddedListener( this.numberPieceAddedListener );
+      this.stack.numberPieces.removeItemRemovedListener( this.numberPieceRemovedListener );
+
+      super.dispose();
+    }
+  }
+
+  return fractionsCommon.register( 'NumberStackNode', NumberStackNode );
 } );

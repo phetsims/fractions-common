@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * Provides a wrapper for handling animation logic for an assorted number of different properties.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */

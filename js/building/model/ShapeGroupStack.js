@@ -9,8 +9,8 @@ define( require => {
   'use strict';
 
   // modules
-  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Stack = require( 'FRACTIONS_COMMON/building/model/Stack' );
 
   class ShapeGroupStack extends Stack {

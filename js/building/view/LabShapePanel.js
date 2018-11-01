@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   var AlignBox = require( 'SCENERY/nodes/AlignBox' );
+  var BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   var Fraction = require( 'PHETCOMMON/model/Fraction' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
@@ -19,7 +20,6 @@ define( require => {
   var Node = require( 'SCENERY/nodes/Node' );
   var Panel = require( 'SUN/Panel' );
   var RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
-  var BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
   var StackNodesBox = require( 'FRACTIONS_COMMON/building/view/StackNodesBox' );

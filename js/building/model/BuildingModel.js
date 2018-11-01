@@ -10,16 +10,16 @@ define( require => {
 
   // modules
   const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const Easing = require( 'TWIXT/Easing' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
-  const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
   const NumberSpotType = require( 'FRACTIONS_COMMON/building/enum/NumberSpotType' );
+  const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Property = require( 'AXON/Property' );
   const Range = require( 'DOT/Range' );
-  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
   const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
   const ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );

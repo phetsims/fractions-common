@@ -9,6 +9,7 @@ define( require => {
   'use strict';
 
   // modules
+  var BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   var Circle = require( 'SCENERY/nodes/Circle' );
   var DragListener = require( 'SCENERY/listeners/DragListener' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
@@ -19,7 +20,6 @@ define( require => {
   var Path = require( 'SCENERY/nodes/Path' );
   var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   var Shape = require( 'KITE/Shape' );
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var Touch = require( 'SCENERY/input/Touch' );

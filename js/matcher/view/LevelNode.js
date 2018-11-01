@@ -40,8 +40,8 @@ define( require => {
   // strings
   var checkString = require( 'string!VEGAS/check' );
   var labelLevelString = require( 'string!VEGAS/label.level' );
-  var okString = require( 'string!FRACTIONS_COMMON/ok' );
   var labelScoreString = require( 'string!VEGAS/label.score' );
+  var okString = require( 'string!FRACTIONS_COMMON/ok' );
   var showAnswerString = require( 'string!VEGAS/showAnswer' );
   var timeNumberSecString = require( 'string!FRACTIONS_COMMON/timeNumberSec' );
   var tryAgainString = require( 'string!VEGAS/tryAgain' );

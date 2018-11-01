@@ -12,6 +12,7 @@ define( require => {
 
   // modules
   var arrayRemove = require( 'PHET_CORE/arrayRemove' );
+  var BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   var Circle = require( 'SCENERY/nodes/Circle' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
@@ -20,11 +21,10 @@ define( require => {
   var Node = require( 'SCENERY/nodes/Node' );
   var Path = require( 'SCENERY/nodes/Path' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   var Shape = require( 'KITE/Shape' );
+  var ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   var ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
-  var ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
   var Util = require( 'DOT/Util' );
 
   // constants

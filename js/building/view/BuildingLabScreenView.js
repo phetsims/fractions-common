@@ -29,11 +29,11 @@ define( require => {
   var Property = require( 'AXON/Property' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ScreenView = require( 'JOIST/ScreenView' );
-  var ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
   var ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
+  var ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
   var ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
-  var ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
   var ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
+  var ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
 
   // constants
   var PANEL_MARGIN = FractionsCommonConstants.PANEL_MARGIN;

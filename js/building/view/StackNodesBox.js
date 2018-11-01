@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * An HBox of stack views, with logic for proper alignment and mouse/touch areas. 
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -9,108 +9,119 @@ define( require => {
   'use strict';
 
   // modules
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var DragListener = require( 'SCENERY/listeners/DragListener' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var NumberGroupStack = require( 'FRACTIONS_COMMON/building/model/NumberGroupStack' );
-  var NumberGroupStackNode = require( 'FRACTIONS_COMMON/building/view/NumberGroupStackNode' );
-  var NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
-  var NumberStackNode = require( 'FRACTIONS_COMMON/building/view/NumberStackNode' );
-  var ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
-  var ShapeGroupStackNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupStackNode' );
-  var ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
-  var ShapeStackNode = require( 'FRACTIONS_COMMON/building/view/ShapeStackNode' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const Bounds2 = require( 'DOT/Bounds2' );
+  const DragListener = require( 'SCENERY/listeners/DragListener' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const NumberGroupStack = require( 'FRACTIONS_COMMON/building/model/NumberGroupStack' );
+  const NumberGroupStackNode = require( 'FRACTIONS_COMMON/building/view/NumberGroupStackNode' );
+  const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
+  const NumberStackNode = require( 'FRACTIONS_COMMON/building/view/NumberStackNode' );
+  const ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
+  const ShapeGroupStackNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupStackNode' );
+  const ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
+  const ShapeStackNode = require( 'FRACTIONS_COMMON/building/view/ShapeStackNode' );
+  const Vector2 = require( 'DOT/Vector2' );
 
-  /**
-   * @constructor
-   * @extends {HBox}
-   *
-   * @param {Array.<Stack>} stacks
-   * @param {function} pressCallback - function( {Event}, {Stack} ) - Called when a press is started.
-   * @param {Object} [options]
-   */
-  function StackNodesBox( stacks, pressCallback, options ) {
+  class StackNodesBox extends HBox {
+    /**
+     * @param {Array.<Stack>} stacks
+     * @param {function} pressCallback - function( {Event}, {Stack} ) - Called when a press is started.
+     * @param {Object} [options]
+     */
+    constructor( stacks, pressCallback, options ) {
+      options = _.extend( {
+        padding: 20,
+        maxHeightOverride: null
+      }, options );
 
-    options = _.extend( {
-      padding: 20,
-      maxHeightOverride: null
-    }, options );
-
-    // @private {Array.<StackNode>}
-    this.stackNodes = stacks.map( function( stack ) {
-      if ( stack instanceof NumberStack ) {
-        return new NumberStackNode( stack );
-      }
-      else if ( stack instanceof ShapeStack ) {
-        return new ShapeStackNode( stack );
-      }
-      else if ( stack instanceof NumberGroupStack ) {
-        return new NumberGroupStackNode( stack );
-      }
-      else if ( stack instanceof ShapeGroupStack ) {
-        return new ShapeGroupStackNode( stack );
-      }
-      else {
-        throw new Error( 'Unknown stack' );
-      }
-    } );
-
-    // @private {Array.<Node>}
-    this.stackTargets = this.stackNodes.map( function( stackNode ) {
-      const stackTarget = new Node( {
-        children: [ stackNode ],
-        cursor: 'pointer', // TODO: only pointer if it has 1+ in stack
-        inputListeners: [
-          DragListener.createForwardingListener( function( event ) {
-            pressCallback( event, stackNode.stack );
-          } )
-        ]
+      super( {
+        spacing: options.padding
       } );
-      // TODO: cleanliness
-      stackTarget.layoutBounds = stackNode.localToParentBounds( stackNode.layoutBounds );
-      stackNode.stack.array.lengthProperty.link( length => {
-        stackTarget.pickable = length === 0 ? false : null;
-      } );
-      return stackTarget;
-    } );
 
-    // Apply appropriate mouse/touch areas
-    var maxTargetHeight = _.max( this.stackTargets.map( function( stackTarget ) { return stackTarget.layoutBounds.height; } ) );
-    if ( options.maxHeightOverride ) {
-      assert && assert( maxTargetHeight <= options.maxHeightOverride );
-      maxTargetHeight = options.maxHeightOverride;
+      // @private {Array.<StackNode>}
+      this.stackNodes = stacks.map( stack => {
+        if ( stack instanceof NumberStack ) {
+          return new NumberStackNode( stack );
+        }
+        else if ( stack instanceof ShapeStack ) {
+          return new ShapeStackNode( stack );
+        }
+        else if ( stack instanceof NumberGroupStack ) {
+          return new NumberGroupStackNode( stack );
+        }
+        else if ( stack instanceof ShapeGroupStack ) {
+          return new ShapeGroupStackNode( stack );
+        }
+        else {
+          throw new Error( 'Unknown stack' );
+        }
+      } );
+
+      // @private {Array.<DragListener>}
+      this.dragListeners = [];
+
+      // @private {Array.<Node>} - We want to create custom-area targets for each stack that when clicked will activate
+      // the "press" of the stack.
+      this.stackTargets = this.stackNodes.map( stackNode => {
+        const dragListener = DragListener.createForwardingListener( event => pressCallback( event, stackNode.stack ) );
+        this.dragListeners.push( dragListener );
+        const stackTarget = new Node( {
+          children: [ stackNode ],
+          cursor: 'pointer',
+          inputListeners: [ dragListener ]
+        } );
+        stackTarget.layoutBounds = stackNode.localToParentBounds( stackNode.layoutBounds );
+
+        // Shouldn't be pickable when it has no elements.
+        stackNode.stack.array.lengthProperty.link( length => {
+          stackTarget.pickable = length === 0 ? false : null;
+        } );
+        return stackTarget;
+      } );
+
+      // Apply appropriate mouse/touch areas
+      let maxTargetHeight = _.max( this.stackTargets.map( stackTarget => stackTarget.layoutBounds.height ) );
+      if ( options.maxHeightOverride ) {
+        assert && assert( maxTargetHeight <= options.maxHeightOverride );
+        maxTargetHeight = options.maxHeightOverride;
+      }
+      this.stackTargets.forEach( node => {
+        const layoutBounds = node.layoutBounds;
+        assert && assert( layoutBounds.isValid() );
+        const bounds = new Bounds2( -options.padding / 2 + layoutBounds.left, -maxTargetHeight / 2, layoutBounds.right + options.padding / 2, maxTargetHeight / 2 );
+        node.mouseArea = bounds;
+        node.touchArea = bounds;
+
+        // For layout, handle verticality
+        node.localBounds = new Bounds2( layoutBounds.left, -maxTargetHeight / 2, layoutBounds.right, maxTargetHeight / 2 );
+      } );
+
+      this.children = this.stackTargets;
     }
-    this.stackTargets.forEach( function( node ) {
-      const layoutBounds = node.layoutBounds;
-      assert && assert( layoutBounds.isValid() );
-      var bounds = new Bounds2( -options.padding / 2 + layoutBounds.left, -maxTargetHeight / 2, layoutBounds.right + options.padding / 2, maxTargetHeight / 2 );
-      node.mouseArea = bounds;
-      node.touchArea = bounds;
 
-      // For layout, handle verticality
-      node.localBounds = new Bounds2( layoutBounds.left, -maxTargetHeight / 2, layoutBounds.right, maxTargetHeight / 2 );
-    } );
-
-    HBox.call( this, {
-      spacing: options.padding,
-      children: this.stackTargets
-    } );
-  }
-
-  fractionsCommon.register( 'StackNodesBox', StackNodesBox );
-
-  return inherit( HBox, StackNodesBox, {
     // TODO: doc
-    updateModelLocations: function( modelViewTransform, panel ) {
-      this.stackNodes.forEach( function( stackNode ) {
+    updateModelLocations( modelViewTransform, panel ) {
+      this.stackNodes.forEach( stackNode => {
         stackNode.stack.positionProperty.value = modelViewTransform.viewToModelPosition(
           stackNode.getUniqueTrailTo( panel ).localToGlobalPoint( Vector2.ZERO )
         );
       } );
     }
-  } );
+
+    /**
+     * Releases references.
+     * @public
+     * @override
+     */
+    dispose() {
+      this.stackNodes.forEach( stackNode => stackNode.dispose() );
+      this.dragListeners.forEach( dragListener => dragListener.dispose() );
+
+      super.dispose();
+    }
+  }
+
+  return fractionsCommon.register( 'StackNodesBox', StackNodesBox );
 } );

@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   const BuildingModel = require( 'FRACTIONS_COMMON/building/model/BuildingModel' );
+  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
@@ -19,7 +20,6 @@ define( require => {
   const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
   const Property = require( 'AXON/Property' );
-  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
   const ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
   const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );

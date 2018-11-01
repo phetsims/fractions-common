@@ -9,13 +9,13 @@ define( require => {
   'use strict';
 
   // modules
+  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Matrix3 = require( 'DOT/Matrix3' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Property = require( 'AXON/Property' );
-  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   const Util = require( 'DOT/Util' );
   const Vector2 = require( 'DOT/Vector2' );

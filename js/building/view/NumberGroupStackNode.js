@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * View for a NumberGroupStack.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -9,52 +9,59 @@ define( require => {
   'use strict';
 
   // modules
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var NumberGroupNode = require( 'FRACTIONS_COMMON/building/view/NumberGroupNode' );
-  var StackNode = require( 'FRACTIONS_COMMON/building/view/StackNode' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const NumberGroupNode = require( 'FRACTIONS_COMMON/building/view/NumberGroupNode' );
+  const StackNode = require( 'FRACTIONS_COMMON/building/view/StackNode' );
 
-  /**
-   * @constructor
-   * @extends {StackNode}
-   *
-   * @param {NumberStackGroup} numberGroupStack
-   * @param {Object} [options]
-   */
-  function NumberGroupStackNode( numberGroupStack, options ) {
-
-    StackNode.call( this, numberGroupStack );
-
-    // @private {boolean}
-    this.isMixedNumber = numberGroupStack.isMixedNumber;
-
-    // @private {Node}
-    this.icon = NumberGroupNode.createIcon( numberGroupStack.isMixedNumber );
-
-    this.addChild( this.icon );
-
-    numberGroupStack.numberGroups.lengthProperty.link( length => {
-      this.icon.visible = length > 0;
-    } );
-
-    // @public {Bounds2}
-    this.layoutBounds = this.computeLayoutBounds();
-
-    this.mutate( options );
-  }
-
-  fractionsCommon.register( 'NumberGroupStackNode', NumberGroupStackNode );
-
-  return inherit( StackNode, NumberGroupStackNode, {
+  class NumberGroupStackNode extends StackNode {
     /**
-     * Returns the ideal layout bounds for this node (that should be used for layout).
-     * @public
-     *
-     * @returns {Bounds2}
+     * @param {NumberStackGroup} numberGroupStack
+     * @param {Object} [options]
      */
-    computeLayoutBounds() {
-      return this.icon.bounds;
+    constructor( numberGroupStack, options ) {
+      super( numberGroupStack );
+
+      // @private {boolean}
+      this.isMixedNumber = numberGroupStack.isMixedNumber;
+
+      // @private {Node}
+      this.icon = NumberGroupNode.createIcon( numberGroupStack.isMixedNumber );
+
+      this.addChild( this.icon );
+
+      // @private {function}
+      this.stackLengthListener = this.onStackLengthChange.bind( this );
+      
+      this.stack.numberGroups.lengthProperty.link( this.stackLengthListener );
+
+      // Inform about our available layout bounds
+      this.layoutBounds = this.icon.bounds;
+
+      this.mutate( options );
     }
 
-  } );
+    /**
+     * How to handle changes to the stack length.
+     * @private
+     *
+     * @param {number} length
+     */
+    onStackLengthChange( length ) {
+      this.icon.visible = length > 0;
+    }
+
+    /**
+     * Releases references.
+     * @public
+     * @override
+     */
+    dispose() {
+      this.icon.dispose();
+      this.stack.numberGroups.lengthProperty.unlink( this.stackLengthListener );
+
+      super.dispose();
+    }
+  }
+
+  return fractionsCommon.register( 'NumberGroupStackNode', NumberGroupStackNode );
 } );
