@@ -35,6 +35,12 @@ define( require => {
       this.box = box;
     }
 
+    /**
+     * Sets the model positions of our model objects corresponding to their displayed (view) positions.
+     * @public
+     *
+     * @param {ModelViewTransform2} modelViewTransform
+     */
     updateModelLocations( modelViewTransform ) {
       this.box.updateModelLocations( modelViewTransform, this );
     }

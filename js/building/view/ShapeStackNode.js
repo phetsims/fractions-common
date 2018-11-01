@@ -10,22 +10,14 @@ define( require => {
 
   // modules
   const arrayRemove = require( 'PHET_CORE/arrayRemove' );
-  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
-  const Circle = require( 'SCENERY/nodes/Circle' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
-  const Path = require( 'SCENERY/nodes/Path' );
-  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  const Shape = require( 'KITE/Shape' );
+  const Property = require( 'AXON/Property' );
+  const ShapeLayerNode = require( 'FRACTIONS_COMMON/building/view/ShapeLayerNode' );
   const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   const ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
   const ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
   const StackNode = require( 'FRACTIONS_COMMON/building/view/StackNode' );
-  const Util = require( 'DOT/Util' );
-
-  // constants
-  const CIRCLE_RADIUS = FractionsCommonConstants.SHAPE_SIZE / 2;
 
   class ShapeStackNode extends StackNode {
     /**
@@ -49,48 +41,9 @@ define( require => {
       // @private {Array.<ShapePieceNode>}
       this.shapePieceNodes = [];
 
-      const denominator = shapeStack.fraction.denominator;
-      const separatorShape = new Shape();
-
-      // Background
-      if ( shapeStack.representation === BuildingRepresentation.PIE ) {
-        this.addChild( new Circle( CIRCLE_RADIUS, {
-          fill: FractionsCommonColorProfile.shapeStackFillProperty
-        } ) );
-        if ( denominator > 1 ) {
-          for ( let i = 0; i < denominator; i++ ) {
-            const angle = -i * 2 * Math.PI / denominator;
-            // Slight offset for https://github.com/phetsims/fractions-common/issues/2
-            separatorShape.moveTo( 1e-5 * Math.cos( angle ), 1e-5 * Math.sin( angle ) ).lineTo( CIRCLE_RADIUS * Math.cos( angle ), CIRCLE_RADIUS * Math.sin( angle ) );
-          }
-          this.addChild( new Path( separatorShape, {
-            stroke: FractionsCommonColorProfile.shapeStackSeparatorStrokeProperty
-          } ) );
-        }
-        this.addChild( new Circle( CIRCLE_RADIUS, {
-          stroke: FractionsCommonColorProfile.shapeStackStrokeProperty
-        } ) );
-      }
-      else if ( shapeStack.representation === BuildingRepresentation.BAR ) {
-        // TODO: Share separator code
-        const barBounds = ShapePiece.VERTICAL_BAR_BOUNDS;
-        this.addChild( Rectangle.bounds( barBounds, {
-          fill: FractionsCommonColorProfile.shapeStackFillProperty
-        } ) );
-        for ( let i = 1; i < denominator; i++ ) {
-          const x = Util.linear( 0, 1, barBounds.minX, barBounds.maxX, i / denominator );
-          separatorShape.moveTo( x, barBounds.minY ).lineTo( x, barBounds.maxY );
-        }
-        this.addChild( new Path( separatorShape, {
-          stroke: FractionsCommonColorProfile.shapeStackSeparatorStrokeProperty
-        } ) );
-        this.addChild( Rectangle.bounds( barBounds, {
-          stroke: FractionsCommonColorProfile.shapeStackStrokeProperty
-        } ) );
-      }
-      else {
-        throw new Error( 'Unsupported representation for ShapeStackNode: ' + shapeStack.representation );
-      }
+      // @private {Node}
+      this.shapeLayerNode = new ShapeLayerNode( shapeStack.representation, new Property( shapeStack.fraction.denominator ) );
+      this.addChild( this.shapeLayerNode );
 
       // @private {function}
       this.shapePieceAddedListener = this.addShapePiece.bind( this );
@@ -157,6 +110,7 @@ define( require => {
       this.shapePieceNodes.forEach( shapePieceNode => shapePieceNode.dispose() );
       this.stack.shapePieces.removeItemAddedListener( this.shapePieceAddedListener );
       this.stack.shapePieces.removeItemRemovedListener( this.shapePieceRemovedListener );
+      this.shapeLayerNode.dispose();
 
       super.dispose();
     }

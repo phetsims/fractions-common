@@ -110,8 +110,14 @@ define( require => {
   fractionsCommon.register( 'LabShapePanel', LabShapePanel );
 
   return inherit( Panel, LabShapePanel, {
-    // TODO: doc ---- and when to call? Can we call it when our representationProperty changes?
+    /**
+     * Sets the model positions of our model objects corresponding to their displayed (view) positions.
+     * @public
+     *
+     * @param {ModelViewTransform2} modelViewTransform
+     */
     updateModelLocations: function( modelViewTransform ) {
+      // TODO: doc ---- and when to call? Can we call it when our representationProperty changes?
       this.circleBox.updateModelLocations( modelViewTransform, this );
       this.barBox.updateModelLocations( modelViewTransform, this );
     }

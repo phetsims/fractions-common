@@ -101,7 +101,13 @@ define( require => {
       this.children = this.stackTargets;
     }
 
-    // TODO: doc
+    /**
+     * Sets the model positions of our model objects corresponding to their displayed (view) positions.
+     * @public
+     *
+     * @param {ModelViewTransform2} modelViewTransform
+     * @param {Node} panel
+     */
     updateModelLocations( modelViewTransform, panel ) {
       this.stackNodes.forEach( stackNode => {
         stackNode.stack.positionProperty.value = modelViewTransform.viewToModelPosition(

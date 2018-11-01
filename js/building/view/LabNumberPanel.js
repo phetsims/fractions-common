@@ -35,7 +35,12 @@ define( require => {
   fractionsCommon.register( 'LabNumberPanel', LabNumberPanel );
 
   return inherit( Panel, LabNumberPanel, {
-    // TODO: doc
+    /**
+     * Sets the model positions of our model objects corresponding to their displayed (view) positions.
+     * @public
+     *
+     * @param {ModelViewTransform2} modelViewTransform
+     */
     updateModelLocations: function( modelViewTransform ) {
       this.box.updateModelLocations( modelViewTransform, this );
     }

@@ -194,7 +194,14 @@ define( require => {
       }
     }
 
-    // TODO: doc and cleanup
+    /**
+     * Sets the model positions of our model objects corresponding to their displayed (view) positions.
+     * @public
+     *
+     * @param {ModelViewTransform2} modelViewTransform
+     * @param {Node} parentContainer - A parent node that contains this node, and has no transform relative to the
+     *                                 screenView.
+     */
     updateModelLocations( modelViewTransform, parentContainer ) {
       this.modelViewTransform = modelViewTransform;
       this.parentContainer = parentContainer;
