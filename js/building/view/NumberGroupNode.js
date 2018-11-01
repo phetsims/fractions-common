@@ -241,6 +241,7 @@ define( require => {
     /**
      * Releases references.
      * @public
+     * @override
      */
     dispose() {
       this.numberGroup.isAnimatingProperty.unlink( this.visibilityListener );

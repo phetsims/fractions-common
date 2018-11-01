@@ -59,6 +59,7 @@ define( require => {
     /**
      * Releases references.
      * @public
+     * @override
      */
     dispose() {
       this.multilink.dispose();

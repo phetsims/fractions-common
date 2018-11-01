@@ -154,6 +154,7 @@ define( require => {
     /**
      * Releases references.
      * @public
+     * @override
      */
     dispose() {
       this.interruptSubtreeInput();

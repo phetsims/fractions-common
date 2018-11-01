@@ -183,6 +183,10 @@ define( require => {
       this.animator.step( dt );
     }
 
+    /**
+     * Releases references.
+     * @public
+     */
     dispose() {
       this.activeNumberRangeProperty.unlink( this.spotAllowedListener );
       this.disposed = true;

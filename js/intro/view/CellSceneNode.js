@@ -342,6 +342,7 @@ define( require => {
     /**
      * Releases references.
      * @public
+     * @override
      */
     dispose() {
       this.containerNodes.forEach( containerNode => containerNode.dispose() );

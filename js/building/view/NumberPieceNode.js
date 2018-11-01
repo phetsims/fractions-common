@@ -138,6 +138,7 @@ define( require => {
     /**
      * Releases references.
      * @public
+     * @override
      */
     dispose() {
       // Required disposal, since we are passing the isUserControlledProperty

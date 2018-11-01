@@ -407,6 +407,11 @@ define( require => {
       numberPieceNode.dispose();
     }
 
+    /**
+     * Releases references.
+     * @public
+     * @override
+     */
     dispose() {
       this.challenge.shapeGroups.removeItemAddedListener( this.addShapeGroupListener );
       this.challenge.shapeGroups.removeItemRemovedListener( this.removeShapeGroupListener );
