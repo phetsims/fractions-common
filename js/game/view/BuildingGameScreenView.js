@@ -131,6 +131,11 @@ define( require => {
       let lastChallengeNode = null;
       model.challengeProperty.lazyLink( ( challenge, oldChallenge ) => {
         const oldChallengeNode = lastChallengeNode;
+
+        if ( oldChallengeNode ) {
+          oldChallengeNode.interruptSubtreeInput();
+        }
+
         lastChallengeNode = null;
         let transition;
         if ( challenge ) {
@@ -284,6 +289,7 @@ define( require => {
 
       const resetAllButton = new AlignBox( new ResetAllButton( {
         listener: () => {
+          this.interruptSubtreeInput();
           model.reset();
           this.reset();
         },

@@ -10,28 +10,22 @@ define( require => {
 
   // modules
   const AlignBox = require( 'SCENERY/nodes/AlignBox' );
-  const arrayRemove = require( 'PHET_CORE/arrayRemove' );
   const Bounds2 = require( 'DOT/Bounds2' );
-  const DerivedProperty = require( 'AXON/DerivedProperty' );
+  const BuildingLabLayerNode = require( 'FRACTIONS_COMMON/building/view/BuildingLabLayerNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const LabNumberPanel = require( 'FRACTIONS_COMMON/building/view/LabNumberPanel' );
   const LabShapePanel = require( 'FRACTIONS_COMMON/building/view/LabShapePanel' );
   const Matrix3 = require( 'DOT/Matrix3' );
   const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
-  const Node = require( 'SCENERY/nodes/Node' );
-  const NumberGroupNode = require( 'FRACTIONS_COMMON/building/view/NumberGroupNode' );
   const NumberGroupStack = require( 'FRACTIONS_COMMON/building/model/NumberGroupStack' );
   const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
-  const NumberPieceNode = require( 'FRACTIONS_COMMON/building/view/NumberPieceNode' );
   const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
   const Property = require( 'AXON/Property' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const ScreenView = require( 'JOIST/ScreenView' );
-  const ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
   const ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
   const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
-  const ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
   const ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
 
   // constants
@@ -60,19 +54,14 @@ define( require => {
           const shapePiece = new ShapePiece( stack.fraction, stack.representation, stack.color );
           shapePiece.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
           model.activeShapePieces.push( shapePiece );
-          // TODO: factor this "find" usage out
-          const shapePieceNode = _.find( this.shapePieceNodes, shapePieceNode => {
-            return shapePieceNode.shapePiece === shapePiece;
-          } );
+          const shapePieceNode = this.layerNode.getShapePieceNode( shapePiece );
           shapePieceNode.dragListener.press( event, shapePieceNode );
         }
         else if ( stack instanceof ShapeGroupStack ) {
           // TODO: encapsulation
           const shapeGroup = model.addShapeGroup( stack.representation );
           shapeGroup.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
-          const shapeGroupNode = _.find( this.shapeGroupNodes, shapeGroupNode => {
-            return shapeGroupNode.shapeGroup === shapeGroup;
-          } );
+          const shapeGroupNode = this.layerNode.getShapeGroupNode( shapeGroup );
           shapeGroupNode.dragListener.press( event, shapeGroupNode );
           event.handle(); // for our selection
         }
@@ -87,91 +76,18 @@ define( require => {
           const numberPiece = new NumberPiece( stack.number );
           numberPiece.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
           model.dragNumberPieceFromStack( numberPiece, stack );
-          // TODO: factor this "find" usage out
-          const numberPieceNode = _.find( this.numberPieceNodes, numberPieceNode => {
-            return numberPieceNode.numberPiece === numberPiece;
-          } );
+          const numberPieceNode = this.layerNode.getNumberPieceNode( numberPiece );
           numberPieceNode.dragListener.press( event, numberPieceNode );
         }
         else if ( stack instanceof NumberGroupStack ) {
           const numberGroup = model.addNumberGroup( stack.isMixedNumber );
           numberGroup.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
-          const numberGroupNode = _.find( this.numberGroupNodes, numberGroupNode => {
-            return numberGroupNode.numberGroup === numberGroup;
-          } );
+          const numberGroupNode = this.layerNode.getNumberGroupNode( numberGroup );
           numberGroupNode.dragListener.press( event, numberGroupNode );
         }
         else {
           throw new Error( 'unknown stack type' );
         }
-      } );
-
-      // @private {Node}
-      this.groupLayer = new Node();
-
-      // @private {Node}
-      this.pieceLayer = new Node();
-
-      // @private {Array.<ShapeGroupNode>}
-      this.shapeGroupNodes = []; // TODO: interrupt on reset
-
-      model.shapeGroups.addItemAddedListener( this.addShapeGroup.bind( this ) );
-      model.shapeGroups.addItemRemovedListener( this.removeShapeGroup.bind( this ) );
-      model.shapeGroups.forEach( this.addShapeGroup.bind( this ) );
-
-      // @private {Array.<NumberGroupNode>}
-      this.numberGroupNodes = []; // TODO: interrupt on reset
-
-      model.numberGroups.addItemAddedListener( this.addNumberGroup.bind( this ) );
-      model.numberGroups.addItemRemovedListener( this.removeNumberGroup.bind( this ) );
-      model.numberGroups.forEach( this.addNumberGroup.bind( this ) );
-
-      // @private {Array.<ShapePieceNode>}
-      this.shapePieceNodes = []; // TODO: interrupt on reset
-
-      model.activeShapePieces.addItemAddedListener( shapePiece => {
-        const shapePieceNode = new ShapePieceNode( shapePiece, {
-          positioned: true,
-          modelViewTransform: this.modelViewTransform,
-          dropListener: wasTouch => {
-            model.shapePieceDropped( shapePiece, wasTouch ? 100 : 50 );
-          }
-        } );
-        this.shapePieceNodes.push( shapePieceNode );
-        this.pieceLayer.addChild( shapePieceNode );
-      } );
-      model.activeShapePieces.addItemRemovedListener( shapePiece => {
-        const shapePieceNode = _.find( this.shapePieceNodes, shapePieceNode => {
-          return shapePieceNode.shapePiece === shapePiece;
-        } );
-
-        arrayRemove( this.shapePieceNodes, shapePieceNode );
-        this.pieceLayer.removeChild( shapePieceNode );
-        shapePieceNode.dispose();
-      } );
-
-      // @private {Array.<NumberPieceNode>}
-      this.numberPieceNodes = []; // TODO: interrupt on reset
-
-      model.activeNumberPieces.addItemAddedListener( numberPiece => {
-        const numberPieceNode = new NumberPieceNode( numberPiece, {
-          positioned: true,
-          modelViewTransform: this.modelViewTransform,
-          dropListener: wasTouch => {
-            model.numberPieceDropped( numberPiece, wasTouch ? 50 : 20 );
-          }
-        } );
-        this.numberPieceNodes.push( numberPieceNode );
-        this.pieceLayer.addChild( numberPieceNode );
-      } );
-      model.activeNumberPieces.addItemRemovedListener( numberPiece => {
-        const numberPieceNode = _.find( this.numberPieceNodes, numberPieceNode => {
-          return numberPieceNode.numberPiece === numberPiece;
-        } );
-
-        arrayRemove( this.numberPieceNodes, numberPieceNode );
-        this.pieceLayer.removeChild( numberPieceNode );
-        numberPieceNode.dispose();
       } );
 
       phet.joist.display.addInputListener( {
@@ -185,6 +101,7 @@ define( require => {
       // @private {Node}
       const resetAllButton = new ResetAllButton( {
         listener: () => {
+          this.interruptSubtreeInput();
           model.reset();
         }
       } );
@@ -207,14 +124,6 @@ define( require => {
         margin: PANEL_MARGIN
       } );
 
-      this.children = [
-        bottomRightAlignBox,
-        topAlignBox,
-        bottomAlignBox,
-        this.groupLayer,
-        this.pieceLayer
-      ];
-
       this.visibleBoundsProperty.link( visibleBounds => {
         topAlignBox.alignBounds = visibleBounds;
         bottomAlignBox.alignBounds = visibleBounds;
@@ -235,74 +144,16 @@ define( require => {
           visibleBounds.bottom
         ) );
       } );
-    }
 
-    addShapeGroup( shapeGroup ) {
-      const shapeGroupNode = new ShapeGroupNode( shapeGroup, {
-        dragBoundsProperty: this.shapeDragBoundsProperty,
-        modelViewTransform: this.modelViewTransform,
-        dropListener: () => {
-          // TODO: What about groups with lots of containers?
-          if ( this.shapePanel.bounds.dilated( 10 ).containsPoint( this.modelViewTransform.modelToViewPosition( shapeGroup.positionProperty.value ) ) ) {
-            this.model.returnShapeGroup( shapeGroup );
-          }
-        },
-        selectListener: () => {
-          this.model.selectedGroupProperty.value = shapeGroup;
-        },
-        removeLastListener: () => {
-          this.model.removeLastPieceFromShapeGroup( shapeGroup );
-        },
-        isSelectedProperty: this.model.getShapeControlsVisibleProperty( shapeGroup )
-      } );
-      this.shapeGroupNodes.push( shapeGroupNode );
-      this.groupLayer.addChild( shapeGroupNode );
-    }
+      // @private {BuildingLabLayerNode}
+      this.layerNode = new BuildingLabLayerNode( model, this.modelViewTransform, this.shapeDragBoundsProperty, this.numberDragBoundsProperty, this.shapePanel, this.numberPanel );
 
-    removeShapeGroup( shapeGroup ) {
-      const shapeGroupNode = _.find( this.shapeGroupNodes, shapeGroupNode => {
-        return shapeGroupNode.shapeGroup === shapeGroup;
-      } );
-      assert && assert( shapeGroupNode );
-
-      arrayRemove( this.shapeGroupNodes, shapeGroupNode );
-      this.groupLayer.removeChild( shapeGroupNode );
-      shapeGroupNode.dispose();
-    }
-
-    addNumberGroup( numberGroup ) {
-      const numberGroupNode = new NumberGroupNode( numberGroup, {
-        dragBoundsProperty: this.numberDragBoundsProperty,
-        modelViewTransform: this.modelViewTransform,
-
-        dropListener: () => {
-          if ( this.numberPanel.bounds.dilated( 10 ).containsPoint( this.modelViewTransform.modelToViewPosition( numberGroup.positionProperty.value ) ) ) {
-            this.model.returnNumberGroup( numberGroup );
-          }
-        },
-        selectListener: () => {
-          this.model.selectedGroupProperty.value = numberGroup;
-        },
-        removeLastListener: () => {
-          this.model.removeLastPieceFromNumberGroup( numberGroup );
-        },
-        isSelectedProperty: new DerivedProperty( [ this.model.selectedGroupProperty ], selectedGroup => {
-          return selectedGroup === numberGroup;
-        } )
-      } );
-      this.numberGroupNodes.push( numberGroupNode );
-      this.groupLayer.addChild( numberGroupNode );
-    }
-
-    removeNumberGroup( numberGroup ) {
-      const numberGroupNode = _.find( this.numberGroupNodes, numberGroupNode => {
-        return numberGroupNode.numberGroup === numberGroup;
-      } );
-      assert && assert( numberGroupNode );
-
-      arrayRemove( this.numberGroupNodes, numberGroupNode );
-      this.groupLayer.removeChild( numberGroupNode );
-      numberGroupNode.dispose();
+      this.children = [
+        bottomRightAlignBox,
+        topAlignBox,
+        bottomAlignBox,
+        this.layerNode
+      ];
     }
 
     /**
