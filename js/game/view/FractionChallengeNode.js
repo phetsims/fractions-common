@@ -39,7 +39,6 @@ define( require => {
   const PANEL_MARGIN = FractionsCommonConstants.PANEL_MARGIN;
 
   class FractionChallengeNode extends Node {
-    // TODO: anything to share with build?
     /**
      * @param {FractionChallenge} challenge
      * @param {Bounds2} layoutBounds

@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * The different slots in a number group where number pieces can go.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -22,7 +22,14 @@ define( require => {
      * @returns {Array.<NumberSpotType>} - Shows the number spots available for whether mixed numbers are an option.
      */
     NumberSpotType.getTypes = function( isMixedNumber ) {
-      return isMixedNumber ? [ NumberSpotType.WHOLE, NumberSpotType.NUMERATOR, NumberSpotType.DENOMINATOR ] : [ NumberSpotType.NUMERATOR, NumberSpotType.DENOMINATOR ];
+      return isMixedNumber ? [
+        NumberSpotType.WHOLE,
+        NumberSpotType.NUMERATOR,
+        NumberSpotType.DENOMINATOR
+      ] : [
+        NumberSpotType.NUMERATOR,
+        NumberSpotType.DENOMINATOR
+      ];
     };
   } ) );
 } );

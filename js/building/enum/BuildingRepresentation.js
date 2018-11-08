@@ -23,7 +23,6 @@ define( require => {
      *
      * @param {BuildingRepresentation} representation
      * @param {number} index
-     *
      * @returns {Vector2}
      */
     BuildingRepresentation.getOffset = ( representation, index ) => {
