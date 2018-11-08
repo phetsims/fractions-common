@@ -36,8 +36,6 @@ define( require => {
       assert && assert( BuildingRepresentation.VALUES.includes( representation ) );
       assert && assert( color instanceof Property );
 
-      var self = this;
-
       this.id = globalID++;
 
       // @public {Fraction}
@@ -82,24 +80,24 @@ define( require => {
       this.dampedHarmonicTimeElapsed = 0;
       this.trueTargetRotation = 0;
 
-      this.isUserControlledProperty.link( function( isUserControlled ) {
+      this.isUserControlledProperty.link( isUserControlled => {
         if ( isUserControlled ) {
-          self.shadowProperty.value = 1;
+          this.shadowProperty.value = 1;
         }
       } );
 
-      Property.multilink( [ this.isUserControlledProperty, this.targetRotationProperty ], function( isUserControlled, targetRotation ) {
+      Property.multilink( [ this.isUserControlledProperty, this.targetRotationProperty ], ( isUserControlled, targetRotation ) => {
         if ( isUserControlled ) {
-          var currentRotation = self.rotationProperty.value;
-          self.trueTargetRotation = Animator.modifiedEndAngle( currentRotation, self.targetRotationProperty.value );
+          var currentRotation = this.rotationProperty.value;
+          this.trueTargetRotation = Animator.modifiedEndAngle( currentRotation, this.targetRotationProperty.value );
 
           var damping = 1;
           var force = 50;
-          self.dampedHarmonicTimeElapsed = 0;
-          self.dampedHarmonic = new DampedHarmonic( 1, Math.sqrt( 4 * force ) * damping, force, currentRotation - self.trueTargetRotation, self.angularVelocityProperty.value );
+          this.dampedHarmonicTimeElapsed = 0;
+          this.dampedHarmonic = new DampedHarmonic( 1, Math.sqrt( 4 * force ) * damping, force, currentRotation - this.trueTargetRotation, this.angularVelocityProperty.value );
         }
         else {
-          self.dampedHarmonic = null;
+          this.dampedHarmonic = null;
         }
       } );
     }

@@ -208,7 +208,7 @@ define( require => {
       this.levelSelectionLayer.addChild( this.levelSelectionTransitionNode );
 
       const leftButton = new RoundArrowButton( {
-        mutableBaseColor: FractionsCommonColorProfile.yellowRoundArrowButtonProperty,
+        baseColor: FractionsCommonColorProfile.yellowRoundArrowButtonProperty,
         radius: 20,
         arrowRotation: -Math.PI / 2,
         enabledProperty: new DerivedProperty( [ this.leftLevelSelectionProperty ], value => !value ),
@@ -217,7 +217,7 @@ define( require => {
         }
       } );
       const rightButton = new RoundArrowButton( {
-        mutableBaseColor: FractionsCommonColorProfile.yellowRoundArrowButtonProperty,
+        baseColor: FractionsCommonColorProfile.yellowRoundArrowButtonProperty,
         radius: 20,
         arrowRotation: Math.PI / 2,
         enabledProperty: this.leftLevelSelectionProperty,

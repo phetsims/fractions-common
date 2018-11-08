@@ -1,6 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
+
 /**
- * TODO: doc
+ * Shows a round push-button with a directional arrow.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -8,83 +9,77 @@ define( require => {
   'use strict';
 
   // modules
-  var BooleanProperty = require( 'AXON/BooleanProperty' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
-  var FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var MutableOptionsNode = require( 'SUN/MutableOptionsNode' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var RoundPushButton = require( 'SUN/buttons/RoundPushButton' );
-  var Shape = require( 'KITE/Shape' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
+  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const Path = require( 'SCENERY/nodes/Path' );
+  const RoundPushButton = require( 'SUN/buttons/RoundPushButton' );
+  const Shape = require( 'KITE/Shape' );
 
-  /**
-   * @constructor
-   * @extends {MutableOptionsNode}
-   *
-   * @param {Object} [options]
-   */
-  function RoundArrowButton( options ) {
+  class RoundArrowButton extends RoundPushButton {
+    /**
+     * @param {Object} [options]
+     */
+    constructor( options ) {
+      // TODO: Use this for all of those arrow buttons
 
-    // TODO: Use this for all of those arrow buttons
+      options = _.extend( {
+        radius: FractionsCommonConstants.ROUND_BUTTON_RADIUS,
+        fireOnHold: true,
+        arrowRotation: 0,
+        baseColor: FractionsCommonColorProfile.greenRoundArrowButtonProperty,
+        enabledProperty: new BooleanProperty( true )
+      }, options );
 
-    options = _.extend( {
-      radius: FractionsCommonConstants.ROUND_BUTTON_RADIUS,
-      fireOnHold: true,
-      arrowRotation: 0,
-      mutableBaseColor: FractionsCommonColorProfile.greenRoundArrowButtonProperty,
-      enabledProperty: new BooleanProperty( true )
-    }, options );
+      // "center" the shape around the origin (where we want it to rotate around)
+      const size = options.radius * 0.5;
+      const ratio = 0.4;
+      const arrowShape = new Shape().moveTo( -size, ratio * size ).lineTo( 0, ( ratio - 1 ) * size ).lineTo( size, ratio * size );
+      const arrowPath = new Path( arrowShape, {
+        stroke: 'black',
+        lineWidth: size * 0.5,
+        lineCap: 'round',
+        rotation: options.arrowRotation
+      } );
 
-    // @private {Property.<boolean>}
-    this.enabledProperty = options.enabledProperty;
+      // Provide offsets so that it will place our origin at the actual center
+      options.content = arrowPath;
+      options.xContentOffset = arrowPath.centerX;
+      options.yContentOffset = arrowPath.centerY;
 
-    // "center" the shape around the origin (where we want it to rotate around)
-    var size = options.radius * 0.5;
-    var ratio = 0.4;
-    var arrowShape = new Shape().moveTo( -size, ratio * size ).lineTo( 0,  ( ratio - 1 ) * size ).lineTo( size, ratio * size );
-    var arrowPath = new Path( arrowShape, {
-      stroke: 'black',
-      lineWidth: size * 0.5,
-      lineCap: 'round',
-      rotation: options.arrowRotation
-    } );
+      super( options );
 
-    // Provide offsets so that it will place our origin at the actual center
-    options.content = arrowPath;
-    options.xContentOffset = arrowPath.centerX;
-    options.yContentOffset = arrowPath.centerY;
+      // @private {Property.<boolean>}
+      this.enabledProperty = options.enabledProperty;
 
-    // Doesn't support a mutable baseColor... so we wrap it
-    MutableOptionsNode.call( this, RoundPushButton, [], options, {
-      baseColor: options.mutableBaseColor
-    } );
+      // @private {function}
+      this.enabledListener = this.onEnabledChange.bind( this );
 
-    // @private {function}
-    this.enabledListener = this.setEnabled.bind( this );
-    this.enabledProperty.link( this.enabledListener );
-    this.nodeProperty.link( this.enabledListener );
-  }
+      this.enabledProperty.link( this.enabledListener );
+    }
 
-  fractionsCommon.register( 'RoundArrowButton', RoundArrowButton );
-
-  return inherit( MutableOptionsNode, RoundArrowButton, {
     /**
      * Sets whether this is enabled.
      * @private
+     *
+     * @param {boolean} enabled
      */
-    setEnabled: function( enabled ) {
-      this.nodeProperty.value.enabled = this.enabledProperty.value;
-    },
+    onEnabledChange( enabled ) {
+      this.enabled = this.enabledProperty.value;
+    }
 
     /**
+     * Releases references.
      * @public
      * @override
      */
-    dispose: function() {
+    dispose() {
       this.enabledProperty.unlink( this.enabledListener );
 
-      MutableOptionsNode.prototype.dispose.call( this );
+      super.dispose();
     }
-  } );
+  }
+
+  return fractionsCommon.register( 'RoundArrowButton', RoundArrowButton );
 } );

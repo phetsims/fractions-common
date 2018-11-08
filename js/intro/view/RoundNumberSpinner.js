@@ -30,21 +30,27 @@ define( require => {
 
       options = _.extend( {
         baseColor: FractionsCommonColorProfile.yellowRoundArrowButtonProperty,
-        rotation: 0
+        rotation: 0,
+        spacing: 3
       }, options );
 
-      const increaseButton = new RoundArrowButton( {
+      super( options );
+
+      // @private {RoundArrowButton}
+      this.increaseButton = new RoundArrowButton( {
         rotation: -options.rotation,
-        mutableBaseColor: options.baseColor,
+        baseColor: options.baseColor,
         arrowRotation: options.rotation,
         enabledProperty: increaseEnabledProperty,
         listener: () => {
           numberProperty.value++;
         }
       } );
-      const decreaseButton = new RoundArrowButton( {
+
+      // @private {RoundArrowButton}
+      this.decreaseButton = new RoundArrowButton( {
         rotation: -options.rotation,
-        mutableBaseColor: options.baseColor,
+        baseColor: options.baseColor,
         arrowRotation: Math.PI + options.rotation,
         enabledProperty: decreaseEnabledProperty,
         listener: () => {
@@ -52,13 +58,22 @@ define( require => {
         }
       } );
 
-      super( _.extend( {
-        spacing: 3,
-        children: [
-          increaseButton,
-          decreaseButton
-        ]
-      }, options ) );
+      this.children = [
+        this.increaseButton,
+        this.decreaseButton
+      ];
+    }
+
+    /**
+     * Releases references.
+     * @public
+     * @override
+     */
+    dispose() {
+      this.increaseButton.dispose();
+      this.decreaseButton.dispose();
+
+      super.dispose();
     }
   }
 
