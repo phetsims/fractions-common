@@ -21,15 +21,13 @@ define( require => {
      * @param {boolean} isMixedNumber
      * @returns {Array.<NumberSpotType>} - Shows the number spots available for whether mixed numbers are an option.
      */
-    NumberSpotType.getTypes = function( isMixedNumber ) {
-      return isMixedNumber ? [
-        NumberSpotType.WHOLE,
-        NumberSpotType.NUMERATOR,
-        NumberSpotType.DENOMINATOR
-      ] : [
-        NumberSpotType.NUMERATOR,
-        NumberSpotType.DENOMINATOR
-      ];
-    };
+    NumberSpotType.getTypes = isMixedNumber => isMixedNumber ? [
+      NumberSpotType.WHOLE,
+      NumberSpotType.NUMERATOR,
+      NumberSpotType.DENOMINATOR
+    ] : [
+      NumberSpotType.NUMERATOR,
+      NumberSpotType.DENOMINATOR
+    ];
   } ) );
 } );

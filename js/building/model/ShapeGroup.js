@@ -29,8 +29,6 @@ define( require => {
      * @param {Object} [options}]
      */
     constructor( representation, options ) {
-      var self = this;
-
       options = _.extend( {
         returnPieceListener: null,
 
@@ -79,11 +77,8 @@ define( require => {
       // @public {Animator}
       this.animator = new Animator( this.positionProperty, new NumberProperty( 0 ), this.scaleProperty, new NumberProperty( 0 ), this.isAnimatingProperty );
 
-      var emitChanged = function() {
-        self.changedEmitter.emit();
-      };
-      this.shapeContainers.addItemAddedListener( emitChanged );
-      this.shapeContainers.addItemRemovedListener( emitChanged );
+      this.shapeContainers.addItemAddedListener( () => this.changedEmitter.emit() );
+      this.shapeContainers.addItemRemovedListener( () => this.changedEmitter.emit() );
 
       // Keep our hover target up-to-date
       this.hoveringTargetProperty.lazyLink( ( newTarget, oldTarget ) => {

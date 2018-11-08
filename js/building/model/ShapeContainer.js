@@ -57,16 +57,12 @@ define( require => {
       // Keep totalFractionProperty up-to-date
       this.shapePieces.addItemAddedListener( shapePiece => {
         this.totalFractionProperty.value = this.totalFractionProperty.value.plus( shapePiece.fraction ).reduced();
+        this.changedEmitter.emit();
       } );
       this.shapePieces.addItemRemovedListener( shapePiece => {
         this.totalFractionProperty.value = this.totalFractionProperty.value.minus( shapePiece.fraction ).reduced();
+        this.changedEmitter.emit();
       } );
-
-      var emitChanged = function() {
-        changedEmitter.emit();
-      };
-      this.shapePieces.addItemAddedListener( emitChanged );
-      this.shapePieces.addItemRemovedListener( emitChanged );
     }
 
     /**

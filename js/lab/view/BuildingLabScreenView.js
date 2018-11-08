@@ -11,11 +11,11 @@ define( require => {
   // modules
   const AlignBox = require( 'SCENERY/nodes/AlignBox' );
   const Bounds2 = require( 'DOT/Bounds2' );
-  const BuildingLabLayerNode = require( 'FRACTIONS_COMMON/building/view/BuildingLabLayerNode' );
+  const BuildingLabLayerNode = require( 'FRACTIONS_COMMON/lab/view/BuildingLabLayerNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
-  const LabNumberPanel = require( 'FRACTIONS_COMMON/building/view/LabNumberPanel' );
-  const LabShapePanel = require( 'FRACTIONS_COMMON/building/view/LabShapePanel' );
+  const LabNumberPanel = require( 'FRACTIONS_COMMON/lab/view/LabNumberPanel' );
+  const LabShapePanel = require( 'FRACTIONS_COMMON/lab/view/LabShapePanel' );
   const Matrix3 = require( 'DOT/Matrix3' );
   const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   const NumberGroupStack = require( 'FRACTIONS_COMMON/building/model/NumberGroupStack' );
