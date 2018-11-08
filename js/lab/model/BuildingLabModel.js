@@ -126,7 +126,7 @@ define( require => {
     reset() {
       this.topRepresentationProperty.reset();
 
-      BuildingModel.prototype.reset.call( this );
+      super.reset();
 
       // Initial state
       var shapeGroup = this.addShapeGroup( BuildingRepresentation.PIE );

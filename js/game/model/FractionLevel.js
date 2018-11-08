@@ -470,7 +470,7 @@ define( require => {
      *
      * @param {Array.<ShapePartition>} shapePartitions
      * @param {Array.<ColorDef>} colors
-     * @param {function} denominatorToNumerator- function( {number} denominator ): {number}
+     * @param {function} denominatorToNumerator - function( {number} denominator ): {number}
      * @param {FillType|null} fillType - If null, will have the chance of being sequential or random.
      * @returns {Array.<ShapeTarget>}
      */

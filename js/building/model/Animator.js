@@ -126,7 +126,7 @@ define( require => {
         }
         else {
           // TODO: control the easing in/out more? sometimes we want IN_OUT
-          var easedRatio = this.easing.value( this.ratio );
+          const easedRatio = this.easing.value( this.ratio );
           this.positionProperty.value = this.originPosition.blend( this.destinationPosition, easedRatio );
           this.rotationProperty.value = Animator.clerp( this.originRotation, this.destinationRotation, easedRatio );
           this.scaleProperty.value = this.originScale * ( 1 - easedRatio ) + this.destinationScale * easedRatio;
@@ -144,7 +144,7 @@ define( require => {
     }
 
     static modifiedEndAngle( startAngle, endAngle ) {
-      var modifiedEndAngle = Util.moduloBetweenDown( endAngle, startAngle, startAngle + 2 * Math.PI );
+      let modifiedEndAngle = Util.moduloBetweenDown( endAngle, startAngle, startAngle + 2 * Math.PI );
       if ( modifiedEndAngle > startAngle + Math.PI ) {
         modifiedEndAngle -= 2 * Math.PI;
       }

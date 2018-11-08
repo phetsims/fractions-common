@@ -72,7 +72,7 @@ define( require => {
         } );
       }
 
-      var rangeListener = this.updateDraggedNumberRange.bind( this );
+      const rangeListener = this.updateDraggedNumberRange.bind( this );
       this.draggedNumberPieces.addItemAddedListener( rangeListener );
       this.draggedNumberPieces.addItemRemovedListener( rangeListener );
       rangeListener();
@@ -126,14 +126,12 @@ define( require => {
     }
 
     returnActiveShapePiece( shapePiece ) {
-      var self = this;
-
-      var shapeStack = this.findMatchingShapeStack( shapePiece );
-      var shapeMatrix = ShapeStack.getShapeMatrix( shapePiece.fraction, shapePiece.representation, this.getShapeStackIndex( shapeStack ) );
-      var position = shapeStack.positionProperty.value.plus( shapeMatrix.timesVector2( Vector2.ZERO ).timesScalar( FractionsCommonConstants.SHAPE_BUILD_SCALE ) );
-      var speed = 40 / Math.sqrt( position.distance( shapePiece.positionProperty.value ) );
+      const shapeStack = this.findMatchingShapeStack( shapePiece );
+      const shapeMatrix = ShapeStack.getShapeMatrix( shapePiece.fraction, shapePiece.representation, this.getShapeStackIndex( shapeStack ) );
+      const position = shapeStack.positionProperty.value.plus( shapeMatrix.timesVector2( Vector2.ZERO ).timesScalar( FractionsCommonConstants.SHAPE_BUILD_SCALE ) );
+      const speed = 40 / Math.sqrt( position.distance( shapePiece.positionProperty.value ) );
       shapePiece.animator.animateTo( position, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, 0, shapeStack.positionProperty, Easing.QUADRATIC_IN, speed, () => {
-        self.activeShapePieces.remove( shapePiece );
+        this.activeShapePieces.remove( shapePiece );
         if ( shapeStack.isMutable ) {
           shapeStack.shapePieces.push( shapePiece );
         }
@@ -141,14 +139,12 @@ define( require => {
     }
 
     returnActiveNumberPiece( numberPiece ) {
-      var self = this;
-
-      var numberStack = this.findMatchingNumberStack( numberPiece );
-      var offset = NumberStack.getOffset( this.getNumberStackIndex( numberStack ) );
-      var position = numberStack.positionProperty.value.plus( offset.timesScalar( FractionsCommonConstants.NUMBER_BUILD_SCALE ) );
-      var speed = 40 / Math.sqrt( position.distance( numberPiece.positionProperty.value ) );
+      const numberStack = this.findMatchingNumberStack( numberPiece );
+      const offset = NumberStack.getOffset( this.getNumberStackIndex( numberStack ) );
+      const position = numberStack.positionProperty.value.plus( offset.timesScalar( FractionsCommonConstants.NUMBER_BUILD_SCALE ) );
+      const speed = 40 / Math.sqrt( position.distance( numberPiece.positionProperty.value ) );
       numberPiece.animator.animateTo( position, 0, 1, 0, numberStack.positionProperty, Easing.QUADRATIC_IN, speed, () => {
-        self.activeNumberPieces.remove( numberPiece );
+        this.activeNumberPieces.remove( numberPiece );
         if ( numberStack.isMutable ) {
           numberStack.numberPieces.push( numberPiece );
         }
@@ -164,11 +160,11 @@ define( require => {
      * @param {ShapeGroup} shapeGroup
      */
     placeActiveShapePiece( shapePiece, shapeContainer, shapeGroup ) {
-      var self = this;
+      const self = this;
 
-      var shapeMatrix = ShapeContainer.getShapeMatrix( shapeContainer.getShapeRatio( shapePiece ), shapePiece.fraction, shapePiece.representation );
+      const shapeMatrix = ShapeContainer.getShapeMatrix( shapeContainer.getShapeRatio( shapePiece ), shapePiece.fraction, shapePiece.representation );
       // TODO: rotation
-      var position = shapeGroup.positionProperty.value.plus( shapeContainer.offset ).plus( shapeMatrix.timesVector2( Vector2.ZERO ) );
+      const position = shapeGroup.positionProperty.value.plus( shapeContainer.offset ).plus( shapeMatrix.timesVector2( Vector2.ZERO ) );
       // TODO: also invalidate if our container goes away?
       // NOTE: Handle it if it starts animation and THEN the piece gets moved somewhere else. Instant animate
       shapePiece.animator.animateTo( position, shapeMatrix.rotation, 1, 0, shapeGroup.positionProperty, Easing.QUADRATIC_IN_OUT, 5, () => {
@@ -177,17 +173,17 @@ define( require => {
     }
 
     closestDroppableShapeContainer( shapePiece, threshold ) {
-      var closestContainer = null;
-      var closestDistance = threshold;
+      let closestContainer = null;
+      let closestDistance = threshold;
 
-      var point = shapePiece.positionProperty.value;
+      const point = shapePiece.positionProperty.value;
 
       this.shapeGroups.forEach( shapeGroup => {
-        var localPoint = scratchVector.set( point ).subtract( shapeGroup.positionProperty.value );
+        const localPoint = scratchVector.set( point ).subtract( shapeGroup.positionProperty.value );
 
         shapeGroup.shapeContainers.forEach( shapeContainer => {
           if ( shapeContainer.canFitPiece( shapePiece ) ) {
-            var distance = shapeContainer.distanceFromPoint( localPoint );
+            const distance = shapeContainer.distanceFromPoint( localPoint );
             if ( distance <= closestDistance ) {
               closestDistance = distance;
               closestContainer = shapeContainer;
@@ -200,7 +196,7 @@ define( require => {
     }
 
     shapePieceDropped( shapePiece, threshold ) {
-      var closestContainer = this.closestDroppableShapeContainer( shapePiece, threshold );
+      let closestContainer = this.closestDroppableShapeContainer( shapePiece, threshold );
 
       if ( closestContainer ) {
         closestContainer.shapePieces.push( shapePiece );
@@ -212,17 +208,17 @@ define( require => {
     }
 
     numberPieceDropped( numberPiece, threshold ) {
-      var closestSpot = null;
-      var closestDistance = threshold;
+      let closestSpot = null;
+      let closestDistance = threshold;
 
-      var point = numberPiece.positionProperty.value;
+      const point = numberPiece.positionProperty.value;
 
       this.numberGroups.forEach( numberGroup => {
-        var localPoint = scratchVector.set( point ).subtract( numberGroup.positionProperty.value );
+        const localPoint = scratchVector.set( point ).subtract( numberGroup.positionProperty.value );
 
         numberGroup.spots.forEach( spot => {
           if ( numberGroup.canPlaceNumberInSpot( numberPiece.number, spot ) ) {
-            var distance = Math.sqrt( spot.bounds.minimumDistanceToPointSquared( localPoint ) );
+            const distance = Math.sqrt( spot.bounds.minimumDistanceToPointSquared( localPoint ) );
             if ( distance <= closestDistance ) {
               closestDistance = distance;
               closestSpot = spot;
@@ -256,17 +252,17 @@ define( require => {
 
     // TODO: doc
     removeLastPieceFromShapeGroup( shapeGroup ) {
-      for ( var i = shapeGroup.shapeContainers.length - 1; i >= 0; i-- ) {
-        var shapeContainer = shapeGroup.shapeContainers.get( i );
+      for ( let i = shapeGroup.shapeContainers.length - 1; i >= 0; i-- ) {
+        const shapeContainer = shapeGroup.shapeContainers.get( i );
         if ( shapeContainer.shapePieces.length ) {
-          var shapePiece = shapeContainer.shapePieces.pop();
+          const shapePiece = shapeContainer.shapePieces.pop();
 
           // If the piece hasn't arrived yet, just complete the animation
           shapePiece.animator.endAnimation();
 
           // TODO: Better determination of the position, including with centroid and rotation offsets
-          var shapeMatrix = ShapeContainer.getShapeMatrix( shapeContainer.totalFractionProperty.value.value, shapePiece.fraction, shapePiece.representation );
-          var containerPoint = shapeGroup.positionProperty.value.plus( shapeContainer.offset );
+          const shapeMatrix = ShapeContainer.getShapeMatrix( shapeContainer.totalFractionProperty.value.value, shapePiece.fraction, shapePiece.representation );
+          const containerPoint = shapeGroup.positionProperty.value.plus( shapeContainer.offset );
           shapePiece.positionProperty.value = containerPoint.plus( shapeMatrix.timesVector2( Vector2.ZERO ) );
           shapePiece.rotationProperty.value = shapeMatrix.rotation;
           this.activeShapePieces.push( shapePiece );
@@ -278,10 +274,10 @@ define( require => {
     }
 
     removeLastPieceFromNumberGroup( numberGroup ) {
-      for ( var i = 0; i < numberGroup.spots.length; i++ ) {
-        var spot = numberGroup.spots[ i ];
+      for ( let i = 0; i < numberGroup.spots.length; i++ ) {
+        const spot = numberGroup.spots[ i ];
         if ( spot.pieceProperty.value !== null ) {
-          var numberPiece = spot.pieceProperty.value;
+          const numberPiece = spot.pieceProperty.value;
           spot.pieceProperty.value = null;
 
           numberPiece.positionProperty.value = spot.bounds.center.plus( numberGroup.positionProperty.value );
@@ -296,22 +292,19 @@ define( require => {
     }
 
     addShapeGroup( representation, maxContainers = FractionsCommonConstants.MAX_SHAPE_CONTAINERS ) {
-      var self = this;
-
-      var shapeGroup = new ShapeGroup( representation, {
-        returnPieceListener() {
-          self.removeLastPieceFromShapeGroup( shapeGroup );
+      const shapeGroup = new ShapeGroup( representation, {
+        returnPieceListener: () => {
+          this.removeLastPieceFromShapeGroup( shapeGroup );
         },
 
         maxContainers
       } );
       this.shapeGroups.push( shapeGroup );
-
       return shapeGroup;
     }
 
     addNumberGroup( isMixedNumber ) {
-      var numberGroup = new NumberGroup( isMixedNumber, {
+      const numberGroup = new NumberGroup( isMixedNumber, {
         activeNumberRangeProperty: this.activeNumberRangeProperty
       } );
       this.numberGroups.push( numberGroup );
@@ -329,8 +322,8 @@ define( require => {
       }
 
       const shapeGroupStack = _.find( this.shapeGroupStacks, shapeGroupStack => shapeGroupStack.representation === shapeGroup.representation );
-      var positionProperty = shapeGroupStack.positionProperty;
-      var speed = 40 / Math.sqrt( positionProperty.value.distance( shapeGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
+      const positionProperty = shapeGroupStack.positionProperty;
+      const speed = 40 / Math.sqrt( positionProperty.value.distance( shapeGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
       shapeGroup.animator.animateTo( positionProperty.value, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, 0, positionProperty, Easing.QUADRATIC_IN, speed, () => {
         this.shapeGroups.remove( shapeGroup );
         if ( shapeGroupStack.isMutable ) {
@@ -345,8 +338,8 @@ define( require => {
       }
 
       const numberGroupStack = _.find( this.numberGroupStacks, numberGroupStack => numberGroupStack.isMixedNumber === numberGroup.isMixedNumber );
-      var positionProperty = numberGroupStack.positionProperty;
-      var speed = 40 / Math.sqrt( positionProperty.value.distance( numberGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
+      const positionProperty = numberGroupStack.positionProperty;
+      const speed = 40 / Math.sqrt( positionProperty.value.distance( numberGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
       numberGroup.animator.animateTo( positionProperty.value, 0, FractionsCommonConstants.NUMBER_BUILD_SCALE, 0, positionProperty, Easing.QUADRATIC_IN, speed, () => {
         // TODO: More methods for adding/removing to make things un-missable
         this.numberGroups.remove( numberGroup );
@@ -364,8 +357,8 @@ define( require => {
         this.activeNumberRangeProperty.value = null;
       }
       else {
-        var min = Number.POSITIVE_INFINITY;
-        var max = Number.NEGATIVE_INFINITY;
+        let min = Number.POSITIVE_INFINITY;
+        let max = Number.NEGATIVE_INFINITY;
 
         this.draggedNumberPieces.forEach( numberPiece => {
           min = Math.min( min, numberPiece.number );
@@ -413,8 +406,6 @@ define( require => {
      * @param {number} dt
      */
     step( dt ) {
-      var self = this;
-
       // TODO: minimize garbage
       this.shapeGroups.forEach( shapeGroup => {
         shapeGroup.step( dt );
@@ -429,7 +420,7 @@ define( require => {
 
         // Don't compute the closest for ALL pieces, that would hurt performance.
         if ( shapePiece.representation === BuildingRepresentation.PIE && shapePiece.isUserControlledProperty.value ) {
-          var closestContainer = self.closestDroppableShapeContainer( shapePiece, Number.POSITIVE_INFINITY );
+          var closestContainer = this.closestDroppableShapeContainer( shapePiece, Number.POSITIVE_INFINITY );
           if ( closestContainer ) {
             shapePiece.orientTowardsContainer( closestContainer, dt );
           }

@@ -50,7 +50,7 @@ define( require => {
       this.showNumberLineProperty.reset();
       this.multiplierProperty.reset();
 
-      ContainerSetModel.prototype.reset.call( this );
+      super.reset();
     }
   }
 

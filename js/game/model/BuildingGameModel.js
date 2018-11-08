@@ -193,8 +193,8 @@ define( require => {
 
       FractionChallenge.beginFullGeneration();
 
-      this.shapeLevels.forEach( function( level ) { level.reset(); } );
-      this.numberLevels.forEach( function( level ) { level.reset(); } );
+      this.shapeLevels.forEach( level => level.reset() );
+      this.numberLevels.forEach( level => level.reset() );
 
       FractionChallenge.endFullGeneration();
     }
