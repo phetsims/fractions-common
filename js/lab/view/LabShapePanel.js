@@ -15,7 +15,6 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const HBox = require( 'SCENERY/nodes/HBox' );
-  const MutableOptionsNode = require( 'SUN/MutableOptionsNode' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Panel = require( 'SUN/Panel' );
   const RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
@@ -69,7 +68,7 @@ define( require => {
       this.representationProperty = model.topRepresentationProperty;
 
       // TODO: Move all this code out to a named panel?
-      const representationSelectionNode = new MutableOptionsNode( RadioButtonGroup, [ this.representationProperty, [
+      const representationSelectionNode = new RadioButtonGroup( this.representationProperty, [
         {
           value: BuildingRepresentation.PIE,
           node: new ShapePieceNode( new ShapePiece( Fraction.ONE, BuildingRepresentation.PIE, FractionsCommonColorProfile.labCircleFillProperty ), {
@@ -82,15 +81,14 @@ define( require => {
             scale: 0.3
           } )
         }
-      ] ], _.extend( {
+      ], {
         orientation: 'vertical',
         buttonContentXMargin: 6,
         buttonContentYMargin: 6,
         selectedLineWidth: 2,
         touchAreaXDilation: 5,
         touchAreaYDilation: 2.5,
-        spacing: 5
-      } ), {
+        spacing: 5,
         selectedStroke: FractionsCommonColorProfile.radioStrokeProperty,
         baseColor: FractionsCommonColorProfile.radioBaseProperty
       } );

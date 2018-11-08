@@ -18,7 +18,6 @@ define( require => {
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const HBox = require( 'SCENERY/nodes/HBox' );
-  const MutableOptionsNode = require( 'SUN/MutableOptionsNode' );
   const Node = require( 'SCENERY/nodes/Node' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Path = require( 'SCENERY/nodes/Path' );
@@ -95,7 +94,7 @@ define( require => {
       const lineSize = 8;
 
       // @private {Node}
-      this.addContainerButton = new MutableOptionsNode( RoundPushButton, [], {
+      this.addContainerButton = new RoundPushButton( {
         content: new Path( new Shape().moveTo( -lineSize, 0 ).lineTo( lineSize, 0 ).moveTo( 0, -lineSize ).lineTo( 0, lineSize ), {
           stroke: 'black',
           lineCap: 'round',
@@ -103,13 +102,12 @@ define( require => {
         } ),
         radius: FractionsCommonConstants.ROUND_BUTTON_RADIUS,
         listener: shapeGroup.increaseContainerCount.bind( shapeGroup ),
-        enabled: !options.isIcon
-      }, {
+        enabled: !options.isIcon,
         baseColor: FractionsCommonColorProfile.greenRoundArrowButtonProperty
       } );
 
       // @private {Node}
-      this.removeContainerButton = new MutableOptionsNode( RoundPushButton, [], {
+      this.removeContainerButton = new RoundPushButton( {
         content: new Path( new Shape().moveTo( -lineSize, 0 ).lineTo( lineSize, 0 ), {
           stroke: 'black',
           lineCap: 'round',
@@ -117,8 +115,7 @@ define( require => {
         } ),
         radius: FractionsCommonConstants.ROUND_BUTTON_RADIUS,
         listener: shapeGroup.decreaseContainerCount.bind( shapeGroup ),
-        enabled: !options.isIcon
-      }, {
+        enabled: !options.isIcon,
         baseColor: FractionsCommonColorProfile.redRoundArrowButtonProperty
       } );
 
