@@ -92,9 +92,11 @@ define( require => {
 
       phet.joist.display.addInputListener( {
         down: () => {
-          // Any event on a shape group should handle it.
-          // TODO: How do we.... handle number groups? Use same property presumably. TODO
-          model.selectedGroupProperty.value = null;
+          const screen = phet.joist.sim.currentScreenProperty.value;
+          if ( screen && screen.view === this ) {
+            // Any event on a shape group should handle it.
+            model.selectedGroupProperty.value = null;
+          }
         }
       } );
 
