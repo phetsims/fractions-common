@@ -9,7 +9,9 @@ define( require => {
   'use strict';
 
   // modules
+  const Easing = require( 'TWIXT/Easing' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Property = require( 'AXON/Property' );
   const Util = require( 'DOT/Util' );
 
   class Animator {
@@ -20,23 +22,41 @@ define( require => {
      * @param {Property.<number>} shadowProperty
      * @param {Property.<boolean>} isAnimatingProperty
      */
-    constructor( positionProperty, rotationProperty, scaleProperty, shadowProperty, isAnimatingProperty ) {
-      // @public {Property.<Vector2>}
-      this.positionProperty = positionProperty;
+    constructor( config ) {
 
-      // @public {Property.<number>}
-      this.rotationProperty = rotationProperty;
+      config = _.extend( {
+        // {Property.<Vector2>}
+        positionProperty: null,
 
-      // @public {Property.<number>}
-      this.scaleProperty = scaleProperty;
+        // {Property.<boolean>}
+        isAnimatingProperty: null,
 
-      // @public {Property.<number>}
-      this.shadowProperty = shadowProperty;
+        // {Property.<number>|null}
+        rotationProperty: null,
+        scaleProperty: null,
+        shadowProperty: null
+      }, config );
 
-      // @public {Property.<boolean>}
-      this.isAnimatingProperty = isAnimatingProperty;
+      assert && assert( config.positionProperty instanceof Property );
+      assert && assert( config.isAnimatingProperty instanceof Property );
 
-      // @function {Property.<Vector2>|null}
+      // @private {Property.<Vector2>} - The position of the element
+      this.positionProperty = config.positionProperty;
+
+      // @private {Property.<number>|null} - The rotation of the element (will interpolate to closest rotation)
+      this.rotationProperty = config.rotationProperty;
+
+      // @private {Property.<number>|null} - The scale of the element
+      this.scaleProperty = config.scaleProperty;
+
+      // @private {Property.<number>|null} - The shadow "offset" ratio, from 0 (shadow directly under) to 1 (shadow
+      // at full offset)
+      this.shadowProperty = config.shadowProperty;
+
+      // @private {Property.<boolean>} - Whether the element is being animated
+      this.isAnimatingProperty = config.isAnimatingProperty;
+
+      // @private {Property.<Vector2>|null} - If non-null, changes to this Property will end the animation
       this.animationInvalidationProperty = null;
 
       // @private {function}
@@ -71,44 +91,93 @@ define( require => {
       this.easing = null;
     }
 
-    // TODO: Options objects, since we do have some "unused" options that could have defaults?
-    animateTo( endPosition, endRotation, endScale, endShadow, animationInvalidationProperty, easing, animationSpeed, endAnimationCallback ) {
-      // TODO: Make it non-pickable so we can't regrab
+    /**
+     * Animates to the defined set of values.
+     * @public
+     *
+     * @param {Object} config
+     */
+    animateTo( config ) {
+      config = _.extend( {
+        // {Vector2}
+        position: null,
 
+        // {number|null}
+        rotation: null,
+        scale: null,
+        shadow: null,
 
-      // TODO: How to handle an already-animating value? Finish it and call endAnimationCallback?
+        // {Property.<*>|null}
+        animationInvalidationProperty: null,
+
+        // {Easing}
+        easing: Easing.QUADRATIC_IN,
+
+        // {number}
+        velocity: 40,
+
+        // {function|null} - Called with no arguments
+        endAnimationCallback: null
+      }, config );
+
+      // TODO: Ensure things are made non-pickable so we can't  re-grab while in motion?
+
+      if ( this.isAnimatingProperty.value ) {
+        this.endAnimation();
+      }
+
       this.isAnimatingProperty.value = true;
       this.ratio = 0;
 
-      this.originPosition = this.positionProperty.value;
-      this.destinationPosition = endPosition;
+      if ( this.positionProperty ) {
+        this.originPosition = this.positionProperty.value;
+        this.destinationPosition = config.position;
+      }
 
-      this.originRotation = this.rotationProperty.value;
-      this.destinationRotation = endRotation;
+      if ( this.rotationProperty ) {
+        this.originRotation = this.rotationProperty.value;
+        this.destinationRotation = config.rotation;
+      }
 
-      this.originScale = this.scaleProperty.value;
-      this.destinationScale = endScale;
+      if ( this.scaleProperty ) {
+        this.originScale = this.scaleProperty.value;
+        this.destinationScale = config.scale;
+      }
 
-      this.originShadow = this.shadowProperty.value;
-      this.destinationShadow = endShadow;
+      if ( this.shadowProperty ) {
+        this.originShadow = this.shadowProperty.value;
+        this.destinationShadow = config.shadow;
+      }
 
-      this.animationInvalidationProperty = animationInvalidationProperty;
-      this.animationInvalidationProperty.lazyLink( this.endAnimationListener );
+      this.animationInvalidationProperty = config.animationInvalidationProperty;
+      this.animationInvalidationProperty && this.animationInvalidationProperty.lazyLink( this.endAnimationListener );
 
-      this.easing = easing;
-      this.animationSpeed = animationSpeed;
-      this.endAnimationCallback = endAnimationCallback;
+      this.animationSpeed = config.velocity / Math.sqrt( config.position.distance( this.positionProperty.value ) );
+      this.endAnimationCallback = config.endAnimationCallback;
+      this.easing = config.easing;
     }
 
+    /**
+     * Ends the animation.
+     * @public
+     */
     endAnimation() {
       if ( this.isAnimatingProperty.value ) {
-        this.positionProperty.value = this.destinationPosition;
-        this.rotationProperty.value = this.destinationRotation;
-        this.scaleProperty.value = this.destinationScale;
-        this.shadowProperty.value = this.destinationShadow;
+        if ( this.positionProperty ) {
+          this.positionProperty.value = this.destinationPosition;
+        }
+        if ( this.rotationProperty ) {
+          this.rotationProperty.value = this.destinationRotation;
+        }
+        if ( this.scaleProperty ) {
+          this.scaleProperty.value = this.destinationScale;
+        }
+        if ( this.shadowProperty ) {
+          this.shadowProperty.value = this.destinationShadow;
+        }
         this.isAnimatingProperty.value = false;
-        this.animationInvalidationProperty.unlink( this.endAnimationListener );
-        this.endAnimationCallback();
+        this.animationInvalidationProperty && this.animationInvalidationProperty.unlink( this.endAnimationListener );
+        this.endAnimationCallback && this.endAnimationCallback();
       }
     }
 
@@ -125,24 +194,31 @@ define( require => {
           this.endAnimation();
         }
         else {
-          // TODO: control the easing in/out more? sometimes we want IN_OUT
           const easedRatio = this.easing.value( this.ratio );
-          this.positionProperty.value = this.originPosition.blend( this.destinationPosition, easedRatio );
-          this.rotationProperty.value = Animator.clerp( this.originRotation, this.destinationRotation, easedRatio );
-          this.scaleProperty.value = this.originScale * ( 1 - easedRatio ) + this.destinationScale * easedRatio;
-          this.shadowProperty.value = this.originShadow * ( 1 - easedRatio ) + this.destinationShadow * easedRatio;
+          if ( this.positionProperty ) {
+            this.positionProperty.value = this.originPosition.blend( this.destinationPosition, easedRatio );
+          }
+          if ( this.rotationProperty ) {
+            this.rotationProperty.value = Animator.clerp( this.originRotation, this.destinationRotation, easedRatio );
+          }
+          if ( this.scaleProperty ) {
+            this.scaleProperty.value = this.originScale * ( 1 - easedRatio ) + this.destinationScale * easedRatio;
+          }
+          if ( this.shadowProperty ) {
+            this.shadowProperty.value = this.originShadow * ( 1 - easedRatio ) + this.destinationShadow * easedRatio;
+          }
         }
       }
     }
 
-    orientTowardsContainer( closestContainer, dt ) {
-      this.targetRotationProperty.value = -2 * Math.PI * closestContainer.totalFractionProperty.value.value;
-
-      this.dampedHarmonicTimeElapsed += dt;
-      this.rotationProperty.value = this.trueTargetRotation + this.dampedHarmonic.getValue( this.dampedHarmonicTimeElapsed );
-      this.angularVelocityProperty.value = this.dampedHarmonic.getDerivative( this.dampedHarmonicTimeElapsed );
-    }
-
+    /**
+     * Returns the equivalent endAngle closest to the startAngle (mod 2pi).
+     * @public
+     *
+     * @param {number} startAngle
+     * @param {number} endAngle
+     * @returns {number}
+     */
     static modifiedEndAngle( startAngle, endAngle ) {
       let modifiedEndAngle = Util.moduloBetweenDown( endAngle, startAngle, startAngle + 2 * Math.PI );
       if ( modifiedEndAngle > startAngle + Math.PI ) {

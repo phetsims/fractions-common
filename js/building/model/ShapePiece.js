@@ -67,7 +67,13 @@ define( require => {
       this.isAnimatingProperty = new BooleanProperty( false );
 
       // @public {Animator}
-      this.animator = new Animator( this.positionProperty, this.rotationProperty, this.scaleProperty, this.shadowProperty, this.isAnimatingProperty );
+      this.animator = new Animator( {
+        positionProperty: this.positionProperty,
+        rotationProperty: this.rotationProperty,
+        scaleProperty: this.scaleProperty,
+        shadowProperty: this.shadowProperty,
+        isAnimatingProperty: this.isAnimatingProperty
+      } );
 
       // @private {Property.<number>}
       this.angularVelocityProperty = new NumberProperty( 0 );

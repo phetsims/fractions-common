@@ -128,12 +128,17 @@ define( require => {
     returnActiveShapePiece( shapePiece ) {
       const shapeStack = this.findMatchingShapeStack( shapePiece );
       const shapeMatrix = ShapeStack.getShapeMatrix( shapePiece.fraction, shapePiece.representation, this.getShapeStackIndex( shapeStack ) );
-      const position = shapeStack.positionProperty.value.plus( shapeMatrix.timesVector2( Vector2.ZERO ).timesScalar( FractionsCommonConstants.SHAPE_BUILD_SCALE ) );
-      const speed = 40 / Math.sqrt( position.distance( shapePiece.positionProperty.value ) );
-      shapePiece.animator.animateTo( position, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, 0, shapeStack.positionProperty, Easing.QUADRATIC_IN, speed, () => {
-        this.activeShapePieces.remove( shapePiece );
-        if ( shapeStack.isMutable ) {
-          shapeStack.shapePieces.push( shapePiece );
+      shapePiece.animator.animateTo( {
+        position: shapeStack.positionProperty.value.plus( shapeMatrix.timesVector2( Vector2.ZERO ).timesScalar( FractionsCommonConstants.SHAPE_BUILD_SCALE ) ),
+        rotation: 0, // TODO: do we need to customize this so it is as in the "bucket"?
+        scale: FractionsCommonConstants.SHAPE_BUILD_SCALE,
+        shadow: 0,
+        animationInvalidationProperty: shapeStack.positionProperty,
+        endAnimationCallback: () => {
+          this.activeShapePieces.remove( shapePiece );
+          if ( shapeStack.isMutable ) {
+            shapeStack.shapePieces.push( shapePiece );
+          }
         }
       } );
     }
@@ -141,12 +146,15 @@ define( require => {
     returnActiveNumberPiece( numberPiece ) {
       const numberStack = this.findMatchingNumberStack( numberPiece );
       const offset = NumberStack.getOffset( this.getNumberStackIndex( numberStack ) );
-      const position = numberStack.positionProperty.value.plus( offset.timesScalar( FractionsCommonConstants.NUMBER_BUILD_SCALE ) );
-      const speed = 40 / Math.sqrt( position.distance( numberPiece.positionProperty.value ) );
-      numberPiece.animator.animateTo( position, 0, 1, 0, numberStack.positionProperty, Easing.QUADRATIC_IN, speed, () => {
-        this.activeNumberPieces.remove( numberPiece );
-        if ( numberStack.isMutable ) {
-          numberStack.numberPieces.push( numberPiece );
+      numberPiece.animator.animateTo( {
+        position: numberStack.positionProperty.value.plus( offset.timesScalar( FractionsCommonConstants.NUMBER_BUILD_SCALE ) ),
+        scale: 1,
+        animationInvalidationProperty: numberStack.positionProperty,
+        endAnimationCallback: () => {
+          this.activeNumberPieces.remove( numberPiece );
+          if ( numberStack.isMutable ) {
+            numberStack.numberPieces.push( numberPiece );
+          }
         }
       } );
     }
@@ -160,15 +168,20 @@ define( require => {
      * @param {ShapeGroup} shapeGroup
      */
     placeActiveShapePiece( shapePiece, shapeContainer, shapeGroup ) {
-      const self = this;
-
       const shapeMatrix = ShapeContainer.getShapeMatrix( shapeContainer.getShapeRatio( shapePiece ), shapePiece.fraction, shapePiece.representation );
-      // TODO: rotation
-      const position = shapeGroup.positionProperty.value.plus( shapeContainer.offset ).plus( shapeMatrix.timesVector2( Vector2.ZERO ) );
       // TODO: also invalidate if our container goes away?
       // NOTE: Handle it if it starts animation and THEN the piece gets moved somewhere else. Instant animate
-      shapePiece.animator.animateTo( position, shapeMatrix.rotation, 1, 0, shapeGroup.positionProperty, Easing.QUADRATIC_IN_OUT, 5, () => {
-        self.activeShapePieces.remove( shapePiece );
+      shapePiece.animator.animateTo( {
+        position: shapeGroup.positionProperty.value.plus( shapeContainer.offset ).plus( shapeMatrix.timesVector2( Vector2.ZERO ) ),
+        rotation: shapeMatrix.rotation,
+        scale: 1,
+        shadow: 0,
+        animationInvalidationProperty:  shapeGroup.positionProperty,
+        easing: Easing.QUADRATIC_IN_OUT,
+        // TODO: adjust the velocity of  this?
+        endAnimationCallback: () => {
+          this.activeShapePieces.remove( shapePiece );
+        }
       } );
     }
 
@@ -323,11 +336,15 @@ define( require => {
 
       const shapeGroupStack = _.find( this.shapeGroupStacks, shapeGroupStack => shapeGroupStack.representation === shapeGroup.representation );
       const positionProperty = shapeGroupStack.positionProperty;
-      const speed = 40 / Math.sqrt( positionProperty.value.distance( shapeGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
-      shapeGroup.animator.animateTo( positionProperty.value, 0, FractionsCommonConstants.SHAPE_BUILD_SCALE, 0, positionProperty, Easing.QUADRATIC_IN, speed, () => {
-        this.shapeGroups.remove( shapeGroup );
-        if ( shapeGroupStack.isMutable ) {
-          shapeGroupStack.shapeGroups.push( shapeGroup );
+      shapeGroup.animator.animateTo( {
+        position: positionProperty.value,
+        scale: FractionsCommonConstants.SHAPE_BUILD_SCALE,
+        animationInvalidationProperty: positionProperty,
+        endAnimationCallback: () => {
+          this.shapeGroups.remove( shapeGroup );
+          if ( shapeGroupStack.isMutable ) {
+            shapeGroupStack.shapeGroups.push( shapeGroup );
+          }
         }
       } );
     }
@@ -339,15 +356,19 @@ define( require => {
 
       const numberGroupStack = _.find( this.numberGroupStacks, numberGroupStack => numberGroupStack.isMixedNumber === numberGroup.isMixedNumber );
       const positionProperty = numberGroupStack.positionProperty;
-      const speed = 40 / Math.sqrt( positionProperty.value.distance( numberGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
-      numberGroup.animator.animateTo( positionProperty.value, 0, FractionsCommonConstants.NUMBER_BUILD_SCALE, 0, positionProperty, Easing.QUADRATIC_IN, speed, () => {
-        // TODO: More methods for adding/removing to make things un-missable
-        this.numberGroups.remove( numberGroup );
-        if ( numberGroupStack.isMutable ) {
-          numberGroupStack.numberGroups.push( numberGroup );
-        }
-        else {
-          numberGroup.dispose();
+      numberGroup.animator.animateTo( {
+        position: positionProperty.value,
+        scale: FractionsCommonConstants.NUMBER_BUILD_SCALE,
+        animationInvalidationProperty: positionProperty,
+        endAnimationCallback: () => {
+          // TODO: More methods for adding/removing to make things un-missable
+          this.numberGroups.remove( numberGroup );
+          if ( numberGroupStack.isMutable ) {
+            numberGroupStack.numberGroups.push( numberGroup );
+          }
+          else {
+            numberGroup.dispose();
+          }
         }
       } );
     }

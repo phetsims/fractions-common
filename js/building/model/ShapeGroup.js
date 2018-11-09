@@ -75,7 +75,11 @@ define( require => {
       this.hoveringTargetProperty = new Property( null );
 
       // @public {Animator}
-      this.animator = new Animator( this.positionProperty, new NumberProperty( 0 ), this.scaleProperty, new NumberProperty( 0 ), this.isAnimatingProperty );
+      this.animator = new Animator( {
+        positionProperty: this.positionProperty,
+        scaleProperty: this.scaleProperty,
+        isAnimatingProperty: this.isAnimatingProperty
+      } );
 
       this.shapeContainers.addItemAddedListener( () => this.changedEmitter.emit() );
       this.shapeContainers.addItemRemovedListener( () => this.changedEmitter.emit() );

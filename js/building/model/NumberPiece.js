@@ -42,7 +42,11 @@ define( require => {
       this.isAnimatingProperty = new BooleanProperty( false );
 
       // @public {Animator}
-      this.animator = new Animator( this.positionProperty, new NumberProperty( 0 ), this.scaleProperty, new NumberProperty( 0 ), this.isAnimatingProperty );
+      this.animator = new Animator( {
+        positionProperty: this.positionProperty,
+        scaleProperty: this.scaleProperty,
+        isAnimatingProperty: this.isAnimatingProperty
+      } );
 
       // @public {Bounds2}
       this.bounds = Bounds2.point( 0, 0 ).dilatedXY( ( number >= 10 ? FractionsCommonConstants.NUMBER_DOUBLE_DIGIT_WIDTH : FractionsCommonConstants.NUMBER_SINGLE_DIGIT_WIDTH ) / 2, FractionsCommonConstants.NUMBER_HEIGHT / 2 );

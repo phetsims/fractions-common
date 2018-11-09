@@ -104,7 +104,11 @@ define( require => {
       this.hoveringTargetProperty = new Property( null );
 
       // @public {Animator}
-      this.animator = new Animator( this.positionProperty, new NumberProperty( 0 ), this.scaleProperty, new NumberProperty( 0 ), this.isAnimatingProperty );
+      this.animator = new Animator( {
+        positionProperty: this.positionProperty,
+        scaleProperty: this.scaleProperty,
+        isAnimatingProperty: this.isAnimatingProperty
+      } );
 
       // @public {number} - TODO: Any reason we need this in the model
       this.fractionLineWidth = FRACTION_LINE_WIDTH;

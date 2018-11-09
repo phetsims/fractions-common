@@ -14,7 +14,6 @@ define( require => {
   const ChallengeType = require( 'FRACTIONS_COMMON/game/enum/ChallengeType' );
   const ColorDef = require( 'SCENERY/util/ColorDef' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
-  const Easing = require( 'TWIXT/Easing' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
@@ -22,7 +21,6 @@ define( require => {
   const NumberGroupStack = require( 'FRACTIONS_COMMON/building/model/NumberGroupStack' );
   const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
-  const Property = require( 'AXON/Property' );
   const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
   const ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
   const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
@@ -225,9 +223,13 @@ define( require => {
       this.ensureShapeGroups();
 
       var positionProperty = target.positionProperty;
-      var speed = 40 / Math.sqrt( positionProperty.value.distance( shapeGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
-      shapeGroup.animator.animateTo( positionProperty.value, 0, FractionsCommonConstants.SHAPE_COLLECTION_SCALE, 0, positionProperty, Easing.QUADRATIC_IN, speed, () => {
-        this.shapeGroups.remove( shapeGroup );
+      shapeGroup.animator.animateTo( {
+        position: positionProperty.value,
+        scale: FractionsCommonConstants.SHAPE_COLLECTION_SCALE,
+        animationInvalidationProperty: positionProperty,
+        endAnimationCallback: () => {
+          this.shapeGroups.remove( shapeGroup );
+        }
       } );
     }
 
@@ -242,26 +244,34 @@ define( require => {
       this.ensureNumberGroups();
 
       var positionProperty = target.positionProperty;
-      var speed = 40 / Math.sqrt( positionProperty.value.distance( numberGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
-      numberGroup.animator.animateTo( positionProperty.value, 0, FractionsCommonConstants.NUMBER_COLLECTION_SCALE, 0, positionProperty, Easing.QUADRATIC_IN, speed, () => {
-        this.numberGroups.remove( numberGroup );
+      numberGroup.animator.animateTo( {
+        position: positionProperty.value,
+        scale: FractionsCommonConstants.NUMBER_COLLECTION_SCALE,
+        animationInvalidationProperty: positionProperty,
+        endAnimationCallback: () => {
+          this.numberGroups.remove( numberGroup );
+        }
       } );
     }
 
     centerShapeGroup( shapeGroup ) {
       assert && assert( shapeGroup instanceof ShapeGroup );
 
-      const center = Vector2.ZERO;
-      var speed = 60 / Math.sqrt( center.distance( shapeGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
-      shapeGroup.animator.animateTo( center, 0, 1, 0, new Property( center ), Easing.QUADRATIC_IN, speed, () => {} );
+      shapeGroup.animator.animateTo( {
+        position: Vector2.ZERO,
+        scale: 1,
+        velocity: 60
+      } );
     }
 
     centerNumberGroup( numberGroup ) {
       assert && assert( numberGroup instanceof NumberGroup );
 
-      const center = Vector2.ZERO;
-      var speed = 60 / Math.sqrt( center.distance( numberGroup.positionProperty.value ) ); // TODO: factor out speed elsewhere
-      numberGroup.animator.animateTo( center, 0, 1, 0, new Property( center ), Easing.QUADRATIC_IN, speed, () => {} );
+      numberGroup.animator.animateTo( {
+        position: Vector2.ZERO,
+        scale: 1,
+        velocity: 60
+      } );
     }
 
     ensureShapeGroups() {
