@@ -99,7 +99,7 @@ define( require => {
         return Math.sqrt( ShapePiece.VERTICAL_BAR_BOUNDS.minimumDistanceToPointSquared( localPoint ) );
       }
       else {
-        throw new Error( 'Unsupported representation for ShapeContainer: ' + this.representation );
+        throw new Error( `Unsupported representation for ShapeContainer: ${this.representation}` );
       }
     }
 
@@ -139,7 +139,7 @@ define( require => {
         return Matrix3.translation( Util.linear( 0, 1, ShapePiece.VERTICAL_BAR_BOUNDS.minX, ShapePiece.VERTICAL_BAR_BOUNDS.maxX, centralValue ), 0 );
       }
       else {
-        throw new Error( 'Unsupported representation for getShapeMatrix: ' + representation );
+        throw new Error( `Unsupported representation for getShapeMatrix: ${representation}` );
       }
     }
   }

@@ -74,7 +74,11 @@ define( require => {
       this.wholeSpot = isMixedNumber ? new NumberSpot( this, NumberSpotType.WHOLE, MIXED_WHOLE_BOUNDS ) : null;
 
       // @public {Array.<NumberSpot>}
-      this.spots = ( isMixedNumber ? [ this.wholeSpot ] : [] ).concat( [ this.numeratorSpot, this.denominatorSpot ] );
+      this.spots = [
+        ...( isMixedNumber ? [ this.wholeSpot ] : [] ),
+        this.numeratorSpot,
+        this.denominatorSpot
+      ];
 
       // @public {Property.<boolean>}
       this.isCompleteProperty = new DerivedProperty( this.spots.map( spot => spot.pieceProperty ), () => {

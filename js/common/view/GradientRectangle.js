@@ -582,7 +582,10 @@ define( require => {
   fractionsCommon.register( 'GradientRectangle', GradientRectangle );
 
   // We use the Node system for mutator keys, so they get added here
-  GradientRectangle.prototype._mutatorKeys = GRADIENT_RECTANGLE_OPTION_KEYS.concat( Rectangle.prototype._mutatorKeys );
+  GradientRectangle.prototype._mutatorKeys = [
+    ...GRADIENT_RECTANGLE_OPTION_KEYS,
+    ...Rectangle.prototype._mutatorKeys
+  ];
 
   return GradientRectangle;
 } );

@@ -98,7 +98,7 @@ define( require => {
         this.shadowNode = new Rectangle( -width / 2, -BAR_HEIGHT / 2, width, BAR_HEIGHT, shadowOptions );
       }
       else {
-        throw new Error( 'Unsupported representation for ShapePieceNode: ' + shapePiece.representation );
+        throw new Error( `Unsupported representation for ShapePieceNode: ${shapePiece.representation}` );
       }
       if ( this.positioned ) {
         // @private {Node}

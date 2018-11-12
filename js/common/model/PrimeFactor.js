@@ -64,7 +64,7 @@ define( require => {
      * @returns {string}
      */
     toString() {
-      return `${this.prime}${this.order > 1 ? '^' + this.order : ''}`;
+      return `${this.prime}${this.order > 1 ? `^${this.order}` : ''}`;
     }
   }
 

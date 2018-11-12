@@ -222,7 +222,7 @@ define( require => {
           this.buttonStatusProperty.value = 'ok';
           break;
         default:
-          throw new Error( 'invalid buttonName: ' + buttonName );
+          throw new Error( `invalid buttonName: ${buttonName}` );
       }
     }
 

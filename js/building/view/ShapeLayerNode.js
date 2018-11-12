@@ -80,7 +80,7 @@ define( require => {
         } ) );
       }
       else {
-        throw new Error( 'Unsupported representation for ShapeLayerNode: ' + representation );
+        throw new Error( `Unsupported representation for ShapeLayerNode: ${representation}` );
       }
     }
 
