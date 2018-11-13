@@ -20,7 +20,12 @@ define( require => {
   class EqualityLabModel extends ContainerSetModel {
     constructor() {
       super( {
-        representations: [ IntroRepresentation.CIRCLE, IntroRepresentation.HORIZONTAL_BAR, IntroRepresentation.VERTICAL_BAR, IntroRepresentation.BEAKER ],
+        representations: [
+          IntroRepresentation.CIRCLE,
+          IntroRepresentation.HORIZONTAL_BAR,
+          IntroRepresentation.VERTICAL_BAR,
+          IntroRepresentation.BEAKER
+        ],
         initialContainerCount: 4,
         maxContainers: 4,
         maxDenominator: 6,

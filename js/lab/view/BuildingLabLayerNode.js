@@ -29,9 +29,6 @@ define( require => {
       this.shapePanel = shapePanel;
       this.numberPanel = numberPanel;
 
-      // @private {Array.<*>}
-      this.itemsToDispose = [];
-
       this.initialize();
     }
 
@@ -111,24 +108,13 @@ define( require => {
      * @protected
      * @override
      *
+     * NOTE: The returned property will be disposed by the caller. No need to track it in this method.
+     *
      * @param {NumberGroup} numberGroup
      * @returns {Property.<boolean>}
      */
     getNumberGroupSelectedProperty( numberGroup ) {
-      const property = new DerivedProperty( [ this.model.selectedGroupProperty ], selectedGroup => selectedGroup === numberGroup );
-      this.itemsToDispose.push( property );
-      return property;
-    }
-
-    /**
-     * Releases references.
-     * @public
-     * @override
-     */
-    dispose() {
-      this.itemsToDispose.forEach( item => item.dispose() );
-
-      super.dispose();
+      return new DerivedProperty( [ this.model.selectedGroupProperty ], selectedGroup => selectedGroup === numberGroup );
     }
   }
 

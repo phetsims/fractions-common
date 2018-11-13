@@ -235,6 +235,8 @@ define( require => {
      * selected.
      * @protected
      *
+     * NOTE: The returned property will be disposed by the caller. No need to track it in this method.
+     *
      * @param {NumberGroup} numberGroup
      * @returns {Property.<boolean>}
      */

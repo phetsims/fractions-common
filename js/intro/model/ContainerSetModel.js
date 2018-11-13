@@ -24,7 +24,10 @@ define( require => {
      */
     constructor( options ) {
       options = _.extend( {
+        // {Array.<IntroRepresentation>}
         representations: IntroRepresentation.VALUES,
+
+        // {number}
         initialNumerator: 0,
         initialDenominator: 1,
         initialContainerCount: 1,
