@@ -173,6 +173,7 @@ define( require => {
 
         this.numeratorSpot.showNotAllowedProperty.value = range === null ? false : !this.canPlaceNumberInSpot( range.min, this.numeratorSpot );
         this.denominatorSpot.showNotAllowedProperty.value = range === null ? false : !this.canPlaceNumberInSpot( range.max, this.denominatorSpot );
+        this.wholeSpot.showNotAllowedProperty.value = range === null ? false : !this.canPlaceNumberInSpot( range.min, this.wholeSpot );
       }
     }
 
@@ -192,6 +193,11 @@ define( require => {
 
         // Don't allow 1s here as there is no valid choice
         if ( spot === this.denominatorSpot && number === 1 ) {
+          return false;
+        }
+
+        // Don't allow putting 2-digit numbers in the wholes spot.
+        if ( spot === this.wholeSpot && number >= 10 ) {
           return false;
         }
       }
