@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * Represents a mixed or non-mixed fraction represented by numerator/denominator and optionally a whole number.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -22,27 +22,33 @@ define( require => {
   const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
 
+  // constants
+
+  // {number} - Controls for the sizing of the number group
   const HORIZONTAL_SPACING = 18;
   const FRACTIONAL_NUMBER_HEIGHT = 43;
   const FRACTIONAL_NUMBER_WIDTH = 32;
   const WHOLE_NUMBER_HEIGHT = 100;
-  // TODO: Probably compute the width slightly differently here, but we need this compensation right now
-  const HACK_FACTOR = FractionsCommonConstants.WHOLE_FRACTIONAL_SIZE_RATIO / ( WHOLE_NUMBER_HEIGHT / FRACTIONAL_NUMBER_HEIGHT );
-  const WHOLE_NUMBER_WIDTH = HACK_FACTOR * WHOLE_NUMBER_HEIGHT * FRACTIONAL_NUMBER_WIDTH / FRACTIONAL_NUMBER_HEIGHT;
-  const FRACTION_LINE_WIDTH = 40;
+  const WHOLE_NUMBER_WIDTH = FractionsCommonConstants.WHOLE_FRACTIONAL_SIZE_RATIO * FRACTIONAL_NUMBER_WIDTH;
   const VERTICAL_SPACING = 12;
 
-  const NUMERATOR_BOUNDS = Bounds2.rect( -FRACTIONAL_NUMBER_WIDTH / 2, -FRACTIONAL_NUMBER_HEIGHT - VERTICAL_SPACING, FRACTIONAL_NUMBER_WIDTH, FRACTIONAL_NUMBER_HEIGHT );
-  const DENOMINATOR_BOUNDS = Bounds2.rect( -FRACTIONAL_NUMBER_WIDTH / 2, VERTICAL_SPACING, FRACTIONAL_NUMBER_WIDTH, FRACTIONAL_NUMBER_HEIGHT );
+  // {Bounds2} - Of the spots, in an arbitrary coordinate frame
+  const SEPARATE_NUMERATOR_BOUNDS = Bounds2.rect( 0, 0, FRACTIONAL_NUMBER_WIDTH, FRACTIONAL_NUMBER_HEIGHT );
+  const SEPARATE_DENOMINATOR_BOUNDS = Bounds2.rect( 0, SEPARATE_NUMERATOR_BOUNDS.bottom + 2 * VERTICAL_SPACING, FRACTIONAL_NUMBER_WIDTH, FRACTIONAL_NUMBER_HEIGHT );
+  const SEPARATE_WHOLE_BOUNDS = Bounds2.rect( -WHOLE_NUMBER_WIDTH - HORIZONTAL_SPACING, ( 2 * FRACTIONAL_NUMBER_HEIGHT + 2 * VERTICAL_SPACING - WHOLE_NUMBER_HEIGHT ) / 2, WHOLE_NUMBER_WIDTH, WHOLE_NUMBER_HEIGHT );
 
-  // TODO: Can we construct these in a nicer way up front?
-  const MIXED_NUMERATOR_BOUNDS = NUMERATOR_BOUNDS.copy();
-  const MIXED_DENOMINATOR_BOUNDS = DENOMINATOR_BOUNDS.copy();
-  const MIXED_WHOLE_BOUNDS = Bounds2.rect( -WHOLE_NUMBER_WIDTH - HORIZONTAL_SPACING - FRACTIONAL_NUMBER_WIDTH / 2, -WHOLE_NUMBER_HEIGHT / 2, WHOLE_NUMBER_WIDTH, WHOLE_NUMBER_HEIGHT );
-  const beforeCenter = ( NUMERATOR_BOUNDS.right + MIXED_WHOLE_BOUNDS.left ) / 2;
-  MIXED_NUMERATOR_BOUNDS.shiftX( -beforeCenter );
-  MIXED_DENOMINATOR_BOUNDS.shiftX( -beforeCenter );
-  MIXED_WHOLE_BOUNDS.shiftX( -beforeCenter );
+  // {Vector2} - Centers of the two "groups" of spots (mixed and unmixed)
+  const UNMIXED_CENTER = SEPARATE_NUMERATOR_BOUNDS.union( SEPARATE_DENOMINATOR_BOUNDS ).center;
+  const MIXED_CENTER = SEPARATE_NUMERATOR_BOUNDS.union( SEPARATE_DENOMINATOR_BOUNDS ).union( SEPARATE_WHOLE_BOUNDS ).center;
+
+  // {Bounds2} - "Centered" versions of the spot bounds for the "unmixed" case
+  const NUMERATOR_BOUNDS = SEPARATE_NUMERATOR_BOUNDS.shifted( -UNMIXED_CENTER.x, -UNMIXED_CENTER.y );
+  const DENOMINATOR_BOUNDS = SEPARATE_DENOMINATOR_BOUNDS.shifted( -UNMIXED_CENTER.x, -UNMIXED_CENTER.y );
+
+  // {Bounds2} - "Centered" versions of the spot bounds for the "mixed" case
+  const MIXED_NUMERATOR_BOUNDS = SEPARATE_NUMERATOR_BOUNDS.shifted( -MIXED_CENTER.x, -MIXED_CENTER.y );
+  const MIXED_DENOMINATOR_BOUNDS = SEPARATE_DENOMINATOR_BOUNDS.shifted( -MIXED_CENTER.x, -MIXED_CENTER.y );
+  const MIXED_WHOLE_BOUNDS = SEPARATE_WHOLE_BOUNDS.shifted( -MIXED_CENTER.x, -MIXED_CENTER.y );
 
   // TODO: double-digit support
 
@@ -90,9 +96,6 @@ define( require => {
         return _.some( this.spots, spot => spot.pieceProperty.value !== null );
       } );
 
-      // @public {Bounds2}
-      this.allSpotsBounds = _.reduce( this.spots, ( bounds, spot ) => bounds.union( spot.bounds ), Bounds2.NOTHING );
-
       // @public {Property.<Vector2>}
       this.positionProperty = new Property( Vector2.ZERO, {
         valueType: Vector2 // TODO: add valueType to more things?
@@ -114,8 +117,28 @@ define( require => {
         isAnimatingProperty: this.isAnimatingProperty
       } );
 
-      // @public {number} - TODO: Any reason we need this in the model
-      this.fractionLineWidth = FRACTION_LINE_WIDTH;
+      // @public {Property.<boolean>}
+      this.hasDoubleDigitsProperty = new DerivedProperty( [
+        this.numeratorSpot.pieceProperty,
+        this.denominatorSpot.pieceProperty
+      ], ( numeratorPiece, denominatorPiece ) => {
+        return ( numeratorPiece && numeratorPiece.number >= 10 ) ||
+               ( denominatorPiece && denominatorPiece.number >= 10 );
+      } );
+
+      const allSpotsBounds = _.reduce( this.spots, ( bounds, spot ) => bounds.union( spot.bounds ), Bounds2.NOTHING );
+
+      // @public {Property.<Bounds2>}
+      this.allSpotsBoundsProperty = new DerivedProperty( [ this.hasDoubleDigitsProperty ], hasDoubleDigits => {
+        const bounds = allSpotsBounds.copy();
+        if ( hasDoubleDigits ) {
+          bounds.maxX += 10;
+          if ( !this.isMixedNumber ) {
+            bounds.minX -= 10;
+          }
+        }
+        return bounds;
+      } );
 
       // @private {function}
       this.spotAllowedListener = this.updateAllowedSpots.bind( this );

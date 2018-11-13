@@ -51,7 +51,7 @@ define( require => {
         { representation: BuildingRepresentation.PIE, color: FractionsCommonColorProfile.labCircleFillProperty },
         { representation: BuildingRepresentation.BAR, color: FractionsCommonColorProfile.labBarFillProperty }
       ].forEach( ( { representation, color } ) => {
-        _.range( 1, 9 ).forEach( denominator => {
+        [ 1, 2, 4, 7, 12, 17, 24 ].forEach( denominator => {
           var stack = new ShapeStack( new Fraction( 1, denominator ), PIECE_LAYOUT_QUANTITY, representation, color, false );
           stack.shapePieces.push( new ShapePiece( new Fraction( 1, denominator ), representation, color ) );
           stack.shapePieces.push( new ShapePiece( new Fraction( 1, denominator ), representation, color ) );
@@ -60,7 +60,7 @@ define( require => {
       } );
 
       // Number stacks
-      _.range( 1, 9 ).map( number => {
+     [ 1, 2, 4, 7, 12, 17, 24 ].map( number => {
         var stack = new NumberStack( number, PIECE_LAYOUT_QUANTITY, false );
         stack.numberPieces.push( new NumberPiece( number ) );
         stack.numberPieces.push( new NumberPiece( number ) );

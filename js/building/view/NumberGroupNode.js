@@ -115,10 +115,7 @@ define( require => {
         wholeSpot = createSpot( numberGroup.wholeSpot );
       }
 
-      this.mouseArea = numberGroup.allSpotsBounds.dilatedX( 5 );
-      this.touchArea = numberGroup.allSpotsBounds.dilatedX( 5 );
-
-      const cardBackground = Rectangle.bounds( numberGroup.allSpotsBounds.dilatedXY( 20, 15 ), {
+      const cardBackground = new Rectangle( {
         fill: FractionsCommonColorProfile.numberFillProperty,
         stroke: FractionsCommonColorProfile.numberStrokeProperty,
         cornerRadius: FractionsCommonConstants.NUMBER_CORNER_RADIUS
@@ -131,19 +128,32 @@ define( require => {
       this.numberGroup.isCompleteProperty.link( this.completeVisibilityListener );
 
       const fractionLine = new Line( {
-        x1: -numberGroup.fractionLineWidth / 2 + numberGroup.numeratorSpot.bounds.centerX,
-        x2: numberGroup.fractionLineWidth / 2 + numberGroup.numeratorSpot.bounds.centerX,
         lineCap: 'round',
         lineWidth: 4,
         stroke: FractionsCommonColorProfile.numberFractionLineProperty
       } );
 
       // @private {Node}
-      this.returnButton = new ReturnButton( options.removeLastListener, {
-        // TODO: Make it computational
-        rightCenter: cardBackground.leftCenter.plusXY( 5, 0 ) // Some slight overlap shown in mockups
-      } );
+      this.returnButton = new ReturnButton( options.removeLastListener );
       this.itemsToDispose.push( this.returnButton );
+
+      // @private {function}
+      this.allSpotsBoundsListener = allSpotsBounds => {
+        const expandedBounds = allSpotsBounds.dilatedX( 5 );
+        this.mouseArea = expandedBounds;
+        this.touchArea = expandedBounds;
+        cardBackground.rectBounds = allSpotsBounds.dilatedXY( 20, 15 );
+        this.returnButton.rightCenter = cardBackground.leftCenter.plusXY( 5, 0 ); // Some slight overlap shown in mockups
+      };
+      this.numberGroup.allSpotsBoundsProperty.link( this.allSpotsBoundsListener );
+
+      // @private {function}
+      this.fractionLineLengthListener = hasDoubleDigits => {
+        const lineWidth = hasDoubleDigits ? 60 : 40;
+        fractionLine.x1 = -lineWidth / 2 + numberGroup.numeratorSpot.bounds.centerX;
+        fractionLine.x2 = lineWidth / 2 + numberGroup.numeratorSpot.bounds.centerX;
+      };
+      this.numberGroup.hasDoubleDigitsProperty.link( this.fractionLineLengthListener );
 
       // @private {Property.<boolean>}
       this.isSelectedProperty = options.isSelectedProperty;
@@ -196,7 +206,7 @@ define( require => {
 
       if ( !options.isIcon ) {
         // @private {Property.<Bounds2>}
-        this.dragBoundsProperty = new DerivedProperty( [ options.dragBoundsProperty ], dragBounds => {
+        this.dragBoundsProperty = new DerivedProperty( [ options.dragBoundsProperty, this.numberGroup.allSpotsBoundsProperty ], ( dragBounds, allSpotsBounds ) => {
           return dragBounds.withOffsets( cardBackground.left, cardBackground.top, -cardBackground.right, -cardBackground.bottom );
         } );
         this.itemsToDispose.push( this.dragBoundsProperty );
@@ -246,6 +256,8 @@ define( require => {
     dispose() {
       this.numberGroup.isAnimatingProperty.unlink( this.visibilityListener );
       this.numberGroup.isCompleteProperty.unlink( this.completeVisibilityListener );
+      this.numberGroup.hasDoubleDigitsProperty.unlink( this.fractionLineLengthListener );
+      this.numberGroup.allSpotsBoundsProperty.unlink( this.allSpotsBoundsListener );
       this.positionListener && this.numberGroup.positionProperty.unlink( this.positionListener );
       this.scaleListener && this.numberGroup.scaleProperty.unlink( this.scaleListener );
       this.isAnimatingListener && this.numberGroup.isAnimatingProperty.unlink( this.isAnimatingListener );
