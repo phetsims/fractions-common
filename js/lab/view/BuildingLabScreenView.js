@@ -53,7 +53,7 @@ define( require => {
         if ( stack instanceof ShapeStack ) {
           const shapePiece = new ShapePiece( stack.fraction, stack.representation, stack.color );
           shapePiece.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
-          model.activeShapePieces.push( shapePiece );
+          model.dragShapePieceFromStack( shapePiece, stack );
           const shapePieceNode = this.layerNode.getShapePieceNode( shapePiece );
           shapePieceNode.dragListener.press( event, shapePieceNode );
         }

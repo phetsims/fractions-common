@@ -41,8 +41,6 @@ define( require => {
       // @public {Array.<NumberGroupStack>}
       this.numberGroupStacks = [];
 
-      // TODO: better encapsulation, so things don't reach in here
-
       // @public {ObservableArray.<ShapeGroup>}
       this.shapeGroups = new ObservableArray();
 
@@ -84,22 +82,49 @@ define( require => {
       rangeListener();
     }
 
+    /**
+     * Called when the user drags a shape piece from the specified stack (usually from a panel).
+     * @public
+     *
+     * @param {ShapePiece} shapePiece
+     * @param {ShapeStack} shapeStack
+     */
+    dragShapePieceFromStack( shapePiece, shapeStack ) {
+      this.activeShapePieces.push( shapePiece );
+    }
+
+    /**
+     * Called when the user drags a number piece from the specified stack (usually from a panel).
+     * @public
+     *
+     * @param {NumberPiece} numberPiece
+     * @param {NumberStack} numberStack
+     */
     dragNumberPieceFromStack( numberPiece, numberStack ) {
       this.activeNumberPieces.push( numberPiece );
       this.draggedNumberPieces.push( numberPiece );
-
-      // Support for the game where they can be removed
-      if ( numberStack.numberPieces.contains( numberPiece ) ) {
-        numberStack.numberPieces.remove( numberPiece );
-      }
     }
 
+    /**
+     * Returns a corresponding ShapeStack that should be used as the "home" of a given ShapePiece (if it's returned from
+     * the play area with an animation, etc.)
+     * @public
+     *
+     * @param {ShapePiece} shapePiece
+     * @returns {ShapeStack|null}
+     */
     findMatchingShapeStack( shapePiece ) {
-      return _.find( this.shapeStacks, stack => {
-        return stack.representation === shapePiece.representation && stack.fraction.equals( shapePiece.fraction );
-      } ) || null;
+      return _.find( this.shapeStacks, stack => stack.representation === shapePiece.representation && stack.fraction.equals( shapePiece.fraction ) ) || null;
     }
 
+    /**
+     * Returns a corresponding NumberStack that should be used as the "home" of a given NumberPiece (if it's returned from
+     * the play area with an animation, etc.)
+     * @public
+     *
+     * @param {NumberPiece} numberPiece
+     * @returns {NumberStack|null}
+     */
     findMatchingNumberStack( numberPiece ) {
       return _.find( this.numberStacks, stack => stack.number === numberPiece.number ) || null;
     }
@@ -112,7 +137,7 @@ define( require => {
      * @returns {number}
      */
     getShapeStackIndex( shapeStack ) {
-      return 1;
+      return shapeStack.shapePieces.length;
     }
 
     /**
@@ -123,7 +148,7 @@ define( require => {
      * @returns {number}
      */
     getNumberStackIndex( numberStack ) {
-      return 1;
+      return numberStack.numberPieces.length;
     }
 
     returnActiveShapePiece( shapePiece ) {

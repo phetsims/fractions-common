@@ -66,7 +66,7 @@ define( require => {
           shapePiece.scaleProperty.reset();
           shapePiece.rotationProperty.reset();
           shapePiece.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
-          challenge.activeShapePieces.push( shapePiece );
+          challenge.dragShapePieceFromStack( shapePiece, stack );
           const shapePieceNode = this.layerNode.getShapePieceNode( shapePiece );
           shapePieceNode.dragListener.press( event, shapePieceNode );
         }

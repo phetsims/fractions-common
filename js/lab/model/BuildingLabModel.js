@@ -114,6 +114,30 @@ define( require => {
     }
 
     /**
+     * Returns the index to which pieces should animate to in the shape stack.
+     * @protected
+     * @override
+     *
+     * @param {ShapeStack} shapeStack
+     * @returns {number}
+     */
+    getShapeStackIndex( shapeStack ) {
+      return 1;
+    }
+
+    /**
+     * Returns the index to which pieces should animate to in the number stack.
+     * @protected
+     * @override
+     *
+     * @param {NumberStack} numberStack
+     * @returns {number}
+     */
+    getNumberStackIndex( numberStack ) {
+      return 1;
+    }
+
+    /**
      * Resets the model.
      * @public
      */
