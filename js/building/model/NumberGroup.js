@@ -9,18 +9,15 @@ define( require => {
   'use strict';
 
   // modules
-  const Animator = require( 'FRACTIONS_COMMON/building/model/Animator' );
-  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Bounds2 = require( 'DOT/Bounds2' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
-  const NumberProperty = require( 'AXON/NumberProperty' );
+  const Group = require( 'FRACTIONS_COMMON/building/model/Group' );
   const NumberSpot = require( 'FRACTIONS_COMMON/building/model/NumberSpot' );
   const NumberSpotType = require( 'FRACTIONS_COMMON/building/enum/NumberSpotType' );
   const Property = require( 'AXON/Property' );
-  const Vector2 = require( 'DOT/Vector2' );
 
   // constants
 
@@ -53,7 +50,7 @@ define( require => {
   // TODO: double-digit support
 
   // TODO: Supertype for ShapeGroup/NumberGroup
-  class NumberGroup {
+  class NumberGroup extends Group {
     /**
      * @param {boolean} isMixedNumber
      * @param {Object} [options]
@@ -63,6 +60,8 @@ define( require => {
         // {Property.<Range|null>}
         activeNumberRangeProperty: new Property( null )
       }, options );
+
+      super();
 
       // @public {boolean}
       this.isMixedNumber = isMixedNumber;
@@ -96,26 +95,8 @@ define( require => {
         return _.some( this.spots, spot => spot.pieceProperty.value !== null );
       } );
 
-      // @public {Property.<Vector2>}
-      this.positionProperty = new Property( Vector2.ZERO, {
-        valueType: Vector2 // TODO: add valueType to more things?
-      } );
-
-      // @public {Property.<number>} - Applies only while out in the play area (being animated or dragged)
-      this.scaleProperty = new NumberProperty( 1 );
-
-      // @public {Property.<boolean>}
-      this.isAnimatingProperty = new BooleanProperty( false );
-
       // @public {Property.<Target|null>}
       this.hoveringTargetProperty = new Property( null );
-
-      // @public {Animator}
-      this.animator = new Animator( {
-        positionProperty: this.positionProperty,
-        scaleProperty: this.scaleProperty,
-        isAnimatingProperty: this.isAnimatingProperty
-      } );
 
       // @public {Property.<boolean>}
       this.hasDoubleDigitsProperty = new DerivedProperty( [
@@ -143,18 +124,15 @@ define( require => {
       // @private {function}
       this.spotAllowedListener = this.updateAllowedSpots.bind( this );
       this.activeNumberRangeProperty.link( this.spotAllowedListener );
-
-      // Keep our hover target up-to-date
-      this.hoveringTargetProperty.lazyLink( ( oldTarget, newTarget ) => {
-        oldTarget && oldTarget.hoveringGroups.remove( this );
-        newTarget && newTarget.hoveringGroups.push( this );
-      } );
-
-      // @public {boolean} TODO
-      this.disposed = false;
     }
 
-    // TODO: do we want this as a property?
+    /**
+     * The current "amount" of the entire group
+     * @public
+     * @override
+     *
+     * @returns {Fraction}
+     */
     get totalFraction() {
       const fraction = new Fraction( this.wholeSpot && this.wholeSpot.pieceProperty.value ? this.wholeSpot.pieceProperty.value.number : 0, 1 );
       if ( this.numeratorSpot.pieceProperty.value && this.denominatorSpot.pieceProperty.value ) {
@@ -163,6 +141,13 @@ define( require => {
       return fraction;
     }
 
+    /**
+     * The center locations of every "container" in the group.
+     * @public
+     * @override
+     *
+     * @returns {Array.<Vector2>}
+     */
     get centerPoints() {
       return [ this.positionProperty.value ];
     }
@@ -205,28 +190,26 @@ define( require => {
       return true;
     }
 
-    // TODO: doc
+    /**
+     * Whether this group contains any pieces.
+     * @public
+     * @override
+     *
+     * @returns {boolean}
+     */
     hasAnyPieces() {
       return _.some( this.spots, spot => spot.pieceProperty.value !== null );
     }
 
     /**
-     * Steps forward in time.
-     * @public
-     *
-     * @param {number} dt
-     */
-    step( dt ) {
-      this.animator.step( dt );
-    }
-
-    /**
      * Releases references.
      * @public
+     * @override
      */
     dispose() {
       this.activeNumberRangeProperty.unlink( this.spotAllowedListener );
-      this.disposed = true;
+
+      super.dispose();
     }
   }
 

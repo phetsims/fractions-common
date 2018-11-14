@@ -219,28 +219,14 @@ define( require => {
     }
 
     /**
-     * Given a new ShapeGroup, this returns a boolean Property that should be used for whether the given group is
-     * selected.
+     * Given a group, this returns a boolean Property that should be used for whether the given group is selected.
      * @protected
+     * @override
      *
      * @param {ShapeGroup} shapeGroup
      * @returns {Property.<boolean>}
      */
-    getShapeGroupSelectedProperty( shapeGroup ) {
-      throw new Error( 'abstract method' );
-    }
-
-    /**
-     * Given a new NumberGroup, this returns a boolean Property that should be used for whether the given group is
-     * selected.
-     * @protected
-     *
-     * NOTE: The returned property will be disposed by the caller. No need to track it in this method.
-     *
-     * @param {NumberGroup} numberGroup
-     * @returns {Property.<boolean>}
-     */
-    getNumberGroupSelectedProperty( numberGroup ) {
+    getGroupSelectedProperty( shapeGroup ) {
       throw new Error( 'abstract method' );
     }
 
@@ -258,7 +244,7 @@ define( require => {
         dropListener: this.onShapeGroupDrop.bind( this, shapeGroup ),
         selectListener: this.onShapeGroupSelect.bind( this, shapeGroup ),
         removeLastListener: this.onShapeGroupRemoveLastListener.bind( this, shapeGroup ),
-        isSelectedProperty: this.getShapeGroupSelectedProperty( shapeGroup )
+        isSelectedProperty: this.getGroupSelectedProperty( shapeGroup )
       } );
       this.shapeGroupNodes.push( shapeGroupNode );
       this.groupLayer.addChild( shapeGroupNode );
@@ -293,7 +279,7 @@ define( require => {
         dropListener: this.onNumberGroupDrop.bind( this, numberGroup ),
         selectListener: this.onNumberGroupSelect.bind( this, numberGroup ),
         removeLastListener: this.onNumberGroupRemoveLastListener.bind( this, numberGroup ),
-        isSelectedProperty: this.getNumberGroupSelectedProperty( numberGroup )
+        isSelectedProperty: this.getGroupSelectedProperty( numberGroup )
       } );
       this.numberGroupNodes.push( numberGroupNode );
       this.groupLayer.addChild( numberGroupNode );

@@ -152,30 +152,14 @@ define( require => {
     }
 
     /**
-     * Given a new ShapeGroup, this returns a boolean Property that should be used for whether the given group is
-     * selected.
+     * Given a group, this returns a boolean Property that should be used for whether the given group is selected.
      * @protected
      * @override
      *
-     * @param {ShapeGroup} shapeGroup
+     * @param {Group} group
      * @returns {Property.<boolean>}
      */
-    getShapeGroupSelectedProperty( shapeGroup ) {
-      return this.model.getShapeControlsVisibleProperty( shapeGroup );
-    }
-
-    /**
-     * Given a new NumberGroup, this returns a boolean Property that should be used for whether the given group is
-     * selected.
-     * @protected
-     * @override
-     *
-     * NOTE: The returned property will be disposed by the caller. No need to track it in this method.
-     *
-     * @param {NumberGroup} numberGroup
-     * @returns {Property.<boolean>}
-     */
-    getNumberGroupSelectedProperty( numberGroup ) {
+    getGroupSelectedProperty( group ) {
       return new BooleanProperty( true );
     }
   }

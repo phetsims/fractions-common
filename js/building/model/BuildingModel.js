@@ -9,7 +9,6 @@ define( require => {
   'use strict';
 
   // modules
-  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const Easing = require( 'TWIXT/Easing' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
@@ -56,19 +55,26 @@ define( require => {
       // @public {ObservableArray.<NumberPiece>} - Number pieces in the play area (controlled or animating)
       this.activeNumberPieces = new ObservableArray();
 
-      // @public {ObservableArray.<NumberPiece>}
+      // @public {ObservableArray.<NumberPiece>} - Tracking number pieces being dragged, so we can decide whether each
+      // number group should show any "do not drop here" symbols on their spots.
       this.draggedNumberPieces = new ObservableArray();
 
-      // @public {Property.<Range|null>} - null when there are no active numbers, otherwise a range of all values being dragged.
+      // @public {Property.<Range|null>} - null when there are no active numbers, otherwise a range of all values being
+      // dragged.
       this.activeNumberRangeProperty = new Property( null, {
         useDeepEquality: true
       } );
 
-      // Check for duplicates
+      // Check for duplicates (but only when assertions are enabled, don't want to use `allowDuplicates` for
+      // ObservableArray)
       if ( assert ) {
         this.activeShapePieces.addItemAddedListener( () => {
           const array = this.activeShapePieces.getArray();
           assert( array.length === _.uniq( array ).length, 'Duplicate items should not be added to activeShapePieces' );
+        } );
+        this.activeNumberPieces.addItemAddedListener( () => {
+          const array = this.activeNumberPieces.getArray();
+          assert( array.length === _.uniq( array ).length, 'Duplicate items should not be added to activeNumberPieces' );
         } );
       }
 
@@ -76,11 +82,6 @@ define( require => {
       this.draggedNumberPieces.addItemAddedListener( rangeListener );
       this.draggedNumberPieces.addItemRemovedListener( rangeListener );
       rangeListener();
-    }
-
-    // NOTE: Meant to override
-    getShapeControlsVisibleProperty( shapeGroup ) {
-      return new BooleanProperty( true );
     }
 
     dragNumberPieceFromStack( numberPiece, numberStack ) {
@@ -309,7 +310,6 @@ define( require => {
         returnPieceListener: () => {
           this.removeLastPieceFromShapeGroup( shapeGroup );
         },
-
         maxContainers
       } );
       this.shapeGroups.push( shapeGroup );

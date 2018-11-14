@@ -23,14 +23,13 @@ define( require => {
       // @public {Fraction}
       this.fraction = fraction;
 
-      // @public {Property.<ShapeGroup|NumberGroup|null>}
-      // TODO: Properly supertype this?
+      // @public {Property.<Group|null>}
       this.groupProperty = new Property( null );
 
       // @public {Property.<Vector2>} - Position of our target in model units (updated from the view)
       this.positionProperty = new Property( Vector2.ZERO );
 
-      // @public {ObservableArray.<ShapeGroup|NumberGroup>}
+      // @public {ObservableArray.<Group>}
       this.hoveringGroups = new ObservableArray();
     }
   }

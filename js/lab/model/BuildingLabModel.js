@@ -11,7 +11,6 @@ define( require => {
   // modules
   const BuildingModel = require( 'FRACTIONS_COMMON/building/model/BuildingModel' );
   const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
-  const DerivedProperty = require( 'AXON/DerivedProperty' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
@@ -43,7 +42,7 @@ define( require => {
       // @public {Property.<BuildingRepresentation>}
       this.topRepresentationProperty = new Property( BuildingRepresentation.PIE );
 
-      // @public {Property.<ShapeGroup|NumberGroup|null>} - We'll only show controls for this shape group
+      // @public {Property.<Group|null>} - We'll only show controls for this shape group
       this.selectedGroupProperty = new Property( null );
 
       // Shape stacks
@@ -83,11 +82,6 @@ define( require => {
 
       // Shared to set up some initial state
       this.reset();
-    }
-
-    // NOTE: Meant to override
-    getShapeControlsVisibleProperty( shapeGroup ) {
-      return new DerivedProperty( [ this.selectedGroupProperty ], selectedGroup => selectedGroup === shapeGroup );
     }
 
     /**

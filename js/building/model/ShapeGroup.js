@@ -9,13 +9,11 @@ define( require => {
   'use strict';
 
   // modules
-  const Animator = require( 'FRACTIONS_COMMON/building/model/Animator' );
-  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
-  const Emitter = require( 'AXON/Emitter' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const Group = require( 'FRACTIONS_COMMON/building/model/Group' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Property = require( 'AXON/Property' );
@@ -23,7 +21,7 @@ define( require => {
   const ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
   const Vector2 = require( 'DOT/Vector2' );
 
-  class ShapeGroup {
+  class ShapeGroup extends Group {
     /**
      * @param {BuildingRepresentation} representation
      * @param {Object} [options}]
@@ -35,6 +33,8 @@ define( require => {
         // {number} - The maximum number of containers. Should be at least 1
         maxContainers: FractionsCommonConstants.MAX_SHAPE_CONTAINERS
       }, options );
+
+      super();
 
       assert && assert( _.includes( BuildingRepresentation.VALUES, representation ) );
       assert && assert( typeof options.maxContainers === 'number' && options.maxContainers >= 1 );
@@ -48,14 +48,6 @@ define( require => {
       // @private {function}
       this.returnPieceListener = options.returnPieceListener;
 
-      // @public {Property.<Vector2>}
-      this.positionProperty = new Property( Vector2.ZERO, {
-        valueType: Vector2
-      } );
-
-      // @public {Property.<number>} - Applies only while out in the play area (being animated or dragged)
-      this.scaleProperty = new NumberProperty( 1 );
-
       // @public {ObservableArray.<ShapeContainer>} - Should generally only be popped/pushed
       this.shapeContainers = new ObservableArray();
 
@@ -65,58 +57,42 @@ define( require => {
         numberType: 'Integer'
       } );
 
-      // @public {Emitter} - Emitted when containers/pieces change
-      this.changedEmitter = new Emitter();
-
-      // @public {Property.<boolean>}
-      this.isAnimatingProperty = new BooleanProperty( false );
-
       // @public {Property.<Target|null>}
       this.hoveringTargetProperty = new Property( null );
 
-      // @public {Animator}
-      this.animator = new Animator( {
-        positionProperty: this.positionProperty,
-        scaleProperty: this.scaleProperty,
-        isAnimatingProperty: this.isAnimatingProperty
-      } );
-
       this.shapeContainers.addItemAddedListener( () => this.changedEmitter.emit() );
       this.shapeContainers.addItemRemovedListener( () => this.changedEmitter.emit() );
-
-      // Keep our hover target up-to-date
-      this.hoveringTargetProperty.lazyLink( ( newTarget, oldTarget ) => {
-        oldTarget && oldTarget.hoveringGroups.remove( this );
-        newTarget && newTarget.hoveringGroups.push( this );
-      } );
 
       // Always want at least one container
       this.increaseContainerCount();
     }
 
-    // TODO: do we want this as a property?
+    /**
+     * The current "amount" of the entire group
+     * @public
+     * @override
+     *
+     * @returns {Fraction}
+     */
     get totalFraction() {
       return this.shapeContainers.reduce( new Fraction( 0, 1 ), ( fraction, shapeContainer ) => fraction.plus( shapeContainer.totalFractionProperty.value ) );
     }
 
-    // TODO: doc (and if on all groups, bring up to Group.js?)
+    /**
+     * The center locations of every "container" in the group.
+     * @public
+     * @override
+     *
+     * @returns {Array.<Vector2>}
+     */
     get centerPoints() {
       return this.shapeContainers.getArray().map( shapeContainer => this.positionProperty.value.plus( shapeContainer.offset ) );
     }
 
     /**
-     * Steps forward in time.
+     * Whether this group contains any pieces.
      * @public
-     *
-     * @param {number} dt
-     */
-    step( dt ) {
-      this.animator.step( dt );
-    }
-
-    /**
-     * Returns whether there are any pieces in any of the shape containers.
-     * @public
+     * @override
      *
      * @returns {boolean}
      */
