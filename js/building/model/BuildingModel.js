@@ -151,6 +151,12 @@ define( require => {
       return numberStack.numberPieces.length;
     }
 
+    /**
+     * Animates a piece back to its "home" stack.
+     * @public
+     *
+     * @param {ShapePiece} shapePiece
+     */
     returnActiveShapePiece( shapePiece ) {
       const shapeStack = this.findMatchingShapeStack( shapePiece );
       const shapeMatrix = ShapeStack.getShapeMatrix( shapePiece.fraction, shapePiece.representation, this.getShapeStackIndex( shapeStack ) );
@@ -169,6 +175,12 @@ define( require => {
       } );
     }
 
+    /**
+     * Animates a piece back to its "home" stack.
+     * @public
+     *
+     * @param {NumberPiece} numberPiece
+     */
     returnActiveNumberPiece( numberPiece ) {
       const numberStack = this.findMatchingNumberStack( numberPiece );
       const offset = NumberStack.getOffset( this.getNumberStackIndex( numberStack ) );
@@ -211,6 +223,14 @@ define( require => {
       } );
     }
 
+    /**
+     * Returns the closest ShapeContainer that the given shape piece could be dropped on.
+     * @public
+     *
+     * @param {ShapePiece} shapePiece
+     * @param {number} threshold - How much distance can be allowed between the two for it to be droppable.
+     * @returns {ShapeContainer|null}
+     */
     closestDroppableShapeContainer( shapePiece, threshold ) {
       let closestContainer = null;
       let closestDistance = threshold;
@@ -234,6 +254,14 @@ define( require => {
       return closestContainer;
     }
 
+    /**
+     * Called when a ShapePiece is dropped by the user.
+     * @public
+     *
+     * @param {ShapePiece} shapePiece
+     * @param {number} threshold - How much distance to allow between the piece and a container/group for it to be
+     *                             dropped inside.
+     */
     shapePieceDropped( shapePiece, threshold ) {
       let closestContainer = this.closestDroppableShapeContainer( shapePiece, threshold );
 
@@ -246,6 +274,14 @@ define( require => {
       }
     }
 
+    /**
+     * Called when a NumberPiece is dropped by the user.
+     * @public
+     *
+     * @param {NumberPiece} numberPiece
+     * @param {number} threshold - How much distance to allow between the piece and a container/group for it to be
+     *                             dropped inside.
+     */
     numberPieceDropped( numberPiece, threshold ) {
       let closestSpot = null;
       let closestDistance = threshold;
@@ -289,7 +325,12 @@ define( require => {
       this.activeNumberPieces.remove( numberPiece );
     }
 
-    // TODO: doc
+    /**
+     * Removes the last piece from a ShapeGroup (animating it back to its home stack).
+     * @public
+     *
+     * @param {ShapeGroup} shapeGroup
+     */
     removeLastPieceFromShapeGroup( shapeGroup ) {
       for ( let i = shapeGroup.shapeContainers.length - 1; i >= 0; i-- ) {
         const shapeContainer = shapeGroup.shapeContainers.get( i );
@@ -312,6 +353,12 @@ define( require => {
       throw new Error( 'Could not find a piece to remove' );
     }
 
+    /**
+     * Removes the last piece from a NumberGroup (animating it back to its home stack).
+     * @public
+     *
+     * @param {NumberGroup} shapeGroup
+     */
     removeLastPieceFromNumberGroup( numberGroup ) {
       for ( let i = 0; i < numberGroup.spots.length; i++ ) {
         const spot = numberGroup.spots[ i ];
@@ -330,6 +377,14 @@ define( require => {
       }
     }
 
+    /**
+     * Adds a ShapeGroup to the model.
+     * @public
+     *
+     * @param {BuildingRepresentation} representation
+     * @param {number} [maxContainers]
+     * @returns {ShapeGroup}
+     */
     addShapeGroup( representation, maxContainers = FractionsCommonConstants.MAX_SHAPE_CONTAINERS ) {
       const shapeGroup = new ShapeGroup( representation, {
         returnPieceListener: () => {
@@ -341,6 +396,13 @@ define( require => {
       return shapeGroup;
     }
 
+    /**
+     * Adds a NumberGroup to the model.
+     * @public
+     *
+     * @param {boolean} isMixedNumber
+     * @returns {NumberGroup}
+     */
     addNumberGroup( isMixedNumber ) {
       const numberGroup = new NumberGroup( isMixedNumber, {
         activeNumberRangeProperty: this.activeNumberRangeProperty
@@ -350,6 +412,12 @@ define( require => {
       return numberGroup;
     }
 
+    /**
+     * Animates the ShapeGroup back to its "home" stack.
+     * @public
+     *
+     * @param {ShapeGroup} shapeGroup
+     */
     returnShapeGroup( shapeGroup ) {
       while ( shapeGroup.hasAnyPieces() ) {
         this.removeLastPieceFromShapeGroup( shapeGroup );
@@ -370,10 +438,19 @@ define( require => {
           if ( shapeGroupStack.isMutable ) {
             shapeGroupStack.shapeGroups.push( shapeGroup );
           }
+          else {
+            shapeGroup.dispose();
+          }
         }
       } );
     }
 
+    /**
+     * Animates the NumberGroup back to its "home" stack.
+     * @public
+     *
+     * @param {NumberGroup} numberGroup
+     */
     returnNumberGroup( numberGroup ) {
       while ( numberGroup.hasAnyPieces() ) {
         this.removeLastPieceFromNumberGroup( numberGroup );
@@ -398,6 +475,10 @@ define( require => {
       } );
     }
 
+    /**
+     * When our dragged number pieces change, we need to update our numeric range.
+     * @private
+     */
     updateDraggedNumberRange() {
       if ( this.draggedNumberPieces.length === 0 ) {
         this.activeNumberRangeProperty.value = null;
