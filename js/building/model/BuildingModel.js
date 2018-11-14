@@ -53,11 +53,11 @@ define( require => {
       // @public {ObservableArray.<NumberPiece>} - Number pieces in the play area (controlled or animating)
       this.activeNumberPieces = new ObservableArray();
 
-      // @public {ObservableArray.<NumberPiece>} - Tracking number pieces being dragged, so we can decide whether each
+      // @private {ObservableArray.<NumberPiece>} - Tracking number pieces being dragged, so we can decide whether each
       // number group should show any "do not drop here" symbols on their spots.
       this.draggedNumberPieces = new ObservableArray();
 
-      // @public {Property.<Range|null>} - null when there are no active numbers, otherwise a range of all values being
+      // @private {Property.<Range|null>} - null when there are no active numbers, otherwise a range of all values being
       // dragged.
       this.activeNumberRangeProperty = new Property( null, {
         useDeepEquality: true
@@ -83,26 +83,44 @@ define( require => {
     }
 
     /**
-     * Called when the user drags a shape piece from the specified stack (usually from a panel).
+     * Called when the user drags a shape piece from a stack.
      * @public
      *
      * @param {ShapePiece} shapePiece
-     * @param {ShapeStack} shapeStack
      */
-    dragShapePieceFromStack( shapePiece, shapeStack ) {
+    dragShapePieceFromStack( shapePiece ) {
       this.activeShapePieces.push( shapePiece );
     }
 
     /**
-     * Called when the user drags a number piece from the specified stack (usually from a panel).
+     * Called when the user drags a number piece from a stack.
      * @public
      *
      * @param {NumberPiece} numberPiece
-     * @param {NumberStack} numberStack
      */
-    dragNumberPieceFromStack( numberPiece, numberStack ) {
+    dragNumberPieceFromStack( numberPiece ) {
       this.activeNumberPieces.push( numberPiece );
       this.draggedNumberPieces.push( numberPiece );
+    }
+
+    /**
+     * Called when the user drags a shape group from a stack.
+     * @public
+     *
+     * @param {ShapeGroup} shapeGroup
+     */
+    dragShapeGroupFromStack( shapeGroup ) {
+      this.shapeGroups.push( shapeGroup );
+    }
+
+    /**
+     * Called when the user drags a number group from a stack.
+     * @public
+     *
+     * @param {NumberGroup} numberGroup
+     */
+    dragNumberGroupFromStack( numberGroup ) {
+      this.numberGroups.push( numberGroup );
     }
 
     /**
@@ -378,7 +396,7 @@ define( require => {
     }
 
     /**
-     * Adds a ShapeGroup to the model.
+     * Adds a ShapeGroup to the model (usually created from a stack)
      * @public
      *
      * @param {BuildingRepresentation} representation
@@ -392,12 +410,12 @@ define( require => {
         },
         maxContainers
       } );
-      this.shapeGroups.push( shapeGroup );
+      this.dragShapeGroupFromStack( shapeGroup );
       return shapeGroup;
     }
 
     /**
-     * Adds a NumberGroup to the model.
+     * Adds a NumberGroup to the model (usually created from a stack)
      * @public
      *
      * @param {boolean} isMixedNumber
@@ -407,7 +425,7 @@ define( require => {
       const numberGroup = new NumberGroup( isMixedNumber, {
         activeNumberRangeProperty: this.activeNumberRangeProperty
       } );
-      this.numberGroups.push( numberGroup );
+      this.dragNumberGroupFromStack( numberGroup );
 
       return numberGroup;
     }

@@ -66,7 +66,7 @@ define( require => {
           shapePiece.scaleProperty.reset();
           shapePiece.rotationProperty.reset();
           shapePiece.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
-          challenge.dragShapePieceFromStack( shapePiece, stack );
+          challenge.dragShapePieceFromStack( shapePiece );
           const shapePieceNode = this.layerNode.getShapePieceNode( shapePiece );
           shapePieceNode.dragListener.press( event, shapePieceNode );
         }
@@ -74,7 +74,7 @@ define( require => {
           const numberPiece = stack.numberPieces.pop();
           numberPiece.scaleProperty.reset();
           numberPiece.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
-          challenge.dragNumberPieceFromStack( numberPiece, stack );
+          challenge.dragNumberPieceFromStack( numberPiece );
           const numberPieceNode = this.layerNode.getNumberPieceNode( numberPiece );
           numberPieceNode.dragListener.press( event, numberPieceNode );
         }
@@ -85,7 +85,7 @@ define( require => {
           shapeGroup.scaleProperty.reset();
           shapeGroup.partitionDenominatorProperty.reset();
           shapeGroup.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
-          challenge.shapeGroups.push( shapeGroup );
+          challenge.dragShapeGroupFromStack( shapeGroup );
           const shapeGroupNode = this.layerNode.getShapeGroupNode( shapeGroup );
           shapeGroupNode.dragListener.press( event, shapeGroupNode );
           event.handle(); // for our selection
@@ -94,7 +94,7 @@ define( require => {
           const numberGroup = stack.numberGroups.pop();
           numberGroup.scaleProperty.reset();
           numberGroup.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
-          challenge.numberGroups.push( numberGroup );
+          challenge.dragNumberGroupFromStack( numberGroup );
           const numberGroupNode = this.layerNode.getNumberGroupNode( numberGroup );
           numberGroupNode.dragListener.press( event, numberGroupNode );
         }
