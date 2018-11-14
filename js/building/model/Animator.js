@@ -16,11 +16,7 @@ define( require => {
 
   class Animator {
     /**
-     * @param {Property.<Vector2>} positionProperty
-     * @param {Property.<number>} rotationProperty
-     * @param {Property.<number>} scaleProperty
-     * @param {Property.<number>} shadowProperty
-     * @param {Property.<boolean>} isAnimatingProperty
+     * @param {Object} config
      */
     constructor( config ) {
 
@@ -119,8 +115,6 @@ define( require => {
         // {function|null} - Called with no arguments
         endAnimationCallback: null
       }, config );
-
-      // TODO: Ensure things are made non-pickable so we can't  re-grab while in motion?
 
       if ( this.isAnimatingProperty.value ) {
         this.endAnimation();

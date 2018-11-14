@@ -56,8 +56,8 @@ define( require => {
       // @public {Property.<number>} - Applies only while out in the play area (being animated or dragged)
       this.scaleProperty = new NumberProperty( 1 );
 
-      // TODO: doc [0,1]
-      // @public {Property.<number>} - Applies only while out in the play area (being animated or dragged)
+      // @public {Property.<number>} - Applies only while out in the play area (being animated or dragged). Will be
+      // inclusively between 0 (no shadow shown, directly behind) and 1 (largest shadow offset).
       this.shadowProperty = new NumberProperty( 0 );
 
       // @public {Property.<boolean>}
