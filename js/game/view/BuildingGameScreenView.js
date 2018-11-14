@@ -94,8 +94,8 @@ define( require => {
       this.model = model;
 
       // @private {Array.<Node>}
-      this.shapeIcons = this.model.shapeLevels.map( BuildingGameScreenView.createLevelIcon );
-      this.numberIcons = this.model.numberLevels.map( BuildingGameScreenView.createLevelIcon );
+      this.shapeIcons = this.model.shapeLevels.map( level => BuildingGameScreenView.createLevelIcon( level, model.hasMixedNumbers ) );
+      this.numberIcons = this.model.numberLevels.map( level => BuildingGameScreenView.createLevelIcon( level, model.hasMixedNumbers ) );
 
       const leftLevelSelectionNode = this.createLevelSection( 0, 4 );
       const rightLevelSelectionNode = this.createLevelSection( 5, 9 );
