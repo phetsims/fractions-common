@@ -31,13 +31,13 @@ define( require => {
       // @public {Emitter} - Emitted when containers/pieces change
       this.changedEmitter = new Emitter();
 
-      // @public {Property.<boolean>}
+      // @public {Property.<boolean>} - Whether the group is being moved (not by the user)
       this.isAnimatingProperty = new BooleanProperty( false );
 
-      // @public {Property.<Target|null>}
+      // @public {Property.<Target|null>} - The target, if any, that the user is holding this group over.
       this.hoveringTargetProperty = new Property( null );
 
-      // @public {Animator}
+      // @public {Animator} - Reponsible for animating the main properties of this group.
       this.animator = new Animator( {
         positionProperty: this.positionProperty,
         scaleProperty: this.scaleProperty,

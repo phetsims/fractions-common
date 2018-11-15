@@ -32,8 +32,7 @@ define( require => {
      */
     constructor( stacks, pressCallback, options ) {
       options = _.extend( {
-        padding: 20,
-        maxHeightOverride: null
+        padding: 20
       }, options );
 
       super( {
@@ -83,20 +82,18 @@ define( require => {
       } );
 
       // Apply appropriate mouse/touch areas
-      let maxTargetHeight = _.max( this.stackTargets.map( stackTarget => stackTarget.layoutBounds.height ) );
-      if ( options.maxHeightOverride ) {
-        assert && assert( maxTargetHeight <= options.maxHeightOverride );
-        maxTargetHeight = options.maxHeightOverride;
-      }
+      let maxHalfHeight = _.max( this.stackTargets.map( stackTarget => {
+        return Math.max( Math.abs( stackTarget.layoutBounds.minY ), Math.abs( stackTarget.layoutBounds.maxY ) );
+      } ) );
       this.stackTargets.forEach( node => {
         const layoutBounds = node.layoutBounds;
         assert && assert( layoutBounds.isValid() );
-        const bounds = new Bounds2( -options.padding / 2 + layoutBounds.left, -maxTargetHeight / 2, layoutBounds.right + options.padding / 2, maxTargetHeight / 2 );
+        const bounds = new Bounds2( -options.padding / 2 + layoutBounds.left, -maxHalfHeight, layoutBounds.right + options.padding / 2, maxHalfHeight );
         node.mouseArea = bounds;
         node.touchArea = bounds;
 
         // For layout, handle verticality
-        node.localBounds = new Bounds2( layoutBounds.left, -maxTargetHeight / 2, layoutBounds.right, maxTargetHeight / 2 );
+        node.localBounds = new Bounds2( layoutBounds.left, -maxHalfHeight, layoutBounds.right, maxHalfHeight );
       } );
 
       this.children = this.stackTargets;

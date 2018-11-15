@@ -35,7 +35,8 @@ define( require => {
       } );
 
       super( shapeBox, {
-        xMargin: 15
+        xMargin: 15,
+        yMargin: 10 // TODO: why do we need non-equal margins to see an equal effect?
       } );
 
       const createBox = representation => {
@@ -46,9 +47,6 @@ define( require => {
           return shapeGroupStack.representation === representation;
         } );
         return new StackNodesBox( stacks.concat( groupStacks ), pressCallback, {
-          // TODO: Is there a better way where this is not needed or hardcoded?
-          maxHeightOverride: 113,
-
           padding: 37
         } );
       };

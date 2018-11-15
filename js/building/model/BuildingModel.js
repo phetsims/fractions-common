@@ -25,6 +25,7 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   const scratchVector = new Vector2();
+  const stepFunction = item => item.step();
 
   class BuildingModel {
     constructor() {
@@ -551,14 +552,8 @@ define( require => {
      * @param {number} dt
      */
     step( dt ) {
-      // TODO: minimize garbage
-      this.shapeGroups.forEach( shapeGroup => {
-        shapeGroup.step( dt );
-      } );
-
-      this.numberGroups.forEach( numberGroup => {
-        numberGroup.step( dt );
-      } );
+      this.shapeGroups.forEach( stepFunction );
+      this.numberGroups.forEach( stepFunction );
 
       this.activeShapePieces.forEach( shapePiece => {
         shapePiece.step( dt );
@@ -572,9 +567,7 @@ define( require => {
         }
       } );
 
-      this.activeNumberPieces.forEach( numberPiece => {
-        numberPiece.step( dt );
-      } );
+      this.activeNumberPieces.forEach( stepFunction );
     }
   }
 

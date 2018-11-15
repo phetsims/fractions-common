@@ -5,6 +5,8 @@
  *
  * "mutable" stacks have elements dynamically added/removed, whereas "immutable" ones are not affected by the user.
  *
+ * Usually the items in a stack are shown (offset by a certain amount).
+ *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 define( require => {
@@ -25,7 +27,7 @@ define( require => {
       assert && assert( typeof layoutQuantity === 'number' && layoutQuantity >= 1 && layoutQuantity % 1 === 0 );
       assert && assert( typeof isMutable === 'boolean' );
 
-      // @public {boolean}
+      // @public {number}
       this.layoutQuantity = layoutQuantity;
 
       // @public {boolean}

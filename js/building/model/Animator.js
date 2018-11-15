@@ -58,7 +58,7 @@ define( require => {
       // @private {function}
       this.endAnimationListener = this.endAnimation.bind( this );
 
-      // @private {number} - Ratio of the animation
+      // @private {number} - Ratio of the animation, from 0 (the start) to 1 (the end)
       this.ratio = 0;
 
       // @private {number}
