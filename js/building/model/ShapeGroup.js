@@ -1,7 +1,8 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * Represents a (growing/shrinking) set of ShapeContainers, so that it can hold arbitrary mixed fraction
+ * representations. Each container can hold shape pieces, and can add up to at most 1.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -108,7 +109,6 @@ define( require => {
     /**
      * Adds a container.
      * @public
-     * TODO: don't require calling this at the start? Can we ALWAYS call it initially?
      */
     increaseContainerCount() {
       var offset = new Vector2( this.shapeContainers.length * ( FractionsCommonConstants.SHAPE_SIZE + FractionsCommonConstants.SHAPE_CONTAINER_PADDING ), 0 );
@@ -118,8 +118,6 @@ define( require => {
     /**
      * Removes the most-recently-added container
      * @public
-     *
-     * TODO: Should we do this when being returned/animated back to the panel?
      */
     decreaseContainerCount() {
       while ( this.shapeContainers.length && this.shapeContainers.get( this.shapeContainers.length - 1 ).shapePieces.length ) {

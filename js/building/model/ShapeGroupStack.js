@@ -31,6 +31,7 @@ define( require => {
 
     /**
      * Returns the desired visual offset of an item in the stack from the base.
+     * @public
      *
      * @param {BuildingRepresentation} representation
      * @param {number} index

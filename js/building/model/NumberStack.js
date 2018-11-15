@@ -29,7 +29,13 @@ define( require => {
       this.numberPieces = this.array;
     }
 
-    // TODO: doc
+    /**
+     * Returns the desired visual offset of an item in the stack from the base.
+     * @public
+     *
+     * @param {number} index
+     * @returns {Vector2}
+     */
     static getOffset( index ) {
       return new Vector2( 4 * index, 4 * index );
     }

@@ -27,13 +27,14 @@ define( require => {
       // @public {NumberSpotType}
       this.type = type;
 
-      // @public {Bounds2}
+      // @public {Bounds2} - Model-coordinate area for its zone.
       this.bounds = bounds;
 
-      // @public {Property.<NumberPiece|null>}
+      // @public {Property.<NumberPiece|null>} - The piece our spot is "filled" with (if any)
       this.pieceProperty = new Property( null );
 
-      // @public {Property.<boolean>}
+      // @public {Property.<boolean>} - Whether it should appear like it cannot be filled with a number piece currently
+      // being dragged.
       this.showNotAllowedProperty = new BooleanProperty( false );
     }
   }

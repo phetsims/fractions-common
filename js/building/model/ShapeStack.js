@@ -26,13 +26,13 @@ define( require => {
     constructor( fraction, layoutQuantity, representation, color, isMutable = true ) {
       super( layoutQuantity, isMutable );
 
-      // @public {Fraction}
+      // @public {Fraction} - What fraction of pieces should it hold (stacks generally hold only a specific value).
       this.fraction = fraction;
 
-      // @public {BuildingRepresentation}
+      // @public {BuildingRepresentation} - What type of pieces it can hold
       this.representation = representation;
 
-      // @public {ColorDef}
+      // @public {ColorDef} - What color of pieces does it hold
       this.color = color;
 
       // @public {ObservableArray.<ShapePiece>} - NOTE: These should only ever be popped/pushed.
@@ -49,7 +49,9 @@ define( require => {
      * @returns {Matrix3}
      */
     static getShapeMatrix( fraction, representation, index ) {
-      return Matrix3.translationFromVector( BuildingRepresentation.getOffset( representation, index ) ).timesMatrix( ShapeContainer.getShapeMatrix( 0, fraction, representation ) );
+      return Matrix3.translationFromVector( BuildingRepresentation.getOffset( representation, index ) ).timesMatrix(
+        ShapeContainer.getShapeMatrix( 0, fraction, representation )
+      );
     }
   }
 

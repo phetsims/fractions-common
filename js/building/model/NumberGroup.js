@@ -47,9 +47,6 @@ define( require => {
   const MIXED_DENOMINATOR_BOUNDS = SEPARATE_DENOMINATOR_BOUNDS.shifted( -MIXED_CENTER.x, -MIXED_CENTER.y );
   const MIXED_WHOLE_BOUNDS = SEPARATE_WHOLE_BOUNDS.shifted( -MIXED_CENTER.x, -MIXED_CENTER.y );
 
-  // TODO: double-digit support
-
-  // TODO: Supertype for ShapeGroup/NumberGroup
   class NumberGroup extends Group {
     /**
      * @param {boolean} isMixedNumber
@@ -90,7 +87,7 @@ define( require => {
         return _.every( this.spots, spot => spot.pieceProperty.value !== null );
       } );
 
-      // @public {Property.<boolean>} TODO: hasAnyPieces usage can move to this?
+      // @public {Property.<boolean>}
       this.hasPiecesProperty = new DerivedProperty( this.spots.map( spot => spot.pieceProperty ), () => {
         return _.some( this.spots, spot => spot.pieceProperty.value !== null );
       } );
@@ -152,6 +149,10 @@ define( require => {
       return [ this.positionProperty.value ];
     }
 
+    /**
+     * Updates whether each spot is marked as "normal" or "cannot drop a piece on it".
+     * @private
+     */
     updateAllowedSpots() {
       if ( this.isMixedNumber ) {
         var range = this.activeNumberRangeProperty.value;
@@ -162,8 +163,19 @@ define( require => {
       }
     }
 
+    /**
+     * Returns whether it would be legal, given the current state, to place a number piece with the given number into
+     * the given spot.
+     * @public
+     *
+     * @param {number} number
+     * @param {NumberSpot} spot
+     * @returns {boolean}
+     */
     canPlaceNumberInSpot( number, spot ) {
-      // TODO: simplify into one boolean
+      // NOTE: Intellij formatting really mucks up things if this is simplified to one boolean expression. It's left in
+      // this more verbose form so the nesting is more understandable.
+
       if ( spot.pieceProperty.value !== null ) {
         return false;
       }

@@ -38,7 +38,7 @@ define( require => {
       // @public {Property.<boolean>}
       this.isUserControlledProperty = new BooleanProperty( false );
 
-      // @public {Property.<boolean>} TODO: consider rename, as we also "animate" when this is false...
+      // @public {Property.<boolean>}
       this.isAnimatingProperty = new BooleanProperty( false );
 
       // @public {Animator}

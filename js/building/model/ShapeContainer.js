@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * Represents an area of value 1 that can hold shape pieces that in total can sum up to 1.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -24,8 +24,7 @@ define( require => {
 
   class ShapeContainer {
     /**
-     * @param {ShapeGroup} shapeGroup -- Should we just pass this through in general? Or get rid of the reference and
-     *                                   simplify our "find the container" logic? Or provide as null? TODO
+     * @param {ShapeGroup} shapeGroup - So far it is easier to pass through this reference (no need for 1 container).
      * @param {Property.<number>} partitionDenominatorProperty
      * @param {BuildingRepresentation} representation
      * @param {Emitter} changedEmitter
@@ -122,7 +121,15 @@ define( require => {
       throw new Error( 'ShapePiece not found' );
     }
 
-    // TODO: doc
+    /**
+     * Returns the matrix transform (locally) for how to position a piece in the container with the given properties.
+     * @public
+     *
+     * @param {number} startingRatio - The numeric value of all fraction pieces BEFORE the desired piece to orient
+     * @param {Fraction} fraction - The value of the piece to orient
+     * @param {BuildingRepresentation} representation
+     * @returns {Matrix3}
+     */
     static getShapeMatrix( startingRatio, fraction, representation ) {
       if ( representation === BuildingRepresentation.PIE ) {
         if ( fraction.equals( Fraction.ONE ) ) {

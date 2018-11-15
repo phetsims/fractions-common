@@ -63,7 +63,8 @@ define( require => {
       // @public {Property.<boolean>}
       this.isUserControlledProperty = new BooleanProperty( false );
 
-      // @public {Property.<boolean>} TODO: consider rename, as we also "animate" when this is false...
+      // @public {Property.<boolean>} - NOTE: The shape piece can rotate when this is false (e.g. when the user is
+      // dragging it). It just means that the position/rotation/scale/shadow are controlled by animation.
       this.isAnimatingProperty = new BooleanProperty( false );
 
       // @public {Animator}
@@ -79,7 +80,7 @@ define( require => {
       this.angularVelocityProperty = new NumberProperty( 0 );
       this.targetRotationProperty = new NumberProperty( 0 );
 
-      // @private {DampedHarmonic|null}
+      // @private {DampedHarmonic|null} - For rotational animation
       this.dampedHarmonic = null;
 
       // @private {number}
@@ -92,6 +93,7 @@ define( require => {
         }
       } );
 
+      // Handle rotational animation towards a target (if any)
       Property.multilink( [ this.isUserControlledProperty, this.targetRotationProperty ], ( isUserControlled, targetRotation ) => {
         if ( isUserControlled ) {
           var currentRotation = this.rotationProperty.value;
@@ -157,7 +159,11 @@ define( require => {
 
   fractionsCommon.register( 'ShapePiece', ShapePiece );
 
-  ShapePiece.VERTICAL_BAR_BOUNDS = Bounds2.point( 0, 0 ).dilatedXY( FractionsCommonConstants.SHAPE_SIZE / 2, FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT / 2 );
+  // @public {Bounds2}
+  ShapePiece.VERTICAL_BAR_BOUNDS = Bounds2.point( 0, 0 ).dilatedXY(
+    FractionsCommonConstants.SHAPE_SIZE / 2,
+    FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT / 2
+  );
 
   return ShapePiece;
 } );

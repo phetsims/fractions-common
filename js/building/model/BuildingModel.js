@@ -25,7 +25,6 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   const scratchVector = new Vector2();
-  const stepFunction = item => item.step();
 
   class BuildingModel {
     constructor() {
@@ -180,8 +179,10 @@ define( require => {
       const shapeStack = this.findMatchingShapeStack( shapePiece );
       const shapeMatrix = ShapeStack.getShapeMatrix( shapePiece.fraction, shapePiece.representation, this.getShapeStackIndex( shapeStack ) );
       shapePiece.animator.animateTo( {
-        position: shapeStack.positionProperty.value.plus( shapeMatrix.timesVector2( Vector2.ZERO ).timesScalar( FractionsCommonConstants.SHAPE_BUILD_SCALE ) ),
-        rotation: 0, // TODO: do we need to customize this so it is as in the "bucket"?
+        position: shapeStack.positionProperty.value.plus( shapeMatrix.timesVector2( Vector2.ZERO ).timesScalar(
+          FractionsCommonConstants.SHAPE_BUILD_SCALE
+        ) ),
+        rotation: 0, // All shapes on building-based screens have 0 rotation in their stacks
         scale: FractionsCommonConstants.SHAPE_BUILD_SCALE,
         shadow: 0,
         animationInvalidationProperty: shapeStack.positionProperty,
@@ -226,8 +227,6 @@ define( require => {
      */
     placeActiveShapePiece( shapePiece, shapeContainer, shapeGroup ) {
       const shapeMatrix = ShapeContainer.getShapeMatrix( shapeContainer.getShapeRatio( shapePiece ), shapePiece.fraction, shapePiece.representation );
-      // TODO: also invalidate if our container goes away?
-      // NOTE: Handle it if it starts animation and THEN the piece gets moved somewhere else. Instant animate
       shapePiece.animator.animateTo( {
         position: shapeGroup.positionProperty.value.plus( shapeContainer.offset ).plus( shapeMatrix.timesVector2( Vector2.ZERO ) ),
         rotation: shapeMatrix.rotation,
@@ -235,7 +234,6 @@ define( require => {
         shadow: 0,
         animationInvalidationProperty:  shapeGroup.positionProperty,
         easing: Easing.QUADRATIC_IN_OUT,
-        // TODO: adjust the velocity of  this?
         endAnimationCallback: () => {
           this.activeShapePieces.remove( shapePiece );
         }
@@ -359,7 +357,6 @@ define( require => {
           // If the piece hasn't arrived yet, just complete the animation
           shapePiece.animator.endAnimation();
 
-          // TODO: Better determination of the position, including with centroid and rotation offsets
           const shapeMatrix = ShapeContainer.getShapeMatrix( shapeContainer.totalFractionProperty.value.value, shapePiece.fraction, shapePiece.representation );
           const containerPoint = shapeGroup.positionProperty.value.plus( shapeContainer.offset );
           shapePiece.positionProperty.value = containerPoint.plus( shapeMatrix.timesVector2( Vector2.ZERO ) );
@@ -482,7 +479,6 @@ define( require => {
         scale: FractionsCommonConstants.NUMBER_BUILD_SCALE,
         animationInvalidationProperty: positionProperty,
         endAnimationCallback: () => {
-          // TODO: More methods for adding/removing to make things un-missable
           this.numberGroups.remove( numberGroup );
           if ( numberGroupStack.isMutable ) {
             numberGroupStack.numberGroups.push( numberGroup );
@@ -552,8 +548,8 @@ define( require => {
      * @param {number} dt
      */
     step( dt ) {
-      this.shapeGroups.forEach( stepFunction );
-      this.numberGroups.forEach( stepFunction );
+      this.shapeGroups.forEach( shapeGroup => shapeGroup.step( dt ) );
+      this.numberGroups.forEach( numberGroup => numberGroup.step( dt ) );
 
       this.activeShapePieces.forEach( shapePiece => {
         shapePiece.step( dt );
@@ -567,7 +563,7 @@ define( require => {
         }
       } );
 
-      this.activeNumberPieces.forEach( stepFunction );
+      this.activeNumberPieces.forEach( numberPiece => numberPiece.step( dt ) );
     }
   }
 
