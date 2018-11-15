@@ -63,7 +63,7 @@ define( require => {
       // @public {ObservableArray.<ShapeContainerNode>} TODO: don't require this being public
       this.shapeContainerNodes = new ObservableArray();
 
-      // @private {Property.<Bounds2>}
+      // @private {Property.<Bounds2>} TODO: make sure all of these are documented properly for the non-icon version
       this.generalDragBoundsProperty = options.dragBoundsProperty;
 
       // @private {Node}
@@ -137,12 +137,18 @@ define( require => {
       }
       this.updateRightButtonPosition();
 
+      // @private {Property.<boolean>}
+      this.decreaseEnabledProperty = new DerivedProperty( [ shapeGroup.partitionDenominatorProperty ], denominator => {
+        return !options.isIcon && ( denominator > shapeGroup.partitionDenominatorProperty.range.min );
+      } );
+      this.increaseEnabledProperty = new DerivedProperty( [ shapeGroup.partitionDenominatorProperty ], denominator => {
+        return !options.isIcon && ( denominator < shapeGroup.partitionDenominatorProperty.range.max );
+      } );
+
       // @private {Node}
       this.decreasePartitionCountButton = new RoundArrowButton( {
         arrowRotation: -Math.PI / 2,
-        enabledProperty: new DerivedProperty( [ shapeGroup.partitionDenominatorProperty ], denominator => {
-          return !options.isIcon && ( denominator > shapeGroup.partitionDenominatorProperty.range.min );
-        } ),
+        enabledProperty: this.decreaseEnabledProperty,
         listener: () => {
           shapeGroup.partitionDenominatorProperty.value -= 1;
         }
@@ -150,9 +156,7 @@ define( require => {
       // @private {Node}
       this.increasePartitionCountButton = new RoundArrowButton( {
         arrowRotation: Math.PI / 2,
-        enabledProperty: new DerivedProperty( [ shapeGroup.partitionDenominatorProperty ], denominator => {
-          return !options.isIcon && ( denominator < shapeGroup.partitionDenominatorProperty.range.max );
-        } ),
+        enabledProperty: this.increaseEnabledProperty,
         listener: () => {
           shapeGroup.partitionDenominatorProperty.value += 1;
         }
@@ -330,6 +334,8 @@ define( require => {
 
       this.decreasePartitionCountButton.dispose();
       this.increasePartitionCountButton.dispose();
+      this.decreaseEnabledProperty.dispose();
+      this.increaseEnabledProperty.dispose();
       this.addContainerButton.dispose();
       this.removeContainerButton.dispose();
       this.returnButton.dispose();

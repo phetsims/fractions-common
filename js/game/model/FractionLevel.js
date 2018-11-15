@@ -126,6 +126,7 @@ define( require => {
 
       // @public {Property.<FractionChallenge>}
       this.challengeProperty = new Property( generateChallenge( this.number, this.color ) );
+      this.challengeProperty._initialValue = null; // TODO: This is unclean. Find a better way to do this to normal properties
 
       // @public {Property.<number>}
       this.scoreProperty = new DynamicProperty( this.challengeProperty, {

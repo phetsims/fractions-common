@@ -83,6 +83,8 @@ define( require => {
         fill: FractionsCommonColorProfile.collectionBackgroundProperty,
         stroke: FractionsCommonColorProfile.collectionBorderProperty
       } );
+      this.placeholder.dispose();
+      this.placeholder = null;
 
       // @private {GradientRectangle}
       this.highlight = new GradientRectangle( {
@@ -222,6 +224,8 @@ define( require => {
       this.target.hoveringGroups.lengthProperty.unlink( this.highlightListener );
 
       this.groupNode && this.groupNode.dispose();
+      this.highlight.dispose();
+      this.returnButton.dispose();
 
       super.dispose();
     }
