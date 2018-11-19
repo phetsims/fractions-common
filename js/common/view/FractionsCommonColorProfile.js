@@ -23,7 +23,7 @@ define( require => {
 
   // Initial colors for each profile, by string key. Only profile currently is default (still helpful for making color
   // tweaks with the top-level files)
-  const FractionsCommonColorProfile = new ColorProfile( {
+  const FractionsCommonColorProfile = new ColorProfile( [ 'default' ], {
     introScreenBackground: { default: Color.WHITE },
     otherScreenBackground: { default: new Color( 235, 251, 251 ) },
 
@@ -102,7 +102,7 @@ define( require => {
 
     collectionBackground: { default: Color.WHITE },
     collectionBorder: { default: Color.BLACK }
-  }, [ 'default' ] );
+  } );
 
   fractionsCommon.register( 'FractionsCommonColorProfile', FractionsCommonColorProfile );
 
