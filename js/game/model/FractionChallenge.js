@@ -415,9 +415,10 @@ define( require => {
       this.endAnimation();
 
       this.targets.forEach( target => this.returnTarget( target ) );
+      this.endAnimation();
+
       this.shapeGroups.forEach( shapeGroup => this.returnShapeGroup( shapeGroup ) );
       this.numberGroups.forEach( numberGroup => this.returnNumberGroup( numberGroup ) );
-
       this.endAnimation();
 
       const groupStack = this.hasShapes ? this.shapeGroupStacks[ 0 ] : this.numberGroupStacks[ 0 ];
@@ -569,7 +570,8 @@ define( require => {
       for ( let i = 1; i <= maxSolution; i++ ) {
         const numerator = i * fraction.numerator;
         const denominator = i * fraction.denominator;
-        if ( availableQuantities[ numerator ] && availableQuantities[ denominator ] ) {
+        if ( availableQuantities[ numerator ] && availableQuantities[ denominator ] &&
+             ( numerator !== denominator || availableQuantities[ numerator ] > 1 ) ) {
           availableQuantities[ numerator ]--;
           availableQuantities[ denominator ]--;
           const subsolution = FractionChallenge.findNumberSolution( fractions.slice( 1 ), maxNumber, availableQuantities );
