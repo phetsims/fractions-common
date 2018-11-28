@@ -517,17 +517,17 @@ define( require => {
      * @public
      */
     endAnimation() {
-      this.shapeGroups.forEach( shapeGroup => {
-        shapeGroup.animator.endAnimation();
-      } );
-      this.numberGroups.forEach( numberGroup => {
-        numberGroup.animator.endAnimation();
-      } );
       this.activeShapePieces.forEach( shapePiece => {
         shapePiece.animator.endAnimation();
       } );
       this.activeNumberPieces.forEach( shapePiece => {
         shapePiece.animator.endAnimation();
+      } );
+      this.shapeGroups.forEach( shapeGroup => {
+        shapeGroup.animator.endAnimation();
+      } );
+      this.numberGroups.forEach( numberGroup => {
+        numberGroup.animator.endAnimation();
       } );
     }
 

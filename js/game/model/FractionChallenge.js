@@ -412,6 +412,8 @@ define( require => {
      * @public
      */
     cheat() {
+      this.endAnimation();
+
       this.targets.forEach( target => this.returnTarget( target ) );
       this.shapeGroups.forEach( shapeGroup => this.returnShapeGroup( shapeGroup ) );
       this.numberGroups.forEach( numberGroup => this.returnNumberGroup( numberGroup ) );
@@ -431,6 +433,8 @@ define( require => {
           return this.pullNumberGroupFromStack( groupStack, point );
         }
       } );
+
+      this.endAnimation();
 
       if ( this.hasShapes ) {
         let maxQuantity = 0;
@@ -466,6 +470,7 @@ define( require => {
         const pullNumberPiece = ( number, spot ) => {
           const stack = _.find( this.numberStacks, stack => stack.number === number );
           const piece = this.pullNumberPieceFromStack( stack, Vector2.ZERO );
+          this.draggedNumberPieces.remove( piece );
           this.placeNumberPiece( spot, piece );
         };
 
