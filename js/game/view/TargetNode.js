@@ -114,22 +114,8 @@ define( require => {
 
       // @private {Node}
       this.returnButton = new ReturnButton( () => {
-        // TODO: cleanup?
         if ( this.groupNode ) {
-          const group = target.groupProperty.value;
-
-          // If the group hasn't fully completed its animation, then force it to complete early.
-          group.animator.endAnimation();
-
-          target.groupProperty.value = null;
-          if ( challenge.hasShapes ) {
-            challenge.shapeGroups.push( group );
-            challenge.returnShapeGroup( group );
-          }
-          else {
-            challenge.numberGroups.push( group );
-            challenge.returnNumberGroup( group );
-          }
+          challenge.returnTarget( target );
         }
       }, {
         cornerRadius: CORNER_RADIUS - CORNER_OFFSET,

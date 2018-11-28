@@ -38,6 +38,7 @@ define( require => {
   const NumberStackNode = require( 'FRACTIONS_COMMON/building/view/NumberStackNode' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const platform = require( 'PHET_CORE/platform' );
+  const RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
   const RefreshButton = require( 'SCENERY_PHET/buttons/RefreshButton' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const RewardNode = require( 'VEGAS/RewardNode' );
@@ -173,7 +174,15 @@ define( require => {
                     listener() {
                       model.levelProperty.value && model.levelProperty.value.reset();
                     }
-                  } )
+                  } ),
+                  ...( phet.chipper.queryParameters.showAnswers ? [
+                    new RectangularPushButton( {
+                      content: new FaceNode( 27 ),
+                      listener: function() {
+                        challenge.cheat();
+                      }
+                    } )
+                  ] : [] )
                 ]
               } ),
               challengeNode,

@@ -12,6 +12,7 @@ define( require => {
   const BuildingModel = require( 'FRACTIONS_COMMON/building/model/BuildingModel' );
   const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const ChallengeType = require( 'FRACTIONS_COMMON/game/enum/ChallengeType' );
+  const CollectionFinder = require( 'FRACTIONS_COMMON/game/model/CollectionFinder' );
   const ColorDef = require( 'SCENERY/util/ColorDef' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
@@ -21,12 +22,14 @@ define( require => {
   const NumberGroupStack = require( 'FRACTIONS_COMMON/building/model/NumberGroupStack' );
   const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
+  const PrimeFactorization = require( 'FRACTIONS_COMMON/common/model/PrimeFactorization' );
   const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
   const ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
   const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   const ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
   const ShapeTarget = require( 'FRACTIONS_COMMON/game/model/ShapeTarget' );
   const Target = require( 'FRACTIONS_COMMON/game/model/Target' );
+  const UnitCollection = require( 'FRACTIONS_COMMON/game/model/UnitCollection' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // global
@@ -306,6 +309,275 @@ define( require => {
           break;
         }
       }
+    }
+
+    /**
+     * Grabs a ShapePiece from the stack, sets up state for it to be dragged/placed, and places it at the
+     * given point.
+     * @public
+     *
+     * @param {ShapeStack} stack
+     * @param {Vector2} modelPoint
+     * @returns {ShapePiece}
+     */
+    pullShapePieceFromStack( stack, modelPoint ) {
+      const shapePiece = stack.shapePieces.pop();
+      shapePiece.scaleProperty.reset();
+      shapePiece.rotationProperty.reset();
+      shapePiece.positionProperty.value = modelPoint;
+      this.dragShapePieceFromStack( shapePiece );
+      return shapePiece;
+    }
+
+    /**
+     * Grabs a NumberPiece from the stack, sets up state for it to be dragged/placed, and places it at the
+     * given point.
+     * @public
+     *
+     * @param {NumberStack} stack
+     * @param {Vector2} modelPoint
+     * @returns {NumberPiece}
+     */
+    pullNumberPieceFromStack( stack, modelPoint ) {
+      const numberPiece = stack.numberPieces.pop();
+      numberPiece.scaleProperty.reset();
+      numberPiece.positionProperty.value = modelPoint;
+      this.dragNumberPieceFromStack( numberPiece );
+      return numberPiece;
+    }
+
+    /**
+     * Grabs a ShapeGroup from the stack, sets up state for it to be dragged/placed, and places it at the
+     * given point.
+     * @public
+     *
+     * @param {ShapeGroupStack} stack
+     * @param {Vector2} modelPoint
+     * @returns {ShapeGroup}
+     */
+    pullShapeGroupFromStack( stack, modelPoint ) {
+      const shapeGroup = stack.shapeGroups.pop();
+      shapeGroup.scaleProperty.reset();
+      shapeGroup.partitionDenominatorProperty.reset();
+      shapeGroup.positionProperty.value = modelPoint;
+      this.dragShapeGroupFromStack( shapeGroup );
+      return shapeGroup;
+    }
+
+    // TODO: can we reduce duplication of these functions?
+    /**
+     * Grabs a NumberGroup from the stack, sets up state for it to be dragged/placed, and places it at the
+     * given point.
+     * @public
+     *
+     * @param {NumberGroupStack} stack
+     * @param {Vector2} modelPoint
+     * @returns {NumberGroup}
+     */
+    pullNumberGroupFromStack( stack, modelPoint ) {
+      const numberGroup = stack.numberGroups.pop();
+      numberGroup.scaleProperty.reset();
+      numberGroup.positionProperty.value = modelPoint;
+      this.dragNumberGroupFromStack( numberGroup );
+      return numberGroup;
+    }
+
+    /**
+     * Returns the contents of a target to the collection panels.
+     * @public
+     *
+     * @param {Target} target
+     */
+    returnTarget( target ) {
+      const group = target.groupProperty.value;
+
+      if ( group ) {
+        // If the group hasn't fully completed its animation, then force it to complete early.
+        group.animator.endAnimation();
+
+        target.groupProperty.value = null;
+        if ( this.hasShapes ) {
+          this.shapeGroups.push( group );
+          this.returnShapeGroup( group );
+        }
+        else {
+          this.numberGroups.push( group );
+          this.returnNumberGroup( group );
+        }
+      }
+    }
+
+    /**
+     * Does a semi-reset of the challenge state, and constructs a solution (without putting things in targets).
+     * @public
+     */
+    cheat() {
+      this.targets.forEach( target => this.returnTarget( target ) );
+      this.shapeGroups.forEach( shapeGroup => this.returnShapeGroup( shapeGroup ) );
+      this.numberGroups.forEach( numberGroup => this.returnNumberGroup( numberGroup ) );
+
+      this.endAnimation();
+
+      const groupStack = this.hasShapes ? this.shapeGroupStacks[ 0 ] : this.numberGroupStacks[ 0 ];
+
+      const numGroups = groupStack.array.length;
+      const groups = _.range( 0, numGroups ).map( index => {
+        const point = new Vector2( this.hasShapes ? -100 : 0, ( index - ( numGroups - 1 ) / 2 ) * 100 );
+
+        if ( this.hasShapes ) {
+          return this.pullShapeGroupFromStack( groupStack, point );
+        }
+        else {
+          return this.pullNumberGroupFromStack( groupStack, point );
+        }
+      } );
+
+      if ( this.hasShapes ) {
+        let maxQuantity = 0;
+        const availableCollection = UnitCollection.fractionsToCollection( this.shapeStacks.map( shapeStack => {
+          maxQuantity = Math.max( maxQuantity, shapeStack.array.length );
+          return new Fraction( shapeStack.array.length, shapeStack.fraction.denominator );
+        } ) );
+        const denominators = availableCollection.nonzeroDenominators;
+        const fractions = this.targets.map( target => target.fraction );
+
+        const collectionFinder = new CollectionFinder( {
+          denominators: denominators.map( PrimeFactorization.factor )
+        } );
+
+        const solution = FractionChallenge.findShapeSolution( fractions, collectionFinder, maxQuantity, availableCollection );
+
+        solution.forEach( ( groupCollections, groupIndex ) => {
+          const group = groups[ groupIndex ];
+          while ( group.shapeContainers.length < groupCollections.length ) {
+            group.increaseContainerCount();
+          }
+
+          groupCollections.forEach( ( collection, containerIndex ) => {
+            collection.unitFractions.forEach( fraction => {
+              const stack = _.find( this.shapeStacks, stack => stack.fraction.equals( fraction ) );
+              const piece = this.pullShapePieceFromStack( stack, Vector2.ZERO );
+              this.placeActiveShapePiece( piece, group.shapeContainers.get( containerIndex ), group );
+            } );
+          } );
+        } );
+      }
+      else {
+        const pullNumberPiece = ( number, spot ) => {
+          const stack = _.find( this.numberStacks, stack => stack.number === number );
+          const piece = this.pullNumberPieceFromStack( stack, Vector2.ZERO );
+          this.placeNumberPiece( spot, piece );
+        };
+
+        const availableQuantities = {};
+        const numbers = this.numberStacks.map( numberStack => {
+          availableQuantities[ numberStack.number ] = numberStack.array.length;
+          return numberStack.number;
+        } );
+        const fractions = [];
+
+        // if we have mixed numbers, their "whole" parts are exactly computable
+        groups.forEach( ( group, index ) => {
+          let fraction = this.targets[ index ].fraction;
+          if ( group.isMixedNumber ) {
+            const whole = Math.floor( fraction.value );
+            pullNumberPiece( whole, group.wholeSpot );
+            availableQuantities[ whole ]--;
+            fraction = fraction.minusInteger( whole );
+          }
+          fractions.push( fraction.reduced() );
+        } );
+
+        const solution = FractionChallenge.findNumberSolution( fractions, Math.max( ...numbers ), availableQuantities );
+
+        groups.forEach( ( group, index ) => {
+          pullNumberPiece( solution[ index ] * fractions[ index ].numerator, group.numeratorSpot );
+          pullNumberPiece( solution[ index ] * fractions[ index ].denominator, group.denominatorSpot );
+        } );        
+      }
+
+      this.endAnimation();
+    }
+
+    static findShapeSolution( fractions, collectionFinder, maxQuantity, availableCollection ) {
+      // {Array.<Array.<Object>>} - Each object is { {Array.<UnitCollection>} containers, {UnitCollection} total }
+      const fractionPossibilities = fractions.map( fraction => {
+        const collections = collectionFinder.search( fraction, {
+          maxQuantity: maxQuantity
+        } );
+
+        // {Array.<Array.<Array.<Fraction>>>}
+        const compactGroups = collections.map( collection => collection.getCompactRequiredGroups( Math.ceil( fraction.value ) ) ).filter( _.identity );
+
+        return compactGroups.map( compactGroup => {
+          const containers = compactGroup.map( UnitCollection.fractionsToCollection );
+          return {
+            containers,
+            total: _.reduce( containers, ( a, b ) => a.plus( b ), new UnitCollection( [] ) )
+          };
+        } );
+      } );
+
+      let currentCollection = availableCollection;
+      function findSolution( i ) {
+        if ( i === fractions.length ) {
+          return [];
+        }
+
+        const possibilities = fractionPossibilities[ i ];
+
+        for ( let possibility of possibilities ) {
+          if ( currentCollection.contains( possibility.total ) ) {
+            currentCollection = currentCollection.minus( possibility.total );
+
+            const subsolution = findSolution( i + 1 );
+
+            currentCollection = currentCollection.plus( possibility.total );
+
+            if ( subsolution ) {
+              return [ possibility.containers, ...subsolution ];
+            }
+          }
+        }
+      }
+      return findSolution( 0 );
+    }
+
+    /**
+     * Returns an array of solutions (multipliers for each fraction such that numerator*n and denominator*n are in
+     * availableQuantities).
+     * @private
+     *
+     * @param {Array.<Fraction>} fractions
+     * @param {number} maxNumber
+     * @param {Object} availableQuantities - Map from number => quantity available.
+     * @returns {Array.<number>} - multipliers
+     */
+    static findNumberSolution( fractions, maxNumber, availableQuantities ) {
+      if ( fractions.length === 0 ) {
+        return [];
+      }
+
+      const fraction = fractions[ 0 ];
+      const maxSolution = Math.floor( maxNumber / fraction.denominator );
+
+      for ( let i = 1; i <= maxSolution; i++ ) {
+        const numerator = i * fraction.numerator;
+        const denominator = i * fraction.denominator;
+        if ( availableQuantities[ numerator ] && availableQuantities[ denominator ] ) {
+          availableQuantities[ numerator ]--;
+          availableQuantities[ denominator ]--;
+          const subsolution = FractionChallenge.findNumberSolution( fractions.slice( 1 ), maxNumber, availableQuantities );
+          availableQuantities[ numerator ]++;
+          availableQuantities[ denominator ]++;
+
+          if ( subsolution ) {
+            return [ i, ...subsolution ];
+          }
+        }
+      }
+
+      return null;
     }
 
     /**

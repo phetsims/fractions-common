@@ -226,6 +226,8 @@ define( require => {
      * @param {ShapeGroup} shapeGroup
      */
     placeActiveShapePiece( shapePiece, shapeContainer, shapeGroup ) {
+      shapeContainer.shapePieces.push( shapePiece );
+
       const shapeMatrix = ShapeContainer.getShapeMatrix( shapeContainer.getShapeRatio( shapePiece ), shapePiece.fraction, shapePiece.representation );
       shapePiece.animator.animateTo( {
         position: shapeGroup.positionProperty.value.plus( shapeContainer.offset ).plus( shapeMatrix.timesVector2( Vector2.ZERO ) ),
@@ -283,7 +285,6 @@ define( require => {
       let closestContainer = this.closestDroppableShapeContainer( shapePiece, threshold );
 
       if ( closestContainer ) {
-        closestContainer.shapePieces.push( shapePiece );
         this.placeActiveShapePiece( shapePiece, closestContainer, closestContainer.shapeGroup );
       }
       else {
@@ -512,31 +513,39 @@ define( require => {
     }
 
     /**
+     * Ends the animation of everything possible.
+     * @public
+     */
+    endAnimation() {
+      this.shapeGroups.forEach( shapeGroup => {
+        shapeGroup.animator.endAnimation();
+      } );
+      this.numberGroups.forEach( numberGroup => {
+        numberGroup.animator.endAnimation();
+      } );
+      this.activeShapePieces.forEach( shapePiece => {
+        shapePiece.animator.endAnimation();
+      } );
+      this.activeNumberPieces.forEach( shapePiece => {
+        shapePiece.animator.endAnimation();
+      } );
+    }
+
+    /**
      * Resets the model.
      * @public
      */
     reset() {
-      this.shapeGroups.forEach( shapeGroup => {
-        shapeGroup.animator.endAnimation();
-      } );
-      this.shapeGroups.reset();
+      this.endAnimation();
 
+      this.shapeGroups.reset();
       this.numberGroups.forEach( numberGroup => {
-        numberGroup.animator.endAnimation();
         if ( !numberGroup.disposed ) {
           numberGroup.dispose();
         }
       } );
       this.numberGroups.reset();
-
-      this.activeShapePieces.forEach( shapePiece => {
-        shapePiece.animator.endAnimation();
-      } );
       this.activeShapePieces.reset();
-
-      this.activeNumberPieces.forEach( shapePiece => {
-        shapePiece.animator.endAnimation();
-      } );
       this.activeNumberPieces.reset();
       this.draggedNumberPieces.reset();
     }

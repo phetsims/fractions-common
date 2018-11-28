@@ -61,40 +61,25 @@ define( require => {
       // @private {Node}
       this.panel = new FractionChallengePanel( challenge, ( event, stack ) => {
         if ( !stack.array.length ) { return; }
+        const modelPoint = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
         if ( stack instanceof ShapeStack ) {
-          const shapePiece = stack.shapePieces.pop();
-          shapePiece.scaleProperty.reset();
-          shapePiece.rotationProperty.reset();
-          shapePiece.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
-          challenge.dragShapePieceFromStack( shapePiece );
+          const shapePiece = challenge.pullShapePieceFromStack( stack, modelPoint );
           const shapePieceNode = this.layerNode.getShapePieceNode( shapePiece );
           shapePieceNode.dragListener.press( event, shapePieceNode );
         }
         else if ( stack instanceof NumberStack ) {
-          const numberPiece = stack.numberPieces.pop();
-          numberPiece.scaleProperty.reset();
-          numberPiece.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
-          challenge.dragNumberPieceFromStack( numberPiece );
+          const numberPiece = challenge.pullNumberPieceFromStack( stack, modelPoint );
           const numberPieceNode = this.layerNode.getNumberPieceNode( numberPiece );
           numberPieceNode.dragListener.press( event, numberPieceNode );
         }
         else if ( stack instanceof ShapeGroupStack ) {
-          // TODO: encapsulation
-          const shapeGroup = stack.shapeGroups.pop();
-          // TODO: better model place to handle this
-          shapeGroup.scaleProperty.reset();
-          shapeGroup.partitionDenominatorProperty.reset();
-          shapeGroup.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
-          challenge.dragShapeGroupFromStack( shapeGroup );
+          const shapeGroup = challenge.pullShapeGroupFromStack( stack, modelPoint );
           const shapeGroupNode = this.layerNode.getShapeGroupNode( shapeGroup );
           shapeGroupNode.dragListener.press( event, shapeGroupNode );
-          event.handle(); // for our selection
+          event.handle(); // for our selection (so we don't immediately clear it)
         }
         else if ( stack instanceof NumberGroupStack ) {
-          const numberGroup = stack.numberGroups.pop();
-          numberGroup.scaleProperty.reset();
-          numberGroup.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
-          challenge.dragNumberGroupFromStack( numberGroup );
+          const numberGroup = challenge.pullNumberGroupFromStack( stack, modelPoint );
           const numberGroupNode = this.layerNode.getNumberGroupNode( numberGroup );
           numberGroupNode.dragListener.press( event, numberGroupNode );
         }

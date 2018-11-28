@@ -90,7 +90,7 @@ define( require => {
      * @returns {PrimeFactorization}
      */
     binaryOperation( factorization, operation ) {
-      const primes = _.uniq( [ ...this.factors, ...factorization.factors ].map( f => f.prime ) );
+      const primes = _.uniq( [ ...this.factors, ...factorization.factors ].map( f => f.prime ) ).sort( ( a, b ) => a - b );
       const factors = [];
       for ( let prime of primes ) {
         const order = operation( this.getOrder( prime ), factorization.getOrder( prime ) );

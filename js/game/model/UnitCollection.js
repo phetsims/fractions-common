@@ -73,6 +73,18 @@ define( require => {
     }
 
     /**
+     * Returns an array of all denominators which have a non-zero numerator.
+     * @public
+     *
+     * @returns {Array.<number>}
+     */
+    get nonzeroDenominators() {
+      return _.range( 1, this.quantities.length + 1 ).filter( denominator => {
+        return this.quantities[ denominator - 1 ] > 0;
+      } );
+    }
+
+    /**
      * Determines how many "whole groups" are required to fit this unit collection. This is essentially the question of
      * how many pie-shaped containers do you need to fit all of the "unit fraction" pie slices in this collection.
      * This can be more than the "ceiling" of the fraction, e.g. 1/2 + 1/3 + 1/4 + 1/5 + 5/7 (~1.9976) which needs to be
@@ -174,6 +186,61 @@ define( require => {
     }
 
     /**
+     * Returns the result of applying the binary operation component-wise to this collection and the provided one.
+     * @private
+     *
+     * @param {function} op - function( {number}, {number} ) => {number}
+     * @param {UnitCollection} collection
+     * @returns {UnitCollection}
+     */
+    binaryOperation( op, collection ) {
+      return new UnitCollection( _.range( 0, Math.max( this.quantities.length, collection.quantities.length ) ).map( i => {
+        return op( this.quantities[ i ] || 0, collection.quantities[ i ] || 0 );
+      } ) );
+    }
+
+    /**
+     * Returns the result of adding the two collections.
+     * @public
+     *
+     * @param {UnitCollection} collection
+     * @returns {UnitCollection}
+     */
+    plus( collection ) {
+      return this.binaryOperation( ( a, b ) => a + b, collection );
+    }
+
+    /**
+     * Returns the result of subtracting the two collections.
+     * @public
+     *
+     * @param {UnitCollection} collection
+     * @returns {UnitCollection}
+     */
+    minus( collection ) {
+      return this.binaryOperation( ( a, b ) => a - b, collection );
+    }
+
+    /**
+     * Returns whether this collection is effectively a superset of the given collection.
+     * @public
+     *
+     * @param {UnitCollection} collection
+     * @returns {boolean}
+     */
+    contains( collection ) {
+      for ( let i = 0; i < collection.quantities.length; i++ ) {
+        const ourCoefficient = this.quantities[ i ];
+        const theirCoefficient = collection.quantities[ i ];
+        
+        if ( theirCoefficient && ( !ourCoefficient || theirCoefficient > ourCoefficient ) ) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    /**
      * Returns a string representation useful for debugging.
      * @public
      *
@@ -181,6 +248,24 @@ define( require => {
      */
     toString() {
       return this.quantities.map( ( quantity, index ) => quantity ? `${quantity}/${index + 1}` : '' ).filter( _.identity ).join( ' + ' );
+    }
+
+    /**
+     * Converts an array of fractions to the corresponding UnitCollection with the same sum.
+     * @public
+     *
+     * @param {Array.<Fraction>} fractions
+     * @returns {UnitCollection}
+     */
+    static fractionsToCollection( fractions ) {
+      const quantities = [];
+      fractions.forEach( fraction => {
+        while ( quantities.length < fraction.denominator ) {
+          quantities.push( 0 );
+        }
+        quantities[ fraction.denominator - 1 ] += fraction.numerator;
+      } );
+      return new UnitCollection( quantities );
     }
 
     static allCollectionsTo8( fraction, options ) {
