@@ -45,8 +45,7 @@ define( require => {
     equalityLabColor: { default: new Color( 254, 112, 212 ) },
     equalityLabWater: { default: new Color( 254, 112, 212, 0.8 ) },
 
-    // TODO: Is this only on intro?
-    panelBackground: { default: new Color( 230, 230, 230 ) },
+    introPanelBackground: { default: new Color( 230, 230, 230 ) },
     shapePieceStroke: { default: Color.BLACK },
 
     labCircleFill: { default: LIGHT_RED },

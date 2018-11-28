@@ -98,7 +98,13 @@ define( require => {
             const angle = -i * 2 * Math.PI / denominator;
             // Offset for crashes, see https://github.com/phetsims/fractions-common/issues/2 and
             // https://github.com/phetsims/scenery/issues/750
-            separatorShape.moveTo( 1e-5 * Math.cos( angle ), 1e-5 * Math.sin( angle ) ).lineTo( CIRCLE_RADIUS * Math.cos( angle ), CIRCLE_RADIUS * Math.sin( angle ) );
+            separatorShape.moveTo(
+              1e-5 * Math.cos( angle ),
+              1e-5 * Math.sin( angle )
+            ).lineTo(
+              CIRCLE_RADIUS * Math.cos( angle ),
+              CIRCLE_RADIUS * Math.sin( angle )
+            );
           }
           this.separatorPath.shape = separatorShape;
         }

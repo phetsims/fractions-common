@@ -88,7 +88,12 @@ define( require => {
       this.stackTargets.forEach( node => {
         const layoutBounds = node.layoutBounds;
         assert && assert( layoutBounds.isValid() );
-        const bounds = new Bounds2( -options.padding / 2 + layoutBounds.left, -maxHalfHeight, layoutBounds.right + options.padding / 2, maxHalfHeight );
+        const bounds = new Bounds2(
+          -options.padding / 2 + layoutBounds.left,
+          -maxHalfHeight,
+          layoutBounds.right + options.padding / 2,
+          maxHalfHeight
+        );
         node.mouseArea = bounds;
         node.touchArea = bounds;
 

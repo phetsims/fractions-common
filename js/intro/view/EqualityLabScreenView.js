@@ -113,7 +113,7 @@ define( require => {
       const showNumberLinePanel = new Panel( new AlignBox( showNumberLineNode, {
         group: this.topAlignGroup
       } ), {
-        fill: FractionsCommonColorProfile.panelBackgroundProperty,
+        fill: FractionsCommonColorProfile.introPanelBackgroundProperty,
         // TODO: factor out margins?
         xMargin: 10,
         yMargin: 10

@@ -28,38 +28,31 @@ define( require => {
     // {number} - The amount of space between shape containers
     SHAPE_CONTAINER_PADDING: 8,
 
-    // {number}
-    NUMBER_HEIGHT: 75,
-
-    // {number}
-    NUMBER_SINGLE_DIGIT_WIDTH: 54,
-
-    // {number}
-    NUMBER_DOUBLE_DIGIT_WIDTH: 80,
-
-    // TODO: cleanup
+    // {Font}
     NUMBER_FRACTIONAL_FONT: new PhetFont( { size: 60, weight: 'bold' } ),
     NUMBER_WHOLE_FONT: new PhetFont( { size: 60 * WHOLE_FRACTIONAL_SIZE_RATIO, weight: 'bold' } ),
 
+    // {number} - The size of the "whole" number text compared to the numerator or denominator text
     WHOLE_FRACTIONAL_SIZE_RATIO: WHOLE_FRACTIONAL_SIZE_RATIO,
 
     NUMBER_CORNER_RADIUS: 5,
-
     ROUND_BUTTON_RADIUS: 15,
-
     MAX_SHAPE_CONTAINERS: 4,
 
+    // {number} - The relative scales of shape/number pieces in panels for the "building" style
     SHAPE_BUILD_SCALE: 0.6,
     NUMBER_BUILD_SCALE: 0.8,
 
+    // {number} - The relative scales of shape/number groups in the collection areas / targets.
     SHAPE_COLLECTION_SCALE: 0.6,
     NUMBER_COLLECTION_SCALE: 0.7,
 
-    // {number}
+    // {number} - Common values for building piece views
     INTRO_DROP_SHADOW_OFFSET: 5,
     INTRO_CONTAINER_LINE_WIDTH: 2,
     INTRO_CONTAINER_SPACING: 10,
 
+    // {number} - We have a number of things that rely on a certain fixed number of levels for the game
     NUM_LEVELS: 10
   };
 

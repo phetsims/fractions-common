@@ -15,10 +15,15 @@ define( require => {
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Bounds2 = require( 'DOT/Bounds2' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
+
+  // constants
+  const NUMBER_HEIGHT = 75;
+  const NUMBER_SINGLE_DIGIT_WIDTH = 54;
+  const NUMBER_DOUBLE_DIGIT_WIDTH = 80;
+
 
   class NumberPiece {
     /**
@@ -49,7 +54,7 @@ define( require => {
       } );
 
       // @public {Bounds2}
-      this.bounds = Bounds2.point( 0, 0 ).dilatedXY( ( number >= 10 ? FractionsCommonConstants.NUMBER_DOUBLE_DIGIT_WIDTH : FractionsCommonConstants.NUMBER_SINGLE_DIGIT_WIDTH ) / 2, FractionsCommonConstants.NUMBER_HEIGHT / 2 );
+      this.bounds = Bounds2.point( 0, 0 ).dilatedXY( ( number >= 10 ? NUMBER_DOUBLE_DIGIT_WIDTH : NUMBER_SINGLE_DIGIT_WIDTH ) / 2, NUMBER_HEIGHT / 2 );
     }
 
     /**

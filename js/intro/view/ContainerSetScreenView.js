@@ -83,7 +83,7 @@ define( require => {
       this.representationPanel = new Panel( new AlignBox( representationRadioButtonGroup, {
         group: this.topAlignGroup
       } ), {
-        fill: FractionsCommonColorProfile.panelBackgroundProperty,
+        fill: FractionsCommonColorProfile.introPanelBackgroundProperty,
         xMargin: 10,
         yMargin: 10
       } );

@@ -31,7 +31,6 @@ define( require => {
 
       // @private {function}
       this.stackLengthListener = this.onStackLengthChange.bind( this );
-      
       this.stack.numberGroups.lengthProperty.link( this.stackLengthListener );
 
       // Inform about our available layout bounds

@@ -41,7 +41,7 @@ define( require => {
       this.addChild( new Panel( new AlignBox( new MaxNode( model.containerCountProperty ), {
         group: this.topAlignGroup
       } ), {
-        fill: FractionsCommonColorProfile.panelBackgroundProperty,
+        fill: FractionsCommonColorProfile.introPanelBackgroundProperty,
         xMargin: 16,
         yMargin: 10,
         right: this.layoutBounds.right - MARGIN,

@@ -22,8 +22,6 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( options ) {
-      // TODO: Use this for all of those arrow buttons
-
       options = _.extend( {
         radius: FractionsCommonConstants.ROUND_BUTTON_RADIUS,
         fireOnHold: true,
@@ -55,7 +53,6 @@ define( require => {
 
       // @private {function}
       this.enabledListener = this.onEnabledChange.bind( this );
-
       this.enabledProperty.link( this.enabledListener );
     }
 
