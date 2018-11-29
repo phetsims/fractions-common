@@ -35,7 +35,7 @@ define( require => {
     introCircleFill: { default: new Color( 140, 198, 61 ) },
     introHorizontalBar: { default: new Color( '#ED4344' ) },
     introVerticalBar: { default: new Color( '#FFE600' ) },
-    emptyBeaker: { default: new Color( 150, 150, 150, 0.15 ) },
+    emptyBeaker: { default: new Color( 150, 150, 150, 0.1 ) },
     water: { default: new Color( 30, 163, 255, 0.8 ) },
     beakerShine: { default: new Color( 255, 255, 255, 0.7 ) },
 
