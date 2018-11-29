@@ -85,7 +85,7 @@ define( require => {
           shapeGroup.hoveringTargetProperty.value = null;
         }
         else {
-          this.model.centerShapeGroup( shapeGroup );
+          this.model.centerGroup( shapeGroup );
         }
       }
       else if ( _.some( viewPoints, viewPoints => panelBounds.containsPoint( viewPoints ) ) ) {
@@ -143,7 +143,7 @@ define( require => {
           numberGroup.hoveringTargetProperty.value = null;
         }
         else {
-          this.model.centerNumberGroup( numberGroup );
+          this.model.centerGroup( numberGroup );
         }
       }
       else if ( _.some( viewPoints, viewPoints => panelBounds.containsPoint( viewPoints ) ) ) {

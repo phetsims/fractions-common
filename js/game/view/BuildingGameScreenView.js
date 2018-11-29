@@ -216,6 +216,7 @@ define( require => {
 
       this.levelSelectionLayer.addChild( this.levelSelectionTransitionNode );
 
+      // Buttons to switch between level selection pages
       const leftButton = new RoundArrowButton( {
         baseColor: FractionsCommonColorProfile.yellowRoundArrowButtonProperty,
         radius: 20,
@@ -307,7 +308,6 @@ define( require => {
       } ), { group: bottomAlignGroup } );
       this.levelSelectionLayer.addChild( resetAllButton );
 
-      // TODO: cleanup layout
       slidingLevelSelectionNode.bottom = soundToggleButton.bottom = resetAllButton.bottom = this.layoutBounds.bottom - SIDE_MARGIN;
       slidingLevelSelectionNode.centerX = this.layoutBounds.centerX;
       soundToggleButton.left = this.layoutBounds.left + SIDE_MARGIN;

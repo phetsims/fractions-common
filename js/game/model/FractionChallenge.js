@@ -18,6 +18,7 @@ define( require => {
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const Group = require( 'FRACTIONS_COMMON/building/model/Group' );
   const NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
   const NumberGroupStack = require( 'FRACTIONS_COMMON/building/model/NumberGroupStack' );
   const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
@@ -213,6 +214,13 @@ define( require => {
     }
 
     // TODO: reduce duplication between shapes and numbers!
+    /**
+     * Handles moving a ShapeGroup into the collection area (Target).
+     * @public
+     *
+     * @param {ShapeGroup} shapeGroup
+     * @param {Target} target
+     */
     collectShapeGroup( shapeGroup, target ) {
       assert && assert( shapeGroup instanceof ShapeGroup );
       assert && assert( target.groupProperty.value === null );
@@ -236,6 +244,13 @@ define( require => {
       } );
     }
 
+    /**
+     * Handles moving a NumberGroup into the collection area (Target).
+     * @public
+     *
+     * @param {NumberGroup} shapeGroup
+     * @param {Target} target
+     */
     collectNumberGroup( numberGroup, target ) {
       assert && assert( numberGroup instanceof NumberGroup );
       assert && assert( target.groupProperty.value === null );
@@ -257,26 +272,26 @@ define( require => {
       } );
     }
 
-    centerShapeGroup( shapeGroup ) {
-      assert && assert( shapeGroup instanceof ShapeGroup );
+    /**
+     * Moves a group to the center of the play area.
+     * @public
+     *
+     * @param {Group} group
+     */
+    centerGroup( group ) {
+      assert && assert( group instanceof Group );
 
-      shapeGroup.animator.animateTo( {
+      group.animator.animateTo( {
         position: Vector2.ZERO,
         scale: 1,
         velocity: 60
       } );
     }
 
-    centerNumberGroup( numberGroup ) {
-      assert && assert( numberGroup instanceof NumberGroup );
-
-      numberGroup.animator.animateTo( {
-        position: Vector2.ZERO,
-        scale: 1,
-        velocity: 60
-      } );
-    }
-
+    /**
+     * If there are no shape groups, it moves one out to the center of the play area.
+     * @public
+     */
     ensureShapeGroups() {
       // If we already have one out, don't look for more
       if ( this.shapeGroups.length >= 2 ) { return; }
@@ -289,12 +304,16 @@ define( require => {
           // TODO: add the stack offset here (should be a common method on Stack?)
           shapeGroup.positionProperty.value = shapeGroupStack.positionProperty.value;
           this.shapeGroups.push( shapeGroup );
-          this.centerShapeGroup( shapeGroup );
+          this.centerGroup( shapeGroup );
           break;
         }
       }
     }
 
+    /**
+     * If there are no number groups, it moves one out to the center of the play area.
+     * @public
+     */
     ensureNumberGroups() {
       // If we already have one out, don't look for more
       if ( this.numberGroups.length >= 2 ) { return; }
@@ -305,7 +324,7 @@ define( require => {
           // TODO: add the stack offset here (should be a common method on Stack?)
           numberGroup.positionProperty.value = numberGroupStack.positionProperty.value;
           this.numberGroups.push( numberGroup );
-          this.centerNumberGroup( numberGroup );
+          this.centerGroup( numberGroup );
           break;
         }
       }
@@ -412,6 +431,7 @@ define( require => {
      * @public
      */
     cheat() {
+      // First we do a lot of work to stop what's happening and do a "soft" reset
       this.endAnimation();
 
       this.targets.forEach( target => this.returnTarget( target ) );
@@ -446,6 +466,7 @@ define( require => {
         const denominators = availableCollection.nonzeroDenominators;
         const fractions = this.targets.map( target => target.fraction );
 
+        // Only search over the given denominators
         const collectionFinder = new CollectionFinder( {
           denominators: denominators.map( PrimeFactorization.factor )
         } );
@@ -453,11 +474,13 @@ define( require => {
         const solution = FractionChallenge.findShapeSolution( fractions, collectionFinder, maxQuantity, availableCollection );
 
         solution.forEach( ( groupCollections, groupIndex ) => {
+          // Add containers where needed
           const group = groups[ groupIndex ];
           while ( group.shapeContainers.length < groupCollections.length ) {
             group.increaseContainerCount();
           }
 
+          // Move the pieces to the containers
           groupCollections.forEach( ( collection, containerIndex ) => {
             collection.unitFractions.forEach( fraction => {
               const stack = _.find( this.shapeStacks, stack => stack.fraction.equals( fraction ) );
@@ -505,6 +528,17 @@ define( require => {
       this.endAnimation();
     }
 
+    /**
+     * Returns a solution to shape challenges.
+     * @private
+     *
+     * @param {Array.<Fraction>} fractions - The target fractions to fill
+     * @param {CollectionFinder} collectionFinder
+     * @param {number} maxQuantity - No solution which takes more than this much of one piece type would be correct.
+     * @param {UnitCollection} availableCollection - Represents the pieces we have available
+     * @returns {Array.<Array.<UnitCollection>>} - For each group, for each container, a unit collection of the
+     *                                             fractions to be placed inside.
+     */
     static findShapeSolution( fractions, collectionFinder, maxQuantity, availableCollection ) {
       // {Array.<Array.<Object>>} - Each object is { {Array.<UnitCollection>} containers, {UnitCollection} total }
       const fractionPossibilities = fractions.map( fraction => {

@@ -9,7 +9,6 @@ define( require => {
   'use strict';
 
   // modules
-  const Color = require( 'SCENERY/util/Color' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Matrix3 = require( 'DOT/Matrix3' );
   const Shape = require( 'KITE/Shape' );
@@ -461,53 +460,6 @@ define( require => {
       shapes.push( hexShape );
 
       return new ShapePartition( shapes );
-    }
-
-    // TODO: remove or doc
-    static debugReport( partitions ) {
-      const size = 100;
-      const columns = 8;
-      const rows = Math.ceil( partitions.length / columns );
-
-      const canvas = document.createElement( 'canvas' );
-      canvas.width = size * columns;
-      canvas.height = size * rows;
-      const context = canvas.getContext( '2d' );
-
-      const colorA = new Color( 'red' );
-      const colorB = new Color( 'cyan' );
-
-      for ( let i = 0; i < partitions.length; i++ ) {
-        const partition = partitions[ i ];
-        const column = i % columns;
-        const row = Math.floor( i / columns );
-
-        context.save();
-        context.translate( ( 0.5 + column ) * size, ( 0.5 + row ) * size );
-        context.scale( size / 130, size / 130 );
-        context.translate( -partition.outlineShape.bounds.centerX, -partition.outlineShape.bounds.centerY );
-
-        partition.shapes.forEach( ( shape, index ) => {
-          context.beginPath();
-          shape.writeToContext( context );
-          context.fillStyle = colorA.blend( colorB, ( index / ( partition.shapes.length - 1 ) ) || 0 ).toCSS();
-          context.fill();
-
-          context.strokeStyle = 'black';
-          context.lineWidth = 0.5;
-          context.stroke();
-        } );
-
-        context.beginPath();
-        partition.outlineShape.writeToContext( context );
-        context.strokeStyle = 'black';
-        context.lineWidth = 1;
-        context.stroke();
-
-        context.restore();
-      }
-
-      return canvas.toDataURL();
     }
   }
 

@@ -192,7 +192,15 @@ define( require => {
       } ) );
     }
 
-    // TODO: unit tests?
+    /**
+     * Finds fractions suitable for shape group containers, minimizing the number of pieces total. For example for
+     * 1/2 and 13/8, it splits wholes away (1/1, 1/2 and 5/8), splits 5/8 into 1/2 + 1/8, and returns 1/1,1/2,1/2,1/8
+     * in a non-important order.
+     * @private
+     *
+     * @param {Array.<Fraction>}
+     * @returns {Fraction}
+     */
     static minimizedFractions( fractions ) {
       return _.flatten( fractions.map( fraction => {
         const whole = Math.floor( fraction.value );
@@ -206,13 +214,13 @@ define( require => {
       } ) );
     }
 
-    // note createCardsSameNumberEachType from Java
-    // TODO: get rid of this?
-    static maxNumeratorUnitFractions( fractions ) {
-      const maxNumerator = Math.max( ...fractions.map( f => f.numerator ) );
-      return _.flatten( fractions.map( f => repeat( maxNumerator, new Fraction( 1, f.denominator ) ) ) );
-    }
-
+    /**
+     * Picks at random a "fairly low number of fractions" that add up to the given fraction.
+     * @private
+     *
+     * @param {Fraction} fraction
+     * @param {number} [quantity] - Return a random set from the top `quantity` of possibilities.
+     */
     static interestingFractions( fraction, quantity = 5 ) {
       let collections = collectionFinder8.search( fraction );
       assert && assert( collections.length );
@@ -232,6 +240,15 @@ define( require => {
       return sample( collections ).unitFractions;
     }
 
+    /**
+     * Returns a list of fractions with an equivalent sum, where up to `quantity` fractions have been split into
+     * sub-fractions.
+     * @private
+     *
+     * @param {Array.<Fraction>} fractions
+     * @param {Object} [options]
+     * @returns {Array.<Fraction>}
+     */
     static simpleSplitFractions( fractions, options ) {
       options = _.extend( {
         // {number} - Up to how many fractions to split
@@ -282,6 +299,15 @@ define( require => {
       ];
     }
 
+    /**
+     * Returns a list of fractions with an equivalent sum, where up to `quantity` fractions have been split into
+     * sub-fractions. Does more complicated / full splits based on unit fractions up to 1/12.
+     * @private
+     *
+     * @param {Array.<Fraction>} fractions
+     * @param {Object} [options]
+     * @returns {Array.<Fraction>}
+     */
     static fullSplitFractions( fractions, options ) {
       options = _.extend( {
         // {number} - Up to how many fractions to split
@@ -487,7 +513,15 @@ define( require => {
       } );
     }
 
-    // TODO: sharing code
+    /**
+     * Splits a fraction into a "difficult" number of pieces that are suitable to fit into shape group containers
+     * (should fit into ceil(fraction.value) different containers of size 1).
+     * @private
+     *
+     * @param {Fraction} fraction
+     * @param {number} [maxNonzeroCount] - Only allow up to this many different denominators in the result.
+     * @returns {Array.<Fraction>}
+     */
     static difficultSplit( fraction, maxNonzeroCount = 5 ) {
       const wholeCount = Math.ceil( fraction.value );
       const fullWholeCount = Math.floor( fraction.value );
