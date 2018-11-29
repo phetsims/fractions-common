@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * The state of a single (potentially in-progress) challenge for a level.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -499,7 +499,7 @@ define( require => {
         groups.forEach( ( group, index ) => {
           pullNumberPiece( solution[ index ] * fractions[ index ].numerator, group.numeratorSpot );
           pullNumberPiece( solution[ index ] * fractions[ index ].denominator, group.denominatorSpot );
-        } );        
+        } );
       }
 
       this.endAnimation();

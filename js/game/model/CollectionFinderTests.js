@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * Tests for CollectionFinder
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */

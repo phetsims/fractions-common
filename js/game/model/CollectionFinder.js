@@ -1,7 +1,16 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * Searches for all combinations of a sum of fractions that sum to a given value, e.g. given the fraction 9/4 and the
+ * coefficients 1,2,3,4,5,6, it can find all of the values a,b,c,d,e,f that satisfy
+ * a/1 + b/2 + c/3 + d/4 + e/5 + f/6 === X/Y. It is also possible to constrain the search with other options, for
+ * efficiency's sake.
+ *
+ * There is some up-front computation that will figure out an effective "search plan", i.e. what order should we search
+ * for values of a,b,c,d,e,f, and how can we make the search space smaller? For instance, the value of e/5 in this case
+ * can be highly constrained. The rest of the LHS (a/1 + b/2 + c/3 + d/4 + f/6) will reduce to a fraction whose
+ * denominator is NOT a multiple of 5, so if (X/Y - e/5)'s denominator is a multiple of 5, it can be excluded. In this
+ * case, it excludes 4/5ths of the values of e.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */

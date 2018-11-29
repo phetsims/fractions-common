@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * Represents a ShapePartition with each shape marked as filled or unfilled (all with a particular color).
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
