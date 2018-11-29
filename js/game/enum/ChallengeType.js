@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * Represents the three main different styles of game challenges.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */

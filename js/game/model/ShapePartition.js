@@ -12,16 +12,14 @@ define( require => {
   const Color = require( 'SCENERY/util/Color' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Matrix3 = require( 'DOT/Matrix3' );
-  const PartitionType = require( 'FRACTIONS_COMMON/game/enum/PartitionType' );
   const Shape = require( 'KITE/Shape' );
   const Vector2 = require( 'DOT/Vector2' );
 
   class ShapePartition {
     /**
      * @param {Array.<Shape>} shapes
-     * @param {PartitionType} type
      */
-    constructor( shapes, type ) {
+    constructor( shapes ) {
       // @public {Array.<Shape>}
       this.shapes = shapes;
 
@@ -30,9 +28,6 @@ define( require => {
 
       // @public {Shape}
       this.outlineShape = Shape.union( shapes );
-
-      // @public {PartitionType}
-      this.type = type;
 
       // Make the shapes immutable, so it minimizes the number of listeners added later
       [ ...this.shapes, this.outlineShape ].forEach( shape => shape.makeImmutable() );
@@ -107,7 +102,7 @@ define( require => {
       else {
         shapes.push( Shape.circle( 0, 0, radius ) );
       }
-      return new ShapePartition( shapes, PartitionType.PIE );
+      return new ShapePartition( shapes );
     }
 
     /**
@@ -143,9 +138,7 @@ define( require => {
         Vector2.ZERO,
         Vector2.createPolar( 1, -2 * Math.PI * i / quantity + offset ),
         Vector2.createPolar( 1, -2 * Math.PI * ( i + 1 ) / quantity + offset )
-      ] ) ),
-        PartitionType.POLYGON
-      );
+      ] ) ) );
     }
 
     /**
@@ -159,8 +152,7 @@ define( require => {
       assert && assert( quantity >= 1 && quantity % 1 === 0 );
 
       return new ShapePartition(
-        _.range( 0, quantity ).map( i => Shape.rect( -1, 2 * i / quantity - 1, 2, 2 / quantity ) ),
-        PartitionType.HORIZONTAL_BARS
+        _.range( 0, quantity ).map( i => Shape.rect( -1, 2 * i / quantity - 1, 2, 2 / quantity ) )
       );
     }
 
@@ -175,8 +167,7 @@ define( require => {
       assert && assert( quantity >= 1 && quantity % 1 === 0 );
 
       return new ShapePartition(
-        _.range( 0, quantity ).map( i => Shape.rect( 2 * i / quantity - 1, -1, 2 / quantity, 2 ) ),
-        PartitionType.VERTICAL_BARS
+        _.range( 0, quantity ).map( i => Shape.rect( 2 * i / quantity - 1, -1, 2 / quantity, 2 ) )
       );
     }
 
@@ -216,7 +207,7 @@ define( require => {
         }
       }
 
-      return new ShapePartition( shapes, PartitionType.INTERLEAVED_L );
+      return new ShapePartition( shapes );
     }
 
     /**
@@ -252,7 +243,7 @@ define( require => {
         shapes.push( bottomShape.transformed( matrix ) );
       }
 
-      return new ShapePartition( shapes, PartitionType.DIAGONAL_L );
+      return new ShapePartition( shapes );
     }
 
     /**
@@ -303,7 +294,7 @@ define( require => {
           new Vector2( 3, 2 ),
           new Vector2( 3, 3 )
         ] )
-      ], PartitionType.TETRIS );
+      ] );
     }
 
     /**
@@ -348,7 +339,7 @@ define( require => {
             polar( 1, baseAngle + halfAngle )
           ] ) ];
         }
-      } ) ), PartitionType.FLOWER );
+      } ) ) );
     }
 
     /**
@@ -374,7 +365,7 @@ define( require => {
         new Vector2( 4, 4 )
       ].slice( 0, quantity ).map( offset => {
         return plusShape.transformed( Matrix3.translation( offset.x, offset.y ) );
-      } ), PartitionType.PLUS_SIGNS );
+      } ) );
     }
 
     /**
@@ -393,7 +384,7 @@ define( require => {
         return _.range( 0, columns ).map( column => {
           return Shape.rect( column / columns, row / rows, 1 / columns, 1 / rows );
         } );
-      } ) ), PartitionType.GRID );
+      } ) ) );
     }
 
     /**
@@ -431,7 +422,7 @@ define( require => {
         }
       }
 
-      return new ShapePartition( shapes, PartitionType.PYRAMID );
+      return new ShapePartition( shapes );
     }
 
     /**
@@ -469,7 +460,7 @@ define( require => {
 
       shapes.push( hexShape );
 
-      return new ShapePartition( shapes, PartitionType.HONEYCOMB );
+      return new ShapePartition( shapes );
     }
 
     // TODO: remove or doc
