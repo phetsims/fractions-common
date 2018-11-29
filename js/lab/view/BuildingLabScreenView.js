@@ -126,6 +126,7 @@ define( require => {
         margin: PANEL_MARGIN
       } );
 
+      // dynamic layout
       this.visibleBoundsProperty.link( visibleBounds => {
         topAlignBox.alignBounds = visibleBounds;
         bottomAlignBox.alignBounds = visibleBounds;
@@ -156,14 +157,6 @@ define( require => {
         bottomAlignBox,
         this.layerNode
       ];
-    }
-
-    /**
-     * Steps forward in time.
-     * @public
-     */
-    step( dt ) {
-
     }
   }
 

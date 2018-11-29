@@ -65,7 +65,6 @@ define( require => {
       // @private {Property.<BuildingRepresentation>}
       this.representationProperty = model.topRepresentationProperty;
 
-      // TODO: Move all this code out to a named panel?
       const representationSelectionNode = new RadioButtonGroup( this.representationProperty, [
         {
           value: BuildingRepresentation.PIE,

@@ -42,8 +42,11 @@ define( require => {
     onShapeGroupDrop( shapeGroup ) {
       super.onShapeGroupDrop( shapeGroup );
 
-      // TODO: What about groups with lots of containers?
-      if ( this.shapePanel.bounds.dilated( 10 ).containsPoint( this.modelViewTransform.modelToViewPosition( shapeGroup.positionProperty.value ) ) ) {
+      const modelPoints = shapeGroup.centerPoints;
+      const viewPoints = modelPoints.map( modelPoint => this.modelViewTransform.modelToViewPosition( modelPoint ) );
+      const panelBounds = this.shapePanel.bounds.dilated( 10 );
+
+      if ( _.some( viewPoints, viewPoints => panelBounds.containsPoint( viewPoints ) ) ) {
         this.model.returnShapeGroup( shapeGroup );
       }
     }
