@@ -59,16 +59,16 @@ define( require => {
       ];
 
       // @private {Array.<ShapeGroupNode>}
-      this.shapeGroupNodes = []; // TODO: interrupt on reset
+      this.shapeGroupNodes = [];
 
       // @private {Array.<NumberGroupNode>}
-      this.numberGroupNodes = []; // TODO: interrupt on reset
+      this.numberGroupNodes = [];
 
       // @private {Array.<ShapePieceNode>}
-      this.shapePieceNodes = []; // TODO: interrupt on reset
+      this.shapePieceNodes = [];
 
       // @private {Array.<NumberPieceNode>}
-      this.numberPieceNodes = []; // TODO: interrupt on reset
+      this.numberPieceNodes = [];
     }
 
     /**

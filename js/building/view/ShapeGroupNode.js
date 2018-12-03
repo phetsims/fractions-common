@@ -9,14 +9,13 @@ define( require => {
   'use strict';
 
   // modules
-  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Bounds2 = require( 'DOT/Bounds2' );
   const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
-  const DragListener = require( 'SCENERY/listeners/DragListener' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const GroupNode = require( 'FRACTIONS_COMMON/building/view/GroupNode' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const Node = require( 'SCENERY/nodes/Node' );
   const ObservableArray = require( 'AXON/ObservableArray' );
@@ -34,7 +33,7 @@ define( require => {
   // constants
   const CONTAINER_PADDING = FractionsCommonConstants.SHAPE_CONTAINER_PADDING;
 
-  class ShapeGroupNode extends Node {
+  class ShapeGroupNode extends GroupNode {
     /**
      * @param {ShapeGroup} shapeGroup
      * @param {Object} [options]
@@ -43,19 +42,12 @@ define( require => {
       assert && assert( shapeGroup instanceof ShapeGroup );
 
       options = _.extend( {
-        isIcon: false, // TODO: cleanup?
         hasButtons: true,
-        isSelectedProperty: new BooleanProperty( true ), // takes ownership, will dispose at the end
-        dragListener: null,
-        dropListener: null,
-        selectListener: null,
         removeLastListener: null,
-        dragBoundsProperty: null,
-        modelViewTransform: null, // {ModelViewTransform2|null} - Not needed if we are an icon
-        positioned: true
+        dragBoundsProperty: null
       }, options );
 
-      super();
+      super( shapeGroup, options );
 
       // @public {ShapeGroup}
       this.shapeGroup = shapeGroup;
@@ -76,8 +68,6 @@ define( require => {
       this.controlLayer = new Node();
       this.addChild( this.controlLayer );
 
-      // @private {Property.<boolean>}
-      this.isSelectedProperty = options.isSelectedProperty;
       this.isSelectedProperty.linkAttribute( this.controlLayer, 'visible' );
 
       // @private {function}
@@ -102,7 +92,7 @@ define( require => {
         } ),
         radius: FractionsCommonConstants.ROUND_BUTTON_RADIUS,
         listener: shapeGroup.increaseContainerCount.bind( shapeGroup ),
-        enabled: !options.isIcon,
+        enabled: !this.isIcon,
         baseColor: FractionsCommonColorProfile.greenRoundArrowButtonProperty
       } );
 
@@ -115,7 +105,7 @@ define( require => {
         } ),
         radius: FractionsCommonConstants.ROUND_BUTTON_RADIUS,
         listener: shapeGroup.decreaseContainerCount.bind( shapeGroup ),
-        enabled: !options.isIcon,
+        enabled: !this.isIcon,
         baseColor: FractionsCommonColorProfile.redRoundArrowButtonProperty
       } );
 
@@ -139,10 +129,10 @@ define( require => {
 
       // @private {Property.<boolean>}
       this.decreaseEnabledProperty = new DerivedProperty( [ shapeGroup.partitionDenominatorProperty ], denominator => {
-        return !options.isIcon && ( denominator > shapeGroup.partitionDenominatorProperty.range.min );
+        return !this.isIcon && ( denominator > shapeGroup.partitionDenominatorProperty.range.min );
       } );
       this.increaseEnabledProperty = new DerivedProperty( [ shapeGroup.partitionDenominatorProperty ], denominator => {
-        return !options.isIcon && ( denominator < shapeGroup.partitionDenominatorProperty.range.max );
+        return !this.isIcon && ( denominator < shapeGroup.partitionDenominatorProperty.range.max );
       } );
 
       // @private {Node}
@@ -190,34 +180,8 @@ define( require => {
         this.controlLayer.addChild( undoArrowContainer );
       }
 
-      // @private {function}
-      this.visibilityListener = isAnimating => {
-        if ( !options.positioned ) {
-          this.visible = !isAnimating;
-        }
-      };
-      this.shapeGroup.isAnimatingProperty.link( this.visibilityListener );
 
-      if ( !options.isIcon ) {
-        // @private {function}
-        this.positionListener = position => {
-          this.translation = options.modelViewTransform.modelToViewPosition( position );
-        };
-        this.shapeGroup.positionProperty.link( this.positionListener );
-
-        // @private {function}
-        this.scaleListener = scale => {
-          this.setScaleMagnitude( scale );
-        };
-        this.shapeGroup.scaleProperty.link( this.scaleListener );
-
-        // Don't allow touching once we start animating
-        // @private {function}
-        this.isAnimatingListener = isAnimating => {
-          this.pickable = !isAnimating;
-        };
-        this.shapeGroup.isAnimatingProperty.link( this.isAnimatingListener );
-
+      if ( !this.isIcon ) {
         // @private {Property.<Bounds2>}
         this.dragBoundsProperty = new Property( Bounds2.NOTHING );
 
@@ -230,32 +194,7 @@ define( require => {
           shapeGroup.positionProperty.value = dragBounds.closestPointTo( shapeGroup.positionProperty.value );
         } );
 
-        // @public {DragListener}
-        this.dragListener = new DragListener( {
-          // TODO: drag bounds
-          targetNode: this,
-          dragBoundsProperty: this.dragBoundsProperty,
-          locationProperty: shapeGroup.positionProperty,
-          transform: options.modelViewTransform,
-          start: event => {
-            options.selectListener && options.selectListener();
-            this.moveToFront();
-          },
-          drag: event => {
-            options.dragListener && options.dragListener();
-          },
-          end: event => {
-            options.dropListener && options.dropListener();
-          }
-        } );
-        this.shapeContainerLayer.addInputListener( this.dragListener );
-
-        this.addInputListener( {
-          down: event => {
-            options.selectListener && options.selectListener();
-            event.handle();
-          }
-        } );
+        this.attachDragListener( this.dragBoundsProperty, this.shapeContainerLayer, options );
       }
 
       this.mutate( options );
@@ -322,11 +261,7 @@ define( require => {
     dispose() {
       this.shapeContainerNodes.forEach( shapeContainer => shapeContainer.dispose() );
       this.shapeGroup.changedEmitter.removeListener( this.updateVisibilityListener );
-      this.shapeGroup.isAnimatingProperty.unlink( this.visibilityListener );
       this.shapeGroup.shapeContainers.lengthProperty.unlink( this.addRemoveVisibleListener );
-      this.positionListener && this.shapeGroup.positionProperty.unlink( this.positionListener );
-      this.scaleListener && this.shapeGroup.scaleProperty.unlink( this.scaleListener );
-      this.isAnimatingListener && this.shapeGroup.isAnimatingProperty.unlink( this.isAnimatingListener );
       this.generalDragBoundsProperty && this.generalDragBoundsProperty.unlink( this.dragBoundsListener );
 
       this.shapeGroup.shapeContainers.removeItemAddedListener( this.addShapeContainerListener );
@@ -339,8 +274,6 @@ define( require => {
       this.addContainerButton.dispose();
       this.removeContainerButton.dispose();
       this.returnButton.dispose();
-      this.isSelectedProperty.dispose();
-      this.dragListener && this.dragListener.dispose();
 
       super.dispose();
     }
