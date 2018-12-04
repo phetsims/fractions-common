@@ -92,9 +92,6 @@ define( require => {
         return _.some( this.spots, spot => spot.pieceProperty.value !== null );
       } );
 
-      // @public {Property.<Target|null>}
-      this.hoveringTargetProperty = new Property( null );
-
       // @public {Property.<boolean>}
       this.hasDoubleDigitsProperty = new DerivedProperty( [
         this.numeratorSpot.pieceProperty,

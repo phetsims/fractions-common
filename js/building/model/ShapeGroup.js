@@ -17,7 +17,6 @@ define( require => {
   const Group = require( 'FRACTIONS_COMMON/building/model/Group' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const ObservableArray = require( 'AXON/ObservableArray' );
-  const Property = require( 'AXON/Property' );
   const Range = require( 'DOT/Range' );
   const ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -57,9 +56,6 @@ define( require => {
         range: new Range( 1, 8 ),
         numberType: 'Integer'
       } );
-
-      // @public {Property.<Target|null>}
-      this.hoveringTargetProperty = new Property( null );
 
       this.shapeContainers.addItemAddedListener( () => this.changedEmitter.emit() );
       this.shapeContainers.addItemRemovedListener( () => this.changedEmitter.emit() );
