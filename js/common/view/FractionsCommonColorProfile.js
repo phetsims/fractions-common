@@ -48,7 +48,7 @@ define( require => {
     introPanelBackground: { default: new Color( 230, 230, 230 ) },
     shapePieceStroke: { default: Color.BLACK },
 
-    labCircleFill: { default: LIGHT_RED },
+    labPieFill: { default: LIGHT_RED },
     labBarFill: { default: LIGHT_BLUE },
     shapeShadow: { default: new Color( 0, 0, 0, 0.5 ) },
 

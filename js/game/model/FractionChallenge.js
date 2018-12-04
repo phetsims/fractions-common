@@ -59,12 +59,11 @@ define( require => {
 
       super();
 
-      // TODO: PIE/BAR terminology. look for other "circles" cases
-      const hasCircles = _.some( shapePieces, piece => piece.representation === BuildingRepresentation.PIE );
+      const hasPies = _.some( shapePieces, piece => piece.representation === BuildingRepresentation.PIE );
       const hasBars = _.some( shapePieces, piece => piece.representation === BuildingRepresentation.BAR );
       const hasNumbers = !!numberPieces.length;
 
-      assert && assert( hasCircles + hasBars + hasNumbers === 1, 'We only support one for now' );
+      assert && assert( hasPies + hasBars + hasNumbers === 1, 'We only support one for now' );
 
       // @public {number}
       this.levelNumber = levelNumber;
@@ -79,10 +78,10 @@ define( require => {
       this.hasMixedTargets = hasMixedTargets;
 
       // @public {boolean}
-      this.hasShapes = hasBars || hasCircles;
+      this.hasShapes = hasBars || hasPies;
 
       // @public {BuildingRepresentation|null}
-      this.representation = hasCircles ? BuildingRepresentation.PIE : ( hasBars ? BuildingRepresentation.BAR : null );
+      this.representation = hasPies ? BuildingRepresentation.PIE : ( hasBars ? BuildingRepresentation.BAR : null );
 
       // @public {number}
       this.maxTargetWholes = Math.ceil( Math.max( ...targets.map( target => target.fraction.value ) ) );
@@ -117,7 +116,7 @@ define( require => {
         if ( a.number < b.number ) { return -1; } else if ( a.number === b.number ) { return 0; } else { return 1; }
       } );
 
-      if ( hasCircles ) {
+      if ( hasPies ) {
         this.shapeGroupStacks.push( new ShapeGroupStack( targets.length, BuildingRepresentation.PIE ) );
       }
       if ( hasBars ) {
@@ -148,7 +147,6 @@ define( require => {
       } );
 
       if ( shapePieces.length ) {
-        // TODO: Don't add all reprs
         this.shapeGroupStacks.forEach( shapeGroupStack => {
           _.times( targets.length - 1, () => {
             shapeGroupStack.shapeGroups.push( new ShapeGroup( shapeGroupStack.representation, {
@@ -159,7 +157,6 @@ define( require => {
       }
 
       if ( numberPieces.length ) {
-        // TODO: Don't add all reprs
         this.numberGroupStacks.forEach( numberGroupStack => {
           _.times( targets.length - 1, () => {
             numberGroupStack.numberGroups.push( new NumberGroup( numberGroupStack.isMixedNumber ) );
@@ -170,7 +167,7 @@ define( require => {
       this.reset();
 
       const initialGroups = [];
-      if ( hasCircles ) {
+      if ( hasPies ) {
         initialGroups.push( this.addShapeGroup( BuildingRepresentation.PIE, this.maxTargetWholes ) );
       }
       if ( hasBars ) {

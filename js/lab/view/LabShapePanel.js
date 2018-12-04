@@ -52,12 +52,12 @@ define( require => {
       };
 
       // @private {StackNodesBox}
-      this.circleBox = createBox( BuildingRepresentation.PIE );
+      this.pieBox = createBox( BuildingRepresentation.PIE );
       this.barBox = createBox( BuildingRepresentation.BAR );
 
       const boxContainer = new Node( {
         children: [
-          this.circleBox,
+          this.pieBox,
           this.barBox
         ]
       } );
@@ -68,7 +68,7 @@ define( require => {
       const representationSelectionNode = new RadioButtonGroup( this.representationProperty, [
         {
           value: BuildingRepresentation.PIE,
-          node: new ShapePieceNode( new ShapePiece( Fraction.ONE, BuildingRepresentation.PIE, FractionsCommonColorProfile.labCircleFillProperty ), {
+          node: new ShapePieceNode( new ShapePiece( Fraction.ONE, BuildingRepresentation.PIE, FractionsCommonColorProfile.labPieFillProperty ), {
             scale: 0.3
           } )
         },
@@ -98,7 +98,7 @@ define( require => {
       ];
 
       this.representationProperty.link( representation => {
-        this.circleBox.visible = representation === BuildingRepresentation.PIE;
+        this.pieBox.visible = representation === BuildingRepresentation.PIE;
         this.barBox.visible = representation === BuildingRepresentation.BAR;
       } );
     }
@@ -110,7 +110,7 @@ define( require => {
      * @param {ModelViewTransform2} modelViewTransform
      */
     updateModelLocations( modelViewTransform ) {
-      this.circleBox.updateModelLocations( modelViewTransform, this );
+      this.pieBox.updateModelLocations( modelViewTransform, this );
       this.barBox.updateModelLocations( modelViewTransform, this );
     }
   }

@@ -269,7 +269,7 @@ define( require => {
               ..._.times( 7, () => new StarNode() ),
               ..._.times( 7, () => new FaceNode( 40, { headStroke: 'black' } ) ),
               ..._.range( 1, 10 ).map( n => new NumberPieceNode( new NumberPiece( n ) ) ),
-              ..._.range( 1, 5 ).map( n => new ShapePieceNode( new ShapePiece( new Fraction( 1, n ), BuildingRepresentation.PIE, FractionsCommonColorProfile.labCircleFillProperty ), { rotation: phet.joist.random.nextDouble() * 2 * Math.PI } ) ),
+              ..._.range( 1, 5 ).map( n => new ShapePieceNode( new ShapePiece( new Fraction( 1, n ), BuildingRepresentation.PIE, FractionsCommonColorProfile.labPieFillProperty ), { rotation: phet.joist.random.nextDouble() * 2 * Math.PI } ) ),
               ..._.range( 1, 5 ).map( n => new ShapePieceNode( new ShapePiece( new Fraction( 1, n ), BuildingRepresentation.BAR, FractionsCommonColorProfile.labBarFillProperty ) ) )
             ], 150 )
           } );

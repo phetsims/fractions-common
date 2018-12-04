@@ -47,7 +47,7 @@ define( require => {
 
       // Shape stacks
       [
-        { representation: BuildingRepresentation.PIE, color: FractionsCommonColorProfile.labCircleFillProperty },
+        { representation: BuildingRepresentation.PIE, color: FractionsCommonColorProfile.labPieFillProperty },
         { representation: BuildingRepresentation.BAR, color: FractionsCommonColorProfile.labBarFillProperty }
       ].forEach( ( { representation, color } ) => {
         _.range( 1, 9 ).forEach( denominator => {

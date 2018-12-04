@@ -154,7 +154,6 @@ define( require => {
       }
 
       ( function recur( index, remainder, totalCount, nonzeroCount ) {
-        // TODO: handle last index differently, since we don't need to search/iterate
         const entry = entries[ index ];
         const maxCoefficient = Math.min( maxQuantity, Math.floor( remainder / entry.inverseNumber ), maxTotalQuantity - totalCount );
         if ( index === entries.length - 1 ) {
