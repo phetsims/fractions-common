@@ -483,6 +483,8 @@ define( require => {
   ShapePartition.PLUS_SIGNS = _.range( 1, 7 ).map( quantity => ShapePartition.createPlusSigns( quantity ).rescaled( RESCALE_SIZE ) );
   ShapePartition.GRIDS = _.range( 2, 4 ).map( quantity => ShapePartition.createGrid( quantity, quantity ).rescaled( RESCALE_SIZE ) );
   ShapePartition.PYRAMIDS = _.range( 1, 4 ).map( quantity => ShapePartition.createPyramid( quantity ).rescaled( RESCALE_SIZE ) );
+  ShapePartition.EXTENDED_HORIZONTAL_BARS = _.range( 1, MAX_PIECES + 1 ).map( quantity => ShapePartition.createHorizontalBars( quantity ).rescaled( RESCALE_SIZE ) );
+  ShapePartition.EXTENDED_VERTICAL_BARS = _.range( 1, MAX_PIECES + 1 ).map( quantity => ShapePartition.createVerticalBars( quantity ).rescaled( RESCALE_SIZE ) );
 
   // @public {ShapePartition}
   ShapePartition.TETRIS = ShapePartition.createTetris().rescaled( RESCALE_SIZE );
@@ -497,14 +499,6 @@ define( require => {
     ...ShapePartition.HORIZONTAL_BARS,
     ...ShapePartition.VERTICAL_BARS
   ];
-
-  // @public {Array.<ShapePartition>}
-  const gridSizes = [ 1, 2, 3, 4, 5, 7, 11 ];
-  ShapePartition.UNIVERSAL_GRIDS = _.flatten( gridSizes.map( rows => gridSizes.filter( columns => {
-    return rows * columns <= MAX_PIECES;
-  } ).map( columns => {
-    return ShapePartition.createGrid( rows, columns ).rescaled( RESCALE_SIZE );
-  } ) ) );
 
   // @public {Array.<ShapePartition>}
   ShapePartition.GAME_PARTITIONS = [

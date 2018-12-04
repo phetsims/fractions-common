@@ -1895,7 +1895,8 @@ define( require => {
         const color = COLORS_4[ index ];
         const shapePartitions = sample( [
           ShapePartition.PIES,
-          ShapePartition.UNIVERSAL_GRIDS
+          ShapePartition.EXTENDED_HORIZONTAL_BARS,
+          ShapePartition.EXTENDED_VERTICAL_BARS
         ] );
         if ( index < 2 ) {
           return FractionLevel.difficultMixedShapeTarget( shapePartitions, fraction, color );
@@ -1926,7 +1927,8 @@ define( require => {
       const shapeTargets = fractions.map( ( fraction, index ) => {
         const shapePartitions = sample( [
           ShapePartition.PIES,
-          ShapePartition.UNIVERSAL_GRIDS
+          ShapePartition.EXTENDED_HORIZONTAL_BARS,
+          ShapePartition.EXTENDED_VERTICAL_BARS
         ] );
         return FractionLevel.difficultMixedShapeTarget( shapePartitions, fraction, colors[ index ] );
       } );
