@@ -279,6 +279,7 @@ define( require => {
 
         const doneListener = () => {
           model.levelProperty.unlink( doneListener );
+          model.challengeProperty.unlink( doneListener );
 
           if ( this.rewardNode ) {
             this.rewardNode.dispose();
@@ -286,6 +287,7 @@ define( require => {
           }
           allLevelsCompletedNode.visible = false;
         };
+        model.challengeProperty.lazyLink( doneListener );
         model.levelProperty.lazyLink( doneListener );
       } );
 
