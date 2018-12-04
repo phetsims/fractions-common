@@ -210,7 +210,34 @@ define( require => {
       return bestTarget;
     }
 
-    // TODO: reduce duplication between shapes and numbers!
+    /**
+     * Handles moving a Group into the collection area (Target).
+     * @public
+     *
+     * @param {Group} group
+     * @param {Target} target
+     */
+    collectGroup( group, target, groupArray, scale ) {
+      assert && assert( group instanceof Group );
+      assert && assert( target.groupProperty.value === null );
+
+      // Setting this should result in a side-effect of updating our target's positionProperty to the correct location.
+      target.groupProperty.value = group;
+
+      // Try to start moving out another group
+      this.ensureShapeGroups();
+
+      var positionProperty = target.positionProperty;
+      group.animator.animateTo( {
+        position: positionProperty.value,
+        scale,
+        animationInvalidationProperty: positionProperty,
+        endAnimationCallback: () => {
+          groupArray.remove( group );
+        }
+      } );
+    }
+
     /**
      * Handles moving a ShapeGroup into the collection area (Target).
      * @public
@@ -219,26 +246,12 @@ define( require => {
      * @param {Target} target
      */
     collectShapeGroup( shapeGroup, target ) {
-      assert && assert( shapeGroup instanceof ShapeGroup );
-      assert && assert( target.groupProperty.value === null );
-
-      // Setting this should result in a side-effect of updating our target's positionProperty to the correct location.
-      target.groupProperty.value = shapeGroup;
-
-      shapeGroup.partitionDenominatorProperty.value = target.fraction.denominator;
-
       // Try to start moving out another group
       this.ensureShapeGroups();
 
-      var positionProperty = target.positionProperty;
-      shapeGroup.animator.animateTo( {
-        position: positionProperty.value,
-        scale: FractionsCommonConstants.SHAPE_COLLECTION_SCALE,
-        animationInvalidationProperty: positionProperty,
-        endAnimationCallback: () => {
-          this.shapeGroups.remove( shapeGroup );
-        }
-      } );
+      shapeGroup.partitionDenominatorProperty.value = target.fraction.denominator;
+
+      this.collectGroup( shapeGroup, target, this.shapeGroups, FractionsCommonConstants.SHAPE_COLLECTION_SCALE );
     }
 
     /**
@@ -249,24 +262,10 @@ define( require => {
      * @param {Target} target
      */
     collectNumberGroup( numberGroup, target ) {
-      assert && assert( numberGroup instanceof NumberGroup );
-      assert && assert( target.groupProperty.value === null );
-
-      // Setting this should result in a side-effect of updating our target's positionProperty to the correct location.
-      target.groupProperty.value = numberGroup;
-
       // Try to start moving out another group
       this.ensureNumberGroups();
 
-      var positionProperty = target.positionProperty;
-      numberGroup.animator.animateTo( {
-        position: positionProperty.value,
-        scale: FractionsCommonConstants.NUMBER_COLLECTION_SCALE,
-        animationInvalidationProperty: positionProperty,
-        endAnimationCallback: () => {
-          this.numberGroups.remove( numberGroup );
-        }
-      } );
+      this.collectGroup( numberGroup, target, this.numberGroups, FractionsCommonConstants.NUMBER_COLLECTION_SCALE );
     }
 
     /**
@@ -285,26 +284,30 @@ define( require => {
       } );
     }
 
+    ensureGroups( groupArray, stackArray ) {
+      // If we already have one out, don't look for more
+      if ( groupArray.length >= 2 ) { return; }
+
+      for ( let groupStack of stackArray ) {
+        if ( !groupStack.isEmpty() ) {
+          const group = groupStack.array.pop();
+          group.clear();
+          // TODO: add the stack offset here (should be a common method on Stack?)
+          group.positionProperty.value = groupStack.positionProperty.value;
+          groupArray.push( group );
+          this.centerGroup( group );
+          break;
+        }
+      }
+    }
+
+    // TODO: EnumerationMap the groups and stacks arrays?
     /**
      * If there are no shape groups, it moves one out to the center of the play area.
      * @public
      */
     ensureShapeGroups() {
-      // If we already have one out, don't look for more
-      if ( this.shapeGroups.length >= 2 ) { return; }
-
-      for ( let shapeGroupStack of this.shapeGroupStacks ) {
-        if ( !shapeGroupStack.isEmpty() ) {
-          const shapeGroup = shapeGroupStack.shapeGroups.pop();
-          // TODO: don't require this here AND in the challengenode. Have things "reset" once they go to the stack!!!
-          shapeGroup.partitionDenominatorProperty.reset();
-          // TODO: add the stack offset here (should be a common method on Stack?)
-          shapeGroup.positionProperty.value = shapeGroupStack.positionProperty.value;
-          this.shapeGroups.push( shapeGroup );
-          this.centerGroup( shapeGroup );
-          break;
-        }
-      }
+      this.ensureGroups( this.shapeGroups, this.shapeGroupStacks );
     }
 
     /**
@@ -312,19 +315,7 @@ define( require => {
      * @public
      */
     ensureNumberGroups() {
-      // If we already have one out, don't look for more
-      if ( this.numberGroups.length >= 2 ) { return; }
-
-      for ( let numberGroupStack of this.numberGroupStacks ) {
-        if ( !numberGroupStack.isEmpty() ) {
-          const numberGroup = numberGroupStack.numberGroups.pop();
-          // TODO: add the stack offset here (should be a common method on Stack?)
-          numberGroup.positionProperty.value = numberGroupStack.positionProperty.value;
-          this.numberGroups.push( numberGroup );
-          this.centerGroup( numberGroup );
-          break;
-        }
-      }
+      this.ensureGroups( this.numberGroups, this.numberGroupStacks );
     }
 
     /**
@@ -338,8 +329,7 @@ define( require => {
      */
     pullShapePieceFromStack( stack, modelPoint ) {
       const shapePiece = stack.shapePieces.pop();
-      shapePiece.scaleProperty.reset();
-      shapePiece.rotationProperty.reset();
+      shapePiece.clear();
       shapePiece.positionProperty.value = modelPoint;
       this.dragShapePieceFromStack( shapePiece );
       return shapePiece;
@@ -356,7 +346,7 @@ define( require => {
      */
     pullNumberPieceFromStack( stack, modelPoint ) {
       const numberPiece = stack.numberPieces.pop();
-      numberPiece.scaleProperty.reset();
+      numberPiece.clear();
       numberPiece.positionProperty.value = modelPoint;
       this.dragNumberPieceFromStack( numberPiece );
       return numberPiece;
@@ -373,8 +363,7 @@ define( require => {
      */
     pullShapeGroupFromStack( stack, modelPoint ) {
       const shapeGroup = stack.shapeGroups.pop();
-      shapeGroup.scaleProperty.reset();
-      shapeGroup.partitionDenominatorProperty.reset();
+      shapeGroup.clear();
       shapeGroup.positionProperty.value = modelPoint;
       this.dragShapeGroupFromStack( shapeGroup );
       return shapeGroup;
@@ -392,7 +381,7 @@ define( require => {
      */
     pullNumberGroupFromStack( stack, modelPoint ) {
       const numberGroup = stack.numberGroups.pop();
-      numberGroup.scaleProperty.reset();
+      numberGroup.clear();
       numberGroup.positionProperty.value = modelPoint;
       this.dragNumberGroupFromStack( numberGroup );
       return numberGroup;

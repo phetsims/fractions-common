@@ -91,6 +91,18 @@ define( require => {
     }
 
     /**
+     * Clears some associated temporary properties (that isn't a full reset), particularly before it is pulled from a
+     * stack.
+     * @public
+     * @override
+     */
+    clear() {
+      this.partitionDenominatorProperty.reset();
+
+      super.clear();
+    }
+
+    /**
      * Whether this group contains any pieces.
      * @public
      * @override

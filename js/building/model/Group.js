@@ -95,6 +95,15 @@ define( require => {
     }
 
     /**
+     * Clears some associated temporary properties (that isn't a full reset), particularly before it is pulled from a
+     * stack.
+     * @public
+     */
+    clear() {
+      this.scaleProperty.reset();
+    }
+
+    /**
      * Releases references.
      * @public
      */
