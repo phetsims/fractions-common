@@ -52,10 +52,11 @@ define( require => {
       // @public {ShapeGroup}
       this.shapeGroup = shapeGroup;
 
-      // @public {ObservableArray.<ShapeContainerNode>} TODO: don't require this being public
+      // @private {ObservableArray.<ShapeContainerNode>}
       this.shapeContainerNodes = new ObservableArray();
 
-      // @private {Property.<Bounds2>} TODO: make sure all of these are documented properly for the non-icon version
+      // @private {Property.<Bounds2>} - Our original drag bounds (which we'll need to map before providing to our
+      // drag listener)
       this.generalDragBoundsProperty = options.dragBoundsProperty;
 
       // @private {Node}
@@ -80,7 +81,6 @@ define( require => {
 
       assert && assert( shapeGroup.shapeContainers.length > 0 );
 
-      // TODO: reduplicate?
       const lineSize = 8;
 
       // @private {Node}
@@ -125,7 +125,6 @@ define( require => {
       if ( options.hasButtons ) {
         this.controlLayer.addChild( this.rightButtonBox );
       }
-      this.updateRightButtonPosition();
 
       // @private {Property.<boolean>}
       this.decreaseEnabledProperty = new DerivedProperty( [ shapeGroup.partitionDenominatorProperty ], denominator => {
@@ -156,7 +155,6 @@ define( require => {
         this.controlLayer.addChild( new HBox( {
           spacing: CONTAINER_PADDING,
           children: [ this.decreasePartitionCountButton, this.increasePartitionCountButton ],
-          // TODO: improve? This is safe, given we can't trust container bounds
           top: ( shapeGroup.representation === BuildingRepresentation.BAR ? FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT : FractionsCommonConstants.SHAPE_SIZE ) / 2 + CONTAINER_PADDING - 3,
           centerX: 0
         } ) );
@@ -164,8 +162,10 @@ define( require => {
 
       // @private {Node}
       this.returnButton = new ReturnButton( options.removeLastListener, {
-        // TODO: Make it computational
-        rightBottom: shapeGroup.representation === BuildingRepresentation.BAR ? new Vector2( -50, -75 / 2 ) : new Vector2( -36, -36 )
+        // constants tuned for current appearance
+        rightBottom: shapeGroup.representation === BuildingRepresentation.BAR
+          ? new Vector2( -50, -75 / 2 )
+          : new Vector2( -36, -36 )
       } );
 
       const undoArrowContainer = new Node();
@@ -197,28 +197,38 @@ define( require => {
         this.attachDragListener( this.dragBoundsProperty, this.shapeContainerLayer, options );
       }
 
+      // Now that we have a return button and drag bounds, we should update right-button positions
+      this.updateRightButtonPosition();
+
       this.mutate( options );
     }
 
+    /**
+     * Updates the available drag bounds. This can be influenced not only by the "general" drag bounds (places in the
+     * play area), but since our size can change we need to compensate for shifts in size.
+     * @private
+     */
     updateDragBounds() {
-      let safeBounds = this.controlLayer.bounds.union( this.returnButton.bounds ); // undo button not always in the control layer
+      if ( this.generalDragBoundsProperty ) {
+        let safeBounds = this.controlLayer.bounds.union( this.returnButton.bounds ); // undo button not always in the control layer
 
-      const containerTop = -( this.shapeGroup.representation === BuildingRepresentation.PIE ? FractionsCommonConstants.SHAPE_SIZE : FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT ) / 2;
-      safeBounds = safeBounds.withMinY( Math.min( safeBounds.top, containerTop ) );
-      this.dragBoundsProperty.value = this.generalDragBoundsProperty.value.withOffsets( safeBounds.left, safeBounds.top, -safeBounds.right, -safeBounds.bottom );
+        const containerTop = -( this.shapeGroup.representation === BuildingRepresentation.PIE ? FractionsCommonConstants.SHAPE_SIZE : FractionsCommonConstants.SHAPE_VERTICAL_BAR_HEIGHT ) / 2;
+        safeBounds = safeBounds.withMinY( Math.min( safeBounds.top, containerTop ) );
+        this.dragBoundsProperty.value = this.generalDragBoundsProperty.value.withOffsets( safeBounds.left, safeBounds.top, -safeBounds.right, -safeBounds.bottom );
+      }
     }
 
-    // TODO: doc
+    /**
+     * Updates the position of the rightButtonBox (and potentially updates drag bounds based on that).
+     * @private
+     */
     updateRightButtonPosition() {
-      // TODO;
+      // Our container initializers are called before we add things in the subtype, so we need an additional check here.
       if ( this.rightButtonBox ) {
         // Subtracts 0.5 since our containers have their origins in their centers
         this.rightButtonBox.left = ( this.shapeContainerNodes.length - 0.5 ) * ( FractionsCommonConstants.SHAPE_SIZE + CONTAINER_PADDING );
 
-        // TODO:
-        if ( this.returnButton ) {
-          this.updateDragBounds();
-        }
+        this.updateDragBounds();
       }
     }
 
@@ -291,7 +301,6 @@ define( require => {
         scale: FractionsCommonConstants.SHAPE_BUILD_SCALE,
         pickable: false
       } );
-      // TODO: better way? At least this is safe
       iconNode.localBounds = iconNode.localBounds.withMinY( iconNode.localBounds.minY - 2 * iconNode.localBounds.centerY );
       return iconNode;
     }

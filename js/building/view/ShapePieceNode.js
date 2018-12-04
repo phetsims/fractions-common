@@ -80,7 +80,7 @@ define( require => {
       if ( shapePiece.representation === BuildingRepresentation.PIE ) {
         if ( fractionValue === 1 ) {
           this.viewNode = new Circle( CIRCLE_RADIUS, nodeOptions );
-          this.shadowNode = new Circle( CIRCLE_RADIUS, shadowOptions ); // TODO: conditionally create?
+          this.shadowNode = new Circle( CIRCLE_RADIUS, shadowOptions );
         }
         else {
           const translation = ShapePiece.getSweptCentroid( shapePiece.fraction ).negated();
