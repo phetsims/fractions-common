@@ -10,12 +10,17 @@ define( require => {
 
   // modules
   const Bounds2 = require( 'DOT/Bounds2' );
+  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
+  const EnumerationMap = require( 'FRACTIONS_COMMON/common/EnumerationMap' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Node = require( 'SCENERY/nodes/Node' );
   const ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
   const ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
   const StackNode = require( 'FRACTIONS_COMMON/building/view/StackNode' );
+
+  // constants
+  const iconMap = new EnumerationMap( BuildingRepresentation, representation => ShapeGroupNode.createIcon( representation ) );
 
   class ShapeGroupStackNode extends StackNode {
     /**
@@ -29,8 +34,7 @@ define( require => {
       this.representation = shapeGroupStack.representation;
 
       // @private {Node}
-      // TODO: Can we NOT recreate these icons, and reuse (and unparent correctly?)
-      this.icon = ShapeGroupNode.createIcon( shapeGroupStack.representation );
+      this.icon = iconMap.get( shapeGroupStack.representation );
 
       // @private {function}
       this.shapeGroupAddedListener = this.addShapeGroup.bind( this );
@@ -83,7 +87,9 @@ define( require => {
      * @override
      */
     dispose() {
-      this.icon.dispose();
+      // Dispose all of the child nodes, so that they won't have the icon as a child anymore (which would leak memory).
+      this.children.forEach( child => child.dispose() );
+
       this.stack.shapeGroups.removeItemAddedListener( this.shapeGroupAddedListener );
       this.stack.shapeGroups.removeItemRemovedListener( this.shapeGroupRemovedListener );
 
