@@ -90,7 +90,6 @@ define( require => {
 
       // @public {DragListener}
       this.dragListener = new DragListener( {
-        // TODO: drag bounds
         targetNode: this,
         transform: options.modelViewTransform,
         locationProperty: numberPiece.positionProperty,

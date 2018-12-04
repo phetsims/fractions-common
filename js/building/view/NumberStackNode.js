@@ -27,7 +27,7 @@ define( require => {
 
       super( numberStack );
 
-      // @public {NumberStack} TODO: consider using this.stack (for all 4 types)
+      // @public {NumberStack}
       this.numberStack = numberStack;
 
       // @private {Array.<NumberPieceNode>}

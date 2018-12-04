@@ -34,7 +34,6 @@ define( require => {
 
       super( shapeStack );
 
-      // TODO: consider using this.stack?
       // @public {ShapeStack}
       this.shapeStack = shapeStack;
 
