@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   const AlignBox = require( 'SCENERY/nodes/AlignBox' );
+  const AlignGroup = require( 'SCENERY/nodes/AlignGroup' );
   const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
@@ -39,6 +40,8 @@ define( require => {
         yMargin: 10 // TODO: why do we need non-equal margins to see an equal effect?
       } );
 
+      const boxAlignGroup = new AlignGroup();
+
       const createBox = representation => {
         const stacks = model.shapeStacks.filter( shapeStack => {
           return shapeStack.representation === representation;
@@ -57,8 +60,8 @@ define( require => {
 
       const boxContainer = new Node( {
         children: [
-          this.pieBox,
-          this.barBox
+          new AlignBox( this.pieBox, { group: boxAlignGroup } ),
+          new AlignBox( this.barBox, { group: boxAlignGroup } )
         ]
       } );
 
