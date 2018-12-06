@@ -9,6 +9,7 @@ define( require => {
   'use strict';
 
   // modules
+  const AccordionBox = require( 'SUN/AccordionBox' );
   const AlignBox = require( 'SCENERY/nodes/AlignBox' );
   const Checkbox = require( 'SUN/Checkbox' );
   const ContainerSetScreenView = require( 'FRACTIONS_COMMON/intro/view/ContainerSetScreenView' );
@@ -17,6 +18,8 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
+  const MathSymbols = require( 'SCENERY_PHET/MathSymbols' );
   const MaxNode = require( 'FRACTIONS_COMMON/intro/view/MaxNode' );
   const MixedFractionNode = require( 'FRACTIONS_COMMON/common/view/MixedFractionNode' );
   const Panel = require( 'SUN/Panel' );
@@ -25,6 +28,7 @@ define( require => {
   const Text = require( 'SCENERY/nodes/Text' );
 
   // strings
+  const equationString = require( 'string!FRACTIONS_COMMON/equation' );
   const mixedNumberString = require( 'string!FRACTIONS_COMMON/mixedNumber' );
 
   // constants
@@ -78,7 +82,7 @@ define( require => {
           // Node options
           scale: 2
         };
-        const maxFractionNodeBounds = new MixedFractionNode( _.extend( {}, fractionNodeOptions, {
+        const maxMixedFractionNodeBounds = new MixedFractionNode( _.extend( {}, fractionNodeOptions, {
           whole: 0,
           numerator: 0,
           denominator: 0,
@@ -87,7 +91,7 @@ define( require => {
 
         // @private {Node}
         this.mixedFractionNode = new AlignBox( new PropertyFractionNode( model.numeratorProperty, model.denominatorProperty, fractionNodeOptions ), {
-          alignBounds: maxFractionNodeBounds,
+          alignBounds: maxMixedFractionNodeBounds,
           xAlign: 'right'
         } );
         this.addChild( this.mixedFractionNode );
@@ -99,6 +103,59 @@ define( require => {
           right: this.layoutBounds.right - MARGIN,
           bottom: this.resetAllButton.top - 40
         } ) );
+
+        // Options for the "Equation" accordion box (bottom-left)
+        const equationScale = 1.5;
+        const equationLeftOptions = {
+          type: FractionDisplayType.MIXED,
+          simplify: true,
+
+          maxWhole: model.containerCountProperty.range.max,
+          maxNumerator: model.denominatorProperty.range.max - 1,
+          maxDenominator: model.denominatorProperty.range.max,
+
+          wholeFill: FractionsCommonColorProfile.mixedFractionStrongProperty,
+          numeratorFill: partialFractionColorProperty,
+          denominatorFill: partialFractionColorProperty,
+          separatorFill: partialFractionColorProperty,
+
+          scale: equationScale
+        };
+        const equationRightOptions = {
+          type: FractionDisplayType.IMPROPER,
+
+          maxNumerator: model.denominatorProperty.range.max * model.containerCountProperty.range.max,
+          maxDenominator: model.denominatorProperty.range.max,
+
+          scale: equationScale
+        };
+
+        const equationBoxContent = new HBox( {
+          spacing: 10,
+          children: [
+            new AlignBox( new PropertyFractionNode( model.numeratorProperty, model.denominatorProperty, equationLeftOptions ), {
+              alignBounds: new MixedFractionNode( _.extend( {}, equationLeftOptions, {
+                whole: 0,
+                numerator: 0,
+                denominator: 0,
+                simplify: false
+              } ) ).bounds,
+              xAlign: 'right'
+            } ),
+            new Text( MathSymbols.EQUAL_TO, { font: new PhetFont( 30 * equationScale ) } ),
+            new PropertyFractionNode( model.numeratorProperty, model.denominatorProperty, equationRightOptions )
+          ]
+        } );
+
+        const equationBox = new AccordionBox( equationBoxContent, {
+          titleNode: new Text( equationString, { font: new PhetFont( 20 ) } ),
+          showTitleWhenExpanded: false,
+          bottom: this.layoutBounds.bottom - MARGIN,
+          left: this.layoutBounds.left + 50,
+          fill: 'white'
+        } );
+        this.addChild( equationBox );
+        model.showMixedNumbersProperty.linkAttribute( equationBox, 'visible' );
       }
 
       // layout
