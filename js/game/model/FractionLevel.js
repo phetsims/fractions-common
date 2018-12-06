@@ -37,8 +37,9 @@ define( require => {
     // default denominators to match the Java search
     denominators: inclusive( 1, 8 ).map( PrimeFactorization.factor )
   } );
-  const collectionFinder12 = new CollectionFinder( {
-    denominators: inclusive( 1, 12 ).map( PrimeFactorization.factor )
+  const collectionFinder9 = new CollectionFinder( {
+    // default denominators to match the Java search
+    denominators: inclusive( 1, 9 ).map( PrimeFactorization.factor )
   } );
   const COLORS_3 = [
     FractionsCommonColorProfile.level1Property,
@@ -205,7 +206,7 @@ define( require => {
       return _.flatten( fractions.map( fraction => {
         const whole = Math.floor( fraction.value );
         const remainder = fraction.minusInteger( whole );
-        const collections = collectionFinder12.search( remainder );
+        const collections = collectionFinder8.search( remainder );
         const collection = _.sortBy( collections, 'totalQuantities' )[ 0 ];
         return [
           ...repeat( whole, new Fraction( 1, 1 ) ),
@@ -301,7 +302,7 @@ define( require => {
 
     /**
      * Returns a list of fractions with an equivalent sum, where up to `quantity` fractions have been split into
-     * sub-fractions. Does more complicated / full splits based on unit fractions up to 1/12.
+     * sub-fractions. Does more complicated / full splits based on unit fractions up to 1/8.
      * @private
      *
      * @param {Array.<Fraction>} fractions
@@ -329,7 +330,7 @@ define( require => {
 
       return [
         ..._.flatten( fractionsToChange.map( fraction => {
-          return sample( collectionFinder12.search( fraction, {
+          return sample( collectionFinder8.search( fraction, {
             maxTotalQuantity: options.maxTotalQuantity
           } ) ).unitFractions;
         } ) ),
@@ -528,7 +529,7 @@ define( require => {
       const remainder = fraction.minusInteger( Math.floor( fraction.value ) );
 
       // Need to filter the collections so we don't end up needing too many whole sections
-      const collections = shuffle( collectionFinder12.search( fraction, {
+      const collections = shuffle( collectionFinder8.search( fraction, {
         maxNonzeroCount: maxNonzeroCount,
         maxTotalQuantity: fullWholeCount + remainder.numerator + 5,
         maxQuantity: Math.max( fraction.denominator - 1, 4 )
@@ -574,7 +575,7 @@ define( require => {
       const wholeCount = Math.ceil( fraction.value );
 
       // Need to filter the collections so we don't end up needing too many whole sections
-      const collections = collectionFinder12.search( fraction, {
+      const collections = collectionFinder9.search( fraction, {
         maxNonzeroCount: 4
       } ).filter( collection => _.sum( collection.fractions.map( f => Math.ceil( f.value ) ) ) <= wholeCount );
 
