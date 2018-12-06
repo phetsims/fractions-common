@@ -9,6 +9,7 @@ define( require => {
   'use strict';
 
   // modules
+  const ArrowNode = require( 'SCENERY_PHET/ArrowNode' );
   const Bounds2 = require( 'DOT/Bounds2' );
   const Circle = require( 'SCENERY/nodes/Circle' );
   const DragListener = require( 'SCENERY/listeners/DragListener' );
@@ -61,11 +62,14 @@ define( require => {
         minorTickLineWidth: 2,
         axisLineWidth: 3,
         markerRadius: 12,
-        highlightLineWidth: 18,
+        arrowLength: 22,
+        arrowOffset: 12,
+        highlightLineWidth: 8,
         highlightExtension: 8,
 
         // {ColorDef}
         markerFill: FractionsCommonColorProfile.introCircleFillProperty,
+        arrowFill: FractionsCommonColorProfile.introCircleFillProperty,
 
         // TODO: isUserControlledProperty so we can properly handle lock-out?
 
@@ -118,6 +122,16 @@ define( require => {
         lineWidth: 3
       } );
 
+      const arrowNode = new ArrowNode( 0, -options.markerRadius - options.arrowLength - options.arrowOffset, 0, -options.markerRadius - options.arrowOffset, {
+        fill: options.arrowFill,
+        stroke: 'black',
+        headWidth: 9,
+        tailWidth: 4
+      } );
+      if ( options.showArrow ) {
+        markerNode.addChild( arrowNode );
+      }
+
       const highlightNode = new Line( {
         stroke: FractionsCommonColorProfile.introNumberLineHighlightProperty,
         lineWidth: options.highlightLineWidth
@@ -161,7 +175,10 @@ define( require => {
       this.containerCountProperty.link( this.containerCountListener );
 
       // @private {Multilink}
-      this.minorTickMultilink = Property.multilink( [ denominatorProperty, containerCountProperty ], ( denominator, containerCount ) => {
+      this.minorTickMultilink = Property.multilink( [
+        denominatorProperty,
+        containerCountProperty
+      ], ( denominator, containerCount ) => {
         const shape = new Shape();
 
         for ( let i = 0; i <= containerCount * denominator; i++ ) {
@@ -179,7 +196,11 @@ define( require => {
 
       // @private {Multilink}
       // TODO: format
-      this.multipliedTickMultilink = Property.multilink( [ denominatorProperty, containerCountProperty, options.multiplierProperty ], ( denominator, containerCount, multiplier ) => {
+      this.multipliedTickMultilink = Property.multilink( [
+        denominatorProperty,
+        containerCountProperty,
+        options.multiplierProperty
+      ], ( denominator, containerCount, multiplier ) => {
         const shape = new Shape();
 
         const effectiveDenominator = denominator * multiplier;
@@ -198,7 +219,10 @@ define( require => {
       } );
 
       // @private {Multilink}
-      this.markerMultilink = Property.multilink( [ numeratorProperty, denominatorProperty ], ( numerator, denominator ) => {
+      this.markerMultilink = Property.multilink( [
+        numeratorProperty,
+        denominatorProperty
+      ], ( numerator, denominator ) => {
         const x = options.unitSize * numerator / denominator;
         const tickY = ( ( numerator % denominator === 0 ) ? options.majorTickLength : options.minorTickLength ) / 2;
         markerNode.x = x;

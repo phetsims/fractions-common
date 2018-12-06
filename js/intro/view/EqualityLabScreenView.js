@@ -178,6 +178,8 @@ define( require => {
 
           const colorOverride = FractionsCommonColorProfile.equalityLabColorProperty;
 
+          const semitransparentColorOverride = new DerivedProperty( [ colorOverride ], color => color.withAlpha( 0.8 ) );
+
           // TODO: some cleanup
           if ( representation === IntroRepresentation.CIRCLE ) {
             containerNodes = containers.map( container => new CircularContainerNode( container, {
@@ -210,7 +212,9 @@ define( require => {
               multiplierProperty: model.multiplierProperty,
               orientation: NumberLineOrientation.VERTICAL,
               unitSize: 60,
-              markerFill: colorOverride
+              arrowFill: colorOverride,
+              markerFill: semitransparentColorOverride,
+              showArrow: true
             } );
             containerNodes = [ multipliedNumberLine ];
             multipliedViewContainer.addChild( multipliedNumberLine );
