@@ -151,7 +151,7 @@ define( require => {
       shapeGroup.positionProperty.value = new Vector2( 170, 0 );
       this.selectedGroupProperty.value = shapeGroup;
 
-      var numberGroup = this.addNumberGroup( false );
+      var numberGroup = this.addNumberGroup( this.allowMixedNumbers );
       numberGroup.positionProperty.value = new Vector2( -170, 0 );
     }
   }
