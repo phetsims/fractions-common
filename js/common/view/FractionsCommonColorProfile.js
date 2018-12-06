@@ -58,7 +58,7 @@ define( require => {
 
     shapeContainerFill: { default: Color.WHITE },
     shapeContainerStroke: { default: Color.BLACK },
-    shapeContainerPartition: { default: new Color( 170, 170, 170 ) },
+    shapeContainerPartition: { default: new Color( '#c0c0c0' ) },
 
     numberStroke: { default: Color.BLACK },
     numberFill: { default: Color.WHITE },
