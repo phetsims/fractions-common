@@ -117,10 +117,10 @@ define( require => {
       } );
 
       if ( hasPies ) {
-        this.shapeGroupStacks.push( new ShapeGroupStack( targets.length, BuildingRepresentation.PIE ) );
+        this.shapeGroupStacks.push( new ShapeGroupStack( targets.length, BuildingRepresentation.PIE, this.maxTargetWholes > 1 ) );
       }
       if ( hasBars ) {
-        this.shapeGroupStacks.push( new ShapeGroupStack( targets.length, BuildingRepresentation.BAR ) );
+        this.shapeGroupStacks.push( new ShapeGroupStack( targets.length, BuildingRepresentation.BAR, this.maxTargetWholes > 1 ) );
       }
       if ( hasNumbers ) {
         this.numberGroupStacks.push( new NumberGroupStack( targets.length, this.hasMixedTargets ) );

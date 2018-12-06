@@ -122,7 +122,7 @@ define( require => {
         children: [ this.addContainerButton, this.removeContainerButton ],
         centerY: 0
       } );
-      if ( options.hasButtons ) {
+      if ( options.hasButtons && shapeGroup.maxContainers > 1 ) {
         this.controlLayer.addChild( this.rightButtonBox );
       }
 
@@ -293,10 +293,13 @@ define( require => {
      * @public
      *
      * @param {BuildingRepresentation} representation
+     * @param {boolean} hasExpansionButtons
      * @returns {Node}
      */
-    static createIcon( representation ) {
-      const iconNode = new ShapeGroupNode( new ShapeGroup( representation ), {
+    static createIcon( representation, hasExpansionButtons ) {
+      const iconNode = new ShapeGroupNode( new ShapeGroup( representation, {
+        maxContainers: hasExpansionButtons ? 6 : 1
+      } ), {
         isIcon: true,
         scale: FractionsCommonConstants.SHAPE_BUILD_SCALE,
         pickable: false

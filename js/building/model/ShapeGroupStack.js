@@ -17,9 +17,10 @@ define( require => {
     /**
      * @param {number} layoutQuantity
      * @param {BuildingRepresentation} representation
+     * @param {boolean} hasExpansionButtons
      * @param {boolean} [isMutable]
      */
-    constructor( layoutQuantity, representation, isMutable = true ) {
+    constructor( layoutQuantity, representation, hasExpansionButtons, isMutable = true ) {
       super( layoutQuantity, isMutable );
 
       // @public {BuildingRepresentation}
@@ -27,6 +28,9 @@ define( require => {
 
       // @public {ObservableArray.<ShapeGroup>} - NOTE: These should only ever be popped/pushed.
       this.shapeGroups = this.array;
+
+      // @public {boolean} - Whether the icons will have the + button to add another container.
+      this.hasExpansionButtons = hasExpansionButtons;
     }
 
     /**

@@ -67,8 +67,8 @@ define( require => {
       } );
 
       // Non-mutable stacks
-      this.shapeGroupStacks.push( new ShapeGroupStack( GROUP_LAYOUT_QUANTITY, BuildingRepresentation.PIE, false ) );
-      this.shapeGroupStacks.push( new ShapeGroupStack( GROUP_LAYOUT_QUANTITY, BuildingRepresentation.BAR, false ) );
+      this.shapeGroupStacks.push( new ShapeGroupStack( GROUP_LAYOUT_QUANTITY, BuildingRepresentation.PIE, true, false ) );
+      this.shapeGroupStacks.push( new ShapeGroupStack( GROUP_LAYOUT_QUANTITY, BuildingRepresentation.BAR, true, false ) );
       this.numberGroupStacks.push( new NumberGroupStack( GROUP_LAYOUT_QUANTITY, false, false ) );
       this.numberGroupStacks.push( new NumberGroupStack( GROUP_LAYOUT_QUANTITY, true, false ) );
 

@@ -20,7 +20,10 @@ define( require => {
   const StackNode = require( 'FRACTIONS_COMMON/building/view/StackNode' );
 
   // constants
-  const iconMap = new EnumerationMap( BuildingRepresentation, representation => ShapeGroupNode.createIcon( representation ) );
+  const iconMap = {};
+  [ false, true ].map( hasExpansionButtons => {
+    iconMap[ hasExpansionButtons ] = new EnumerationMap( BuildingRepresentation, representation => ShapeGroupNode.createIcon( representation, hasExpansionButtons ) );
+  } );
 
   class ShapeGroupStackNode extends StackNode {
     /**
@@ -34,7 +37,7 @@ define( require => {
       this.representation = shapeGroupStack.representation;
 
       // @private {Node}
-      this.icon = iconMap.get( shapeGroupStack.representation );
+      this.icon = iconMap[ shapeGroupStack.hasExpansionButtons ].get( shapeGroupStack.representation );
 
       // @private {function}
       this.shapeGroupAddedListener = this.addShapeGroup.bind( this );
