@@ -314,6 +314,19 @@ define( require => {
       slidingLevelSelectionNode.centerX = this.layoutBounds.centerX;
       soundToggleButton.left = this.layoutBounds.left + SIDE_MARGIN;
       resetAllButton.right = this.layoutBounds.right - SIDE_MARGIN;
+
+      phet.joist.display.addInputListener( {
+        down: () => {
+          const screen = phet.joist.sim.currentScreenProperty.value;
+          if ( screen && screen.view === this ) {
+            // Any event on a shape group should handle it.
+            const challenge = model.challengeProperty.value;
+            if ( challenge ) {
+              challenge.selectedGroupProperty.value = null;
+            }
+          }
+        }
+      } );
     }
 
     /**

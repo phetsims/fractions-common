@@ -10,7 +10,6 @@ define( require => {
 
   // modules
   const BuildingLayerNode = require( 'FRACTIONS_COMMON/building/view/BuildingLayerNode' );
-  const DerivedProperty = require( 'AXON/DerivedProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
   class BuildingLabLayerNode extends BuildingLayerNode {
@@ -52,19 +51,6 @@ define( require => {
     }
 
     /**
-     * Called when a ShapeGroup is selected.
-     * @protected
-     * @override
-     *
-     * @param {ShapeGroup} shapeGroup
-     */
-    onShapeGroupSelect( shapeGroup ) {
-      super.onShapeGroupSelect( shapeGroup );
-
-      this.model.selectedGroupProperty.value = shapeGroup;
-    }
-
-    /**
      * Called when a NumberGroup is dropped.
      * @protected
      * @override
@@ -77,31 +63,6 @@ define( require => {
       if ( this.numberPanel.bounds.dilated( 10 ).containsPoint( this.modelViewTransform.modelToViewPosition( numberGroup.positionProperty.value ) ) ) {
         this.model.returnNumberGroup( numberGroup );
       }
-    }
-
-    /**
-     * Called when a NumberGroup is selected.
-     * @protected
-     * @override
-     *
-     * @param {NumberGroup} numberGroup
-     */
-    onNumberGroupSelect( numberGroup ) {
-      super.onNumberGroupSelect( numberGroup );
-
-      this.model.selectedGroupProperty.value = numberGroup;
-    }
-
-    /**
-     * Given a group, this returns a boolean Property that should be used for whether the given group is selected.
-     * @protected
-     * @override
-     *
-     * @param {Group} group
-     * @returns {Property.<boolean>}
-     */
-    getGroupSelectedProperty( group ) {
-      return new DerivedProperty( [ this.model.selectedGroupProperty ], selectedGroup => selectedGroup === group );
     }
   }
 

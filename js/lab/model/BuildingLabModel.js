@@ -42,9 +42,6 @@ define( require => {
       // @public {Property.<BuildingRepresentation>}
       this.topRepresentationProperty = new Property( BuildingRepresentation.PIE );
 
-      // @public {Property.<Group|null>} - We'll only show controls for this shape group
-      this.selectedGroupProperty = new Property( null );
-
       // Shape stacks
       [
         { representation: BuildingRepresentation.PIE, color: FractionsCommonColorProfile.labPieFillProperty },
@@ -82,35 +79,6 @@ define( require => {
 
       // Shared to set up some initial state
       this.reset();
-    }
-
-    /**
-     * Places a ShapePiece into a ShapeContainer.
-     * @public
-     * @override
-     *
-     * @param {ShapePiece}
-     * @param {ShapeContainer} shapeContainer
-     * @param {ShapeGroup} shapeGroup
-     */
-    placeActiveShapePiece( shapePiece, shapeContainer, shapeGroup ) {
-      super.placeActiveShapePiece( shapePiece, shapeContainer, shapeGroup );
-
-      this.selectedGroupProperty.value = shapeGroup;
-    }
-
-    /**
-     * Places a NumberPiece in a NumberSpot
-     * @public
-     * @override
-     *
-     * @param {NumberSpot} numberSpot
-     * @param {NumberPiece} numberPiece
-     */
-    placeNumberPiece( numberSpot, numberPiece ) {
-      super.placeNumberPiece( numberSpot, numberPiece );
-
-      this.selectedGroupProperty.value = numberSpot.numberGroup;
     }
 
     /**

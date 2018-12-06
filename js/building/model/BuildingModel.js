@@ -63,6 +63,9 @@ define( require => {
         useDeepEquality: true
       } );
 
+      // @public {Property.<Group|null>} - We'll only show controls for this group
+      this.selectedGroupProperty = new Property( null );
+
       // Check for duplicates (but only when assertions are enabled, don't want to use `allowDuplicates` for
       // ObservableArray)
       if ( assert ) {
@@ -240,6 +243,8 @@ define( require => {
           this.activeShapePieces.remove( shapePiece );
         }
       } );
+
+      this.selectedGroupProperty.value = shapeGroup;
     }
 
     /**
@@ -341,6 +346,8 @@ define( require => {
     placeNumberPiece( numberSpot, numberPiece ) {
       numberSpot.pieceProperty.value = numberPiece;
       this.activeNumberPieces.remove( numberPiece );
+
+      this.selectedGroupProperty.value = numberSpot.numberGroup;
     }
 
     /**
@@ -538,6 +545,7 @@ define( require => {
     reset() {
       this.endAnimation();
 
+      this.selectedGroupProperty.reset();
       this.shapeGroups.reset();
       this.numberGroups.forEach( numberGroup => {
         if ( !numberGroup.disposed ) {

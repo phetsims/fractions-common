@@ -9,7 +9,6 @@ define( require => {
   'use strict';
 
   // modules
-  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const BuildingLayerNode = require( 'FRACTIONS_COMMON/building/view/BuildingLayerNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
@@ -149,18 +148,6 @@ define( require => {
       else if ( _.some( viewPoints, viewPoints => panelBounds.containsPoint( viewPoints ) ) ) {
         this.model.returnNumberGroup( numberGroup );
       }
-    }
-
-    /**
-     * Given a group, this returns a boolean Property that should be used for whether the given group is selected.
-     * @protected
-     * @override
-     *
-     * @param {Group} group
-     * @returns {Property.<boolean>}
-     */
-    getGroupSelectedProperty( group ) {
-      return new BooleanProperty( true );
     }
   }
 

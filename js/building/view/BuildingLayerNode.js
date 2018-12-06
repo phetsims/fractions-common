@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   const arrayRemove = require( 'PHET_CORE/arrayRemove' );
+  const DerivedProperty = require( 'AXON/DerivedProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberGroupNode = require( 'FRACTIONS_COMMON/building/view/NumberGroupNode' );
@@ -169,16 +170,6 @@ define( require => {
     }
 
     /**
-     * Called when a ShapeGroup is selected.
-     * @protected
-     *
-     * @param {ShapeGroup} shapeGroup
-     */
-    onShapeGroupSelect( shapeGroup ) {
-
-    }
-
-    /**
      * Called when a NumberGroup is dragged.
      * @protected
      *
@@ -209,25 +200,14 @@ define( require => {
     }
 
     /**
-     * Called when a NumberGroup is selected.
-     * @protected
-     *
-     * @param {NumberGroup} numberGroup
-     */
-    onNumberGroupSelect( numberGroup ) {
-
-    }
-
-    /**
      * Given a group, this returns a boolean Property that should be used for whether the given group is selected.
-     * @protected
-     * @override
+     * @private
      *
-     * @param {ShapeGroup} shapeGroup
+     * @param {Group} group
      * @returns {Property.<boolean>}
      */
-    getGroupSelectedProperty( shapeGroup ) {
-      throw new Error( 'abstract method' );
+    getGroupSelectedProperty( group ) {
+      return new DerivedProperty( [ this.model.selectedGroupProperty ], selectedGroup => selectedGroup === group );
     }
 
     /**
@@ -242,7 +222,9 @@ define( require => {
         modelViewTransform: this.modelViewTransform,
         dragListener: this.onShapeGroupDrag.bind( this, shapeGroup ),
         dropListener: this.onShapeGroupDrop.bind( this, shapeGroup ),
-        selectListener: this.onShapeGroupSelect.bind( this, shapeGroup ),
+        selectListener: () => {
+          this.model.selectedGroupProperty.value = shapeGroup;
+        },
         removeLastListener: this.onShapeGroupRemoveLastListener.bind( this, shapeGroup ),
         isSelectedProperty: this.getGroupSelectedProperty( shapeGroup )
       } );
@@ -277,7 +259,9 @@ define( require => {
         modelViewTransform: this.modelViewTransform,
         dragListener: this.onNumberGroupDrag.bind( this, numberGroup ),
         dropListener: this.onNumberGroupDrop.bind( this, numberGroup ),
-        selectListener: this.onNumberGroupSelect.bind( this, numberGroup ),
+        selectListener: () => {
+          this.model.selectedGroupProperty.value = numberGroup;
+        },
         removeLastListener: this.onNumberGroupRemoveLastListener.bind( this, numberGroup ),
         isSelectedProperty: this.getGroupSelectedProperty( numberGroup )
       } );

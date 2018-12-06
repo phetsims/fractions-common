@@ -167,14 +167,21 @@ define( require => {
       this.reset();
 
       const initialGroups = [];
+      let lastInitialGroup = null;
       if ( hasPies ) {
-        initialGroups.push( this.addShapeGroup( BuildingRepresentation.PIE, this.maxTargetWholes ) );
+        lastInitialGroup = this.addShapeGroup( BuildingRepresentation.PIE, this.maxTargetWholes );
+        initialGroups.push( lastInitialGroup );
       }
       if ( hasBars ) {
-        initialGroups.push( this.addShapeGroup( BuildingRepresentation.BAR, this.maxTargetWholes ) );
+        lastInitialGroup = this.addShapeGroup( BuildingRepresentation.BAR, this.maxTargetWholes );
+        initialGroups.push( lastInitialGroup );
       }
       if ( hasNumbers ) {
-        initialGroups.push( this.addNumberGroup( this.hasMixedTargets ) );
+        lastInitialGroup = this.addNumberGroup( this.hasMixedTargets );
+        initialGroups.push( lastInitialGroup );
+      }
+      if ( lastInitialGroup ) {
+        this.selectedGroupProperty.value = lastInitialGroup;
       }
 
       // Lay out initial groups
@@ -296,6 +303,7 @@ define( require => {
           group.positionProperty.value = groupStack.positionProperty.value;
           groupArray.push( group );
           this.centerGroup( group );
+          this.selectedGroupProperty.value = group;
           break;
         }
       }
