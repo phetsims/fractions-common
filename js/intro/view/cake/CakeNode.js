@@ -14,6 +14,7 @@ define( require => {
   const Dimension2 = require( 'DOT/Dimension2' );
   const EllipticalArc = require( 'KITE/segments/EllipticalArc' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Image = require( 'SCENERY/nodes/Image' );
   const Line = require( 'KITE/segments/Line' );
@@ -135,7 +136,7 @@ define( require => {
 
       if ( options.dropShadow ) {
         // @private {Node}
-        this.shadowPath = new Path( null, { fill: 'rgba(0,0,0,0.5)', scale: CAKE_DEFAULT_SCALE } );
+        this.shadowPath = new Path( null, { fill: FractionsCommonColorProfile.introShapeShadowProperty, scale: CAKE_DEFAULT_SCALE } );
         this.addChild( this.shadowPath );
       }
 
@@ -190,8 +191,9 @@ define( require => {
       this.imageNode.localBounds = cakeShape.bounds;
 
       if ( this.shadowPath ) {
+        const cakeShadowShape = CakeNode.CAKE_SHADOW_SHAPES[ this.denominator - 1 ][ index ];
         this.shadowPath.translation = this.imageNode.translation.plusScalar( FractionsCommonConstants.INTRO_DROP_SHADOW_OFFSET );
-        this.shadowPath.shape = cakeShape;
+        this.shadowPath.shape = cakeShadowShape;
       }
     }
 
@@ -251,9 +253,13 @@ define( require => {
   CakeNode.MID_ELLIPSE_OFFSET_CENTER = MID_ELLIPSE_OFFSET_CENTER;
   CakeNode.TOP_ELLIPSE_OFFSET_CENTER = TOP_ELLIPSE_OFFSET_CENTER;
 
+  CakeNode.CAKE_SHADOW_SHAPES = [];
+
   // @public {Array.<Array.<Shape>>} - 2D areas that cover the entire cake (for accurate touch/mouse areas)
   // TODO: consider precomputing these in a SVG string'ed form so we have faster loads.
   CakeNode.CAKE_SHAPES = _.range( 1, 9 ).map( denominator => {
+    const shadowShapes = [];
+    CakeNode.CAKE_SHADOW_SHAPES.push( shadowShapes );
     return _.range( 0, denominator ).map( index => {
       const shapes = []; // We'll union all of these shapes
 
@@ -263,7 +269,7 @@ define( require => {
       const angleB = -CakeNode.getEndAngle( denominator, index );
 
       // Adds a pie-shaped wedge (flat) to the list of shapes. We'll do this for all three vertical "layers"
-      function addPie( ellipse, offsetCenter, aspect ) {
+      function getPieShape( ellipse, offsetCenter, aspect ) {
         const topSegments = [];
         if ( denominator === 1 ) {
           topSegments.push( ellipse );
@@ -282,11 +288,14 @@ define( require => {
           topSegments.push( new Line( intersectionA.point, offsetCenter ) );
           topSegments.push( new Line( offsetCenter, intersectionB.point ) );
         }
-        shapes.push( Shape.segments( topSegments, true ) );
+        return Shape.segments( topSegments, true );
       }
-      addPie( TOP_ELLIPSE, TOP_ELLIPSE_OFFSET_CENTER, TOP_ASPECT );
-      addPie( MID_ELLIPSE, MID_ELLIPSE_OFFSET_CENTER, MID_ASPECT );
-      addPie( BASE_ELLIPSE, BASE_ELLIPSE_OFFSET_CENTER, BASE_ASPECT );
+      shapes.push( getPieShape( TOP_ELLIPSE, TOP_ELLIPSE_OFFSET_CENTER, TOP_ASPECT ) );
+      shapes.push( getPieShape( MID_ELLIPSE, MID_ELLIPSE_OFFSET_CENTER, MID_ASPECT ) );
+
+      const pieBase = getPieShape( BASE_ELLIPSE, BASE_ELLIPSE_OFFSET_CENTER, BASE_ASPECT );
+      shapes.push( pieBase );
+      shadowShapes.push( pieBase );
 
       // Interior
       if ( denominator > 1 ) {

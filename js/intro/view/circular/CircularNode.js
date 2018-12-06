@@ -64,7 +64,7 @@ define( require => {
       } );
       if ( options.dropShadow ) {
         // @private {Node}
-        this.shadowPath = new Path( shape, { fill: 'black' } );
+        this.shadowPath = new Path( shape, { fill: FractionsCommonColorProfile.introShapeShadowProperty } );
         this.shadowPath.center = this.primaryPath.center.plusScalar( FractionsCommonConstants.INTRO_DROP_SHADOW_OFFSET );
         this.container.addChild( this.shadowPath );
       }

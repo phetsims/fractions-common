@@ -74,7 +74,7 @@ define( require => {
         center: mainRectangle.center.plusScalar( FractionsCommonConstants.INTRO_DROP_SHADOW_OFFSET ),
         rectWidth,
         rectHeight,
-        fill: 'black'
+        fill: FractionsCommonColorProfile.introShapeShadowProperty
       } );
 
       this.children = [
