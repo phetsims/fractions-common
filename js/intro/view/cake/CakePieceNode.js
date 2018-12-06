@@ -22,7 +22,7 @@ define( require => {
      */
     constructor( piece, finishedAnimatingCallback, droppedCallback ) {
       super( piece, finishedAnimatingCallback, droppedCallback, {
-        graphic: new CakeNode( piece.denominator, 0 )
+        graphic: new CakeNode( piece.denominator, 0, { dropShadow: true } )
       } );
 
       // cake specific

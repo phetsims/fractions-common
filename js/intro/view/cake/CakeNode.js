@@ -14,9 +14,11 @@ define( require => {
   const Dimension2 = require( 'DOT/Dimension2' );
   const EllipticalArc = require( 'KITE/segments/EllipticalArc' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Image = require( 'SCENERY/nodes/Image' );
   const Line = require( 'KITE/segments/Line' );
   const Node = require( 'SCENERY/nodes/Node' );
+  const Path = require( 'SCENERY/nodes/Path' );
   const Ray2 = require( 'DOT/Ray2' );
   const Shape = require( 'KITE/Shape' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -122,7 +124,20 @@ define( require => {
     constructor( denominator, index, options ) {
       assert && assert( index < denominator );
 
+      options = _.extend( {
+        // {boolean} - If true, this node will have a permanent drop shadow added
+        dropShadow: false
+      }, options );
+
+      assert && assert( typeof options.dropShadow === 'boolean' );
+
       super();
+
+      if ( options.dropShadow ) {
+        // @private {Node}
+        this.shadowPath = new Path( null, { fill: 'rgba(0,0,0,0.5)', scale: CAKE_DEFAULT_SCALE } );
+        this.addChild( this.shadowPath );
+      }
 
       // @private {Image}
       this.imageNode = new Image( cakeImageArray[ denominator - 1 ][ index ], {
@@ -173,6 +188,11 @@ define( require => {
       this.imageNode.mouseArea = cakeShape;
       this.imageNode.touchArea = cakeShape;
       this.imageNode.localBounds = cakeShape.bounds;
+
+      if ( this.shadowPath ) {
+        this.shadowPath.translation = this.imageNode.translation.plusScalar( FractionsCommonConstants.INTRO_DROP_SHADOW_OFFSET );
+        this.shadowPath.shape = cakeShape;
+      }
     }
 
     // TODO: deduplicate and doc
