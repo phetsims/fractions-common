@@ -50,6 +50,12 @@ define( require => {
         lineDash: [ 5, 5 ],
         pickable: false
       } );
+      this.separatorOffsetPath = new Path( null, {
+        stroke: FractionsCommonColorProfile.shapeContainerPartitionOffsetProperty,
+        lineDash: [ 5, 5 ],
+        lineDashOffset: 5,
+        pickable: false
+      } );
 
       // @private {function}
       this.separatorListener = this.updateSeparator.bind( this );
@@ -63,6 +69,7 @@ define( require => {
         } ) );
         this.addChild( this.shapePieceLayer );
         this.addChild( this.separatorPath );
+        this.addChild( this.separatorOffsetPath );
         this.addChild( new Circle( CIRCLE_RADIUS, {
           stroke: FractionsCommonColorProfile.shapeContainerStrokeProperty,
           pickable: false
@@ -74,6 +81,7 @@ define( require => {
         } ) );
         this.addChild( this.shapePieceLayer );
         this.addChild( this.separatorPath );
+        this.addChild( this.separatorOffsetPath );
         this.addChild( Rectangle.bounds( ShapePiece.VERTICAL_BAR_BOUNDS, {
           stroke: FractionsCommonColorProfile.shapeContainerStrokeProperty,
           pickable: false
@@ -107,9 +115,11 @@ define( require => {
             );
           }
           this.separatorPath.shape = separatorShape;
+          this.separatorOffsetPath.shape = separatorShape;
         }
         else {
           this.separatorPath.shape = null;
+          this.separatorOffsetPath.shape = null;
         }
       }
       else {
@@ -119,6 +129,7 @@ define( require => {
           separatorShape.moveTo( x, ShapePiece.VERTICAL_BAR_BOUNDS.minY ).lineTo( x, ShapePiece.VERTICAL_BAR_BOUNDS.maxY );
         }
         this.separatorPath.shape = separatorShape;
+        this.separatorOffsetPath.shape = separatorShape;
       }
     }
 
