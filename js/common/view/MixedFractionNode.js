@@ -79,14 +79,14 @@ define( require => {
       } ) : this.denominatorText;
 
       // @private {Line}
-      this.lineNode = new Line( 0, 0, 10, 0, {
+      this.vinculumNode = new Line( 0, 0, 10, 0, {
         stroke: options.separatorFill,
         lineWidth: 2
       } );
 
       // @private {VBox}
       this.vbox = new VBox( {
-        children: [ this.numeratorContainer, this.lineNode, this.denominatorContainer ],
+        children: [ this.numeratorContainer, this.vinculumNode, this.denominatorContainer ],
         spacing: 1
       } );
 
@@ -117,7 +117,7 @@ define( require => {
       this.numeratorText.text = hasNumerator ? this._numerator : ' ';
       this.denominatorText.text = hasDenominator ? this._denominator : ' ';
 
-      this.lineNode.x2 = Math.max( this.numeratorContainer.width, this.denominatorContainer.width ) + 2;
+      this.vinculumNode.x2 = Math.max( this.numeratorContainer.width, this.denominatorContainer.width ) + 2;
     }
 
     /**
