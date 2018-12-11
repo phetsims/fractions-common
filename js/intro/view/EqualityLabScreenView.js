@@ -214,7 +214,10 @@ define( require => {
               unitSize: 60,
               arrowFill: colorOverride,
               markerFill: semitransparentColorOverride,
-              showArrow: true
+              showArrow: true,
+              markerLineWidth: 2,
+              markerRadius: 8,
+              arrowOffset: 15
             } );
             containerNodes = [ multipliedNumberLine ];
             multipliedViewContainer.addChild( multipliedNumberLine );

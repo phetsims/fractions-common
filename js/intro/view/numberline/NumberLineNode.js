@@ -57,11 +57,12 @@ define( require => {
         // {number}
         majorTickLength: 80,
         minorTickLength: 40,
-        evenMajorLineWidth: 5,
+        evenMajorLineWidth: 3,
         oddMajorLineWidth: 3,
         minorTickLineWidth: 2,
         axisLineWidth: 3,
         markerRadius: 12,
+        markerLineWidth: 3,
         arrowLength: 22,
         arrowOffset: 12,
         highlightLineWidth: 8,
@@ -119,7 +120,7 @@ define( require => {
       const markerNode = new Circle( options.markerRadius, {
         fill: options.markerFill,
         stroke: 'black',
-        lineWidth: 3
+        lineWidth: options.markerLineWidth
       } );
 
       const arrowNode = new ArrowNode( 0, -options.markerRadius - options.arrowLength - options.arrowOffset, 0, -options.markerRadius - options.arrowOffset, {
