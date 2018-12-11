@@ -21,9 +21,9 @@ define( require => {
   QUnit.test( `Prime factorizations of everything up to ${MAX_NUMBER}`, assert => {
     for ( let n = 2; n < MAX_NUMBER; n++ ) {
       const factorization = PrimeFactorization.factor( n );
-      for ( let factor of factorization.factors ) {
+      factorization.factors.forEach( factor => {
         assert.ok( Primes.isPrime( factor.prime ), `Prime of factorization of ${n} is prime` );
-      }
+      } );
       assert.equal( n, factorization.number, `Prime factorization of ${n} is consistent` );
     }
   } );
@@ -62,9 +62,9 @@ define( require => {
       const factorization = PrimeFactorization.factor( a );
       const divisors = factorization.divisors;
 
-      for ( let divisor of divisors ) {
+      divisors.forEach( divisor => {
         assert.equal( a / divisor.number, factorization.divided( divisor ).number, `Division of ${a} divided by ${divisor.number}` );
-      }
+      } );
     }
   } );
 

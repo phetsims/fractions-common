@@ -78,9 +78,9 @@ define( require => {
         const constraintIndex = findMinConstraintIndex();
         const divisorDenominators = constraintDenominators[ constraintIndex ];
 
-        for ( let uncomputedDenominator of filterUncomputedDenominators( divisorDenominators ) ) {
+        filterUncomputedDenominators( divisorDenominators ).forEach( uncomputedDenominator => {
           entries.push( new Entry( uncomputedDenominator, lcm.divided( uncomputedDenominator ) ) );
-        }
+        } );
         for ( let i = 0; i < constraintDivisors.length; i++ ) {
           const divisor = constraintDivisors[ i ];
           const divisorDenominators = constraintDenominators[ i ];
@@ -95,9 +95,9 @@ define( require => {
         constraintDivisors.splice( constraintIndex, 1 );
         constraintDenominators.splice( constraintIndex, 1 );
       }
-      for ( let uncomputedDenominator of filterUncomputedDenominators( denominators ) ) {
+      filterUncomputedDenominators( denominators ).forEach( uncomputedDenominator => {
         entries.push( new Entry( uncomputedDenominator, lcm.divided( uncomputedDenominator ) ) );
-      }
+      } );
 
       // @private {Array.<Entry>}
       this.entries = entries;
@@ -182,7 +182,8 @@ define( require => {
             coefficients.push( coefficient );
 
             let constraintsSatisfied = true;
-            for ( let constraint of entry.constraints ) {
+            for ( let i = 0; i < entry.constraints.length; i++ ) {
+              const constraint = entry.constraints[ i ];
               if ( !constraint.satisfies( r, coefficients ) ) {
                 constraintsSatisfied = false;
                 break;

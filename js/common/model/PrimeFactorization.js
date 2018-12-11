@@ -92,12 +92,12 @@ define( require => {
     binaryOperation( factorization, operation ) {
       const primes = _.uniq( [ ...this.factors, ...factorization.factors ].map( f => f.prime ) ).sort( ( a, b ) => a - b );
       const factors = [];
-      for ( let prime of primes ) {
+      primes.forEach( prime => {
         const order = operation( this.getOrder( prime ), factorization.getOrder( prime ) );
         if ( order ) {
           factors.push( new PrimeFactor( prime, order ) );
         }
-      }
+      } );
       return new PrimeFactorization( factors );
     }
 
@@ -164,7 +164,8 @@ define( require => {
      * @returns {boolean}
      */
     divides( factorization ) {
-      for ( let factor of this.factors ) {
+      for ( let i = 0; i < this.factors.length; i++ ) {
+        const factor = this.factors[ i ];
         if ( factor.order > factorization.getOrder( factor.prime ) ) {
           return false;
         }
@@ -236,7 +237,9 @@ define( require => {
 
       const factors = [];
 
-      for ( let prime of Primes.primes ) {
+      const primes = Primes.primes;
+      for ( let i = 0; i < primes.length; i++ ) {
+        const prime = primes[ i ];
         // A prime that is a divisor (not equal to our number) would be less than the max divisor
         if ( prime > maxDivisor ) { break; }
 

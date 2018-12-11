@@ -295,7 +295,8 @@ define( require => {
       // If we already have one out, don't look for more
       if ( groupArray.length >= 2 ) { return; }
 
-      for ( let groupStack of stackArray ) {
+      for ( let i = 0; i < stackArray.length; i++ ) {
+        const groupStack = stackArray[ i ];
         if ( !groupStack.isEmpty() ) {
           const group = groupStack.array.pop();
           group.clear();
@@ -560,7 +561,8 @@ define( require => {
 
         const possibilities = fractionPossibilities[ i ];
 
-        for ( let possibility of possibilities ) {
+        for ( let i = 0; i < possibilities.length; i++ ) {
+          const possibility = possibilities[ i ];
           if ( currentCollection.contains( possibility.total ) ) {
             currentCollection = currentCollection.minus( possibility.total );
 

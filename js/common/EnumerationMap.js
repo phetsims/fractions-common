@@ -23,10 +23,10 @@ define( require => {
       // @private {Enumeration}
       this._enumeration = enumeration;
 
-      for ( let entry of enumeration.VALUES ) {
+      enumeration.VALUES.forEach( entry => {
         assert && assert( this[ entry ] === undefined, 'Enumeration key override problem' );
         this[ entry ] = factory( entry );
-      }
+      } );
     }
 
     /**
