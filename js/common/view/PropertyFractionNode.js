@@ -25,7 +25,10 @@ define( require => {
         type: FractionDisplayType.IMPROPER,
 
         // {boolean}
-        simplify: false
+        simplify: false,
+
+        // {boolean}
+        showZeroImproperFraction: true
       }, options );
 
       assert && assert( FractionDisplayType.includes( options.type ) );
@@ -45,6 +48,7 @@ define( require => {
 
       // @private {boolean}
       this.simplify = options.simplify;
+      this.showZeroImproperFraction = options.showZeroImproperFraction;
 
       this.numeratorProperty.lazyLink( this.propertyListener );
       this.denominatorProperty.lazyLink( this.propertyListener );
@@ -60,7 +64,7 @@ define( require => {
       const denominator = this.denominatorProperty.value;
 
       const hasWhole = this.type === FractionDisplayType.IMPROPER || !this.simplify || numerator === 0 || numerator >= denominator;
-      const hasFraction = this.type === FractionDisplayType.IMPROPER || !this.simplify || numerator > 0;
+      const hasFraction = this.type === FractionDisplayType.IMPROPER || !this.simplify || ( this.showZeroImproperFraction ? numerator > 0 : ( numerator % denominator !== 0 ) );
 
       this.denominator = hasFraction ? denominator : null;
 

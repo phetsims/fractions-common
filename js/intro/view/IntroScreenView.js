@@ -109,15 +109,16 @@ define( require => {
         const equationLeftOptions = {
           type: FractionDisplayType.MIXED,
           simplify: true,
+          showZeroImproperFraction: false,
 
           maxWhole: model.containerCountProperty.range.max,
           maxNumerator: model.denominatorProperty.range.max - 1,
           maxDenominator: model.denominatorProperty.range.max,
 
           wholeFill: FractionsCommonColorProfile.mixedFractionStrongProperty,
-          numeratorFill: partialFractionColorProperty,
-          denominatorFill: partialFractionColorProperty,
-          separatorFill: partialFractionColorProperty,
+          numeratorFill: FractionsCommonColorProfile.mixedFractionStrongProperty,
+          denominatorFill: FractionsCommonColorProfile.mixedFractionStrongProperty,
+          separatorFill: FractionsCommonColorProfile.mixedFractionStrongProperty,
 
           scale: equationScale
         };
