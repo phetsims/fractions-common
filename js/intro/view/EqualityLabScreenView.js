@@ -12,6 +12,7 @@ define( require => {
   const AlignBox = require( 'SCENERY/nodes/AlignBox' );
   const BeakerContainerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerContainerNode' );
   const BeakerSceneNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerSceneNode' );
+  const CellSceneNode = require( 'FRACTIONS_COMMON/intro/view/CellSceneNode' );
   const CircularContainerNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularContainerNode' );
   const CircularSceneNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularSceneNode' );
   const ContainerSetScreenView = require( 'FRACTIONS_COMMON/intro/view/ContainerSetScreenView' );
@@ -126,12 +127,22 @@ define( require => {
       this.addChild( multipliedViewContainer );
 
       // layout
-      this.bucketContainer.left = this.layoutBounds.left + MARGIN;
-      this.adjustableFractionNode.left = this.bucketContainer.right + MARGIN;
-      equalsText.left = this.adjustableFractionNode.right + MARGIN;
+
+      // We need to rescale some parts (which we can't just re-parent and put under a single node)
+      const bottomControlScale = 0.85;
+      this.adjustableFractionNode.scale( bottomControlScale );
+      equalsText.scale( bottomControlScale );
+      multipliedFractionNode.scale( bottomControlScale );
+      multiplierSpinner.scale( bottomControlScale );
+
+      // Center things with the equals sign at the center of the screen (with everything positioned based on it)
+      equalsText.centerX = this.layoutBounds.centerX;
+      this.adjustableFractionNode.right = equalsText.left - MARGIN;
+      this.bucketContainer.right = this.adjustableFractionNode.left - MARGIN;
       multipliedFractionNode.left = equalsText.right + MARGIN;
       multiplierSpinner.left = multipliedFractionNode.right + MARGIN;
 
+      // Align the left/right edges for the radio button groups and other controls.
       this.representationPanel.right = this.adjustableFractionNode.right;
       this.representationPanel.top = this.layoutBounds.top + MARGIN;
       showNumberLinePanel.left = multipliedFractionNode.left;
@@ -141,12 +152,15 @@ define( require => {
       this.viewContainer.y = centerY;
       multipliedViewContainer.y = centerY;
 
-      // TODO: vertical alignment
+      // The bucket should always be at the bottom
       this.bucketContainer.bottom = this.layoutBounds.bottom - MARGIN;
-      this.adjustableFractionNode.bottom = this.layoutBounds.bottom - MARGIN;
-      equalsText.centerY = this.adjustableFractionNode.centerY;
-      multipliedFractionNode.centerY = this.adjustableFractionNode.centerY;
-      multiplierSpinner.centerY = this.adjustableFractionNode.centerY;
+
+      // Center the remaining controls adjacent to the bottom
+      const bottomAlignY = this.layoutBounds.bottom - MARGIN - this.adjustableFractionNode.height / 2;
+      this.adjustableFractionNode.centerY = bottomAlignY;
+      equalsText.centerY = bottomAlignY;
+      multipliedFractionNode.centerY = bottomAlignY;
+      multiplierSpinner.centerY = bottomAlignY;
 
       model.representationProperty.link( () => {
         this.viewContainer.right = this.representationPanel.right;
@@ -155,12 +169,12 @@ define( require => {
       let containerNodes = [];
       let lastRepresentation = null;
 
-      function spacedBox( numPerRow, nodes ) {
+      function spacedBox( numPerRow, nodes, representation ) {
         return new VBox( {
           center: Vector2.ZERO,
-          spacing: FractionsCommonConstants.INTRO_CONTAINER_SPACING,
+          spacing: CellSceneNode.getVerticalSpacing( representation ),
           children: _.chunk( nodes, numPerRow ).map( rowNodes => new HBox( {
-            spacing: FractionsCommonConstants.INTRO_CONTAINER_SPACING,
+            spacing: CellSceneNode.getHorizontalSpacing( representation ),
             children: rowNodes
           } ) )
         } );
@@ -185,27 +199,27 @@ define( require => {
             containerNodes = containers.map( container => new CircularContainerNode( container, {
               colorOverride
             } ) );
-            multipliedViewContainer.addChild( spacedBox( 2, containerNodes ) );
+            multipliedViewContainer.addChild( spacedBox( 2, containerNodes, representation ) );
           }
           else if ( representation === IntroRepresentation.HORIZONTAL_BAR ) {
             containerNodes = containers.map( container => new RectangularContainerNode( container, {
               rectangularOrientation: RectangularOrientation.HORIZONTAL,
               colorOverride
             } ) );
-            multipliedViewContainer.addChild( spacedBox( 1, containerNodes ) );
+            multipliedViewContainer.addChild( spacedBox( 1, containerNodes, representation ) );
           }
           else if ( representation === IntroRepresentation.VERTICAL_BAR ) {
             containerNodes = containers.map( container => new RectangularContainerNode( container, {
               rectangularOrientation: RectangularOrientation.VERTICAL,
               colorOverride
             } ) );
-            multipliedViewContainer.addChild( spacedBox( 4, containerNodes ) );
+            multipliedViewContainer.addChild( spacedBox( 4, containerNodes, representation ) );
           }
           else if ( representation === IntroRepresentation.BEAKER ) {
             containerNodes = containers.map( container => new BeakerContainerNode( container, {
               colorOverride: FractionsCommonColorProfile.equalityLabWaterProperty
             } ) );
-            multipliedViewContainer.addChild( spacedBox( 4, containerNodes ) );
+            multipliedViewContainer.addChild( spacedBox( 4, containerNodes, representation ) );
           }
           else if ( representation === IntroRepresentation.NUMBER_LINE ) {
             const multipliedNumberLine = new NumberLineNode( model.numeratorProperty, model.denominatorProperty, model.containerCountProperty, {

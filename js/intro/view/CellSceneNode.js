@@ -11,9 +11,10 @@ define( require => {
   // modules
   const arrayRemove = require( 'PHET_CORE/arrayRemove' );
   const BucketNode = require( 'FRACTIONS_COMMON/intro/view/BucketNode' );
+  const DerivedProperty = require( 'AXON/DerivedProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const HBox = require( 'SCENERY/nodes/HBox' );
+  const IntroRepresentation = require( 'FRACTIONS_COMMON/intro/enum/IntroRepresentation' );
   const Node = require( 'SCENERY/nodes/Node' );
   const SceneNode = require( 'FRACTIONS_COMMON/intro/view/SceneNode' );
   const VBox = require( 'SCENERY/nodes/VBox' );
@@ -59,9 +60,13 @@ define( require => {
 
       // @private {VBox}
       this.containerLayer = new VBox( {
-        spacing: FractionsCommonConstants.INTRO_CONTAINER_SPACING,
         align: 'left'
       } );
+
+      // @private {Property.<number>}
+      this.horizontalSpacingProperty = new DerivedProperty( [ model.representationProperty ], CellSceneNode.getHorizontalSpacing );
+      this.verticalSpacingProperty = new DerivedProperty( [ model.representationProperty ], CellSceneNode.getVerticalSpacing );
+      this.verticalSpacingProperty.linkAttribute( this.containerLayer, 'spacing' );
 
       // @private {Node}
       this.pieceLayer = new Node();
@@ -291,9 +296,9 @@ define( require => {
       // creates new HBox within containerLayer dependent on VBox container
       if ( currentContainerNodesLength % this.maxContainersPerRow === 0 ) {
         const containerHBox = new HBox( {
-          spacing: FractionsCommonConstants.INTRO_CONTAINER_SPACING,
           align: 'top'
         } );
+        containerHBox.spacingLink = this.horizontalSpacingProperty.linkAttribute( containerHBox, 'spacing' );
         this.containerHBoxes.push( containerHBox );
         this.containerLayer.addChild( containerHBox );
       }
@@ -326,6 +331,7 @@ define( require => {
         // removes the last HBox within containerLayer
         const containerHBoxRemoved = this.containerHBoxes.pop();
         this.containerLayer.removeChild( containerHBoxRemoved );
+        this.horizontalSpacingProperty.unlink( containerHBoxRemoved.spacingLink );
       }
 
       containerNode.dispose();
@@ -352,7 +358,32 @@ define( require => {
       this.model.pieces.removeItemAddedListener( this.pieceAddedListener );
       this.model.pieces.removeItemRemovedListener( this.pieceRemovedListener );
 
+      this.horizontalSpacingProperty.dispose();
+      this.verticalSpacingProperty.dispose();
+
       super.dispose();
+    }
+
+    /**
+     * Returns the horizontal spacing between containers for a given representation.
+     * @public
+     *
+     * @param {IntroRepresentation} representation
+     * @returns {number}
+     */
+    static getHorizontalSpacing( representation ) {
+      return ( representation === IntroRepresentation.BEAKER || representation === IntroRepresentation.HORIZONTAL_BAR ) ? 20 : 10;
+    }
+
+    /**
+     * Returns the vertical spacing between containers for a given representation.
+     * @public
+     *
+     * @param {IntroRepresentation} representation
+     * @returns {number}
+     */
+    static getVerticalSpacing( representation ) {
+      return representation === IntroRepresentation.HORIZONTAL_BAR ? 20 : 10;
     }
   }
 

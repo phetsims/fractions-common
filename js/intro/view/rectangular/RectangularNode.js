@@ -19,7 +19,7 @@ define( require => {
   const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/RectangularOrientation' );
 
   // constants
-  const HORIZONTAL_SIZE = new Dimension2( 250, 50 );
+  const HORIZONTAL_SIZE = new Dimension2( 200, 40 );
   const VERTICAL_SIZE = new Dimension2( 90, 185 );
 
   class RectangularNode extends Node {
