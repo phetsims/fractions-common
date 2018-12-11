@@ -277,9 +277,11 @@ define( require => {
         }
         allLevelsCompletedNode.visible = true;
 
+        const scoreProperty = model.levelProperty.value.scoreProperty;
         const doneListener = () => {
           model.levelProperty.unlink( doneListener );
           model.challengeProperty.unlink( doneListener );
+          scoreProperty.unlink( doneListener );
 
           if ( this.rewardNode ) {
             this.rewardNode.dispose();
@@ -289,6 +291,7 @@ define( require => {
         };
         model.challengeProperty.lazyLink( doneListener );
         model.levelProperty.lazyLink( doneListener );
+        scoreProperty.lazyLink( doneListener );
       } );
 
       const soundToggleButton = new AlignBox( new SoundToggleButton( model.soundEnabledProperty, {
