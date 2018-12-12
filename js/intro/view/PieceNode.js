@@ -12,11 +12,11 @@ define( require => {
   'use strict';
 
   // modules
+  const DragListener = require( 'SCENERY/listeners/DragListener' );
   const Easing = require( 'TWIXT/Easing' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Property = require( 'AXON/Property' );
-  const SimpleDragHandler = require( 'SCENERY/input/SimpleDragHandler' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // TODO: Get rid of SimpleDragHandler usage
@@ -62,6 +62,7 @@ define( require => {
       // TODO: duplication with other pieces? BeakerPieceNode?
       this.originProperty.lazyLink( origin => {
         this.ratio = 0;
+        piece.positionProperty.value = origin;
         this.setMidpoint( origin );
 
         // circle specific
@@ -74,18 +75,15 @@ define( require => {
         this.ratio = 0;
       } );
 
-      // @public
-      let initialOffset;
-      this.dragListener = new SimpleDragHandler( {
-        start: event => {
-          initialOffset = this.getMidpoint().minus( this.globalToParentPoint( event.pointer.point ) );
-        },
-        drag: event => {
-          this.setMidpoint( this.globalToParentPoint( event.pointer.point ).plus( initialOffset ) );
-        },
-        end: () => {
-          droppedCallback( piece );
-        }
+      // @private {function}
+      this.positionListener = position => this.setMidpoint( position );
+      this.piece.positionProperty.link( this.positionListener );
+
+      // @public {DragListener}
+      this.dragListener = new DragListener( {
+        targetNode: this,
+        locationProperty: piece.positionProperty,
+        end: () => droppedCallback( piece )
       } );
     }
 
@@ -106,6 +104,7 @@ define( require => {
      * @param {Vector2} midpoint
      */
     setMidpoint( midpoint ) {
+      // TODO: why doesn't this use getMidpoint?
       this.translation = this.translation.plus( midpoint.minus( this.localToParentPoint( Vector2.ZERO ) ) );
     }
 
@@ -157,7 +156,9 @@ define( require => {
      * @override
      */
     dispose() {
+      this.piece.positionProperty.unlink( this.positionListener );
       this.interruptSubtreeInput();
+      this.dragListener.dispose();
 
       super.dispose();
     }

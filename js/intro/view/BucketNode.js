@@ -19,6 +19,7 @@ define( require => {
   const CircularContainerNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularContainerNode' );
   const Container = require( 'FRACTIONS_COMMON/intro/model/Container' );
   const Dimension2 = require( 'DOT/Dimension2' );
+  const DragListener = require( 'SCENERY/listeners/DragListener' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const HBox = require( 'SCENERY/nodes/HBox' );
@@ -180,13 +181,10 @@ define( require => {
       super( options );
 
       // add listener to the bucket and static pieces
-      [ bucketHole, staticLayer, bucketFront ].forEach( node => {
-        node.addInputListener( {
-          down: event => {
-            startPieceDrag( event );
-          }
-        } );
+      const bucketListener = DragListener.createForwardingListener( startPieceDrag, {
+        allowTouchSnag: true
       } );
+      [ bucketHole, staticLayer, bucketFront ].forEach( node => node.addInputListener( bucketListener ) );
     }
   }
 

@@ -10,6 +10,8 @@ define( require => {
 
   // modules
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Property = require( 'AXON/Property' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   class Piece {
     /**
@@ -26,6 +28,9 @@ define( require => {
       // @public {Cell|null} - Where this piece will end up. If set to a cell, it will change the cell appearance when
       // the piece goes away.
       this.destinationCell = null;
+
+      // @public {Property.<Vector2>}
+      this.positionProperty = new Property( Vector2.ZERO );
     }
   }
 

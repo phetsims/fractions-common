@@ -254,12 +254,15 @@ define( require => {
      */
     onBucketDragStart( event ) {
       const piece = this.model.grabFromBucket();
+      piece.positionProperty.value = this.globalToLocalPoint( event.pointer.point );
+
       // TODO: factor out function for the find
       const pieceNode = _.find( this.pieceNodes, pieceNode => pieceNode.piece === piece );
 
+      // TODO: why does the node care about the origin? move to the model?
       pieceNode.originProperty.value = this.globalToLocalPoint( event.pointer.point );
       pieceNode.isUserControlled = true;
-      pieceNode.dragListener.startDrag( event );
+      pieceNode.dragListener.press( event );
     }
 
     /**
@@ -271,11 +274,14 @@ define( require => {
      */
     onExistingCellDragStart( cell, event ) {
       const piece = this.model.grabCell( cell );
+      piece.positionProperty.value = this.getCellMidpoint( cell );
+
       const pieceNode = _.find( this.pieceNodes, pieceNode => pieceNode.piece === piece );
 
+      // TODO: why does the node care about the origin? move to the model?
       pieceNode.originProperty.value = this.getCellMidpoint( cell );
       pieceNode.isUserControlled = true;
-      pieceNode.dragListener.startDrag( event );
+      pieceNode.dragListener.press( event );
     }
 
     /**

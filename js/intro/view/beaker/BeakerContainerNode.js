@@ -11,6 +11,7 @@ define( require => {
   // modules
   const BeakerNode = require( 'FRACTIONS_COMMON/intro/view/beaker/BeakerNode' );
   const ContainerNode = require( 'FRACTIONS_COMMON/intro/view/ContainerNode' );
+  const DragListener = require( 'SCENERY/listeners/DragListener' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Property = require( 'AXON/Property' );
 
@@ -38,13 +39,13 @@ define( require => {
       this.cursorListener = this.updateCursor.bind( this );
       container.appearsFilledCellCountProperty.link( this.cursorListener );
 
-      this.addInputListener( {
-        down: event => {
-          if ( container.appearsFilledCellCountProperty.value > 0 ) {
-            this.cellDownCallback( container.getNextAppearsFilledCell(), event );
-          }
+      this.addInputListener( DragListener.createForwardingListener( event => {
+        if ( container.appearsFilledCellCountProperty.value > 0 ) {
+          this.cellDownCallback( container.getNextAppearsFilledCell(), event );
         }
-      } );
+      }, {
+        allowTouchSnag: true
+      } ) );
 
       this.mutate( options );
     }

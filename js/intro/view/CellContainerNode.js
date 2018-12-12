@@ -12,6 +12,7 @@ define( require => {
   const CellEntry = require( 'FRACTIONS_COMMON/intro/view/CellEntry' );
   const ContainerNode = require( 'FRACTIONS_COMMON/intro/view/ContainerNode' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
+  const DragListener = require( 'SCENERY/listeners/DragListener' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
 
@@ -74,11 +75,9 @@ define( require => {
       this.addChild( node );
 
       node.cursor = 'pointer';
-      node.addInputListener( {
-        down: event => {
-          this.cellDownCallback( cell, event );
-        }
-      } );
+      node.addInputListener( DragListener.createForwardingListener( event => this.cellDownCallback( cell, event ), {
+        allowTouchSnag: true
+      } ) );
     }
 
     /**
