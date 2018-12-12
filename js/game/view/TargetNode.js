@@ -171,9 +171,9 @@ define( require => {
         } ) );
       }
       else {
-        let whole = challenge.hasMixedTargets ? Math.floor( target.fraction.value ) : null;
-        let numerator = whole ? target.fraction.minus( new Fraction( whole, 1 ) ).numerator : target.fraction.numerator;
-        let denominator = target.fraction.denominator;
+        const whole = challenge.hasMixedTargets ? Math.floor( target.fraction.value ) : null;
+        const numerator = whole ? target.fraction.minus( new Fraction( whole, 1 ) ).numerator : target.fraction.numerator;
+        const denominator = target.fraction.denominator;
         this.addChild( new MixedFractionNode( {
           whole: whole === 0 ? null : whole,
           numerator: numerator === 0 ? ( whole === null ? 0 : null ) : numerator,

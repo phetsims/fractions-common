@@ -287,7 +287,7 @@ define( require => {
      *                             dropped inside.
      */
     shapePieceDropped( shapePiece, threshold ) {
-      let closestContainer = this.closestDroppableShapeContainer( shapePiece, threshold );
+      const closestContainer = this.closestDroppableShapeContainer( shapePiece, threshold );
 
       if ( closestContainer ) {
         this.placeActiveShapePiece( shapePiece, closestContainer, closestContainer.shapeGroup );

@@ -84,7 +84,7 @@ define( require => {
       } );
 
       // Apply appropriate mouse/touch areas
-      let maxHalfHeight = _.max( this.stackTargets.map( stackTarget => {
+      const maxHalfHeight = _.max( this.stackTargets.map( stackTarget => {
         return Math.max( Math.abs( stackTarget.layoutBounds.minY ), Math.abs( stackTarget.layoutBounds.maxY ) );
       } ) );
       this.stackTargets.forEach( node => {
