@@ -17,6 +17,7 @@ define( require => {
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const GroupNode = require( 'FRACTIONS_COMMON/building/view/GroupNode' );
   const HBox = require( 'SCENERY/nodes/HBox' );
+  const Matrix3 = require( 'DOT/Matrix3' );
   const Node = require( 'SCENERY/nodes/Node' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Path = require( 'SCENERY/nodes/Path' );
@@ -27,6 +28,7 @@ define( require => {
   const Shape = require( 'KITE/Shape' );
   const ShapeContainerNode = require( 'FRACTIONS_COMMON/building/view/ShapeContainerNode' );
   const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
+  const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   const VBox = require( 'SCENERY/nodes/VBox' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -215,6 +217,21 @@ define( require => {
           ? new Vector2( -50, -75 / 2 )
           : new Vector2( -36, -36 )
       } );
+
+      // Construct a touch shape 
+      let returnTouchShape = Shape.boundsOffsetWithRadii( this.returnButton.localBounds, {
+        top: 10, left: 10, bottom: 12, right: 12
+      }, {
+        bottomRight: 10, topLeft: 10, topRight: 10, bottomLeft: 10
+      } );
+      const returnInverseTransform = Matrix3.translationFromVector( this.returnButton.translation.negated() );
+      if ( shapeGroup.representation === BuildingRepresentation.BAR ) {
+        returnTouchShape = returnTouchShape.shapeDifference( Shape.bounds( ShapePiece.VERTICAL_BAR_BOUNDS ).transformed( returnInverseTransform ) );
+      }
+      else {
+        returnTouchShape = returnTouchShape.shapeDifference( Shape.circle( 0, 0, FractionsCommonConstants.SHAPE_SIZE / 2 ).transformed( returnInverseTransform ) ); 
+      }
+      this.returnButton.touchArea = returnTouchShape;
 
       const undoArrowContainer = new Node();
 
