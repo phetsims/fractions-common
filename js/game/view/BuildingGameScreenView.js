@@ -153,6 +153,10 @@ define( require => {
 
           // TODO: don't need wrapper, include somehow? (maybe put the things in the challenge node?)
           // TODO: Or have a transition between a challenge OR the two level select screens!!!!!!!!!
+          const leftButtonOptions = {
+            touchAreaXDilation: SIDE_MARGIN,
+            touchAreaYDilation: SIDE_MARGIN / 2
+          };
           const wrapper = new Node( {
             children: [
               challengeBackground,
@@ -161,12 +165,12 @@ define( require => {
                 top: this.layoutBounds.top + SIDE_MARGIN,
                 left: this.layoutBounds.left + SIDE_MARGIN,
                 children: [
-                  new BackButton( {
+                  new BackButton( _.extend( {
                     listener() {
                       model.levelProperty.value = null;
                     }
-                  } ),
-                  new RefreshButton( {
+                  }, leftButtonOptions ) ),
+                  new RefreshButton( _.extend( {
                     // TODO: hmm, these 3 are copied from expression-exchange, and make the button the same width...
                     iconScale: 0.7,
                     xMargin: 9,
@@ -174,14 +178,14 @@ define( require => {
                     listener() {
                       model.levelProperty.value && model.levelProperty.value.reset();
                     }
-                  } ),
+                  }, leftButtonOptions ) ),
                   ...( phet.chipper.queryParameters.showAnswers ? [
-                    new RectangularPushButton( {
+                    new RectangularPushButton( _.extend( {
                       content: new FaceNode( 27 ),
                       listener: function() {
                         challenge.cheat();
                       }
-                    } )
+                    }, leftButtonOptions ) )
                   ] : [] )
                 ]
               } ),
@@ -216,6 +220,8 @@ define( require => {
 
       this.levelSelectionLayer.addChild( this.levelSelectionTransitionNode );
 
+      const levelSelectionButtonSpacing = 20;
+
       // Buttons to switch between level selection pages
       const leftButton = new RoundArrowButton( {
         baseColor: FractionsCommonColorProfile.yellowRoundArrowButtonProperty,
@@ -236,6 +242,10 @@ define( require => {
         }
       } );
 
+      // left-right touch areas
+      leftButton.touchArea = leftButton.bounds.dilatedXY( levelSelectionButtonSpacing / 2, 10 );
+      rightButton.touchArea = rightButton.bounds.dilatedXY( levelSelectionButtonSpacing / 2, 10 );
+
       // We'll vertically center the things along the bottom
       const bottomAlignGroup = new AlignGroup( {
         matchHorizontal: false
@@ -248,7 +258,7 @@ define( require => {
         ],
         centerX: this.layoutBounds.centerX,
         bottom: this.layoutBounds.bottom - 10, // TODO: center with reset-all and sound button
-        spacing: 20
+        spacing: levelSelectionButtonSpacing
       } ), { group: bottomAlignGroup } );
       this.levelSelectionLayer.addChild( slidingLevelSelectionNode );
 
@@ -309,7 +319,8 @@ define( require => {
           this.reset();
         },
         right: this.layoutBounds.maxX - 10,
-        bottom: this.layoutBounds.maxY - 10
+        bottom: this.layoutBounds.maxY - 10,
+        touchAreaDilation: 10
       } ), { group: bottomAlignGroup } );
       this.levelSelectionLayer.addChild( resetAllButton );
 
@@ -367,7 +378,7 @@ define( require => {
     createLevelRow( levels, icons ) {
       return new HBox( {
         children: levels.map( ( level, index ) => {
-          return new LevelSelectionButton( icons[ index ], level.scoreProperty, {
+          const button = new LevelSelectionButton( icons[ index ], level.scoreProperty, {
             buttonWidth: 110,
             buttonHeight: 200,
             scoreDisplayConstructor: ScoreDisplayStars,
@@ -379,6 +390,8 @@ define( require => {
               this.model.levelProperty.value = level;
             }
           } );
+          button.touchArea = button.localBounds.dilated( LEVEL_SELECTION_SPACING / 2 );
+          return button;
         } ),
         spacing: LEVEL_SELECTION_SPACING
       } );

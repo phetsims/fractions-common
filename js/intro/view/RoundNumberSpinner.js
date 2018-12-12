@@ -12,8 +12,10 @@ define( require => {
   // modules
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
+  const Matrix3 = require( 'DOT/Matrix3' );
   const Property = require( 'AXON/Property' );
   const RoundArrowButton = require( 'FRACTIONS_COMMON/common/view/RoundArrowButton' );
+  const Shape = require( 'KITE/Shape' );
   const VBox = require( 'SCENERY/nodes/VBox' );
 
   class RoundNumberSpinner extends VBox {
@@ -31,7 +33,10 @@ define( require => {
       options = _.extend( {
         baseColor: FractionsCommonColorProfile.yellowRoundArrowButtonProperty,
         rotation: 0,
-        spacing: 3
+        spacing: 3,
+        longTouchDilation: 12,
+        sideTouchDilation: 12,
+        touchRadius: 10
       }, options );
 
       super( options );
@@ -57,6 +62,35 @@ define( require => {
           numberProperty.value--;
         }
       } );
+
+      const rotationMatrix = Matrix3.rotation2( options.rotation );
+
+      this.increaseButton.touchArea = Shape.boundsOffsetWithRadii( this.increaseButton.localBounds, {
+        left: options.sideTouchDilation,
+        right: options.sideTouchDilation,
+        top: options.longTouchDilation,
+        bottom: options.spacing / 2
+      }, {
+        topLeft: options.touchRadius,
+        topRight: options.touchRadius
+      } ).transformed( rotationMatrix );
+
+      this.decreaseButton.touchArea = Shape.boundsOffsetWithRadii( this.decreaseButton.localBounds, {
+        left: options.sideTouchDilation,
+        right: options.sideTouchDilation,
+        top: options.spacing / 2,
+        bottom: options.longTouchDilation
+      }, {
+        bottomLeft: options.touchRadius,
+        bottomRight: options.touchRadius
+      } ).transformed( rotationMatrix );
+
+      // this.increaseButton.touchArea = Shape.bounds( this.increaseButton.localBounds.withOffsets(
+      //   options.sideTouchDilation, options.longTouchDilation, options.sideTouchDilation, options.spacing / 2
+      // ) ).transformed( rotationMatrix );
+      // this.decreaseButton.touchArea = Shape.bounds( this.decreaseButton.localBounds.withOffsets(
+      //   options.sideTouchDilation, options.spacing / 2, options.sideTouchDilation, options.longTouchDilation
+      // ) ).transformed( rotationMatrix );
 
       this.children = [
         this.increaseButton,

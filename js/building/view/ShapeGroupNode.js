@@ -109,6 +109,30 @@ define( require => {
         baseColor: FractionsCommonColorProfile.redRoundArrowButtonProperty
       } );
 
+      // Touch areas for add/remove buttons
+      const addRemoveOffsets = {
+        left: CONTAINER_PADDING / 2,
+        right: CONTAINER_PADDING * 1.2,
+        inside: CONTAINER_PADDING / 2,
+        outside: CONTAINER_PADDING
+      };
+      this.addContainerButton.touchArea = Shape.boundsOffsetWithRadii( this.addContainerButton.localBounds, {
+        top: addRemoveOffsets.outside,
+        bottom: addRemoveOffsets.inside,
+        left: addRemoveOffsets.left,
+        right: addRemoveOffsets.right
+      }, {
+        topRight: 10
+      } );
+      this.removeContainerButton.touchArea = Shape.boundsOffsetWithRadii( this.removeContainerButton.localBounds, {
+        top: addRemoveOffsets.inside,
+        bottom: addRemoveOffsets.outside,
+        left: addRemoveOffsets.left,
+        right: addRemoveOffsets.right
+      }, {
+        bottomRight: 10
+      } );
+
       // @private {function}
       this.addRemoveVisibleListener = numShapeContainers => {
         this.addContainerButton.visible = numShapeContainers < shapeGroup.maxContainers;
@@ -149,6 +173,30 @@ define( require => {
         listener: () => {
           shapeGroup.partitionDenominatorProperty.value += 1;
         }
+      } );
+
+      // Set up touch areas for the partition buttons
+      const partitionCountOffsets = {
+        top: CONTAINER_PADDING / 2,
+        bottom: CONTAINER_PADDING * 1.2,
+        inside: CONTAINER_PADDING / 2,
+        outside: CONTAINER_PADDING * 1.5
+      };
+      this.decreasePartitionCountButton.touchArea = Shape.boundsOffsetWithRadii( this.decreasePartitionCountButton.localBounds, {
+        top: partitionCountOffsets.top,
+        bottom: partitionCountOffsets.bottom,
+        left: partitionCountOffsets.outside,
+        right: partitionCountOffsets.inside
+      }, {
+        bottomLeft: 10
+      } );
+      this.increasePartitionCountButton.touchArea = Shape.boundsOffsetWithRadii( this.increasePartitionCountButton.localBounds, {
+        top: partitionCountOffsets.top,
+        bottom: partitionCountOffsets.bottom,
+        left: partitionCountOffsets.inside,
+        right: partitionCountOffsets.outside
+      }, {
+        bottomRight: 10
       } );
 
       if ( options.hasButtons ) {

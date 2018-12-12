@@ -24,7 +24,9 @@ define( require => {
         baseColor: 'white',
         spacing: 12,
         buttonContentXMargin: 5,
-        buttonContentYMargin: 10
+        buttonContentYMargin: 10,
+        touchAreaXDilation: 6,
+        touchAreaYDilation: 6
       }, options ) );
     }
   }
