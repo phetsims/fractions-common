@@ -367,6 +367,8 @@ define( require => {
       this.horizontalSpacingProperty.dispose();
       this.verticalSpacingProperty.dispose();
 
+      this.bucketNode.dispose();
+
       super.dispose();
     }
 
