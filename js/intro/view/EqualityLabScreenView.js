@@ -222,6 +222,7 @@ define( require => {
             multipliedViewContainer.addChild( spacedBox( 4, containerNodes, representation ) );
           }
           else if ( representation === IntroRepresentation.NUMBER_LINE ) {
+            // TODO: check disposal here for properties
             const multipliedNumberLine = new NumberLineNode( model.numeratorProperty, model.denominatorProperty, model.containerCountProperty, {
               multiplierProperty: model.multiplierProperty,
               orientation: NumberLineOrientation.VERTICAL,

@@ -31,6 +31,17 @@ define( require => {
       // @public {Property.<boolean>} - Whether to show mixed numbers or not
       this.showMixedNumbersProperty = new BooleanProperty( false );
     }
+
+    /**
+     * Resets the model.
+     * @public
+     * @override
+     */
+    reset() {
+      this.showMixedNumbersProperty.reset();
+
+      super.reset();
+    }
   }
 
   return fractionsCommon.register( 'IntroModel', IntroModel );

@@ -288,7 +288,7 @@ define( require => {
           topSegments.push( new Line( intersectionA.point, offsetCenter ) );
           topSegments.push( new Line( offsetCenter, intersectionB.point ) );
         }
-        return Shape.segments( topSegments, true );
+        return Shape.segments( topSegments, true ).makeImmutable();
       }
       shapes.push( getPieShape( TOP_ELLIPSE, TOP_ELLIPSE_OFFSET_CENTER, TOP_ASPECT ) );
       shapes.push( getPieShape( MID_ELLIPSE, MID_ELLIPSE_OFFSET_CENTER, MID_ASPECT ) );

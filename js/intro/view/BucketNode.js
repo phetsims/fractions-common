@@ -121,6 +121,10 @@ define( require => {
       // layer to hold all the static cell nodes in the bucket
       const staticLayer = new Node();
 
+      var propertyFractionNode = new PropertyFractionNode( new NumberProperty( 1 ), denominatorProperty, {
+        scale: 0.7
+      } );
+
       bucketFront.setLabel( new HBox( {
         spacing: 15,
         children: [
@@ -131,9 +135,7 @@ define( require => {
               iconNode
             ]
           } ),
-          new PropertyFractionNode( new NumberProperty( 1 ), denominatorProperty, {
-            scale: 0.7
-          } )
+          propertyFractionNode
         ]
       } ) );
 
@@ -142,6 +144,15 @@ define( require => {
 
       // @private {Property.<number>}
       this.denominatorProperty = denominatorProperty;
+
+      // @private {PropertyFractionNode}
+      this.propertyFractionNode = propertyFractionNode;
+
+      // @private {BucketFront}
+      this.bucketFront = bucketFront;
+
+      // @private {BucketHole}
+      this.bucketHole = bucketHole;
 
       // @private {function}
       this.denominatorListener = denominator => {
@@ -198,6 +209,9 @@ define( require => {
      */
     dispose() {
       this.denominatorProperty.unlink( this.denominatorListener );
+      this.propertyFractionNode.dispose();
+      this.bucketFront.dispose();
+      this.bucketHole.dispose();
 
       super.dispose();
     }
