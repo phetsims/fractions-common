@@ -26,6 +26,7 @@ define( require => {
     7: [ 1, 0, 2, 3, 4, 6, 5 ],
     8: [ 1, 0, 2, 3, 4, 5, 7, 6 ]
   };
+  const baseEllipseShape = Shape.segments( [ CakeNode.BASE_ELLIPSE ], true ).makeImmutable();
 
   class CakeContainerNode extends CellContainerNode {
     /**
@@ -36,7 +37,7 @@ define( require => {
       super( container, options );
 
       // The shape of the ellipse is determined empirically based on the image
-      this.addChild( new Path( Shape.segments( [ CakeNode.BASE_ELLIPSE ], true ).makeImmutable(), {
+      this.addChild( new Path( baseEllipseShape, {
         fill: 'white',
         stroke: this.strokeProperty,
         scale: CakeNode.CAKE_DEFAULT_SCALE,

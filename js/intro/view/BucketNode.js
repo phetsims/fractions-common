@@ -154,6 +154,9 @@ define( require => {
       // @private {BucketHole}
       this.bucketHole = bucketHole;
 
+      // @private {Node}
+      this.iconNode = iconNode;
+
       // @private {function}
       this.denominatorListener = denominator => {
         // take denominator, and the length of the icon container
@@ -212,6 +215,7 @@ define( require => {
       this.propertyFractionNode.dispose();
       this.bucketFront.dispose();
       this.bucketHole.dispose();
+      this.iconNode.dispose();
 
       super.dispose();
     }
