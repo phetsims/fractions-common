@@ -17,6 +17,7 @@ define( require => {
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const GroupNode = require( 'FRACTIONS_COMMON/building/view/GroupNode' );
   const HBox = require( 'SCENERY/nodes/HBox' );
+  const Matrix3 = require( 'DOT/Matrix3' );
   const Node = require( 'SCENERY/nodes/Node' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Path = require( 'SCENERY/nodes/Path' );
@@ -27,6 +28,7 @@ define( require => {
   const Shape = require( 'KITE/Shape' );
   const ShapeContainerNode = require( 'FRACTIONS_COMMON/building/view/ShapeContainerNode' );
   const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
+  const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   const VBox = require( 'SCENERY/nodes/VBox' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -109,6 +111,30 @@ define( require => {
         baseColor: FractionsCommonColorProfile.redRoundArrowButtonProperty
       } );
 
+      // Touch areas for add/remove buttons
+      const addRemoveOffsets = {
+        left: CONTAINER_PADDING / 2,
+        right: CONTAINER_PADDING * 1.2,
+        inside: CONTAINER_PADDING / 2,
+        outside: CONTAINER_PADDING
+      };
+      this.addContainerButton.touchArea = Shape.boundsOffsetWithRadii( this.addContainerButton.localBounds, {
+        top: addRemoveOffsets.outside,
+        bottom: addRemoveOffsets.inside,
+        left: addRemoveOffsets.left,
+        right: addRemoveOffsets.right
+      }, {
+        topRight: 10
+      } );
+      this.removeContainerButton.touchArea = Shape.boundsOffsetWithRadii( this.removeContainerButton.localBounds, {
+        top: addRemoveOffsets.inside,
+        bottom: addRemoveOffsets.outside,
+        left: addRemoveOffsets.left,
+        right: addRemoveOffsets.right
+      }, {
+        bottomRight: 10
+      } );
+
       // @private {function}
       this.addRemoveVisibleListener = numShapeContainers => {
         this.addContainerButton.visible = numShapeContainers < shapeGroup.maxContainers;
@@ -151,6 +177,30 @@ define( require => {
         }
       } );
 
+      // Set up touch areas for the partition buttons
+      const partitionCountOffsets = {
+        top: CONTAINER_PADDING / 2,
+        bottom: CONTAINER_PADDING * 1.2,
+        inside: CONTAINER_PADDING / 2,
+        outside: CONTAINER_PADDING * 1.5
+      };
+      this.decreasePartitionCountButton.touchArea = Shape.boundsOffsetWithRadii( this.decreasePartitionCountButton.localBounds, {
+        top: partitionCountOffsets.top,
+        bottom: partitionCountOffsets.bottom,
+        left: partitionCountOffsets.outside,
+        right: partitionCountOffsets.inside
+      }, {
+        bottomLeft: 10
+      } );
+      this.increasePartitionCountButton.touchArea = Shape.boundsOffsetWithRadii( this.increasePartitionCountButton.localBounds, {
+        top: partitionCountOffsets.top,
+        bottom: partitionCountOffsets.bottom,
+        left: partitionCountOffsets.inside,
+        right: partitionCountOffsets.outside
+      }, {
+        bottomRight: 10
+      } );
+
       if ( options.hasButtons ) {
         this.controlLayer.addChild( new HBox( {
           spacing: CONTAINER_PADDING,
@@ -167,6 +217,21 @@ define( require => {
           ? new Vector2( -50, -75 / 2 )
           : new Vector2( -36, -36 )
       } );
+
+      // Construct a touch shape 
+      let returnTouchShape = Shape.boundsOffsetWithRadii( this.returnButton.localBounds, {
+        top: 10, left: 10, bottom: 12, right: 12
+      }, {
+        bottomRight: 10, topLeft: 10, topRight: 10, bottomLeft: 10
+      } );
+      const returnInverseTransform = Matrix3.translationFromVector( this.returnButton.translation.negated() );
+      if ( shapeGroup.representation === BuildingRepresentation.BAR ) {
+        returnTouchShape = returnTouchShape.shapeDifference( Shape.bounds( ShapePiece.VERTICAL_BAR_BOUNDS ).transformed( returnInverseTransform ) );
+      }
+      else {
+        returnTouchShape = returnTouchShape.shapeDifference( Shape.circle( 0, 0, FractionsCommonConstants.SHAPE_SIZE / 2 ).transformed( returnInverseTransform ) ); 
+      }
+      this.returnButton.touchArea = returnTouchShape;
 
       const undoArrowContainer = new Node();
 

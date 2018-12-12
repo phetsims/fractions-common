@@ -153,7 +153,8 @@ define( require => {
           showTitleWhenExpanded: false,
           bottom: this.layoutBounds.bottom - MARGIN,
           left: this.layoutBounds.left + 50,
-          fill: 'white'
+          fill: 'white',
+          expandedProperty: model.mixedNumbersBoxExpandedProperty
         } );
         this.addChild( equationBox );
         model.showMixedNumbersProperty.linkAttribute( equationBox, 'visible' );

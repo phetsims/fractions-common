@@ -45,7 +45,8 @@ define( require => {
             model.reset();
           },
           x: model.width - 40,
-          y: model.height - 40
+          y: model.height - 40,
+          touchAreaDilation: 10
         } ),
         new HBox( {
           children: [

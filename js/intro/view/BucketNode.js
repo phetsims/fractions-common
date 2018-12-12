@@ -121,7 +121,44 @@ define( require => {
       // layer to hold all the static cell nodes in the bucket
       const staticLayer = new Node();
 
-      denominatorProperty.link( denominator => {
+      var propertyFractionNode = new PropertyFractionNode( new NumberProperty( 1 ), denominatorProperty, {
+        scale: 0.7
+      } );
+
+      bucketFront.setLabel( new HBox( {
+        spacing: 15,
+        children: [
+          new Node( {
+            maxWidth: 100,
+            maxHeight: 50,
+            children: [
+              iconNode
+            ]
+          } ),
+          propertyFractionNode
+        ]
+      } ) );
+
+      options.children = [ bucketHole, staticLayer, bucketFront ];
+      super( options );
+
+      // @private {Property.<number>}
+      this.denominatorProperty = denominatorProperty;
+
+      // @private {PropertyFractionNode}
+      this.propertyFractionNode = propertyFractionNode;
+
+      // @private {BucketFront}
+      this.bucketFront = bucketFront;
+
+      // @private {BucketHole}
+      this.bucketHole = bucketHole;
+
+      // @private {Node}
+      this.iconNode = iconNode;
+
+      // @private {function}
+      this.denominatorListener = denominator => {
         // take denominator, and the length of the icon container
         // find the difference add/remove that many cells from the container
         const difference = denominator - iconContainer.cells.length;
@@ -159,32 +196,28 @@ define( require => {
           } ) );
         }
         staticLayer.children = random.shuffle( children );
-      } );
-
-      bucketFront.setLabel( new HBox( {
-        spacing: 15,
-        children: [
-          new Node( {
-            maxWidth: 100,
-            maxHeight: 50,
-            children: [
-              iconNode
-            ]
-          } ),
-          new PropertyFractionNode( new NumberProperty( 1 ), denominatorProperty, {
-            scale: 0.7
-          } )
-        ]
-      } ) );
-
-      options.children = [ bucketHole, staticLayer, bucketFront ];
-      super( options );
+      };
+      this.denominatorProperty.link( this.denominatorListener );
 
       // add listener to the bucket and static pieces
       const bucketListener = DragListener.createForwardingListener( startPieceDrag, {
         allowTouchSnag: true
       } );
       [ bucketHole, staticLayer, bucketFront ].forEach( node => node.addInputListener( bucketListener ) );
+    }
+
+    /**
+     * Releases references.
+     * @public
+     */
+    dispose() {
+      this.denominatorProperty.unlink( this.denominatorListener );
+      this.propertyFractionNode.dispose();
+      this.bucketFront.dispose();
+      this.bucketHole.dispose();
+      this.iconNode.dispose();
+
+      super.dispose();
     }
   }
 

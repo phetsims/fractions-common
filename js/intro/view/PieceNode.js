@@ -127,7 +127,8 @@ define( require => {
       }
 
       // Smaller animations are somewhat faster
-      this.ratio = Math.min( 1, this.ratio + dt * 60 / Math.sqrt( this.originProperty.value.distance( this.destinationProperty.value ) ) );
+      const distance = Math.sqrt( this.originProperty.value.distance( this.destinationProperty.value ) );
+      this.ratio = distance === 0 ? 1 : Math.min( 1, this.ratio + dt * 60 / distance );
       if ( this.ratio === 1 ) {
         this.finishedAnimatingCallback( this );
       }

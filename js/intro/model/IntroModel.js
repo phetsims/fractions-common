@@ -30,6 +30,21 @@ define( require => {
 
       // @public {Property.<boolean>} - Whether to show mixed numbers or not
       this.showMixedNumbersProperty = new BooleanProperty( false );
+
+      // @public {Property.<boolean>} - Whether the accordion box showing a mixed-number equivalence is expanded.
+      this.mixedNumbersBoxExpandedProperty = new BooleanProperty( true );
+    }
+
+    /**
+     * Resets the model.
+     * @public
+     * @override
+     */
+    reset() {
+      this.showMixedNumbersProperty.reset();
+      this.mixedNumbersBoxExpandedProperty.reset();
+
+      super.reset();
     }
   }
 
