@@ -455,7 +455,7 @@ define( require => {
         const whole = Math.floor( fraction.value );
         fraction = fraction.minus( new Fraction( whole, 1 ) );
 
-        const multiplier = sample( fraction.denominator <= 3 ? [ 2, 3 ] : [ 2 ] );
+        const multiplier = sample( fraction.denominator <= 4 ? ( fraction.denominator <= 3 ? [ 2, 3 ] : [ 2 ] ) : [ 1 ] );
         return [
           whole,
           fraction.numerator * multiplier,
