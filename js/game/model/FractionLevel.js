@@ -31,6 +31,8 @@ define( require => {
   const choose = ( q, i ) => FractionLevel.choose( q, i );
   const inclusive = ( a, b ) => _.range( a, b + 1 );
   const repeat = ( q, i ) => _.times( q, () => i );
+  const splittable = array => array.filter( f => f.denominator <= 4 );
+  const chooseSplittable = ( q, i ) => [ sample( splittable( i ) ), ...choose( q - 1, i ) ];
 
   // constants
   const collectionFinder8 = new CollectionFinder( {
@@ -126,7 +128,7 @@ define( require => {
       this.generateChallenge = generateChallenge;
 
       // @public {Property.<FractionChallenge>}
-      this.challengeProperty = new Property( generateChallenge( this.number, this.color ) );
+      this.challengeProperty = new Property( this.nextChallenge() );
       this.challengeProperty._initialValue = null; // TODO: This is unclean. Find a better way to do this to normal properties
 
       // @public {Property.<number>}
@@ -136,12 +138,28 @@ define( require => {
     }
 
     /**
+     * Returns a fresh FractionChallenge that satisfies constraints.
+     * @private
+     *
+     * @returns {FractionChallenge}
+     */
+    nextChallenge() {
+      let challenge = null;
+      do {
+        challenge = this.generateChallenge( this.number, this.color );
+      }
+      while ( challenge.getLargestStackLayoutQuantity() > 10 );
+
+      return challenge;
+    }
+
+    /**
      * Resets the object.
      * @public
      */
     reset() {
       // Note it as a refreshed challenge, so that we'll dissolve to it if needed.
-      const nextChallenge = this.generateChallenge( this.number, this.color );
+      const nextChallenge = this.nextChallenge();
       this.challengeProperty.value.refreshedChallenge = nextChallenge;
       this.challengeProperty.value = nextChallenge;
     }
@@ -642,7 +660,7 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level2Shapes( levelNumber, color ) {
-      const targetFractions = choose( 3, [
+      const targetFractions = chooseSplittable( 3, [
         new Fraction( 1, 2 ),
         new Fraction( 1, 3 ),
         new Fraction( 1, 4 ),
@@ -657,7 +675,7 @@ define( require => {
 
       const pieceFractions = [
         ...FractionLevel.unitFractions( targetFractions ),
-        ...FractionLevel.interestingFractions( sample( targetFractions ) )
+        ...FractionLevel.interestingFractions( sample( splittable( targetFractions ) ) )
       ];
 
       return FractionChallenge.createShapeChallenge( levelNumber, false, color, targetFractions, pieceFractions );
@@ -676,7 +694,7 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level3Shapes( levelNumber, color ) {
-      const targetFractions = choose( 3, _.flatten( inclusive( 1, 6 ).map( d => {
+      const targetFractions = chooseSplittable( 3, _.flatten( inclusive( 1, 6 ).map( d => {
         return inclusive( 1, d ).map( n => new Fraction( n, d ) );
       } ) ) );
 
@@ -1123,7 +1141,7 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level5ShapesMixed( levelNumber, color ) {
-      const targetFractions = choose( 3, _.flatten( inclusive( 1, 3 ).map( whole => {
+      const targetFractions = chooseSplittable( 3, _.flatten( inclusive( 1, 3 ).map( whole => {
         return [
           new Fraction( 1, 2 ),
           new Fraction( 1, 3 ),
@@ -1153,7 +1171,7 @@ define( require => {
         ...FractionLevel.simpleSplitFractions( FractionLevel.straightforwardFractions( targetFractions ), {
           quantity: 5
         } ),
-        ...FractionLevel.interestingFractions( sample( targetFractions ), 3 )
+        ...FractionLevel.interestingFractions( sample( splittable( targetFractions ) ), 3 )
       ];
 
       return FractionChallenge.createShapeChallenge( levelNumber, true, color, targetFractions, pieceFractions );

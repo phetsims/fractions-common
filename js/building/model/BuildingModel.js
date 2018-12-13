@@ -539,6 +539,25 @@ define( require => {
     }
 
     /**
+     * Returns the layout quantity of the "largest" stack.
+     * @public
+     *
+     * @returns {number}
+     */
+    getLargestStackLayoutQuantity() {
+      let quantity = 0;
+      [
+        ...this.shapeStacks,
+        ...this.numberStacks,
+        ...this.shapeGroupStacks,
+        ...this.numberGroupStacks
+      ].forEach( stack => {
+        quantity = Math.max( quantity, stack.layoutQuantity );
+      } );
+      return quantity;
+    }
+
+    /**
      * Resets the model.
      * @public
      */
