@@ -121,6 +121,7 @@ define( require => {
         cornerRadius: CORNER_RADIUS - CORNER_OFFSET,
         leftTop: this.background.leftTop.plus( new Vector2( CORNER_OFFSET, CORNER_OFFSET ) )
       } );
+      this.returnButton.touchArea = this.returnButton.localBounds.dilated( 12 );
       this.container.addChild( this.returnButton );
 
       // @private {function}

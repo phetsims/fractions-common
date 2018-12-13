@@ -108,6 +108,7 @@ define( require => {
 
       // @private {Node}
       this.returnButton = new ReturnButton( options.removeLastListener );
+      this.returnButton.touchArea = this.returnButton.localBounds.dilated( 10 );
       this.itemsToDispose.push( this.returnButton );
 
       // @private {function}
