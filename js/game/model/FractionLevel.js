@@ -32,7 +32,8 @@ define( require => {
   const inclusive = ( a, b ) => _.range( a, b + 1 );
   const repeat = ( q, i ) => _.times( q, () => i );
   const splittable = array => array.filter( f => f.denominator <= 4 );
-  const chooseSplittable = ( q, i ) => [ sample( splittable( i ) ), ...choose( q - 1, i ) ];
+  const notSplittable = array => array.filter( f => f.denominator > 4 );
+  const chooseSplittable = ( q, i, c = 1 ) => [ ...choose( c, splittable( i ) ), ...choose( q - c, i ) ];
 
   // constants
   const collectionFinder8 = new CollectionFinder( {
@@ -454,7 +455,7 @@ define( require => {
         const whole = Math.floor( fraction.value );
         fraction = fraction.minus( new Fraction( whole, 1 ) );
 
-        const multiplier = sample( [ 2, 3 ] );
+        const multiplier = sample( fraction.denominator <= 3 ? [ 2, 3 ] : [ 2 ] );
         return [
           whole,
           fraction.numerator * multiplier,
@@ -468,17 +469,28 @@ define( require => {
      * certain quantity of them multiplied by a random factor.
      * @public
      *
-     * TODO: Combine with the non-mixed version if possible?
-     *
      * @param {Array.<Fraction>}
      * @param {number} quantity
      * @returns {Array.<number>}
      */
     static withMultipliedMixedNumbers( fractions, quantity ) {
-      const shuffledFractions = shuffle( fractions );
+      let breakable = shuffle( splittable( fractions ) );
+      let unbreakable = notSplittable( fractions );
+
+      assert && assert( breakable.length >= quantity );
+
+      // Reshape the arrays so that we have at most `quantity` in breakable (we'll multiply those)
+      if ( breakable.length > quantity ) {
+        unbreakable = [
+          ...unbreakable,
+          ...breakable.slice( quantity )
+        ];
+        breakable = breakable.slice( 0, quantity );
+      }
+
       return [
-        ...FractionLevel.exactMixedNumbers( shuffledFractions.slice( 0, fractions.length - quantity ) ),
-        ...FractionLevel.multipliedMixedNumbers( shuffledFractions.slice( fractions.length - quantity, fractions.length ) )
+        ...FractionLevel.exactMixedNumbers( unbreakable ),
+        ...FractionLevel.multipliedMixedNumbers( breakable )
       ];
     }
 
@@ -1811,7 +1823,7 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level5NumbersMixed( levelNumber ) {
-      const fractions = choose( 3, mixedNumbersFractions );
+      const fractions = chooseSplittable( 3, mixedNumbersFractions, 1 );
 
       const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.GAME_PARTITIONS, fractions, COLORS_3, FillType.SEQUENTIAL, true );
       const pieceNumbers = FractionLevel.withMultipliedMixedNumbers( fractions, 1 );
@@ -1833,7 +1845,7 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level6NumbersMixed( levelNumber ) {
-      const fractions = choose( 4, mixedNumbersFractions );
+      const fractions = chooseSplittable( 4, mixedNumbersFractions, 2 );
 
       const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.GAME_PARTITIONS, fractions, COLORS_4, FillType.RANDOM, true );
       const pieceNumbers = FractionLevel.withMultipliedMixedNumbers( fractions, 2 );
