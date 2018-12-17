@@ -154,7 +154,9 @@ define( require => {
           bottom: this.layoutBounds.bottom - MARGIN,
           left: this.layoutBounds.left + 50,
           fill: 'white',
-          expandedProperty: model.mixedNumbersBoxExpandedProperty
+          expandedProperty: model.mixedNumbersBoxExpandedProperty,
+          buttonTouchAreaXDilation: 15,
+          buttonTouchAreaYDilation: 15
         } );
         this.addChild( equationBox );
         model.showMixedNumbersProperty.linkAttribute( equationBox, 'visible' );
