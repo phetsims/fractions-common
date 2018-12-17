@@ -561,8 +561,8 @@ define( require => {
 
         const possibilities = fractionPossibilities[ i ];
 
-        for ( let i = 0; i < possibilities.length; i++ ) {
-          const possibility = possibilities[ i ];
+        for ( let j = 0; j < possibilities.length; j++ ) {
+          const possibility = possibilities[ j ];
           if ( currentCollection.contains( possibility.total ) ) {
             currentCollection = currentCollection.minus( possibility.total );
 
