@@ -10,7 +10,9 @@ define( require => {
 
   // modules
   const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
+  const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
   const Easing = require( 'TWIXT/Easing' );
+  const EnumerationMap = require( 'FRACTIONS_COMMON/common/EnumerationMap' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
@@ -66,18 +68,38 @@ define( require => {
       // @public {Property.<Group|null>} - We'll only show controls for this group
       this.selectedGroupProperty = new Property( null );
 
+      // @public {EnumerationMap.<Array.<Stack>>} - The stacks for pieces
+      this.stacksMap = new EnumerationMap( BuildingType, type => ( {
+        [ BuildingType.SHAPE ]: this.shapeStacks,
+        [ BuildingType.NUMBER ]: this.numberStacks
+      }[ type ] ) );
+
+      // @public {EnumerationMap.<Array.<Stack>>} - The stacks for groups
+      this.groupStacksMap = new EnumerationMap( BuildingType, type => ( {
+        [ BuildingType.SHAPE ]: this.shapeGroupStacks,
+        [ BuildingType.NUMBER ]: this.numberGroupStacks
+      }[ type ] ) );
+
+      // @public {EnumerationMap.<ObservableArray.<Group>>} - The arrays of groups
+      this.groupsMap = new EnumerationMap( BuildingType, type => ( {
+        [ BuildingType.SHAPE ]: this.shapeGroups,
+        [ BuildingType.NUMBER ]: this.numberGroups
+      }[ type ] ) );
+
+      // @public {EnumerationMap.<Array.<ShapePiece|NumberPiece>>} - The active pieces arrays
+      this.activePiecesMap = new EnumerationMap( BuildingType, type => ( {
+        [ BuildingType.SHAPE ]: this.activeShapePieces,
+        [ BuildingType.NUMBER ]: this.activeNumberPieces
+      }[ type ] ) );
+
       // Check for duplicates (but only when assertions are enabled, don't want to use `allowDuplicates` for
       // ObservableArray)
-      if ( assert ) {
-        this.activeShapePieces.addItemAddedListener( () => {
-          const array = this.activeShapePieces.getArray();
-          assert( array.length === _.uniq( array ).length, 'Duplicate items should not be added to activeShapePieces' );
+      assert && this.activePiecesMap.forEach( ( activePieces, type ) => {
+        activePieces.addItemAddedListener( () => {
+          const array = activePieces.getArray();
+          assert( array.length === _.uniq( array ).length, `Duplicate items should not be added to active pieces for ${type}` );
         } );
-        this.activeNumberPieces.addItemAddedListener( () => {
-          const array = this.activeNumberPieces.getArray();
-          assert( array.length === _.uniq( array ).length, 'Duplicate items should not be added to activeNumberPieces' );
-        } );
-      }
+      } );
 
       const rangeListener = this.updateDraggedNumberRange.bind( this );
       this.draggedNumberPieces.addItemAddedListener( rangeListener );
@@ -107,23 +129,13 @@ define( require => {
     }
 
     /**
-     * Called when the user drags a shape group from a stack.
+     * Called when the user drags a group from a stack.
      * @public
      *
-     * @param {ShapeGroup} shapeGroup
+     * @param {Group} group
      */
-    dragShapeGroupFromStack( shapeGroup ) {
-      this.shapeGroups.push( shapeGroup );
-    }
-
-    /**
-     * Called when the user drags a number group from a stack.
-     * @public
-     *
-     * @param {NumberGroup} numberGroup
-     */
-    dragNumberGroupFromStack( numberGroup ) {
-      this.numberGroups.push( numberGroup );
+    dragGroupFromStack( group ) {
+      this.groupsMap.get( group.type ).push( group );
     }
 
     /**
@@ -416,7 +428,7 @@ define( require => {
         },
         maxContainers
       } );
-      this.dragShapeGroupFromStack( shapeGroup );
+      this.dragGroupFromStack( shapeGroup );
       return shapeGroup;
     }
 
@@ -431,7 +443,7 @@ define( require => {
       const numberGroup = new NumberGroup( isMixedNumber, {
         activeNumberRangeProperty: this.activeNumberRangeProperty
       } );
-      this.dragNumberGroupFromStack( numberGroup );
+      this.dragGroupFromStack( numberGroup );
 
       return numberGroup;
     }

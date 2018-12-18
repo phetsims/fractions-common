@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
+  const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Matrix3 = require( 'DOT/Matrix3' );
   const ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );
@@ -24,7 +25,7 @@ define( require => {
      * @param {boolean} [isMutable]
      */
     constructor( fraction, layoutQuantity, representation, color, isMutable = true ) {
-      super( layoutQuantity, isMutable );
+      super( BuildingType.NUMBER, layoutQuantity, isMutable );
 
       // @public {Fraction} - What fraction of pieces should it hold (stacks generally hold only a specific value).
       this.fraction = fraction;

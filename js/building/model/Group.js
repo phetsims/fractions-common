@@ -18,7 +18,13 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   class Group {
-    constructor() {
+    /**
+     * @param {BuildingType} type
+     */
+    constructor( type ) {
+
+      // @public {BuildingType}
+      this.type = type;
 
       // @public {Property.<Vector2>}
       this.positionProperty = new Property( Vector2.ZERO, {

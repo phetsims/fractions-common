@@ -11,6 +11,7 @@ define( require => {
   // modules
   const BuildingModel = require( 'FRACTIONS_COMMON/building/model/BuildingModel' );
   const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
+  const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
   const ChallengeType = require( 'FRACTIONS_COMMON/game/enum/ChallengeType' );
   const CollectionFinder = require( 'FRACTIONS_COMMON/game/model/CollectionFinder' );
   const ColorDef = require( 'SCENERY/util/ColorDef' );
@@ -232,7 +233,7 @@ define( require => {
       target.groupProperty.value = group;
 
       // Try to start moving out another group
-      this.ensureShapeGroups();
+      this.ensureGroups( group.type );
 
       var positionProperty = target.positionProperty;
       group.animator.animateTo( {
@@ -254,7 +255,7 @@ define( require => {
      */
     collectShapeGroup( shapeGroup, target ) {
       // Try to start moving out another group
-      this.ensureShapeGroups();
+      this.ensureGroups( BuildingType.SHAPE );
 
       shapeGroup.partitionDenominatorProperty.value = target.fraction.denominator;
 
@@ -270,7 +271,7 @@ define( require => {
      */
     collectNumberGroup( numberGroup, target ) {
       // Try to start moving out another group
-      this.ensureNumberGroups();
+      this.ensureGroups( BuildingType.NUMBER );
 
       this.collectGroup( numberGroup, target, this.numberGroups, FractionsCommonConstants.NUMBER_COLLECTION_SCALE );
     }
@@ -291,7 +292,16 @@ define( require => {
       } );
     }
 
-    ensureGroups( groupArray, stackArray ) {
+    /**
+     * If there are no groups, it moves one out to the center of the play area.
+     * @private
+     *
+     * @param {BuildingType} type
+     */
+    ensureGroups( type ) {
+      const groupArray = this.groupsMap.get( type );
+      const stackArray = this.activePiecesMap.get( type );
+
       // If we already have one out, don't look for more
       if ( groupArray.length >= 2 ) { return; }
 
@@ -300,7 +310,6 @@ define( require => {
         if ( !groupStack.isEmpty() ) {
           const group = groupStack.array.pop();
           group.clear();
-          // TODO: add the stack offset here (should be a common method on Stack?)
           group.positionProperty.value = groupStack.positionProperty.value;
           groupArray.push( group );
           this.centerGroup( group );
@@ -308,23 +317,6 @@ define( require => {
           break;
         }
       }
-    }
-
-    // TODO: EnumerationMap the groups and stacks arrays?
-    /**
-     * If there are no shape groups, it moves one out to the center of the play area.
-     * @public
-     */
-    ensureShapeGroups() {
-      this.ensureGroups( this.shapeGroups, this.shapeGroupStacks );
-    }
-
-    /**
-     * If there are no number groups, it moves one out to the center of the play area.
-     * @public
-     */
-    ensureNumberGroups() {
-      this.ensureGroups( this.numberGroups, this.numberGroupStacks );
     }
 
     /**
@@ -362,38 +354,20 @@ define( require => {
     }
 
     /**
-     * Grabs a ShapeGroup from the stack, sets up state for it to be dragged/placed, and places it at the
+     * Grabs a Group from the stack, sets up state for it to be dragged/placed, and places it at the
      * given point.
      * @public
      *
-     * @param {ShapeGroupStack} stack
+     * @param {ShapeGroupStack|NumberGroupStack} stack
      * @param {Vector2} modelPoint
      * @returns {ShapeGroup}
      */
-    pullShapeGroupFromStack( stack, modelPoint ) {
-      const shapeGroup = stack.shapeGroups.pop();
-      shapeGroup.clear();
-      shapeGroup.positionProperty.value = modelPoint;
-      this.dragShapeGroupFromStack( shapeGroup );
-      return shapeGroup;
-    }
-
-    // TODO: can we reduce duplication of these functions?
-    /**
-     * Grabs a NumberGroup from the stack, sets up state for it to be dragged/placed, and places it at the
-     * given point.
-     * @public
-     *
-     * @param {NumberGroupStack} stack
-     * @param {Vector2} modelPoint
-     * @returns {NumberGroup}
-     */
-    pullNumberGroupFromStack( stack, modelPoint ) {
-      const numberGroup = stack.numberGroups.pop();
-      numberGroup.clear();
-      numberGroup.positionProperty.value = modelPoint;
-      this.dragNumberGroupFromStack( numberGroup );
-      return numberGroup;
+    pullGroupFromStack( stack, modelPoint ) {
+      const group = stack.array.pop();
+      group.clear();
+      group.positionProperty.value = modelPoint;
+      this.dragGroupFromStack( group );
+      return group;
     }
 
     /**
@@ -442,12 +416,7 @@ define( require => {
       const groups = _.range( 0, numGroups ).map( index => {
         const point = new Vector2( this.hasShapes ? -100 : 0, ( index - ( numGroups - 1 ) / 2 ) * 100 );
 
-        if ( this.hasShapes ) {
-          return this.pullShapeGroupFromStack( groupStack, point );
-        }
-        else {
-          return this.pullNumberGroupFromStack( groupStack, point );
-        }
+        return this.pullGroupFromStack( groupStack, point );
       } );
 
       this.endAnimation();

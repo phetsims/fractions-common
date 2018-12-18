@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   const Bounds2 = require( 'DOT/Bounds2' );
+  const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
@@ -58,7 +59,7 @@ define( require => {
         activeNumberRangeProperty: new Property( null )
       }, options );
 
-      super();
+      super( BuildingType.NUMBER );
 
       // @public {boolean}
       this.isMixedNumber = isMixedNumber;

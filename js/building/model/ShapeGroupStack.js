@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
+  const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Stack = require( 'FRACTIONS_COMMON/building/model/Stack' );
 
@@ -21,7 +22,7 @@ define( require => {
      * @param {boolean} [isMutable]
      */
     constructor( layoutQuantity, representation, hasExpansionButtons, isMutable = true ) {
-      super( layoutQuantity, isMutable );
+      super( BuildingType.SHAPE, layoutQuantity, isMutable );
 
       // @public {BuildingRepresentation}
       this.representation = representation;

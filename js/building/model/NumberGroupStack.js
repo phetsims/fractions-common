@@ -9,6 +9,7 @@ define( require => {
   'use strict';
 
   // modules
+  const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Stack = require( 'FRACTIONS_COMMON/building/model/Stack' );
 
@@ -19,7 +20,7 @@ define( require => {
      * @param {boolean} [isMutable]
      */
     constructor( layoutQuantity, isMixedNumber, isMutable = true ) {
-      super( layoutQuantity, isMutable );
+      super( BuildingType.NUMBER, layoutQuantity, isMutable );
 
       // @public {boolean}
       this.isMixedNumber = isMixedNumber;

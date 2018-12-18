@@ -11,6 +11,7 @@ define( require => {
 
   // modules
   const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
+  const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
@@ -34,7 +35,7 @@ define( require => {
         maxContainers: FractionsCommonConstants.MAX_SHAPE_CONTAINERS
       }, options );
 
-      super();
+      super( BuildingType.SHAPE );
 
       assert && assert( _.includes( BuildingRepresentation.VALUES, representation ) );
       assert && assert( typeof options.maxContainers === 'number' && options.maxContainers >= 1 );

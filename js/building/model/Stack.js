@@ -20,12 +20,16 @@ define( require => {
 
   class Stack {
     /**
+     * @param {BuildingType} type
      * @param {number} layoutQuantity
      * @param {boolean} [isMutable]
      */
-    constructor( layoutQuantity, isMutable = true ) {
+    constructor( type, layoutQuantity, isMutable = true ) {
       assert && assert( typeof layoutQuantity === 'number' && layoutQuantity >= 1 && layoutQuantity % 1 === 0 );
       assert && assert( typeof isMutable === 'boolean' );
+
+      // @public {BuildingType}
+      this.type = type;
 
       // @public {number}
       this.layoutQuantity = layoutQuantity;

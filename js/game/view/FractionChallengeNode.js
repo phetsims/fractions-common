@@ -73,13 +73,13 @@ define( require => {
           numberPieceNode.dragListener.press( event, numberPieceNode );
         }
         else if ( stack instanceof ShapeGroupStack ) {
-          const shapeGroup = challenge.pullShapeGroupFromStack( stack, modelPoint );
+          const shapeGroup = challenge.pullGroupFromStack( stack, modelPoint );
           const shapeGroupNode = this.layerNode.getShapeGroupNode( shapeGroup );
           shapeGroupNode.dragListener.press( event, shapeGroupNode );
           event.handle(); // for our selection (so we don't immediately clear it)
         }
         else if ( stack instanceof NumberGroupStack ) {
-          const numberGroup = challenge.pullNumberGroupFromStack( stack, modelPoint );
+          const numberGroup = challenge.pullGroupFromStack( stack, modelPoint );
           const numberGroupNode = this.layerNode.getNumberGroupNode( numberGroup );
           numberGroupNode.dragListener.press( event, numberGroupNode );
         }
