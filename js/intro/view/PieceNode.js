@@ -24,23 +24,23 @@ define( require => {
      * @param {Piece} piece
      * @param {function} finishedAnimatingCallback - Called as function( {Piece} ) with the piece to finish animating.
      * @param {function} droppedCallback - Called as function( {Piece} )
-     * @param {Object} [options]
+     * @param {Object} [config]
      */
-    constructor( piece, finishedAnimatingCallback, droppedCallback, options ) {
-      options = _.extend( {
-        // TODO: better way of handling default. rename to config
-        graphic: new Node()
-      }, options );
+    constructor( piece, finishedAnimatingCallback, droppedCallback, config ) {
+      config = _.extend( {
+        // {Node} - required to be provided
+        graphic: null
+      }, config );
 
       super( {
-        children: [ options.graphic ]
+        children: [ config.graphic ]
       } );
 
       // @public {Piece} - Accessed from elsewhere
       this.piece = piece;
 
       // @protected {Node}
-      this.graphic = options.graphic;
+      this.graphic = config.graphic;
 
       // @private {function}
       this.finishedAnimatingCallback = finishedAnimatingCallback;

@@ -97,7 +97,7 @@ define( require => {
       // Initial setup
       model.containers.forEach( this.addListener );
 
-      // @public {BucketNode} - TODO: better way?
+      // @public {BucketNode}
       this.bucketNode = new BucketNode( model.denominatorProperty, this.onBucketDragStart.bind( this ),
                                         config.createCellNode, model.representationProperty, { bucketWidth: model.bucketWidth } );
 
@@ -166,101 +166,103 @@ define( require => {
     }
 
     /**
-     * returns the midpoint associated with the cell
+     * Returns the midpoint associated with the cell.
+     * @public
+     *
      * @param {Cell} cell
      * @returns {Vector2}
-     * @public
      */
     getCellMidpoint( cell ) {
-      // TODO: some cleanup here would be good. Doesn't have to be this inefficient when called from getClosestCell
       const containerNode = _.find( this.containerNodes, containerNode => containerNode.container === cell.container );
-      //TODO: proper coordinate transform
       const matrix = containerNode.getUniqueTrail().getMatrixTo( this.pieceLayer.getUniqueTrail() );
       return matrix.timesVector2( containerNode.getMidpointByIndex( cell.index ) );
     }
 
     /**
-     * callback whenever a piece is added
-     * @param {Piece} piece
+     * Finds a given PieceNode for a matching Piece.
      * @private
-     */
-    onPieceAdded( piece ) {
-      //TODO: support on all
-      if ( this.createPieceNode ) {
-        const pieceNode = this.createPieceNode( piece,
-          () => {
-            this.model.completePiece( piece );
-          },
-          () => {
-            const currentMidpoint = pieceNode.getMidpoint();
-
-            const closestCell = this.getClosestCell( currentMidpoint, 100 );
-
-            pieceNode.isUserControlled = false;
-            pieceNode.originProperty.value = currentMidpoint;
-
-            if ( closestCell ) {
-              pieceNode.destinationProperty.value = this.getCellMidpoint( closestCell );
-              this.model.targetPieceToCell( piece, closestCell );
-            }
-            else {
-              pieceNode.destinationProperty.value = this.getBucketLocation();
-            }
-          } );
-
-        const originCell = piece.originCell;
-        if ( originCell ) {
-          pieceNode.originProperty.value = this.getCellMidpoint( originCell );
-        }
-        else {
-          pieceNode.originProperty.value = this.getBucketLocation();
-        }
-
-        const destinationCell = piece.destinationCell;
-        if ( destinationCell ) {
-          pieceNode.destinationProperty.value = this.getCellMidpoint( destinationCell );
-        }
-        else {
-          pieceNode.destinationProperty.value = this.getBucketLocation();
-        }
-
-        this.pieceNodes.push( pieceNode );
-        this.pieceLayer.addChild( pieceNode );
-      }
-      else {
-        this.model.completePiece( piece );
-      }
-    }
-
-    /**
-     * callback whenever a piece is remove
      *
      * @param {Piece} piece
-     * @private
+     * @returns {PieceNode}
      */
-    onPieceRemoved( piece ) {
-      //TODO: support on all
-      if ( this.createPieceNode ) {
-        const pieceNode = _.find( this.pieceNodes, pieceNode => pieceNode.piece === piece );
-        arrayRemove( this.pieceNodes, pieceNode );
-        this.pieceLayer.removeChild( pieceNode );
-      }
+    findPieceNode( piece ) {
+      return _.find( this.pieceNodes, pieceNode => pieceNode.piece === piece );
     }
 
     /**
-     * callback on start event when grabbing piece from bucketNode
-     * @param {Event} event
+     * Called whenever a piece is added.
      * @private
+     *
+     * @param {Piece} piece
+     */
+    onPieceAdded( piece ) {
+      const pieceNode = this.createPieceNode( piece,
+        () => {
+          this.model.completePiece( piece );
+        },
+        () => {
+          const currentMidpoint = pieceNode.getMidpoint();
+
+          const closestCell = this.getClosestCell( currentMidpoint, 100 );
+
+          pieceNode.isUserControlled = false;
+          pieceNode.originProperty.value = currentMidpoint;
+
+          if ( closestCell ) {
+            pieceNode.destinationProperty.value = this.getCellMidpoint( closestCell );
+            this.model.targetPieceToCell( piece, closestCell );
+          }
+          else {
+            pieceNode.destinationProperty.value = this.getBucketLocation();
+          }
+        } );
+
+      const originCell = piece.originCell;
+      if ( originCell ) {
+        pieceNode.originProperty.value = this.getCellMidpoint( originCell );
+      }
+      else {
+        pieceNode.originProperty.value = this.getBucketLocation();
+      }
+
+      const destinationCell = piece.destinationCell;
+      if ( destinationCell ) {
+        pieceNode.destinationProperty.value = this.getCellMidpoint( destinationCell );
+      }
+      else {
+        pieceNode.destinationProperty.value = this.getBucketLocation();
+      }
+
+      this.pieceNodes.push( pieceNode );
+      this.pieceLayer.addChild( pieceNode );
+    }
+
+    /**
+     * Called whenever a piece is removed.
+     * @private
+     *
+     * @param {Piece} piece
+     */
+    onPieceRemoved( piece ) {
+      const pieceNode = this.findPieceNode( piece );
+      arrayRemove( this.pieceNodes, pieceNode );
+      this.pieceLayer.removeChild( pieceNode );
+    }
+
+    /**
+     * Called on start event when grabbing piece from bucketNode.
+     * @private
+     *
+     * @param {Event} event
      */
     onBucketDragStart( event ) {
       const piece = this.model.grabFromBucket();
-      piece.positionProperty.value = this.globalToLocalPoint( event.pointer.point );
+      const piecePosition = this.globalToLocalPoint( event.pointer.point );
+      piece.positionProperty.value = piecePosition;
 
-      // TODO: factor out function for the find
-      const pieceNode = _.find( this.pieceNodes, pieceNode => pieceNode.piece === piece );
+      const pieceNode = this.findPieceNode( piece );
 
-      // TODO: why does the node care about the origin? move to the model?
-      pieceNode.originProperty.value = this.globalToLocalPoint( event.pointer.point );
+      pieceNode.originProperty.value = piecePosition;
       pieceNode.isUserControlled = true;
       pieceNode.dragListener.press( event );
     }
@@ -276,21 +278,20 @@ define( require => {
       const piece = this.model.grabCell( cell );
       piece.positionProperty.value = this.getCellMidpoint( cell );
 
-      const pieceNode = _.find( this.pieceNodes, pieceNode => pieceNode.piece === piece );
+      const pieceNode = this.findPieceNode( piece );
 
-      // TODO: why does the node care about the origin? move to the model?
       pieceNode.originProperty.value = this.getCellMidpoint( cell );
       pieceNode.isUserControlled = true;
       pieceNode.dragListener.press( event );
     }
 
     /**
-     * add a container node to the scene graph
-     * @param {Container} container
+     * Add a container node to the scene graph.
      * @private
+     *
+     * @param {Container} container
      */
     addContainer( container ) {
-
       const containerNode = this.createContainerNode( container, {
         cellDownCallback: this.onExistingCellDragStart.bind( this )
       } );
@@ -316,15 +317,15 @@ define( require => {
     }
 
     /**
-     * remove a container node from the scene graph
-     * @param {Container} container
+     * Remove a container node from the scene graph.
      * @private
+     *
+     * NOTE: This assumes that containers are removed in-order (which should currently be true)
+     *
+     * @param {Container} container
      */
     removeContainer( container ) {
-      // TODO: factor out find
       const containerNode = _.find( this.containerNodes, containerNode => containerNode.container === container );
-
-      // TODO: Definitely need to redo some of this, especially if containers are removed out-of-order?
 
       arrayRemove( this.containerNodes, containerNode );
 
@@ -345,6 +346,10 @@ define( require => {
       this.updateLayout();
     }
 
+    /**
+     * Updates the layout based on our containerLayer.
+     * @public
+     */
     updateLayout() {
       if ( this.containerLayer.bounds.isValid() ) {
         this.containerLayer.center = Vector2.ZERO;

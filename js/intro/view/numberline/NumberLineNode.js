@@ -72,7 +72,8 @@ define( require => {
         markerFill: FractionsCommonColorProfile.introCircleFillProperty,
         arrowFill: FractionsCommonColorProfile.introCircleFillProperty,
 
-        // TODO: isUserControlledProperty so we can properly handle lock-out?
+        // REVIEW NOTE: Should we add an isUserControlledProperty so we can properly handle lock-out with other
+        // controls? AP noted that multitouch handling was not a priority based on current deadlines.
 
         // {PhetFont}
         tickLabelFont: new PhetFont( 40 )
@@ -196,14 +197,12 @@ define( require => {
       } );
 
       // @private {Multilink}
-      // TODO: format
       this.multipliedTickMultilink = Property.multilink( [
         denominatorProperty,
         containerCountProperty,
         options.multiplierProperty
       ], ( denominator, containerCount, multiplier ) => {
         const shape = new Shape();
-
         const effectiveDenominator = denominator * multiplier;
 
         for ( let i = 0; i <= containerCount * effectiveDenominator; i++ ) {
@@ -243,7 +242,6 @@ define( require => {
         hitTargetNode
       ];
 
-      // TODO: cleanup
       if ( options.orientation === NumberLineOrientation.VERTICAL ) {
         this.rotation = -Math.PI / 2;
         this.y = containerCountProperty.range.max * options.unitSize / 2;

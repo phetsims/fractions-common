@@ -35,7 +35,6 @@ define( require => {
   // constants
   const IDENTITY_TRANSFORM = ModelViewTransform2.createIdentity();
 
-  // TODO: piece layout improvements
   class BucketNode extends Node {
     /**
      * @param {Property.<number>} denominatorProperty
