@@ -190,6 +190,7 @@ define( require => {
           const colorOverride = FractionsCommonColorProfile.equalityLabColorProperty;
 
           const semitransparentColorOverride = new DerivedProperty( [ colorOverride ], color => color.withAlpha( 0.8 ) );
+          let containerOffset = 0;
 
           if ( representation === IntroRepresentation.CIRCLE ) {
             containerNodes = containers.map( container => new CircularContainerNode( container, {
@@ -231,10 +232,13 @@ define( require => {
             } );
             containerNodes = [ multipliedNumberLine ];
             multipliedViewContainer.addChild( multipliedNumberLine );
+
+            const parentLayoutPoint = multipliedNumberLine.localToParentPoint( multipliedNumberLine.localLayoutPoint );
+            containerOffset = multipliedNumberLine.left - parentLayoutPoint.x;
           }
 
           if ( multipliedViewContainer.bounds.isValid() ) {
-            multipliedViewContainer.left = multipliedFractionNode.left;
+            multipliedViewContainer.left = multipliedFractionNode.left + containerOffset;
           }
         }
       } );

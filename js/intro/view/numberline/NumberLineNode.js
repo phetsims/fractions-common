@@ -64,7 +64,6 @@ define( require => {
         markerRadius: 12,
         markerLineWidth: 3,
         arrowLength: 22,
-        arrowOffset: 12,
         highlightLineWidth: 8,
         highlightExtension: 8,
 
@@ -124,7 +123,7 @@ define( require => {
         lineWidth: options.markerLineWidth
       } );
 
-      const arrowNode = new ArrowNode( 0, -options.markerRadius - options.arrowLength - options.arrowOffset, 0, -options.markerRadius - options.arrowOffset, {
+      const arrowNode = new ArrowNode( 0, -options.arrowLength, 0, 0, {
         fill: options.arrowFill,
         stroke: 'black',
         headWidth: 9,
@@ -224,8 +223,10 @@ define( require => {
         denominatorProperty
       ], ( numerator, denominator ) => {
         const x = options.unitSize * numerator / denominator;
-        const tickY = ( ( numerator % denominator === 0 ) ? options.majorTickLength : options.minorTickLength ) / 2;
+        const useMajorTick = numerator % denominator === 0;
+        const tickY = ( useMajorTick ? options.majorTickLength : options.minorTickLength ) / 2;
         markerNode.x = x;
+        arrowNode.y = -tickY - 4;
         highlightNode.x1 = x;
         highlightNode.x2 = x;
         highlightNode.y1 = -tickY - options.highlightExtension;
@@ -241,6 +242,10 @@ define( require => {
         markerNode,
         hitTargetNode
       ];
+
+      // @public {Vector2} - The local-bounds location of the true "left" for layout purposes (so we can ignore the
+      // arrow when aligning)
+      this.localLayoutPoint = majorTickNodes[ 0 ].leftTop;
 
       if ( options.orientation === NumberLineOrientation.VERTICAL ) {
         this.rotation = -Math.PI / 2;
