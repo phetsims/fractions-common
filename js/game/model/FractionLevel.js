@@ -1706,11 +1706,11 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level1NumbersMixed( levelNumber ) {
-      const fractions = [
+      const fractions = shuffle( [
         new Fraction( 3, 2 ),
         new Fraction( 5, 2 ),
         new Fraction( 13, 4 )
-      ];
+      ] );
       const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.PIES, fractions, COLORS_3, FillType.SEQUENTIAL );
       const pieceNumbers = FractionLevel.exactMixedNumbers( fractions );
 
