@@ -20,7 +20,7 @@ define( require => {
 
   // constants
   const HORIZONTAL_SIZE = new Dimension2( 200, 40 );
-  const VERTICAL_SIZE = new Dimension2( 90, 185 );
+  const VERTICAL_SIZE = new Dimension2( 90, 160 );
 
   class RectangularNode extends Node {
     /**
