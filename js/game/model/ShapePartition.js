@@ -511,6 +511,7 @@ define( require => {
     ShapePartition.SIX_FLOWER,
     ...ShapePartition.POLYGONS
   ];
+  ShapePartition.LIMITED_9_GAME_PARTITIONS = ShapePartition.GAME_PARTITIONS.filter( partition => partition.length <= 9 );
 
   // @public {Array.<ShapePartition>}
   ShapePartition.SHAPE_PARTITIONS = [
