@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   const BuildingLayerNode = require( 'FRACTIONS_COMMON/building/view/BuildingLayerNode' );
+  const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
   class GameLayerNode extends BuildingLayerNode {
@@ -36,6 +37,65 @@ define( require => {
     }
 
     /**
+     * Utility function for when a Group is dragged
+     * @private
+     *
+     * @param {Group} group
+     */
+    onGroupDrag( group ) {
+      const modelPoints = group.centerPoints;
+      const viewPoints = modelPoints.map( modelPoint => this.modelViewTransform.modelToViewPosition( modelPoint ) );
+      const targetBounds = this.targetsContainer.bounds.dilated( 10 );
+      if ( _.some( viewPoints, viewPoint => targetBounds.containsPoint( viewPoint ) ) ) {
+        const closestTarget = this.model.findClosestTarget( modelPoints );
+        group.hoveringTargetProperty.value = closestTarget;
+      }
+      else {
+        group.hoveringTargetProperty.value = null;
+      }
+    }
+
+    /**
+     * Utility function for when a Group is dropped
+     * @private
+     *
+     * @param {Group} group
+     */
+    onGroupDrop( group ) {
+      group.hoveringTargetProperty.value = null;
+
+      const modelPoints = group.centerPoints;
+      const viewPoints = modelPoints.map( modelPoint => this.modelViewTransform.modelToViewPosition( modelPoint ) );
+      const targetBounds = this.targetsContainer.bounds.dilated( 10 );
+      const panelBounds = this.panel.bounds.dilated( 10 );
+
+      if ( _.some( viewPoints, viewPoint => targetBounds.containsPoint( viewPoint ) ) ) {
+        const closestTarget = this.model.findClosestTarget( modelPoints );
+        if ( closestTarget.groupProperty.value === null && group.totalFraction.reduced().equals( closestTarget.fraction.reduced() ) ) {
+          if ( group.type === BuildingType.SHAPE ) {
+            this.model.collectShapeGroup( group, closestTarget );
+          }
+          else {
+            this.model.collectNumberGroup( group, closestTarget );
+          }
+          this.onCollection();
+          group.hoveringTargetProperty.value = null;
+        }
+        else {
+          this.model.centerGroup( group );
+        }
+      }
+      else if ( _.some( viewPoints, viewPoints => panelBounds.containsPoint( viewPoints ) ) ) {
+        if ( group.type === BuildingType.SHAPE ) {
+          this.model.returnShapeGroup( group );
+        }
+        else {
+          this.model.returnNumberGroup( group );
+        }
+      }
+    }
+
+    /**
      * Called when a ShapeGroup is dragged.
      * @protected
      * @override
@@ -45,17 +105,7 @@ define( require => {
     onShapeGroupDrag( shapeGroup ) {
       super.onShapeGroupDrag( shapeGroup );
 
-      // TODO: reduce duplication here
-      const modelPoints = shapeGroup.centerPoints;
-      const viewPoints = modelPoints.map( modelPoint => this.modelViewTransform.modelToViewPosition( modelPoint ) );
-      const targetBounds = this.targetsContainer.bounds.dilated( 10 );
-      if ( _.some( viewPoints, viewPoint => targetBounds.containsPoint( viewPoint ) ) ) {
-        const closestTarget = this.model.findClosestTarget( modelPoints );
-        shapeGroup.hoveringTargetProperty.value = closestTarget;
-      }
-      else {
-        shapeGroup.hoveringTargetProperty.value = null;
-      }
+      this.onGroupDrag( shapeGroup );
     }
 
     /**
@@ -68,28 +118,7 @@ define( require => {
     onShapeGroupDrop( shapeGroup ) {
       super.onShapeGroupDrop( shapeGroup );
 
-      // TODO: handle the "cancel" properly
-      shapeGroup.hoveringTargetProperty.value = null;
-
-      const modelPoints = shapeGroup.centerPoints;
-      const viewPoints = modelPoints.map( modelPoint => this.modelViewTransform.modelToViewPosition( modelPoint ) );
-      const targetBounds = this.targetsContainer.bounds.dilated( 10 );
-      const panelBounds = this.panel.bounds.dilated( 10 );
-
-      if ( _.some( viewPoints, viewPoint => targetBounds.containsPoint( viewPoint ) ) ) {
-        const closestTarget = this.model.findClosestTarget( modelPoints );
-        if ( closestTarget.groupProperty.value === null && shapeGroup.totalFraction.reduced().equals( closestTarget.fraction.reduced() ) ) {
-          this.model.collectShapeGroup( shapeGroup, closestTarget );
-          this.onCollection();
-          shapeGroup.hoveringTargetProperty.value = null;
-        }
-        else {
-          this.model.centerGroup( shapeGroup );
-        }
-      }
-      else if ( _.some( viewPoints, viewPoints => panelBounds.containsPoint( viewPoints ) ) ) {
-        this.model.returnShapeGroup( shapeGroup );
-      }
+      this.onGroupDrop( shapeGroup );
     }
 
     /**
@@ -102,17 +131,7 @@ define( require => {
     onNumberGroupDrag( numberGroup ) {
       super.onNumberGroupDrag( numberGroup );
 
-      // TODO: reduce duplication here
-      const modelPoints = numberGroup.centerPoints;
-      const viewPoints = modelPoints.map( modelPoint => this.modelViewTransform.modelToViewPosition( modelPoint ) );
-      const targetBounds = this.targetsContainer.bounds.dilated( 10 );
-      if ( _.some( viewPoints, viewPoint => targetBounds.containsPoint( viewPoint ) ) ) {
-        const closestTarget = this.model.findClosestTarget( modelPoints );
-        numberGroup.hoveringTargetProperty.value = closestTarget;
-      }
-      else {
-        numberGroup.hoveringTargetProperty.value = null;
-      }
+      this.onGroupDrag( numberGroup );
     }
 
     /**
@@ -125,29 +144,7 @@ define( require => {
     onNumberGroupDrop( numberGroup ) {
       super.onNumberGroupDrop( numberGroup );
 
-      // TODO: handle the "cancel" properly
-      numberGroup.hoveringTargetProperty.value = null;
-
-      // TODO: factor out with shape stuff above
-      const modelPoints = numberGroup.centerPoints;
-      const viewPoints = modelPoints.map( modelPoint => this.modelViewTransform.modelToViewPosition( modelPoint ) );
-      const targetBounds = this.targetsContainer.bounds.dilated( 10 );
-      const panelBounds = this.panel.bounds.dilated( 10 );
-
-      if ( _.some( viewPoints, viewPoint => targetBounds.containsPoint( viewPoint ) ) ) {
-        const closestTarget = this.model.findClosestTarget( modelPoints );
-        if ( closestTarget.groupProperty.value === null && numberGroup.totalFraction.reduced().equals( closestTarget.fraction.reduced() ) ) {
-          this.model.collectNumberGroup( numberGroup, closestTarget );
-          this.onCollection();
-          numberGroup.hoveringTargetProperty.value = null;
-        }
-        else {
-          this.model.centerGroup( numberGroup );
-        }
-      }
-      else if ( _.some( viewPoints, viewPoints => panelBounds.containsPoint( viewPoints ) ) ) {
-        this.model.returnNumberGroup( numberGroup );
-      }
+      this.onGroupDrop( numberGroup );
     }
   }
 
