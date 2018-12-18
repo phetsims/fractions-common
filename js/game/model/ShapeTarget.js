@@ -1,7 +1,8 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * The ideal "target" for a collection box, that shows an additional shape-based representation of the fraction to the
+ * side.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */

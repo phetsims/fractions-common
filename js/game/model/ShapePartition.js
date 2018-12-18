@@ -1,7 +1,8 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * A nonoverlapping partition of a larger "shape" into smaller shapes, that can be rescaled or used to display a
+ * fractional representation.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
@@ -22,7 +23,7 @@ define( require => {
       // @public {Array.<Shape>}
       this.shapes = shapes;
 
-      // @public {number} - TODO: Use this!!!
+      // @public {number}
       this.length = shapes.length;
 
       // @public {Shape}

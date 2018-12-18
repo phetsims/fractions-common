@@ -130,7 +130,10 @@ define( require => {
 
       // @public {Property.<FractionChallenge>}
       this.challengeProperty = new Property( this.nextChallenge() );
-      this.challengeProperty._initialValue = null; // TODO: This is unclean. Find a better way to do this to normal properties
+
+      // Clear out the initial value so that we don't leak memory (since they retain a reference to the previous
+      // challenge).
+      this.challengeProperty._initialValue = null;
 
       // @public {Property.<number>}
       this.scoreProperty = new DynamicProperty( this.challengeProperty, {
@@ -511,7 +514,6 @@ define( require => {
         const potentialPartitions = allowSubdivision
           ? ShapePartition.supportsDivisibleDenominator( shapePartitions, fraction.denominator )
           : ShapePartition.supportsDenominator( shapePartitions, fraction.denominator );
-        // TODO: any cleaner way to do this?
         const concreteFillType = fillType ? fillType : sample( [
           FillType.SEQUENTIAL,
           FillType.MIXED
@@ -577,8 +579,6 @@ define( require => {
           break;
         }
       }
-      // TODO: see if this is the best workaround
-      // const legalCollections = collections.filter( collection => collection.getCompactRequiredGroups().length <= wholeCount );
 
       const maxNondivisible = _.max( legalCollections.map( collection => collection.nondivisibleCount ) );
 
@@ -616,7 +616,6 @@ define( require => {
 
       return new ShapeTarget( fraction, shuffle( _.flatten( collection.fractions.map( subFraction => {
         const shapePartition = sample( ShapePartition.supportsDenominator( shapePartitions, subFraction.denominator ) );
-        // TODO: even more random? This one tries to fill in wholes where possible
         return FilledPartition.randomFill( shapePartition, subFraction, color );
       } ) ) ) );
     }
