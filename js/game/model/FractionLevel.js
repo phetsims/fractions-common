@@ -1505,7 +1505,7 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level5Numbers( levelNumber ) {
-      const shapeTargets = FractionLevel.targetsFromPartitions( choose( 3, ShapePartition.GAME_PARTITIONS ), COLORS_3, d => sample( inclusive( 1, d ) ), FillType.SEQUENTIAL );
+      const shapeTargets = FractionLevel.targetsFromPartitions( choose( 3, ShapePartition.LIMITED_9_GAME_PARTITIONS ), COLORS_3, d => sample( inclusive( 1, d ) ), FillType.SEQUENTIAL );
       const pieceNumbers = FractionLevel.exactNumbers( shapeTargets.map( target => target.fraction ) );
 
       return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
@@ -1526,7 +1526,7 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level6Numbers( levelNumber ) {
-      const shapeTargets = FractionLevel.targetsFromPartitions( choose( 4, ShapePartition.GAME_PARTITIONS ), COLORS_4, d => sample( inclusive( 1, d ) ), null );
+      const shapeTargets = FractionLevel.targetsFromPartitions( choose( 4, ShapePartition.LIMITED_9_GAME_PARTITIONS ), COLORS_4, d => sample( inclusive( 1, d ) ), null );
       const pieceNumbers = FractionLevel.withMultipliedNumbers( shapeTargets.map( target => target.fraction ), 2 );
 
       return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
@@ -1667,7 +1667,7 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level9Numbers( levelNumber ) {
-      const shapeTargets = FractionLevel.targetsFromPartitions( choose( 4, ShapePartition.GAME_PARTITIONS ), COLORS_4, d => sample( inclusive( 1, 2 * d ) ), FillType.MIXED );
+      const shapeTargets = FractionLevel.targetsFromPartitions( choose( 4, ShapePartition.LIMITED_9_GAME_PARTITIONS ), COLORS_4, d => sample( inclusive( 1, 2 * d ) ), FillType.MIXED );
       const pieceNumbers = FractionLevel.exactNumbers( shapeTargets.map( target => target.fraction ) );
 
       return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
@@ -1686,7 +1686,7 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level10Numbers( levelNumber ) {
-      const shapeTargets = FractionLevel.targetsFromPartitions( choose( 4, ShapePartition.GAME_PARTITIONS ), COLORS_4, d => sample( inclusive( 1, 2 * d ) ), FillType.MIXED );
+      const shapeTargets = FractionLevel.targetsFromPartitions( choose( 4, ShapePartition.LIMITED_9_GAME_PARTITIONS ), COLORS_4, d => sample( inclusive( 1, 2 * d ) ), FillType.MIXED );
       const pieceNumbers = FractionLevel.withMultipliedNumbers( shapeTargets.map( target => target.fraction ), 2 );
 
       return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
