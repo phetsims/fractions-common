@@ -25,7 +25,7 @@ define( require => {
   var myMatchesString = require( 'string!FRACTIONS_COMMON/myMatches' );
 
   // images
-  var scaleImage = require( 'image!FRACTIONS_COMMON/scale.png' );
+  var scaleImage = require( 'mipmap!FRACTIONS_COMMON/scale.png' );
 
   /**
    *
