@@ -98,11 +98,13 @@ define( require => {
         model.showMixedNumbersProperty.linkAttribute( this.mixedFractionNode, 'visible' );
 
         const label = new Text( mixedNumberString, { font: new PhetFont( 26 ) } );
-        this.addChild( new Checkbox( label, model.showMixedNumbersProperty, {
+        const showMixedCheckbox = new Checkbox( label, model.showMixedNumbersProperty, {
           boxWidth: 30,
           right: this.layoutBounds.right - MARGIN,
           bottom: this.resetAllButton.top - 40
-        } ) );
+        } );
+        showMixedCheckbox.touchArea = showMixedCheckbox.localBounds.dilated( 18 );
+        this.addChild( showMixedCheckbox );
 
         // Options for the "Equation" accordion box (bottom-left)
         const equationScale = 1.5;
