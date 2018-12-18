@@ -25,6 +25,7 @@ define( require => {
   const ReturnButton = require( 'FRACTIONS_COMMON/building/view/ReturnButton' );
   const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
   const ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
+  const ShapePartition = require( 'FRACTIONS_COMMON/game/model/ShapePartition' );
   const ShapeTarget = require( 'FRACTIONS_COMMON/game/model/ShapeTarget' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -167,8 +168,10 @@ define( require => {
       if ( isShapeTarget ) {
         this.addChild( new HBox( {
           scale: 0.6,
-          spacing: 8,
-          children: target.filledPartitions.map( filledPartition => new FilledPartitionNode( filledPartition ) )
+          spacing: 5,
+          children: target.filledPartitions.map( filledPartition => new FilledPartitionNode( filledPartition, {
+            layoutShapeWidth: ShapePartition.GAME_PARTITIONS_MAX_WIDTH
+          } ) )
         } ) );
       }
       else {

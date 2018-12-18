@@ -30,7 +30,11 @@ define( require => {
         borderStroke: FractionsCommonColorProfile.shapePartitionBorderProperty,
 
         interiorLineWidth: 1,
-        borderLineWidth: 2
+        borderLineWidth: 2,
+
+        // {number|null} - If non-null, the width of this node will be padded to make sure it is the same width as if
+        // the filledPartition's outlineShape has this width.
+        layoutShapeWidth: null
       }, options );
 
       assert && assert( options.primaryFill, 'primaryFill should be provided' );
@@ -46,6 +50,17 @@ define( require => {
           lineWidth: options.borderLineWidth
         } )
       ];
+
+      // Enforce layoutShapeWidth
+      if ( options.layoutShapeWidth !== null ) {
+        const center = this.localBounds.centerX;
+        // NOTE: We're doubling the borderLineWidth due to miter possibilities
+        this.localBounds = this.localBounds.withMinX(
+          center - options.layoutShapeWidth / 2 + options.borderLineWidth
+        ).withMaxX(
+          center + options.layoutShapeWidth / 2 + options.borderLineWidth
+        );
+      }
 
       this.mutate( options );
     }

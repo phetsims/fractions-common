@@ -513,6 +513,11 @@ define( require => {
   ];
   ShapePartition.LIMITED_9_GAME_PARTITIONS = ShapePartition.GAME_PARTITIONS.filter( partition => partition.length <= 9 );
 
+  // @public {number}
+  ShapePartition.GAME_PARTITIONS_MAX_WIDTH = Math.max( ...ShapePartition.GAME_PARTITIONS.map( partition => {
+    return partition.outlineShape.bounds.width;
+  } ) );
+
   // @public {Array.<ShapePartition>}
   ShapePartition.SHAPE_PARTITIONS = [
     ...ShapePartition.PIES,
