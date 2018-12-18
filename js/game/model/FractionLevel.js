@@ -1867,13 +1867,16 @@ define( require => {
      */
     static level7NumbersMixed( levelNumber ) {
       const baseFractions = choose( 2, expandableMixedNumbersFractions );
+      const smallMultipliers = [
+        new Fraction( 2, 2 )
+      ];
       const multipliers = [
         new Fraction( 2, 2 ),
         new Fraction( 3, 3 )
       ];
       const fractions = [
-        ...shuffle( [ baseFractions[ 0 ], baseFractions[ 0 ].times( sample( multipliers ) ) ] ),
-        ...shuffle( [ baseFractions[ 1 ], baseFractions[ 1 ].times( sample( multipliers ) ) ] )
+        ...shuffle( [ baseFractions[ 0 ], baseFractions[ 0 ].times( sample( baseFractions[ 0 ].denominator >= 4 ? smallMultipliers : multipliers ) ) ] ),
+        ...shuffle( [ baseFractions[ 1 ], baseFractions[ 1 ].times( sample( baseFractions[ 1 ].denominator >= 4 ? smallMultipliers : multipliers ) ) ] )
       ];
 
       const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.LIMITED_9_GAME_PARTITIONS, fractions, COLORS_4, FillType.SEQUENTIAL );
