@@ -25,44 +25,47 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // images
-  const cake_1_1Image = require( 'image!FRACTIONS_COMMON/cake_1_1.png' );
-  const cake_2_1Image = require( 'image!FRACTIONS_COMMON/cake_2_1.png' );
-  const cake_2_2Image = require( 'image!FRACTIONS_COMMON/cake_2_2.png' );
-  const cake_3_1Image = require( 'image!FRACTIONS_COMMON/cake_3_1.png' );
-  const cake_3_2Image = require( 'image!FRACTIONS_COMMON/cake_3_2.png' );
-  const cake_3_3Image = require( 'image!FRACTIONS_COMMON/cake_3_3.png' );
-  const cake_4_1Image = require( 'image!FRACTIONS_COMMON/cake_4_1.png' );
-  const cake_4_2Image = require( 'image!FRACTIONS_COMMON/cake_4_2.png' );
-  const cake_4_3Image = require( 'image!FRACTIONS_COMMON/cake_4_3.png' );
-  const cake_4_4Image = require( 'image!FRACTIONS_COMMON/cake_4_4.png' );
-  const cake_5_1Image = require( 'image!FRACTIONS_COMMON/cake_5_1.png' );
-  const cake_5_2Image = require( 'image!FRACTIONS_COMMON/cake_5_2.png' );
-  const cake_5_3Image = require( 'image!FRACTIONS_COMMON/cake_5_3.png' );
-  const cake_5_4Image = require( 'image!FRACTIONS_COMMON/cake_5_4.png' );
-  const cake_5_5Image = require( 'image!FRACTIONS_COMMON/cake_5_5.png' );
-  const cake_6_1Image = require( 'image!FRACTIONS_COMMON/cake_6_1.png' );
-  const cake_6_2Image = require( 'image!FRACTIONS_COMMON/cake_6_2.png' );
-  const cake_6_3Image = require( 'image!FRACTIONS_COMMON/cake_6_3.png' );
-  const cake_6_4Image = require( 'image!FRACTIONS_COMMON/cake_6_4.png' );
-  const cake_6_5Image = require( 'image!FRACTIONS_COMMON/cake_6_5.png' );
-  const cake_6_6Image = require( 'image!FRACTIONS_COMMON/cake_6_6.png' );
-  const cake_7_1Image = require( 'image!FRACTIONS_COMMON/cake_7_1.png' );
-  const cake_7_2Image = require( 'image!FRACTIONS_COMMON/cake_7_2.png' );
-  const cake_7_3Image = require( 'image!FRACTIONS_COMMON/cake_7_3.png' );
-  const cake_7_4Image = require( 'image!FRACTIONS_COMMON/cake_7_4.png' );
-  const cake_7_5Image = require( 'image!FRACTIONS_COMMON/cake_7_5.png' );
-  const cake_7_6Image = require( 'image!FRACTIONS_COMMON/cake_7_6.png' );
-  const cake_7_7Image = require( 'image!FRACTIONS_COMMON/cake_7_7.png' );
-  const cake_8_1Image = require( 'image!FRACTIONS_COMMON/cake_8_1.png' );
-  const cake_8_2Image = require( 'image!FRACTIONS_COMMON/cake_8_2.png' );
-  const cake_8_3Image = require( 'image!FRACTIONS_COMMON/cake_8_3.png' );
-  const cake_8_4Image = require( 'image!FRACTIONS_COMMON/cake_8_4.png' );
-  const cake_8_5Image = require( 'image!FRACTIONS_COMMON/cake_8_5.png' );
-  const cake_8_6Image = require( 'image!FRACTIONS_COMMON/cake_8_6.png' );
-  const cake_8_7Image = require( 'image!FRACTIONS_COMMON/cake_8_7.png' );
-  const cake_8_8Image = require( 'image!FRACTIONS_COMMON/cake_8_8.png' );
+  const cake_1_1Image = require( 'mipmap!FRACTIONS_COMMON/cake_1_1.png' );
+  const cake_2_1Image = require( 'mipmap!FRACTIONS_COMMON/cake_2_1.png' );
+  const cake_2_2Image = require( 'mipmap!FRACTIONS_COMMON/cake_2_2.png' );
+  const cake_3_1Image = require( 'mipmap!FRACTIONS_COMMON/cake_3_1.png' );
+  const cake_3_2Image = require( 'mipmap!FRACTIONS_COMMON/cake_3_2.png' );
+  const cake_3_3Image = require( 'mipmap!FRACTIONS_COMMON/cake_3_3.png' );
+  const cake_4_1Image = require( 'mipmap!FRACTIONS_COMMON/cake_4_1.png' );
+  const cake_4_2Image = require( 'mipmap!FRACTIONS_COMMON/cake_4_2.png' );
+  const cake_4_3Image = require( 'mipmap!FRACTIONS_COMMON/cake_4_3.png' );
+  const cake_4_4Image = require( 'mipmap!FRACTIONS_COMMON/cake_4_4.png' );
+  const cake_5_1Image = require( 'mipmap!FRACTIONS_COMMON/cake_5_1.png' );
+  const cake_5_2Image = require( 'mipmap!FRACTIONS_COMMON/cake_5_2.png' );
+  const cake_5_3Image = require( 'mipmap!FRACTIONS_COMMON/cake_5_3.png' );
+  const cake_5_4Image = require( 'mipmap!FRACTIONS_COMMON/cake_5_4.png' );
+  const cake_5_5Image = require( 'mipmap!FRACTIONS_COMMON/cake_5_5.png' );
+  const cake_6_1Image = require( 'mipmap!FRACTIONS_COMMON/cake_6_1.png' );
+  const cake_6_2Image = require( 'mipmap!FRACTIONS_COMMON/cake_6_2.png' );
+  const cake_6_3Image = require( 'mipmap!FRACTIONS_COMMON/cake_6_3.png' );
+  const cake_6_4Image = require( 'mipmap!FRACTIONS_COMMON/cake_6_4.png' );
+  const cake_6_5Image = require( 'mipmap!FRACTIONS_COMMON/cake_6_5.png' );
+  const cake_6_6Image = require( 'mipmap!FRACTIONS_COMMON/cake_6_6.png' );
+  const cake_7_1Image = require( 'mipmap!FRACTIONS_COMMON/cake_7_1.png' );
+  const cake_7_2Image = require( 'mipmap!FRACTIONS_COMMON/cake_7_2.png' );
+  const cake_7_3Image = require( 'mipmap!FRACTIONS_COMMON/cake_7_3.png' );
+  const cake_7_4Image = require( 'mipmap!FRACTIONS_COMMON/cake_7_4.png' );
+  const cake_7_5Image = require( 'mipmap!FRACTIONS_COMMON/cake_7_5.png' );
+  const cake_7_6Image = require( 'mipmap!FRACTIONS_COMMON/cake_7_6.png' );
+  const cake_7_7Image = require( 'mipmap!FRACTIONS_COMMON/cake_7_7.png' );
+  const cake_8_1Image = require( 'mipmap!FRACTIONS_COMMON/cake_8_1.png' );
+  const cake_8_2Image = require( 'mipmap!FRACTIONS_COMMON/cake_8_2.png' );
+  const cake_8_3Image = require( 'mipmap!FRACTIONS_COMMON/cake_8_3.png' );
+  const cake_8_4Image = require( 'mipmap!FRACTIONS_COMMON/cake_8_4.png' );
+  const cake_8_5Image = require( 'mipmap!FRACTIONS_COMMON/cake_8_5.png' );
+  const cake_8_6Image = require( 'mipmap!FRACTIONS_COMMON/cake_8_6.png' );
+  const cake_8_7Image = require( 'mipmap!FRACTIONS_COMMON/cake_8_7.png' );
+  const cake_8_8Image = require( 'mipmap!FRACTIONS_COMMON/cake_8_8.png' );
 
   // constants
+
+  // {Array.<Array.<Array.<*>>>} - cakeImageArray[ denominator + 1 ][ rotationalIndex ] will be something that can be
+  // passed to scenery Images.
   const cakeImageArray = [
     [ cake_1_1Image ],
     [ cake_2_2Image, cake_2_1Image ],
@@ -73,6 +76,9 @@ define( require => {
     [ cake_7_1Image, cake_7_2Image, cake_7_3Image, cake_7_4Image, cake_7_5Image, cake_7_6Image, cake_7_7Image ],
     [ cake_8_1Image, cake_8_2Image, cake_8_3Image, cake_8_4Image, cake_8_5Image, cake_8_6Image, cake_8_7Image, cake_8_8Image ]
   ];
+
+  // We create a matching mathematical model of the cake's "locations", tuned by hand so that the shapes will match the
+  // given images.
   const CAKE_IMAGE_SIZE = new Dimension2( 219, 166 );
   const CAKE_IMAGE_BOUNDS = new Bounds2(  25, 10, 194, 154 );
   const CAKE_DEFAULT_SCALE = 130 / CAKE_IMAGE_SIZE.height;
@@ -83,16 +89,19 @@ define( require => {
   // The determined center of the cake images (determined empirically)
   const CAKE_OFFSET = new Vector2( 0.5 * SCALED_CAKE_IMAGE_SIZE.width, 0.55 * SCALED_CAKE_IMAGE_SIZE.height );
 
+  // The ellipse base (bottom face) of cake slices
   const BASE_ELLIPSE_CENTER = new Vector2( CAKE_IMAGE_SIZE.width * 0.501, CAKE_IMAGE_SIZE.height * 0.641 );
   const BASE_ELLIPSE_RADII = new Vector2( CAKE_IMAGE_SIZE.width * 0.364, CAKE_IMAGE_SIZE.height * 0.276 );
   const BASE_ELLIPSE_OFFSET_CENTER = BASE_ELLIPSE_CENTER.plusXY( 0, -0.07 * CAKE_IMAGE_SIZE.height );
   const BASE_ASPECT = 0.565;
 
+  // An ellipse at the very top of the "side" of the cake (where the black line is)
   const MID_ELLIPSE_CENTER = new Vector2( CAKE_IMAGE_SIZE.width * 0.501, CAKE_IMAGE_SIZE.height * 0.42 );
   const MID_ELLIPSE_RADII = new Vector2( CAKE_IMAGE_SIZE.width * 0.38, CAKE_IMAGE_SIZE.height * 0.25 );
   const MID_ELLIPSE_OFFSET_CENTER = MID_ELLIPSE_CENTER.plusXY( 0, -0.06 * CAKE_IMAGE_SIZE.height );
   const MID_ASPECT = 0.46;
 
+  // An ellipse at the outside of the "top" of the cake (where the green piping is)
   const TOP_ELLIPSE_CENTER = new Vector2( CAKE_IMAGE_SIZE.width * 0.501, CAKE_IMAGE_SIZE.height * 0.365 );
   const TOP_ELLIPSE_RADII = new Vector2( CAKE_IMAGE_SIZE.width * 0.355, CAKE_IMAGE_SIZE.height * 0.215 );
   const TOP_ELLIPSE_OFFSET_CENTER = TOP_ELLIPSE_CENTER.plusXY( 0, -0.04 * CAKE_IMAGE_SIZE.height );
@@ -154,7 +163,15 @@ define( require => {
       this.mutate( options );
     }
 
-    // TODO: doc
+    /**
+     * Returns the offset of the node comared to the origin.
+     * @public
+     *
+     * REVIEW NOTE: This may be slightly wrong, but AP wasn't concerned about it enough. Try the cake animations when
+     * you drop a piece with ?speed=0.1, there will be a slight jump.
+     *
+     * @returns {Vector2}
+     */
     getOffset() {
       return this.imageNode.translation.negated().minus( CAKE_OFFSET );
     }
@@ -197,38 +214,85 @@ define( require => {
       }
     }
 
-    // TODO: deduplicate and doc
-
+    /**
+     * Returns the start (smaller) angle for a given size/rotation of a cake piece.
+     * @public
+     *
+     * @param {number} denominator
+     * @param {number} index
+     * @returns {number}
+     */
     static getStartAngle( denominator, index ) {
       return 2 * Math.PI * index / denominator + ( denominator === 2 ? 0.5 * Math.PI : 0 );
     }
 
+    /**
+     * Returns the end (larger) angle for a given size/rotation of a cake piece.
+     * @public
+     *
+     * @param {number} denominator
+     * @param {number} index
+     * @returns {number}
+     */
     static getEndAngle( denominator, index ) {
       return 2 * Math.PI * ( index + 1 ) / denominator + ( denominator === 2 ? 0.5 * Math.PI : 0 );
     }
 
+    /**
+     * Returns the first intersection of an ellipse with a ray defined by the angle (modified by the aspect ratio
+     * modifier).
+     * @private
+     *
+     * @param {number} angle
+     * @param {EllipticalArc} ellipse
+     * @param {Vector2} offsetCenter
+     * @param {number} aspect
+     * @returns {RayIntersection}
+     */
     static ellipseIntersect( angle, ellipse, offsetCenter, aspect ) {
       const direction = Vector2.createPolar( 1, angle ).componentTimes( new Vector2( 1, aspect ) ).normalized();
       const intersections = ellipse.intersection( new Ray2( offsetCenter, direction ) );
       return intersections[ 0 ];
     }
 
+    /**
+     * Returns the intersection information for the base ellipse (shooting a ray for the given cake angle from the
+     * center).
+     * @public
+     *
+     * @param {number} angle
+     * @returns {number}
+     */
     static getBaseIntersection( angle ) {
       return CakeNode.ellipseIntersect( angle, BASE_ELLIPSE, BASE_ELLIPSE_OFFSET_CENTER, BASE_ASPECT );
     }
 
+    /**
+     * Returns the intersection information for the mid ellipse (shooting a ray for the given cake angle from the
+     * center).
+     * @public
+     *
+     * @param {number} angle
+     * @returns {number}
+     */
     static getMidIntersection( angle ) {
       return CakeNode.ellipseIntersect( angle, MID_ELLIPSE, MID_ELLIPSE_OFFSET_CENTER, MID_ASPECT );
     }
 
+    /**
+     * Returns the intersection information for the top ellipse (shooting a ray for the given cake angle from the
+     * center).
+     * @public
+     *
+     * @param {number} angle
+     * @returns {number}
+     */
     static getTopIntersection( angle ) {
       return CakeNode.ellipseIntersect( angle, TOP_ELLIPSE, TOP_ELLIPSE_OFFSET_CENTER, TOP_ASPECT );
     }
   }
 
   fractionsCommon.register( 'CakeNode', CakeNode );
-
-  // TODO: can we use these below references directly?
 
   // @public {Dimension2}
   CakeNode.CAKE_IMAGE_SIZE = CAKE_IMAGE_SIZE;
@@ -253,18 +317,26 @@ define( require => {
   CakeNode.MID_ELLIPSE_OFFSET_CENTER = MID_ELLIPSE_OFFSET_CENTER;
   CakeNode.TOP_ELLIPSE_OFFSET_CENTER = TOP_ELLIPSE_OFFSET_CENTER;
 
+  // @public {Array.<Array.<Shape>>} - 2D areas that cover the bottom of the cake (so we can display shadows beneath
+  // pieces when they are dragged).
   CakeNode.CAKE_SHADOW_SHAPES = [];
 
   // @public {Array.<Array.<Shape>>} - 2D areas that cover the entire cake (for accurate touch/mouse areas)
-  // TODO: consider precomputing these in a SVG string'ed form so we have faster loads.
+  // PERFORMANCE NOTE: These could be precomputed in the future, with
+  // copy( JSON.stringify( phet.fractionsCommon.CakeNode.CAKE_SHADOW_SHAPES.map( arr => arr.map( s => s.getSVGPath() ) ) , null, 2 ) );
+  // copy( JSON.stringify( phet.fractionsCommon.CakeNode.CAKE_SHAPES.map( arr => arr.map( s => s.getSVGPath() ) ) , null, 2 ) );
+  // And then data.map( arr => arr.map( svg => new Shape( svg ) ) ) them.
+  // It's simpler to leave as-is for now.
   CakeNode.CAKE_SHAPES = _.range( 1, 9 ).map( denominator => {
     const shadowShapes = [];
     CakeNode.CAKE_SHADOW_SHAPES.push( shadowShapes );
     return _.range( 0, denominator ).map( index => {
       const shapes = []; // We'll union all of these shapes
 
-      // TODO: A bit of docs
+      // We'll basically gather shapes that represent each face (surface area) of a cake slice, and then will union
+      // those 2d shapes together to get the mouse/touch area for cake slices.
 
+      // Compute the visual angles for the cake slice.
       const angleA = -CakeNode.getStartAngle( denominator, index );
       const angleB = -CakeNode.getEndAngle( denominator, index );
 
@@ -293,6 +365,7 @@ define( require => {
       shapes.push( getPieShape( TOP_ELLIPSE, TOP_ELLIPSE_OFFSET_CENTER, TOP_ASPECT ) );
       shapes.push( getPieShape( MID_ELLIPSE, MID_ELLIPSE_OFFSET_CENTER, MID_ASPECT ) );
 
+      // Reuse the base for the shadow
       const pieBase = getPieShape( BASE_ELLIPSE, BASE_ELLIPSE_OFFSET_CENTER, BASE_ASPECT );
       shapes.push( pieBase );
       shadowShapes.push( pieBase );
@@ -312,9 +385,10 @@ define( require => {
         } );
       }
 
+      // If our slice includes the "far left" side, include a polygon that will give us the horizontal swept area.
       if ( angleA > -Math.PI && angleB < -Math.PI ) {
         shapes.push( Shape.polygon( [
-          // TODO: Fix KITE CAG, remove 0.99
+          // 0.99 is a workaround for current Kite shape handling.
           BASE_ELLIPSE.positionAt( 0.5 ).timesScalar( 0.99 ),
           MID_ELLIPSE.positionAt( 0.5 ).timesScalar( 0.99 ),
           MID_ELLIPSE_OFFSET_CENTER,
@@ -322,6 +396,7 @@ define( require => {
         ] ) );
       }
 
+      // If our slice includes the "far right" side, include a polygon that will give us the horizontal swept area.
       if ( denominator === 1 || ( denominator === 2 && index === 1 ) ) {
         shapes.push( Shape.polygon( [
           BASE_ELLIPSE_OFFSET_CENTER,

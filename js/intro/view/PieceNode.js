@@ -19,8 +19,6 @@ define( require => {
   const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
 
-  // TODO: Get rid of SimpleDragHandler usage
-
   class PieceNode extends Node {
     /**
      * @param {Piece} piece
@@ -38,15 +36,13 @@ define( require => {
         children: [ options.graphic ]
       } );
 
-      // TODO: check visibilities, things are not as they seem
-
       // @public {Piece} - Accessed from elsewhere
       this.piece = piece;
 
       // @protected {Node}
       this.graphic = options.graphic;
 
-      // @protected (read-only) {function}
+      // @private {function}
       this.finishedAnimatingCallback = finishedAnimatingCallback;
 
       // @public {Property.<Vector2>}
@@ -56,18 +52,17 @@ define( require => {
       // @public <boolean>
       this.isUserControlled = false;
 
-      // @private {number} - Animation progress, from 0 to 1.
+      // @protected {number} - Animation progress, from 0 to 1.
       this.ratio = 0;
 
-      // TODO: duplication with other pieces? BeakerPieceNode?
       this.originProperty.lazyLink( origin => {
         this.ratio = 0;
         piece.positionProperty.value = origin;
         this.setMidpoint( origin );
 
         // circle specific
-        //TODO : fixed for when not a circle
         if ( this.graphic.getCircleRotation ) {
+          // @protected {number}
           this.originRotation = this.graphic.getCircleRotation();
         }
       } );

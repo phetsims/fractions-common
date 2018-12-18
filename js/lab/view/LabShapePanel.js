@@ -37,7 +37,7 @@ define( require => {
 
       super( shapeBox, {
         xMargin: 15,
-        yMargin: 10 // TODO: why do we need non-equal margins to see an equal effect?
+        yMargin: 10
       } );
 
       const boxAlignGroup = new AlignGroup();

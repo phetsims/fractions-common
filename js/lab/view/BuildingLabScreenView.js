@@ -50,17 +50,17 @@ define( require => {
 
       // @private {Node}
       this.shapePanel = new LabShapePanel( model, ( event, stack ) => {
+        const modelPoint = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
         if ( stack instanceof ShapeStack ) {
           const shapePiece = new ShapePiece( stack.fraction, stack.representation, stack.color );
-          shapePiece.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
+          shapePiece.positionProperty.value = modelPoint;
           model.dragShapePieceFromStack( shapePiece );
           const shapePieceNode = this.layerNode.getShapePieceNode( shapePiece );
           shapePieceNode.dragListener.press( event, shapePieceNode );
         }
         else if ( stack instanceof ShapeGroupStack ) {
-          // TODO: encapsulation
           const shapeGroup = model.addShapeGroup( stack.representation );
-          shapeGroup.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
+          shapeGroup.positionProperty.value = modelPoint;
           const shapeGroupNode = this.layerNode.getShapeGroupNode( shapeGroup );
           shapeGroupNode.dragListener.press( event, shapeGroupNode );
           event.handle(); // for our selection
@@ -72,16 +72,17 @@ define( require => {
 
       // @private {Node}
       this.numberPanel = new LabNumberPanel( model, ( event, stack ) => {
+        const modelPoint = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
         if ( stack instanceof NumberStack ) {
           const numberPiece = new NumberPiece( stack.number );
-          numberPiece.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
+          numberPiece.positionProperty.value = modelPoint;
           model.dragNumberPieceFromStack( numberPiece );
           const numberPieceNode = this.layerNode.getNumberPieceNode( numberPiece );
           numberPieceNode.dragListener.press( event, numberPieceNode );
         }
         else if ( stack instanceof NumberGroupStack ) {
           const numberGroup = model.addNumberGroup( stack.isMixedNumber );
-          numberGroup.positionProperty.value = this.modelViewTransform.viewToModelPosition( this.globalToLocalPoint( event.pointer.point ) );
+          numberGroup.positionProperty.value = modelPoint;
           const numberGroupNode = this.layerNode.getNumberGroupNode( numberGroup );
           numberGroupNode.dragListener.press( event, numberGroupNode );
         }
