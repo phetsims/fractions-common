@@ -1876,7 +1876,7 @@ define( require => {
         ...shuffle( [ baseFractions[ 1 ], baseFractions[ 1 ].times( sample( multipliers ) ) ] )
       ];
 
-      const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.GAME_PARTITIONS, fractions, COLORS_4, FillType.SEQUENTIAL );
+      const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.LIMITED_9_GAME_PARTITIONS, fractions, COLORS_4, FillType.SEQUENTIAL );
       const pieceNumbers = [
         ...FractionLevel.exactMixedNumbers( baseFractions ),
         ...FractionLevel.exactMixedNumbers( baseFractions )
@@ -1899,7 +1899,7 @@ define( require => {
     static level8NumbersMixed( levelNumber ) {
       const fractions = choose( 4, mixedNumbersFractions );
 
-      const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.GAME_PARTITIONS, fractions, COLORS_4, FillType.RANDOM, true );
+      const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.LIMITED_9_GAME_PARTITIONS, fractions, COLORS_4, FillType.RANDOM, true );
       const pieceNumbers = FractionLevel.multipliedMixedNumbers( fractions );
 
       return FractionChallenge.createNumberChallenge( levelNumber, true, shapeTargets, pieceNumbers );
