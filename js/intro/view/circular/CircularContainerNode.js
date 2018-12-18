@@ -67,7 +67,6 @@ define( require => {
       for ( let i = 0; i < denominator; i++ ) {
         const cell = this.container.cells.get( i );
 
-        // TODO: YIKES, OPTIONS
         const cellNode = new CircularNode( denominator, i, {
           colorOverride: this.colorOverride
         } );

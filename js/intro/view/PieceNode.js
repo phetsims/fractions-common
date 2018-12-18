@@ -99,8 +99,7 @@ define( require => {
      * @param {Vector2} midpoint
      */
     setMidpoint( midpoint ) {
-      // TODO: why doesn't this use getMidpoint?
-      this.translation = this.translation.plus( midpoint.minus( this.localToParentPoint( Vector2.ZERO ) ) );
+      this.translation = this.translation.plus( midpoint.minus( this.getMidpoint() ) );
     }
 
     /**

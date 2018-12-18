@@ -84,8 +84,8 @@ define( require => {
         group: this.topAlignGroup
       } ), {
         fill: FractionsCommonColorProfile.introPanelBackgroundProperty,
-        xMargin: 10,
-        yMargin: 10
+        xMargin: FractionsCommonConstants.PANEL_MARGIN,
+        yMargin: FractionsCommonConstants.PANEL_MARGIN
       } );
 
       // @protected {Node}
@@ -94,6 +94,12 @@ define( require => {
 
       // @private {Node|null} the visual representation of the container set
       this.currentView = null;
+
+      // Returns the current bucket location
+      const getBucketLocation = () => {
+        assert && assert( this.currentView.bucketNode );
+        return this.currentView.bucketNode.getUniqueTrail().getMatrixTo( this.currentView.getUniqueTrail() ).timesVector2( Vector2.ZERO );
+      };
 
       // present for the lifetime of the simulation
       model.representationProperty.link( representation => {
@@ -106,49 +112,46 @@ define( require => {
           this.currentView.dispose();
         }
 
-        // TODO: fractor out, clearn erp
-        const getBucketLocation = () => {
-          assert && assert( this.currentView.bucketNode );
-          return this.currentView.bucketNode.getUniqueTrail().getMatrixTo( this.currentView.getUniqueTrail() ).timesVector2( Vector2.ZERO );
-        };
-
-        // Should this be a switch statement? TODO: yes. cleanup
         this.currentView = null;
-        if ( representation === IntroRepresentation.CIRCLE ) {
-          this.currentView = new CircularSceneNode( model, {
-            getBucketLocation
-          } );
-        }
-        else if ( representation === IntroRepresentation.VERTICAL_BAR ) {
-          this.currentView = new RectangularSceneNode( model, {
-            getBucketLocation,
-            rectangularOrientation: RectangularOrientation.VERTICAL
-          } );
-        }
-        else if ( representation === IntroRepresentation.HORIZONTAL_BAR ) {
-          this.currentView = new RectangularSceneNode( model, {
-            getBucketLocation,
-            rectangularOrientation: RectangularOrientation.HORIZONTAL
-          } );
-        }
-        else if ( representation === IntroRepresentation.BEAKER ) {
-          this.currentView = new BeakerSceneNode( model, {
-            getBucketLocation
-          } );
-        }
-        else if ( representation === IntroRepresentation.CAKE ) {
-          this.currentView = new CakeSceneNode( model, {
-            getBucketLocation
-          } );
-        }
-        else if ( representation === IntroRepresentation.NUMBER_LINE ) {
-          this.currentView = new NumberLineSceneNode( model );
+
+        switch ( representation ) {
+          case IntroRepresentation.CIRCLE:
+            this.currentView = new CircularSceneNode( model, {
+              getBucketLocation
+            } );
+            break;
+          case IntroRepresentation.VERTICAL_BAR:
+            this.currentView = new RectangularSceneNode( model, {
+              getBucketLocation,
+              rectangularOrientation: RectangularOrientation.VERTICAL
+            } );
+            break;
+          case IntroRepresentation.HORIZONTAL_BAR:
+            this.currentView = new RectangularSceneNode( model, {
+              getBucketLocation,
+              rectangularOrientation: RectangularOrientation.HORIZONTAL
+            } );
+            break;
+          case IntroRepresentation.BEAKER:
+            this.currentView = new BeakerSceneNode( model, {
+              getBucketLocation
+            } );
+            break;
+          case IntroRepresentation.CAKE:
+            this.currentView = new CakeSceneNode( model, {
+              getBucketLocation
+            } );
+            break;
+          case IntroRepresentation.NUMBER_LINE:
+            this.currentView = new NumberLineSceneNode( model );
+            break;
+          default:
+            // Don't have a current view. May happen on startup
         }
         if ( this.currentView ) {
           // add the chosen visual representation to the scene graph
           this.viewContainer.addChild( this.currentView );
           if ( this.currentView.pieceLayer ) {
-            // TODO: egad, why are we doing this? Also when do pieces need to be behind?
             this.viewContainer.addChild( this.currentView.pieceLayer );
           }
           if ( this.currentView.bucketNode ) {

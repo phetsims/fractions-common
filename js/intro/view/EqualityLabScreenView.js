@@ -63,7 +63,6 @@ define( require => {
       } );
 
       const multipliedFractionNode = new PropertyFractionNode( multipliedNumeratorProperty, multipliedDenominatorProperty, {
-        // TODO: share scale
         scale: 3,
 
         maxNumerator: model.numeratorProperty.range.max * model.multiplierProperty.range.max,
@@ -80,7 +79,6 @@ define( require => {
       } );
       this.addChild( multiplierSpinner );
 
-      // TODO: alternates!
       const circularIcon = CircularSceneNode.getIcon( true );
       const horizontalIcon = RectangularSceneNode.getIcon( RectangularOrientation.HORIZONTAL, true );
       const verticalIcon = RectangularSceneNode.getIcon( RectangularOrientation.VERTICAL, true );
@@ -115,9 +113,8 @@ define( require => {
         group: this.topAlignGroup
       } ), {
         fill: FractionsCommonColorProfile.introPanelBackgroundProperty,
-        // TODO: factor out margins?
-        xMargin: 10,
-        yMargin: 10
+        xMargin: FractionsCommonConstants.PANEL_MARGIN,
+        yMargin: FractionsCommonConstants.PANEL_MARGIN
       } );
       this.addChild( showNumberLinePanel );
 
@@ -194,7 +191,6 @@ define( require => {
 
           const semitransparentColorOverride = new DerivedProperty( [ colorOverride ], color => color.withAlpha( 0.8 ) );
 
-          // TODO: some cleanup
           if ( representation === IntroRepresentation.CIRCLE ) {
             containerNodes = containers.map( container => new CircularContainerNode( container, {
               colorOverride
@@ -222,7 +218,6 @@ define( require => {
             multipliedViewContainer.addChild( spacedBox( 4, containerNodes, representation ) );
           }
           else if ( representation === IntroRepresentation.NUMBER_LINE ) {
-            // TODO: check disposal here for properties
             const multipliedNumberLine = new NumberLineNode( model.numeratorProperty, model.denominatorProperty, model.containerCountProperty, {
               multiplierProperty: model.multiplierProperty,
               orientation: NumberLineOrientation.VERTICAL,

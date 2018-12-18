@@ -85,13 +85,6 @@ define( require => {
         bottomRight: options.touchRadius
       } ).transformed( rotationMatrix );
 
-      // this.increaseButton.touchArea = Shape.bounds( this.increaseButton.localBounds.withOffsets(
-      //   options.sideTouchDilation, options.longTouchDilation, options.sideTouchDilation, options.spacing / 2
-      // ) ).transformed( rotationMatrix );
-      // this.decreaseButton.touchArea = Shape.bounds( this.decreaseButton.localBounds.withOffsets(
-      //   options.sideTouchDilation, options.spacing / 2, options.sideTouchDilation, options.longTouchDilation
-      // ) ).transformed( rotationMatrix );
-
       this.children = [
         this.increaseButton,
         this.decreaseButton
