@@ -35,7 +35,10 @@ define( require => {
         spacing: 5
       }, options );
 
-      const maxText = new Text( representationMaxString, { font: new PhetFont( 24 ) } );
+      const maxText = new Text( representationMaxString, {
+        font: new PhetFont( 24 ),
+        maxWidth: 100
+      } );
       const readoutText = new Text( '', { font: new PhetFont( 34 ) } );
 
       // Figure out what the largest bounds are for the readout

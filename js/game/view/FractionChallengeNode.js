@@ -100,14 +100,16 @@ define( require => {
 
       // @private {Node}
       this.levelText = new Text( StringUtils.fillIn( levelTitlePatternString, { number: challenge.levelNumber } ), {
-        font: new PhetFont( { size: 30, weight: 'bold' } )
+        font: new PhetFont( { size: 30, weight: 'bold' } ),
+        maxWidth: 400
       } );
 
       // @private {TextPushButton}
       this.nextLevelButton = new TextPushButton( nextString, {
         listener: nextLevelCallback,
         baseColor: PhetColorScheme.BUTTON_YELLOW,
-        font: new PhetFont( 24 )
+        font: new PhetFont( 24 ),
+        maxTextWidth: 150
       } );
 
       // @private {Node}

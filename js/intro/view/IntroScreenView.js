@@ -97,7 +97,10 @@ define( require => {
         this.addChild( this.mixedFractionNode );
         model.showMixedNumbersProperty.linkAttribute( this.mixedFractionNode, 'visible' );
 
-        const label = new Text( mixedNumberString, { font: new PhetFont( 26 ) } );
+        const label = new Text( mixedNumberString, {
+          font: new PhetFont( 26 ),
+          maxWidth: 270
+        } );
         const showMixedCheckbox = new Checkbox( label, model.showMixedNumbersProperty, {
           boxWidth: 30,
           right: this.layoutBounds.right - MARGIN,
@@ -151,7 +154,10 @@ define( require => {
         } );
 
         const equationBox = new AccordionBox( equationBoxContent, {
-          titleNode: new Text( equationString, { font: new PhetFont( 20 ) } ),
+          titleNode: new Text( equationString, {
+            font: new PhetFont( 20 ),
+            maxWidth: 200
+          } ),
           showTitleWhenExpanded: false,
           bottom: this.layoutBounds.bottom - MARGIN,
           left: this.layoutBounds.left + 50,
