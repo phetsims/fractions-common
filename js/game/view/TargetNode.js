@@ -167,7 +167,7 @@ define( require => {
 
       if ( isShapeTarget ) {
         this.addChild( new HBox( {
-          scale: 0.6,
+          scale: challenge.hasMixedTargets ? 0.6 : ( challenge.maxTargetWholes > 1 ? 0.9 : 1 ),
           spacing: 5,
           children: target.filledPartitions.map( filledPartition => new FilledPartitionNode( filledPartition, {
             layoutShapeWidth: ShapePartition.GAME_PARTITIONS_MAX_WIDTH
