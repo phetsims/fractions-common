@@ -1482,7 +1482,7 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level5Numbers( levelNumber ) {
-      const shapeTargets = FractionLevel.targetsFromPartitions( choose( 3, ShapePartition.LIMITED_9_GAME_PARTITIONS ), COLORS_3, d => sample( inclusive( 1, d ) ), FillType.SEQUENTIAL );
+      const shapeTargets = FractionLevel.targetsFromPartitions( choose( 3, ShapePartition.LIMITED_9_GAME_PARTITIONS.filter( partition => partition.length > 1 ) ), COLORS_3, d => sample( inclusive( 1, d - 1 ) ), FillType.SEQUENTIAL );
       const pieceNumbers = FractionLevel.exactNumbers( shapeTargets.map( target => target.fraction ) );
 
       return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
