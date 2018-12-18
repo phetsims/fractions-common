@@ -392,41 +392,6 @@ define( require => {
     }
 
     /**
-     * Returns a list of numbers required exactly for the given fractions (for number challenges), but multiplied by
-     * a given factor.
-     * @public
-     *
-     * @param {Array.<Fraction>}
-     * @returns {Array.<number>}
-     */
-    static multipliedNumbers( fractions ) {
-      return _.flatten( fractions.map( fraction => {
-        const multiplier = sample( [ 2, 3 ] );
-        return [
-          fraction.numerator * multiplier,
-          fraction.denominator * multiplier
-        ];
-      } ) ).filter( _.identity );
-    }
-
-    /**
-     * Returns a list of numbers required exactly for the given fractions (for number challenges), but with a certain
-     * quantity of them multiplied by a random factor.
-     * @public
-     *
-     * @param {Array.<Fraction>}
-     * @param {number} quantity
-     * @returns {Array.<number>}
-     */
-    static withMultipliedNumbers( fractions, quantity ) {
-      const shuffledFractions = shuffle( fractions );
-      return [
-        ...FractionLevel.exactNumbers( shuffledFractions.slice( 0, fractions.length - quantity ) ),
-        ...FractionLevel.multipliedNumbers( shuffledFractions.slice( fractions.length - quantity, fractions.length ) )
-      ];
-    }
-
-    /**
      * Returns a list of numbers required exactly for the given fractions (for number challenges).
      * @public
      *
@@ -446,41 +411,53 @@ define( require => {
     }
 
     /**
-     * Returns a list of mixed numbers required exactly for the given fractions (for number challenges), but multiplied
-     * by a given factor.
+     * Returns a list of numbers required exactly for the given fractions (for number challenges), but multiplied by
+     * a given factor.
      * @public
      *
      * @param {Array.<Fraction>}
+     * @param {boolean} separateWhole - If true, the whole portion will be separated out into a card of its own.
      * @returns {Array.<number>}
      */
-    static multipliedMixedNumbers( fractions ) {
+    static multipliedNumbers( fractions, separateWhole ) {
       return _.flatten( fractions.map( fraction => {
-        const whole = Math.floor( fraction.value );
-        fraction = fraction.minus( new Fraction( whole, 1 ) );
+        const result = [];
 
+        // Add the whole part (if applicable)
+        if ( separateWhole ) {
+          const whole = Math.floor( fraction.value );
+          if ( whole > 0 ) {
+            result.push( whole );
+            fraction = fraction.minus( new Fraction( whole, 1 ) );
+          }
+        }
+
+        // Add the numerator/denominator
         const multiplier = sample( fraction.denominator <= 4 ? ( fraction.denominator <= 3 ? [ 2, 3 ] : [ 2 ] ) : [ 1 ] );
-        return [
-          whole,
-          fraction.numerator * multiplier,
-          fraction.denominator * multiplier
-        ];
+        result.push( fraction.numerator * multiplier );
+        result.push( fraction.denominator * multiplier );
+
+        return result;
       } ) ).filter( _.identity );
     }
 
     /**
-     * Returns a list of mixed numbers required exactly for the given fractions (for number challenges), but with a
-     * certain quantity of them multiplied by a random factor.
+     * Returns a list of numbers required exactly for the given fractions (for number challenges), but with a certain
+     * quantity of them multiplied by a random factor.
      * @public
      *
      * @param {Array.<Fraction>}
      * @param {number} quantity
+     * @param {boolean} separateWhole - If true, the whole portion will be separated out into a card of its own.
      * @returns {Array.<number>}
      */
-    static withMultipliedMixedNumbers( fractions, quantity ) {
+    static withMultipliedNumbers( fractions, quantity, separateWhole ) {
       let breakable = shuffle( splittable( fractions ) );
       let unbreakable = notSplittable( fractions );
 
-      assert && assert( breakable.length >= quantity );
+      // TODO: see decision on https://github.com/phetsims/fractions-common/issues/8, what to do if we lack the
+      // number of breakable bits?
+      // assert && assert( breakable.length >= quantity );
 
       // Reshape the arrays so that we have at most `quantity` in breakable (we'll multiply those)
       if ( breakable.length > quantity ) {
@@ -493,7 +470,7 @@ define( require => {
 
       return [
         ...FractionLevel.exactMixedNumbers( unbreakable ),
-        ...FractionLevel.multipliedMixedNumbers( breakable )
+        ...FractionLevel.multipliedNumbers( breakable, separateWhole )
       ];
     }
 
@@ -1458,7 +1435,7 @@ define( require => {
       const targetFractions = numerators.map( n => new Fraction( n, 6 ) );
       const pieceNumbers = [
         ...FractionLevel.exactNumbers( targetFractions ),
-        ...FractionLevel.multipliedNumbers( choose( 2, targetFractions ) )
+        ...FractionLevel.multipliedNumbers( choose( 2, targetFractions ), false )
       ];
       const shapeTargets = FractionLevel.targetsFromFractions( shapePartitions, targetFractions, COLORS_3, FillType.SEQUENTIAL );
 
@@ -1527,7 +1504,7 @@ define( require => {
      */
     static level6Numbers( levelNumber ) {
       const shapeTargets = FractionLevel.targetsFromPartitions( choose( 4, ShapePartition.LIMITED_9_GAME_PARTITIONS ), COLORS_4, d => sample( inclusive( 1, d ) ), null );
-      const pieceNumbers = FractionLevel.withMultipliedNumbers( shapeTargets.map( target => target.fraction ), 2 );
+      const pieceNumbers = FractionLevel.withMultipliedNumbers( shapeTargets.map( target => target.fraction ), 2, false );
 
       return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
     }
@@ -1687,7 +1664,7 @@ define( require => {
      */
     static level10Numbers( levelNumber ) {
       const shapeTargets = FractionLevel.targetsFromPartitions( choose( 4, ShapePartition.LIMITED_9_GAME_PARTITIONS ), COLORS_4, d => sample( inclusive( 1, 2 * d ) ), FillType.MIXED );
-      const pieceNumbers = FractionLevel.withMultipliedNumbers( shapeTargets.map( target => target.fraction ), 2 );
+      const pieceNumbers = FractionLevel.withMultipliedNumbers( shapeTargets.map( target => target.fraction ), 2, false );
 
       return FractionChallenge.createNumberChallenge( levelNumber, false, shapeTargets, pieceNumbers );
     }
@@ -1825,7 +1802,7 @@ define( require => {
       const fractions = chooseSplittable( 3, mixedNumbersFractions, 1 );
 
       const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.LIMITED_9_GAME_PARTITIONS, fractions, COLORS_3, FillType.SEQUENTIAL, true );
-      const pieceNumbers = FractionLevel.withMultipliedMixedNumbers( fractions, 1 );
+      const pieceNumbers = FractionLevel.withMultipliedNumbers( fractions, 1, true );
 
       return FractionChallenge.createNumberChallenge( levelNumber, true, shapeTargets, pieceNumbers );
     }
@@ -1847,7 +1824,7 @@ define( require => {
       const fractions = chooseSplittable( 4, mixedNumbersFractions, 2 );
 
       const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.LIMITED_9_GAME_PARTITIONS, fractions, COLORS_4, FillType.RANDOM, true );
-      const pieceNumbers = FractionLevel.withMultipliedMixedNumbers( fractions, 2 );
+      const pieceNumbers = FractionLevel.withMultipliedNumbers( fractions, 2, true );
 
       return FractionChallenge.createNumberChallenge( levelNumber, true, shapeTargets, pieceNumbers );
     }
@@ -1903,7 +1880,7 @@ define( require => {
       const fractions = choose( 4, mixedNumbersFractions );
 
       const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.LIMITED_9_GAME_PARTITIONS, fractions, COLORS_4, FillType.RANDOM, true );
-      const pieceNumbers = FractionLevel.multipliedMixedNumbers( fractions );
+      const pieceNumbers = FractionLevel.multipliedNumbers( fractions, true );
 
       return FractionChallenge.createNumberChallenge( levelNumber, true, shapeTargets, pieceNumbers );
     }
@@ -1965,7 +1942,7 @@ define( require => {
         ] );
         return FractionLevel.difficultMixedShapeTarget( shapePartitions, fraction, colors[ index ] );
       } );
-      const pieceNumbers = FractionLevel.multipliedMixedNumbers( fractions );
+      const pieceNumbers = FractionLevel.multipliedNumbers( fractions, true );
 
       return FractionChallenge.createNumberChallenge( levelNumber, true, shapeTargets, pieceNumbers );
     }
