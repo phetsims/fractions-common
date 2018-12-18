@@ -129,6 +129,40 @@ define( require => {
         content: this.levelSelectionLayer,
         cachedNodes: [ this.levelSelectionLayer ]
       } );
+
+      const leftButtonOptions = {
+        touchAreaXDilation: SIDE_MARGIN,
+        touchAreaYDilation: SIDE_MARGIN / 2
+      };
+      const challengeControlBox = new VBox( {
+        spacing: SIDE_MARGIN,
+        top: this.layoutBounds.top + SIDE_MARGIN,
+        left: this.layoutBounds.left + SIDE_MARGIN,
+        children: [
+          new BackButton( _.extend( {
+            listener() {
+              model.levelProperty.value = null;
+            }
+          }, leftButtonOptions ) ),
+          new RefreshButton( _.extend( {
+            iconScale: 0.7,
+            xMargin: 9,
+            yMargin: 7,
+            listener() {
+              model.levelProperty.value && model.levelProperty.value.reset();
+            }
+          }, leftButtonOptions ) ),
+          ...( phet.chipper.queryParameters.showAnswers ? [
+            new RectangularPushButton( _.extend( {
+              content: new FaceNode( 27 ),
+              listener: function() {
+                model.challengeProperty.value.cheat();
+              }
+            }, leftButtonOptions ) )
+          ] : [] )
+        ]
+      } );
+
       let lastChallengeNode = null;
       model.challengeProperty.lazyLink( ( challenge, oldChallenge ) => {
         const oldChallengeNode = lastChallengeNode;
@@ -147,54 +181,17 @@ define( require => {
             allLevelsCompletedNode.center = challengeNode.challengeCenter;
           }
 
-          // Reparent these, since we don't want to leak memory
-          challengeBackground.detach();
-          challengeForeground.detach();
-
-          // TODO: don't need wrapper, include somehow? (maybe put the things in the challenge node?)
-          // TODO: Or have a transition between a challenge OR the two level select screens!!!!!!!!!
-          const leftButtonOptions = {
-            touchAreaXDilation: SIDE_MARGIN,
-            touchAreaYDilation: SIDE_MARGIN / 2
-          };
-          const wrapper = new Node( {
+          // Assign each challenge node with a wrapper reference, so we can easily dispose it.
+          challengeNode.wrapper = new Node( {
             children: [
               challengeBackground,
-              new VBox( {
-                spacing: SIDE_MARGIN,
-                top: this.layoutBounds.top + SIDE_MARGIN,
-                left: this.layoutBounds.left + SIDE_MARGIN,
-                children: [
-                  new BackButton( _.extend( {
-                    listener() {
-                      model.levelProperty.value = null;
-                    }
-                  }, leftButtonOptions ) ),
-                  new RefreshButton( _.extend( {
-                    // TODO: hmm, these 3 are copied from expression-exchange, and make the button the same width...
-                    iconScale: 0.7,
-                    xMargin: 9,
-                    yMargin: 7,
-                    listener() {
-                      model.levelProperty.value && model.levelProperty.value.reset();
-                    }
-                  }, leftButtonOptions ) ),
-                  ...( phet.chipper.queryParameters.showAnswers ? [
-                    new RectangularPushButton( _.extend( {
-                      content: new FaceNode( 27 ),
-                      listener: function() {
-                        challenge.cheat();
-                      }
-                    }, leftButtonOptions ) )
-                  ] : [] )
-                ]
-              } ),
+              challengeControlBox,
               challengeNode,
               challengeForeground
             ]
           } );
           if ( oldChallenge && oldChallenge.refreshedChallenge === challenge ) {
-            transition = this.mainTransitionNode.dissolveTo( wrapper, {
+            transition = this.mainTransitionNode.dissolveTo( challengeNode.wrapper, {
               duration: 0.6,
               targetOptions: {
                 easing: Easing.LINEAR
@@ -202,14 +199,17 @@ define( require => {
             } );
           }
           else {
-            transition = this.mainTransitionNode.slideLeftTo( wrapper, QUADRATIC_TRANSITION_OPTIONS );
+            transition = this.mainTransitionNode.slideLeftTo( challengeNode.wrapper, QUADRATIC_TRANSITION_OPTIONS );
           }
         }
         else {
           transition = this.mainTransitionNode.slideRightTo( this.levelSelectionLayer, QUADRATIC_TRANSITION_OPTIONS );
         }
         if ( oldChallengeNode ) {
-          transition.endedEmitter.addListener( () => oldChallengeNode.dispose() );
+          transition.endedEmitter.addListener( () => {
+            oldChallengeNode.wrapper.dispose();
+            oldChallengeNode.dispose();
+          } );
         }
       } );
 
@@ -257,7 +257,7 @@ define( require => {
           rightButton
         ],
         centerX: this.layoutBounds.centerX,
-        bottom: this.layoutBounds.bottom - 10, // TODO: center with reset-all and sound button
+        bottom: this.layoutBounds.bottom - 10,
         spacing: levelSelectionButtonSpacing
       } ), { group: bottomAlignGroup } );
       this.levelSelectionLayer.addChild( slidingLevelSelectionNode );
@@ -362,7 +362,7 @@ define( require => {
     reset() {
       this.leftLevelSelectionProperty.reset();
 
-      // TODO: better way of saying "animate instantly"
+      // "Instantly" complete animations
       this.levelSelectionTransitionNode.step( Number.POSITIVE_INFINITY );
       this.mainTransitionNode.step( Number.POSITIVE_INFINITY );
     }

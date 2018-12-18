@@ -11,7 +11,6 @@ define( require => {
   // modules
   const BuildingModel = require( 'FRACTIONS_COMMON/building/model/BuildingModel' );
   const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
-  const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
   const ChallengeType = require( 'FRACTIONS_COMMON/game/enum/ChallengeType' );
   const CollectionFinder = require( 'FRACTIONS_COMMON/game/model/CollectionFinder' );
   const ColorDef = require( 'SCENERY/util/ColorDef' );
@@ -254,9 +253,6 @@ define( require => {
      * @param {Target} target
      */
     collectShapeGroup( shapeGroup, target ) {
-      // Try to start moving out another group
-      this.ensureGroups( BuildingType.SHAPE );
-
       shapeGroup.partitionDenominatorProperty.value = target.fraction.denominator;
 
       this.collectGroup( shapeGroup, target, this.shapeGroups, FractionsCommonConstants.SHAPE_COLLECTION_SCALE );
@@ -270,9 +266,6 @@ define( require => {
      * @param {Target} target
      */
     collectNumberGroup( numberGroup, target ) {
-      // Try to start moving out another group
-      this.ensureGroups( BuildingType.NUMBER );
-
       this.collectGroup( numberGroup, target, this.numberGroups, FractionsCommonConstants.NUMBER_COLLECTION_SCALE );
     }
 
@@ -300,7 +293,7 @@ define( require => {
      */
     ensureGroups( type ) {
       const groupArray = this.groupsMap.get( type );
-      const stackArray = this.activePiecesMap.get( type );
+      const stackArray = this.groupStacksMap.get( type );
 
       // If we already have one out, don't look for more
       if ( groupArray.length >= 2 ) { return; }
