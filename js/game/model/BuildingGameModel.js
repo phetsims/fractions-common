@@ -58,20 +58,24 @@ define( require => {
       // @public {Emitter}
       this.allLevelsCompleteEmitter = new Emitter();
 
-      this.shapeLevels.forEach( shapeLevel => {
-        shapeLevel.scoreProperty.lazyLink( () => {
-          const numMissing = _.sum( this.shapeLevels.map( shapeLevel => shapeLevel.scoreProperty.value - shapeLevel.numTargets ) );
-          if ( numMissing === 0 ) {
-            this.allLevelsCompleteEmitter.emit();
-          }
-        } );
-      } );
-      this.numberLevels.forEach( numberLevel => {
-        numberLevel.scoreProperty.lazyLink( () => {
-          const numMissing = _.sum( this.numberLevels.map( numberLevel => numberLevel.scoreProperty.value - numberLevel.numTargets ) );
-          if ( numMissing === 0 ) {
-            this.allLevelsCompleteEmitter.emit();
-          }
+      // @public {Emitter}
+      this.singleLevelCompleteEmitter = new Emitter();
+
+      // Fire the level complete emitters when needed
+      [ this.shapeLevels, this.numberLevels ].forEach( levels => {
+        const countMissing = () => _.sum( this.levels.map( level => level.scoreProperty.value - level.numTargets ) );
+        let lastCountMissing = countMissing();
+        levels.forEach( level => {
+          level.scoreProperty.lazyLink( () => {
+            const numMissing = countMissing();
+            if ( numMissing === 0 ) {
+              this.allLevelsCompleteEmitter.emit();
+            }
+            else if ( numMissing < lastCountMissing ) {
+              this.singleLevelCompleteEmitter.emit();
+            }
+            lastCountMissing = numMissing;
+          } );
         } );
       } );
     }

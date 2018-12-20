@@ -271,6 +271,10 @@ define( require => {
       } );
       challengeForeground.addChild( allLevelsCompletedNode );
 
+      model.singleLevelCompleteEmitter.addListener( () => {
+        
+      } );
+
       model.allLevelsCompleteEmitter.addListener( () => {
         if ( !platform.mobileSafari ) {
           // @private {RewardNode}

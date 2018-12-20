@@ -174,7 +174,7 @@ define( require => {
         this.gameAudioPlayer.correctAnswer();
       }
       else {
-        this.gameAudioPlayer.gameOverPerfectScore();
+        this.gameAudioPlayer.gameOverPerfectScore(); // or challengeComplete
       }
     }
 
