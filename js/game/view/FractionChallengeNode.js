@@ -42,17 +42,13 @@ define( require => {
     /**
      * @param {FractionChallenge} challenge
      * @param {Bounds2} layoutBounds
-     * @param {GameAudioPlayer} gameAudioPlayer
      * @param {function|null} nextLevelCallback - Called with no arguments, forwards to the next level (if there is one)
      */
-    constructor( challenge, layoutBounds, gameAudioPlayer, nextLevelCallback ) {
+    constructor( challenge, layoutBounds, nextLevelCallback ) {
       super();
 
       // @private {FractionChallenge}
       this.challenge = challenge;
-
-      // @private {GameAudioPlayer}
-      this.gameAudioPlayer = gameAudioPlayer;
 
       // @private {Property.<Bounds2>}
       this.shapeDragBoundsProperty = new Property( layoutBounds );
@@ -154,7 +150,7 @@ define( require => {
       this.numberDragBoundsProperty.value = this.modelViewTransform.viewToModelBounds( layoutBounds );
 
       // @private {GameLayerNode}
-      this.layerNode = new GameLayerNode( challenge, this.modelViewTransform, this.shapeDragBoundsProperty, this.numberDragBoundsProperty, this.targetsContainer, this.panel, this.playCollectedSound.bind( this ) );
+      this.layerNode = new GameLayerNode( challenge, this.modelViewTransform, this.shapeDragBoundsProperty, this.numberDragBoundsProperty, this.targetsContainer, this.panel );
 
       this.children = [
         this.panel,
@@ -163,19 +159,6 @@ define( require => {
         this.layerNode,
         this.levelCompleteNode
       ];
-    }
-
-    /**
-     * Plays the "collection" sound.
-     * @private
-     */
-    playCollectedSound() {
-      if ( _.some( this.challenge.targets, target => target.groupProperty.value === null ) ) {
-        this.gameAudioPlayer.correctAnswer();
-      }
-      else {
-        this.gameAudioPlayer.gameOverPerfectScore(); // or challengeComplete
-      }
     }
 
     /**
