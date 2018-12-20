@@ -175,7 +175,7 @@ define( require => {
         let transition;
         if ( challenge ) {
           const nextLevelCallback = challenge.levelNumber < FractionsCommonConstants.NUM_LEVELS ? model.nextLevel.bind( model ) : null;
-          const challengeNode = new FractionChallengeNode( challenge, this.layoutBounds, this.gameAudioPlayer, nextLevelCallback );
+          const challengeNode = new FractionChallengeNode( challenge, this.layoutBounds, nextLevelCallback );
           lastChallengeNode = challengeNode;
           if ( allLevelsCompletedNode ) {
             allLevelsCompletedNode.center = challengeNode.challengeCenter;
@@ -215,8 +215,11 @@ define( require => {
 
       this.addChild( this.mainTransitionNode );
 
-      // @public {GameAudioPlayer}
-      this.gameAudioPlayer = new GameAudioPlayer( model.soundEnabledProperty );
+      const gameAudioPlayer = new GameAudioPlayer( model.soundEnabledProperty );
+
+      model.allLevelsCompleteEmitter.addListener( () => gameAudioPlayer.gameOverPerfectScore() );
+      model.singleLevelCompleteEmitter.addListener( () => gameAudioPlayer.challengeCompleted() );
+      model.collectedGroupEmitter.addListener( () => gameAudioPlayer.correctAnswer() );
 
       this.levelSelectionLayer.addChild( this.levelSelectionTransitionNode );
 
@@ -270,6 +273,10 @@ define( require => {
         visible: false
       } );
       challengeForeground.addChild( allLevelsCompletedNode );
+
+      model.singleLevelCompleteEmitter.addListener( () => {
+
+      } );
 
       model.allLevelsCompleteEmitter.addListener( () => {
         if ( !platform.mobileSafari ) {

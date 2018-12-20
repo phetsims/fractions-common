@@ -55,23 +55,33 @@ define( require => {
       // @public {Property.<boolean>}
       this.soundEnabledProperty = new BooleanProperty( true );
 
-      // @public {Emitter}
+      // @public {Emitter} - Triggers when all 10 levels are completed
       this.allLevelsCompleteEmitter = new Emitter();
 
-      this.shapeLevels.forEach( shapeLevel => {
-        shapeLevel.scoreProperty.lazyLink( () => {
-          const numMissing = _.sum( this.shapeLevels.map( shapeLevel => shapeLevel.scoreProperty.value - shapeLevel.numTargets ) );
-          if ( numMissing === 0 ) {
-            this.allLevelsCompleteEmitter.emit();
-          }
-        } );
-      } );
-      this.numberLevels.forEach( numberLevel => {
-        numberLevel.scoreProperty.lazyLink( () => {
-          const numMissing = _.sum( this.numberLevels.map( numberLevel => numberLevel.scoreProperty.value - numberLevel.numTargets ) );
-          if ( numMissing === 0 ) {
-            this.allLevelsCompleteEmitter.emit();
-          }
+      // @public {Emitter} - Triggers when a level is completed, but it doesn't complete all 10 levels
+      this.singleLevelCompleteEmitter = new Emitter();
+
+      // @public {Emitter} - Triggers when a group is collected (but not when the level is completed)
+      this.collectedGroupEmitter = new Emitter();
+
+      // Fire the level complete emitters when needed
+      [ this.shapeLevels, this.numberLevels ].forEach( levels => {
+        const countMissing = () => _.sum( this.levels.map( level => level.scoreProperty.value - level.numTargets ) );
+        let lastCountMissing = countMissing();
+        levels.forEach( level => {
+          level.scoreProperty.lazyLink( ( newScore, oldScore ) => {
+            const numMissing = countMissing();
+            if ( numMissing === 0 ) {
+              this.allLevelsCompleteEmitter.emit();
+            }
+            else if ( numMissing < lastCountMissing ) {
+              this.singleLevelCompleteEmitter.emit();
+            }
+            else if ( newScore > oldScore ) {
+              this.collectedGroupEmitter.emit();
+            }
+            lastCountMissing = numMissing;
+          } );
         } );
       } );
     }
