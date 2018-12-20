@@ -43,7 +43,7 @@ define( require => {
       // @public {Property.<Target|null>} - The target, if any, that the user is holding this group over.
       this.hoveringTargetProperty = new Property( null );
 
-      // @public {Animator} - Reponsible for animating the main properties of this group.
+      // @public {Animator} - Responsible for animating the main properties of this group.
       this.animator = new Animator( {
         positionProperty: this.positionProperty,
         scaleProperty: this.scaleProperty,
