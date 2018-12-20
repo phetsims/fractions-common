@@ -1259,20 +1259,20 @@ define( require => {
         ].map( f => f.plusInteger( whole ) );
       } ) ) );
 
-      const topFractions = repeat( 2, baseFractions[ 0 ] );
-      const bottomFractions = repeat( 2, baseFractions[ 1 ] );
+      const topFraction = baseFractions[ 0 ];
+      const bottomFraction = baseFractions[ 1 ];
+
+      const topFractions = repeat( 2, topFraction );
+      const bottomFractions = repeat( 2, bottomFraction );
       const targetFractions = [
         ...topFractions,
         ...bottomFractions
       ];
 
       const pieceFractions = [
-        ...FractionLevel.fullSplitFractions( FractionLevel.straightforwardFractions( topFractions ), {
-          quantity: 4
-        } ),
-        ...FractionLevel.fullSplitFractions( FractionLevel.straightforwardFractions( bottomFractions ), {
-          quantity: 4
-        } )
+        ...FractionLevel.difficultSplit( topFraction ),
+        ...FractionLevel.difficultSplit( bottomFraction ),
+        ...FractionLevel.straightforwardFractions( [ topFraction, bottomFraction ] )
       ];
 
       return FractionChallenge.createShapeChallenge( levelNumber, true, color, targetFractions, pieceFractions );
