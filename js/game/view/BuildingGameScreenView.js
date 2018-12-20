@@ -288,7 +288,14 @@ define( require => {
         allLevelsCompletedNode.visible = true;
 
         const scoreProperty = model.levelProperty.value.scoreProperty;
+        let finished = false;
         const doneListener = () => {
+          // We need a guard here, since otherwise the doneListener could potentially be called twice from the same
+          // event.
+          if ( finished ) {
+            return;
+          }
+          finished = true;
           model.levelProperty.unlink( doneListener );
           model.challengeProperty.unlink( doneListener );
           scoreProperty.unlink( doneListener );
