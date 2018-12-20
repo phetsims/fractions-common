@@ -690,7 +690,7 @@ define( require => {
       } ) ) );
 
       const pieceFractions = [
-        ...FractionLevel.unitFractions( targetFractions ),
+        ...FractionLevel.unitFractions( targetFractions.map( f => f.value === 1 ? Fraction.ONE : f ) ),
         ..._.flatten( targetFractions.map( f => FractionLevel.interestingFractions( f, 2 ) ) )
       ];
 
@@ -1825,7 +1825,14 @@ define( require => {
       const fractions = chooseSplittable( 3, mixedNumbersFractions, 1 );
 
       const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.LIMITED_9_GAME_PARTITIONS, fractions, COLORS_3, FillType.SEQUENTIAL, true );
-      const pieceNumbers = FractionLevel.withMultipliedNumbers( fractions, 1, true );
+
+      const splittableFraction = fractions[ 0 ];
+      const multiplier = sample( [ 2, 3, 4 ].filter( n => n * splittableFraction.denominator <= 9 ) );
+
+      const pieceNumbers = FractionLevel.exactMixedNumbers( [
+        ...fractions.slice( 1 ),
+        new Fraction( splittableFraction.numerator * multiplier, splittableFraction.denominator * multiplier )
+      ] );
 
       return FractionChallenge.createNumberChallenge( levelNumber, true, shapeTargets, pieceNumbers );
     }
