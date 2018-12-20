@@ -131,7 +131,7 @@ define( require => {
       this.panel.bottom = layoutBounds.bottom - PANEL_MARGIN;
       this.targetsContainer.right = layoutBounds.right - PANEL_MARGIN;
       const horizontalCenter = ( layoutBounds.left + this.targetsContainer.left ) / 2;
-      this.targetsContainer.centerY = ( layoutBounds.top + this.panel.top ) / 2;
+      this.targetsContainer.centerY = 234; // Tuned so that this should be just high enough to work for stacks of 10
       this.panel.centerX = horizontalCenter;
       if ( this.panel.left < PANEL_MARGIN ) {
         this.panel.left = PANEL_MARGIN;

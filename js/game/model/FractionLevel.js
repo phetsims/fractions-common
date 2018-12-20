@@ -278,7 +278,7 @@ define( require => {
         quantity: Number.POSITIVE_INFINITY,
 
         // {number} - The maximum denominator to consider for a split (any larger denominators will be ignored)
-        maxDenominator: 3,
+        maxDenominator: 4,
 
         // {Array.<Array.<Fraction>>} - Partitions that add up to 1, in a distribution that will evenly create denominators
         splits: [
@@ -316,7 +316,10 @@ define( require => {
 
       return [
         ..._.flatten( fractionsToChange.map( fraction => {
-          return sample( options.splits ).map( f => f.times( fraction ) );
+          const availableSplits = options.splits.filter( splitFractions => _.every( splitFractions, splitFraction => {
+            return splitFraction.denominator * fraction.denominator <= 8;
+          } ) );
+          return sample( availableSplits ).map( f => f.times( fraction ) );
         } ) ),
         ...otherFractions
       ];
