@@ -201,6 +201,7 @@ define( require => {
 
       for ( let i = 0; i < numPairColumns; i++ ) {
         for ( let j = 0; j < numPairRows; j++ ) {
+          // REVIEW: 'let' instead of 'var'?
           var matrix = Matrix3.translation( i, j );
           shapes.push( leftSideShape.transformed( matrix ) );
           shapes.push( rightSideShape.transformed( matrix ) );
