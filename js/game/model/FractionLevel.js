@@ -1568,7 +1568,7 @@ define( require => {
 
       const shapeTargets = inclusive( 0, 3 ).map( index => {
         const mainIndex = index < 2 ? 0 : 1;
-        const smallFraction = smallFractions[ mainIndex ];
+        const smallFraction = smallFractions[ mainIndex ].reduced();
         return ShapeTarget.fill( sample( ShapePartition.supportsDenominator( shapePartitionChoices[ mainIndex ], smallFraction.denominator ) ),
                                  smallFraction,
                                  colors[ index ],
