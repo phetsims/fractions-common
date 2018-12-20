@@ -278,7 +278,7 @@ define( require => {
         quantity: Number.POSITIVE_INFINITY,
 
         // {number} - The maximum denominator to consider for a split (any larger denominators will be ignored)
-        maxDenominator: 6,
+        maxDenominator: 3,
 
         // {Array.<Array.<Fraction>>} - Partitions that add up to 1, in a distribution that will evenly create denominators
         splits: [
