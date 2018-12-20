@@ -97,6 +97,7 @@ define( require => {
      */
     animateTo( config ) {
       config = _.extend( {
+
         // {Vector2}
         position: null,
 

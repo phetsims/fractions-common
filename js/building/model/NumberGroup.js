@@ -153,6 +153,7 @@ define( require => {
      */
     updateAllowedSpots() {
       if ( this.isMixedNumber ) {
+        // REVIEW: 'let' instead of 'var'?
         var range = this.activeNumberRangeProperty.value;
 
         this.numeratorSpot.showNotAllowedProperty.value = range === null ? false : !this.canPlaceNumberInSpot( range.min, this.numeratorSpot );
