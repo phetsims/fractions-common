@@ -1041,7 +1041,24 @@ define( require => {
       } ) ) );
       const pieceFractions = [
         ...FractionLevel.straightforwardFractions( targetFractions ),
-        ...FractionLevel.interestingFractions( sample( targetFractions ) )
+        ..._.flatten( choose( 2, [
+          [
+            new Fraction( 1, 1 )
+          ],
+          [
+            new Fraction( 1, 2 ),
+            new Fraction( 1, 2 )
+          ],
+          [
+            new Fraction( 1, 3 ),
+            new Fraction( 1, 3 ),
+            new Fraction( 1, 3 )
+          ],
+          [
+            new Fraction( 1, 4 ),
+            new Fraction( 1, 4 )
+          ]
+        ] ) )
       ];
       return FractionChallenge.createShapeChallenge( levelNumber, true, color, targetFractions, pieceFractions );
     }
