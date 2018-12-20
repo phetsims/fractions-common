@@ -218,7 +218,7 @@ define( require => {
       const gameAudioPlayer = new GameAudioPlayer( model.soundEnabledProperty );
 
       model.allLevelsCompleteEmitter.addListener( () => gameAudioPlayer.gameOverPerfectScore() );
-      model.singleLevelCompleteEmitter.addListener( () => gameAudioPlayer.challengeCompleted() );
+      model.singleLevelCompleteEmitter.addListener( () => gameAudioPlayer.challengeComplete() );
       model.collectedGroupEmitter.addListener( () => gameAudioPlayer.correctAnswer() );
 
       this.levelSelectionLayer.addChild( this.levelSelectionTransitionNode );
@@ -273,10 +273,6 @@ define( require => {
         visible: false
       } );
       challengeForeground.addChild( allLevelsCompletedNode );
-
-      model.singleLevelCompleteEmitter.addListener( () => {
-
-      } );
 
       model.allLevelsCompleteEmitter.addListener( () => {
         if ( !platform.mobileSafari ) {

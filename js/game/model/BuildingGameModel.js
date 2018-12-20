@@ -66,7 +66,7 @@ define( require => {
 
       // Fire the level complete emitters when needed
       [ this.shapeLevels, this.numberLevels ].forEach( levels => {
-        const countMissing = () => _.sum( this.levels.map( level => level.scoreProperty.value - level.numTargets ) );
+        const countMissing = () => _.sum( levels.map( level => level.numTargets - level.scoreProperty.value > 0 ? 1 : 0 ) );
         let lastCountMissing = countMissing();
         levels.forEach( level => {
           level.scoreProperty.lazyLink( ( newScore, oldScore ) => {
