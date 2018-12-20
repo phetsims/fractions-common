@@ -352,7 +352,7 @@ define( require => {
 
       return [
         ..._.flatten( fractionsToChange.map( fraction => {
-          return sample( collectionFinder8.search( fraction, {
+          return sample( collectionFinder9.search( fraction, {
             maxTotalQuantity: options.maxTotalQuantity
           } ) ).unitFractions;
         } ) ),
@@ -1293,7 +1293,7 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level8ShapesMixed( levelNumber, color ) {
-      const targetFractions = choose( 4, _.flatten( inclusive( 1, 3 ).map( whole => {
+      const targetFractions = chooseSplittable( 4, _.flatten( inclusive( 1, 3 ).map( whole => {
         return [
           new Fraction( 1, 2 ),
           new Fraction( 1, 3 ),
@@ -1307,7 +1307,7 @@ define( require => {
           new Fraction( 1, 6 ),
           new Fraction( 5, 6 )
         ].map( f => f.plusInteger( whole ) );
-      } ) ) );
+      } ) ), 2 );
 
       const pieceFractions = FractionLevel.fullSplitFractions( FractionLevel.straightforwardFractions( targetFractions ), {
         quantity: 5
