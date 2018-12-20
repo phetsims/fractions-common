@@ -174,6 +174,7 @@ define( require => {
 
         const cellNode = createCellNode( denominator, 0, {} );
         const bounds = representation === IntroRepresentation.CAKE ? cellNode.bounds : cellNode.getSafeTransformedVisibleBounds();
+        // REVIEW: Why are we not using phet.joist.random here?
         const random = new Random( {
           seed: 4 // https://xkcd.com/221/
         } );
