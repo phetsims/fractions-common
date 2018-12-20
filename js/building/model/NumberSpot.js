@@ -8,6 +8,7 @@
 define( require => {
   'use strict';
 
+  //REVIEW: `const` instead of `var`?
   // modules
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
