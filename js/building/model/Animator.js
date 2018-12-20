@@ -20,6 +20,7 @@ define( require => {
      */
     constructor( config ) {
 
+      // REVIEW: Should "config" be named "options"? This may just be a matter of preference.
       config = _.extend( {
         // {Property.<Vector2>}
         positionProperty: null,
