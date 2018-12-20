@@ -326,44 +326,6 @@ define( require => {
     }
 
     /**
-     * Returns a list of fractions with an equivalent sum, where up to `quantity` fractions have been split into
-     * sub-fractions. Does more complicated / full splits based on unit fractions up to 1/8.
-     * @private
-     *
-     * @param {Array.<Fraction>} fractions
-     * @param {Object} [options]
-     * @returns {Array.<Fraction>}
-     */
-    static fullSplitFractions( fractions, options ) {
-      options = _.extend( {
-        // {number} - Up to how many fractions to split
-        quantity: Number.POSITIVE_INFINITY,
-
-        // {number} - The maximum denominator to consider for a split (any larger denominators will be ignored)
-        maxDenominator: 6,
-
-        // {number} - Maximum number of pieces a single fraction can be split into
-        maxTotalQuantity: 4
-      }, options );
-
-      // Make a copy of all fractions, so we have unique instances (for down below)
-      fractions = fractions.map( f => f.copy() );
-
-      const availableFractions = fractions.filter( f => f.denominator <= options.maxDenominator );
-      const fractionsToChange = choose( Math.min( options.quantity, availableFractions.length ), availableFractions );
-      const otherFractions = arrayDifference( fractions, fractionsToChange );
-
-      return [
-        ..._.flatten( fractionsToChange.map( fraction => {
-          return sample( collectionFinder9.search( fraction, {
-            maxTotalQuantity: options.maxTotalQuantity
-          } ) ).unitFractions;
-        } ) ),
-        ...otherFractions
-      ];
-    }
-
-    /**
      * Returns an (optionally) filtered list of fractions from the list of numerators/denominators.
      * @public
      *
@@ -1312,9 +1274,10 @@ define( require => {
         ].map( f => f.plusInteger( whole ) );
       } ) ), 2 );
 
-      const pieceFractions = FractionLevel.fullSplitFractions( FractionLevel.straightforwardFractions( targetFractions ), {
-        quantity: 5
-      } );
+      const pieceFractions = [
+        ..._.flatten( targetFractions.slice( 0, 2 ).map( f => FractionLevel.difficultSplit( f ) ) ),
+        ...FractionLevel.straightforwardFractions( targetFractions.slice( 2 ) )
+      ];
 
       return FractionChallenge.createShapeChallenge( levelNumber, true, color, targetFractions, pieceFractions );
     }
