@@ -1813,7 +1813,7 @@ define( require => {
     static level6NumbersMixed( levelNumber ) {
       const fractions = chooseSplittable( 4, mixedNumbersFractions, 2 );
 
-      const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.LIMITED_9_GAME_PARTITIONS, fractions, COLORS_4, FillType.RANDOM, true );
+      const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.LIMITED_9_GAME_PARTITIONS, fractions, COLORS_4, FillType.MIXED, true );
 
       const pieceNumbers = [
         ...FractionLevel.multipliedNumbers( fractions.slice( 0, 2 ), true ),
