@@ -8,6 +8,7 @@
 define( require => {
   'use strict';
 
+  // REVIEW: 'const' instead of 'var'
   // modules
   var Namespace = require( 'PHET_CORE/Namespace' );
 

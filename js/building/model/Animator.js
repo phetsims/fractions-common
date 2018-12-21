@@ -21,6 +21,7 @@ define( require => {
     constructor( config ) {
 
       // REVIEW: Should "config" be named "options"? This may just be a matter of preference.
+      // REVIEW: (Review amendment) I see we are using the config pattern here, not too sure of the difference from options.
       config = _.extend( {
 
         // {Property.<Vector2>}
