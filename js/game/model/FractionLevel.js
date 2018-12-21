@@ -1914,7 +1914,8 @@ define( require => {
           const shapePartitions = sample( [
             ShapePartition.PIES,
             ShapePartition.EXTENDED_HORIZONTAL_BARS,
-            ShapePartition.EXTENDED_VERTICAL_BARS
+            ShapePartition.EXTENDED_VERTICAL_BARS,
+            ShapePartition.EXTENDED_RECTANGULAR_BARS
           ] );
           return FractionLevel.difficultMixedShapeTarget( shapePartitions, fraction, color );
         }
@@ -1945,7 +1946,8 @@ define( require => {
         const shapePartitions = sample( [
           ShapePartition.PIES,
           ShapePartition.EXTENDED_HORIZONTAL_BARS,
-          ShapePartition.EXTENDED_VERTICAL_BARS
+          ShapePartition.EXTENDED_VERTICAL_BARS,
+          ShapePartition.EXTENDED_RECTANGULAR_BARS
         ] );
         return FractionLevel.difficultMixedShapeTarget( shapePartitions, fraction, colors[ index ] );
       } );

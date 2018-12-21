@@ -172,6 +172,23 @@ define( require => {
     }
 
     /**
+     * Returns a stack of rectangular bars.
+     * @public
+     *
+     * @param {number} quantity - Number of bars
+     * @returns {ShapePartition}
+     */
+    static createRectangularBars( quantity ) {
+      assert && assert( quantity >= 1 && quantity % 1 === 0 );
+
+      const yMultiplier = 1.25;
+
+      return new ShapePartition(
+        _.range( 0, quantity ).map( i => Shape.rect( -1, yMultiplier * 2 * i / quantity - 1, 2, yMultiplier * 2 / quantity ) )
+      );
+    }
+
+    /**
      * Returns a pattern of interleaved L-like pieces.
      * @public
      *
@@ -494,6 +511,7 @@ define( require => {
     ..._.range( 1, 9 ).map( quantity => ShapePartition.createVerticalBars( quantity ).rescaled( RESCALE_SIZE ) ),
     ShapePartition.createGrid( 3, 3 ).rescaled( RESCALE_SIZE )
   ];
+  ShapePartition.EXTENDED_RECTANGULAR_BARS = _.range( 1, 9 ).map( quantity => ShapePartition.createRectangularBars( quantity ).rescaled( RESCALE_SIZE ) );
 
   // @public {ShapePartition}
   ShapePartition.TETRIS = ShapePartition.createTetris().rescaled( RESCALE_SIZE );
