@@ -517,6 +517,8 @@ define( require => {
     ...ShapePartition.GRIDS,
     ...ShapePartition.PYRAMIDS,
     ShapePartition.SIX_FLOWER,
+    ShapePartition.HEX_RING,
+    ShapePartition.FIVE_POINT,
     ...ShapePartition.POLYGONS
   ];
   ShapePartition.LIMITED_9_GAME_PARTITIONS = ShapePartition.GAME_PARTITIONS.filter( partition => partition.length <= 9 );
