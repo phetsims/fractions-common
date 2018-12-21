@@ -9,6 +9,8 @@ define( require => {
   'use strict';
 
   // modules
+  const Color = require( 'SCENERY/util/Color' );
+  const FilledPartition = require( 'FRACTIONS_COMMON/game/model/FilledPartition' );
   const FilledPartitionNode = require( 'FRACTIONS_COMMON/game/view/FilledPartitionNode' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
@@ -32,6 +34,23 @@ define( require => {
   // constants
   const CORNER_RADIUS = 5;
   const CORNER_OFFSET = 1;
+
+  const MIXED_SCALE = 0.6;
+  const UNMIXED_IMPROPER_SCALE = 0.9;
+  const UNMIXED_PROPER_SCALE = 1;
+
+  // compute the maximum width for our different scales
+  const maxPartitionWidthMap = {};
+  [ MIXED_SCALE, UNMIXED_IMPROPER_SCALE, UNMIXED_PROPER_SCALE ].forEach( scale => {
+    maxPartitionWidthMap[ scale ] = Math.max( ...ShapePartition.GAME_PARTITIONS.map( partition => {
+      const filledPartition = new FilledPartition( partition, _.range( 0, partition.length ).map( () => true ), Color.RED );
+      return new FilledPartitionNode( filledPartition, {
+        layoutScale: scale,
+        adaptiveScale: true,
+        primaryFill: Color.RED
+      } ).width;
+    } ) );
+  } );
 
   class TargetNode extends HBox {
     /**
@@ -166,13 +185,20 @@ define( require => {
       this.addChild( this.container );
 
       if ( isShapeTarget ) {
-        this.addChild( new HBox( {
-          scale: challenge.hasMixedTargets ? 0.6 : ( challenge.maxTargetWholes > 1 ? 0.9 : 1 ),
-          spacing: 5,
+        const scale = challenge.hasMixedTargets ? 0.6 : ( challenge.maxTargetWholes > 1 ? 0.9 : 1 );
+        const padding = 10;
+        const maxWidth = maxPartitionWidthMap[ scale ];
+        const box = new HBox( {
+          spacing: padding,
           children: target.filledPartitions.map( filledPartition => new FilledPartitionNode( filledPartition, {
-            layoutShapeWidth: ShapePartition.GAME_PARTITIONS_MAX_WIDTH
+            layoutScale: scale,
+            adaptiveScale: true
           } ) )
-        } ) );
+        } );
+        this.addChild( box );
+        const quantity = target.filledPartitions.length;
+        const combinedMaxWidth = maxWidth * quantity + padding * ( quantity - 1 );
+        box.localBounds = box.localBounds.withMaxX( box.localBounds.minX + combinedMaxWidth );
       }
       else {
         const whole = challenge.hasMixedTargets ? Math.floor( target.fraction.value ) : null;

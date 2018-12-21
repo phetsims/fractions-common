@@ -29,38 +29,40 @@ define( require => {
         interiorStroke: FractionsCommonColorProfile.shapePartitionBorderProperty,
         borderStroke: FractionsCommonColorProfile.shapePartitionBorderProperty,
 
-        interiorLineWidth: 1,
-        borderLineWidth: 2,
+        interiorLineWidth: 0.7,
+        borderLineWidth: 2 * 0.7,
 
-        // {number|null} - If non-null, the width of this node will be padded to make sure it is the same width as if
-        // the filledPartition's outlineShape has this width.
-        layoutShapeWidth: null
+        // {number}
+        layoutScale: 1,
+
+        // {boolean} - If true, it will apply relative scaling so that partitions will have closer to the same width
+        adaptiveScale: false
       }, options );
 
       assert && assert( options.primaryFill, 'primaryFill should be provided' );
+
+      let scale = options.layoutScale;
+      if ( options.adaptiveScale ) {
+        const scaleMultiplier = Math.min(
+          96 / filledPartition.shapePartition.outlineShape.bounds.width,
+          80 / filledPartition.shapePartition.outlineShape.bounds.height
+        );
+        scale *= scaleMultiplier;
+      }
 
       this.children = [
         ...filledPartition.shapePartition.shapes.map( ( shape, index ) => new Path( shape, {
           fill: filledPartition.fills[ index ] ? options.primaryFill : options.backgroundFill,
           stroke: options.interiorStroke,
-          lineWidth: options.interiorLineWidth
+          lineWidth: options.interiorLineWidth / scale
         } ) ),
         new Path( filledPartition.shapePartition.outlineShape, {
           stroke: options.borderStroke,
-          lineWidth: options.borderLineWidth
+          lineWidth: options.borderLineWidth / scale
         } )
       ];
 
-      // Enforce layoutShapeWidth
-      if ( options.layoutShapeWidth !== null ) {
-        const center = this.localBounds.centerX;
-        // NOTE: We're doubling the borderLineWidth due to miter possibilities
-        this.localBounds = this.localBounds.withMinX(
-          center - options.layoutShapeWidth / 2 + options.borderLineWidth
-        ).withMaxX(
-          center + options.layoutShapeWidth / 2 + options.borderLineWidth
-        );
-      }
+      this.scale( scale );
 
       this.mutate( options );
     }
