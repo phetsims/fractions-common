@@ -22,7 +22,7 @@ define( require => {
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
-
+// REVIEW: Added doc about how this is used would be helpful
   let globalID = 0;
 
   class ShapePiece {

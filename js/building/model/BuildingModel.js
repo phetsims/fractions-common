@@ -25,7 +25,7 @@ define( require => {
   const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
   const ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
   const Vector2 = require( 'DOT/Vector2' );
-
+// REVIEW: Doc for how scratchVector is used would be helpful.
   const scratchVector = new Vector2();
 
   class BuildingModel {
