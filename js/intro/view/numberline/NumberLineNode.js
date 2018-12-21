@@ -264,6 +264,7 @@ define( require => {
      * @override
      */
     dispose() {
+      // REVIEW: Would it be safer to dispose this.containerCountProperty?
       this.containerCountProperty.unlink( this.containerCountListener );
       this.minorTickMultilink.dispose();
       this.multipliedTickMultilink.dispose();

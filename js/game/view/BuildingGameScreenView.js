@@ -207,6 +207,7 @@ define( require => {
           transition = this.mainTransitionNode.slideRightTo( this.levelSelectionLayer, QUADRATIC_TRANSITION_OPTIONS );
         }
         if ( oldChallengeNode ) {
+          // REVIEW: Do we not have to remove emitters from transitionNodes?
           transition.endedEmitter.addListener( () => {
             oldChallengeNode.wrapper.dispose();
             oldChallengeNode.dispose();
@@ -218,6 +219,7 @@ define( require => {
 
       const gameAudioPlayer = new GameAudioPlayer( model.soundEnabledProperty );
 
+      // REVIEW: Should a dispose call remove these listeners?
       model.allLevelsCompleteEmitter.addListener( () => gameAudioPlayer.gameOverPerfectScore() );
       model.singleLevelCompleteEmitter.addListener( () => gameAudioPlayer.challengeComplete() );
       model.collectedGroupEmitter.addListener( () => gameAudioPlayer.correctAnswer() );
