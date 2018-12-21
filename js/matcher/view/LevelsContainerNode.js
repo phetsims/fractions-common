@@ -108,6 +108,7 @@ define( require => {
 
     this.levelNodes = [];
 
+    // REVIEW: Does this need an unlink?
     model.currentLevelProperty.link( function( newLevel ) {
       if ( newLevel > 0 ) {
         //generate each node levelNode on demand, to make loading faster

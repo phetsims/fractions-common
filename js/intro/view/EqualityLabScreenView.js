@@ -91,6 +91,7 @@ define( require => {
           beakerIcon
         ]
       } );
+      // REVIEW: Does this need an unlink?
       model.representationProperty.link( representation => {
         circularIcon.visible = representation === IntroRepresentation.CIRCLE;
         horizontalIcon.visible = representation === IntroRepresentation.HORIZONTAL_BAR;
@@ -159,6 +160,7 @@ define( require => {
       multipliedFractionNode.centerY = bottomAlignY;
       multiplierSpinner.centerY = bottomAlignY;
 
+      // REVIEW: Does this need an unlink?
       model.representationProperty.link( () => {
         this.viewContainer.right = this.representationPanel.right;
       } );

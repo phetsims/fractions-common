@@ -269,6 +269,7 @@ define( require => {
     };
 
     //show correct button depending on the previous actions
+    // REVIEW: Does this need an unlink?
     model.buttonStatusProperty.link( function updateButtonStatus( value ) {
       buttonOk.setVisible( value === 'ok' );
       buttonCheck.setVisible( value === 'check' );
@@ -293,19 +294,23 @@ define( require => {
       }
     } );
 
+    // REVIEW: Doc typo?
     //adjustion timer position if necessary
+    // REVIEW: Does this need an unlink?
     model.gameModel.isTimerProperty.link( function( isTimer ) {
       timeLabel.visible = isTimer;
       vBox.right = model.gameModel.width - margin;
     } );
 
     //update timer
+    // REVIEW: Does this need an unlink?
     model.timeProperty.link( function( newTime ) {
       timeLabel.text = StringUtils.format( timeNumberSecString, Util.toFixed( newTime, 0 ) );
       vBox.right = model.gameModel.width - margin;
     } );
 
     //update score
+    // REVIEW: Does this need an unlink?
     model.scoreProperty.link( function( newScore ) {
       scoreLabel.text = StringUtils.format( labelScoreString, newScore );
       vBox.right = model.gameModel.width - margin;

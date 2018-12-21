@@ -146,6 +146,7 @@ define( require => {
           options.dropListener && options.dropListener( wasTouch );
         }
       } );
+      // REVIEW: Does this need an unlink?
       this.dragListener.isUserControlledProperty.link( controlled => {
         shapePiece.isUserControlledProperty.value = controlled;
       } );

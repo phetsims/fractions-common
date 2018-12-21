@@ -100,6 +100,7 @@ define( require => {
         boxContainer
       ];
 
+      // REVIEW: Does this need an unlink?
       this.representationProperty.link( representation => {
         this.pieBox.visible = representation === BuildingRepresentation.PIE;
         this.barBox.visible = representation === BuildingRepresentation.BAR;

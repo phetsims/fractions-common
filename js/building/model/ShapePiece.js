@@ -87,6 +87,7 @@ define( require => {
       this.dampedHarmonicTimeElapsed = 0;
       this.trueTargetRotation = 0;
 
+      // REVIEW: Does this property need an unlink?
       this.isUserControlledProperty.link( isUserControlled => {
         if ( isUserControlled ) {
           this.shadowProperty.value = 1;
