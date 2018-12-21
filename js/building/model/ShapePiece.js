@@ -95,6 +95,7 @@ define( require => {
       } );
 
       // Handle rotational animation towards a target (if any)
+      // REVIEW: Does this need a dispose?
       Property.multilink( [ this.isUserControlledProperty, this.targetRotationProperty ], ( isUserControlled, targetRotation ) => {
         if ( isUserControlled ) {
           // REVIEW: 'let' instead of 'var'
