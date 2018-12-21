@@ -55,6 +55,7 @@ define( require => {
       // @protected {number} - Animation progress, from 0 to 1.
       this.ratio = 0;
 
+      // REVIEW: Does this need an unlink?
       this.originProperty.lazyLink( origin => {
         this.ratio = 0;
         piece.positionProperty.value = origin;

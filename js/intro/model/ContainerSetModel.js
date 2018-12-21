@@ -86,6 +86,7 @@ define( require => {
       this.onNumeratorChange( this.numeratorProperty.value, 0 );
 
       // Hook up listeners for external notifications
+      // REVIEW: Do these need unlinks?
       this.numeratorProperty.lazyLink( this.onNumeratorChange.bind( this ) );
       this.denominatorProperty.lazyLink( this.onDenominatorChange.bind( this ) );
       this.containerCountProperty.lazyLink( this.onMaxChange.bind( this ) );

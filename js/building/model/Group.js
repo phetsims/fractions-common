@@ -51,6 +51,7 @@ define( require => {
       } );
 
       // Keep our hover target up-to-date
+      // REVIEW: Does this need an unlink?
       this.hoveringTargetProperty.lazyLink( ( newTarget, oldTarget ) => {
         oldTarget && oldTarget.hoveringGroups.remove( this );
         newTarget && newTarget.hoveringGroups.push( this );

@@ -115,6 +115,7 @@ define( require => {
         content: leftLevelSelectionNode,
         cachedNodes: [ leftLevelSelectionNode, rightLevelSelectionNode ]
       } );
+      // REVIEW: Does this need an unlink?
       this.leftLevelSelectionProperty.lazyLink( isLeft => {
         if ( isLeft ) {
           this.levelSelectionTransitionNode.slideRightTo( leftLevelSelectionNode, QUADRATIC_TRANSITION_OPTIONS );
