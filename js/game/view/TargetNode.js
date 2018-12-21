@@ -181,7 +181,8 @@ define( require => {
         this.addChild( new MixedFractionNode( {
           whole: whole === 0 ? null : whole,
           numerator: numerator === 0 ? ( whole === null ? 0 : null ) : numerator,
-          denominator
+          denominator,
+          scale: 1.2
         } ) );
       }
     }

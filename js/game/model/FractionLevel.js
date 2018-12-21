@@ -278,7 +278,7 @@ define( require => {
         quantity: Number.POSITIVE_INFINITY,
 
         // {number} - The maximum denominator to consider for a split (any larger denominators will be ignored)
-        maxDenominator: 6,
+        maxDenominator: 4,
 
         // {Array.<Array.<Fraction>>} - Partitions that add up to 1, in a distribution that will evenly create denominators
         splits: [
@@ -316,45 +316,10 @@ define( require => {
 
       return [
         ..._.flatten( fractionsToChange.map( fraction => {
-          return sample( options.splits ).map( f => f.times( fraction ) );
-        } ) ),
-        ...otherFractions
-      ];
-    }
-
-    /**
-     * Returns a list of fractions with an equivalent sum, where up to `quantity` fractions have been split into
-     * sub-fractions. Does more complicated / full splits based on unit fractions up to 1/8.
-     * @private
-     *
-     * @param {Array.<Fraction>} fractions
-     * @param {Object} [options]
-     * @returns {Array.<Fraction>}
-     */
-    static fullSplitFractions( fractions, options ) {
-      options = _.extend( {
-        // {number} - Up to how many fractions to split
-        quantity: Number.POSITIVE_INFINITY,
-
-        // {number} - The maximum denominator to consider for a split (any larger denominators will be ignored)
-        maxDenominator: 6,
-
-        // {number} - Maximum number of pieces a single fraction can be split into
-        maxTotalQuantity: 4
-      }, options );
-
-      // Make a copy of all fractions, so we have unique instances (for down below)
-      fractions = fractions.map( f => f.copy() );
-
-      const availableFractions = fractions.filter( f => f.denominator <= options.maxDenominator );
-      const fractionsToChange = choose( Math.min( options.quantity, availableFractions.length ), availableFractions );
-      const otherFractions = arrayDifference( fractions, fractionsToChange );
-
-      return [
-        ..._.flatten( fractionsToChange.map( fraction => {
-          return sample( collectionFinder8.search( fraction, {
-            maxTotalQuantity: options.maxTotalQuantity
-          } ) ).unitFractions;
+          const availableSplits = options.splits.filter( splitFractions => _.every( splitFractions, splitFraction => {
+            return splitFraction.denominator * fraction.denominator <= 8;
+          } ) );
+          return sample( availableSplits ).map( f => f.times( fraction ) );
         } ) ),
         ...otherFractions
       ];
@@ -687,7 +652,7 @@ define( require => {
       } ) ) );
 
       const pieceFractions = [
-        ...FractionLevel.unitFractions( targetFractions ),
+        ...FractionLevel.unitFractions( targetFractions.map( f => f.value === 1 ? Fraction.ONE : f ) ),
         ..._.flatten( targetFractions.map( f => FractionLevel.interestingFractions( f, 2 ) ) )
       ];
 
@@ -1008,7 +973,10 @@ define( require => {
       ] );
       const pieceFractions = [
         ...FractionLevel.straightforwardFractions( targetFractions ),
-        ...FractionLevel.interestingFractions( sample( targetFractions ) )
+        new Fraction( 1, 1 ),
+        new Fraction( 1, 2 ),
+        new Fraction( 1, 2 ),
+        new Fraction( 1, 4 )
       ];
       return FractionChallenge.createShapeChallenge( levelNumber, true, color, targetFractions, pieceFractions );
     }
@@ -1038,7 +1006,24 @@ define( require => {
       } ) ) );
       const pieceFractions = [
         ...FractionLevel.straightforwardFractions( targetFractions ),
-        ...FractionLevel.interestingFractions( sample( targetFractions ) )
+        ..._.flatten( choose( 2, [
+          [
+            new Fraction( 1, 1 )
+          ],
+          [
+            new Fraction( 1, 2 ),
+            new Fraction( 1, 2 )
+          ],
+          [
+            new Fraction( 1, 3 ),
+            new Fraction( 1, 3 ),
+            new Fraction( 1, 3 )
+          ],
+          [
+            new Fraction( 1, 4 ),
+            new Fraction( 1, 4 )
+          ]
+        ] ) )
       ];
       return FractionChallenge.createShapeChallenge( levelNumber, true, color, targetFractions, pieceFractions );
     }
@@ -1239,20 +1224,20 @@ define( require => {
         ].map( f => f.plusInteger( whole ) );
       } ) ) );
 
-      const topFractions = repeat( 2, baseFractions[ 0 ] );
-      const bottomFractions = repeat( 2, baseFractions[ 1 ] );
+      const topFraction = baseFractions[ 0 ];
+      const bottomFraction = baseFractions[ 1 ];
+
+      const topFractions = repeat( 2, topFraction );
+      const bottomFractions = repeat( 2, bottomFraction );
       const targetFractions = [
         ...topFractions,
         ...bottomFractions
       ];
 
       const pieceFractions = [
-        ...FractionLevel.fullSplitFractions( FractionLevel.straightforwardFractions( topFractions ), {
-          quantity: 4
-        } ),
-        ...FractionLevel.fullSplitFractions( FractionLevel.straightforwardFractions( bottomFractions ), {
-          quantity: 4
-        } )
+        ...FractionLevel.difficultSplit( topFraction ),
+        ...FractionLevel.difficultSplit( bottomFraction ),
+        ...FractionLevel.straightforwardFractions( [ topFraction, bottomFraction ] )
       ];
 
       return FractionChallenge.createShapeChallenge( levelNumber, true, color, targetFractions, pieceFractions );
@@ -1273,7 +1258,7 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level8ShapesMixed( levelNumber, color ) {
-      const targetFractions = choose( 4, _.flatten( inclusive( 1, 3 ).map( whole => {
+      const targetFractions = chooseSplittable( 4, _.flatten( inclusive( 1, 3 ).map( whole => {
         return [
           new Fraction( 1, 2 ),
           new Fraction( 1, 3 ),
@@ -1287,11 +1272,12 @@ define( require => {
           new Fraction( 1, 6 ),
           new Fraction( 5, 6 )
         ].map( f => f.plusInteger( whole ) );
-      } ) ) );
+      } ) ), 2 );
 
-      const pieceFractions = FractionLevel.fullSplitFractions( FractionLevel.straightforwardFractions( targetFractions ), {
-        quantity: 5
-      } );
+      const pieceFractions = [
+        ..._.flatten( targetFractions.slice( 0, 2 ).map( f => FractionLevel.difficultSplit( f ) ) ),
+        ...FractionLevel.straightforwardFractions( targetFractions.slice( 2 ) )
+      ];
 
       return FractionChallenge.createShapeChallenge( levelNumber, true, color, targetFractions, pieceFractions );
     }
@@ -1568,7 +1554,7 @@ define( require => {
 
       const shapeTargets = inclusive( 0, 3 ).map( index => {
         const mainIndex = index < 2 ? 0 : 1;
-        const smallFraction = smallFractions[ mainIndex ];
+        const smallFraction = smallFractions[ mainIndex ].reduced();
         return ShapeTarget.fill( sample( ShapePartition.supportsDenominator( shapePartitionChoices[ mainIndex ], smallFraction.denominator ) ),
                                  smallFraction,
                                  colors[ index ],
@@ -1802,7 +1788,11 @@ define( require => {
       const fractions = chooseSplittable( 3, mixedNumbersFractions, 1 );
 
       const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.LIMITED_9_GAME_PARTITIONS, fractions, COLORS_3, FillType.SEQUENTIAL, true );
-      const pieceNumbers = FractionLevel.withMultipliedNumbers( fractions, 1, true );
+
+      const pieceNumbers = [
+        ...FractionLevel.multipliedNumbers( fractions.slice( 0, 1 ), true ),
+        ...FractionLevel.exactMixedNumbers( fractions.slice( 1 ) )
+      ];
 
       return FractionChallenge.createNumberChallenge( levelNumber, true, shapeTargets, pieceNumbers );
     }
@@ -1824,7 +1814,11 @@ define( require => {
       const fractions = chooseSplittable( 4, mixedNumbersFractions, 2 );
 
       const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.LIMITED_9_GAME_PARTITIONS, fractions, COLORS_4, FillType.RANDOM, true );
-      const pieceNumbers = FractionLevel.withMultipliedNumbers( fractions, 2, true );
+
+      const pieceNumbers = [
+        ...FractionLevel.multipliedNumbers( fractions.slice( 0, 2 ), true ),
+        ...FractionLevel.exactMixedNumbers( fractions.slice( 2 ) )
+      ];
 
       return FractionChallenge.createNumberChallenge( levelNumber, true, shapeTargets, pieceNumbers );
     }

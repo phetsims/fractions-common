@@ -149,9 +149,13 @@ define( require => {
       if ( shapePieces.length ) {
         this.shapeGroupStacks.forEach( shapeGroupStack => {
           _.times( targets.length - 1, () => {
-            shapeGroupStack.shapeGroups.push( new ShapeGroup( shapeGroupStack.representation, {
+            const shapeGroup = new ShapeGroup( shapeGroupStack.representation, {
+              returnPieceListener: () => {
+                this.removeLastPieceFromShapeGroup( shapeGroup );
+              },
               maxContainers: this.maxTargetWholes
-            } ) );
+            } );
+            shapeGroupStack.shapeGroups.push( shapeGroup );
           } );
         } );
       }

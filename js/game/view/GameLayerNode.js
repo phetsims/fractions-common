@@ -21,17 +21,13 @@ define( require => {
      * @param {Property.<Bounds2>} numberDragBoundsProperty
      * @param {Node} targetsContainer
      * @param {Node} panel
-     * @param {function} onCollection - Called with no arguments when something has been collected.
      */
-    constructor( model, modelViewTransform, shapeDragBoundsProperty, numberDragBoundsProperty, targetsContainer, panel, onCollection ) {
-      super( model, modelViewTransform, shapeDragBoundsProperty, numberDragBoundsProperty, targetsContainer, panel, onCollection );
+    constructor( model, modelViewTransform, shapeDragBoundsProperty, numberDragBoundsProperty, targetsContainer, panel ) {
+      super( model, modelViewTransform, shapeDragBoundsProperty, numberDragBoundsProperty, targetsContainer, panel );
 
       // @private {Node}
       this.targetsContainer = targetsContainer;
       this.panel = panel;
-
-      // @private {function}
-      this.onCollection = onCollection;
 
       this.initialize();
     }
@@ -78,7 +74,6 @@ define( require => {
           else {
             this.model.collectNumberGroup( group, closestTarget );
           }
-          this.onCollection();
           group.hoveringTargetProperty.value = null;
         }
         else {
