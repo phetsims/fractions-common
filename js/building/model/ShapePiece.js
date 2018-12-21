@@ -97,9 +97,12 @@ define( require => {
       // Handle rotational animation towards a target (if any)
       Property.multilink( [ this.isUserControlledProperty, this.targetRotationProperty ], ( isUserControlled, targetRotation ) => {
         if ( isUserControlled ) {
+          // REVIEW: 'let' instead of 'var'
           var currentRotation = this.rotationProperty.value;
           this.trueTargetRotation = Animator.modifiedEndAngle( currentRotation, this.targetRotationProperty.value );
 
+          // REVIEW: 'let' instead of 'var'
+          // REVIEW: Documentation for these variables would be helpful, being they are only used below.
           var damping = 1;
           var force = 50;
           this.dampedHarmonicTimeElapsed = 0;
