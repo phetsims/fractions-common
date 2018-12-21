@@ -1910,16 +1910,16 @@ define( require => {
 
       const shapeTargets = shuffle( fractions.map( ( fraction, index ) => {
         const color = COLORS_4[ index ];
-        const shapePartitions = sample( [
-          ShapePartition.PIES,
-          ShapePartition.EXTENDED_HORIZONTAL_BARS,
-          ShapePartition.EXTENDED_VERTICAL_BARS
-        ] );
         if ( index < 2 ) {
+          const shapePartitions = sample( [
+            ShapePartition.PIES,
+            ShapePartition.EXTENDED_HORIZONTAL_BARS,
+            ShapePartition.EXTENDED_VERTICAL_BARS
+          ] );
           return FractionLevel.difficultMixedShapeTarget( shapePartitions, fraction, color );
         }
         else {
-          return ShapeTarget.randomFill( sample( ShapePartition.supportsDenominator( shapePartitions, fraction.denominator ) ), fraction, color );
+          return ShapeTarget.randomFill( sample( ShapePartition.supportsDenominator( ShapePartition.LIMITED_9_GAME_PARTITIONS, fraction.denominator ) ), fraction, color );
         }
       } ) );
       const pieceNumbers = FractionLevel.exactMixedNumbers( fractions );
