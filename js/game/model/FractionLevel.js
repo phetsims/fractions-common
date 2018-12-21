@@ -1871,10 +1871,23 @@ define( require => {
      * @returns {FractionChallenge}
      */
     static level8NumbersMixed( levelNumber ) {
-      const fractions = choose( 4, mixedNumbersFractions );
+      const unreducedFractions = choose( 4, _.flatten( inclusive( 1, 3 ).map( whole => {
+        return [
+          new Fraction( 2, 4 ),
+          new Fraction( 3, 6 ),
+          new Fraction( 4, 8 ),
+          new Fraction( 2, 6 ),
+          new Fraction( 3, 9 ),
+          new Fraction( 4, 6 ),
+          new Fraction( 6, 9 ),
+          new Fraction( 2, 8 ),
+          new Fraction( 6, 8 )
+        ].map( f => f.plusInteger( whole ) );
+      } ) ) );
+      const fractions = unreducedFractions.map( f => f.reduced() );
 
       const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.LIMITED_9_GAME_PARTITIONS, fractions, COLORS_4, FillType.RANDOM, true );
-      const pieceNumbers = FractionLevel.multipliedNumbers( fractions, true );
+      const pieceNumbers = FractionLevel.exactMixedNumbers( unreducedFractions );
 
       return FractionChallenge.createNumberChallenge( levelNumber, true, shapeTargets, pieceNumbers );
     }
