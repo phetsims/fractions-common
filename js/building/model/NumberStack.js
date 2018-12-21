@@ -20,6 +20,8 @@ define( require => {
      * @param {number} layoutQuantity
      * @param {boolean} [isMutable]
      */
+    // REVIEW: Could you respond in #29 about this notation/syntax "isMutable = true" in the constructor arguements?
+    // REVIEW: If 'isMutable' is always true why is it a parameter and not a const?
     constructor( number, layoutQuantity, isMutable = true ) {
       super( BuildingType.NUMBER, layoutQuantity, isMutable );
 
