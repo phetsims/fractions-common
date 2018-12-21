@@ -34,6 +34,7 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // global
+  // REVIEW: Added doc about the use of these variables would be helpful.
   let isDoingResetGeneration = false;
   let resetTypes = [];
 
@@ -98,9 +99,11 @@ define( require => {
       // should instead be a "refresh" animation instead of "next" challenge.
       this.refreshedChallenge = null;
 
+      // REVIEW: Doc typo
       // Sort out inputs (with a new copy, so we don't modify our actual paramater reference) so we create the stacks in
       // increasing order
       shapePieces = shapePieces.slice().sort( ( a, b ) => {
+        // REVIEW: Why do we want the biggest fraction at the start? Does this relate to a later operation?
         // NOTE: This seems backwards, but we want the BIGGEST fraction at the start
         if ( a.fraction.isLessThan( b.fraction ) ) {
           return 1;
@@ -126,7 +129,9 @@ define( require => {
         this.numberGroupStacks.push( new NumberGroupStack( targets.length, this.hasMixedTargets ) );
       }
 
+      // REVIEW: Please add doc about what this chunk is doing.
       shapePieces.forEach( shapePiece => {
+        // REVIEW: 'let' instead of 'var'
         var shapeStack = this.findMatchingShapeStack( shapePiece );
         if ( !shapeStack ) {
           const quantity = shapePieces.filter( otherPiece => otherPiece.fraction.equals( shapePiece.fraction ) ).length;
@@ -136,7 +141,9 @@ define( require => {
         shapeStack.shapePieces.push( shapePiece );
       } );
 
+      // REVIEW: Please add doc about what this chunk is doing.
       numberPieces.forEach( numberPiece => {
+        // REVIEW: 'let' instead of 'var'
         var numberStack = this.findMatchingNumberStack( numberPiece );
         if ( !numberStack ) {
           const quantity = numberPieces.filter( otherPiece => otherPiece.number === numberPiece.number ).length;
@@ -146,6 +153,7 @@ define( require => {
         numberStack.numberPieces.push( numberPiece );
       } );
 
+      // REVIEW: Please add doc about what this step is doing.
       if ( shapePieces.length ) {
         this.shapeGroupStacks.forEach( shapeGroupStack => {
           _.times( targets.length - 1, () => {
@@ -159,7 +167,7 @@ define( require => {
           } );
         } );
       }
-
+      // REVIEW: Please add doc about what this chunk is doing.
       if ( numberPieces.length ) {
         this.numberGroupStacks.forEach( numberGroupStack => {
           _.times( targets.length - 1, () => {
@@ -168,8 +176,10 @@ define( require => {
         } );
       }
 
+      // REVIEW: Why are we calling a reset here?
       this.reset();
 
+      // REVIEW: Please add doc about what this chunk is doing.
       const initialGroups = [];
       let lastInitialGroup = null;
       if ( hasPies ) {
@@ -221,6 +231,7 @@ define( require => {
       return bestTarget;
     }
 
+    // REVIEW: Incomplete parameter documentation
     /**
      * Handles moving a Group into the collection area (Target).
      * @public
@@ -238,6 +249,7 @@ define( require => {
       // Try to start moving out another group
       this.ensureGroups( group.type );
 
+      // REVIEW: 'let' instead of 'var'
       var positionProperty = target.positionProperty;
       group.animator.animateTo( {
         position: positionProperty.value,
@@ -262,6 +274,7 @@ define( require => {
       this.collectGroup( shapeGroup, target, this.shapeGroups, FractionsCommonConstants.SHAPE_COLLECTION_SCALE );
     }
 
+    // REVIEW: Parameter naming mismatch
     /**
      * Handles moving a NumberGroup into the collection area (Target).
      * @public
@@ -273,6 +286,7 @@ define( require => {
       this.collectGroup( numberGroup, target, this.numberGroups, FractionsCommonConstants.NUMBER_COLLECTION_SCALE );
     }
 
+    // REVIEW: Can this method be a Static?
     /**
      * Moves a group to the center of the play area.
      * @public
@@ -316,6 +330,8 @@ define( require => {
       }
     }
 
+    // REVIEW: The following 3 methods are really similar. I think it's easier to read when separated, but if you
+    // REVIEW: refactor into one method, that may reduce code duplication. I'm fine either way.
     /**
      * Grabs a ShapePiece from the stack, sets up state for it to be dragged/placed, and places it at the
      * given point.
@@ -392,11 +408,13 @@ define( require => {
       }
     }
 
+    // REVIEW: I would add in doc this is only called using ?showAnswers.
     /**
      * Does a semi-reset of the challenge state, and constructs a solution (without putting things in targets).
      * @public
      */
     cheat() {
+
       // First we do a lot of work to stop what's happening and do a "soft" reset
       this.endAnimation();
 
@@ -501,6 +519,7 @@ define( require => {
      *                                             fractions to be placed inside.
      */
     static findShapeSolution( fractions, collectionFinder, maxQuantity, availableCollection ) {
+
       // {Array.<Array.<Object>>} - Each object is { {Array.<UnitCollection>} containers, {UnitCollection} total }
       const fractionPossibilities = fractions.map( fraction => {
         const collections = collectionFinder.search( fraction, {
