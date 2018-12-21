@@ -20,6 +20,7 @@ define( require => {
   const Util = require( 'DOT/Util' );
   const Vector2 = require( 'DOT/Vector2' );
 
+  // REVIEW: Please add doc about how this is used.
   const scratchVector = new Vector2();
 
   class ShapeContainer {
@@ -88,6 +89,7 @@ define( require => {
      * @returns {number}
      */
     distanceFromPoint( point ) {
+
       // Subtract off our local offset
       const localPoint = scratchVector.set( point ).subtract( this.offset );
 
