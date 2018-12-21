@@ -511,7 +511,7 @@ define( require => {
     ..._.range( 1, 9 ).map( quantity => ShapePartition.createVerticalBars( quantity ).rescaled( RESCALE_SIZE ) ),
     ShapePartition.createGrid( 3, 3 ).rescaled( RESCALE_SIZE )
   ];
-  ShapePartition.EXTENDED_RECTANGULAR_BARS = _.range( 1, 9 ).map( quantity => ShapePartition.createRectangularBars( quantity ).rescaled( RESCALE_SIZE ) );
+  ShapePartition.EXTENDED_RECTANGULAR_BARS = _.range( 1, 10 ).map( quantity => ShapePartition.createRectangularBars( quantity ).rescaled( RESCALE_SIZE ) );
 
   // @public {ShapePartition}
   ShapePartition.TETRIS = ShapePartition.createTetris().rescaled( RESCALE_SIZE );
