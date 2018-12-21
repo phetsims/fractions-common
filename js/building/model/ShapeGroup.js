@@ -107,6 +107,7 @@ define( require => {
      * @returns {boolean}
      */
     hasAnyPieces() {
+      // REVIEW: Are we still using 'var' in for loops?
       for ( var i = 0; i < this.shapeContainers.length; i++ ) {
         if ( this.shapeContainers.get( i ).shapePieces.length ) {
           return true;
@@ -120,6 +121,7 @@ define( require => {
      * @public
      */
     increaseContainerCount() {
+      // REVIEW: 'let' instead of 'var'?
       var offset = new Vector2( this.shapeContainers.length * ( FractionsCommonConstants.SHAPE_SIZE + FractionsCommonConstants.SHAPE_CONTAINER_PADDING ), 0 );
       this.shapeContainers.push( new ShapeContainer( this, this.partitionDenominatorProperty, this.representation, this.changedEmitter, offset ) );
     }

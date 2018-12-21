@@ -68,6 +68,7 @@ define( require => {
       // @public {Property.<Group|null>} - We'll only show controls for this group
       this.selectedGroupProperty = new Property( null );
 
+      // REVIEW: Is this an unused variable?
       // @public {EnumerationMap.<Array.<Stack>>} - The stacks for pieces
       this.stacksMap = new EnumerationMap( BuildingType, type => ( {
         [ BuildingType.SHAPE ]: this.shapeStacks,
@@ -232,6 +233,7 @@ define( require => {
       } );
     }
 
+    // REVIEW: Incomplete JSDoc for parameters
     /**
      * Places a ShapePiece into a ShapeContainer.
      * @public
@@ -389,6 +391,7 @@ define( require => {
       throw new Error( 'Could not find a piece to remove' );
     }
 
+    // REVIEW: JSDoc parameter mismatch
     /**
      * Removes the last piece from a NumberGroup (animating it back to its home stack).
      * @public
@@ -604,6 +607,7 @@ define( require => {
 
         // Don't compute the closest for ALL pieces, that would hurt performance.
         if ( shapePiece.representation === BuildingRepresentation.PIE && shapePiece.isUserControlledProperty.value ) {
+          // REVIEW: 'let' instead of 'var'
           var closestContainer = this.closestDroppableShapeContainer( shapePiece, Number.POSITIVE_INFINITY );
           if ( closestContainer ) {
             shapePiece.orientTowardsContainer( closestContainer, dt );

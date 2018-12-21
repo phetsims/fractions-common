@@ -393,6 +393,7 @@ define( require => {
       const group = target.groupProperty.value;
 
       if ( group ) {
+
         // If the group hasn't fully completed its animation, then force it to complete early.
         group.animator.endAnimation();
 

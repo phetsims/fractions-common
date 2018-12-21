@@ -55,6 +55,7 @@ define( require => {
      */
     constructor( isMixedNumber, options ) {
       options = _.extend( {
+
         // {Property.<Range|null>}
         activeNumberRangeProperty: new Property( null )
       }, options );

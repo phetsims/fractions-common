@@ -24,7 +24,6 @@ define( require => {
   const NUMBER_SINGLE_DIGIT_WIDTH = 54;
   const NUMBER_DOUBLE_DIGIT_WIDTH = 80;
 
-
   class NumberPiece {
     /**
      * @param {number} number
