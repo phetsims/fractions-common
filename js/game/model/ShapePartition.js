@@ -172,6 +172,23 @@ define( require => {
     }
 
     /**
+     * Returns a stack of rectangular bars.
+     * @public
+     *
+     * @param {number} quantity - Number of bars
+     * @returns {ShapePartition}
+     */
+    static createRectangularBars( quantity ) {
+      assert && assert( quantity >= 1 && quantity % 1 === 0 );
+
+      const yMultiplier = 1.25;
+
+      return new ShapePartition(
+        _.range( 0, quantity ).map( i => Shape.rect( -1, yMultiplier * 2 * i / quantity - 1, 2, yMultiplier * 2 / quantity ) )
+      );
+    }
+
+    /**
      * Returns a pattern of interleaved L-like pieces.
      * @public
      *
@@ -486,8 +503,15 @@ define( require => {
   ShapePartition.PLUS_SIGNS = _.range( 1, 7 ).map( quantity => ShapePartition.createPlusSigns( quantity ).rescaled( RESCALE_SIZE ) );
   ShapePartition.GRIDS = _.range( 2, 4 ).map( quantity => ShapePartition.createGrid( quantity, quantity ).rescaled( RESCALE_SIZE ) );
   ShapePartition.PYRAMIDS = _.range( 1, 4 ).map( quantity => ShapePartition.createPyramid( quantity ).rescaled( RESCALE_SIZE ) );
-  ShapePartition.EXTENDED_HORIZONTAL_BARS = _.range( 1, MAX_PIECES + 1 ).map( quantity => ShapePartition.createHorizontalBars( quantity ).rescaled( RESCALE_SIZE ) );
-  ShapePartition.EXTENDED_VERTICAL_BARS = _.range( 1, MAX_PIECES + 1 ).map( quantity => ShapePartition.createVerticalBars( quantity ).rescaled( RESCALE_SIZE ) );
+  ShapePartition.EXTENDED_HORIZONTAL_BARS = [
+    ..._.range( 1, 9 ).map( quantity => ShapePartition.createHorizontalBars( quantity ).rescaled( RESCALE_SIZE ) ),
+    ShapePartition.createGrid( 3, 3 ).rescaled( RESCALE_SIZE )
+  ];
+  ShapePartition.EXTENDED_VERTICAL_BARS = [
+    ..._.range( 1, 9 ).map( quantity => ShapePartition.createVerticalBars( quantity ).rescaled( RESCALE_SIZE ) ),
+    ShapePartition.createGrid( 3, 3 ).rescaled( RESCALE_SIZE )
+  ];
+  ShapePartition.EXTENDED_RECTANGULAR_BARS = _.range( 1, 10 ).map( quantity => ShapePartition.createRectangularBars( quantity ).rescaled( RESCALE_SIZE ) );
 
   // @public {ShapePartition}
   ShapePartition.TETRIS = ShapePartition.createTetris().rescaled( RESCALE_SIZE );
@@ -511,6 +535,8 @@ define( require => {
     ...ShapePartition.GRIDS,
     ...ShapePartition.PYRAMIDS,
     ShapePartition.SIX_FLOWER,
+    ShapePartition.HEX_RING,
+    ShapePartition.FIVE_POINT,
     ...ShapePartition.POLYGONS
   ];
   ShapePartition.LIMITED_9_GAME_PARTITIONS = ShapePartition.GAME_PARTITIONS.filter( partition => partition.length <= 9 );
