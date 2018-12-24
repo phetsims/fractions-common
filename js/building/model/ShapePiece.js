@@ -162,6 +162,7 @@ define( require => {
         return Vector2.ZERO;
       }
       else {
+        // REVIEW: 'let' instead of 'var'
         var positiveAngle = fraction.value * 2 * Math.PI;
 
         // Compute the centroid for a circular sector
