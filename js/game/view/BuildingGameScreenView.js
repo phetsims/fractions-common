@@ -30,6 +30,7 @@ define( require => {
   const GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const LevelSelectionButton = require( 'VEGAS/LevelSelectionButton' );
+  const MathSymbols = require( 'SCENERY_PHET/MathSymbols' );
   const MixedFractionNode = require( 'FRACTIONS_COMMON/common/view/MixedFractionNode' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
@@ -38,13 +39,17 @@ define( require => {
   const NumberStackNode = require( 'FRACTIONS_COMMON/building/view/NumberStackNode' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const platform = require( 'PHET_CORE/platform' );
+  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
   const RefreshButton = require( 'SCENERY_PHET/buttons/RefreshButton' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const RewardNode = require( 'VEGAS/RewardNode' );
   const RoundArrowButton = require( 'FRACTIONS_COMMON/common/view/RoundArrowButton' );
   const ScoreDisplayStars = require( 'VEGAS/ScoreDisplayStars' );
+  const Screen = require( 'JOIST/Screen' );
   const ScreenView = require( 'JOIST/ScreenView' );
+  const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
+  const ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
   const ShapePartition = require( 'FRACTIONS_COMMON/game/model/ShapePartition' );
   const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   const ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
@@ -510,6 +515,107 @@ define( require => {
       return new Node( {
         children: [ label, iconContainer ],
         localBounds: ICON_DESIGN_BOUNDS
+      } );
+    }
+
+    /**
+     * Creates the icon for the unmixed game screens.
+     * @public
+     *
+     * @returns {Node}
+     */
+    static createUnmixedScreenIcon() {
+
+      const shapeGroup = new ShapeGroup( BuildingRepresentation.BAR );
+      shapeGroup.partitionDenominatorProperty.value = 3;
+
+      shapeGroup.shapeContainers.get( 0 ).shapePieces.push( new ShapePiece( new Fraction( 1, 3 ), BuildingRepresentation.BAR, FractionsCommonColorProfile.shapeBlueProperty ) );
+
+      const shapeGroupNode = new ShapeGroupNode( shapeGroup, {
+        hasButtons: false,
+        isIcon: true,
+        positioned: false
+      } );
+
+      const equalsText = new Text( MathSymbols.EQUAL_TO, { font: new PhetFont( 30 ) } );
+
+      const fractionNode = new MixedFractionNode( {
+        numerator: 1,
+        denominator: 3,
+        scale: 1.5
+      } );
+
+      const background = new Rectangle( {
+        rectBounds: Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.toBounds( 0, 0 ),
+        fill: FractionsCommonColorProfile.otherScreenBackgroundProperty
+      } );
+
+      const box = new HBox( {
+        spacing: 10,
+        children: [
+          shapeGroupNode,
+          equalsText,
+          fractionNode
+        ],
+        scale: 2.3
+      } );
+
+      return new Node( {
+        children: [
+          background,
+          new AlignBox( box, {
+            alignBounds: background.bounds
+          } )
+        ]
+      } );
+    }
+
+    /**
+     * Creates the icon for the mixed game screens.
+     * @public
+     *
+     * @returns {Node}
+     */
+    static createMixedScreenIcon() {
+      const fractionNode = new MixedFractionNode( {
+        whole: 1,
+        numerator: 2,
+        denominator: 3,
+        scale: 1.5
+      } );
+
+      const equalsText = new Text( MathSymbols.EQUAL_TO, { font: new PhetFont( 30 ) } );
+
+      const rightSide = new HBox( {
+        spacing: 5,
+        children: [
+          new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ true, true, true, true, true, true ], FractionsCommonColorProfile.shapeBlueProperty ) ),
+          new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ true, true, true, true, false, false ], FractionsCommonColorProfile.shapeBlueProperty ) )
+        ]
+      } );
+
+      const background = new Rectangle( {
+        rectBounds: Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.toBounds( 0, 0 ),
+        fill: FractionsCommonColorProfile.otherScreenBackgroundProperty
+      } );
+
+      const box = new HBox( {
+        spacing: 10,
+        children: [
+          fractionNode,
+          equalsText,
+          rightSide
+        ],
+        scale: 1.7
+      } );
+
+      return new Node( {
+        children: [
+          background,
+          new AlignBox( box, {
+            alignBounds: background.bounds
+          } )
+        ]
       } );
     }
   }
