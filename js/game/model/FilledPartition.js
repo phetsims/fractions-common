@@ -64,10 +64,10 @@ define( require => {
           result = result.concat( FilledPartition.sequentialFill( shapePartition, Fraction.ONE, color ) );
           fraction = fraction.minus( Fraction.ONE );
         }
-        return [
+        return phet.joist.random.shuffle( [
           ...result,
           ...FilledPartition.randomFill( shapePartition, fraction, color )
-        ];
+        ] );
       }
     }
 
