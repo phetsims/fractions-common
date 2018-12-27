@@ -12,18 +12,27 @@ define( require => {
   const AlignBox = require( 'SCENERY/nodes/AlignBox' );
   const Bounds2 = require( 'DOT/Bounds2' );
   const BuildingLabLayerNode = require( 'FRACTIONS_COMMON/lab/view/BuildingLabLayerNode' );
+  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
+  const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const FractionsCommonGlobals = require( 'FRACTIONS_COMMON/common/FractionsCommonGlobals' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
   const LabNumberPanel = require( 'FRACTIONS_COMMON/lab/view/LabNumberPanel' );
   const LabShapePanel = require( 'FRACTIONS_COMMON/lab/view/LabShapePanel' );
   const Matrix3 = require( 'DOT/Matrix3' );
   const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
+  const NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
+  const NumberGroupNode = require( 'FRACTIONS_COMMON/building/view/NumberGroupNode' );
   const NumberGroupStack = require( 'FRACTIONS_COMMON/building/model/NumberGroupStack' );
   const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
   const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
   const Property = require( 'AXON/Property' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const ScreenView = require( 'JOIST/ScreenView' );
+  const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
+  const ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
   const ShapeGroupStack = require( 'FRACTIONS_COMMON/building/model/ShapeGroupStack' );
   const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   const ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
@@ -159,6 +168,78 @@ define( require => {
         bottomAlignBox,
         this.layerNode
       ];
+    }
+
+    /**
+     * Creates the icon for the unmixed lab screens.
+     * @public
+     *
+     * @returns {Node}
+     */
+    static createUnmixedScreenIcon() {
+
+      const numberGroup = new NumberGroup( false );
+      numberGroup.numeratorSpot.pieceProperty.value = new NumberPiece( 7 );
+      numberGroup.denominatorSpot.pieceProperty.value = new NumberPiece( 8 );
+
+      const numberGroupNode = new NumberGroupNode( numberGroup, {
+        isIcon: true,
+        positioned: false,
+        scale: 0.8
+      } );
+
+      const shapeGroup = new ShapeGroup( BuildingRepresentation.PIE );
+      [
+        new Fraction( 1, 2 ),
+        new Fraction( 1, 4 ),
+        new Fraction( 1, 8 )
+      ].forEach( fraction => {
+        shapeGroup.shapeContainers.get( 0 ).shapePieces.push( new ShapePiece( fraction, BuildingRepresentation.PIE, FractionsCommonColorProfile.shapeRedProperty ) );
+      } );
+
+      const shapeGroupNode = new ShapeGroupNode( shapeGroup, {
+        hasButtons: false,
+        isIcon: true,
+        positioned: false
+      } );
+
+      return FractionsCommonGlobals.wrapIcon( new HBox( {
+        spacing: 20,
+        children: [
+          numberGroupNode,
+          shapeGroupNode
+        ],
+        scale: 2.3
+      } ), FractionsCommonColorProfile.otherScreenBackgroundProperty );
+    }
+
+    /**
+     * Creates the icon for the mixed lab screens.
+     * @public
+     *
+     * @returns {Node}
+     */
+    static createMixedScreenIcon() {
+
+      const shapeGroup = new ShapeGroup( BuildingRepresentation.PIE );
+      shapeGroup.increaseContainerCount();
+      shapeGroup.shapeContainers.get( 0 ).shapePieces.push( new ShapePiece( Fraction.ONE, BuildingRepresentation.PIE, FractionsCommonColorProfile.shapeRedProperty ) );
+      [
+        new Fraction( 1, 2 ),
+        new Fraction( 1, 4 ),
+        new Fraction( 1, 8 )
+      ].forEach( fraction => {
+        shapeGroup.shapeContainers.get( 1 ).shapePieces.push( new ShapePiece( fraction, BuildingRepresentation.PIE, FractionsCommonColorProfile.shapeRedProperty ) );
+      } );
+
+      const shapeGroupNode = new ShapeGroupNode( shapeGroup, {
+        hasButtons: false,
+        isIcon: true,
+        positioned: false,
+        scale: 2.1
+      } );
+      
+      return FractionsCommonGlobals.wrapIcon( shapeGroupNode, FractionsCommonColorProfile.otherScreenBackgroundProperty );
     }
   }
 

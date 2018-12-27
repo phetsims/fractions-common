@@ -27,6 +27,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const FractionsCommonGlobals = require( 'FRACTIONS_COMMON/common/FractionsCommonGlobals' );
   const GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const LevelSelectionButton = require( 'VEGAS/LevelSelectionButton' );
@@ -39,14 +40,12 @@ define( require => {
   const NumberStackNode = require( 'FRACTIONS_COMMON/building/view/NumberStackNode' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const platform = require( 'PHET_CORE/platform' );
-  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
   const RefreshButton = require( 'SCENERY_PHET/buttons/RefreshButton' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const RewardNode = require( 'VEGAS/RewardNode' );
   const RoundArrowButton = require( 'FRACTIONS_COMMON/common/view/RoundArrowButton' );
   const ScoreDisplayStars = require( 'VEGAS/ScoreDisplayStars' );
-  const Screen = require( 'JOIST/Screen' );
   const ScreenView = require( 'JOIST/ScreenView' );
   const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
   const ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
@@ -545,12 +544,7 @@ define( require => {
         scale: 1.5
       } );
 
-      const background = new Rectangle( {
-        rectBounds: Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.toBounds( 0, 0 ),
-        fill: FractionsCommonColorProfile.otherScreenBackgroundProperty
-      } );
-
-      const box = new HBox( {
+      return FractionsCommonGlobals.wrapIcon( new HBox( {
         spacing: 10,
         children: [
           shapeGroupNode,
@@ -558,16 +552,7 @@ define( require => {
           fractionNode
         ],
         scale: 2.3
-      } );
-
-      return new Node( {
-        children: [
-          background,
-          new AlignBox( box, {
-            alignBounds: background.bounds
-          } )
-        ]
-      } );
+      } ), FractionsCommonColorProfile.otherScreenBackgroundProperty );
     }
 
     /**
@@ -594,12 +579,7 @@ define( require => {
         ]
       } );
 
-      const background = new Rectangle( {
-        rectBounds: Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.toBounds( 0, 0 ),
-        fill: FractionsCommonColorProfile.otherScreenBackgroundProperty
-      } );
-
-      const box = new HBox( {
+      return FractionsCommonGlobals.wrapIcon( new HBox( {
         spacing: 10,
         children: [
           fractionNode,
@@ -607,16 +587,7 @@ define( require => {
           rightSide
         ],
         scale: 1.7
-      } );
-
-      return new Node( {
-        children: [
-          background,
-          new AlignBox( box, {
-            alignBounds: background.bounds
-          } )
-        ]
-      } );
+      } ), FractionsCommonColorProfile.otherScreenBackgroundProperty );
     }
   }
 
