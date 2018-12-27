@@ -15,11 +15,13 @@ define( require => {
   const CellSceneNode = require( 'FRACTIONS_COMMON/intro/view/CellSceneNode' );
   const CircularContainerNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularContainerNode' );
   const CircularSceneNode = require( 'FRACTIONS_COMMON/intro/view/circular/CircularSceneNode' );
+  const Container = require( 'FRACTIONS_COMMON/intro/model/Container' );
   const ContainerSetScreenView = require( 'FRACTIONS_COMMON/intro/view/ContainerSetScreenView' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const FractionsCommonGlobals = require( 'FRACTIONS_COMMON/common/FractionsCommonGlobals' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const IntroRadioButtonGroup = require( 'FRACTIONS_COMMON/intro/view/IntroRadioButtonGroup' );
   const IntroRepresentation = require( 'FRACTIONS_COMMON/intro/enum/IntroRepresentation' );
@@ -245,6 +247,45 @@ define( require => {
         }
       } );
     }
+
+    /**
+     * Creates the icon for the screen.
+     * @public
+     *
+     * @returns {Node}
+     */
+    static createScreenIcon() {
+      const leftContainer = new Container();
+      const rightContainer = new Container();
+
+      leftContainer.addCells( 3 );
+      rightContainer.addCells( 9 );
+
+      _.times( 2, () => {
+        leftContainer.getNextEmptyCell().setFilled( true );
+      } );
+      _.times( 6, () => {
+        rightContainer.getNextEmptyCell().setFilled( true );
+      } );
+
+      const equalsText = new Text( MathSymbols.EQUAL_TO, { font: new PhetFont( 80 ) } );
+
+      const leftContainerNode = new RectangularContainerNode( leftContainer );
+      const rightContainerNode = new RectangularContainerNode( rightContainer, {
+        colorOverride: FractionsCommonColorProfile.equalityLabColorProperty
+      } );
+
+      return FractionsCommonGlobals.wrapIcon( new HBox( {
+        spacing: 13,
+        children: [
+          leftContainerNode,
+          equalsText,
+          rightContainerNode
+        ],
+        scale: 1.5
+      } ), FractionsCommonColorProfile.introScreenBackgroundProperty );
+    }
+
   }
 
   return fractionsCommon.register( 'EqualityLabScreenView', EqualityLabScreenView );

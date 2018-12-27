@@ -11,21 +11,28 @@ define( require => {
   // modules
   const AccordionBox = require( 'SUN/AccordionBox' );
   const AlignBox = require( 'SCENERY/nodes/AlignBox' );
+  const CakeContainerNode = require( 'FRACTIONS_COMMON/intro/view/cake/CakeContainerNode' );
   const Checkbox = require( 'SUN/Checkbox' );
+  const Container = require( 'FRACTIONS_COMMON/intro/model/Container' );
   const ContainerSetScreenView = require( 'FRACTIONS_COMMON/intro/view/ContainerSetScreenView' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const FractionDisplayType = require( 'FRACTIONS_COMMON/common/enum/FractionDisplayType' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const FractionsCommonGlobals = require( 'FRACTIONS_COMMON/common/FractionsCommonGlobals' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const MathSymbols = require( 'SCENERY_PHET/MathSymbols' );
   const MaxNode = require( 'FRACTIONS_COMMON/intro/view/MaxNode' );
   const MixedFractionNode = require( 'FRACTIONS_COMMON/common/view/MixedFractionNode' );
+  const NumberLineNode = require( 'FRACTIONS_COMMON/intro/view/numberline/NumberLineNode' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const PropertyFractionNode = require( 'FRACTIONS_COMMON/common/view/PropertyFractionNode' );
+  const Range = require( 'DOT/Range' );
   const Text = require( 'SCENERY/nodes/Text' );
+  const VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
   const equationString = require( 'string!FRACTIONS_COMMON/equation' );
@@ -189,6 +196,111 @@ define( require => {
       this.bucketContainer.centerX = centerX;
       this.bucketContainer.bottom = this.layoutBounds.bottom - MARGIN;
     }
+
+    /**
+     * Returns a number line node with the given (unchanging) attributes.
+     * @private
+     *
+     * @param {number} numerator
+     * @param {number} denominator
+     * @param {number} wholes
+     * @returns {Node}
+     */
+    static createStaticNumberLine( numerator, denominator, wholes ) {
+      return new NumberLineNode(
+        new NumberProperty( numerator, { range: new Range( 0, numerator ) } ),
+        new NumberProperty( denominator, { range: new Range( 1, denominator ) } ),
+        new NumberProperty( wholes, { range: new Range( 0, wholes ) } )
+      );
+    }
+
+    /**
+     * Creates the icon for the unmixed intro screens.
+     * @public
+     *
+     * @returns {Node}
+     */
+    static createUnmixedScreenIcon() {
+      const container = new Container();
+
+      container.addCells( 4 );
+      _.times( 3, () => {
+        container.getNextEmptyCell().setFilled( true );
+      } );
+
+      const cakeNode = new CakeContainerNode( container );
+
+      const numberLineNode = IntroScreenView.createStaticNumberLine( 3, 4, 1 );
+
+      return FractionsCommonGlobals.wrapIcon( new HBox( {
+        spacing: 30,
+        children: [
+          cakeNode,
+          numberLineNode
+        ],
+        scale: 1.3
+      } ), FractionsCommonColorProfile.introScreenBackgroundProperty );
+    }
+
+    /**
+     * Creates the thumbnail for the unmixed intro screens.
+     * @public
+     *
+     * @returns {Node}
+     */
+    static createUnmixedScreenThumbnail() {
+      const container = new Container();
+
+      container.addCells( 4 );
+      _.times( 3, () => {
+        container.getNextEmptyCell().setFilled( true );
+      } );
+
+      const cakeNode = new CakeContainerNode( container, {
+        scale: 2.5
+      } );
+
+      return FractionsCommonGlobals.wrapIcon( cakeNode, FractionsCommonColorProfile.introScreenBackgroundProperty );
+    }
+
+    /**
+     * Creates the icon for the mixed intro screens.
+     * @public
+     *
+     * @returns {Node}
+     */
+    static createMixedScreenIcon() {
+      const fractionNode = new MixedFractionNode( {
+        whole: 2,
+        numerator: 1,
+        denominator: 2,
+        scale: 2.4
+      } );
+
+      const numberLineNode = IntroScreenView.createStaticNumberLine( 5, 2, 3 );
+
+      return FractionsCommonGlobals.wrapIcon( new VBox( {
+        spacing: 15,
+        children: [
+          fractionNode,
+          numberLineNode
+        ],
+        scale: 1
+      } ), FractionsCommonColorProfile.introScreenBackgroundProperty );
+    }
+
+    /**
+     * Creates the thumbnail for the mixed intro screens.
+     * @public
+     *
+     * @returns {Node}
+     */
+    static createMixedScreenThumbnail() {
+      const numberLineNode = IntroScreenView.createStaticNumberLine( 5, 2, 3 );
+
+      return FractionsCommonGlobals.wrapIcon( numberLineNode, FractionsCommonColorProfile.introScreenBackgroundProperty );
+    }
+
   }
 
   return fractionsCommon.register( 'IntroScreenView', IntroScreenView );

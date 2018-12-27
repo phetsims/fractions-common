@@ -30,7 +30,7 @@ define( require => {
       assert && assert( container instanceof Container );
 
       options = _.extend( {
-        rectangularOrientation: RectangularOrientation.VERTICAL_SIZE
+        rectangularOrientation: RectangularOrientation.VERTICAL
       }, options );
 
       assert && assert( RectangularOrientation.includes( options.rectangularOrientation ) );
