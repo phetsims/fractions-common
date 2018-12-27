@@ -376,6 +376,21 @@ define( require => {
     }
 
     /**
+     * Returns a multiplied version of the fraction (equal to the same value, but larger numerator and denominator).
+     * @private
+     *
+     * @param {Fraction} fraction
+     * @returns {Fraction}
+     */
+    static multiplyFraction( fraction ) {
+      const multiplier = sample( fraction.denominator <= 4 ? ( fraction.denominator <= 3 ? [ 2, 3 ] : [ 2 ] ) : [ 1 ] );
+      return new Fraction(
+        fraction.numerator * multiplier,
+        fraction.denominator * multiplier
+      );
+    }
+
+    /**
      * Returns a list of numbers required exactly for the given fractions (for number challenges), but multiplied by
      * a given factor.
      * @public
@@ -1792,13 +1807,14 @@ define( require => {
      */
     static level5NumbersMixed( levelNumber ) {
       const fractions = chooseSplittable( 3, mixedNumbersFractions, 1 );
+      const multipliedFractions = shuffle( [
+        ...fractions.slice( 0, 1 ).map( FractionLevel.multiplyFraction ),
+        ...fractions.slice( 1 )
+      ] );
 
-      const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.LIMITED_9_GAME_PARTITIONS, fractions, COLORS_3, FillType.SEQUENTIAL, true );
+      const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.LIMITED_9_GAME_PARTITIONS, multipliedFractions, COLORS_3, FillType.SEQUENTIAL, true );
 
-      const pieceNumbers = [
-        ...FractionLevel.multipliedNumbers( fractions.slice( 0, 1 ), true ),
-        ...FractionLevel.exactMixedNumbers( fractions.slice( 1 ) )
-      ];
+      const pieceNumbers = FractionLevel.exactMixedNumbers( fractions );
 
       return FractionChallenge.createNumberChallenge( levelNumber, true, shapeTargets, pieceNumbers );
     }
@@ -1818,13 +1834,13 @@ define( require => {
      */
     static level6NumbersMixed( levelNumber ) {
       const fractions = chooseSplittable( 4, mixedNumbersFractions, 2 );
+      const multipliedFractions = shuffle( [
+        ...fractions.slice( 0, 2 ).map( FractionLevel.multiplyFraction ),
+        ...fractions.slice( 2 )
+      ] );
 
-      const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.LIMITED_9_GAME_PARTITIONS, fractions, COLORS_4, FillType.MIXED, true );
-
-      const pieceNumbers = [
-        ...FractionLevel.multipliedNumbers( fractions.slice( 0, 2 ), true ),
-        ...FractionLevel.exactMixedNumbers( fractions.slice( 2 ) )
-      ];
+      const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.LIMITED_9_GAME_PARTITIONS, multipliedFractions, COLORS_4, FillType.MIXED, true );
+      const pieceNumbers = FractionLevel.exactMixedNumbers( fractions );
 
       return FractionChallenge.createNumberChallenge( levelNumber, true, shapeTargets, pieceNumbers );
     }
@@ -1892,8 +1908,8 @@ define( require => {
       } ) ) );
       const fractions = unreducedFractions.map( f => f.reduced() );
 
-      const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.LIMITED_9_GAME_PARTITIONS, fractions, COLORS_4, FillType.RANDOM, true );
-      const pieceNumbers = FractionLevel.exactMixedNumbers( unreducedFractions );
+      const shapeTargets = FractionLevel.targetsFromFractions( ShapePartition.LIMITED_9_GAME_PARTITIONS, unreducedFractions, COLORS_4, FillType.RANDOM, true );
+      const pieceNumbers = FractionLevel.exactMixedNumbers( fractions );
 
       return FractionChallenge.createNumberChallenge( levelNumber, true, shapeTargets, pieceNumbers );
     }
