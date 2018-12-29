@@ -25,8 +25,9 @@ define( require => {
   const ShapeGroup = require( 'FRACTIONS_COMMON/building/model/ShapeGroup' );
   const ShapeStack = require( 'FRACTIONS_COMMON/building/model/ShapeStack' );
   const Vector2 = require( 'DOT/Vector2' );
-// REVIEW: Doc for how scratchVector is used would be helpful.
-  const scratchVector = new Vector2();
+
+  // constants
+  const scratchVector = new Vector2(); // Used to minimize garbage collection by reusing a vector.
 
   class BuildingModel {
     constructor() {
@@ -67,13 +68,6 @@ define( require => {
 
       // @public {Property.<Group|null>} - We'll only show controls for this group
       this.selectedGroupProperty = new Property( null );
-
-      // REVIEW: Is this an unused variable?
-      // @public {EnumerationMap.<Array.<Stack>>} - The stacks for pieces
-      this.stacksMap = new EnumerationMap( BuildingType, type => ( {
-        [ BuildingType.SHAPE ]: this.shapeStacks,
-        [ BuildingType.NUMBER ]: this.numberStacks
-      }[ type ] ) );
 
       // @public {EnumerationMap.<Array.<Stack>>} - The stacks for groups
       this.groupStacksMap = new EnumerationMap( BuildingType, type => ( {
@@ -233,12 +227,11 @@ define( require => {
       } );
     }
 
-    // REVIEW: Incomplete JSDoc for parameters
     /**
      * Places a ShapePiece into a ShapeContainer.
      * @public
      *
-     * @param {ShapePiece}
+     * @param {ShapePiece} shapePiece
      * @param {ShapeContainer} shapeContainer
      * @param {ShapeGroup} shapeGroup
      */
@@ -391,12 +384,11 @@ define( require => {
       throw new Error( 'Could not find a piece to remove' );
     }
 
-    // REVIEW: JSDoc parameter mismatch
     /**
      * Removes the last piece from a NumberGroup (animating it back to its home stack).
      * @public
      *
-     * @param {NumberGroup} shapeGroup
+     * @param {NumberGroup} numberGroup
      */
     removeLastPieceFromNumberGroup( numberGroup ) {
       for ( let i = 0; i < numberGroup.spots.length; i++ ) {
@@ -607,8 +599,7 @@ define( require => {
 
         // Don't compute the closest for ALL pieces, that would hurt performance.
         if ( shapePiece.representation === BuildingRepresentation.PIE && shapePiece.isUserControlledProperty.value ) {
-          // REVIEW: 'let' instead of 'var'
-          var closestContainer = this.closestDroppableShapeContainer( shapePiece, Number.POSITIVE_INFINITY );
+          const closestContainer = this.closestDroppableShapeContainer( shapePiece, Number.POSITIVE_INFINITY );
           if ( closestContainer ) {
             shapePiece.orientTowardsContainer( closestContainer, dt );
           }

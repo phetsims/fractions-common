@@ -112,6 +112,10 @@ define( require => {
       const challengeBackground = new Node();
       const challengeForeground = new Node();
 
+      // @private {boolean} - We'll delay steps to transitions by a frame when this is set to true, to handle
+      // https://github.com/phetsims/fractions-common/issues/42.
+      this.delayTransitions = false;
+
       // @orivate {TransitionNode}
       this.levelSelectionTransitionNode = new TransitionNode( this.visibleBoundsProperty, {
         content: leftLevelSelectionNode,
@@ -125,6 +129,7 @@ define( require => {
         else {
           this.levelSelectionTransitionNode.slideLeftTo( rightLevelSelectionNode, QUADRATIC_TRANSITION_OPTIONS );
         }
+        this.delayTransitions = true;
       } );
 
       // @private {TransitionNode}
@@ -208,6 +213,7 @@ define( require => {
         else {
           transition = this.mainTransitionNode.slideRightTo( this.levelSelectionLayer, QUADRATIC_TRANSITION_OPTIONS );
         }
+        this.delayTransitions = true;
         if ( oldChallengeNode ) {
           // REVIEW: Do we not have to remove emitters from transitionNodes?
           transition.endedEmitter.addListener( () => {
@@ -366,8 +372,14 @@ define( require => {
      */
     step( dt ) {
       this.rewardNode && this.rewardNode.visible && this.rewardNode.step( dt );
-      this.levelSelectionTransitionNode.step( dt );
-      this.mainTransitionNode.step( dt );
+
+      if ( this.delayTransitions ) {
+        this.delayTransitions = false;
+      }
+      else {
+        this.levelSelectionTransitionNode.step( dt );
+        this.mainTransitionNode.step( dt );
+      }
     }
 
     /**
