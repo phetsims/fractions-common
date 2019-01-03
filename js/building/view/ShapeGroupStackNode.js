@@ -81,7 +81,11 @@ define( require => {
      * @param {ShapePiece} shapeGroup
      */
     removeShapeGroup( shapeGroup ) {
-      this.removeChild( this.children[ this.children.length - 1 ] );
+      const child = this.children[ this.children.length - 1 ];
+      this.removeChild( child );
+
+      // Since we add in the icon, we need to dispose the child to release the reference to the icon.
+      child.dispose();
     }
 
     /**
