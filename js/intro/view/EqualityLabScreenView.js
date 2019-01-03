@@ -181,6 +181,10 @@ define( require => {
         } );
       }
 
+      const semitransparentColorOverride = new DerivedProperty( [
+        FractionsCommonColorProfile.equalityLabColorProperty
+      ], color => color.withAlpha( 0.8 ) );
+
       Property.multilink( [ model.representationProperty, model.showNumberLineProperty ], ( representation, showNumberLine ) => {
         representation = showNumberLine ? IntroRepresentation.NUMBER_LINE : representation;
         if ( representation !== lastRepresentation ) {
@@ -192,8 +196,6 @@ define( require => {
           const containers = model.multipliedContainers.getArray();
 
           const colorOverride = FractionsCommonColorProfile.equalityLabColorProperty;
-
-          const semitransparentColorOverride = new DerivedProperty( [ colorOverride ], color => color.withAlpha( 0.8 ) );
           let containerOffset = 0;
 
           if ( representation === IntroRepresentation.CIRCLE ) {
