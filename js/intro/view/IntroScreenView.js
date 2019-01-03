@@ -296,7 +296,8 @@ define( require => {
      * @returns {Node}
      */
     static createMixedScreenThumbnail() {
-      const numberLineNode = IntroScreenView.createStaticNumberLine( 5, 2, 3 );
+      const numberLineNode = IntroScreenView.createStaticNumberLine( 3, 2, 2 );
+      numberLineNode.scale( 1.5 );
 
       return FractionsCommonGlobals.wrapIcon( numberLineNode, FractionsCommonColorProfile.introScreenBackgroundProperty );
     }
