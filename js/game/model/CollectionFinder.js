@@ -29,10 +29,12 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( options ) {
-      const {
+      options = _.extend( {
         // {Array.<PrimeFactorization>} - The available denominators that can be used.
-        denominators = _.range( 1, 9 ).map( PrimeFactorization.factor )
-      } = options || {};
+        denominators: _.range( 1, 9 ).map( PrimeFactorization.factor )
+      }, options );
+
+      const denominators = options.denominators;
 
       const lcm = _.reduce( denominators, ( a, b ) => a.lcm( b ), PrimeFactorization.ONE );
       const inverses = denominators.map( f => lcm.divided( f ) );
