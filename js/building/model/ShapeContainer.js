@@ -20,8 +20,7 @@ define( require => {
   const Util = require( 'DOT/Util' );
   const Vector2 = require( 'DOT/Vector2' );
 
-  // REVIEW: Please add doc about how this is used.
-  const scratchVector = new Vector2();
+  const scratchVector = new Vector2(); // Used as a shared Vector2 so that we can avoid allocating vectors dynamically.
 
   class ShapeContainer {
     /**

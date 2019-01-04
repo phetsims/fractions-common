@@ -153,6 +153,7 @@ define( require => {
 
         // Keep the group in the drag bounds (when they change)
         // REVIEW: Does this need an unlink?
+        // REVIEW*: Shouldn't need it, these have the same lifetime.
         this.dragBoundsProperty.lazyLink( dragBounds => {
           numberGroup.positionProperty.value = dragBounds.closestPointTo( numberGroup.positionProperty.value );
         } );

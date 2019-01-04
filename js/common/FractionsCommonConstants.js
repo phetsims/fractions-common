@@ -8,16 +8,15 @@
 define( require => {
   'use strict';
 
-  // REVEIW: 'let' instead of 'var'
   // modules
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
 
-  //REVIEW: Missing "// constants" notation
-  var WHOLE_FRACTIONAL_SIZE_RATIO = 2;
-  var SHAPE_RADIUS = 50;
+  // constants
+  const WHOLE_FRACTIONAL_SIZE_RATIO = 2;
+  const SHAPE_RADIUS = 50;
 
-  var FractionsCommonConstants = {
+  const FractionsCommonConstants = {
     // {number}
     PANEL_MARGIN: 10,
 

@@ -52,6 +52,8 @@ define( require => {
 
       // Keep our hover target up-to-date
       // REVIEW: Does this need an unlink?
+      // REVIEW*: I don't believe so. Since we "own" the Property, any reference to this is going to also reference the
+      // REVIEW*: Property (and vice versa).
       this.hoveringTargetProperty.lazyLink( ( newTarget, oldTarget ) => {
         oldTarget && oldTarget.hoveringGroups.remove( this );
         newTarget && newTarget.hoveringGroups.push( this );

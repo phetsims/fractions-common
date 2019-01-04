@@ -22,7 +22,9 @@ define( require => {
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
-// REVIEW: Added doc about how this is used would be helpful
+
+  // globals
+  // Used for unique identifiers for every ShapePiece (so we can efficiently store a map from piece ID to other objects.
   let globalID = 0;
 
   class ShapePiece {
@@ -88,6 +90,7 @@ define( require => {
       this.trueTargetRotation = 0;
 
       // REVIEW: Does this property need an unlink?
+      // REVIEW*: Shouldn't need it, since they have the same lifetimes.
       this.isUserControlledProperty.link( isUserControlled => {
         if ( isUserControlled ) {
           this.shadowProperty.value = 1;
@@ -96,16 +99,15 @@ define( require => {
 
       // Handle rotational animation towards a target (if any)
       // REVIEW: Does this need a dispose?
+      // REVIEW*: Shouldn't need it, since they have the same lifetimes.
       Property.multilink( [ this.isUserControlledProperty, this.targetRotationProperty ], ( isUserControlled, targetRotation ) => {
         if ( isUserControlled ) {
-          // REVIEW: 'let' instead of 'var'
-          var currentRotation = this.rotationProperty.value;
+          const currentRotation = this.rotationProperty.value;
           this.trueTargetRotation = Animator.modifiedEndAngle( currentRotation, this.targetRotationProperty.value );
 
-          // REVIEW: 'let' instead of 'var'
-          // REVIEW: Documentation for these variables would be helpful, being they are only used below.
-          var damping = 1;
-          var force = 50;
+          // Constants tweaked to give the damped harmonic a pleasing behavior.
+          const damping = 1;
+          const force = 50;
           this.dampedHarmonicTimeElapsed = 0;
           this.dampedHarmonic = new DampedHarmonic( 1, Math.sqrt( 4 * force ) * damping, force, currentRotation - this.trueTargetRotation, this.angularVelocityProperty.value );
         }
@@ -162,12 +164,11 @@ define( require => {
         return Vector2.ZERO;
       }
       else {
-        // REVIEW: 'let' instead of 'var'
-        var positiveAngle = fraction.value * 2 * Math.PI;
+        const positiveAngle = fraction.value * 2 * Math.PI;
 
         // Compute the centroid for a circular sector
-        var radius = FractionsCommonConstants.SHAPE_SIZE / 2;
-        var distanceFromCenter = 4 / 3 * radius * Math.sin( positiveAngle / 2 ) / positiveAngle;
+        const radius = FractionsCommonConstants.SHAPE_SIZE / 2;
+        const distanceFromCenter = 4 / 3 * radius * Math.sin( positiveAngle / 2 ) / positiveAngle;
         return Vector2.createPolar( distanceFromCenter, -positiveAngle / 2 );
       }
     }

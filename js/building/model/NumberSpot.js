@@ -8,11 +8,10 @@
 define( require => {
   'use strict';
 
-  //REVIEW: `const` instead of `var`?
   // modules
-  var BooleanProperty = require( 'AXON/BooleanProperty' );
-  var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  var Property = require( 'AXON/Property' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Property = require( 'AXON/Property' );
 
   class NumberSpot {
     /**
