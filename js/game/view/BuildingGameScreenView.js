@@ -467,11 +467,14 @@ define( require => {
       } );
 
       let icon;
-      if ( level.buildingType !== BuildingType.NUMBER ) {
+      if ( level.buildingType === BuildingType.NUMBER ) {
         if ( !hasMixedNumbers ) {
-          icon = new MixedFractionNode( {
-            numerator: level.number,
-            denominator: 10
+          const stack = new NumberStack( level.number, level.number );
+          for ( let i = 0; i < level.number; i++ ) {
+            stack.numberPieces.push( new NumberPiece( level.number ) );
+          }
+          icon = new NumberStackNode( stack, {
+            scale: 0.75
           } );
         }
         else {
