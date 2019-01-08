@@ -106,7 +106,11 @@ define( require => {
 
             const isActive = this.layerNode.activePointerProperty.value === event.pointer;
 
-            if ( !isActive ) {
+            // See if our press was a "miss" (trail length 1) or a hit on our screen (screen.view in the trail).
+            // We really want to exclude home-screen clicks so that things start focused.
+            const doesTrailMatch = _.includes( event.trail.nodes, screen.view ) || event.trail.length <= 1;
+
+            if ( !isActive && doesTrailMatch ) {
               // Any event on a shape group should handle it.
               model.selectedGroupProperty.value = null;
             }
