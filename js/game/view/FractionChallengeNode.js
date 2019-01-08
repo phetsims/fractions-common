@@ -73,7 +73,6 @@ define( require => {
           const shapeGroup = challenge.pullGroupFromStack( stack, modelPoint );
           const shapeGroupNode = this.layerNode.getShapeGroupNode( shapeGroup );
           shapeGroupNode.dragListener.press( event, shapeGroupNode );
-          event.handle(); // for our selection (so we don't immediately clear it)
         }
         else if ( stack instanceof NumberGroupStack ) {
           const numberGroup = challenge.pullGroupFromStack( stack, modelPoint );
@@ -162,6 +161,17 @@ define( require => {
         this.layerNode,
         this.levelCompleteNode
       ];
+    }
+
+    /**
+     * Checks whether the given pointer is the last pointer actively manipulating a group.
+     * @public
+     *
+     * @param {Pointer} pointer
+     * @returns {boolean}
+     */
+    isPointerActive( pointer ) {
+      return this.layerNode.activePointerProperty.value === pointer;
     }
 
     /**

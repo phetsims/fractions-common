@@ -72,7 +72,6 @@ define( require => {
           shapeGroup.positionProperty.value = modelPoint;
           const shapeGroupNode = this.layerNode.getShapeGroupNode( shapeGroup );
           shapeGroupNode.dragListener.press( event, shapeGroupNode );
-          event.handle(); // for our selection
         }
         else {
           throw new Error( 'unknown stack type' );
@@ -101,11 +100,16 @@ define( require => {
       } );
 
       phet.joist.display.addInputListener( {
-        down: () => {
+        down: event => {
           const screen = phet.joist.sim.currentScreenProperty.value;
           if ( screen && screen.view === this ) {
-            // Any event on a shape group should handle it.
-            model.selectedGroupProperty.value = null;
+
+            const isActive = this.layerNode.activePointerProperty.value === event.pointer;
+
+            if ( !isActive ) {
+              // Any event on a shape group should handle it.
+              model.selectedGroupProperty.value = null;
+            }
           }
         }
       } );
@@ -238,7 +242,7 @@ define( require => {
         positioned: false,
         scale: 2.1
       } );
-      
+
       return FractionsCommonGlobals.wrapIcon( shapeGroupNode, FractionsCommonColorProfile.otherScreenBackgroundProperty );
     }
   }

@@ -366,12 +366,15 @@ define( require => {
       resetAllButton.right = this.layoutBounds.right - SIDE_MARGIN;
 
       phet.joist.display.addInputListener( {
-        down: () => {
+        down: event => {
           const screen = phet.joist.sim.currentScreenProperty.value;
           if ( screen && screen.view === this ) {
             // Any event on a shape group should handle it.
             const challenge = model.challengeProperty.value;
-            if ( challenge ) {
+
+            const isActive = lastChallengeNode && lastChallengeNode.isPointerActive( event.pointer );
+
+            if ( challenge && !isActive ) {
               challenge.selectedGroupProperty.value = null;
             }
           }

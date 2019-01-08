@@ -15,6 +15,7 @@ define( require => {
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberGroupNode = require( 'FRACTIONS_COMMON/building/view/NumberGroupNode' );
   const NumberPieceNode = require( 'FRACTIONS_COMMON/building/view/NumberPieceNode' );
+  const Property = require( 'AXON/Property' );
   const ShapeGroupNode = require( 'FRACTIONS_COMMON/building/view/ShapeGroupNode' );
   const ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
 
@@ -70,6 +71,11 @@ define( require => {
 
       // @private {Array.<NumberPieceNode>}
       this.numberPieceNodes = [];
+
+      // @private {Property.<Pointer|null>} - We track the latest pointer that is actively manipulating a group, so that
+      // we can ignore the pointer "down" that would otherwise select groups.
+      // Otherwise cases like https://github.com/phetsims/fractions-common/issues/59 would happen.
+      this.activePointerProperty = new Property( null );
     }
 
     /**
@@ -221,9 +227,19 @@ define( require => {
         dragBoundsProperty: this.shapeDragBoundsProperty,
         modelViewTransform: this.modelViewTransform,
         dragListener: this.onShapeGroupDrag.bind( this, shapeGroup ),
-        dropListener: this.onShapeGroupDrop.bind( this, shapeGroup ),
-        selectListener: () => {
+        dropListener: pointer => {
+          this.onShapeGroupDrop.bind( this, shapeGroup );
+
+          // Handles releasing of pointer focus for selection
+          if ( pointer === this.activePointerProperty.value ) {
+            this.activePointerProperty.value = null;
+          }
+        },
+        selectListener: pointer => {
           this.model.selectedGroupProperty.value = shapeGroup;
+
+          // Handles capturing of pointer focus for selection
+          this.activePointerProperty.value = pointer;
         },
         removeLastListener: this.onShapeGroupRemoveLastListener.bind( this, shapeGroup ),
         isSelectedProperty: this.getGroupSelectedProperty( shapeGroup )
@@ -258,9 +274,19 @@ define( require => {
         dragBoundsProperty: this.numberDragBoundsProperty,
         modelViewTransform: this.modelViewTransform,
         dragListener: this.onNumberGroupDrag.bind( this, numberGroup ),
-        dropListener: this.onNumberGroupDrop.bind( this, numberGroup ),
-        selectListener: () => {
+        dropListener: pointer => {
+          this.onNumberGroupDrop.bind( this, numberGroup );
+
+          // Handles releasing of pointer focus for selection (ignore if we weren't the last pointer)
+          if ( pointer === this.activePointerProperty.value ) {
+            this.activePointerProperty.value = null;
+          }
+        },
+        selectListener: pointer => {
           this.model.selectedGroupProperty.value = numberGroup;
+
+          // Handles capturing of pointer focus for selection
+          this.activePointerProperty.value = pointer;
         },
         removeLastListener: this.onNumberGroupRemoveLastListener.bind( this, numberGroup ),
         isSelectedProperty: this.getGroupSelectedProperty( numberGroup )

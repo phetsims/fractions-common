@@ -34,7 +34,7 @@ define( require => {
         // {boolean}
         positioned: true,
 
-        // {function|null} - Listeners for if drag listeners are attached
+        // {function|null} - Listeners for if drag listeners are attached. Passed the pointer.
         dragListener: null,
         dropListener: null,
         selectListener: null,
@@ -102,21 +102,27 @@ define( require => {
      * @param {Object} options - The main options object
      */
     attachDragListener( dragBoundsProperty, dragListenerTarget, options ) {
+
+      let pointer = null;
+
       // @public {DragListener}
       this.dragListener = new DragListener( {
         targetNode: this,
         dragBoundsProperty,
         transform: this.modelViewTransform,
         locationProperty: this.group.positionProperty,
-        start: event => {
-          options.selectListener && options.selectListener();
+        start: ( event, listener ) => {
+          pointer = listener.pointer;
+
+          options.selectListener && options.selectListener( pointer );
           this.moveToFront();
+
         },
-        drag: event => {
-          options.dragListener && options.dragListener();
+        drag: ( event, listener ) => {
+          options.dragListener && options.dragListener( pointer );
         },
-        end: event => {
-          options.dropListener && options.dropListener();
+        end: listener => {
+          options.dropListener && options.dropListener( pointer );
         }
       } );
       this.itemsToDispose.push( this.dragListener );
@@ -124,8 +130,7 @@ define( require => {
 
       this.addInputListener( {
         down: event => {
-          options.selectListener && options.selectListener();
-          event.handle();
+          options.selectListener && options.selectListener( event.pointer );
         }
       } );
     }
