@@ -50,7 +50,12 @@ define( require => {
     }
 
     //My matches string
-    self.addChild( new Text( myMatchesString, { font: new PhetFont( { size: 14, weight: 'bold' } ), x: 15, y: 100 } ) );
+    self.addChild( new Text( myMatchesString, {
+      font: new PhetFont( { size: 14, weight: 'bold' } ),
+      x: 15,
+      y: 100,
+      maxWidth: 400
+    } ) );
 
     //right buttons, reset and toLevelSelection
     var backButton = new BackButton( {

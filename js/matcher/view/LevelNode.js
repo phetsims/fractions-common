@@ -76,19 +76,22 @@ define( require => {
       font: new PhetFont( {
         size: 12,
         weight: 'bold'
-      } )
+      } ),
+      maxWidth: 300
     } );
     var scoreLabel = new Text( StringUtils.format( labelScoreString, 0 ), {
       font: new PhetFont( {
         size: 12,
         weight: 'bold'
-      } )
+      } ),
+      maxWidth: 300
     } );
     var timeLabel = new Text( StringUtils.format( labelScoreString, 0 ), {
       font: new PhetFont( {
         size: 12,
         weight: 'bold'
-      } )
+      } ),
+      maxWidth: 300
     } );
     var vBox = new VBox( {
       children: [ levelLabel, scoreLabel, timeLabel ],
