@@ -55,7 +55,6 @@ define( require => {
       } );
 
       const equalsText = new Text( MathSymbols.EQUAL_TO, { font: new PhetFont( 90 ) } );
-      this.addChild( equalsText );
 
       const multipliedNumeratorProperty = new DerivedProperty( [ model.numeratorProperty, model.multiplierProperty ], ( numerator, multiplier ) => {
         return numerator * multiplier;
@@ -70,7 +69,6 @@ define( require => {
         maxNumerator: model.numeratorProperty.range.max * model.multiplierProperty.range.max,
         maxDenominator: model.denominatorProperty.range.max * model.multiplierProperty.range.max
       } );
-      this.addChild( multipliedFractionNode );
 
       const multiplierSpinner = new RoundNumberSpinner(
         model.multiplierProperty,
@@ -79,7 +77,6 @@ define( require => {
         baseColor: FractionsCommonColorProfile.greenRoundArrowButtonProperty,
         rotation: Math.PI / 2
       } );
-      this.addChild( multiplierSpinner );
 
       const circularIcon = CircularSceneNode.getIcon( true );
       const horizontalIcon = RectangularSceneNode.getIcon( RectangularOrientation.HORIZONTAL, true );
@@ -119,12 +116,19 @@ define( require => {
         xMargin: FractionsCommonConstants.PANEL_MARGIN,
         yMargin: FractionsCommonConstants.PANEL_MARGIN
       } );
-      this.addChild( showNumberLinePanel );
 
       const multipliedViewContainer = new Node( {
         pickable: false
       } );
-      this.addChild( multipliedViewContainer );
+
+      this.children = [
+        equalsText,
+        multipliedFractionNode,
+        multiplierSpinner,
+        showNumberLinePanel,
+        multipliedViewContainer,
+        ...this.children
+      ];
 
       // layout
 

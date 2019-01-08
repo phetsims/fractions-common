@@ -49,7 +49,7 @@ define( require => {
       super( model );
 
       // "Max" panel
-      this.addChild( new Panel( new AlignBox( new MaxNode( model.containerCountProperty ), {
+      const maxPanel = new Panel( new AlignBox( new MaxNode( model.containerCountProperty ), {
         group: this.topAlignGroup
       } ), {
         fill: FractionsCommonColorProfile.introPanelBackgroundProperty,
@@ -57,7 +57,8 @@ define( require => {
         yMargin: 10,
         right: this.layoutBounds.right - MARGIN,
         top: this.layoutBounds.top + MARGIN
-      } ) );
+      } );
+      this.insertChild( 0, maxPanel );
 
       if ( model.allowMixedNumbers ) {
 
@@ -101,7 +102,6 @@ define( require => {
           alignBounds: maxMixedFractionNodeBounds,
           xAlign: 'right'
         } );
-        this.addChild( this.mixedFractionNode );
         model.showMixedNumbersProperty.linkAttribute( this.mixedFractionNode, 'visible' );
 
         const label = new Text( mixedNumberString, {
@@ -114,7 +114,6 @@ define( require => {
           bottom: this.resetAllButton.top - 40
         } );
         showMixedCheckbox.touchArea = showMixedCheckbox.localBounds.dilated( 18 );
-        this.addChild( showMixedCheckbox );
 
         // Options for the "Equation" accordion box (bottom-left)
         const equationScale = 1.5;
@@ -173,8 +172,14 @@ define( require => {
           buttonTouchAreaXDilation: 15,
           buttonTouchAreaYDilation: 15
         } );
-        this.addChild( equationBox );
         model.showMixedNumbersProperty.linkAttribute( equationBox, 'visible' );
+
+        this.children = [
+          this.mixedFractionNode,
+          showMixedCheckbox,
+          equationBox,
+          ...this.children
+        ];
       }
 
       // layout

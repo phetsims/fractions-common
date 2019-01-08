@@ -177,10 +177,10 @@ define( require => {
 
       this.children = [
         this.representationPanel,
-        this.bucketContainer,
-        this.viewContainer,
         this.adjustableFractionNode,
-        this.resetAllButton
+        this.resetAllButton,
+        this.bucketContainer,
+        this.viewContainer
       ];
     }
 
