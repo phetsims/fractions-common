@@ -228,7 +228,7 @@ define( require => {
         modelViewTransform: this.modelViewTransform,
         dragListener: this.onShapeGroupDrag.bind( this, shapeGroup ),
         dropListener: pointer => {
-          this.onShapeGroupDrop.bind( this, shapeGroup );
+          this.onShapeGroupDrop( shapeGroup );
 
           // Handles releasing of pointer focus for selection
           if ( pointer === this.activePointerProperty.value ) {
@@ -275,7 +275,7 @@ define( require => {
         modelViewTransform: this.modelViewTransform,
         dragListener: this.onNumberGroupDrag.bind( this, numberGroup ),
         dropListener: pointer => {
-          this.onNumberGroupDrop.bind( this, numberGroup );
+          this.onNumberGroupDrop( numberGroup );
 
           // Handles releasing of pointer focus for selection (ignore if we weren't the last pointer)
           if ( pointer === this.activePointerProperty.value ) {
