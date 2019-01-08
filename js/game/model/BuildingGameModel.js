@@ -104,14 +104,20 @@ define( require => {
      * @public
      */
     nextLevel() {
-      const shapeIndex = this.shapeLevels.indexOf( this.levelProperty.value ) + 1;
-      const numberIndex = this.numberLevels.indexOf( this.levelProperty.value ) + 1;
-      if ( shapeIndex > 0 && this.shapeLevels[ shapeIndex ] ) {
-        this.levelProperty.value = this.shapeLevels[ shapeIndex ];
-      }
-      else if ( numberIndex > 0 && this.numberLevels[ numberIndex ] ) {
-        this.levelProperty.value = this.numberLevels[ numberIndex ];
-      }
+      [ this.shapeLevels, this.numberLevels ].forEach( levels => {
+        const currentIndex = levels.indexOf( this.levelProperty.value );
+
+        if ( currentIndex >= 0 ) {
+          // Levels to search through next in order (see https://github.com/phetsims/fractions-common/issues/47)
+          this.levelProperty.value = [
+            ...levels.slice( currentIndex + 1 ),
+            ...levels.slice( 0, currentIndex + 1 )
+          ].filter( level => {
+            // Fall back to the current level if all is lost (shouldn't generally happen)
+            return level.scoreProperty.value < level.numTargets || level === this.levelProperty.value;
+          } )[ 0 ];
+        }
+      } );
     }
 
     /**

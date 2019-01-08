@@ -26,7 +26,6 @@ define( require => {
   const FractionChallengeNode = require( 'FRACTIONS_COMMON/game/view/FractionChallengeNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
-  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const FractionsCommonGlobals = require( 'FRACTIONS_COMMON/common/FractionsCommonGlobals' );
   const GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
   const HBox = require( 'SCENERY/nodes/HBox' );
@@ -196,8 +195,7 @@ define( require => {
         lastChallengeNode = null;
         let transition;
         if ( challenge ) {
-          const nextLevelCallback = challenge.levelNumber < FractionsCommonConstants.NUM_LEVELS ? model.nextLevel.bind( model ) : null;
-          const challengeNode = new FractionChallengeNode( challenge, this.layoutBounds, nextLevelCallback, model.incorrectAttemptEmitter );
+          const challengeNode = new FractionChallengeNode( challenge, this.layoutBounds, model.nextLevel.bind( model ), model.incorrectAttemptEmitter );
           lastChallengeNode = challengeNode;
           if ( allLevelsCompletedNode ) {
             allLevelsCompletedNode.center = challengeNode.challengeCenter;
