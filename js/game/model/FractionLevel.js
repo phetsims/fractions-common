@@ -1549,7 +1549,7 @@ define( require => {
         [
           new Fraction( 2, 3 ),
           new Fraction( 4, 6 ),
-          new Fraction( 3, 9 )
+          new Fraction( 6, 9 )
         ],
         [
           new Fraction( 1, 4 ),
