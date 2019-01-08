@@ -432,6 +432,8 @@ define( require => {
      * @returns {Array.<number>}
      */
     static withMultipliedNumbers( fractions, quantity, separateWhole ) {
+      assert && assert( typeof separateWhole === 'boolean' );
+
       let breakable = shuffle( splittable( fractions ) );
       let unbreakable = notSplittable( fractions );
 
@@ -449,7 +451,7 @@ define( require => {
       }
 
       return [
-        ...FractionLevel.exactMixedNumbers( unbreakable ),
+        ...( separateWhole ? FractionLevel.exactMixedNumbers( unbreakable ) : FractionLevel.exactNumbers( unbreakable ) ),
         ...FractionLevel.multipliedNumbers( breakable, separateWhole )
       ];
     }
