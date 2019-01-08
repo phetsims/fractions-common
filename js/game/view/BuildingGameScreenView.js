@@ -185,7 +185,7 @@ define( require => {
         let transition;
         if ( challenge ) {
           const nextLevelCallback = challenge.levelNumber < FractionsCommonConstants.NUM_LEVELS ? model.nextLevel.bind( model ) : null;
-          const challengeNode = new FractionChallengeNode( challenge, this.layoutBounds, nextLevelCallback );
+          const challengeNode = new FractionChallengeNode( challenge, this.layoutBounds, nextLevelCallback, model.incorrectAttemptEmitter );
           lastChallengeNode = challengeNode;
           if ( allLevelsCompletedNode ) {
             allLevelsCompletedNode.center = challengeNode.challengeCenter;
@@ -233,6 +233,7 @@ define( require => {
       model.allLevelsCompleteEmitter.addListener( () => gameAudioPlayer.gameOverPerfectScore() );
       model.singleLevelCompleteEmitter.addListener( () => gameAudioPlayer.challengeComplete() );
       model.collectedGroupEmitter.addListener( () => gameAudioPlayer.correctAnswer() );
+      model.incorrectAttemptEmitter.addListener( () => gameAudioPlayer.wrongAnswer() );
 
       this.levelSelectionLayer.addChild( this.levelSelectionTransitionNode );
 

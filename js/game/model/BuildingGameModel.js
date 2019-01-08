@@ -64,6 +64,9 @@ define( require => {
       // @public {Emitter} - Triggers when a group is collected (but not when the level is completed)
       this.collectedGroupEmitter = new Emitter();
 
+      // @public {Emitter} - Triggers when a user tries to drag a group over a target that doesn't match.
+      this.incorrectAttemptEmitter = new Emitter();
+
       // Fire the level complete emitters when needed
       [ this.shapeLevels, this.numberLevels ].forEach( levels => {
         const countMissing = () => _.sum( levels.map( level => level.numTargets - level.scoreProperty.value > 0 ? 1 : 0 ) );

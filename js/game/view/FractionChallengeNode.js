@@ -43,8 +43,9 @@ define( require => {
      * @param {FractionChallenge} challenge
      * @param {Bounds2} layoutBounds
      * @param {function|null} nextLevelCallback - Called with no arguments, forwards to the next level (if there is one)
+     * @param {Emitter} incorrectAttemptEmitter
      */
-    constructor( challenge, layoutBounds, nextLevelCallback ) {
+    constructor( challenge, layoutBounds, nextLevelCallback, incorrectAttemptEmitter ) {
       super();
 
       // @private {FractionChallenge}
@@ -152,7 +153,7 @@ define( require => {
       this.numberDragBoundsProperty.value = this.modelViewTransform.viewToModelBounds( layoutBounds );
 
       // @private {GameLayerNode}
-      this.layerNode = new GameLayerNode( challenge, this.modelViewTransform, this.shapeDragBoundsProperty, this.numberDragBoundsProperty, this.targetsContainer, this.panel );
+      this.layerNode = new GameLayerNode( challenge, this.modelViewTransform, this.shapeDragBoundsProperty, this.numberDragBoundsProperty, this.targetsContainer, this.panel, incorrectAttemptEmitter );
 
       this.children = [
         this.panel,

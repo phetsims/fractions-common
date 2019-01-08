@@ -21,13 +21,17 @@ define( require => {
      * @param {Property.<Bounds2>} numberDragBoundsProperty
      * @param {Node} targetsContainer
      * @param {Node} panel
+     * @param {Emitter} incorrectAttemptEmitter
      */
-    constructor( model, modelViewTransform, shapeDragBoundsProperty, numberDragBoundsProperty, targetsContainer, panel ) {
+    constructor( model, modelViewTransform, shapeDragBoundsProperty, numberDragBoundsProperty, targetsContainer, panel, incorrectAttemptEmitter ) {
       super( model, modelViewTransform, shapeDragBoundsProperty, numberDragBoundsProperty, targetsContainer, panel );
 
       // @private {Node}
       this.targetsContainer = targetsContainer;
       this.panel = panel;
+
+      // @private {Emitter}
+      this.incorrectAttemptEmitter = incorrectAttemptEmitter;
 
       this.initialize();
     }
@@ -67,16 +71,25 @@ define( require => {
 
       if ( _.some( viewPoints, viewPoint => targetBounds.containsPoint( viewPoint ) ) ) {
         const closestTarget = this.model.findClosestTarget( modelPoints );
-        if ( closestTarget.groupProperty.value === null && group.totalFraction.reduced().equals( closestTarget.fraction.reduced() ) ) {
-          if ( group.type === BuildingType.SHAPE ) {
-            this.model.collectShapeGroup( group, closestTarget );
+        const isOpen = closestTarget.groupProperty.value === null;
+        const isMatch = group.totalFraction.reduced().equals( closestTarget.fraction.reduced() );
+
+        if ( isOpen ) {
+          if ( isMatch ) {
+            if ( group.type === BuildingType.SHAPE ) {
+              this.model.collectShapeGroup( group, closestTarget );
+            }
+            else {
+              this.model.collectNumberGroup( group, closestTarget );
+            }
+            group.hoveringTargetProperty.value = null;
           }
           else {
-            this.model.collectNumberGroup( group, closestTarget );
+            this.incorrectAttemptEmitter.emit();
           }
-          group.hoveringTargetProperty.value = null;
         }
-        else {
+
+        if ( !isOpen || !isMatch ) {
           this.model.centerGroup( group );
         }
       }
