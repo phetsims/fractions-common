@@ -134,6 +134,18 @@ define( require => {
         this.delayTransitions = true;
       } );
 
+      // Switch to the proper level selection page whenever we go to the corresponding level.
+      // See feature for https://github.com/phetsims/fractions-common/issues/58.
+      model.challengeProperty.lazyLink( challenge => {
+        if ( challenge ) {
+          const isLevelLeft = challenge.levelNumber <= 5;
+          if ( this.leftLevelSelectionProperty.value !== isLevelLeft ) {
+            this.leftLevelSelectionProperty.value = isLevelLeft;
+            this.levelSelectionTransitionNode.step( Number.POSITIVE_INFINITY );
+          }
+        }
+      } );
+
       // @private {TransitionNode}
       this.mainTransitionNode = new TransitionNode( this.visibleBoundsProperty, {
         content: this.levelSelectionLayer,
