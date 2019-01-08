@@ -235,7 +235,7 @@ define( require => {
      * @param {number} startAngle
      * @param {number} endAngle
      * @param {number} ratio
-     * @return {number}
+     * @returns {number}
      */
     static clerp( startAngle, endAngle, ratio ) {
       return startAngle * ( 1 - ratio ) + Animator.modifiedEndAngle( startAngle, endAngle ) * ratio;
