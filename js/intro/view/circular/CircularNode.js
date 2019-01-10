@@ -118,15 +118,10 @@ define( require => {
     getCircleRotation() {
       return this.primaryPath.rotation;
     }
-
-    /**
-     * The normal radius.
-     * @public
-     *
-     * @returns {number}
-     */
-    static get RADIUS() { return 63; }
   }
+
+  // @public {number} - The normal radius
+  CircularNode.RADIUS = 63;
 
   return fractionsCommon.register( 'CircularNode', CircularNode );
 } );
