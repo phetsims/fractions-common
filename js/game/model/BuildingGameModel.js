@@ -10,7 +10,7 @@ define( require => {
 
   // modules
   const BooleanProperty = require( 'AXON/BooleanProperty' );
-  const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
+  const BuildingType = require( 'FRACTIONS_COMMON/building/model/BuildingType' );
   const DynamicProperty = require( 'AXON/DynamicProperty' );
   const Emitter = require( 'AXON/Emitter' );
   const FractionChallenge = require( 'FRACTIONS_COMMON/game/model/FractionChallenge' );

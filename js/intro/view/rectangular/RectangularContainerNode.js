@@ -18,7 +18,7 @@ define( require => {
   const Path = require( 'SCENERY/nodes/Path' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const RectangularNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularNode' );
-  const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/RectangularOrientation' );
+  const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/RectangularOrientation' );
   const Shape = require( 'KITE/Shape' );
 
   class RectangularContainerNode extends CellContainerNode {

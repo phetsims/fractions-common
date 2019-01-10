@@ -9,8 +9,8 @@ define( require => {
   'use strict';
 
   // modules
-  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
-  const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
+  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/model/BuildingRepresentation' );
+  const BuildingType = require( 'FRACTIONS_COMMON/building/model/BuildingType' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Matrix3 = require( 'DOT/Matrix3' );
   const ShapeContainer = require( 'FRACTIONS_COMMON/building/model/ShapeContainer' );

@@ -16,7 +16,7 @@ define( require => {
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/RectangularOrientation' );
+  const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/RectangularOrientation' );
 
   // constants
   const HORIZONTAL_SIZE = new Dimension2( 200, 40 );

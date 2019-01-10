@@ -15,7 +15,7 @@ define( require => {
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularContainerNode' );
   const RectangularNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularNode' );
-  const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/RectangularOrientation' );
+  const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/RectangularOrientation' );
   const RectangularPieceNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularPieceNode' );
 
   class RectangularSceneNode extends CellSceneNode {

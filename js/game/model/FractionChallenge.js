@@ -10,8 +10,8 @@ define( require => {
 
   // modules
   const BuildingModel = require( 'FRACTIONS_COMMON/building/model/BuildingModel' );
-  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
-  const ChallengeType = require( 'FRACTIONS_COMMON/game/enum/ChallengeType' );
+  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/model/BuildingRepresentation' );
+  const ChallengeType = require( 'FRACTIONS_COMMON/game/model/ChallengeType' );
   const CollectionFinder = require( 'FRACTIONS_COMMON/game/model/CollectionFinder' );
   const ColorDef = require( 'SCENERY/util/ColorDef' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );

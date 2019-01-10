@@ -9,14 +9,14 @@ define( require => {
   'use strict';
 
   // modules
-  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
-  const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
+  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/model/BuildingRepresentation' );
+  const BuildingType = require( 'FRACTIONS_COMMON/building/model/BuildingType' );
   const Easing = require( 'TWIXT/Easing' );
   const EnumerationMap = require( 'FRACTIONS_COMMON/common/EnumerationMap' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
-  const NumberSpotType = require( 'FRACTIONS_COMMON/building/enum/NumberSpotType' );
+  const NumberSpotType = require( 'FRACTIONS_COMMON/building/model/NumberSpotType' );
   const NumberStack = require( 'FRACTIONS_COMMON/building/model/NumberStack' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Property = require( 'AXON/Property' );

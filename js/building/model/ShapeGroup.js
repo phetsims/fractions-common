@@ -10,8 +10,8 @@ define( require => {
   'use strict';
 
   // modules
-  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
-  const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
+  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/model/BuildingRepresentation' );
+  const BuildingType = require( 'FRACTIONS_COMMON/building/model/BuildingType' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );

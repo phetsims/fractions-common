@@ -9,7 +9,7 @@ define( require => {
   'use strict';
 
   // modules
-  var FillType = require( 'FRACTIONS_COMMON/game/enum/FillType' );
+  var FillType = require( 'FRACTIONS_COMMON/game/model/FillType' );
   var fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SCENERY/nodes/HStrut' );

@@ -10,7 +10,7 @@ define( require => {
 
   // modules
   const BuildingLayerNode = require( 'FRACTIONS_COMMON/building/view/BuildingLayerNode' );
-  const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
+  const BuildingType = require( 'FRACTIONS_COMMON/building/model/BuildingType' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
   class GameLayerNode extends BuildingLayerNode {

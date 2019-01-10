@@ -10,7 +10,7 @@ define( require => {
 
   // modules
   const Bounds2 = require( 'DOT/Bounds2' );
-  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/enum/BuildingRepresentation' );
+  const BuildingRepresentation = require( 'FRACTIONS_COMMON/building/model/BuildingRepresentation' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
@@ -218,7 +218,7 @@ define( require => {
           : new Vector2( -36, -36 )
       } );
 
-      // Construct a touch shape 
+      // Construct a touch shape
       let returnTouchShape = Shape.boundsOffsetWithRadii( this.returnButton.localBounds, {
         top: 10, left: 10, bottom: 12, right: 12
       }, {
@@ -229,7 +229,7 @@ define( require => {
         returnTouchShape = returnTouchShape.shapeDifference( Shape.bounds( ShapePiece.VERTICAL_BAR_BOUNDS ).transformed( returnInverseTransform ) );
       }
       else {
-        returnTouchShape = returnTouchShape.shapeDifference( Shape.circle( 0, 0, FractionsCommonConstants.SHAPE_SIZE / 2 ).transformed( returnInverseTransform ) ); 
+        returnTouchShape = returnTouchShape.shapeDifference( Shape.circle( 0, 0, FractionsCommonConstants.SHAPE_SIZE / 2 ).transformed( returnInverseTransform ) );
       }
       this.returnButton.touchArea = returnTouchShape;
 

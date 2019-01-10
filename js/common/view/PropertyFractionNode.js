@@ -9,7 +9,7 @@ define( require => {
   'use strict';
 
   // modules
-  const FractionDisplayType = require( 'FRACTIONS_COMMON/common/enum/FractionDisplayType' );
+  const FractionDisplayType = require( 'FRACTIONS_COMMON/common/model/FractionDisplayType' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const MixedFractionNode = require( 'FRACTIONS_COMMON/common/view/MixedFractionNode' );
 

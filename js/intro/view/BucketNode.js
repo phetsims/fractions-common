@@ -23,14 +23,14 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const HBox = require( 'SCENERY/nodes/HBox' );
-  const IntroRepresentation = require( 'FRACTIONS_COMMON/intro/enum/IntroRepresentation' );
+  const IntroRepresentation = require( 'FRACTIONS_COMMON/intro/model/IntroRepresentation' );
   const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const PropertyFractionNode = require( 'FRACTIONS_COMMON/common/view/PropertyFractionNode' );
   const Random = require( 'DOT/Random' );
   const RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularContainerNode' );
-  const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/enum/RectangularOrientation' );
+  const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/RectangularOrientation' );
 
   // constants
   const IDENTITY_TRANSFORM = ModelViewTransform2.createIdentity();

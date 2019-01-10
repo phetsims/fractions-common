@@ -12,7 +12,7 @@ define( require => {
 
   // modules
   const DerivedProperty = require( 'AXON/DerivedProperty' );
-  const FractionDisplayType = require( 'FRACTIONS_COMMON/common/enum/FractionDisplayType' );
+  const FractionDisplayType = require( 'FRACTIONS_COMMON/common/model/FractionDisplayType' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const PropertyFractionNode = require( 'FRACTIONS_COMMON/common/view/PropertyFractionNode' );

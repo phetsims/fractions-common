@@ -10,14 +10,14 @@ define( require => {
 
   // modules
   const Bounds2 = require( 'DOT/Bounds2' );
-  const BuildingType = require( 'FRACTIONS_COMMON/building/enum/BuildingType' );
+  const BuildingType = require( 'FRACTIONS_COMMON/building/model/BuildingType' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Group = require( 'FRACTIONS_COMMON/building/model/Group' );
   const NumberSpot = require( 'FRACTIONS_COMMON/building/model/NumberSpot' );
-  const NumberSpotType = require( 'FRACTIONS_COMMON/building/enum/NumberSpotType' );
+  const NumberSpotType = require( 'FRACTIONS_COMMON/building/model/NumberSpotType' );
   const Property = require( 'AXON/Property' );
 
   // constants

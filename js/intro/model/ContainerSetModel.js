@@ -11,7 +11,7 @@ define( require => {
   // modules
   const Container = require( 'FRACTIONS_COMMON/intro/model/Container' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const IntroRepresentation = require( 'FRACTIONS_COMMON/intro/enum/IntroRepresentation' );
+  const IntroRepresentation = require( 'FRACTIONS_COMMON/intro/model/IntroRepresentation' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Piece = require( 'FRACTIONS_COMMON/intro/model/Piece' );

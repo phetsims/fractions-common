@@ -9,7 +9,7 @@ define( require => {
   'use strict';
 
   // modules
-  const FillType = require( 'FRACTIONS_COMMON/game/enum/FillType' );
+  const FillType = require( 'FRACTIONS_COMMON/game/model/FillType' );
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const ShapePartition = require( 'FRACTIONS_COMMON/game/model/ShapePartition' );
