@@ -44,8 +44,9 @@ define( require => {
      * @param {Bounds2} layoutBounds
      * @param {function|null} nextLevelCallback - Called with no arguments, forwards to the next level (if there is one)
      * @param {Emitter} incorrectAttemptEmitter
+     * @param {Property.<boolean>} allLevelsCompleteProperty
      */
-    constructor( challenge, layoutBounds, nextLevelCallback, incorrectAttemptEmitter ) {
+    constructor( challenge, layoutBounds, nextLevelCallback, incorrectAttemptEmitter, allLevelsCompleteProperty ) {
       super();
 
       // @private {FractionChallenge}
@@ -119,7 +120,7 @@ define( require => {
 
       // @private {function}
       this.levelCompleteListener = score => {
-        this.levelCompleteNode.visible = score === this.challenge.targets.length;
+        this.levelCompleteNode.visible = score === this.challenge.targets.length && !allLevelsCompleteProperty.value;
       };
 
       // REVIEW: Does this listener need an unlink?

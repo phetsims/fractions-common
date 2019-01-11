@@ -13,6 +13,7 @@ define( require => {
   const BuildingType = require( 'FRACTIONS_COMMON/building/model/BuildingType' );
   const DynamicProperty = require( 'AXON/DynamicProperty' );
   const Emitter = require( 'AXON/Emitter' );
+  const EnumerationMap = require( 'FRACTIONS_COMMON/common/EnumerationMap' );
   const FractionChallenge = require( 'FRACTIONS_COMMON/game/model/FractionChallenge' );
   const FractionLevel = require( 'FRACTIONS_COMMON/game/model/FractionLevel' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
@@ -33,10 +34,10 @@ define( require => {
       // 1-4.
       FractionChallenge.beginFullGeneration();
 
-      // @public {FractionLevel}
+      // @public {Array.<FractionLevel>}
       this.shapeLevels = BuildingGameModel.getShapeLevels( hasMixedNumbers );
 
-      // @public {FractionLevel}
+      // @public {Array.<FractionLevel>}
       this.numberLevels = BuildingGameModel.getNumberLevels( hasMixedNumbers );
 
       FractionChallenge.endFullGeneration();
@@ -50,6 +51,17 @@ define( require => {
       // @public {Property.<FractionChallenge|null>}
       this.challengeProperty = new DynamicProperty( this.levelProperty, {
         derive: 'challengeProperty'
+      } );
+
+      // @public {EnumerationMap.<BuildingType,Array.<FractionLevel>}
+      this.levelMap = new EnumerationMap( BuildingType, type => {
+        return type === BuildingType.SHAPE ? this.shapeLevels : this.numberLevels;
+      } );
+
+      // @public {EnumerationMap.<BuildingType,Property.<boolean>}
+      this.levelCommpletePropertyMap = new EnumerationMap( BuildingType, type => {
+        // We'll control this from below.
+        return new BooleanProperty( false );
       } );
 
       // @public {Property.<boolean>}
@@ -68,13 +80,18 @@ define( require => {
       this.incorrectAttemptEmitter = new Emitter();
 
       // Fire the level complete emitters when needed
-      [ this.shapeLevels, this.numberLevels ].forEach( levels => {
+      BuildingType.VALUES.forEach( buildingType => {
+        const levels = this.levelMap.get( buildingType );
         const countMissing = () => _.sum( levels.map( level => level.numTargets - level.scoreProperty.value > 0 ? 1 : 0 ) );
         let lastCountMissing = countMissing();
         levels.forEach( level => {
           level.scoreProperty.lazyLink( ( newScore, oldScore ) => {
             const numMissing = countMissing();
-            if ( numMissing === 0 ) {
+            const isComplete = numMissing === 0;
+
+            this.levelCommpletePropertyMap.get( buildingType ).value = isComplete;
+
+            if ( isComplete ) {
               this.allLevelsCompleteEmitter.emit();
             }
             else if ( numMissing < lastCountMissing ) {

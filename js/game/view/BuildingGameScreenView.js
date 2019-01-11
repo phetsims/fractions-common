@@ -198,7 +198,9 @@ define( require => {
           // See https://github.com/phetsims/fractions-common/issues/43
           challenge.selectPreviouslySelectedGroup();
 
-          const challengeNode = new FractionChallengeNode( challenge, this.layoutBounds, model.nextLevel.bind( model ), model.incorrectAttemptEmitter );
+          const allLevelsCompleteProperty = model.levelCommpletePropertyMap.get( challenge.hasShapes ? BuildingType.SHAPE : BuildingType.NUMBER );
+
+          const challengeNode = new FractionChallengeNode( challenge, this.layoutBounds, model.nextLevel.bind( model ), model.incorrectAttemptEmitter, allLevelsCompleteProperty );
           lastChallengeNode = challengeNode;
           if ( allLevelsCompletedNode ) {
             allLevelsCompletedNode.center = challengeNode.challengeCenter;
