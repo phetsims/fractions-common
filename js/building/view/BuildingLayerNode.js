@@ -48,6 +48,7 @@ define( require => {
       this.removeShapePieceListener = this.removeShapePiece.bind( this );
       this.addNumberPieceListener = this.addNumberPiece.bind( this );
       this.removeNumberPieceListener = this.removeNumberPiece.bind( this );
+      this.groupSelectedListener = this.groupSelected.bind( this );
 
       // @private {Node}
       this.groupLayer = new Node();
@@ -99,6 +100,8 @@ define( require => {
       this.model.activeNumberPieces.addItemAddedListener( this.addNumberPieceListener );
       this.model.activeNumberPieces.addItemRemovedListener( this.removeNumberPieceListener );
       this.model.activeNumberPieces.forEach( this.addNumberPieceListener );
+
+      this.model.selectedGroupProperty.lazyLink( this.groupSelectedListener );
     }
 
     /**
@@ -375,6 +378,24 @@ define( require => {
     }
 
     /**
+     * Called when a group is selected.
+     * @private
+     *
+     * @param {Group} group
+     */
+    groupSelected( group ) {
+      const shapeGroupNode = _.find( this.shapeGroupNodes, shapeGroupNode => shapeGroupNode.shapeGroup === group );
+      const numberGroupNode = _.find( this.numberGroupNodes, numberGroupNode => numberGroupNode.numberGroup === group );
+
+      const groupNode = shapeGroupNode || numberGroupNode;
+
+      // Move groups to the front when they are selected, see https://github.com/phetsims/fractions-common/issues/44
+      if ( groupNode ) {
+        groupNode.moveToFront();
+      }
+    }
+
+    /**
      * Releases references.
      * @public
      * @override
@@ -391,6 +412,8 @@ define( require => {
 
       this.model.activeNumberPieces.removeItemAddedListener( this.addNumberPieceListener );
       this.model.activeNumberPieces.removeItemRemovedListener( this.removeNumberPieceListener );
+
+      this.model.selectedGroupProperty.unlink( this.groupSelectedListener );
 
       this.shapeGroupNodes.forEach( shapeGroupNode => shapeGroupNode.dispose() );
       this.numberGroupNodes.forEach( numberGroupNode => numberGroupNode.dispose() );
