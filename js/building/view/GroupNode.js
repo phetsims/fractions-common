@@ -123,6 +123,12 @@ define( require => {
         },
         end: listener => {
           options.dropListener && options.dropListener( pointer );
+        },
+        canStartPress: ( optionalEvent, listener ) => {
+          // REVIEW TODO: Don't access the private _pressListener, yikes! Workaround, see https://github.com/phetsims/fractions-common/issues/62
+          return !optionalEvent ||
+                 !this.returnButton ||
+                 !this.returnButton._pressListener.overPointers.contains( optionalEvent.pointer );
         }
       } );
       this.itemsToDispose.push( this.dragListener );
