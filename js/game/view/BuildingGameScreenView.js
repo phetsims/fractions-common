@@ -195,6 +195,9 @@ define( require => {
         lastChallengeNode = null;
         let transition;
         if ( challenge ) {
+          // See https://github.com/phetsims/fractions-common/issues/43
+          challenge.selectPreviouslySelectedGroup();
+
           const challengeNode = new FractionChallengeNode( challenge, this.layoutBounds, model.nextLevel.bind( model ), model.incorrectAttemptEmitter );
           lastChallengeNode = challengeNode;
           if ( allLevelsCompletedNode ) {

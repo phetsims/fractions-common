@@ -231,6 +231,16 @@ define( require => {
       return bestTarget;
     }
 
+    /**
+     * If nothing is selected, try to select the most-previously-selected group.
+     * @public
+     */
+    selectPreviouslySelectedGroup() {
+      if ( this.previouslySelectedGroupProperty.value && !this.selectedGroupProperty.value ) {
+        this.selectedGroupProperty.value = this.previouslySelectedGroupProperty.value;
+      }
+    }
+
     // REVIEW: Incomplete parameter documentation
     /**
      * Handles moving a Group into the collection area (Target).

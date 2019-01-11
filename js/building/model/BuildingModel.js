@@ -66,8 +66,16 @@ define( require => {
         useDeepEquality: true
       } );
 
-      // @public {Property.<Group|null>} - We'll only show controls for this group
+      // @public {Property.<Group|null>} - We'll only show controls for this group (and track the previous value)
       this.selectedGroupProperty = new Property( null );
+      this.previouslySelectedGroupProperty = new Property( null );
+
+      // Hook up the correct values for previouslySelectedGroupProperty (no need to unlink due to same lifetime)
+      this.selectedGroupProperty.lazyLink( ( newValue, oldValue ) => {
+        if ( oldValue ) {
+          this.previouslySelectedGroupProperty.value = oldValue;
+        }
+      } );
 
       // @public {EnumerationMap.<Array.<Stack>>} - The stacks for groups
       this.groupStacksMap = new EnumerationMap( BuildingType, type => ( {
