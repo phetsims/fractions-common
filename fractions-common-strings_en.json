@@ -23,6 +23,9 @@
   "fractionsChooseYourLevel": {
     "value": "Fractions: Choose your level!"
   },
+  "chooseYourLevel": {
+    "value": "Choose your level!"
+  },
   "equation": {
     "value": "Equation"
   }

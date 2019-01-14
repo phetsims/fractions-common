@@ -59,6 +59,7 @@ define( require => {
   const VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
+  const chooseYourLevelString = require( 'string!FRACTIONS_COMMON/chooseYourLevel' );
   const levelTitlePatternString = require( 'string!FRACTIONS_COMMON/levelTitlePattern' );
 
   // constants
@@ -109,6 +110,12 @@ define( require => {
 
       // @private {Node} - The "left" half of the sliding layer, displayed first
       this.levelSelectionLayer = new Node();
+
+      this.levelSelectionLayer.addChild( new Text( chooseYourLevelString, {
+        centerX: this.layoutBounds.centerX,
+        top: this.layoutBounds.top + 30,
+        font: new PhetFont( 30 )
+      } ) );
 
       const challengeBackground = new Node();
       const challengeForeground = new Node();
