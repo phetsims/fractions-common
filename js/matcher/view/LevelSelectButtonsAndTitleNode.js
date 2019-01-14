@@ -23,6 +23,7 @@ define( require => {
   var VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
+  var chooseYourLevelString = require( 'string!FRACTIONS_COMMON/chooseYourLevel' );
   var fractionsChooseYourLevelString = require( 'string!FRACTIONS_COMMON/fractionsChooseYourLevel' );
   var labelLevelString = require( 'string!VEGAS/label.level' );
   var mixedNumbersChooseYourLevelString = require( 'string!FRACTIONS_COMMON/mixedNumbersChooseYourLevel' );
@@ -36,7 +37,7 @@ define( require => {
     var hasMixedNumbers = model.hasMixedNumbers;
 
     var vBoxChildren = [];
-    vBoxChildren.push( new Text( hasMixedNumbers ? mixedNumbersChooseYourLevelString : fractionsChooseYourLevelString, {
+    vBoxChildren.push( new Text( model.useShortTitle ? chooseYourLevelString : ( hasMixedNumbers ? mixedNumbersChooseYourLevelString : fractionsChooseYourLevelString ), {
       font: new PhetFont( {
         size: 28,
         family: HomeScreenView.TITLE_FONT_FAMILY

@@ -21,12 +21,14 @@ define( require => {
   class FractionMatcherModel {
     /**
      * @param {boolean} hasMixedNumbers
+     * @param {boolean} [useShortTitle]
      */
-    constructor( hasMixedNumbers ) {
+    constructor( hasMixedNumbers, useShortTitle = false ) {
       assert && assert( typeof hasMixedNumbers === 'boolean' );
 
       // @public {boolean}
       this.hasMixedNumbers = hasMixedNumbers;
+      this.useShortTitle = useShortTitle;
 
       // dimensions of the model's space
       // TODO: Don't do this.
