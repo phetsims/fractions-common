@@ -61,16 +61,6 @@ define( require => {
       // drag listener)
       this.generalDragBoundsProperty = options.dragBoundsProperty;
 
-      // @private {Node}
-      this.shapeContainerLayer = new Node( {
-        cursor: 'pointer' // We are where our input listener is added
-      } );
-      this.addChild( this.shapeContainerLayer );
-
-      // @private {Node}
-      this.controlLayer = new Node();
-      this.addChild( this.controlLayer );
-
       this.isSelectedProperty.linkAttribute( this.controlLayer, 'visible' );
 
       // @private {function}
@@ -259,7 +249,7 @@ define( require => {
           shapeGroup.positionProperty.value = dragBounds.closestPointTo( shapeGroup.positionProperty.value );
         } );
 
-        this.attachDragListener( this.dragBoundsProperty, this.shapeContainerLayer, options );
+        this.attachDragListener( this.dragBoundsProperty, options );
       }
 
       // Now that we have a return button and drag bounds, we should update right-button positions
@@ -306,7 +296,7 @@ define( require => {
     addShapeContainer( shapeContainer ) {
       const shapeContainerNode = new ShapeContainerNode( shapeContainer );
       this.shapeContainerNodes.push( shapeContainerNode );
-      this.shapeContainerLayer.addChild( shapeContainerNode );
+      this.displayLayer.addChild( shapeContainerNode );
       this.updateRightButtonPosition();
     }
 
@@ -323,7 +313,7 @@ define( require => {
       assert && assert( shapeContainerNode );
 
       this.shapeContainerNodes.remove( shapeContainerNode );
-      this.shapeContainerLayer.removeChild( shapeContainerNode );
+      this.displayLayer.removeChild( shapeContainerNode );
       shapeContainerNode.dispose();
       this.updateRightButtonPosition();
     }

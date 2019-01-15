@@ -71,6 +71,16 @@ define( require => {
       this.isSelectedProperty = options.isSelectedProperty;
       this.itemsToDispose.push( this.isSelectedProperty );
 
+      // @private {Node}
+      this.displayLayer = new Node( {
+        cursor: 'pointer' // We are where our input listener is added
+      } );
+      this.addChild( this.displayLayer );
+
+      // @private {Node}
+      this.controlLayer = new Node();
+      this.addChild( this.controlLayer );
+
       if ( !this.isIcon ) {
         // @private {function}
         this.positionListener = position => {
@@ -98,10 +108,9 @@ define( require => {
      * @protected
      *
      * @param {Property.<Bounds2>} dragBoundsProperty
-     * @param {Node} dragListenerTarget - The node that the main listener is put on.
      * @param {Object} options - The main options object
      */
-    attachDragListener( dragBoundsProperty, dragListenerTarget, options ) {
+    attachDragListener( dragBoundsProperty, options ) {
 
       let pointer = null;
 
@@ -116,23 +125,16 @@ define( require => {
 
           options.selectListener && options.selectListener( pointer );
           this.moveToFront();
-
         },
         drag: ( event, listener ) => {
           options.dragListener && options.dragListener( pointer );
         },
         end: listener => {
           options.dropListener && options.dropListener( pointer );
-        },
-        canStartPress: ( optionalEvent, listener ) => {
-          // REVIEW TODO: Don't access the private _pressListener, yikes! Workaround, see https://github.com/phetsims/fractions-common/issues/62
-          return !optionalEvent ||
-                 !this.returnButton ||
-                 !this.returnButton._pressListener.overPointers.contains( optionalEvent.pointer );
         }
       } );
       this.itemsToDispose.push( this.dragListener );
-      dragListenerTarget.addInputListener( this.dragListener );
+      this.displayLayer.addInputListener( this.dragListener );
 
       this.addInputListener( {
         down: event => {

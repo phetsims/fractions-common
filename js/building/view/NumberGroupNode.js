@@ -135,9 +135,12 @@ define( require => {
       } );
       this.itemsToDispose.push( this.undoVisibilityListener );
 
-      this.children = [
+      this.controlLayer.children = [
+        ...( this.isIcon ? [] : [ this.returnButton ] )
+      ];
+
+      this.displayLayer.children = [
         ...( options.hasCardBackground ? [ cardBackground ] : [] ),
-        ...( this.isIcon ? [] : [ this.returnButton ] ),
         fractionLine,
         numeratorSpot,
         denominatorSpot,
@@ -158,7 +161,7 @@ define( require => {
           numberGroup.positionProperty.value = dragBounds.closestPointTo( numberGroup.positionProperty.value );
         } );
 
-        this.attachDragListener( this.dragBoundsProperty, this, options );
+        this.attachDragListener( this.dragBoundsProperty, options );
       }
 
       this.mutate( options );
