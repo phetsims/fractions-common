@@ -171,7 +171,9 @@ define( require => {
       if ( numberPieces.length ) {
         this.numberGroupStacks.forEach( numberGroupStack => {
           _.times( targets.length - 1, () => {
-            numberGroupStack.numberGroups.push( new NumberGroup( numberGroupStack.isMixedNumber ) );
+            numberGroupStack.numberGroups.push( new NumberGroup( numberGroupStack.isMixedNumber, {
+              activeNumberRangeProperty: this.activeNumberRangeProperty
+            } ) );
           } );
         } );
       }
