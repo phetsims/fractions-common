@@ -125,14 +125,8 @@ define( require => {
         const currentIndex = levels.indexOf( this.levelProperty.value );
 
         if ( currentIndex >= 0 ) {
-          // Levels to search through next in order (see https://github.com/phetsims/fractions-common/issues/47)
-          this.levelProperty.value = [
-            ...levels.slice( currentIndex + 1 ),
-            ...levels.slice( 0, currentIndex + 1 )
-          ].filter( level => {
-            // Fall back to the current level if all is lost (shouldn't generally happen)
-            return level.scoreProperty.value < level.numTargets || level === this.levelProperty.value;
-          } )[ 0 ];
+          // Wrap levels around if necessary
+          this.levelProperty.value = levels[ ( currentIndex + 1 ) % levels.length ];
         }
       } );
     }
