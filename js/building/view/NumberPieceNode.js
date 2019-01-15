@@ -101,8 +101,7 @@ define( require => {
         }
       } );
 
-      // REVIEW: Does this need an unlink?
-      // REVIEW*: Shouldn't need it, the two objects have the same lifetime.
+      // No need to unlink, as we own the given Property (same lifetime, and we own the listener)
       this.dragListener.isUserControlledProperty.link( controlled => {
         numberPiece.isUserControlledProperty.value = controlled;
       } );

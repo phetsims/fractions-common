@@ -71,7 +71,7 @@ define( require => {
         markerFill: FractionsCommonColorProfile.introCircleFillProperty,
         arrowFill: FractionsCommonColorProfile.introCircleFillProperty,
 
-        // REVIEW NOTE: Should we add an isUserControlledProperty so we can properly handle lock-out with other
+        // NOTE: Should we add an isUserControlledProperty so we can properly handle lock-out with other
         // controls? AP noted that multitouch handling was not a priority based on current deadlines.
 
         // {PhetFont}
@@ -264,7 +264,6 @@ define( require => {
      * @override
      */
     dispose() {
-      // REVIEW: Would it be safer to dispose this.containerCountProperty?
       this.containerCountProperty.unlink( this.containerCountListener );
       this.minorTickMultilink.dispose();
       this.multipliedTickMultilink.dispose();

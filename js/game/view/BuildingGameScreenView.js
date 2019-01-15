@@ -129,7 +129,7 @@ define( require => {
         content: leftLevelSelectionNode,
         cachedNodes: [ leftLevelSelectionNode, rightLevelSelectionNode ]
       } );
-      // REVIEW: Does this need an unlink?
+      // No unlink needed, since we own the given Property.
       this.leftLevelSelectionProperty.lazyLink( isLeft => {
         if ( isLeft ) {
           this.levelSelectionTransitionNode.slideRightTo( leftLevelSelectionNode, QUADRATIC_TRANSITION_OPTIONS );
@@ -239,7 +239,6 @@ define( require => {
         }
         this.delayTransitions = true;
         if ( oldChallengeNode ) {
-          // REVIEW: Do we not have to remove emitters from transitionNodes?
           transition.endedEmitter.addListener( () => {
             oldChallengeNode.wrapper.dispose();
             oldChallengeNode.dispose();
@@ -251,7 +250,7 @@ define( require => {
 
       const gameAudioPlayer = new GameAudioPlayer( model.soundEnabledProperty );
 
-      // REVIEW: Should a dispose call remove these listeners?
+      // No unlinks needed, since the ScreenView/Model are permanent
       model.allLevelsCompleteEmitter.addListener( () => gameAudioPlayer.gameOverPerfectScore() );
       model.singleLevelCompleteEmitter.addListener( () => gameAudioPlayer.challengeComplete() );
       model.collectedGroupEmitter.addListener( () => gameAudioPlayer.correctAnswer() );

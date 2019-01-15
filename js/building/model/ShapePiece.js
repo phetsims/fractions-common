@@ -89,8 +89,7 @@ define( require => {
       this.dampedHarmonicTimeElapsed = 0;
       this.trueTargetRotation = 0;
 
-      // REVIEW: Does this property need an unlink?
-      // REVIEW*: Shouldn't need it, since they have the same lifetimes.
+      // No need to unlink, as we own the given Property
       this.isUserControlledProperty.link( isUserControlled => {
         if ( isUserControlled ) {
           this.shadowProperty.value = 1;
@@ -98,8 +97,7 @@ define( require => {
       } );
 
       // Handle rotational animation towards a target (if any)
-      // REVIEW: Does this need a dispose?
-      // REVIEW*: Shouldn't need it, since they have the same lifetimes.
+      // No need to unlink, as we own the given Properties
       Property.multilink( [ this.isUserControlledProperty, this.targetRotationProperty ], ( isUserControlled, targetRotation ) => {
         if ( isUserControlled ) {
           const currentRotation = this.rotationProperty.value;

@@ -100,7 +100,7 @@ define( require => {
         boxContainer
       ];
 
-      // REVIEW: Does this need an unlink?
+      // Does not need an unlink, since this type is permanent.
       this.representationProperty.link( representation => {
         this.pieBox.visible = representation === BuildingRepresentation.PIE;
         this.barBox.visible = representation === BuildingRepresentation.BAR;

@@ -122,8 +122,6 @@ define( require => {
       this.levelCompleteListener = score => {
         this.levelCompleteNode.visible = score === this.challenge.targets.length && !allLevelsCompleteProperty.value;
       };
-
-      // REVIEW: Does this listener need an unlink?
       this.challenge.scoreProperty.link( this.levelCompleteListener );
 
       // layout

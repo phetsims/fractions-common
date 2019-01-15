@@ -167,7 +167,7 @@ define( require => {
      * Returns the offset of the node comared to the origin.
      * @public
      *
-     * REVIEW NOTE: This may be slightly wrong, but AP wasn't concerned about it enough. Try the cake animations when
+     * NOTE: This may be slightly wrong, but AP wasn't concerned about it enough. Try the cake animations when
      * you drop a piece with ?speed=0.1, there will be a slight jump.
      *
      * @returns {Vector2}

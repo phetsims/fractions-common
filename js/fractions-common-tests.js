@@ -1,10 +1,9 @@
 // Copyright 2018, University of Colorado Boulder
 
-// REVIEW: Author notation is different from other files. Was this intentional?
 /**
  * Unit tests. Please run once in phet brand.
  *
- * @author Jonathan Olson <jonathan.olson>
+ * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 define( require => {
   'use strict';

@@ -218,8 +218,7 @@ define( require => {
 
       for ( let i = 0; i < numPairColumns; i++ ) {
         for ( let j = 0; j < numPairRows; j++ ) {
-          // REVIEW: 'let' instead of 'var'?
-          var matrix = Matrix3.translation( i, j );
+          const matrix = Matrix3.translation( i, j );
           shapes.push( leftSideShape.transformed( matrix ) );
           shapes.push( rightSideShape.transformed( matrix ) );
         }
@@ -256,8 +255,7 @@ define( require => {
       ] );
 
       for ( let i = 0; i < numPairs; i++ ) {
-        // REVIEW: 'let' instead of 'var'?
-        var matrix = Matrix3.translation( i * 2, i );
+        const matrix = Matrix3.translation( i * 2, i );
         shapes.push( topShape.transformed( matrix ) );
         shapes.push( bottomShape.transformed( matrix ) );
       }

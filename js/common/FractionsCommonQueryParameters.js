@@ -16,6 +16,7 @@ define( require => {
   const FractionsCommonQueryParameters = QueryStringMachine.getAll( {
 
     // REVIEW: Is this still needed for debugging?
+    // REVIEW*: It's for the matcher code, so I'm going to leave it for now
     /**
      * Hack level one on the fractions screen to only show shapes, and only show shapes that can be displayed with the
      * denominator given by this query parameter. The numerator is between 1 and 6 (see Level 1 in model/Constants.js).
