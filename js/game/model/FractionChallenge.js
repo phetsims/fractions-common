@@ -238,8 +238,22 @@ define( require => {
      * @public
      */
     selectPreviouslySelectedGroup() {
-      if ( this.previouslySelectedGroupProperty.value && !this.selectedGroupProperty.value ) {
+      if ( this.selectedGroupProperty.value ) {
+        return;
+      }
+
+      const previousGroup = this.previouslySelectedGroupProperty.value;
+      if ( previousGroup && ( this.shapeGroups.contains( previousGroup ) || this.numberGroups.contains( previousGroup ) ) ) {
         this.selectedGroupProperty.value = this.previouslySelectedGroupProperty.value;
+      }
+      else {
+        const firstGroup = this.shapeGroups.get( 0 ) || this.numberGroups.get( 0 );
+
+        // If there is no previously-selected group, we'll just select the first one.
+        // See https://github.com/phetsims/fractions-common/issues/43#issuecomment-454149966
+        if ( firstGroup ) {
+          this.selectedGroupProperty.value = firstGroup;
+        }
       }
     }
 
