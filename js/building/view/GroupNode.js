@@ -11,6 +11,7 @@ define( require => {
   // modules
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const DragListener = require( 'SCENERY/listeners/DragListener' );
+  const PressListener = require( 'SCENERY/listeners/PressListener' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Group = require( 'FRACTIONS_COMMON/building/model/Group' );
   const Node = require( 'SCENERY/nodes/Node' );
@@ -136,11 +137,21 @@ define( require => {
       this.itemsToDispose.push( this.dragListener );
       this.displayLayer.addInputListener( this.dragListener );
 
-      this.addInputListener( {
-        down: event => {
+      // @private {DragListener} - Listener for handling selection/release properly for the controls
+      this.controlListener = new PressListener( {
+        targetNode: this,
+        press: ( event, listener ) => {
+          pointer = listener.pointer;
+
           options.selectListener && options.selectListener( event.pointer );
-        }
+        },
+        release: event => {
+          options.dropListener && options.dropListener( pointer );
+        },
+        attach: false
       } );
+      this.itemsToDispose.push( this.controlListener );
+      this.controlLayer.addInputListener( this.controlListener );
     }
 
     /**
