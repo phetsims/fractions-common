@@ -512,7 +512,8 @@ define( require => {
                   self.rewardNode = null;
                 }, {
                   centerX: this.model.gameModel.width / 2,
-                  centerY: this.model.gameModel.height / 2
+                  centerY: this.model.gameModel.height / 2,
+                  contentMaxWidth: 600
                 } )
             ]
           } );
