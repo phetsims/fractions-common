@@ -54,7 +54,7 @@ define( require => {
       font: new PhetFont( { size: 14, weight: 'bold' } ),
       x: 15,
       y: 100,
-      maxWidth: 400
+      maxWidth: 300
     } ) );
 
     //right buttons, reset and toLevelSelection
