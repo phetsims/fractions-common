@@ -114,8 +114,8 @@ define( require => {
       // @private {function}
       this.allSpotsBoundsListener = allSpotsBounds => {
         const expandedBounds = allSpotsBounds.dilatedX( 5 );
-        this.mouseArea = expandedBounds;
-        this.touchArea = expandedBounds;
+        this.displayLayer.mouseArea = expandedBounds;
+        this.displayLayer.touchArea = expandedBounds;
         cardBackground.rectBounds = allSpotsBounds.dilatedXY( 20, 15 );
         this.returnButton.rightCenter = cardBackground.leftCenter.plusXY( 5, 0 ); // Some slight overlap shown in mockups
       };
