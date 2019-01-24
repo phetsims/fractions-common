@@ -171,8 +171,7 @@ define( require => {
           model.reset();
         },
         right: this.layoutBounds.right - MARGIN,
-        bottom: this.layoutBounds.bottom - MARGIN,
-        touchAreaDilation: 10
+        bottom: this.layoutBounds.bottom - MARGIN
       } );
 
       this.children = [

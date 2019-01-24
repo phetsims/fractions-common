@@ -364,8 +364,7 @@ define( require => {
           this.reset();
         },
         right: this.layoutBounds.maxX - 10,
-        bottom: this.layoutBounds.maxY - 10,
-        touchAreaDilation: 10
+        bottom: this.layoutBounds.maxY - 10
       } ), { group: bottomAlignGroup } );
       this.levelSelectionLayer.addChild( resetAllButton );
 

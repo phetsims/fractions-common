@@ -123,8 +123,7 @@ define( require => {
         listener: () => {
           this.interruptSubtreeInput();
           model.reset();
-        },
-        touchAreaDilation: 10
+        }
       } );
 
       const topAlignBox = new AlignBox( this.shapePanel, {
