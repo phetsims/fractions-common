@@ -48,7 +48,9 @@ define( require => {
         arrowRotation: options.rotation,
         enabledProperty: increaseEnabledProperty,
         listener: () => {
-          numberProperty.value++;
+          if ( increaseEnabledProperty.value ) {
+            numberProperty.value++;
+          }
         }
       } );
 
@@ -59,7 +61,9 @@ define( require => {
         arrowRotation: Math.PI + options.rotation,
         enabledProperty: decreaseEnabledProperty,
         listener: () => {
-          numberProperty.value--;
+          if ( decreaseEnabledProperty.value ) {
+            numberProperty.value--;
+          }
         }
       } );
 
