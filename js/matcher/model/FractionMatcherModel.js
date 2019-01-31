@@ -64,12 +64,12 @@ define( require => {
       this.MAXIMUM_PAIRS = 6;
       this.MAX_POINTS_PER_GAME_LEVEL = 12;
 
-      this.levels = [];
-
       this.currentLevelProperty = new Property( 0 );
       this.isTimerProperty = new Property( false );
 
       this.stepEmitter = new Emitter();
+
+      this.levels = [];
 
       const levelDescriptions = hasMixedNumbers ? FractionMatcherModel.getMixedLevelDescriptions() : FractionMatcherModel.getUnmixedLevelDescriptions();
       levelDescriptions.forEach( ( levelDescription, index ) => {

@@ -12,9 +12,9 @@ define( require => {
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonQueryParameters = require( 'FRACTIONS_COMMON/common/FractionsCommonQueryParameters' );
+  const MatcherPiece = require( 'FRACTIONS_COMMON/matcher/model/MatcherPiece' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Property = require( 'AXON/Property' );
-  const SingleShapeModel = require( 'FRACTIONS_COMMON/matcher/model/SingleShapeModel' );
   const Sound = require( 'VIBE/Sound' );
 
   // sounds
@@ -50,7 +50,7 @@ define( require => {
       this.answersProperty = new Property( [] );//shapes, which moved to answer zone
       this.lastPairProperty = new Property( [ -1, -1 ] );//pair of shapes on scales, user can't compare the same pair two times
       this.lastChangedZoneProperty = new Property( -1 );//when showing correct answer, change only last dragged shape position
-      this.shapesProperty = new Property( [] ); //array of SingleShapeModels
+      this.shapesProperty = new Property( [] ); //array of MatcherPieces
       this.canDragProperty = new BooleanProperty( true );
       this.buttonStatusProperty = new Property( 'none' );// ['none','ok','check','tryAgain','showAnswer']
 
@@ -161,20 +161,20 @@ define( require => {
         var fillType = this.levelDescription.fillType[ phet.joist.random.nextIntBetween( 0, this.levelDescription.fillType.length - 1 ) ];
 
         // first 3 fractions - number, last 3 fractions - shapes with different colors (3 numbers and 3 shapes at least)
-        var type = (i < this.gameModel.MAXIMUM_PAIRS / 2) ? numberType : shapes[ i % (shapes.length - 1) ];
+        var type = ( i < this.gameModel.MAXIMUM_PAIRS / 2 ) ? numberType : shapes[ i % (shapes.length - 1) ];
 
         // With query parameter, override number types and only allow shapes
         if ( FractionsCommonQueryParameters.testDenominator !== 0 ) {
-          type = shapes[ i % (shapes.length - 1) ];
+          type = shapes[ i % ( shapes.length - 1 ) ];
         }
 
-        var color = (type === numberType) ? 'rgb(0,0,0)' : this.gameModel.colorScheme[ i % 3 ];
-        newShapes.push( new SingleShapeModel( type, fraction, scaleFactor, color, fillType, this.gameModel.toSimplify ) );
+        var color = ( type === numberType ) ? 'rgb(0,0,0)' : this.gameModel.colorScheme[ i % 3 ];
+        newShapes.push( new MatcherPiece( type, fraction, scaleFactor, color, fillType, this.gameModel.toSimplify ) );
 
         // add partner: if was number - add shape, if was shape - add number or random shape with another color
-        type = shapes[ phet.joist.random.nextIntBetween( 0, shapes.length - (type === numberType ? 2 : 1) ) ];
-        color = (type === numberType) ? 'rgb(0,0,0)' : this.gameModel.colorScheme[ (i + 1) % 3 ];
-        newShapes.push( new SingleShapeModel( type, fraction, scaleFactor, color, fillType, this.gameModel.toSimplify ) );
+        type = shapes[ phet.joist.random.nextIntBetween( 0, shapes.length - ( type === numberType ? 2 : 1 ) ) ];
+        color = ( type === numberType ) ? 'rgb(0,0,0)' : this.gameModel.colorScheme[ ( i + 1 ) % 3 ];
+        newShapes.push( new MatcherPiece( type, fraction, scaleFactor, color, fillType, this.gameModel.toSimplify ) );
       }
 
       newShapes = phet.joist.random.shuffle( newShapes );
@@ -209,7 +209,7 @@ define( require => {
             //answer incorrect
             incorrectSound.play();
             self.stepScoreProperty.value--;
-            this.buttonStatusProperty.value = (self.stepScoreProperty.value) ? 'tryAgain' : 'showAnswer';
+            this.buttonStatusProperty.value = self.stepScoreProperty.value ? 'tryAgain' : 'showAnswer';
             this.canDragProperty.value = this.buttonStatusProperty.value === 'tryAgain';
             this.lastPairProperty.value = [ this.dropZone[ 12 ], this.dropZone[ 13 ] ];
           }

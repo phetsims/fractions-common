@@ -215,7 +215,7 @@ define( require => {
         }
         self.dropShapeToZone( model.shapesProperty.value[ event.currentTarget.indexShape ], zone );
         if ( model.buttonStatusProperty.value === 'check' || model.buttonStatusProperty.value === 'none' || model.buttonStatusProperty.value === 'tryAgain' ) {
-          if ( model.dropZone[ 12 ] >= 0 && model.dropZone[ 13 ] >= 0 && (model.dropZone[ 12 ] !== model.lastPairProperty.value[ 0 ] || model.dropZone[ 13 ] !== model.lastPairProperty.value[ 1 ]) ) {
+          if ( model.dropZone[ 12 ] >= 0 && model.dropZone[ 13 ] >= 0 && ( model.dropZone[ 12 ] !== model.lastPairProperty.value[ 0 ] || model.dropZone[ 13 ] !== model.lastPairProperty.value[ 1 ] ) ) {
             model.buttonStatusProperty.value = 'check';
           }
           else {
@@ -348,7 +348,7 @@ define( require => {
       //get Vector2(x,y) - position in answer gray rect at the top
       getShapeAnswerPosition: function( position ) {
         var targetRect = this.levelsContainer.answerRects[ Math.floor( position / 2 ) ];
-        var diff = (position % 2 === 0) ? -targetRect.width / 4 : targetRect.width / 4;
+        var diff = ( position % 2 === 0 ) ? -targetRect.width / 4 : targetRect.width / 4;
         return new Vector2( targetRect.centerX + diff, targetRect.centerY );
       },
       //get closest dropZone for shape when drag ends
@@ -357,7 +357,7 @@ define( require => {
         var min = 1e10;
         for ( var i = 0; i < this.model.dropZone.length; i++ ) {
           //if empty or one of two scales and canDropOnScale
-          if ( this.model.dropZone[ i ] < 0 || (canDropOnScale && (i === 12 || i === 13)) ) {
+          if ( this.model.dropZone[ i ] < 0 || ( canDropOnScale && ( i === 12 || i === 13 ) ) ) {
             var dist = coord.distanceSquared( this.getShapeDropPosition( i ) );
             if ( min > dist ) {
               min = dist;
@@ -444,7 +444,7 @@ define( require => {
           var completedTime = this.model.timeProperty.value;
           var lastBestForThisLevel = this.model.bestTimeProperty.value;
           var newBestTime = false;
-          if ( this.model.scoreProperty.value === 12 && (lastBestForThisLevel === null || completedTime < lastBestForThisLevel) ) {
+          if ( this.model.scoreProperty.value === 12 && ( lastBestForThisLevel === null || completedTime < lastBestForThisLevel ) ) {
             newBestTime = true;
             this.model.bestTimeProperty.value = completedTime;
           }

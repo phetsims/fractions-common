@@ -76,7 +76,7 @@ define( require => {
       //single slice of shape
       var getSlice = function( startAngle, endAngle ) {
         var shape = new Shape();
-        if ( Math.abs( (startAngle / 2) % Math.PI - (endAngle / 2) % Math.PI ) > 0.001 ) {
+        if ( Math.abs( ( startAngle / 2 ) % Math.PI - ( endAngle / 2 ) % Math.PI ) > 0.001 ) {
           shape.moveTo( 0, 0 )
             .lineTo( Math.cos( startAngle ) * options.diameter / 2, Math.sin( startAngle ) * options.diameter / 2 )
             .arc( 0, 0, options.diameter / 2, startAngle, endAngle, false )
@@ -152,16 +152,16 @@ define( require => {
       var getSlice = function( position ) {
         return Pattern.pointsToShape( new Shape(), [
           new Vector2( 0, 0 ),
-          halfVector.rotated( -radiansPerSlice * (position - 1 / 2) ),
+          halfVector.rotated( -radiansPerSlice * ( position - 0.5 ) ),
           baseVector.rotated( -radiansPerSlice * position ),
-          halfVector.rotated( -radiansPerSlice * (position + 1 / 2) )
+          halfVector.rotated( -radiansPerSlice * ( position + 0.5 ) )
         ], options.diameter / 2 );
       };
 
       var getOutline = function() {
         var keyPoints = [];
         for ( var i = 0; i < options.denominator; i++ ) {
-          keyPoints.push( halfVector.rotated( -radiansPerSlice * (i - 1 / 2) ) );
+          keyPoints.push( halfVector.rotated( -radiansPerSlice * ( i - 0.5 ) ) );
           keyPoints.push( baseVector.rotated( -radiansPerSlice * i ) );
         }
         return Pattern.pointsToShape( new Shape(), keyPoints, options.diameter / 2 );
@@ -211,7 +211,7 @@ define( require => {
         var keyPoints = [];
         for ( var i = 1; i < 7; i++ ) {
           for ( var j = -1; j < 2; j++ ) {
-            keyPoints.push( hexPoints[ (j + 6 + i - 1) % 6 ].plus( hexCenterPoints[ i ] ) );
+            keyPoints.push( hexPoints[ ( j + 6 + i - 1 ) % 6 ].plus( hexCenterPoints[ i ] ) );
           }
         }
         return Pattern.pointsToShape( new Shape(), keyPoints );
@@ -238,9 +238,9 @@ define( require => {
     LETTER_L_SHAPES: function( shapes, outlines, options ) {
       //Compression along axis y
       var getYCoeff = function( d ) {
-        return (d >= 7 ? 7 / 4 :
-                d >= 5 ? 6 / 4 :
-                d >= 3 ? 5 / 4 : 1);
+        return ( d >= 7 ? 7 / 4 :
+                 d >= 5 ? 6 / 4 :
+                 d >= 3 ? 5 / 4 : 1 );
       };
 
       // determine size of shape
@@ -275,10 +275,10 @@ define( require => {
         var keyPoints = [];
         for ( var j = 0; j < options.denominator / 2; j++ ) {
           keyPoints.push( { x: j * 2 * size, y: j * size } );
-          keyPoints.push( { x: (j + 1) * 2 * size, y: j * size } );
+          keyPoints.push( { x: ( j + 1 ) * 2 * size, y: j * size } );
         }
         for ( j = options.denominator / 2 - 1; j > -1; j-- ) {
-          keyPoints.push( { x: (j + 1) * 2 * size, y: j * size + 4 * size } );
+          keyPoints.push( { x: ( j + 1 ) * 2 * size, y: j * size + 4 * size } );
           keyPoints.push( { x: j * 2 * size, y: j * size + 4 * size } );
         }
         return Pattern.pointsToShape( new Shape(), keyPoints );
@@ -311,14 +311,14 @@ define( require => {
 
       for ( i = 0; i < options.denominator / 2; i++ ) {
         pattern.push( baseVector.rotated( -2 * i * radiansPerSlice ) );
-        pattern.push( halfVector.rotated( -(2 * i + 1) * radiansPerSlice ) );
+        pattern.push( halfVector.rotated( -( 2 * i + 1 ) * radiansPerSlice ) );
       }
 
       var getSlice = function( position ) {
         return Pattern.pointsToShape( new Shape(), [
           { x: 0, y: 0 },
           pattern[ position % options.denominator ],
-          pattern[ (position + 1) % options.denominator ]
+          pattern[ ( position + 1 ) % options.denominator ]
         ], options.diameter / 2 );
       };
 
@@ -376,7 +376,7 @@ define( require => {
             x: 4 * size * j, y: 2 * size * j, fill: 'white', stroke: options.stroke, lineWidth: 1
           } ) );
           shapes[ i ].push( new Path( Pattern.pointsToShape( new Shape(), plusSignPattern, size ), {
-            x: (4 * j + 2) * size, y: (2 * j - 4) * size, fill: 'white', stroke: options.stroke, lineWidth: 1
+            x: ( 4 * j + 2 ) * size, y: ( 2 * j - 4 ) * size, fill: 'white', stroke: options.stroke, lineWidth: 1
           } ) );
         }
         //outlines
@@ -440,8 +440,8 @@ define( require => {
       var getOutline = function() {
         var keyPoints = [
           { x: 0, y: -options.diameter / 2 },
-          { x: -options.diameter / 2, y: options.diameter / (2 * SQRT_3) },
-          { x: options.diameter / 2, y: options.diameter / (2 * SQRT_3) }
+          { x: -options.diameter / 2, y: options.diameter / ( 2 * SQRT_3 ) },
+          { x: options.diameter / 2, y: options.diameter / ( 2 * SQRT_3 ) }
         ];
         return Pattern.pointsToShape( new Shape(), keyPoints );
       };
@@ -582,7 +582,7 @@ define( require => {
           } ) );
         }
         //outlines
-        outlines.push( new Path( Shape.rect( 0, 0, options.width, options.height / (options.denominator / 2) ), {
+        outlines.push( new Path( Shape.rect( 0, 0, options.width, options.height / ( options.denominator / 2 ) ), {
           stroke: options.stroke,
           lineWidth: options.outlineWidth
         } ) );

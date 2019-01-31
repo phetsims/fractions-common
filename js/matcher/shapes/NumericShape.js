@@ -55,7 +55,7 @@ define( require => {
       // add additional offset taking into account whole part width
       integralPartWidth = integralPartNode.getWidth();
       integralPartLength = integralPart.toString().length;
-      offsetX = (integralPartWidth - integralPartWidth / integralPartLength) / 4;
+      offsetX = ( integralPartWidth - integralPartWidth / integralPartLength ) / 4;
       integralPartNode.centerX = -offsetX - spaceX;
       if ( numerator % denominator ) {
         fractionNode.centerX = spaceX + offsetX;
@@ -63,7 +63,7 @@ define( require => {
 
       // common alignment
       if ( isFinite( fractionNode.getWidth() ) ) {
-        this.setX( -(fractionNode.getWidth() - integralPartWidth) / 8 );
+        this.setX( -( fractionNode.getWidth() - integralPartWidth ) / 8 );
       }
     }
     else {

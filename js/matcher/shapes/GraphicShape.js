@@ -19,9 +19,9 @@ define( require => {
 
   function GraphicShape( options ) {
     options = _.extend( {
-        fillType: FillType.SEQUENTIAL
-      },
-      options );
+      fillType: FillType.SEQUENTIAL
+    }, options );
+
     HBox.call( this, { resize: false, x: options.x, y: options.y } );
     this.options = options;
 

@@ -62,13 +62,14 @@ define( require => {
     this.addChild( levelsContainerNode );
     this.addChild( levelSelectionScreen );
 
+    // TODO: drop TWEEN
     var startGameButtonsTween = new TWEEN.Tween( levelSelectionScreen ).easing( TWEEN.Easing.Cubic.InOut ).onComplete( function() {
-      levelSelectionScreen.visible = (levelSelectionScreen.x === 0);
+      levelSelectionScreen.visible = ( levelSelectionScreen.x === 0 );
     } );
 
     var fromLevelNumber; //level from which we return to main screen. keep this to remove corresponding Node from the scene graph
     var levelsTween = new TWEEN.Tween( levelsContainerNode ).easing( TWEEN.Easing.Cubic.InOut ).onComplete( function() {
-      levelsContainerNode.visible = (levelsContainerNode.x === 0);
+      levelsContainerNode.visible = ( levelsContainerNode.x === 0 );
 
       //remove LevelNode from scene graph to keep it simple and fast
       if ( fromLevelNumber && fromLevelNumber !== model.currentLevelProperty.get() ) {
