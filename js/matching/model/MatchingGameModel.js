@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const DynamicProperty = require( 'AXON/DynamicProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const MatchingLevel = require( 'FRACTIONS_COMMON/matching/model/MatchingLevel' );
   const Property = require( 'AXON/Property' );
@@ -28,11 +29,18 @@ define( require => {
       // @public {Property.<MatchingLevel|null>}
       this.levelProperty = new Property( null );
 
+      // @public {Property.<MatchingChallenge|null}
+      this.challengeProperty = new DynamicProperty( this.levelProperty, {
+        derive: 'challengeProperty'
+      } );
+
       // @public {Property.<boolean>}
       this.timeVisibleProperty = new BooleanProperty( false );
 
       // @public {Array.<MatchingLevel>}
-      this.levels = _.range( 1, 9 ).map( number => new MatchingLevel( number ) );
+      this.levels = _.range( 1, 9 ).map( number => new MatchingLevel( number, {
+        timeVisibleProperty: this.timeVisibleProperty
+      } ) );
     }
 
     /**
@@ -42,6 +50,9 @@ define( require => {
      * @param {number} dt
      */
     step( dt ) {
+      if ( this.challengeProperty.value ) {
+        this.challengeProperty.value.elapsedTimeProperty.value += dt;
+      }
     }
 
     /**

@@ -9,6 +9,7 @@ define( require => {
   'use strict';
 
   // modules
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const DynamicProperty = require( 'AXON/DynamicProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const MatchingChallenge = require( 'FRACTIONS_COMMON/matching/model/MatchingChallenge' );
@@ -18,8 +19,16 @@ define( require => {
   class MatchingLevel {
     /**
      * @param {number} number
+     * @param {Object} [options]
      */
-    constructor( number ) {
+    constructor( number, options ) {
+
+      options = _.extend( {
+        timeVisibleProperty: new BooleanProperty( true )
+      }, options );
+
+      // @private {Property.<boolean>}
+      this.timeVisibleProperty = options.timeVisibleProperty;
 
       // @public {number}
       this.number = number;
@@ -43,7 +52,19 @@ define( require => {
      * @returns {MatchingChallenge}
      */
     nextChallenge() {
-      return new MatchingChallenge();
+      return new MatchingChallenge( this.number, {
+        timeVisibleProperty: this.timeVisibleProperty
+      } );
+    }
+
+    /**
+     * Refreshes the level's challenge, without changing permanent things like the high score.
+     * @public
+     */
+    refresh() {
+      const nextChallenge = this.nextChallenge();
+      this.challengeProperty.value.refreshedChallenge = nextChallenge;
+      this.challengeProperty.value = nextChallenge;
     }
 
     /**
@@ -51,7 +72,8 @@ define( require => {
      * @public
      */
     reset() {
-
+      this.refresh();
+      this.highScoreProperty.reset();
     }
   }
 
