@@ -352,6 +352,7 @@ define( require => {
           new MixedFractionNode( {
             numerator: 1,
             denominator: 2,
+            vinculumExtension: 5,
             scale: 3
           } )
         ],
@@ -407,6 +408,7 @@ define( require => {
             whole: 1,
             numerator: 1,
             denominator: 2,
+            vinculumExtension: 3,
             scale: 3
           } )
         ],

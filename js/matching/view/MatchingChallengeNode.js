@@ -4,6 +4,7 @@
  * TODO: doc
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Anton Ulyanov (Mlearner)
  */
 define( require => {
   'use strict';
@@ -13,6 +14,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const Image = require( 'SCENERY/nodes/Image' );
   const Node = require( 'SCENERY/nodes/Node' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
@@ -22,14 +24,20 @@ define( require => {
   const VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
-  var labelLevelString = require( 'string!VEGAS/label.level' );
-  var labelScoreString = require( 'string!VEGAS/label.score' );
-  var myMatchesString = require( 'string!FRACTIONS_COMMON/myMatches' );
-  var timeNumberSecString = require( 'string!FRACTIONS_COMMON/timeNumberSec' );
+  const labelLevelString = require( 'string!VEGAS/label.level' );
+  const labelScoreString = require( 'string!VEGAS/label.score' );
+  const myMatchesString = require( 'string!FRACTIONS_COMMON/myMatches' );
+  const timeNumberSecString = require( 'string!FRACTIONS_COMMON/timeNumberSec' );
+
+  // images
+  const scaleImage = require( 'image!FRACTIONS_COMMON/scale.png' );
 
   // constants
   const PADDING = FractionsCommonConstants.MATCHING_MARGIN;
   const NUM_TARGETS = 6;
+  const TARGET_WIDTH = 125;
+  const TARGET_HEIGHT = 110;
+  const TARGETS_TOP = 385;
 
   class MatchingChallengeNode extends Node {
     /**
@@ -49,8 +57,25 @@ define( require => {
         x: layoutBounds.left + PADDING + ( targetWidth + PADDING ) * index,
         y: layoutBounds.top + PADDING
       } ) );
-
       targetBackgrounds.forEach( targetBackground => this.addChild( targetBackground ) );
+
+      const scaleNodes = _.range( 0, 2 ).map( index => new Image( scaleImage, {
+        centerX: layoutBounds.centerX + ( index - 0.5 ) * 380,
+        y: 270,
+        scale: 0.4
+      } ) );
+      scaleNodes.forEach( scaleNode => this.addChild( scaleNode ) );
+
+      const sourceBackgrounds = _.flatten( _.range( 0, NUM_TARGETS ).map( col => _.range( 0, 2 ).map( row => {
+        const x = layoutBounds.centerX + TARGET_WIDTH * ( col - NUM_TARGETS / 2 );
+        const y = TARGETS_TOP + TARGET_HEIGHT * row;
+        return new Rectangle( x, y, TARGET_WIDTH, TARGET_HEIGHT, {
+          fill: FractionsCommonColorProfile.matchingSourceBackgroundProperty,
+          stroke: FractionsCommonColorProfile.matchingSourceBorderProperty,
+          lineWidth: 1.5
+        } );
+      } ) ) );
+      sourceBackgrounds.forEach( sourceBackground => this.addChild( sourceBackground ) );
 
       this.addChild( new Text( myMatchesString, {
         font: new PhetFont( { size: 18, weight: 'bold' } ),

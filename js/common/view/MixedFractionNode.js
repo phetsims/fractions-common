@@ -43,7 +43,13 @@ define( require => {
         wholeFill: 'black',
         numeratorFill: 'black',
         denominatorFill: 'black',
-        separatorFill: 'black'
+        separatorFill: 'black',
+
+        // {number} - How far past the numbers' bounds that the vinculum should extend.
+        vinculumExtension: 0,
+
+        // {string} - The lineCap of the vinculum
+        vinculumLineCap: 'butt'
       }, options );
 
       // @private {Text}
@@ -81,7 +87,8 @@ define( require => {
       // @private {Line}
       this.vinculumNode = new Line( 0, 0, 10, 0, {
         stroke: options.separatorFill,
-        lineWidth: 2
+        lineWidth: 2,
+        lineCap: options.vinculumLineCap
       } );
 
       // @private {VBox}
@@ -94,6 +101,9 @@ define( require => {
       this._whole = options.whole;
       this._numerator = options.numerator;
       this._denominator = options.denominator;
+
+      // @private {number}
+      this._vinculumExtension = options.vinculumExtension;
 
       this.update();
 
@@ -117,7 +127,8 @@ define( require => {
       this.numeratorText.text = hasNumerator ? this._numerator : ' ';
       this.denominatorText.text = hasDenominator ? this._denominator : ' ';
 
-      this.vinculumNode.x2 = Math.max( this.numeratorContainer.width, this.denominatorContainer.width ) + 2;
+      this.vinculumNode.x1 = -this._vinculumExtension;
+      this.vinculumNode.x2 = Math.max( this.numeratorContainer.width, this.denominatorContainer.width ) + 2 + this._vinculumExtension;
     }
 
     /**
