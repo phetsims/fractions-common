@@ -102,7 +102,11 @@ define( require => {
     level10: { default: new Color( 45, 165, 59 ) },
 
     collectionBackground: { default: Color.WHITE },
-    collectionBorder: { default: Color.BLACK }
+    collectionBorder: { default: Color.BLACK },
+
+    matchingLevelBackground: { default: new Color( 242, 242, 242 ) },
+    matchingHomeIconBackground: { default: new Color( '#e7e9cc' ) },
+    matchingNavbarIconBackground: { default: Color.BLACK }
   } );
 
   fractionsCommon.register( 'FractionsCommonColorProfile', FractionsCommonColorProfile );
