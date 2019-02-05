@@ -27,31 +27,40 @@ define( require => {
 
   class MatcherLevel {
     /**
-     * @param gameModel
-     * @param levelDescription
-     * @param {number} levelNumber 1-based level that is displayed to the user (starts at 1, not zero)
+     * @param {FractionMatcherModel} gameModel
+     * @param {Object} levelDescription
+     * @param {number} levelNumber - 1-based level that is displayed to the user (starts at 1, not zero)
      */
     constructor( gameModel, levelDescription, levelNumber ) {
+
+      // @public {FractionMatcherModel}
       this.gameModel = gameModel;
+
+      // @public {number}
       this.levelNumber = levelNumber;
+
+      // @private {Object}
       this.levelDescription = levelDescription;
 
       // @public {Property.<number>}
       this.scoreProperty = new NumberProperty( 0 );
       this.highScoreProperty = new NumberProperty( 0 );
-
-      // @public {Property.<number>}
       this.timeProperty = new NumberProperty( 0 );
+      this.stepScoreProperty = new NumberProperty( 2 );
 
       // @public {Property.<number|null>}
       this.bestTimeProperty = new Property( null );
 
-      this.stepScoreProperty = new NumberProperty( 2 );
       this.answersProperty = new Property( [] );//shapes, which moved to answer zone
       this.lastPairProperty = new Property( [ -1, -1 ] );//pair of shapes on scales, user can't compare the same pair two times
       this.lastChangedZoneProperty = new Property( -1 );//when showing correct answer, change only last dragged shape position
-      this.shapesProperty = new Property( [] ); //array of MatcherPieces
+
+      // @public {Property.<Array.<MatcherPiece>>}
+      this.shapesProperty = new Property( [] );
+
+      // @public {Property.<boolean>}
       this.canDragProperty = new BooleanProperty( true );
+
       this.buttonStatusProperty = new Property( 'none' );// ['none','ok','check','tryAgain','showAnswer']
 
       this.dropZone = []; //contains indexes of shapes, which are placed in current zone, -1 if empty
