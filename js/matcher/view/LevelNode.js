@@ -333,193 +333,192 @@ define( require => {
   fractionsCommon.register( 'LevelNode', LevelNode );
 
   return inherit( Node, LevelNode, {
-      //get Vector2(x,y) - position in dropZones rect at the bottom
-      getShapeDropPosition: function( position ) {
-        //inside dropZones at the bottom
-        if ( position < this.model.gameModel.MAXIMUM_PAIRS * 2 ) {
-          return this.levelsContainer.sourceRectangles[ position ].center;
-        }
-        else {
-          //one of two scales
-          var scale = this.levelsContainer.scales[ position - this.model.gameModel.MAXIMUM_PAIRS * 2 ];
-          return new Vector2( scale.centerX, scale.top + 6 );
-        }
-      },
-      //get Vector2(x,y) - position in answer gray rect at the top
-      getShapeAnswerPosition: function( position ) {
-        var targetRect = this.levelsContainer.answerRects[ Math.floor( position / 2 ) ];
-        var diff = ( position % 2 === 0 ) ? -targetRect.width / 4 : targetRect.width / 4;
-        return new Vector2( targetRect.centerX + diff, targetRect.centerY );
-      },
-      //get closest dropZone for shape when drag ends
-      getClosestDropZone: function( coord, canDropOnScale ) {
-        var closestZone = -1;
-        var min = 1e10;
-        for ( var i = 0; i < this.model.dropZone.length; i++ ) {
-          //if empty or one of two scales and canDropOnScale
-          if ( this.model.dropZone[ i ] < 0 || ( canDropOnScale && ( i === 12 || i === 13 ) ) ) {
-            var dist = coord.distanceSquared( this.getShapeDropPosition( i ) );
-            if ( min > dist ) {
-              min = dist;
-              closestZone = i;
-            }
+    //get Vector2(x,y) - position in dropZones rect at the bottom
+    getShapeDropPosition: function( position ) {
+      //inside dropZones at the bottom
+      if ( position < this.model.gameModel.MAXIMUM_PAIRS * 2 ) {
+        return this.levelsContainer.sourceRectangles[ position ].center;
+      }
+      else {
+        //one of two scales
+        var scale = this.levelsContainer.scales[ position - this.model.gameModel.MAXIMUM_PAIRS * 2 ];
+        return new Vector2( scale.centerX, scale.top + 6 );
+      }
+    },
+    //get Vector2(x,y) - position in answer gray rect at the top
+    getShapeAnswerPosition: function( position ) {
+      var targetRect = this.levelsContainer.answerRects[ Math.floor( position / 2 ) ];
+      var diff = ( position % 2 === 0 ) ? -targetRect.width / 4 : targetRect.width / 4;
+      return new Vector2( targetRect.centerX + diff, targetRect.centerY );
+    },
+    //get closest dropZone for shape when drag ends
+    getClosestDropZone: function( coord, canDropOnScale ) {
+      var closestZone = -1;
+      var min = 1e10;
+      for ( var i = 0; i < this.model.dropZone.length; i++ ) {
+        //if empty or one of two scales and canDropOnScale
+        if ( this.model.dropZone[ i ] < 0 || ( canDropOnScale && ( i === 12 || i === 13 ) ) ) {
+          var dist = coord.distanceSquared( this.getShapeDropPosition( i ) );
+          if ( min > dist ) {
+            min = dist;
+            closestZone = i;
           }
-        }
-        return closestZone;
-      },
-      //animation for 'snapping' shape to correct position
-      dropShapeToZone: function( shape, zoneIndex ) {
-        //target dropZone now = indexShape
-        if ( !shape.view ) {
-          return;
-        }
-        this.model.dropZone[ zoneIndex ] = shape.view.indexShape;
-        shape.dropZone = zoneIndex;
-        var targetPosition = this.getShapeDropPosition( zoneIndex );
-        if ( zoneIndex > this.model.gameModel.MAXIMUM_PAIRS * 2 - 1 ) {
-          targetPosition.y -= shape.view.height / 2 - 13; //adjust position on scales
-
-          //Adjust numeric mixed fractions down a bit because they are too high by default.  See https://github.com/phetsims/fraction-matcher/issues/46
-          if ( shape.view instanceof NumericShape && shape.numerator / shape.denominator > 1 ) {
-            targetPosition.y += 11;
-          }
-          else if ( shape.view instanceof NumericShape ) {
-            targetPosition.y += 7;
-          }
-        }
-        shape.view.moveToFront();
-        new TWEEN.Tween( shape.view ).easing( TWEEN.Easing.Cubic.InOut ).to( {
-          centerX: targetPosition.x,
-          centerY: targetPosition.y
-        }, this.model.gameModel.ANIMATION_TIME ).start( phet.joist.elapsedTime );
-      },
-      //move correct shape to scales
-      showCorrectAnswer: function() {
-        var self = this;
-        //the unchanged shape on scale
-        var correctShape = this.model.shapesProperty.value[ this.model.dropZone[ this.model.lastChangedZoneProperty.value === 12 ? 13 : 12 ] ];
-        var secondCorrectShape;
-        for ( var i = 0; i < this.model.dropZone.length; i++ ) {
-          if ( this.model.dropZone[ i ] !== -1 && self.model.isShapesEqual( correctShape, this.model.shapesProperty.value[ this.model.dropZone[ i ] ] ) ) {
-            secondCorrectShape = this.model.shapesProperty.value[ this.model.dropZone[ i ] ];
-            break;
-          }
-        }
-        var lastShapeOnScale = this.model.shapesProperty.value[ this.model.dropZone[ this.model.lastChangedZoneProperty.value ] ];
-        this.model.dropZone[ secondCorrectShape.dropZone ] = -1;
-        this.dropShapeToZone( secondCorrectShape, this.model.lastChangedZoneProperty.value );
-        this.dropShapeToZone( lastShapeOnScale, this.getClosestDropZone( lastShapeOnScale.view.center, false ) );
-        secondCorrectShape.view.moveToFront();
-        self.comparisonChart.compare( self.model.shapesProperty.value[ self.model.dropZone[ 12 ] ], self.model.shapesProperty.value[ self.model.dropZone[ 13 ] ] );
-      },
-      //move shapes from scales to answer zone and disable them
-      moveShapesOnScalesToAnswer: function() {
-        var self = this;
-        self.equallyAnswerSymbol[ self.model.answersProperty.value.length / 2 ].setVisible( true );
-        [ 0, 1 ].forEach( function( i ) {
-          var shape = self.model.shapesProperty.value[ self.model.dropZone[ self.model.gameModel.MAXIMUM_PAIRS * 2 + i ] ];
-          var newPosition = self.getShapeAnswerPosition( self.model.answersProperty.value.length );
-          var initialScale = shape.view.matrix.scaleVector.x;
-          var targetScale = initialScale / 2;
-          var linearFunction = new LinearFunction( 0, 1, initialScale, targetScale );
-          var start = {
-            centerX: shape.view.centerX,
-            centerY: shape.view.centerY
-          };
-          new TWEEN.Tween( start ).easing( TWEEN.Easing.Cubic.InOut ).to( {
-            centerX: newPosition.x,
-            centerY: newPosition.y
-          }, self.model.gameModel.ANIMATION_TIME ).onUpdate( function( step ) {
-            var scale = linearFunction( step );
-            shape.view.setScaleMagnitude( scale, scale );
-            shape.view.centerX = this.centerX;
-            shape.view.centerY = this.centerY;
-          } ).start( phet.joist.elapsedTime );
-          self.model.answersProperty.value.push( self.model.dropZone[ self.model.gameModel.MAXIMUM_PAIRS * 2 + i ] );
-          self.model.dropZone[ self.model.gameModel.MAXIMUM_PAIRS * 2 + i ] = -1;
-          shape.view.removeInputListener( shape.view.getInputListeners()[ 0 ] );
-        } );
-        if ( this.model.answersProperty.value.length === this.model.gameModel.MAXIMUM_PAIRS * 2 || debugRewards ) {
-
-          var completedTime = this.model.timeProperty.value;
-          var lastBestForThisLevel = this.model.bestTimeProperty.value;
-          var newBestTime = false;
-          if ( this.model.scoreProperty.value === 12 && ( lastBestForThisLevel === null || completedTime < lastBestForThisLevel ) ) {
-            newBestTime = true;
-            this.model.bestTimeProperty.value = completedTime;
-          }
-
-          //If a perfect score, show the reward node
-          if ( this.model.scoreProperty.value === 12 || debugRewards ) {
-
-            //Play the "cheer" sound for a perfect score
-            cheerSound.play();
-
-            //If there was already a reward node, get rid of it before creating the new one.
-            this.rewardNode && this.rewardNode.detach();
-
-            //Use the shapes from the level in the RewardNode
-            var rewardNodes = this.model.shapesProperty.value.map( function( shape ) {return shape.view;} );
-
-            //Set the scale for each node to be the same, since some may not have animated to the "my matches" boxes yet, and may be a different size
-            var scale = 0.9;
-            for ( var i = 0; i < rewardNodes.length; i++ ) {
-              rewardNodes[ i ].previousScale = rewardNodes[ i ].getScaleVector();
-              rewardNodes[ i ].setScaleMagnitude( scale * scale );
-            }
-
-            //Create and attach the new Reward Node
-
-            var face = new FaceNode( 40, { headStroke: 'black', headLineWidth: 1.5 } );
-            var star = new StarNode();
-            rewardNodes = RewardNode.createRandomNodes( rewardNodes, 100 ).concat( _.times( 6, _.constant( face ) ), _.times( 6, _.constant( star ) ) );
-            this.rewardNode = new RewardNode( {
-              stepEmitter: this.stepEmitter,
-              nodes: rewardNodes
-            } );
-            this.addChild( this.rewardNode );
-
-            // Restore the sizes of the nodes after toImage completed
-            for ( i = 0; i < rewardNodes.length; i++ ) {
-              if ( rewardNodes[ i ].previousScale ) {
-                rewardNodes[ i ].setScaleMagnitude( rewardNodes[ i ].previousScale.x, rewardNodes[ i ].previousScale.y );
-              }
-            }
-          }
-
-          //Show the level completed dialog which shows scores, etc.
-          this.levelCompletedNodeContainer = new Node( {
-            children: [
-
-              //Prevent the user from pressing anything other than the "continue" button
-              new Plane( { fill: 'black', opacity: 0, pickable: true } ),
-
-              //Show the dialog with scores
-              new LevelCompletedNode( this.model.levelNumber, this.model.scoreProperty.value, 12, 3, this.model.gameModel.isTimerProperty.get(), completedTime, lastBestForThisLevel, newBestTime,
-                function() {
-                  var model = self.model;
-                  model.highScoreProperty.value = Math.max( model.highScoreProperty.value, model.scoreProperty.value );
-                  model.gameModel.currentLevelProperty.set( 0 );
-                  model.reset();
-                  self.generateNewLevel();
-
-                  if ( self.rewardNode ) {
-                    self.rewardNode.stop();
-                    self.rewardNode.detach();
-                  }
-
-                  //TODO: only detach after animation transition away complete?
-                  self.rewardNode = null;
-                }, {
-                  centerX: this.model.gameModel.width / 2,
-                  centerY: this.model.gameModel.height / 2,
-                  contentMaxWidth: 600
-                } )
-            ]
-          } );
-          this.addChild( this.levelCompletedNodeContainer );
         }
       }
+      return closestZone;
+    },
+    //animation for 'snapping' shape to correct position
+    dropShapeToZone: function( shape, zoneIndex ) {
+      //target dropZone now = indexShape
+      if ( !shape.view ) {
+        return;
+      }
+      this.model.dropZone[ zoneIndex ] = shape.view.indexShape;
+      shape.dropZone = zoneIndex;
+      var targetPosition = this.getShapeDropPosition( zoneIndex );
+      if ( zoneIndex > this.model.gameModel.MAXIMUM_PAIRS * 2 - 1 ) {
+        targetPosition.y -= shape.view.height / 2 - 13; //adjust position on scales
+
+        //Adjust numeric mixed fractions down a bit because they are too high by default.  See https://github.com/phetsims/fraction-matcher/issues/46
+        if ( shape.view instanceof NumericShape && shape.numerator / shape.denominator > 1 ) {
+          targetPosition.y += 11;
+        }
+        else if ( shape.view instanceof NumericShape ) {
+          targetPosition.y += 7;
+        }
+      }
+      shape.view.moveToFront();
+      new TWEEN.Tween( shape.view ).easing( TWEEN.Easing.Cubic.InOut ).to( {
+        centerX: targetPosition.x,
+        centerY: targetPosition.y
+      }, this.model.gameModel.ANIMATION_TIME ).start( phet.joist.elapsedTime );
+    },
+    //move correct shape to scales
+    showCorrectAnswer: function() {
+      var self = this;
+      //the unchanged shape on scale
+      var correctShape = this.model.shapesProperty.value[ this.model.dropZone[ this.model.lastChangedZoneProperty.value === 12 ? 13 : 12 ] ];
+      var secondCorrectShape;
+      for ( var i = 0; i < this.model.dropZone.length; i++ ) {
+        if ( this.model.dropZone[ i ] !== -1 && self.model.isShapesEqual( correctShape, this.model.shapesProperty.value[ this.model.dropZone[ i ] ] ) ) {
+          secondCorrectShape = this.model.shapesProperty.value[ this.model.dropZone[ i ] ];
+          break;
+        }
+      }
+      var lastShapeOnScale = this.model.shapesProperty.value[ this.model.dropZone[ this.model.lastChangedZoneProperty.value ] ];
+      this.model.dropZone[ secondCorrectShape.dropZone ] = -1;
+      this.dropShapeToZone( secondCorrectShape, this.model.lastChangedZoneProperty.value );
+      this.dropShapeToZone( lastShapeOnScale, this.getClosestDropZone( lastShapeOnScale.view.center, false ) );
+      secondCorrectShape.view.moveToFront();
+      self.comparisonChart.compare( self.model.shapesProperty.value[ self.model.dropZone[ 12 ] ], self.model.shapesProperty.value[ self.model.dropZone[ 13 ] ] );
+    },
+    //move shapes from scales to answer zone and disable them
+    moveShapesOnScalesToAnswer: function() {
+      var self = this;
+      self.equallyAnswerSymbol[ self.model.answersProperty.value.length / 2 ].setVisible( true );
+      [ 0, 1 ].forEach( function( i ) {
+        var shape = self.model.shapesProperty.value[ self.model.dropZone[ self.model.gameModel.MAXIMUM_PAIRS * 2 + i ] ];
+        var newPosition = self.getShapeAnswerPosition( self.model.answersProperty.value.length );
+        var initialScale = shape.view.matrix.scaleVector.x;
+        var targetScale = initialScale / 2;
+        var linearFunction = new LinearFunction( 0, 1, initialScale, targetScale );
+        var start = {
+          centerX: shape.view.centerX,
+          centerY: shape.view.centerY
+        };
+        new TWEEN.Tween( start ).easing( TWEEN.Easing.Cubic.InOut ).to( {
+          centerX: newPosition.x,
+          centerY: newPosition.y
+        }, self.model.gameModel.ANIMATION_TIME ).onUpdate( function( step ) {
+          var scale = linearFunction( step );
+          shape.view.setScaleMagnitude( scale, scale );
+          shape.view.centerX = this.centerX;
+          shape.view.centerY = this.centerY;
+        } ).start( phet.joist.elapsedTime );
+        self.model.answersProperty.value.push( self.model.dropZone[ self.model.gameModel.MAXIMUM_PAIRS * 2 + i ] );
+        self.model.dropZone[ self.model.gameModel.MAXIMUM_PAIRS * 2 + i ] = -1;
+        shape.view.removeInputListener( shape.view.getInputListeners()[ 0 ] );
+      } );
+      if ( this.model.answersProperty.value.length === this.model.gameModel.MAXIMUM_PAIRS * 2 || debugRewards ) {
+
+        var completedTime = this.model.timeProperty.value;
+        var lastBestForThisLevel = this.model.bestTimeProperty.value;
+        var newBestTime = false;
+        if ( this.model.scoreProperty.value === 12 && ( lastBestForThisLevel === null || completedTime < lastBestForThisLevel ) ) {
+          newBestTime = true;
+          this.model.bestTimeProperty.value = completedTime;
+        }
+
+        //If a perfect score, show the reward node
+        if ( this.model.scoreProperty.value === 12 || debugRewards ) {
+
+          //Play the "cheer" sound for a perfect score
+          cheerSound.play();
+
+          //If there was already a reward node, get rid of it before creating the new one.
+          this.rewardNode && this.rewardNode.detach();
+
+          //Use the shapes from the level in the RewardNode
+          var rewardNodes = this.model.shapesProperty.value.map( function( shape ) {return shape.view;} );
+
+          //Set the scale for each node to be the same, since some may not have animated to the "my matches" boxes yet, and may be a different size
+          var scale = 0.9;
+          for ( var i = 0; i < rewardNodes.length; i++ ) {
+            rewardNodes[ i ].previousScale = rewardNodes[ i ].getScaleVector();
+            rewardNodes[ i ].setScaleMagnitude( scale * scale );
+          }
+
+          //Create and attach the new Reward Node
+
+          var face = new FaceNode( 40, { headStroke: 'black', headLineWidth: 1.5 } );
+          var star = new StarNode();
+          rewardNodes = RewardNode.createRandomNodes( rewardNodes, 100 ).concat( _.times( 6, _.constant( face ) ), _.times( 6, _.constant( star ) ) );
+          this.rewardNode = new RewardNode( {
+            stepEmitter: this.stepEmitter,
+            nodes: rewardNodes
+          } );
+          this.addChild( this.rewardNode );
+
+          // Restore the sizes of the nodes after toImage completed
+          for ( i = 0; i < rewardNodes.length; i++ ) {
+            if ( rewardNodes[ i ].previousScale ) {
+              rewardNodes[ i ].setScaleMagnitude( rewardNodes[ i ].previousScale.x, rewardNodes[ i ].previousScale.y );
+            }
+          }
+        }
+
+        //Show the level completed dialog which shows scores, etc.
+        this.levelCompletedNodeContainer = new Node( {
+          children: [
+
+            //Prevent the user from pressing anything other than the "continue" button
+            new Plane( { fill: 'black', opacity: 0, pickable: true } ),
+
+            //Show the dialog with scores
+            new LevelCompletedNode( this.model.levelNumber, this.model.scoreProperty.value, 12, 3, this.model.gameModel.isTimerProperty.get(), completedTime, lastBestForThisLevel, newBestTime,
+              function() {
+                var model = self.model;
+                model.highScoreProperty.value = Math.max( model.highScoreProperty.value, model.scoreProperty.value );
+                model.gameModel.currentLevelProperty.set( 0 );
+                model.reset();
+                self.generateNewLevel();
+
+                if ( self.rewardNode ) {
+                  self.rewardNode.stop();
+                  self.rewardNode.detach();
+                }
+
+                //TODO: only detach after animation transition away complete?
+                self.rewardNode = null;
+              }, {
+                centerX: this.model.gameModel.width / 2,
+                centerY: this.model.gameModel.height / 2,
+                contentMaxWidth: 600
+              } )
+          ]
+        } );
+        this.addChild( this.levelCompletedNodeContainer );
+      }
     }
-  );
+  } );
 } );
