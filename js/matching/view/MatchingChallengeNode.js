@@ -22,6 +22,7 @@ define( require => {
   const Text = require( 'SCENERY/nodes/Text' );
   const Util = require( 'DOT/Util' );
   const VBox = require( 'SCENERY/nodes/VBox' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // strings
   const labelLevelString = require( 'string!VEGAS/label.level' );
@@ -51,36 +52,54 @@ define( require => {
       this.challenge = challenge;
 
       const targetWidth = ( layoutBounds.width - PADDING * ( NUM_TARGETS + 1 ) ) / NUM_TARGETS;
-      const targetBackgrounds = _.range( 0, NUM_TARGETS ).map( index => new Rectangle( 0, 0, targetWidth, 100, {
-        cornerRadius: 10,
-        fill: FractionsCommonColorProfile.matchingTargetBackgroundProperty,
-        x: layoutBounds.left + PADDING + ( targetWidth + PADDING ) * index,
-        y: layoutBounds.top + PADDING
-      } ) );
-      targetBackgrounds.forEach( targetBackground => this.addChild( targetBackground ) );
+      let targetBottom;
 
-      const scaleNodes = _.range( 0, 2 ).map( index => new Image( scaleImage, {
-        centerX: layoutBounds.centerX + ( index - 0.5 ) * 380,
-        y: 270,
-        scale: 0.4
-      } ) );
-      scaleNodes.forEach( scaleNode => this.addChild( scaleNode ) );
+      // Targets
+      challenge.targets.forEach( ( target, index ) => {
+        const targetBackground = new Rectangle( 0, 0, targetWidth, 100, {
+          cornerRadius: 10,
+          fill: FractionsCommonColorProfile.matchingTargetBackgroundProperty,
+          x: layoutBounds.left + PADDING + ( targetWidth + PADDING ) * index,
+          y: layoutBounds.top + PADDING
+        } );
+        this.addChild( targetBackground );
 
-      const sourceBackgrounds = _.flatten( _.range( 0, NUM_TARGETS ).map( col => _.range( 0, 2 ).map( row => {
+        const y = targetBackground.centerY;
+        target.spots[ 0 ].positionProperty.value = new Vector2( 0.6 * targetBackground.left + 0.4 + targetBackground.centerX, y );
+        target.spots[ 1 ].positionProperty.value = new Vector2( 0.6 * targetBackground.right + 0.4 + targetBackground.centerX, y );
+        targetBottom = targetBackground.bottom;
+      } );
+
+      // Scales
+      _.range( 0, 2 ).forEach( index => {
+        const scaleNode = new Image( scaleImage, {
+          centerX: layoutBounds.centerX + ( index - 0.5 ) * 380,
+          y: 270,
+          scale: 0.4
+        } );
+        this.addChild( scaleNode );
+
+        challenge.scaleSpots[ index ].positionProperty.value = scaleNode.centerTop;
+      } );
+
+      // Sources
+      _.range( 0, NUM_TARGETS ).forEach( col => _.range( 0, 2 ).forEach( row => {
         const x = layoutBounds.centerX + TARGET_WIDTH * ( col - NUM_TARGETS / 2 );
         const y = TARGETS_TOP + TARGET_HEIGHT * row;
-        return new Rectangle( x, y, TARGET_WIDTH, TARGET_HEIGHT, {
+        const sourceNode = new Rectangle( x, y, TARGET_WIDTH, TARGET_HEIGHT, {
           fill: FractionsCommonColorProfile.matchingSourceBackgroundProperty,
           stroke: FractionsCommonColorProfile.matchingSourceBorderProperty,
           lineWidth: 1.5
         } );
-      } ) ) );
-      sourceBackgrounds.forEach( sourceBackground => this.addChild( sourceBackground ) );
+        this.addChild( sourceNode );
+
+        challenge.sourceSpots[ col + row * NUM_TARGETS ].positionProperty.value = sourceNode.center;
+      } ) );
 
       this.addChild( new Text( myMatchesString, {
         font: new PhetFont( { size: 18, weight: 'bold' } ),
         left: layoutBounds.left + PADDING,
-        top: targetBackgrounds[ 0 ].bottom + 5,
+        top: targetBottom + 5,
         maxWidth: 300
       } ) );
 
@@ -102,7 +121,7 @@ define( require => {
           timeText
         ]
       } ), {
-        alignBounds: layoutBounds.withMinY( targetBackgrounds[ 0 ].bottom ),
+        alignBounds: layoutBounds.withMinY( targetBottom ),
         xAlign: 'right',
         yAlign: 'top',
         xMargin: PADDING,

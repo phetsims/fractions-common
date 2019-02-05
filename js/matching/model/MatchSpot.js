@@ -1,0 +1,38 @@
+// Copyright 2019, University of Colorado Boulder
+
+/**
+ * TODO: doc
+ *
+ * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ */
+define( require => {
+  'use strict';
+
+  // modules
+  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const Property = require( 'AXON/Property' );
+  const Vector2 = require( 'DOT/Vector2' );
+
+  class MatchSpot {
+    /**
+     * @param {Object} [options]
+     */
+    constructor( options ) {
+
+      options = _.extend( {
+        scale: 1
+      }, options );
+
+      // @public {Property.<Vector2>} - To be updated by the view when its location changes (usually just initially)
+      this.positionProperty = new Property( Vector2.ZERO );
+
+      // @public {number}
+      this.scale = options.scale;
+
+      // @public {Property.<MatchingPiece|null>}
+      this.pieceProperty = new Property( null );
+    }
+  }
+
+  return fractionsCommon.register( 'MatchSpot', MatchSpot );
+} );
