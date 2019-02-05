@@ -11,17 +11,24 @@ define( require => {
   // modules
   const AlignBox = require( 'SCENERY/nodes/AlignBox' );
   const AlignGroup = require( 'SCENERY/nodes/AlignGroup' );
+  const BackButton = require( 'SCENERY_PHET/buttons/BackButton' );
   const Bounds2 = require( 'DOT/Bounds2' );
+  const Easing = require( 'TWIXT/Easing' );
+  const FaceNode = require( 'SCENERY_PHET/FaceNode' );
   const FilledPartition = require( 'FRACTIONS_COMMON/game/model/FilledPartition' );
   const FilledPartitionNode = require( 'FRACTIONS_COMMON/game/view/FilledPartitionNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
+  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const LevelSelectionButton = require( 'VEGAS/LevelSelectionButton' );
+  const MatchingChallengeNode = require( 'FRACTIONS_COMMON/matching/view/MatchingChallengeNode' );
   const MixedFractionNode = require( 'FRACTIONS_COMMON/common/view/MixedFractionNode' );
   const Node = require( 'SCENERY/nodes/Node' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
+  const RefreshButton = require( 'SCENERY_PHET/buttons/RefreshButton' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const ScoreDisplayStars = require( 'VEGAS/ScoreDisplayStars' );
   const Screen = require( 'JOIST/Screen' );
@@ -38,7 +45,7 @@ define( require => {
   // constants
   // TODO: look into deduplication with other code (e.g. icon design bounds)
   const LEVEL_SELECTION_SPACING = 25;
-  const SIDE_MARGIN = 10;
+  const SIDE_MARGIN = FractionsCommonConstants.MATCHING_MARGIN;
   const ICON_DESIGN_BOUNDS = new Bounds2( 0, 0, 90, 129 );
   const select = ( shapePartitions, quantity ) => {
     return _.find( shapePartitions, shapePartition => shapePartition.length === quantity );
@@ -63,6 +70,12 @@ define( require => {
     FractionsCommonColorProfile.shapeLighterPinkProperty,
     FractionsCommonColorProfile.shapeStrongGreenProperty
   ];
+  const QUADRATIC_TRANSITION_OPTIONS = {
+    duration: 0.4,
+    targetOptions: {
+      easing: Easing.QUADRATIC_IN_OUT
+    }
+  };
 
   // strings
   const chooseYourLevelString = require( 'string!FRACTIONS_COMMON/chooseYourLevel' );
@@ -109,7 +122,7 @@ define( require => {
             children: [
               timerToggleButton, soundToggleButton
             ],
-            spacing: SIDE_MARGIN,
+            spacing: 10,
             bottom: this.layoutBounds.bottom - SIDE_MARGIN,
             left: this.layoutBounds.left + SIDE_MARGIN
           } ),
@@ -137,6 +150,90 @@ define( require => {
         cachedNodes: [ this.levelSelectionLayer ]
       } );
       this.addChild( this.transitionNode );
+
+      const challengeBackground = new Node();
+      const challengeForeground = new Node();
+
+      const leftButtonOptions = {
+        touchAreaXDilation: SIDE_MARGIN,
+        touchAreaYDilation: SIDE_MARGIN / 2
+      };
+
+      const challengeControlBox = new VBox( {
+        spacing: 10,
+        top: this.layoutBounds.top + 160,
+        left: this.layoutBounds.left + SIDE_MARGIN,
+        children: [
+          new BackButton( _.extend( {
+            listener() {
+              model.levelProperty.value = null;
+            }
+          }, leftButtonOptions ) ),
+          new RefreshButton( _.extend( {
+            iconScale: 0.7,
+            xMargin: 9,
+            yMargin: 7,
+            listener() {
+              model.levelProperty.value && model.levelProperty.value.refresh();
+            }
+          }, leftButtonOptions ) ),
+          ...( phet.chipper.queryParameters.showAnswers ? [
+            new RectangularPushButton( _.extend( {
+              content: new FaceNode( 27 ),
+              listener: function() {
+                model.challengeProperty.value.cheat();
+              }
+            }, leftButtonOptions ) )
+          ] : [] )
+        ]
+      } );
+
+      let lastChallengeNode = null;
+      model.challengeProperty.lazyLink( ( challenge, oldChallenge ) => {
+        const oldChallengeNode = lastChallengeNode;
+
+        if ( oldChallengeNode ) {
+          oldChallengeNode.interruptSubtreeInput();
+        }
+
+        lastChallengeNode = null;
+        let transition;
+        if ( challenge ) {
+          const challengeNode = new MatchingChallengeNode( challenge, this.layoutBounds );
+          lastChallengeNode = challengeNode;
+
+          // Assign each challenge node with a wrapper reference, so we can easily dispose it.
+          challengeNode.wrapper = new Node( {
+            children: [
+              challengeBackground,
+              challengeControlBox,
+              challengeNode,
+              challengeForeground
+            ]
+          } );
+          if ( oldChallenge && oldChallenge.refreshedChallenge === challenge ) {
+            transition = this.transitionNode.dissolveTo( challengeNode.wrapper, {
+              duration: 0.6,
+              targetOptions: {
+                easing: Easing.LINEAR
+              }
+            } );
+          }
+          else {
+            transition = this.transitionNode.slideLeftTo( challengeNode.wrapper, QUADRATIC_TRANSITION_OPTIONS );
+          }
+        }
+        else {
+          transition = this.transitionNode.slideRightTo( this.levelSelectionLayer, QUADRATIC_TRANSITION_OPTIONS );
+        }
+        this.delayTransitions = true;
+        if ( oldChallengeNode ) {
+          transition.endedEmitter.addListener( () => {
+            oldChallengeNode.wrapper.dispose();
+            oldChallengeNode.dispose();
+          } );
+        }
+      } );
     }
 
     /**
@@ -220,7 +317,7 @@ define( require => {
             scoreDisplayConstructor: ScoreDisplayStars,
             scoreDisplayOptions: {
               numberOfStars: 3,
-              perfectScore: 3 // TODO: is this 12?
+              perfectScore: 12
             },
             listener: () => {
               this.model.levelProperty.value = level;

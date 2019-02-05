@@ -20,6 +20,9 @@ define( require => {
     // {number}
     PANEL_MARGIN: 10,
 
+    // {number} - margins used for the matching screens
+    MATCHING_MARGIN: 15,
+
     // {number} - The diameter of circle shapes, and the width of vertical-bar shapes.
     SHAPE_SIZE: SHAPE_RADIUS * 2,
 
