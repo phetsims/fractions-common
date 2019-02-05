@@ -31,6 +31,13 @@ define( require => {
 
       // @public {Property.<MatchingPiece|null>}
       this.pieceProperty = new Property( null );
+
+      // If we move, our piece should move (if we have one)
+      this.positionProperty.lazyLink( position => {
+        if ( this.pieceProperty.value ) {
+          this.pieceProperty.value.positionProperty.value = position;
+        }
+      } );
     }
   }
 

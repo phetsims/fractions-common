@@ -37,8 +37,11 @@ define( require => {
       // @public {Property.<boolean>}
       this.timeVisibleProperty = new BooleanProperty( false );
 
+      // TODO: improve
+      const descriptions = hasMixedNumbers ? MatchingLevel.getMixedLevelDescriptions() : MatchingLevel.getUnmixedLevelDescriptions();
+
       // @public {Array.<MatchingLevel>}
-      this.levels = _.range( 1, 9 ).map( number => new MatchingLevel( number, {
+      this.levels = _.range( 1, 9 ).map( number => new MatchingLevel( descriptions[ number - 1 ], number, {
         timeVisibleProperty: this.timeVisibleProperty
       } ) );
     }
