@@ -114,7 +114,29 @@ define( require => {
           const color = PIECE_COLORS[ ( index + subIndex ) % 3 ];
 
           const filledPartitions = shapePartition ? FilledPartition.fill( shapePartition, fraction, color, fillType ) : null;
-          pieces.push( new MatchPiece( filledPartitions ? fraction : scaledFraction, filledPartitions, config.hasMixedNumbers ) );
+          const piece = new MatchPiece( filledPartitions ? fraction : scaledFraction, filledPartitions, config.hasMixedNumbers, {
+            grab: () => {
+              if ( piece.spotProperty.value ) {
+                piece.spotProperty.value.pieceProperty.value = null;
+                piece.spotProperty.value = null;
+              }
+            },
+            drop: () => {
+              const openSpots = [ ...this.sourceSpots, ...this.scaleSpots ].filter( spot => spot.pieceProperty.value === null );
+              const closestSpot = _.minBy( openSpots, spot => spot.positionProperty.value.distance( piece.positionProperty.value ) );
+              assert && assert( closestSpot );
+
+              closestSpot.pieceProperty.value = piece;
+              piece.spotProperty.value = closestSpot;
+
+              piece.animator.animateTo( {
+                position: closestSpot.positionProperty.value,
+                scale: 1,
+                animationInvalidationProperty: piece.spotProperty
+              } );
+            }
+          } );
+          pieces.push( piece );
         } );
       } );
 
@@ -128,6 +150,18 @@ define( require => {
         piece.spotProperty.value = sourceSpot;
         sourceSpot.pieceProperty.value = piece;
       } );
+    }
+
+    /**
+     * Steps the model forward in time.
+     * @public
+     *
+     * @param {number} dt
+     */
+    step( dt ) {
+      this.elapsedTimeProperty.value += dt;
+
+      this.pieces.forEach( piece => piece.step( dt ) );
     }
 
     cheat() {

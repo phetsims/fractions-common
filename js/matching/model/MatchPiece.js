@@ -9,6 +9,8 @@ define( require => {
   'use strict';
 
   // modules
+  const Animator = require( 'FRACTIONS_COMMON/common/model/Animator' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Property = require( 'AXON/Property' );
@@ -19,8 +21,15 @@ define( require => {
      * @param {Fraction} fraction
      * @param {Array.<FilledPartition>|null} filledPartitions - If null, this should be displayed as a numeric fraction
      * @param {boolean} hasMixedNumbers
+     * @param {Object} [options]
      */
-    constructor( fraction, filledPartitions, hasMixedNumbers ) {
+    constructor( fraction, filledPartitions, hasMixedNumbers, options ) {
+
+      options = _.extend( {
+        // {function} - Callbacks for when the piece is grabbed and/or dropped
+        grab: _.identity,
+        drop: _.identity
+      }, options );
 
       // @public {Fraction}
       this.fraction = fraction;
@@ -31,6 +40,10 @@ define( require => {
       // @public {boolean}
       this.hasMixedNumbers = hasMixedNumbers;
 
+      // @public {function}
+      this.grab = options.grab;
+      this.drop = options.drop;
+
       // @public {Property.<Vector2>} - To be updated by the view when its location changes (usually just initially)
       this.positionProperty = new Property( Vector2.ZERO );
 
@@ -39,6 +52,26 @@ define( require => {
 
       // @public {Property.<MatchSpot|null>}
       this.spotProperty = new Property( null );
+
+      // @public {Property.<boolean>} - Whether the group is being moved (not by the user)
+      this.isAnimatingProperty = new BooleanProperty( false );
+
+      // @public {Animator} - Responsible for animating the main properties of this piece.
+      this.animator = new Animator( {
+        positionProperty: this.positionProperty,
+        scaleProperty: this.scaleProperty,
+        isAnimatingProperty: this.isAnimatingProperty
+      } );
+    }
+
+    /**
+     * Steps forward in time.
+     * @public
+     *
+     * @param {number} dt
+     */
+    step( dt ) {
+      this.animator.step( dt );
     }
   }
 

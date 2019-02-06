@@ -53,9 +53,7 @@ define( require => {
      * @param {number} dt
      */
     step( dt ) {
-      if ( this.challengeProperty.value ) {
-        this.challengeProperty.value.elapsedTimeProperty.value += dt;
-      }
+      this.challengeProperty.value && this.challengeProperty.value.step( dt );
     }
 
     /**

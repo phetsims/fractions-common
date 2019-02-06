@@ -9,7 +9,7 @@ define( require => {
   'use strict';
 
   // modules
-  const Animator = require( 'FRACTIONS_COMMON/building/model/Animator' );
+  const Animator = require( 'FRACTIONS_COMMON/common/model/Animator' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Emitter = require( 'AXON/Emitter' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );

@@ -16,6 +16,7 @@ define( require => {
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Image = require( 'SCENERY/nodes/Image' );
   const Node = require( 'SCENERY/nodes/Node' );
+  const MatchPieceNode = require( 'FRACTIONS_COMMON/matching/view/MatchPieceNode' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
@@ -36,8 +37,8 @@ define( require => {
   // constants
   const PADDING = FractionsCommonConstants.MATCHING_MARGIN;
   const NUM_TARGETS = 6;
-  const TARGET_WIDTH = 125;
-  const TARGET_HEIGHT = 110;
+  const TARGET_WIDTH = MatchPieceNode.DIMENSION.width;
+  const TARGET_HEIGHT = MatchPieceNode.DIMENSION.height;
   const TARGETS_TOP = 385;
 
   class MatchingChallengeNode extends Node {
@@ -79,7 +80,7 @@ define( require => {
         } );
         this.addChild( scaleNode );
 
-        challenge.scaleSpots[ index ].positionProperty.value = scaleNode.centerTop;
+        challenge.scaleSpots[ index ].positionProperty.value = scaleNode.centerTop.plusXY( 0, -20 );
       } );
 
       // Sources
@@ -142,6 +143,14 @@ define( require => {
       this.challenge.scoreProperty.link( this.scoreListener );
       this.challenge.elapsedTimeProperty.link( this.timeListener );
       this.challenge.timeVisibleProperty.link( this.timeVisibleListener );
+
+      // @private {Node}
+      this.pieceLayer = new Node();
+      this.addChild( this.pieceLayer );
+
+      challenge.pieces.forEach( piece => {
+        this.pieceLayer.addChild( new MatchPieceNode( piece ) );
+      } );
     }
 
     /**
@@ -153,6 +162,8 @@ define( require => {
       this.challenge.scoreProperty.unlink( this.scoreListener );
       this.challenge.elapsedTimeProperty.unlink( this.timeListener );
       this.challenge.timeVisibleProperty.unlink( this.timeVisibleListener );
+
+      this.pieceLayer.children.forEach( pieceNode => pieceNode.dispose() );
 
       super.dispose();
     }
