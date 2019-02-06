@@ -11,25 +11,33 @@ define( require => {
 
   // modules
   const AlignBox = require( 'SCENERY/nodes/AlignBox' );
+  const FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Image = require( 'SCENERY/nodes/Image' );
-  const Node = require( 'SCENERY/nodes/Node' );
+  const MatchingChallenge = require( 'FRACTIONS_COMMON/matching/model/MatchingChallenge' );
   const MatchPieceNode = require( 'FRACTIONS_COMMON/matching/view/MatchPieceNode' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   const Text = require( 'SCENERY/nodes/Text' );
+  const TextPushButton = require( 'SUN/buttons/TextPushButton' );
   const Util = require( 'DOT/Util' );
   const VBox = require( 'SCENERY/nodes/VBox' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // strings
+  const checkString = require( 'string!VEGAS/check' );
   const labelLevelString = require( 'string!VEGAS/label.level' );
   const labelScoreString = require( 'string!VEGAS/label.score' );
   const myMatchesString = require( 'string!FRACTIONS_COMMON/myMatches' );
+  const okString = require( 'string!FRACTIONS_COMMON/ok' );
+  const showAnswerString = require( 'string!VEGAS/showAnswer' );
   const timeNumberSecString = require( 'string!FRACTIONS_COMMON/timeNumberSec' );
+  const tryAgainString = require( 'string!VEGAS/tryAgain' );
 
   // images
   const scaleImage = require( 'image!FRACTIONS_COMMON/scale.png' );
@@ -65,9 +73,13 @@ define( require => {
         } );
         this.addChild( targetBackground );
 
+        const CENTER_WEIGHT = 0.5;
+
+        // TODO: add equals signs
+
         const y = targetBackground.centerY;
-        target.spots[ 0 ].positionProperty.value = new Vector2( 0.6 * targetBackground.left + 0.4 + targetBackground.centerX, y );
-        target.spots[ 1 ].positionProperty.value = new Vector2( 0.6 * targetBackground.right + 0.4 + targetBackground.centerX, y );
+        target.spots[ 0 ].positionProperty.value = new Vector2( ( 1 - CENTER_WEIGHT ) * targetBackground.left + CENTER_WEIGHT * targetBackground.centerX, y );
+        target.spots[ 1 ].positionProperty.value = new Vector2( ( 1 - CENTER_WEIGHT ) * targetBackground.right + CENTER_WEIGHT * targetBackground.centerX, y );
         targetBottom = targetBackground.bottom;
       } );
 
@@ -144,6 +156,64 @@ define( require => {
       this.challenge.elapsedTimeProperty.link( this.timeListener );
       this.challenge.timeVisibleProperty.link( this.timeVisibleListener );
 
+      const faceNode = new FaceWithPointsNode( {
+        spacing: 8,
+        pointsAlignment: 'rightCenter',
+        faceDiameter: 120,
+        pointsFont: new PhetFont( { size: 26, weight: 'bold' } ),
+        centerX: layoutBounds.right - 150,
+        centerY: 250
+      } );
+      this.addChild( faceNode );
+
+      const buttonOptions = {
+        font: new PhetFont( { size: 22, weight: 'bold' } ),
+        centerX: faceNode.centerX,
+        centerY: faceNode.bottom + 30,
+        maxTextWidth: 150
+      };
+
+      const checkButton = new TextPushButton( checkString, _.extend( {
+        baseColor: PhetColorScheme.BUTTON_YELLOW,
+        listener: () => challenge.compare()
+      }, buttonOptions ) );
+      this.addChild( checkButton );
+
+      const okButton = new TextPushButton( okString, _.extend( {
+        baseColor: PhetColorScheme.GREEN_COLORBLIND,
+        listener: () => challenge.collect()
+      }, buttonOptions ) );
+      this.addChild( okButton );
+
+      const tryAgainButton = new TextPushButton( tryAgainString, _.extend( {
+        baseColor: PhetColorScheme.RED_COLORBLIND,
+        listener: () => challenge.tryAgain()
+      }, buttonOptions ) );
+      this.addChild( tryAgainButton );
+
+      const showAnswerButton = new TextPushButton( showAnswerString, _.extend( {
+        baseColor: PhetColorScheme.RED_COLORBLIND,
+        listener: () => challenge.showAnswer()
+      }, buttonOptions ) );
+      this.addChild( showAnswerButton );
+
+      // @private {function}
+      this.stateListener = state => {
+        checkButton.visible = state === MatchingChallenge.State.COMPARISON;
+        okButton.visible = state === MatchingChallenge.State.MATCHED;
+        tryAgainButton.visible = state === MatchingChallenge.State.TRY_AGAIN;
+        showAnswerButton.visible = state === MatchingChallenge.State.SHOW_ANSWER;
+
+        faceNode.visible = state === MatchingChallenge.State.MATCHED;
+      };
+      this.challenge.stateProperty.link( this.stateListener );
+
+      // @private {function}
+      this.lastScoreGainListener = lastScoreGain => {
+        faceNode.setPoints( lastScoreGain );
+      };
+      this.challenge.lastScoreGainProperty.link( this.lastScoreGainListener );
+
       // @private {Node}
       this.pieceLayer = new Node();
       this.addChild( this.pieceLayer );
@@ -162,6 +232,7 @@ define( require => {
       this.challenge.scoreProperty.unlink( this.scoreListener );
       this.challenge.elapsedTimeProperty.unlink( this.timeListener );
       this.challenge.timeVisibleProperty.unlink( this.timeVisibleListener );
+      this.challenge.stateProperty.unlink( this.stateListener );
 
       this.pieceLayer.children.forEach( pieceNode => pieceNode.dispose() );
 

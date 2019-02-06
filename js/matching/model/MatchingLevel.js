@@ -51,6 +51,8 @@ define( require => {
 
       // @public {Property.<number>}
       this.highScoreProperty = new NumberProperty( 0 );
+
+      // TODO: Update high score property when finished
     }
 
     /**
