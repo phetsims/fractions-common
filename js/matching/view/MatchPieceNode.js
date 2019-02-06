@@ -36,7 +36,7 @@ define( require => {
           spacing: 10,
           children: piece.filledPartitions.map( filledPartition => new FilledPartitionNode( filledPartition ) ),
           center: Vector2.ZERO,
-          scale: 1.2
+          scale: piece.hasGreaterThanOne ? 0.6 : 1.2
         } ) );
       }
       else {
@@ -64,6 +64,15 @@ define( require => {
 
       this.piece.positionProperty.link( this.positionListener );
       this.piece.scaleProperty.link( this.scaleListener );
+
+      // @private {function}
+      this.spotListener = spot => {
+        if ( spot && spot.isTarget ) {
+          this.pickable = false;
+        }
+      };
+
+      this.piece.spotProperty.link( this.spotListener );
 
       this.mouseArea = this.touchArea = new Bounds2(
         -MatchPieceNode.DIMENSION.width / 2,
@@ -93,6 +102,7 @@ define( require => {
     dispose() {
       this.piece.positionProperty.unlink( this.positionListener );
       this.piece.scaleProperty.unlink( this.scaleListener );
+      this.piece.spotProperty.unlink( this.spotListener );
 
       this.dragListener.dispose();
 

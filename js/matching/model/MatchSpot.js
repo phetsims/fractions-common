@@ -20,7 +20,8 @@ define( require => {
     constructor( options ) {
 
       options = _.extend( {
-        scale: 1
+        scale: 1,
+        isTarget: false
       }, options );
 
       // @public {Property.<Vector2>} - To be updated by the view when its location changes (usually just initially)
@@ -28,6 +29,9 @@ define( require => {
 
       // @public {number}
       this.scale = options.scale;
+
+      // @public {boolean}
+      this.isTarget = options.isTarget;
 
       // @public {Property.<MatchingPiece|null>}
       this.pieceProperty = new Property( null );

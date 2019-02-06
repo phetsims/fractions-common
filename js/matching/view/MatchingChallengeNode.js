@@ -11,6 +11,7 @@ define( require => {
 
   // modules
   const AlignBox = require( 'SCENERY/nodes/AlignBox' );
+  const Emitter = require( 'AXON/Emitter' );
   const FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
@@ -18,8 +19,8 @@ define( require => {
   const Image = require( 'SCENERY/nodes/Image' );
   const MatchingChallenge = require( 'FRACTIONS_COMMON/matching/model/MatchingChallenge' );
   const MatchPieceNode = require( 'FRACTIONS_COMMON/matching/view/MatchPieceNode' );
+  const MathSymbols = require( 'SCENERY_PHET/MathSymbols' );
   const Node = require( 'SCENERY/nodes/Node' );
-  const PhetColorScheme = require( 'SCENERY_PHET/PhetColorScheme' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
@@ -60,6 +61,9 @@ define( require => {
       // @private {MatchingChallenge}
       this.challenge = challenge;
 
+      // @private {Emitter}
+      this.disposeEmitter = new Emitter(); // TODO: un-property things
+
       const targetWidth = ( layoutBounds.width - PADDING * ( NUM_TARGETS + 1 ) ) / NUM_TARGETS;
       let targetBottom;
 
@@ -73,9 +77,21 @@ define( require => {
         } );
         this.addChild( targetBackground );
 
-        const CENTER_WEIGHT = 0.5;
+        // TODO: better "centering" of equals signs?
+        const equalsSign = new Text( MathSymbols.EQUAL_TO, {
+          font: new PhetFont( { size: 26 } ),
+          center: targetBackground.center
+        } );
+        this.addChild( equalsSign );
+        const targetListener = filled => {
+          equalsSign.visible = filled;
+        };
+        target.isFilledProperty.link( targetListener );
+        this.disposeEmitter.addListener( () => {
+          target.isFilledProperty.unlink( targetListener );
+        } );
 
-        // TODO: add equals signs
+        const CENTER_WEIGHT = 0.5;
 
         const y = targetBackground.centerY;
         target.spots[ 0 ].positionProperty.value = new Vector2( ( 1 - CENTER_WEIGHT ) * targetBackground.left + CENTER_WEIGHT * targetBackground.centerX, y );
@@ -155,6 +171,11 @@ define( require => {
       this.challenge.scoreProperty.link( this.scoreListener );
       this.challenge.elapsedTimeProperty.link( this.timeListener );
       this.challenge.timeVisibleProperty.link( this.timeVisibleListener );
+      this.disposeEmitter.addListener( () => {
+        this.challenge.scoreProperty.unlink( this.scoreListener );
+        this.challenge.elapsedTimeProperty.unlink( this.timeListener );
+        this.challenge.timeVisibleProperty.unlink( this.timeVisibleListener );
+      } );
 
       const faceNode = new FaceWithPointsNode( {
         spacing: 8,
@@ -174,28 +195,32 @@ define( require => {
       };
 
       const checkButton = new TextPushButton( checkString, _.extend( {
-        baseColor: PhetColorScheme.BUTTON_YELLOW,
+        baseColor: FractionsCommonColorProfile.matchingCheckButtonProperty,
         listener: () => challenge.compare()
       }, buttonOptions ) );
       this.addChild( checkButton );
 
       const okButton = new TextPushButton( okString, _.extend( {
-        baseColor: PhetColorScheme.GREEN_COLORBLIND,
+        baseColor: FractionsCommonColorProfile.matchingOkButtonProperty,
         listener: () => challenge.collect()
       }, buttonOptions ) );
       this.addChild( okButton );
 
       const tryAgainButton = new TextPushButton( tryAgainString, _.extend( {
-        baseColor: PhetColorScheme.RED_COLORBLIND,
+        baseColor: FractionsCommonColorProfile.matchingTryAgainButtonProperty,
         listener: () => challenge.tryAgain()
       }, buttonOptions ) );
       this.addChild( tryAgainButton );
 
       const showAnswerButton = new TextPushButton( showAnswerString, _.extend( {
-        baseColor: PhetColorScheme.RED_COLORBLIND,
+        baseColor: FractionsCommonColorProfile.matchingShowAnswerButtonProperty,
         listener: () => challenge.showAnswer()
       }, buttonOptions ) );
       this.addChild( showAnswerButton );
+
+      // @private {Node}
+      this.pieceLayer = new Node();
+      this.addChild( this.pieceLayer );
 
       // @private {function}
       this.stateListener = state => {
@@ -205,8 +230,13 @@ define( require => {
         showAnswerButton.visible = state === MatchingChallenge.State.SHOW_ANSWER;
 
         faceNode.visible = state === MatchingChallenge.State.MATCHED;
+
+        this.pieceLayer.pickable = ( state === MatchingChallenge.State.SHOW_ANSWER || state === MatchingChallenge.State.MATCHED ) ? false : null;
       };
       this.challenge.stateProperty.link( this.stateListener );
+      this.disposeEmitter.addListener( () => {
+        this.challenge.stateProperty.unlink( this.stateListener );
+      } );
 
       // @private {function}
       this.lastScoreGainListener = lastScoreGain => {
@@ -214,12 +244,11 @@ define( require => {
       };
       this.challenge.lastScoreGainProperty.link( this.lastScoreGainListener );
 
-      // @private {Node}
-      this.pieceLayer = new Node();
-      this.addChild( this.pieceLayer );
-
       challenge.pieces.forEach( piece => {
         this.pieceLayer.addChild( new MatchPieceNode( piece ) );
+      } );
+      this.disposeEmitter.addListener( () => {
+        this.pieceLayer.children.forEach( pieceNode => pieceNode.dispose() );
       } );
     }
 
@@ -229,12 +258,7 @@ define( require => {
      * @override
      */
     dispose() {
-      this.challenge.scoreProperty.unlink( this.scoreListener );
-      this.challenge.elapsedTimeProperty.unlink( this.timeListener );
-      this.challenge.timeVisibleProperty.unlink( this.timeVisibleListener );
-      this.challenge.stateProperty.unlink( this.stateListener );
-
-      this.pieceLayer.children.forEach( pieceNode => pieceNode.dispose() );
+      this.disposeEmitter.emit();
 
       super.dispose();
     }

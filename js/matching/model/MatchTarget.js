@@ -21,7 +21,8 @@ define( require => {
 
       // @public {Array.<MatchSpot>}
       this.spots = _.range( 0, 2 ).map( () => new MatchSpot( {
-        scale: 0.5
+        scale: 0.5,
+        isTarget: true
       } ) );
     }
   }

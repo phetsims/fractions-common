@@ -109,7 +109,12 @@ define( require => {
     matchingNavbarIconBackground: { default: Color.BLACK },
     matchingTargetBackground: { default: new Color( '#C0C0C0' ) },
     matchingSourceBackground: { default: Color.WHITE },
-    matchingSourceBorder: { default: new Color( '#C0C0C0' ) }
+    matchingSourceBorder: { default: new Color( '#C0C0C0' ) },
+
+    matchingCheckButton: { default: new Color( '#FFD63F' ) },
+    matchingOkButton: { default: new Color( '#44FF44' ) },
+    matchingTryAgainButton: { default: new Color( '#FF7C3B' ) },
+    matchingShowAnswerButton: { default: new Color( '#FF7C3B' ) }
   } );
 
   fractionsCommon.register( 'FractionsCommonColorProfile', FractionsCommonColorProfile );

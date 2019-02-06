@@ -113,11 +113,14 @@ define( require => {
         } );
       } );
 
+      // TODO: replacement drag to scale replaces one
+
       // @public {Array.<MatchTarget>}
       this.targets = _.range( 0, NUM_PAIRS ).map( () => new MatchTarget() );
 
       const pieces = [];
       const fractions = phet.joist.random.shuffle( config.fractions ).slice( 0, NUM_PAIRS );
+      const hasGreaterThanOne = _.some( fractions, fraction => Fraction.ONE.isLessThan( fraction ) );
 
       fractions.forEach( ( fraction, index ) => {
         const scaleFactor = phet.joist.random.sample( config.numericScaleFactors );
@@ -131,7 +134,7 @@ define( require => {
           const color = PIECE_COLORS[ ( index + subIndex ) % 3 ];
 
           const filledPartitions = shapePartition ? FilledPartition.fill( shapePartition, fraction, color, fillType ) : null;
-          const piece = new MatchPiece( filledPartitions ? fraction : scaledFraction, filledPartitions, config.hasMixedNumbers, {
+          const piece = new MatchPiece( filledPartitions ? fraction : scaledFraction, filledPartitions, config.hasMixedNumbers, hasGreaterThanOne, {
             grab: () => {
               if ( piece.spotProperty.value ) {
                 piece.spotProperty.value.pieceProperty.value = null;
@@ -200,17 +203,20 @@ define( require => {
       leftPiece.spotProperty.value = target.spots[ 0 ];
       rightPiece.spotProperty.value = target.spots[ 1 ];
 
+      // TODO: cleanup
       leftPiece.animator.animateTo( {
         position: target.spots[ 0 ].positionProperty.value,
-        scale: 0.5
+        scale: leftPiece.filledPartitions ? 0.5 : 0.7
       } );
       rightPiece.animator.animateTo( {
         position: target.spots[ 1 ].positionProperty.value,
-        scale: 0.5
+        scale: rightPiece.filledPartitions ? 0.5 : 0.7
       } );
 
       target.isFilledProperty.value = true;
       this.wasLastAttemptFailureProperty.value = false;
+
+      // TODO: record high score, do the ending dialog, etc.
     }
 
     compare() {

@@ -21,9 +21,10 @@ define( require => {
      * @param {Fraction} fraction
      * @param {Array.<FilledPartition>|null} filledPartitions - If null, this should be displayed as a numeric fraction
      * @param {boolean} hasMixedNumbers
+     * @param {boolean} hasGreaterThanOne
      * @param {Object} [options]
      */
-    constructor( fraction, filledPartitions, hasMixedNumbers, options ) {
+    constructor( fraction, filledPartitions, hasMixedNumbers, hasGreaterThanOne, options ) {
 
       options = _.extend( {
         // {function} - Callbacks for when the piece is grabbed and/or dropped
@@ -39,6 +40,7 @@ define( require => {
 
       // @public {boolean}
       this.hasMixedNumbers = hasMixedNumbers;
+      this.hasGreaterThanOne = hasGreaterThanOne;
 
       // @public {function}
       this.grab = options.grab;
