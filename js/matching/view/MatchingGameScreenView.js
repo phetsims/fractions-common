@@ -199,7 +199,17 @@ define( require => {
         lastChallengeNode = null;
         let transition;
         if ( challenge ) {
-          const challengeNode = new MatchingChallengeNode( challenge, this.layoutBounds );
+          const challengeNode = new MatchingChallengeNode( challenge, this.layoutBounds, {
+            onContinue: () => {
+              const level = model.levelProperty.value;
+              model.levelProperty.value = null;
+
+              // Start a new challenge for the level
+              if ( level ) {
+                level.refresh();
+              }
+            }
+          } );
           lastChallengeNode = challengeNode;
 
           // Assign each challenge node with a wrapper reference, so we can easily dispose it.

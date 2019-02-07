@@ -17,6 +17,7 @@ define( require => {
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Image = require( 'SCENERY/nodes/Image' );
+  const LevelCompletedNode = require( 'VEGAS/LevelCompletedNode' );
   const MatchingChallenge = require( 'FRACTIONS_COMMON/matching/model/MatchingChallenge' );
   const MatchPieceNode = require( 'FRACTIONS_COMMON/matching/view/MatchPieceNode' );
   const MathSymbols = require( 'SCENERY_PHET/MathSymbols' );
@@ -54,9 +55,15 @@ define( require => {
     /**
      * @param {MatchingChallenge} challenge
      * @param {Bounds2} layoutBounds
+     * @param {Object} [options]
      */
-    constructor( challenge, layoutBounds ) {
+    constructor( challenge, layoutBounds, options ) {
       super();
+
+      options = _.extend( {
+        // {function} - Called when the "continue" button is pressed on the level-complete node
+        onContinue: () => {}
+      }, options );
 
       // @private {MatchingChallenge}
       this.challenge = challenge;
@@ -249,6 +256,35 @@ define( require => {
       } );
       this.disposeEmitter.addListener( () => {
         this.pieceLayer.children.forEach( pieceNode => pieceNode.dispose() );
+      } );
+
+      const completedListener = () => {
+        const time = Util.toFixed( challenge.elapsedTimeProperty.value, 0 );
+        const lastBestTime = Util.toFixed( challenge.bestElapsedTimeProperty.value, 0 );
+        const levelCompletedNode = new LevelCompletedNode(
+          challenge.levelNumber,
+          challenge.scoreProperty.value,
+          12,
+          3,
+          challenge.timeVisibleProperty.value,
+          time,
+          lastBestTime,
+          time < lastBestTime,
+          options.onContinue, {
+            center: layoutBounds.center,
+            contentMaxWidth: 600
+          } );
+        this.addChild( levelCompletedNode );
+        this.disposeEmitter.addListener( () => {
+          levelCompletedNode.dispose();
+        } );
+
+        // TODO: cheer?
+      };
+
+      this.challenge.completedEmitter.addListener( completedListener );
+      this.disposeEmitter.addListener( () => {
+        this.challenge.completedEmitter.removeListener( completedListener );
       } );
     }
 

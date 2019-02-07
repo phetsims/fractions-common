@@ -44,6 +44,10 @@ define( require => {
       // @public {Property.<MatchingChallenge>}
       this.challengeProperty = new Property( this.nextChallenge() );
 
+      // Clear out the initial value so that we don't leak memory (since they retain a reference to the previous
+      // challenge).
+      this.challengeProperty._initialValue = null;
+
       // @public {Property.<number>}
       this.scoreProperty = new DynamicProperty( this.challengeProperty, {
         derive: 'scoreProperty'
@@ -52,7 +56,15 @@ define( require => {
       // @public {Property.<number>}
       this.highScoreProperty = new NumberProperty( 0 );
 
-      // TODO: Update high score property when finished
+      // @private {function}
+      this.completedListener = () => {
+        this.highScoreProperty.value = Math.max( this.highScoreProperty.value, this.challengeProperty.value.scoreProperty.value );
+      };
+
+      this.challengeProperty.link( ( newChallenge, oldChallenge ) => {
+        oldChallenge && oldChallenge.completedEmitter.removeListener( this.completedListener );
+        newChallenge.completedEmitter.addListener( this.completedListener );
+      } );
     }
 
     /**

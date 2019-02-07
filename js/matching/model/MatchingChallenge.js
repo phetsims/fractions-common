@@ -11,6 +11,7 @@ define( require => {
 
   // modules
   const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const Emitter = require( 'AXON/Emitter' );
   const Enumeration = require( 'PHET_CORE/Enumeration' );
   const FilledPartition = require( 'FRACTIONS_COMMON/game/model/FilledPartition' );
   const FillType = require( 'FRACTIONS_COMMON/game/model/FillType' );
@@ -96,6 +97,10 @@ define( require => {
 
       // @public {Property.<number>}
       this.elapsedTimeProperty = new NumberProperty( 0 );
+      this.bestElapsedTimeProperty = new NumberProperty( Number.POSITIVE_INFINITY );
+
+      // @public {Emitter} - Fires when the challenge is fully completed
+      this.completedEmitter = new Emitter();
 
       // @public {MatchingChallenge} - Set externally if, when going from this challenge to the specified one, there
       // should instead be a "refresh" animation instead of "next" challenge.
@@ -216,7 +221,11 @@ define( require => {
       target.isFilledProperty.value = true;
       this.wasLastAttemptFailureProperty.value = false;
 
-      // TODO: record high score, do the ending dialog, etc.
+      if ( _.every( this.targets, target => target.isFilledProperty.value ) ) {
+        this.completedEmitter.emit();
+
+        this.bestElapsedTimeProperty.value = Math.min( this.bestElapsedTimeProperty.value, this.elapsedTimeProperty.value );
+      }
     }
 
     compare() {
@@ -275,6 +284,32 @@ define( require => {
       this.stateProperty.value = MatchingChallenge.State.MATCHED;
     }
 
+    cheat() {
+      // Only do things if both scales are empty, and there is one unfilled target
+      if ( _.every( this.scaleSpots, spot => spot.pieceProperty.value === null ) &&
+           _.some( this.targets, target => !target.isFilledProperty.value ) ) {
+        const firstPiece = _.find( this.pieces, piece => _.includes( this.sourceSpots, piece.spotProperty.value ) );
+        const secondPiece = _.find( this.pieces, piece => {
+          return piece !== firstPiece &&
+                 _.includes( this.sourceSpots, piece.spotProperty.value ) &&
+                 piece.fraction.equals( firstPiece.fraction );
+        } );
+
+        this.attach( firstPiece, this.scaleSpots[ 0 ] );
+        this.attach( secondPiece, this.scaleSpots[ 1 ] );
+      }
+    }
+
+    attach( piece, spot, scale = 1 ) {
+      piece.spotProperty.value = spot;
+      spot.pieceProperty.value = piece;
+
+      piece.animator.animateTo( {
+        position: spot.positionProperty.value,
+        scale
+      } );
+    }
+
     /**
      * Steps the model forward in time.
      * @public
@@ -285,10 +320,6 @@ define( require => {
       this.elapsedTimeProperty.value += dt;
 
       this.pieces.forEach( piece => piece.step( dt ) );
-    }
-
-    cheat() {
-      // TODO
     }
   }
 
