@@ -12,6 +12,7 @@ define( require => {
   // modules
   const AlignBox = require( 'SCENERY/nodes/AlignBox' );
   const Emitter = require( 'AXON/Emitter' );
+  const FaceNode = require( 'SCENERY_PHET/FaceNode' );
   const FaceWithPointsNode = require( 'SCENERY_PHET/FaceWithPointsNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
@@ -24,6 +25,9 @@ define( require => {
   const Node = require( 'SCENERY/nodes/Node' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const RewardNode = require( 'VEGAS/RewardNode' );
+  const Sound = require( 'VIBE/Sound' );
+  const StarNode = require( 'SCENERY_PHET/StarNode' );
   const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   const Text = require( 'SCENERY/nodes/Text' );
   const TextPushButton = require( 'SUN/buttons/TextPushButton' );
@@ -44,12 +48,16 @@ define( require => {
   // images
   const scaleImage = require( 'image!FRACTIONS_COMMON/scale.png' );
 
+  // sounds
+  const cheerAudio = require( 'sound!VEGAS/cheer.mp3' );
+
   // constants
   const PADDING = FractionsCommonConstants.MATCHING_MARGIN;
   const NUM_TARGETS = 6;
   const TARGET_WIDTH = MatchPieceNode.DIMENSION.width;
   const TARGET_HEIGHT = MatchPieceNode.DIMENSION.height;
   const TARGETS_TOP = 385;
+  const cheerSound = new Sound( cheerAudio );
 
   class MatchingChallengeNode extends Node {
     /**
@@ -70,6 +78,9 @@ define( require => {
 
       // @private {Emitter}
       this.disposeEmitter = new Emitter(); // TODO: un-property things
+
+      // @private {RewardNode|null}
+      this.rewardNode = null;
 
       const targetWidth = ( layoutBounds.width - PADDING * ( NUM_TARGETS + 1 ) ) / NUM_TARGETS;
       let targetBottom;
@@ -259,6 +270,22 @@ define( require => {
       } );
 
       const completedListener = () => {
+        if ( challenge.scoreProperty.value === 12 ) {
+          cheerSound.play();
+
+          this.rewardNode = new RewardNode( {
+            pickable: false,
+            nodes: [
+              ..._.times( 8, () => new StarNode() ),
+              ..._.times( 8, () => new FaceNode( 40, { headStroke: 'black', headLineWidth: 1.5 } ) ),
+              ...RewardNode.createRandomNodes( challenge.pieces.map( piece => {
+                return new MatchPieceNode( piece.copy() );
+              } ), 100 )
+            ]
+          } );
+          this.addChild( this.rewardNode );
+        }
+
         const time = Util.toFixed( challenge.elapsedTimeProperty.value, 0 );
         const lastBestTime = Util.toFixed( challenge.bestElapsedTimeProperty.value, 0 );
         const levelCompletedNode = new LevelCompletedNode(
@@ -278,14 +305,22 @@ define( require => {
         this.disposeEmitter.addListener( () => {
           levelCompletedNode.dispose();
         } );
-
-        // TODO: cheer?
       };
 
       this.challenge.completedEmitter.addListener( completedListener );
       this.disposeEmitter.addListener( () => {
         this.challenge.completedEmitter.removeListener( completedListener );
       } );
+    }
+
+    /**
+     * Steps the view forward in time.
+     * @public
+     *
+     * @param {number} dt
+     */
+    step( dt ) {
+      this.rewardNode && this.rewardNode.step( dt );
     }
 
     /**

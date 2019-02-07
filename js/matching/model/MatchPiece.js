@@ -66,6 +66,11 @@ define( require => {
       } );
     }
 
+    // TODO: doc
+    copy() {
+      return new MatchPiece( this.fraction, this.filledPartitions, this.hasMixedNumbers, this.hasGreaterThanOne );
+    }
+
     /**
      * Steps forward in time.
      * @public

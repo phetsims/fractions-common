@@ -188,15 +188,16 @@ define( require => {
         ]
       } );
 
-      let lastChallengeNode = null;
+      // @private {MatchingChallengeNode|null}
+      this.lastChallengeNode = null;
       model.challengeProperty.lazyLink( ( challenge, oldChallenge ) => {
-        const oldChallengeNode = lastChallengeNode;
+        const oldChallengeNode = this.lastChallengeNode;
 
         if ( oldChallengeNode ) {
           oldChallengeNode.interruptSubtreeInput();
         }
 
-        lastChallengeNode = null;
+        this.lastChallengeNode = null;
         let transition;
         if ( challenge ) {
           const challengeNode = new MatchingChallengeNode( challenge, this.layoutBounds, {
@@ -210,7 +211,7 @@ define( require => {
               }
             }
           } );
-          lastChallengeNode = challengeNode;
+          this.lastChallengeNode = challengeNode;
 
           // Assign each challenge node with a wrapper reference, so we can easily dispose it.
           challengeNode.wrapper = new Node( {
@@ -254,6 +255,8 @@ define( require => {
      */
     step( dt ) {
       this.transitionNode.step( dt );
+
+      this.lastChallengeNode && this.lastChallengeNode.step( dt );
     }
 
     /**
