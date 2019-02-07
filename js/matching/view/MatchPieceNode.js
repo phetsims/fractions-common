@@ -111,7 +111,7 @@ define( require => {
   }
 
   // @public {Dimension2}
-  MatchPieceNode.DIMENSION = new Dimension2( 145, 110 );
+  MatchPieceNode.DIMENSION = new Dimension2( 145, 120 );
 
   return fractionsCommon.register( 'MatchPieceNode', MatchPieceNode );
 } );

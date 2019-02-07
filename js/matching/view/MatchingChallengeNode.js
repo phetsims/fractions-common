@@ -56,7 +56,7 @@ define( require => {
   const NUM_TARGETS = 6;
   const TARGET_WIDTH = MatchPieceNode.DIMENSION.width;
   const TARGET_HEIGHT = MatchPieceNode.DIMENSION.height;
-  const TARGETS_TOP = 385;
+  const TARGETS_TOP = 365;
   const cheerSound = new Sound( cheerAudio );
 
   class MatchingChallengeNode extends Node {
