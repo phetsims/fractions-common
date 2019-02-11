@@ -57,7 +57,7 @@ define( require => {
       } );
 
       // @private {boolean}
-      this.disposed = false;
+      this.isDisposed = false;
     }
 
     /**
@@ -114,9 +114,9 @@ define( require => {
      * @public
      */
     dispose() {
-      assert && assert( !this.disposed );
+      assert && assert( !this.isDisposed );
 
-      this.disposed = true;
+      this.isDisposed = true;
     }
   }
 

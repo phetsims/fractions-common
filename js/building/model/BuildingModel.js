@@ -582,7 +582,7 @@ define( require => {
       this.selectedGroupProperty.reset();
       this.shapeGroups.reset();
       this.numberGroups.forEach( numberGroup => {
-        if ( !numberGroup.disposed ) {
+        if ( !numberGroup.isDisposed ) {
           numberGroup.dispose();
         }
       } );
