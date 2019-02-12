@@ -1,7 +1,7 @@
 {
   "name": "fractions-common",
   "version": "1.0.0-dev.0",
-  "license": "GPL-3.0",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/phetsims/fractions-common.git"
