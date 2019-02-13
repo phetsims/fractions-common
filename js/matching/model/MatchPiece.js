@@ -72,6 +72,25 @@ define( require => {
     }
 
     /**
+     * Moves this piece to the given spot (with animation).
+     * @public
+     *
+     * @param {MatchSpot} spot
+     * @param {Object} [options]
+     */
+    moveToSpot( spot, options ) {
+      spot.attachPiece( this );
+
+      options = _.extend( {
+        position: spot.positionProperty.value,
+        scale: 1,
+        animationInvalidationProperty: this.spotProperty
+      }, options );
+
+      this.animator.animateTo( options );
+    }
+
+    /**
      * Steps forward in time.
      * @public
      *

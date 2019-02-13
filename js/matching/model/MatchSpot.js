@@ -43,6 +43,28 @@ define( require => {
         }
       } );
     }
+
+    /**
+     * Attaches the given piece to this spot.
+     * @public
+     *
+     * @param {MatchPiece} piece
+     */
+    attachPiece( piece ) {
+      this.pieceProperty.value = piece;
+      piece.spotProperty.value = this;
+    }
+
+    /**
+     * Detaches the given piece from this spot.
+     * @public
+     *
+     * @param {MatchPiece} piece
+     */
+    detachPiece( piece ) {
+      this.pieceProperty.value = null;
+      piece.spotProperty.value = null;
+    }
   }
 
   return fractionsCommon.register( 'MatchSpot', MatchSpot );

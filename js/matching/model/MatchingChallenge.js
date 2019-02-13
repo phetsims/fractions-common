@@ -147,18 +147,21 @@ define( require => {
               }
             },
             drop: () => {
+              const distanceFunction = spot => spot.positionProperty.value.distance( piece.positionProperty.value );
               const openSpots = [ ...this.sourceSpots, ...this.scaleSpots ].filter( spot => spot.pieceProperty.value === null );
-              const closestSpot = _.minBy( openSpots, spot => spot.positionProperty.value.distance( piece.positionProperty.value ) );
-              assert && assert( closestSpot );
+              const closestSpot = _.minBy( [ ...this.sourceSpots, ...this.scaleSpots ], distanceFunction );
+              const closestOpenSpot = _.minBy( openSpots, distanceFunction );
+              assert && assert( closestOpenSpot );
 
-              closestSpot.pieceProperty.value = piece;
-              piece.spotProperty.value = closestSpot;
-
-              piece.animator.animateTo( {
-                position: closestSpot.positionProperty.value,
-                scale: 1,
-                animationInvalidationProperty: piece.spotProperty
-              } );
+              // If the user drops the piece on the scale, it will replace any existing piece
+              if ( _.includes( this.scaleSpots, closestSpot ) && closestSpot.pieceProperty.value ) {
+                const existingPiece = closestSpot.pieceProperty.value;
+                existingPiece.moveToSpot( closestOpenSpot );
+                piece.moveToSpot( closestSpot );
+              }
+              else {
+                piece.moveToSpot( closestOpenSpot );
+              }
             }
           } );
           pieces.push( piece );
@@ -203,18 +206,11 @@ define( require => {
       this.scaleSpots.forEach( scaleSpot => {
         scaleSpot.pieceProperty.value = null;
       } );
-      target.spots[ 0 ].pieceProperty.value = leftPiece;
-      target.spots[ 1 ].pieceProperty.value = rightPiece;
-      leftPiece.spotProperty.value = target.spots[ 0 ];
-      rightPiece.spotProperty.value = target.spots[ 1 ];
 
-      // TODO: cleanup
-      leftPiece.animator.animateTo( {
-        position: target.spots[ 0 ].positionProperty.value,
+      leftPiece.moveToSpot( target.spots[ 0 ], {
         scale: leftPiece.filledPartitions ? 0.5 : 0.7
       } );
-      rightPiece.animator.animateTo( {
-        position: target.spots[ 1 ].positionProperty.value,
+      rightPiece.moveToSpot( target.spots[ 1 ], {
         scale: rightPiece.filledPartitions ? 0.5 : 0.7
       } );
 
@@ -267,19 +263,8 @@ define( require => {
       } );
       assert && assert( matchedPiece );
 
-      // TODO: check if animations are not fast enough
-      changingSpot.pieceProperty.value = matchedPiece;
-      discardPiece.spotProperty.value = matchedPiece.spotProperty.value;
-      matchedPiece.spotProperty.value = changingSpot;
-
-      discardPiece.animator.animateTo( {
-        position: discardPiece.spotProperty.value.positionProperty.value,
-        scale: 1
-      } );
-      matchedPiece.animator.animateTo( {
-        position: changingSpot.positionProperty.value,
-        scale: 1
-      } );
+      discardPiece.moveToSpot( matchedPiece.spotProperty.value );
+      matchedPiece.moveToSpot( changingSpot );
 
       this.stateProperty.value = MatchingChallenge.State.MATCHED;
     }
@@ -295,19 +280,9 @@ define( require => {
                  piece.fraction.equals( firstPiece.fraction );
         } );
 
-        this.attach( firstPiece, this.scaleSpots[ 0 ] );
-        this.attach( secondPiece, this.scaleSpots[ 1 ] );
+        firstPiece.moveToSpot( this.scaleSpots[ 0 ] );
+        secondPiece.moveToSpot( this.scaleSpots[ 1 ] );
       }
-    }
-
-    attach( piece, spot, scale = 1 ) {
-      piece.spotProperty.value = spot;
-      spot.pieceProperty.value = piece;
-
-      piece.animator.animateTo( {
-        position: spot.positionProperty.value,
-        scale
-      } );
     }
 
     /**
