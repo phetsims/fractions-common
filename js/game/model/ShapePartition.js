@@ -129,7 +129,7 @@ define( require => {
           offset = Math.PI / quantity;
         }
         else {
-          offset = -bottomPoint.plus( nextToBottomPoint ).angle() + Math.PI / 2;
+          offset = -bottomPoint.plus( nextToBottomPoint ).angle + Math.PI / 2;
         }
       }
 
