@@ -64,16 +64,16 @@ define( require => {
       const mainRectangle = new Rectangle( {
         rectX: -rectWidth / 2,
         rectY: -rectHeight / 2,
-        rectWidth,
-        rectHeight,
+        rectWidth: rectWidth,
+        rectHeight: rectHeight,
         fill: options.colorOverride ? options.colorOverride : defaultColor,
         stroke: 'black'
       } );
 
       const shadowRectangle = new Rectangle( {
         center: mainRectangle.center.plusScalar( FractionsCommonConstants.INTRO_DROP_SHADOW_OFFSET ),
-        rectWidth,
-        rectHeight,
+        rectWidth: rectWidth,
+        rectHeight: rectHeight,
         fill: FractionsCommonColorProfile.introShapeShadowProperty
       } );
 

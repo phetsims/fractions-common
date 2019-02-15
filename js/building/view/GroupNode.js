@@ -118,7 +118,7 @@ define( require => {
       // @public {DragListener}
       this.dragListener = new DragListener( {
         targetNode: this,
-        dragBoundsProperty,
+        dragBoundsProperty: dragBoundsProperty,
         transform: this.modelViewTransform,
         locationProperty: this.group.positionProperty,
         start: ( event, listener ) => {

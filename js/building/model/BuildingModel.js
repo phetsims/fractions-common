@@ -429,7 +429,7 @@ define( require => {
         returnPieceListener: () => {
           this.removeLastPieceFromShapeGroup( shapeGroup );
         },
-        maxContainers
+        maxContainers: maxContainers
       } );
       this.dragGroupFromStack( shapeGroup );
       return shapeGroup;

@@ -277,7 +277,7 @@ define( require => {
       const positionProperty = target.positionProperty;
       group.animator.animateTo( {
         position: positionProperty.value,
-        scale,
+        scale: scale,
         animationInvalidationProperty: positionProperty,
         endAnimationCallback: () => {
           groupArray.remove( group );
@@ -554,7 +554,7 @@ define( require => {
         return compactGroups.map( compactGroup => {
           const containers = compactGroup.map( UnitCollection.fractionsToCollection );
           return {
-            containers,
+            containers: containers,
             total: _.reduce( containers, ( a, b ) => a.plus( b ), new UnitCollection( [] ) )
           };
         } );

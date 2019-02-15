@@ -32,18 +32,18 @@ define( require => {
       super( model, _.extend( {
         createContainerNode( container, options ) {
           return new RectangularContainerNode( container, _.extend( {
-            rectangularOrientation
+            rectangularOrientation: rectangularOrientation
           }, options ) );
         },
         createPieceNode( piece, finishedAnimatingCallback, droppedCallback ) {
           return new RectangularPieceNode( piece, finishedAnimatingCallback, droppedCallback, {
-            rectangularOrientation
+            rectangularOrientation: rectangularOrientation
           } );
         },
         createCellNode( denominator, index, options ) {
           return new RectangularNode( denominator, {
             dropShadow: false,
-            rectangularOrientation
+            rectangularOrientation: rectangularOrientation
           } );
         },
 
@@ -74,7 +74,7 @@ define( require => {
       iconContainer.cells.get( 0 ).fill();
 
       return new RectangularContainerNode( iconContainer, {
-        rectangularOrientation,
+        rectangularOrientation: rectangularOrientation,
         scale: 0.32,
         colorOverride: useEqualityLabColor ? FractionsCommonColorProfile.equalityLabColorProperty : null
       } );

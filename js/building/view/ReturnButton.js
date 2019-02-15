@@ -40,7 +40,7 @@ define( require => {
         xMargin: 5,
         yMargin: 5,
         baseColor: FractionsCommonColorProfile.undoButtonProperty,
-        listener
+        listener: listener
       }, options );
 
       super( options );

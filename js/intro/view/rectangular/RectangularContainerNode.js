@@ -48,7 +48,7 @@ define( require => {
       // @private {Rectangle}
       this.backgroundRectangle = new Rectangle( {
         fill: FractionsCommonColorProfile.introContainerBackgroundProperty,
-        rectBounds
+        rectBounds: rectBounds
       } );
       this.addChild( this.backgroundRectangle );
 

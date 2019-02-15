@@ -204,21 +204,21 @@ define( require => {
 
           if ( representation === IntroRepresentation.CIRCLE ) {
             containerNodes = containers.map( container => new CircularContainerNode( container, {
-              colorOverride
+              colorOverride: colorOverride
             } ) );
             multipliedViewContainer.addChild( spacedBox( 2, containerNodes, representation ) );
           }
           else if ( representation === IntroRepresentation.HORIZONTAL_BAR ) {
             containerNodes = containers.map( container => new RectangularContainerNode( container, {
               rectangularOrientation: RectangularOrientation.HORIZONTAL,
-              colorOverride
+              colorOverride: colorOverride
             } ) );
             multipliedViewContainer.addChild( spacedBox( 1, containerNodes, representation ) );
           }
           else if ( representation === IntroRepresentation.VERTICAL_BAR ) {
             containerNodes = containers.map( container => new RectangularContainerNode( container, {
               rectangularOrientation: RectangularOrientation.VERTICAL,
-              colorOverride
+              colorOverride: colorOverride
             } ) );
             multipliedViewContainer.addChild( spacedBox( 4, containerNodes, representation ) );
           }

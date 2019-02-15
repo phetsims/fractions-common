@@ -117,29 +117,29 @@ define( require => {
         switch ( representation ) {
           case IntroRepresentation.CIRCLE:
             this.currentView = new CircularSceneNode( model, {
-              getBucketLocation
+              getBucketLocation: getBucketLocation
             } );
             break;
           case IntroRepresentation.VERTICAL_BAR:
             this.currentView = new RectangularSceneNode( model, {
-              getBucketLocation,
+              getBucketLocation: getBucketLocation,
               rectangularOrientation: RectangularOrientation.VERTICAL
             } );
             break;
           case IntroRepresentation.HORIZONTAL_BAR:
             this.currentView = new RectangularSceneNode( model, {
-              getBucketLocation,
+              getBucketLocation: getBucketLocation,
               rectangularOrientation: RectangularOrientation.HORIZONTAL
             } );
             break;
           case IntroRepresentation.BEAKER:
             this.currentView = new BeakerSceneNode( model, {
-              getBucketLocation
+              getBucketLocation: getBucketLocation
             } );
             break;
           case IntroRepresentation.CAKE:
             this.currentView = new CakeSceneNode( model, {
-              getBucketLocation
+              getBucketLocation: getBucketLocation
             } );
             break;
           case IntroRepresentation.NUMBER_LINE:
