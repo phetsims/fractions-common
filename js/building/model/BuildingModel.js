@@ -27,7 +27,7 @@ define( require => {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  const scratchVector = new Vector2(); // Used to minimize garbage collection by reusing a vector.
+  const scratchVector = new Vector2( 0, 0 ); // Used to minimize garbage collection by reusing a vector.
 
   class BuildingModel {
     constructor() {
