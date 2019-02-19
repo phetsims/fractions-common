@@ -93,7 +93,7 @@ define( require => {
       const localPoint = scratchVector.set( point ).subtract( this.offset );
 
       if ( this.representation === BuildingRepresentation.PIE ) {
-        return Math.max( 0, localPoint.magnitude() - FractionsCommonConstants.SHAPE_SIZE / 2 );
+        return Math.max( 0, localPoint.magnitude - FractionsCommonConstants.SHAPE_SIZE / 2 );
       }
       else if ( this.representation === BuildingRepresentation.BAR ) {
         return Math.sqrt( ShapePiece.VERTICAL_BAR_BOUNDS.minimumDistanceToPointSquared( localPoint ) );

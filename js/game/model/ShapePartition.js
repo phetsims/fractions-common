@@ -323,7 +323,7 @@ define( require => {
      * @param {number} [tipDistance] - How far the petal tips are from the center.
      * @returns {ShapePartition}
      */
-    static createFlower( numPetals, split = false, tipDistance = Vector2.createPolar( 1, 2 * Math.PI / numPetals ).plus( Vector2.X_UNIT ).magnitude() ) {
+    static createFlower( numPetals, split = false, tipDistance = Vector2.createPolar( 1, 2 * Math.PI / numPetals ).plus( Vector2.X_UNIT ).magnitude ) {
       assert && assert( numPetals >= 3 && numPetals % 1 === 0 );
       assert && assert( typeof split === 'boolean' );
 
