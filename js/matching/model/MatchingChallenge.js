@@ -258,10 +258,13 @@ define( require => {
       const stationarySpot = this.scaleSpots[ ( this.scaleSpots.indexOf( changingSpot ) + 1 ) % 2 ];
       const discardPiece = changingSpot.pieceProperty.value;
       const matchedPiece = _.find( this.pieces, piece => {
-        // TODO: how to handle multitouch here if a person is dragging the matched piece?
         return _.includes( this.sourceSpots, piece.spotProperty.value ) && piece.fraction.equals( stationarySpot.pieceProperty.value.fraction );
       } );
-      assert && assert( matchedPiece );
+
+      // In the case where we are dragging the other pieces that would be required, we won't complete the "show answer".
+      if ( !matchedPiece ) {
+        return;
+      }
 
       discardPiece.moveToSpot( matchedPiece.spotProperty.value );
       matchedPiece.moveToSpot( changingSpot );
