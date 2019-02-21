@@ -234,18 +234,21 @@ define( require => {
         }
       }, buttonOptions ) );
       this.addChild( checkButton );
+      this.disposeEmitter.addListener( () => checkButton.dispose() );
 
       const okButton = new TextPushButton( okString, _.extend( {
         baseColor: FractionsCommonColorProfile.matchingOkButtonProperty,
         listener: () => challenge.collect()
       }, buttonOptions ) );
       this.addChild( okButton );
+      this.disposeEmitter.addListener( () => okButton.dispose() );
 
       const tryAgainButton = new TextPushButton( tryAgainString, _.extend( {
         baseColor: FractionsCommonColorProfile.matchingTryAgainButtonProperty,
         listener: () => challenge.tryAgain()
       }, buttonOptions ) );
       this.addChild( tryAgainButton );
+      this.disposeEmitter.addListener( () => tryAgainButton.dispose() );
 
       const showAnswerButton = new TextPushButton( showAnswerString, _.extend( {
         baseColor: FractionsCommonColorProfile.matchingShowAnswerButtonProperty,
@@ -255,6 +258,7 @@ define( require => {
         }
       }, buttonOptions ) );
       this.addChild( showAnswerButton );
+      this.disposeEmitter.addListener( () => showAnswerButton.dispose() );
 
       // @private {Node}
       this.pieceLayer = new Node();
@@ -293,6 +297,9 @@ define( require => {
         faceNode.setPoints( lastScoreGain );
       };
       this.challenge.lastScoreGainProperty.link( this.lastScoreGainListener );
+      this.disposeEmitter.addListener( () => {
+        this.challenge.lastScoreGainProperty.unlink( this.lastScoreGainListener );
+      } );
 
       challenge.pieces.forEach( piece => {
         this.pieceLayer.addChild( new MatchPieceNode( piece ) );
