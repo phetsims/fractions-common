@@ -66,7 +66,12 @@ define( require => {
       } );
     }
 
-    // TODO: doc
+    /**
+     * Creates a copy of this MatchPiece (without the grab/drop/other options)
+     * @public
+     *
+     * @returns {MatchPiece}
+     */
     copy() {
       return new MatchPiece( this.fraction, this.filledPartitions, this.hasMixedNumbers, this.hasGreaterThanOne );
     }

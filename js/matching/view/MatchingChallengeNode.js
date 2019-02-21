@@ -74,7 +74,7 @@ define( require => {
       this.challenge = challenge;
 
       // @private {Emitter}
-      this.disposeEmitter = new Emitter(); // TODO: un-property things
+      this.disposeEmitter = new Emitter();
 
       // @private {RewardNode|null}
       this.rewardNode = null;
@@ -92,7 +92,6 @@ define( require => {
         } );
         this.addChild( targetBackground );
 
-        // TODO: better "centering" of equals signs?
         const equalsSign = new Text( MathSymbols.EQUAL_TO, {
           font: new PhetFont( { size: 26 } ),
           center: targetBackground.center

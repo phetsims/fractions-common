@@ -293,7 +293,6 @@ define( require => {
     }
 
     static getMixedLevelDescriptions() {
-      // TODO: Should this truly be stored as a delta? -- Improve!!!!
       const descriptions = MatchingLevel.getUnmixedLevelDescriptions();
 
       //mixed numbers added some more fractions or remove extra

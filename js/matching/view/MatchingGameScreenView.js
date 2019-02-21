@@ -43,7 +43,6 @@ define( require => {
   const VBox = require( 'SCENERY/nodes/VBox' );
 
   // constants
-  // TODO: look into deduplication with other code (e.g. icon design bounds)
   const LEVEL_SELECTION_SPACING = 25;
   const SIDE_MARGIN = FractionsCommonConstants.MATCHING_MARGIN;
   const ICON_DESIGN_BOUNDS = new Bounds2( 0, 0, 90, 129 );
@@ -272,7 +271,6 @@ define( require => {
      * @returns {Node}
      */
     static createLevelIcon( level, hasMixedNumbers ) {
-      // TODO: deduplicate with other?
       const label = new Text( StringUtils.fillIn( levelTitlePatternString, {
         number: level.number
       } ), {
