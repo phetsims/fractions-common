@@ -1,7 +1,7 @@
 // Copyright 2019, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * View for a single MatchingChallenge.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  * @author Anton Ulyanov (Mlearner)

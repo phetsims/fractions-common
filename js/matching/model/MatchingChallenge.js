@@ -1,7 +1,7 @@
 // Copyright 2019, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * Represents a specific challenge (set of fractions/pieces/targets and the given state of its solution).
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  * @author Anton Ulyanov, Andrey Zelenkov (Mlearner)
@@ -118,8 +118,6 @@ define( require => {
         } );
       } );
 
-      // TODO: replacement drag to scale replaces one
-
       // @public {Array.<MatchTarget>}
       this.targets = _.range( 0, NUM_PAIRS ).map( () => new MatchTarget() );
 
@@ -192,8 +190,6 @@ define( require => {
           this.stateProperty.value = MatchingChallenge.State.COMPARISON;
         }
       } );
-
-      // TODO: implement pickability toggles based on state
     }
 
     collect() {

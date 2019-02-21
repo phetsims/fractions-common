@@ -1,7 +1,7 @@
 // Copyright 2019, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * A specific level for the matching game, that can have multiple challenges over time.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  * @author Anton Ulyanov, Andrey Zelenkov (Mlearner)

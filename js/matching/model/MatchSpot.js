@@ -1,7 +1,7 @@
 // Copyright 2019, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * A specific place a piece can be "stored" (either a target, a scale, or a source spot near the bottom).
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */

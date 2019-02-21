@@ -1,7 +1,7 @@
 // Copyright 2019, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * View for a MatchPiece (either a shape or fractional representation)
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */

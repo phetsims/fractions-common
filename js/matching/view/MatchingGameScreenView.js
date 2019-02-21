@@ -1,7 +1,7 @@
 // Copyright 2019, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * Main ScreenView for matching game style screens.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */

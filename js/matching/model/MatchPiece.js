@@ -1,7 +1,7 @@
 // Copyright 2019, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * A draggable piece (with an associated fraction). May be a fractional representation or a shape representation.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */

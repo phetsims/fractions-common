@@ -1,7 +1,7 @@
 // Copyright 2019, University of Colorado Boulder
 
 /**
- * TODO: doc
+ * A match target near the top (holds a matched pair of pieces).
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
