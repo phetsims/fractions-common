@@ -39,8 +39,8 @@ define( require => {
     constructor( options ) {
       super();
 
-      // create less shape
-      const lessShape = new Shape().moveTo( -lineWeight / 8, 0 )
+      const lessShape = new Shape()
+        .moveTo( -lineWeight / 8, 0 )
         .lineTo( lineWeight / 4, -lineWeight / 8 )
         .lineTo( lineWeight / 4, -lineWeight / 4 )
         .lineTo( -lineWeight / 4, -lineWeight / 16 )
@@ -48,9 +48,8 @@ define( require => {
         .lineTo( lineWeight / 4, lineWeight / 4 )
         .lineTo( lineWeight / 4, lineWeight / 8 ).close();
 
-
-      // create equal shape
-      const eqShape = new Shape().moveTo( -3 * lineWeight / 8, -3 * lineWeight / 16 )
+      const eqShape = new Shape()
+        .moveTo( -3 * lineWeight / 8, -3 * lineWeight / 16 )
         .lineTo( 3 * lineWeight / 8, -3 * lineWeight / 16 )
         .lineTo( 3 * lineWeight / 8, -lineWeight / 16 )
         .lineTo( -3 * lineWeight / 8, -lineWeight / 16 )
@@ -63,123 +62,73 @@ define( require => {
 
       // @private {Path}
       this.less = new Path( lessShape, {
-        visible: false,
         y: lineWeight / 4 + 10,
         stroke: symbolStroke,
         lineWidth: symbolWidth,
         fill: symbolFill
       } );
       this.eq = new Path( eqShape, {
-        visible: false,
         y: lineWeight / 4 + 10,
         stroke: symbolStroke,
         lineWidth: symbolWidth,
         fill: symbolFill
       } );
-      this.more = new Node( { visible: false } );
-
-      // create more shape
-      this.more.addChild( new Path( lessShape, {
-        y: lineWeight / 4 + 10,
-        stroke: symbolStroke,
-        lineWidth: symbolWidth,
-        fill: symbolFill
-      } ) );
+      this.more = new Node( {
+        children: [
+          new Path( lessShape, {
+            y: lineWeight / 4 + 10,
+            stroke: symbolStroke,
+            lineWidth: symbolWidth,
+            fill: symbolFill
+          } )
+        ]
+      } );
       this.more.scale( -1, 1 );
 
-      // TODO: cleanup!
+      // Maps from a value to the local view coordinate in the chart
+      const mapY = y => -y * lineWeight;
 
+      // Initial vertical line
+      const thickLineShape = new Shape().moveTo( 0, 0 ).lineTo( 0, -lineHeight - 20 )
+      const thinLineShape = new Shape();
 
-      //center vertical line
-      this.addChild( new Path( Shape.lineSegment( 0, 0, 0, -lineHeight - 20 ), {
+      // Ticks
+      for ( let i = 0; i <= 2; i += 0.25 ) {
+        const y = mapY( i );
+        const tickOffset = ( i % 1 === 0 ) ? lineWeight / 2 : ( ( i % 0.5 === 0 ) ? 3 * lineWeight / 8 : lineWeight / 4 );
+        const shape = ( i % 1 === 0 ) ? thickLineShape : thinLineShape;
+        shape.moveTo( -tickOffset, y ).lineTo( tickOffset, y );
+      }
+
+      this.addChild( new Path( thickLineShape, {
         stroke: stroke,
         lineWidth: lineBaseWidth
       } ) );
-
-      //three horizontal lines  at 0,1,2
-      this.addChild( new Path( Shape.lineSegment( -lineWeight / 2, 0, lineWeight / 2, 0 ), {
-        stroke: stroke,
-        lineWidth: lineBaseWidth
-      } ) );
-      this.addChild( new Path( Shape.lineSegment( -lineWeight / 2, -lineHeight / 2, lineWeight / 2, -lineHeight / 2 ), {
-        stroke: stroke,
-        lineWidth: lineBaseWidth
-      } ) );
-      this.addChild( new Path( Shape.lineSegment( -lineWeight / 2, -lineHeight, lineWeight / 2, -lineHeight ), {
-        stroke: stroke,
-        lineWidth: lineBaseWidth
-      } ) );
-
-      //three bottom ticks, between 0 and 1
-      this.addChild( new Path( Shape.lineSegment( -lineWeight / 4, -lineHeight / 8, lineWeight / 4, -lineHeight / 8 ), {
-        stroke: stroke,
-        lineWidth: lineOtherWidth
-      } ) );
-      this.addChild( new Path( Shape.lineSegment( -3 * lineWeight / 8, -2 * lineHeight / 8, 3 * lineWeight / 8, -2 * lineHeight / 8 ), {
-        stroke: stroke,
-        lineWidth: lineOtherWidth
-      } ) );
-      this.addChild( new Path( Shape.lineSegment( -lineWeight / 4, -3 * lineHeight / 8, lineWeight / 4, -3 * lineHeight / 8 ), {
+      this.addChild( new Path( thinLineShape, {
         stroke: stroke,
         lineWidth: lineOtherWidth
       } ) );
 
-      //three top ticks, between 1 and 2
-      this.addChild( new Path( Shape.lineSegment( -lineWeight / 4, -5 * lineHeight / 8, lineWeight / 4, -5 * lineHeight / 8 ), {
-        stroke: stroke,
-        lineWidth: lineOtherWidth
-      } ) );
-      this.addChild( new Path( Shape.lineSegment( -3 * lineWeight / 8, -6 * lineHeight / 8, 3 * lineWeight / 8, -6 * lineHeight / 8 ), {
-        stroke: stroke,
-        lineWidth: lineOtherWidth
-      } ) );
-      this.addChild( new Path( Shape.lineSegment( -lineWeight / 4, -7 * lineHeight / 8, lineWeight / 4, -7 * lineHeight / 8 ), {
-        stroke: stroke,
-        lineWidth: lineOtherWidth
-      } ) );
+      // Labels (on each side of a tick)
+      [ 0, 1, 2 ].forEach( i => {
+        [ -1, 1 ].forEach( direction => {
+          this.addChild( new Text( i, {
+            font: new PhetFont( { size: 18, weight: 'normal' } ),
+            centerX: direction * ( lineWeight / 2 + 10 ),
+            centerY: mapY( i )
+          } ) );
+        } );
+      } );
 
-      //labels 0,1,2
-      this.addChild( new Text( '0', {
-        font: new PhetFont( { size: 18, weight: 'normal' } ),
-        centerX: -lineWeight / 2 - 10,
-        centerY: 0
-      } ) );
-      this.addChild( new Text( '0', {
-        font: new PhetFont( { size: 18, weight: 'normal' } ),
-        centerX: lineWeight / 2 + 10,
-        centerY: 0
-      } ) );
-
-      this.addChild( new Text( '1', {
-        font: new PhetFont( { size: 18, weight: 'normal' } ),
-        centerX: -lineWeight / 2 - 10,
-        centerY: -lineHeight / 2
-      } ) );
-      this.addChild( new Text( '1', {
-        font: new PhetFont( { size: 18, weight: 'normal' } ),
-        centerX: lineWeight / 2 + 10,
-        centerY: -lineHeight / 2
-      } ) );
-
-      this.addChild( new Text( '2', {
-        font: new PhetFont( { size: 18, weight: 'normal' } ),
-        centerX: -lineWeight / 2 - 10,
-        centerY: -lineHeight
-      } ) );
-      this.addChild( new Text( '2', {
-        font: new PhetFont( { size: 18, weight: 'normal' } ),
-        centerX: lineWeight / 2 + 10,
-        centerY: -lineHeight
-      } ) );
+      const rectWidth = lineWeight / 4 * 0.6;
 
       // @private {Rectangle} compare rectangles
-      var widthRect = lineWeight / 4 * 0.6;
-      this.rectLeft = new Rectangle( -lineWeight / 8 - widthRect / 2, 0, widthRect, 0, {
+      this.rectLeft = new Rectangle( -lineWeight / 8 - rectWidth / 2, 0, rectWidth, 0, {
         stroke: stroke,
         lineWidth: lineOtherWidth,
         fill: '#F00'
       } );
-      this.rectRight = new Rectangle( lineWeight / 8 - widthRect / 2, 0, widthRect, 0, {
+      this.rectRight = new Rectangle( lineWeight / 8 - rectWidth / 2, 0, rectWidth, 0, {
         stroke: stroke,
         lineWidth: lineOtherWidth,
         fill: '#0F0'
@@ -191,7 +140,7 @@ define( require => {
       this.addChild( this.eq );
       this.addChild( this.more );
 
-      // @private {Animation|null}
+      // @private {Animation|null} - Set when an animation starts
       this.animation = null;
 
       this.reset();
