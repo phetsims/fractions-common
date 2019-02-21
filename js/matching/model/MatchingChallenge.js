@@ -112,7 +112,7 @@ define( require => {
 
       // @public {Array.<MatchSpot>}
       this.sourceSpots = _.range( 0, 2 * NUM_PAIRS ).map( () => new MatchSpot() );
-      this.scaleSpots = _.range( 0, 2 ).map( () => new MatchSpot() );
+      this.scaleSpots = _.range( 0, 2 ).map( () => new MatchSpot( { isScale: true } ) );
 
       // @public {Property.<MatchSpot>}
       this.lastChangedScaleSpotProperty = new Property( this.scaleSpots[ 0 ] );

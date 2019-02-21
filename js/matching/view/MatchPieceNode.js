@@ -92,6 +92,9 @@ define( require => {
         end: () => piece.drop()
       } );
       this.addInputListener( this.dragListener );
+
+      // Notify the model about the view's bounds, so that the model can correctly position animations
+      this.piece.localBounds = this.localBounds;
     }
 
     /**

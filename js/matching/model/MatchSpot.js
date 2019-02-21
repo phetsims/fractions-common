@@ -21,17 +21,19 @@ define( require => {
 
       options = _.extend( {
         scale: 1,
-        isTarget: false
+        isTarget: false,
+        isScale: false
       }, options );
 
       // @public {Property.<Vector2>} - To be updated by the view when its location changes (usually just initially)
       this.positionProperty = new Property( Vector2.ZERO );
 
-      // @public {number}
+      // @public {number} - How piece nodes should be scaled when placed in this spot
       this.scale = options.scale;
 
       // @public {boolean}
       this.isTarget = options.isTarget;
+      this.isScale = options.isScale;
 
       // @public {Property.<MatchingPiece|null>}
       this.pieceProperty = new Property( null );

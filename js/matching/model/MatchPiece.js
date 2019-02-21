@@ -46,6 +46,9 @@ define( require => {
       this.grab = options.grab;
       this.drop = options.drop;
 
+      // @public {Bounds2|null} - Written by view elements so that relative positioning can be done
+      this.localBounds = null;
+
       // @public {Property.<Vector2>} - To be updated by the view when its location changes (usually just initially)
       this.positionProperty = new Property( Vector2.ZERO );
 
@@ -106,8 +109,21 @@ define( require => {
     moveToSpot( spot, options ) {
       spot.attachPiece( this );
 
+      let position = spot.positionProperty.value;
+
+      // Pieces should not rely on their center for positioning on the scale.
+      // See https://github.com/phetsims/fractions-common/issues/87
+      if ( spot.isScale && this.localBounds ) {
+        position = position.minus( this.localBounds.centerBottom );
+
+        // Because bounds on Text is bad, shift down fractional representations by a bit
+        if ( !this.filledPartitions ) {
+          position = position.plusXY( 0, 8 );
+        }
+      }
+
       options = _.extend( {
-        position: spot.positionProperty.value,
+        position: position,
         scale: 1,
         animationInvalidationProperty: this.spotProperty
       }, options );

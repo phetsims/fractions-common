@@ -137,7 +137,7 @@ define( require => {
         } );
         this.addChild( scaleNode );
 
-        challenge.scaleSpots[ index ].positionProperty.value = scaleNode.centerTop.plusXY( 0, -20 );
+        challenge.scaleSpots[ index ].positionProperty.value = scaleNode.centerTop.plusXY( 0, 20 );
       } );
 
       // Sources
