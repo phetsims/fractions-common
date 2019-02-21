@@ -98,6 +98,13 @@ define( require => {
       this.highScoreProperty.reset();
     }
 
+    /**
+     * Returns a set of config options provided to the MatchingChallenge constructor to create a challenge for unmixed
+     * levels.
+     * @public
+     *
+     * @returns {Array.<Object>}
+     */
     static getUnmixedLevelDescriptions() {
       return [
         /**
@@ -292,6 +299,13 @@ define( require => {
       ];
     }
 
+    /**
+     * Returns a set of config options provided to the MatchingChallenge constructor to create a challenge for mixed
+     * levels.
+     * @public
+     *
+     * @returns {Array.<Object>}
+     */
     static getMixedLevelDescriptions() {
       const descriptions = MatchingLevel.getUnmixedLevelDescriptions();
 

@@ -196,6 +196,10 @@ define( require => {
       } );
     }
 
+    /**
+     * Takes the pieces stored in the scale spots, and moves them to the next open target.
+     * @public
+     */
     collect() {
       const leftPiece = this.scaleSpots[ 0 ].pieceProperty.value;
       const rightPiece = this.scaleSpots[ 1 ].pieceProperty.value;
@@ -224,6 +228,10 @@ define( require => {
       }
     }
 
+    /**
+     * Compares the pieces stored in the scale spots, with either a "correct" (matching) or "incorrect" answer.
+     * @public
+     */
     compare() {
       const leftPiece = this.scaleSpots[ 0 ].pieceProperty.value;
       const rightPiece = this.scaleSpots[ 1 ].pieceProperty.value;
@@ -253,10 +261,18 @@ define( require => {
       }
     }
 
+    /**
+     * Handles the "try again" press behavior, which will remove the chart and buttons for the given (failed) pair.
+     * @public
+     */
     tryAgain() {
       this.stateProperty.value = MatchingChallenge.State.NO_COMPARISON;
     }
 
+    /**
+     * Given that the scale pieces don't match, it swaps out one with the "correct" piece, and animates both.
+     * @public
+     */
     showAnswer() {
       const changingSpot = this.lastChangedScaleSpotProperty.value;
       const stationarySpot = this.scaleSpots[ ( this.scaleSpots.indexOf( changingSpot ) + 1 ) % 2 ];
@@ -276,6 +292,10 @@ define( require => {
       this.stateProperty.value = MatchingChallenge.State.MATCHED;
     }
 
+    /**
+     * If both scales are empty, fill them with a matching pair.
+     * @public
+     */
     cheat() {
       // Only do things if both scales are empty, and there is one unfilled target
       if ( _.every( this.scaleSpots, spot => spot.pieceProperty.value === null ) &&
@@ -305,6 +325,7 @@ define( require => {
     }
   }
 
+  // @public {Enumeration} - The main state values for the model
   MatchingChallenge.State = new Enumeration( [
     'NO_COMPARISON',
     'COMPARISON',
