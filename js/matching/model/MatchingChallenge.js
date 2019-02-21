@@ -99,6 +99,10 @@ define( require => {
       this.elapsedTimeProperty = new NumberProperty( 0 );
       this.bestElapsedTimeProperty = new NumberProperty( Number.POSITIVE_INFINITY );
 
+      // @public {Emitter} - Fires correct/incorrect whenever "check" is pressed, based on the result
+      this.correctEmitter = new Emitter();
+      this.incorrectEmitter = new Emitter();
+
       // @public {Emitter} - Fires when the challenge is fully completed
       this.completedEmitter = new Emitter();
 
@@ -231,6 +235,8 @@ define( require => {
         this.lastScoreGainProperty.value = scoreDelta;
 
         this.scoreProperty.value += scoreDelta;
+
+        this.correctEmitter.emit();
       }
       else {
         if ( this.wasLastAttemptFailureProperty.value ) {
@@ -242,6 +248,8 @@ define( require => {
         this.lastFailedPair = [ leftPiece, rightPiece ];
         this.wasLastAttemptFailureProperty.value = true;
         this.lastScoreGainProperty.value = 0;
+
+        this.incorrectEmitter.emit();
       }
     }
 

@@ -27,7 +27,6 @@ define( require => {
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const RewardNode = require( 'VEGAS/RewardNode' );
-  const Sound = require( 'VIBE/Sound' );
   const StarNode = require( 'SCENERY_PHET/StarNode' );
   const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   const Text = require( 'SCENERY/nodes/Text' );
@@ -49,24 +48,21 @@ define( require => {
   // images
   const scaleImage = require( 'image!FRACTIONS_COMMON/scale.png' );
 
-  // sounds
-  const cheerAudio = require( 'sound!VEGAS/cheer.mp3' );
-
   // constants
   const PADDING = FractionsCommonConstants.MATCHING_MARGIN;
   const NUM_TARGETS = 6;
   const TARGET_WIDTH = MatchPieceNode.DIMENSION.width;
   const TARGET_HEIGHT = MatchPieceNode.DIMENSION.height;
   const TARGETS_TOP = 365;
-  const cheerSound = new Sound( cheerAudio );
 
   class MatchingChallengeNode extends Node {
     /**
      * @param {MatchingChallenge} challenge
      * @param {Bounds2} layoutBounds
+     * @param {GameAudioPlayer} gameAudioPlayer
      * @param {Object} [options]
      */
-    constructor( challenge, layoutBounds, options ) {
+    constructor( challenge, layoutBounds, gameAudioPlayer, options ) {
       super();
 
       options = _.extend( {
@@ -284,6 +280,15 @@ define( require => {
         this.challenge.stateProperty.unlink( this.stateListener );
       } );
 
+      const correctListener = () => gameAudioPlayer.correctAnswer();
+      const incorrectListener = () => gameAudioPlayer.wrongAnswer();
+      this.challenge.correctEmitter.addListener( correctListener );
+      this.challenge.incorrectEmitter.addListener( incorrectListener );
+      this.disposeEmitter.addListener( () => {
+        this.challenge.correctEmitter.removeListener( correctListener );
+        this.challenge.incorrectEmitter.removeListener( incorrectListener );
+      } );
+
       // @private {function}
       this.lastScoreGainListener = lastScoreGain => {
         faceNode.setPoints( lastScoreGain );
@@ -299,7 +304,7 @@ define( require => {
 
       const completedListener = () => {
         if ( challenge.scoreProperty.value === 12 ) {
-          cheerSound.play();
+          gameAudioPlayer.gameOverPerfectScore();
 
           this.rewardNode = new RewardNode( {
             pickable: false,

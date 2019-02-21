@@ -89,7 +89,7 @@ define( require => {
       const mapY = y => -y * lineWeight;
 
       // Initial vertical line
-      const thickLineShape = new Shape().moveTo( 0, 0 ).lineTo( 0, -lineHeight - 20 )
+      const thickLineShape = new Shape().moveTo( 0, 0 ).lineTo( 0, -lineHeight - 20 );
       const thinLineShape = new Shape();
 
       // Ticks

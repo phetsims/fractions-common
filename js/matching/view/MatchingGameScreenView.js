@@ -20,6 +20,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const LevelSelectionButton = require( 'VEGAS/LevelSelectionButton' );
   const MatchingChallengeNode = require( 'FRACTIONS_COMMON/matching/view/MatchingChallengeNode' );
@@ -34,7 +35,6 @@ define( require => {
   const Screen = require( 'JOIST/Screen' );
   const ScreenView = require( 'JOIST/ScreenView' );
   const ShapePartition = require( 'FRACTIONS_COMMON/game/model/ShapePartition' );
-  const Sound = require( 'VIBE/Sound' );
   const SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   const Text = require( 'SCENERY/nodes/Text' );
@@ -93,12 +93,14 @@ define( require => {
       // @private {MatchingGameModel}
       this.model = model;
 
+      const gameAudioPlayer = new GameAudioPlayer( model.soundEnabledProperty );
+
       // We'll vertically center the things along the bottom
       const bottomAlignGroup = new AlignGroup( {
         matchHorizontal: false
       } );
 
-      const soundToggleButton = new AlignBox( new SoundToggleButton( Sound.audioEnabledProperty, {
+      const soundToggleButton = new AlignBox( new SoundToggleButton( model.soundEnabledProperty, {
         touchAreaXDilation: 10,
         touchAreaYDilation: 10
       } ), { group: bottomAlignGroup } );
@@ -200,7 +202,7 @@ define( require => {
         this.lastChallengeNode = null;
         let transition;
         if ( challenge ) {
-          const challengeNode = new MatchingChallengeNode( challenge, this.layoutBounds, {
+          const challengeNode = new MatchingChallengeNode( challenge, this.layoutBounds, gameAudioPlayer, {
             onContinue: () => {
               const level = model.levelProperty.value;
               model.levelProperty.value = null;
