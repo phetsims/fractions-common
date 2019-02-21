@@ -375,11 +375,11 @@ define( require => {
       ] );
       return new ShapePartition( [
         new Vector2( 1, 0 ),
-        new Vector2( 0, 2 ),
         new Vector2( 3, 1 ),
+        new Vector2( 0, 2 ),
         new Vector2( 2, 3 ),
-        new Vector2( 5, 2 ),
-        new Vector2( 4, 4 )
+        new Vector2( -1, 4 ),
+        new Vector2( 1, 5 )
       ].slice( 0, quantity ).map( offset => {
         return plusShape.transformed( Matrix3.translation( offset.x, offset.y ) );
       } ) );

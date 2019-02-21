@@ -33,10 +33,10 @@ define( require => {
 
       if ( piece.filledPartitions ) {
         this.addChild( new HBox( {
-          spacing: 10,
+          spacing: 7,
           children: piece.filledPartitions.map( filledPartition => new FilledPartitionNode( filledPartition ) ),
           center: Vector2.ZERO,
-          scale: piece.hasGreaterThanOne ? 0.6 : 1.2
+          scale: piece.hasGreaterThanOne ? 0.68 : 1.1
         } ) );
       }
       else {

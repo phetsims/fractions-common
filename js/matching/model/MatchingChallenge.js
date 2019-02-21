@@ -49,7 +49,7 @@ define( require => {
           ...ShapePartition.PIES,
           ...ShapePartition.HORIZONTAL_BARS,
           ...ShapePartition.VERTICAL_BARS,
-          ...ShapePartition.PLUS_SIGNS.filter( shapePartition => shapePartition.length > 2 ),
+          ...ShapePartition.PLUS_SIGNS.filter( shapePartition => shapePartition.length > 3 ),
           ...ShapePartition.GRIDS,
           ...ShapePartition.PYRAMIDS,
           ...ShapePartition.POLYGONS,
