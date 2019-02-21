@@ -94,13 +94,28 @@ define( require => {
 
         const equalsSign = new Text( MathSymbols.EQUAL_TO, {
           font: new PhetFont( { size: 26 } ),
-          center: targetBackground.center
+          center: targetBackground.center,
+          visible: false
         } );
         this.addChild( equalsSign );
         const targetListener = filled => {
           equalsSign.visible = filled;
+
+          // Below, we figure out how to center the equals sign in the target so it will be in-between the two pieces.
+          // See https://github.com/phetsims/fractions-common/issues/86
+
+          const leftPiece = target.spots[ 0 ].pieceProperty.value;
+          const rightPiece = target.spots[ 1 ].pieceProperty.value;
+
+          const leftNode = _.find( pieceNodes, pieceNode => pieceNode.piece === leftPiece );
+          const rightNode = _.find( pieceNodes, pieceNode => pieceNode.piece === rightPiece );
+
+          const leftX = target.spots[ 0 ].positionProperty.value.x + leftPiece.getTargetScale() * leftNode.localBounds.width / 2;
+          const rightX = target.spots[ 1 ].positionProperty.value.x - rightPiece.getTargetScale() * rightNode.localBounds.width / 2;
+
+          equalsSign.centerX = ( leftX + rightX ) / 2;
         };
-        target.isFilledProperty.link( targetListener );
+        target.isFilledProperty.lazyLink( targetListener );
         this.disposeEmitter.addListener( () => {
           target.isFilledProperty.unlink( targetListener );
         } );
@@ -301,8 +316,12 @@ define( require => {
         this.challenge.lastScoreGainProperty.unlink( this.lastScoreGainListener );
       } );
 
+      const pieceNodes = [];
+
       challenge.pieces.forEach( piece => {
-        this.pieceLayer.addChild( new MatchPieceNode( piece ) );
+        const pieceNode = new MatchPieceNode( piece );
+        pieceNodes.push( pieceNode );
+        this.pieceLayer.addChild( pieceNode );
       } );
       this.disposeEmitter.addListener( () => {
         this.pieceLayer.children.forEach( pieceNode => pieceNode.dispose() );

@@ -87,6 +87,16 @@ define( require => {
     }
 
     /**
+     * Returns the ending scale size for residing in a target.
+     * @public
+     *
+     * @returns {number}
+     */
+    getTargetScale() {
+      return this.filledPartitions ? 0.5 : 0.7;
+    }
+
+    /**
      * Moves this piece to the given spot (with animation).
      * @public
      *
