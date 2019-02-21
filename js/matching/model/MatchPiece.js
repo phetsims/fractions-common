@@ -72,6 +72,16 @@ define( require => {
     }
 
     /**
+     * Returns the color of the given piece (used for the chart).
+     * @public
+     *
+     * @returns {ColorDef}
+     */
+    getColor() {
+      return this.filledPartitions ? this.filledPartitions[ 0 ].color : 'black';
+    }
+
+    /**
      * Moves this piece to the given spot (with animation).
      * @public
      *

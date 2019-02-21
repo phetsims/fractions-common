@@ -20,6 +20,7 @@ define( require => {
   const Image = require( 'SCENERY/nodes/Image' );
   const LevelCompletedNode = require( 'VEGAS/LevelCompletedNode' );
   const MatchingChallenge = require( 'FRACTIONS_COMMON/matching/model/MatchingChallenge' );
+  const MatchChartNode = require( 'FRACTIONS_COMMON/matching/view/MatchChartNode' );
   const MatchPieceNode = require( 'FRACTIONS_COMMON/matching/view/MatchPieceNode' );
   const MathSymbols = require( 'SCENERY_PHET/MathSymbols' );
   const Node = require( 'SCENERY/nodes/Node' );
@@ -195,6 +196,24 @@ define( require => {
         this.challenge.timeVisibleProperty.unlink( this.timeVisibleListener );
       } );
 
+      // @private {MatchChartNode}
+      this.chartNode = new MatchChartNode( {
+        centerX: layoutBounds.centerX,
+        top: targetBottom + 10
+      } );
+      this.addChild( this.chartNode );
+
+      const chartCompare = () => {
+        const leftPiece = challenge.scaleSpots[ 0 ].pieceProperty.value;
+        const rightPiece = challenge.scaleSpots[ 1 ].pieceProperty.value;
+        this.chartNode.compare(
+          leftPiece.fraction.value,
+          rightPiece.fraction.value,
+          leftPiece.getColor(),
+          rightPiece.getColor()
+        );
+      };
+
       const faceNode = new FaceWithPointsNode( {
         spacing: 8,
         pointsAlignment: 'rightCenter',
@@ -214,7 +233,10 @@ define( require => {
 
       const checkButton = new TextPushButton( checkString, _.extend( {
         baseColor: FractionsCommonColorProfile.matchingCheckButtonProperty,
-        listener: () => challenge.compare()
+        listener: () => {
+          chartCompare();
+          challenge.compare();
+        }
       }, buttonOptions ) );
       this.addChild( checkButton );
 
@@ -232,7 +254,10 @@ define( require => {
 
       const showAnswerButton = new TextPushButton( showAnswerString, _.extend( {
         baseColor: FractionsCommonColorProfile.matchingShowAnswerButtonProperty,
-        listener: () => challenge.showAnswer()
+        listener: () => {
+          challenge.showAnswer();
+          chartCompare();
+        }
       }, buttonOptions ) );
       this.addChild( showAnswerButton );
 
@@ -248,6 +273,9 @@ define( require => {
         showAnswerButton.visible = state === MatchingChallenge.State.SHOW_ANSWER;
 
         faceNode.visible = state === MatchingChallenge.State.MATCHED;
+        if ( state === MatchingChallenge.State.COMPARISON || state === MatchingChallenge.State.NO_COMPARISON ) {
+          this.chartNode.visible = false;
+        }
 
         this.pieceLayer.pickable = ( state === MatchingChallenge.State.SHOW_ANSWER || state === MatchingChallenge.State.MATCHED ) ? false : null;
       };
@@ -321,6 +349,7 @@ define( require => {
      */
     step( dt ) {
       this.rewardNode && this.rewardNode.step( dt );
+      this.chartNode.step( dt );
     }
 
     /**
