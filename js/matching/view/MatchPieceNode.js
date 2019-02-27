@@ -14,6 +14,7 @@ define( require => {
   const DragListener = require( 'SCENERY/listeners/DragListener' );
   const FilledPartitionNode = require( 'FRACTIONS_COMMON/game/view/FilledPartitionNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const MixedFractionNode = require( 'FRACTIONS_COMMON/common/view/MixedFractionNode' );
   const Node = require( 'SCENERY/nodes/Node' );
@@ -34,7 +35,9 @@ define( require => {
       if ( piece.filledPartitions ) {
         this.addChild( new HBox( {
           spacing: 7,
-          children: piece.filledPartitions.map( filledPartition => new FilledPartitionNode( filledPartition, { borderLineWidth: 3 * 0.7 } ) ),
+          children: piece.filledPartitions.map( filledPartition => new FilledPartitionNode( filledPartition, {
+            borderLineWidth: FractionsCommonConstants.MATCHING_BORDER
+          } ) ),
           center: Vector2.ZERO,
           scale: piece.hasGreaterThanOne ? 0.68 : 1
         } ) );

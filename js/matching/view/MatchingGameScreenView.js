@@ -289,7 +289,9 @@ define( require => {
       ];
       const icon = new HBox( {
         spacing: 5,
-        children: filledPartitions.map( filledPartition => new FilledPartitionNode( filledPartition ) ),
+        children: filledPartitions.map( filledPartition => new FilledPartitionNode( filledPartition, {
+          borderLineWidth: FractionsCommonConstants.MATCHING_BORDER
+        } ) ),
         scale: hasMixedNumbers ? 0.5 : 0.8
       } );
 
@@ -359,7 +361,8 @@ define( require => {
         spacing: 20,
         children: [
           new FilledPartitionNode( new FilledPartition( select( ShapePartition.PIES, 2 ), [ false, true ], FractionsCommonColorProfile.shapeBlueProperty ), {
-            scale: 2.5
+            scale: 2.5,
+            borderLineWidth: FractionsCommonConstants.MATCHING_BORDER
           } ),
           new Text( '=', { fill: 'black', font: new PhetFont( 160 ) } ),
           new MixedFractionNode( {
@@ -383,7 +386,8 @@ define( require => {
      */
     static createIntroNavbarIcon() {
       const rectangle = new Rectangle( 0, 0, Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.width, Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.height, {
-        fill: FractionsCommonColorProfile.matchingNavbarIconBackgroundProperty
+        fill: FractionsCommonColorProfile.matchingNavbarIconBackgroundProperty,
+        borderLineWidth: FractionsCommonConstants.MATCHING_BORDER
       } );
 
       rectangle.addChild( new FilledPartitionNode( new FilledPartition( select( ShapePartition.PIES, 2 ), [ false, true ], FractionsCommonColorProfile.shapeBlueProperty ), {
@@ -411,8 +415,12 @@ define( require => {
           new HBox( {
             spacing: 10,
             children: [
-              new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ true, true, true, true, true, true ], FractionsCommonColorProfile.shapeRedProperty ) ),
-              new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ false, true, true, true, false, false ], FractionsCommonColorProfile.shapeRedProperty ) )
+              new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ true, true, true, true, true, true ], FractionsCommonColorProfile.shapeRedProperty ), {
+                borderLineWidth: FractionsCommonConstants.MATCHING_BORDER
+              } ),
+              new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ false, true, true, true, false, false ], FractionsCommonColorProfile.shapeRedProperty ), {
+                borderLineWidth: FractionsCommonConstants.MATCHING_BORDER
+              } )
             ],
             scale: 1.2
           } ),
@@ -445,8 +453,12 @@ define( require => {
       rectangle.addChild( new HBox( {
         spacing: 5,
         children: [
-          new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ true, true, true, true, true, true ], FractionsCommonColorProfile.shapeRedProperty ) ),
-          new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ false, true, true, true, false, false ], FractionsCommonColorProfile.shapeRedProperty ) )
+          new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ true, true, true, true, true, true ], FractionsCommonColorProfile.shapeRedProperty ), {
+            borderLineWidth: FractionsCommonConstants.MATCHING_BORDER
+          } ),
+          new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ false, true, true, true, false, false ], FractionsCommonColorProfile.shapeRedProperty ), {
+            borderLineWidth: FractionsCommonConstants.MATCHING_BORDER
+          } )
         ],
         center: rectangle.center,
         scale: 2.5

@@ -23,6 +23,9 @@ define( require => {
     // {number} - margins used for the matching screens
     MATCHING_MARGIN: 15,
 
+    // {number} - Line width for the outside border
+    MATCHING_BORDER: 2.1,
+
     // {number} - The diameter of circle shapes, and the width of vertical-bar shapes.
     SHAPE_SIZE: SHAPE_RADIUS * 2,
 
