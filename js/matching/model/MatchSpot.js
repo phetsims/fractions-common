@@ -40,7 +40,7 @@ define( require => {
 
       // If we move, our piece should move (if we have one)
       this.positionProperty.lazyLink( position => {
-        if ( this.pieceProperty.value ) {
+        if ( this.pieceProperty.value && !options.isScale ) {
           this.pieceProperty.value.positionProperty.value = position;
         }
       } );
