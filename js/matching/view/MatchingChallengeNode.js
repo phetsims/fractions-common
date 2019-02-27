@@ -132,12 +132,12 @@ define( require => {
       _.range( 0, 2 ).forEach( index => {
         const scaleNode = new Image( scaleImage, {
           centerX: layoutBounds.centerX + ( index - 0.5 ) * 380,
-          y: 270,
-          scale: 0.4
+          y: 260,
+          scale: 0.52
         } );
         this.addChild( scaleNode );
 
-        challenge.scaleSpots[ index ].positionProperty.value = scaleNode.centerTop.plusXY( 0, 20 );
+        challenge.scaleSpots[ index ].positionProperty.value = scaleNode.centerTop.plusXY( 0, 30 );
       } );
 
       // Sources

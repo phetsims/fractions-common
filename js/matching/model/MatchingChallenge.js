@@ -236,7 +236,7 @@ define( require => {
       const leftPiece = this.scaleSpots[ 0 ].pieceProperty.value;
       const rightPiece = this.scaleSpots[ 1 ].pieceProperty.value;
 
-      if ( leftPiece.fraction.equals( rightPiece.fraction ) ) {
+      if ( leftPiece.fraction.reduced().equals( rightPiece.fraction.reduced() ) ) {
         this.stateProperty.value = MatchingChallenge.State.MATCHED;
 
         const scoreDelta = this.wasLastAttemptFailureProperty.value ? 1 : 2;
@@ -304,7 +304,7 @@ define( require => {
         const secondPiece = _.find( this.pieces, piece => {
           return piece !== firstPiece &&
                  _.includes( this.sourceSpots, piece.spotProperty.value ) &&
-                 piece.fraction.equals( firstPiece.fraction );
+                 piece.fraction.reduced().equals( firstPiece.fraction.reduced() );
         } );
 
         firstPiece.moveToSpot( this.scaleSpots[ 0 ] );

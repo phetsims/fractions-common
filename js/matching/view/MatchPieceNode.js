@@ -34,9 +34,9 @@ define( require => {
       if ( piece.filledPartitions ) {
         this.addChild( new HBox( {
           spacing: 7,
-          children: piece.filledPartitions.map( filledPartition => new FilledPartitionNode( filledPartition ) ),
+          children: piece.filledPartitions.map( filledPartition => new FilledPartitionNode( filledPartition, { borderLineWidth: 3 * 0.7 } ) ),
           center: Vector2.ZERO,
-          scale: piece.hasGreaterThanOne ? 0.68 : 1.1
+          scale: piece.hasGreaterThanOne ? 0.68 : 1
         } ) );
       }
       else {

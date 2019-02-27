@@ -309,6 +309,10 @@ define( require => {
     static getMixedLevelDescriptions() {
       const descriptions = MatchingLevel.getUnmixedLevelDescriptions();
 
+      descriptions.forEach( description => {
+        description.hasMixedNumbers = true;
+      } );
+
       //mixed numbers added some more fractions or remove extra
       descriptions[ 0 ].fractions.pop();
       // add mixed fractions
