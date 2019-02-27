@@ -44,7 +44,7 @@ define( require => {
 
   // constants
   const LEVEL_SELECTION_SPACING = 25;
-  const SIDE_MARGIN = FractionsCommonConstants.MATCHING_MARGIN;
+  const SIDE_MARGIN = 10;
   const ICON_DESIGN_BOUNDS = new Bounds2( 0, 0, 90, 129 );
   const select = ( shapePartitions, quantity ) => {
     return _.find( shapePartitions, shapePartition => shapePartition.length === quantity );
@@ -106,12 +106,12 @@ define( require => {
 
       const timerToggleButton = new AlignBox( new TimerToggleButton( model.timeVisibleProperty ), { group: bottomAlignGroup } );
 
-      const resetAllButton = new AlignBox( new ResetAllButton( {
+      const resetAllButton = new ResetAllButton( {
         listener: () => {
           this.interruptSubtreeInput();
           model.reset();
         }
-      } ), { group: bottomAlignGroup } );
+      } );
 
       const levelIcons = model.levels.map( level => MatchingGameScreenView.createLevelIcon( level, model.hasMixedNumbers ) );
 
@@ -163,7 +163,7 @@ define( require => {
       const challengeControlBox = new VBox( {
         spacing: 10,
         top: this.layoutBounds.top + 160,
-        left: this.layoutBounds.left + SIDE_MARGIN,
+        left: this.layoutBounds.left + FractionsCommonConstants.MATCHING_MARGIN,
         children: [
           new BackButton( _.extend( {
             listener() {
