@@ -13,6 +13,7 @@ define( require => {
   const Dimension2 = require( 'DOT/Dimension2' );
   const DragListener = require( 'SCENERY/listeners/DragListener' );
   const FilledPartitionNode = require( 'FRACTIONS_COMMON/game/view/FilledPartitionNode' );
+  const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const HBox = require( 'SCENERY/nodes/HBox' );
@@ -43,7 +44,7 @@ define( require => {
         } ) );
       }
       else {
-        const numberOptions = piece.hasMixedNumbers ? {
+        const numberOptions = ( piece.hasMixedNumbers && Fraction.ONE.isLessThan( piece.fraction ) ) ? {
           whole: Math.floor( piece.fraction.value ),
           numerator: piece.fraction.numerator % piece.fraction.denominator,
           denominator: piece.fraction.denominator
