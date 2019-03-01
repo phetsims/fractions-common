@@ -19,6 +19,7 @@ define( require => {
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Property = require( 'AXON/Property' );
   const ShapePartition = require( 'FRACTIONS_COMMON/game/model/ShapePartition' );
+  const Util = require( 'DOT/Util' );
 
   class MatchingLevel {
     /**
@@ -55,10 +56,12 @@ define( require => {
 
       // @public {Property.<number>}
       this.highScoreProperty = new NumberProperty( 0 );
+      this.bestTimeProperty = new NumberProperty( Number.POSITIVE_INFINITY );
 
       // @private {function}
       this.completedListener = () => {
         this.highScoreProperty.value = Math.max( this.highScoreProperty.value, this.challengeProperty.value.scoreProperty.value );
+        this.bestTimeProperty.value = Util.toFixedNumber( Math.min( this.bestTimeProperty.value, this.challengeProperty.value.elapsedTimeProperty.value ), 0 );
       };
 
       this.challengeProperty.link( ( newChallenge, oldChallenge ) => {

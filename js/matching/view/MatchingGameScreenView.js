@@ -13,6 +13,7 @@ define( require => {
   const AlignGroup = require( 'SCENERY/nodes/AlignGroup' );
   const BackButton = require( 'SCENERY_PHET/buttons/BackButton' );
   const Bounds2 = require( 'DOT/Bounds2' );
+  const DerivedProperty = require( 'AXON/DerivedProperty' );
   const Easing = require( 'TWIXT/Easing' );
   const FaceNode = require( 'SCENERY_PHET/FaceNode' );
   const FilledPartition = require( 'FRACTIONS_COMMON/game/model/FilledPartition' );
@@ -127,18 +128,23 @@ define( require => {
             bottom: this.layoutBounds.bottom - SIDE_MARGIN,
             left: this.layoutBounds.left + SIDE_MARGIN
           } ),
-          new Text( model.useShortTitle ? chooseYourLevelString : ( model.hasMixedNumbers ? mixedNumbersChooseYourLevelString : fractionsChooseYourLevelString ), {
-            centerX: this.layoutBounds.centerX,
-            top: this.layoutBounds.top + 30,
-            font: new PhetFont( 30 )
-          } ),
           new VBox( {
+            spacing: 20,
+            center: this.layoutBounds.center,
             children: [
-              this.createLevelRow( this.model.levels.slice( 0, 4 ), levelIcons.slice( 0, 4 ) ),
-              this.createLevelRow( this.model.levels.slice( 4 ), levelIcons.slice( 4 ) )
-            ],
-            spacing: LEVEL_SELECTION_SPACING,
-            center: this.layoutBounds.center
+              new Text( model.useShortTitle ? chooseYourLevelString : ( model.hasMixedNumbers ? mixedNumbersChooseYourLevelString : fractionsChooseYourLevelString ), {
+                centerX: this.layoutBounds.centerX,
+                top: this.layoutBounds.top + 30,
+                font: new PhetFont( 30 )
+              } ),
+              new VBox( {
+                children: [
+                  this.createLevelRow( this.model.levels.slice( 0, 4 ), levelIcons.slice( 0, 4 ) ),
+                  this.createLevelRow( this.model.levels.slice( 4 ), levelIcons.slice( 4 ) )
+                ],
+                spacing: LEVEL_SELECTION_SPACING
+              } )
+            ]
           } )
         ]
       } );
@@ -337,7 +343,11 @@ define( require => {
             listener: () => {
               this.model.levelProperty.value = level;
             },
-            baseColor: FractionsCommonColorProfile.matchingLevelBackgroundProperty
+            baseColor: FractionsCommonColorProfile.matchingLevelBackgroundProperty,
+            // Workaround since it expects 0 as the best time if there was no best time. Don't solve levels in
+            // under a second!
+            bestTimeProperty: new DerivedProperty( [ level.bestTimeProperty ], bestTime => isFinite( bestTime ) ? bestTime : 0 ),
+            bestTimeVisibleProperty: level.timeVisibleProperty
           } );
           button.touchArea = button.localBounds.dilated( LEVEL_SELECTION_SPACING / 2 );
           return button;
