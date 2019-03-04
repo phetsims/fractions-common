@@ -169,8 +169,10 @@ define( require => {
           left: this.layoutBounds.left + 50,
           fill: 'white',
           expandedProperty: model.mixedNumbersBoxExpandedProperty,
-          buttonTouchAreaXDilation: 15,
-          buttonTouchAreaYDilation: 15
+          expandCollapseButtonOptions: {
+            touchAreaXDilation: 15,
+            touchAreaYDilation: 15
+          }
         } );
         model.showMixedNumbersProperty.linkAttribute( equationBox, 'visible' );
 
