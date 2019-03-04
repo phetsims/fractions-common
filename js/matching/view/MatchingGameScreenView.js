@@ -347,7 +347,8 @@ define( require => {
             // Workaround since it expects 0 as the best time if there was no best time. Don't solve levels in
             // under a second!
             bestTimeProperty: new DerivedProperty( [ level.bestTimeProperty ], bestTime => isFinite( bestTime ) ? bestTime : 0 ),
-            bestTimeVisibleProperty: level.timeVisibleProperty
+            bestTimeVisibleProperty: level.timeVisibleProperty,
+            bestTimeYSpacing: 5
           } );
           button.touchArea = button.localBounds.dilated( LEVEL_SELECTION_SPACING / 2 );
           return button;
