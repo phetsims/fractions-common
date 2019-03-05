@@ -76,6 +76,9 @@ define( require => {
       // @private {Emitter}
       this.disposeEmitter = new Emitter();
 
+      // Will fire once we have piece nodes initialized, so the equals signs can be properly positioned in targets.
+      const layoutCompleteEmitter = new Emitter();
+
       // @private {RewardNode|null}
       this.rewardNode = null;
 
@@ -103,19 +106,21 @@ define( require => {
 
           // Below, we figure out how to center the equals sign in the target so it will be in-between the two pieces.
           // See https://github.com/phetsims/fractions-common/issues/86
+          if ( filled ) {
+            const leftPiece = target.spots[ 0 ].pieceProperty.value;
+            const rightPiece = target.spots[ 1 ].pieceProperty.value;
 
-          const leftPiece = target.spots[ 0 ].pieceProperty.value;
-          const rightPiece = target.spots[ 1 ].pieceProperty.value;
+            const leftNode = _.find( pieceNodes, pieceNode => pieceNode.piece === leftPiece );
+            const rightNode = _.find( pieceNodes, pieceNode => pieceNode.piece === rightPiece );
 
-          const leftNode = _.find( pieceNodes, pieceNode => pieceNode.piece === leftPiece );
-          const rightNode = _.find( pieceNodes, pieceNode => pieceNode.piece === rightPiece );
+            const leftX = target.spots[ 0 ].positionProperty.value.x + leftPiece.getTargetScale() * leftNode.localBounds.width / 2;
+            const rightX = target.spots[ 1 ].positionProperty.value.x - rightPiece.getTargetScale() * rightNode.localBounds.width / 2;
 
-          const leftX = target.spots[ 0 ].positionProperty.value.x + leftPiece.getTargetScale() * leftNode.localBounds.width / 2;
-          const rightX = target.spots[ 1 ].positionProperty.value.x - rightPiece.getTargetScale() * rightNode.localBounds.width / 2;
-
-          equalsSign.centerX = ( leftX + rightX ) / 2;
+            equalsSign.centerX = ( leftX + rightX ) / 2;
+          }
         };
         target.isFilledProperty.lazyLink( targetListener );
+        layoutCompleteEmitter.addListener( () => targetListener( target.isFilledProperty.value ) );
         this.disposeEmitter.addListener( () => {
           target.isFilledProperty.unlink( targetListener );
         } );
@@ -369,6 +374,8 @@ define( require => {
       this.disposeEmitter.addListener( () => {
         this.challenge.completedEmitter.removeListener( completedListener );
       } );
+
+      layoutCompleteEmitter.emit();
     }
 
     /**
