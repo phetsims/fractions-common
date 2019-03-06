@@ -16,6 +16,7 @@ define( require => {
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
+  const Vector2Property = require( 'DOT/Vector2Property' );
 
   class Group {
     /**
@@ -27,9 +28,7 @@ define( require => {
       this.type = type;
 
       // @public {Property.<Vector2>}
-      this.positionProperty = new Property( Vector2.ZERO, {
-        valueType: Vector2
-      } );
+      this.positionProperty = new Vector2Property( Vector2.ZERO );
 
       // @public {Property.<number>} - Applies only while out in the play area (being animated or dragged)
       this.scaleProperty = new NumberProperty( 1 );
