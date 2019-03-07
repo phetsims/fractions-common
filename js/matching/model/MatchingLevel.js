@@ -99,6 +99,7 @@ define( require => {
     reset() {
       this.refresh();
       this.highScoreProperty.reset();
+      this.bestTimeProperty.reset();
     }
 
     /**

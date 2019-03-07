@@ -66,6 +66,7 @@ define( require => {
       this.levelProperty.reset();
       this.timeVisibleProperty.reset();
       this.soundEnabledProperty.reset();
+      this.levels.forEach( level => level.reset() );
     }
   }
 
