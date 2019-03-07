@@ -217,7 +217,7 @@ define( require => {
             new Fraction( 8, 9 )
           ],
           numericScaleFactors: [ 1, 2, 3 ],
-          fillType: [ FillType.SEQUENTIAL, FillType.MIXED ]
+          fillTypes: [ FillType.SEQUENTIAL, FillType.MIXED ]
         },
         /**
          * Level 6:
@@ -246,7 +246,7 @@ define( require => {
             new Fraction( 11, 9 )
           ],
           numericScaleFactors: [ 1, 4, 5 ],
-          fillType: [ FillType.SEQUENTIAL, FillType.RANDOM ]
+          fillTypes: [ FillType.SEQUENTIAL, FillType.RANDOM ]
         },
         /**
          * Level 7:
@@ -267,7 +267,7 @@ define( require => {
             new Fraction( 11, 6 )
           ],
           numericScaleFactors: [ 1, 6, 7 ],
-          fillType: [ FillType.SEQUENTIAL, FillType.RANDOM ]
+          fillTypes: [ FillType.SEQUENTIAL, FillType.RANDOM ]
         },
         /**
          * Level 8:
@@ -298,7 +298,7 @@ define( require => {
             new Fraction( 17, 9 )
           ],
           numericScaleFactors: [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
-          fillType: [ FillType.SEQUENTIAL, FillType.RANDOM ]
+          fillTypes: [ FillType.SEQUENTIAL, FillType.RANDOM ]
         }
       ];
     }
