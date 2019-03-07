@@ -15,8 +15,8 @@ define( require => {
   // modules
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const ObservableArray = require( 'AXON/ObservableArray' );
-  const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
+  const Vector2Property = require( 'DOT/Vector2Property' );
 
   class Stack {
     /**
@@ -37,8 +37,8 @@ define( require => {
       // @public {boolean}
       this.isMutable = isMutable;
 
-      // @public {Property.<Vector2>} - Position of our stack in model units (updated from the view)
-      this.positionProperty = new Property( Vector2.ZERO );
+      // @public - Position of our stack in model units (updated from the view)
+      this.positionProperty = new Vector2Property( Vector2.ZERO );
 
       // @public {ObservableArray.<*>}
       this.array = new ObservableArray();

@@ -12,6 +12,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
+  const Vector2Property = require( 'DOT/Vector2Property' );
 
   class MatchSpot {
     /**
@@ -25,8 +26,8 @@ define( require => {
         isScale: false
       }, options );
 
-      // @public {Property.<Vector2>} - To be updated by the view when its location changes (usually just initially)
-      this.positionProperty = new Property( Vector2.ZERO );
+      // @public - To be updated by the view when its location changes (usually just initially)
+      this.positionProperty = new Vector2Property( Vector2.ZERO );
 
       // @public {number} - How piece nodes should be scaled when placed in this spot
       this.scale = options.scale;

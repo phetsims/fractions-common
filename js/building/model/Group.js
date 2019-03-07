@@ -27,7 +27,7 @@ define( require => {
       // @public {BuildingType}
       this.type = type;
 
-      // @public {Property.<Vector2>}
+      // @public
       this.positionProperty = new Vector2Property( Vector2.ZERO );
 
       // @public {Property.<number>} - Applies only while out in the play area (being animated or dragged)

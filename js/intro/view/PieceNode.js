@@ -16,8 +16,8 @@ define( require => {
   const Easing = require( 'TWIXT/Easing' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Node = require( 'SCENERY/nodes/Node' );
-  const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
+  const Vector2Property = require( 'DOT/Vector2Property' );
 
   class PieceNode extends Node {
     /**
@@ -45,9 +45,9 @@ define( require => {
       // @private {function}
       this.finishedAnimatingCallback = finishedAnimatingCallback;
 
-      // @public {Property.<Vector2>}
-      this.originProperty = new Property( Vector2.ZERO );
-      this.destinationProperty = new Property( Vector2.ZERO );
+      // @public
+      this.originProperty = new Vector2Property( Vector2.ZERO );
+      this.destinationProperty = new Vector2Property( Vector2.ZERO );
 
       // @public <boolean>
       this.isUserControlled = false;

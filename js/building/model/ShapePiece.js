@@ -22,6 +22,7 @@ define( require => {
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
+  const Vector2Property = require( 'DOT/Vector2Property' );
 
   // globals
   // Used for unique identifiers for every ShapePiece (so we can efficiently store a map from piece ID to other objects.
@@ -49,8 +50,8 @@ define( require => {
       // @public {ColorDef}
       this.color = color;
 
-      // @public {Property.<Vector2>} - Applies only while out in the play area (being animated or dragged)
-      this.positionProperty = new Property( Vector2.ZERO );
+      // @public - Applies only while out in the play area (being animated or dragged)
+      this.positionProperty = new Vector2Property( Vector2.ZERO );
 
       // @public {Property.<number>} - Applies only while out in the play area (being animated or dragged)
       this.rotationProperty = new NumberProperty( 0 );

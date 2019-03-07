@@ -16,8 +16,8 @@ define( require => {
   const Bounds2 = require( 'DOT/Bounds2' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const NumberProperty = require( 'AXON/NumberProperty' );
-  const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
+  const Vector2Property = require( 'DOT/Vector2Property' );
 
   // constants
   const NUMBER_HEIGHT = 75;
@@ -33,8 +33,8 @@ define( require => {
       // @public {number}
       this.number = number;
 
-      // @public {Property.<Vector2>} - Applies only while out in the play area (being animated or dragged)
-      this.positionProperty = new Property( Vector2.ZERO );
+      // @public - Applies only while out in the play area (being animated or dragged)
+      this.positionProperty = new Vector2Property( Vector2.ZERO );
 
       // @public {Property.<number>} - Applies only while out in the play area (being animated or dragged)
       this.scaleProperty = new NumberProperty( 1 );

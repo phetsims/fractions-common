@@ -15,6 +15,7 @@ define( require => {
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
+  const Vector2Property = require( 'DOT/Vector2Property' );
 
   class MatchPiece {
     /**
@@ -49,8 +50,8 @@ define( require => {
       // @public {Bounds2|null} - Written by view elements so that relative positioning can be done
       this.localBounds = null;
 
-      // @public {Property.<Vector2>} - To be updated by the view when its location changes (usually just initially)
-      this.positionProperty = new Property( Vector2.ZERO );
+      // @public - To be updated by the view when its location changes (usually just initially)
+      this.positionProperty = new Vector2Property( Vector2.ZERO );
 
       // @public {Property.<number>]}
       this.scaleProperty = new NumberProperty( 1 );

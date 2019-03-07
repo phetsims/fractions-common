@@ -13,6 +13,7 @@ define( require => {
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
+  const Vector2Property = require( 'DOT/Vector2Property' );
 
   class Target {
     /**
@@ -26,8 +27,8 @@ define( require => {
       // @public {Property.<Group|null>}
       this.groupProperty = new Property( null );
 
-      // @public {Property.<Vector2>} - Position of our target in model units (updated from the view)
-      this.positionProperty = new Property( Vector2.ZERO );
+      // @public - Position of our target in model units (updated from the view)
+      this.positionProperty = new Vector2Property( Vector2.ZERO );
 
       // @public {ObservableArray.<Group>}
       this.hoveringGroups = new ObservableArray();

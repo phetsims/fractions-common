@@ -10,8 +10,8 @@ define( require => {
 
   // modules
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
+  const Vector2Property = require( 'DOT/Vector2Property' );
 
   class Piece {
     /**
@@ -29,8 +29,8 @@ define( require => {
       // the piece goes away.
       this.destinationCell = null;
 
-      // @public {Property.<Vector2>}
-      this.positionProperty = new Property( Vector2.ZERO );
+      // @public
+      this.positionProperty = new Vector2Property( Vector2.ZERO );
     }
   }
 
