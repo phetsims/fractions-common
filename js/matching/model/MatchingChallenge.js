@@ -237,10 +237,10 @@ define( require => {
       const rightPiece = this.scaleSpots[ 1 ].pieceProperty.value;
 
       if ( leftPiece.fraction.reduced().equals( rightPiece.fraction.reduced() ) ) {
-        this.stateProperty.value = MatchingChallenge.State.MATCHED;
 
         const scoreDelta = this.wasLastAttemptFailureProperty.value ? 1 : 2;
         this.lastScoreGainProperty.value = scoreDelta;
+        this.stateProperty.value = MatchingChallenge.State.MATCHED;
 
         this.scoreProperty.value += scoreDelta;
 

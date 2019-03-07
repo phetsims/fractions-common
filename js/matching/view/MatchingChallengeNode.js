@@ -291,7 +291,7 @@ define( require => {
         tryAgainButton.visible = state === MatchingChallenge.State.TRY_AGAIN;
         showAnswerButton.visible = state === MatchingChallenge.State.SHOW_ANSWER;
 
-        faceNode.visible = state === MatchingChallenge.State.MATCHED;
+        faceNode.visible = state === MatchingChallenge.State.MATCHED && challenge.lastScoreGainProperty.value > 0;
         if ( state === MatchingChallenge.State.COMPARISON || state === MatchingChallenge.State.NO_COMPARISON ) {
           this.chartNode.visible = false;
         }
