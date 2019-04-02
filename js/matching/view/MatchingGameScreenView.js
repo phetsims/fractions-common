@@ -101,11 +101,14 @@ define( require => {
       } );
 
       const soundToggleButton = new AlignBox( new SoundToggleButton( model.soundEnabledProperty, {
-        touchAreaXDilation: 10,
-        touchAreaYDilation: 10
+        touchAreaXDilation: 5,
+        touchAreaYDilation: 5
       } ), { group: bottomAlignGroup } );
 
-      const timerToggleButton = new AlignBox( new TimerToggleButton( model.timeVisibleProperty ), { group: bottomAlignGroup } );
+      const timerToggleButton = new AlignBox( new TimerToggleButton( model.timeVisibleProperty, {
+        touchAreaXDilation: 5,
+        touchAreaYDilation: 5
+      } ), { group: bottomAlignGroup } );
 
       const resetAllButton = new ResetAllButton( {
         listener: () => {
@@ -350,7 +353,6 @@ define( require => {
             bestTimeVisibleProperty: level.timeVisibleProperty,
             bestTimeYSpacing: 5
           } );
-          button.touchArea = button.localBounds.dilated( LEVEL_SELECTION_SPACING / 2 );
           return button;
         } ),
         spacing: LEVEL_SELECTION_SPACING
