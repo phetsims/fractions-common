@@ -280,7 +280,8 @@ define( require => {
       const stationarySpot = this.scaleSpots[ ( this.scaleSpots.indexOf( changingSpot ) + 1 ) % 2 ];
       const discardPiece = changingSpot.pieceProperty.value;
       const matchedPiece = _.find( this.pieces, piece => {
-        return _.includes( this.sourceSpots, piece.spotProperty.value ) && piece.fraction.equals( stationarySpot.pieceProperty.value.fraction );
+        return _.includes( this.sourceSpots, piece.spotProperty.value ) &&
+               piece.fraction.reduced().equals( stationarySpot.pieceProperty.value.fraction.reduced() );
       } );
 
       // In the case where we are dragging the other pieces that would be required, we won't complete the "show answer".
