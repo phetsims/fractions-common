@@ -44,10 +44,11 @@ define( require => {
         } ) );
       }
       else {
+        const isInteger = piece.fraction.isInteger();
         const numberOptions = ( piece.hasMixedNumbers && Fraction.ONE.isLessThan( piece.fraction ) ) ? {
           whole: Math.floor( piece.fraction.value ),
-          numerator: piece.fraction.numerator % piece.fraction.denominator,
-          denominator: piece.fraction.denominator
+          numerator: isInteger ? null : ( piece.fraction.numerator % piece.fraction.denominator ),
+          denominator: isInteger ? null : piece.fraction.denominator
         } : {
           numerator: piece.fraction.numerator,
           denominator: piece.fraction.denominator
