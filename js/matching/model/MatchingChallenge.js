@@ -159,6 +159,7 @@ define( require => {
               if ( _.includes( this.scaleSpots, closestSpot ) && closestSpot.pieceProperty.value ) {
                 const existingPiece = closestSpot.pieceProperty.value;
                 existingPiece.moveToSpot( closestOpenSpot );
+                closestSpot.pieceProperty.value = null;
                 piece.moveToSpot( closestSpot );
               }
               else {
