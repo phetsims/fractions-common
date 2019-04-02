@@ -94,6 +94,7 @@ define( require => {
           y: layoutBounds.top + PADDING
         } );
         this.addChild( targetBackground );
+        target.targetBoundsProperty.value = targetBackground.bounds;
 
         const equalsSign = new Text( MathSymbols.EQUAL_TO, {
           font: new PhetFont( { size: 26 } ),
@@ -101,36 +102,32 @@ define( require => {
           visible: false
         } );
         this.addChild( equalsSign );
-        const targetListener = filled => {
-          equalsSign.visible = filled;
+        target.equalsSignBounds = equalsSign.localBounds;
 
-          // Below, we figure out how to center the equals sign in the target so it will be in-between the two pieces.
-          // See https://github.com/phetsims/fractions-common/issues/86
-          if ( filled ) {
-            const leftPiece = target.spots[ 0 ].pieceProperty.value;
-            const rightPiece = target.spots[ 1 ].pieceProperty.value;
-
-            const leftNode = _.find( pieceNodes, pieceNode => pieceNode.piece === leftPiece );
-            const rightNode = _.find( pieceNodes, pieceNode => pieceNode.piece === rightPiece );
-
-            const leftX = target.spots[ 0 ].positionProperty.value.x + leftPiece.getTargetScale() * leftNode.localBounds.width / 2;
-            const rightX = target.spots[ 1 ].positionProperty.value.x - rightPiece.getTargetScale() * rightNode.localBounds.width / 2;
-
-            equalsSign.centerX = ( leftX + rightX ) / 2;
-          }
+        const xListener = x => {
+          equalsSign.centerX = x;
         };
-        target.isFilledProperty.lazyLink( targetListener );
-        layoutCompleteEmitter.addListener( () => targetListener( target.isFilledProperty.value ) );
+        target.equalsXProperty.link( xListener );
         this.disposeEmitter.addListener( () => {
-          target.isFilledProperty.unlink( targetListener );
+          target.equalsXProperty.unlink( xListener );
         } );
 
-        const CENTER_WEIGHT = 0.5;
+        const filledListener = filled => {
+          equalsSign.visible = filled;
+        };
+        target.isFilledProperty.link( filledListener );
+        this.disposeEmitter.addListener( () => {
+          target.isFilledProperty.unlink( filledListener );
+        } );
 
-        const y = targetBackground.centerY;
-        target.spots[ 0 ].positionProperty.value = new Vector2( ( 1 - CENTER_WEIGHT ) * targetBackground.left + CENTER_WEIGHT * targetBackground.centerX, y );
-        target.spots[ 1 ].positionProperty.value = new Vector2( ( 1 - CENTER_WEIGHT ) * targetBackground.right + CENTER_WEIGHT * targetBackground.centerX, y );
-        targetBottom = targetBackground.bottom;
+        if ( !target.isFilledProperty.value ) {
+          const CENTER_WEIGHT = 0.5;
+
+          const y = targetBackground.centerY;
+          target.spots[ 0 ].positionProperty.value = new Vector2( ( 1 - CENTER_WEIGHT ) * targetBackground.left + CENTER_WEIGHT * targetBackground.centerX, y );
+          target.spots[ 1 ].positionProperty.value = new Vector2( ( 1 - CENTER_WEIGHT ) * targetBackground.right + CENTER_WEIGHT * targetBackground.centerX, y );
+          targetBottom = targetBackground.bottom;
+        }
       } );
 
       // Scales

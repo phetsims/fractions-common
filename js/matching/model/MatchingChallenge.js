@@ -207,6 +207,8 @@ define( require => {
 
       const target = _.find( this.targets, target => !target.isFilledProperty.value );
 
+      target.layout( leftPiece, rightPiece );
+
       // Hook up the spot/piece changes
       this.scaleSpots.forEach( scaleSpot => {
         scaleSpot.pieceProperty.value = null;
