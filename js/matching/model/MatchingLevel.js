@@ -21,6 +21,9 @@ define( require => {
   const ShapePartition = require( 'FRACTIONS_COMMON/game/model/ShapePartition' );
   const Util = require( 'DOT/Util' );
 
+  // constants
+  const MAX_SCORE = 12;
+
   class MatchingLevel {
     /**
      * @param {Object} description - To be passed to the challenge options
@@ -61,7 +64,11 @@ define( require => {
       // @private {function}
       this.completedListener = () => {
         this.highScoreProperty.value = Math.max( this.highScoreProperty.value, this.challengeProperty.value.scoreProperty.value );
-        this.bestTimeProperty.value = Util.toFixedNumber( Math.min( this.bestTimeProperty.value, this.challengeProperty.value.elapsedTimeProperty.value ), 0 );
+
+        // Only record the best time for perfect runs, see https://github.com/phetsims/fractions-common/issues/92
+        if ( this.highScoreProperty.value === MAX_SCORE ) {
+          this.bestTimeProperty.value = Util.toFixedNumber( Math.min( this.bestTimeProperty.value, this.challengeProperty.value.elapsedTimeProperty.value ), 0 );
+        }
       };
 
       this.challengeProperty.link( ( newChallenge, oldChallenge ) => {
