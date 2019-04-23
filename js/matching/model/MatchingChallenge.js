@@ -322,7 +322,10 @@ define( require => {
      * @param {number} dt
      */
     step( dt ) {
-      this.elapsedTimeProperty.value += dt;
+      // Only increase elapsed time if there is at least one unfilled target
+      if ( _.some( this.targets, target => !target.isFilledProperty.value ) ) {
+        this.elapsedTimeProperty.value += dt;
+      }
 
       this.pieces.forEach( piece => piece.step( dt ) );
     }
