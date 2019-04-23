@@ -176,7 +176,14 @@ define( require => {
         children: [
           new BackButton( _.extend( {
             listener() {
+              const level = model.levelProperty.value;
+              const challenge = model.challengeProperty.value;
               model.levelProperty.value = null;
+
+              // Force a refresh on a completed level with the back button
+              if ( challenge.scoreProperty.value === 12 ) {
+                level.refresh();
+              }
             }
           }, leftButtonOptions ) ),
           new RefreshButton( _.extend( {
