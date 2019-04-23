@@ -67,7 +67,10 @@ define( require => {
 
       options = _.extend( {
         // {function} - Called when the "continue" button is pressed on the level-complete node
-        onContinue: () => {}
+        onContinue: () => {},
+
+        // {Node} - Where the reward node is placed.
+        rewardContainer: new Node()
       }, options );
 
       // @private {MatchingChallenge}
@@ -126,8 +129,8 @@ define( require => {
           const y = targetBackground.centerY;
           target.spots[ 0 ].positionProperty.value = new Vector2( ( 1 - CENTER_WEIGHT ) * targetBackground.left + CENTER_WEIGHT * targetBackground.centerX, y );
           target.spots[ 1 ].positionProperty.value = new Vector2( ( 1 - CENTER_WEIGHT ) * targetBackground.right + CENTER_WEIGHT * targetBackground.centerX, y );
-          targetBottom = targetBackground.bottom;
         }
+        targetBottom = targetBackground.bottom;
       } );
 
       // Scales
@@ -343,7 +346,7 @@ define( require => {
               } ), 100 )
             ]
           } );
-          this.addChild( this.rewardNode );
+          options.rewardContainer.addChild( this.rewardNode );
         }
 
         const time = Util.toFixed( challenge.elapsedTimeProperty.value, 0 );
@@ -364,6 +367,10 @@ define( require => {
         this.addChild( levelCompletedNode );
         this.disposeEmitter.addListener( () => {
           levelCompletedNode.dispose();
+          if ( this.rewardNode ) {
+            this.rewardNode.dispose();
+            this.rewardNode = null;
+          }
         } );
       };
 

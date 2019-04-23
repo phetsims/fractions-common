@@ -211,6 +211,7 @@ define( require => {
         let transition;
         if ( challenge ) {
           const challengeNode = new MatchingChallengeNode( challenge, this.layoutBounds, gameAudioPlayer, {
+            rewardContainer: challengeBackground,
             onContinue: () => {
               const level = model.levelProperty.value;
               model.levelProperty.value = null;

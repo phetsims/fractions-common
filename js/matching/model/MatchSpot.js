@@ -27,7 +27,9 @@ define( require => {
       }, options );
 
       // @public - To be updated by the view when its location changes (usually just initially)
-      this.positionProperty = new Vector2Property( Vector2.ZERO );
+      this.positionProperty = new Vector2Property( Vector2.ZERO, {
+        useDeepEquality: true
+      } );
 
       // @public {number} - How piece nodes should be scaled when placed in this spot
       this.scale = options.scale;
