@@ -68,6 +68,10 @@ define( require => {
         scaleProperty: this.scaleProperty,
         isAnimatingProperty: this.isAnimatingProperty
       } );
+
+      // @public {number} - The scale that will be used to place it in a target. This can be modified if things need to
+      // be scaled down more.
+      this.targetScale = this.getIdealTargetScale();
     }
 
     /**
@@ -96,7 +100,7 @@ define( require => {
      *
      * @returns {number}
      */
-    getTargetScale() {
+    getIdealTargetScale() {
       return this.filledPartitions ? 0.5 : 0.7;
     }
 

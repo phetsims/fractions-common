@@ -53,13 +53,30 @@ define( require => {
      * @param {MatchPiece} rightPiece
      */
     layout( leftPiece, rightPiece ) {
+      let leftTargetScale = leftPiece.getIdealTargetScale();
+      let rightTargetScale = rightPiece.getIdealTargetScale();
+
       const totalWidth = this.targetBoundsProperty.value.width;
-      const leftWidth = leftPiece.getTargetScale() * leftPiece.localBounds.width;
-      const rightWidth = rightPiece.getTargetScale() * rightPiece.localBounds.width;
+      let leftWidth = leftTargetScale * leftPiece.localBounds.width;
+      let rightWidth = rightTargetScale * rightPiece.localBounds.width;
       const equalsWidth = this.equalsSignBounds.width;
 
-      const totalPaddingWidth = totalWidth - leftWidth - rightWidth - equalsWidth;
-      // assert( totalPaddingWidth > 0 );
+      let totalPaddingWidth = totalWidth - leftWidth - rightWidth - equalsWidth;
+      if ( totalPaddingWidth < 0 ) {
+        const availableWidth = totalWidth - equalsWidth;
+        const usedWidth = leftWidth + rightWidth;
+        const scaleFactor = availableWidth / usedWidth;
+
+        leftTargetScale *= scaleFactor;
+        rightTargetScale *= scaleFactor;
+
+        leftWidth = leftTargetScale * leftPiece.localBounds.width;
+        rightWidth = rightTargetScale * rightPiece.localBounds.width;
+        totalPaddingWidth = totalWidth - leftWidth - rightWidth - equalsWidth;
+      }
+
+      leftPiece.targetScale = leftTargetScale;
+      rightPiece.targetScale = rightTargetScale;
 
       const padding = totalPaddingWidth / 4;
 

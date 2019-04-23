@@ -215,10 +215,10 @@ define( require => {
       } );
 
       leftPiece.moveToSpot( target.spots[ 0 ], {
-        scale: leftPiece.getTargetScale()
+        scale: leftPiece.targetScale
       } );
       rightPiece.moveToSpot( target.spots[ 1 ], {
-        scale: rightPiece.getTargetScale()
+        scale: rightPiece.targetScale
       } );
 
       target.isFilledProperty.value = true;
