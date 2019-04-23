@@ -105,9 +105,9 @@ define( require => {
      * @public
      */
     reset() {
-      this.refresh();
       this.highScoreProperty.reset();
       this.bestTimeProperty.reset();
+      this.refresh();
     }
 
     /**
