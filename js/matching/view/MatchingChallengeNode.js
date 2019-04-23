@@ -349,17 +349,18 @@ define( require => {
           options.rewardContainer.addChild( this.rewardNode );
         }
 
-        const time = Util.toFixed( challenge.elapsedTimeProperty.value, 0 );
-        const lastBestTime = Util.toFixed( challenge.bestElapsedTimeProperty.value, 0 );
+        const bestTime = ( isFinite( challenge.previousBestTime ) || challenge.scoreProperty.value === 12 )
+          ? Util.toFixed( Math.min( challenge.elapsedTimeProperty.value, challenge.previousBestTime ), 0 )
+          : null;
         const levelCompletedNode = new LevelCompletedNode(
           challenge.levelNumber,
           challenge.scoreProperty.value,
           12,
           3,
           challenge.timeVisibleProperty.value,
-          time,
-          lastBestTime,
-          time < lastBestTime,
+          Util.toFixed( challenge.elapsedTimeProperty.value, 0 ),
+          bestTime,
+          challenge.isNewBestTime,
           options.onContinue, {
             center: layoutBounds.center,
             contentMaxWidth: 600

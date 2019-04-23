@@ -74,7 +74,10 @@ define( require => {
         numericScaleFactors: [ 1 ],
 
         // {Property.<boolean>} optional
-        timeVisibleProperty: new BooleanProperty( true )
+        timeVisibleProperty: new BooleanProperty( true ),
+
+        // {number}
+        previousBestTime: Number.POSITIVE_INFINITY
       }, config );
 
       assert && assert( config.fractions.length > 0 );
@@ -84,6 +87,7 @@ define( require => {
 
       // @public {number}
       this.levelNumber = levelNumber;
+      this.previousBestTime = config.previousBestTime;
 
       // @public {Property.<MatchingChallenge.State>}
       this.stateProperty = new Property( MatchingChallenge.State.NO_COMPARISON );
@@ -97,7 +101,9 @@ define( require => {
 
       // @public {Property.<number>}
       this.elapsedTimeProperty = new NumberProperty( 0 );
-      this.bestElapsedTimeProperty = new NumberProperty( Number.POSITIVE_INFINITY );
+
+      // @public {boolean}
+      this.isNewBestTime = false;
 
       // @public {Emitter} - Fires correct/incorrect whenever "check" is pressed, based on the result
       this.correctEmitter = new Emitter();
@@ -225,9 +231,13 @@ define( require => {
       this.wasLastAttemptFailureProperty.value = false;
 
       if ( _.every( this.targets, target => target.isFilledProperty.value ) ) {
-        this.completedEmitter.emit();
+        const isPerfectRun = this.scoreProperty.value === this.targets.length * 2;
+        const isImprovedTime = this.elapsedTimeProperty.value < this.previousBestTime;
+        if ( isPerfectRun && isImprovedTime ) {
+          this.isNewBestTime = true;
+        }
 
-        this.bestElapsedTimeProperty.value = Math.min( this.bestElapsedTimeProperty.value, this.elapsedTimeProperty.value );
+        this.completedEmitter.emit();
       }
     }
 

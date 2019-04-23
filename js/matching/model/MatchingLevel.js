@@ -45,6 +45,10 @@ define( require => {
       // @public {number}
       this.number = number;
 
+      // @public {Property.<number>}
+      this.highScoreProperty = new NumberProperty( 0 );
+      this.bestTimeProperty = new NumberProperty( Number.POSITIVE_INFINITY );
+
       // @public {Property.<MatchingChallenge>}
       this.challengeProperty = new Property( this.nextChallenge() );
 
@@ -56,10 +60,6 @@ define( require => {
       this.scoreProperty = new DynamicProperty( this.challengeProperty, {
         derive: 'scoreProperty'
       } );
-
-      // @public {Property.<number>}
-      this.highScoreProperty = new NumberProperty( 0 );
-      this.bestTimeProperty = new NumberProperty( Number.POSITIVE_INFINITY );
 
       // @private {function}
       this.completedListener = () => {
@@ -85,7 +85,8 @@ define( require => {
      */
     nextChallenge() {
       return new MatchingChallenge( this.number, _.extend( {
-        timeVisibleProperty: this.timeVisibleProperty
+        timeVisibleProperty: this.timeVisibleProperty,
+        previousBestTime: this.bestTimeProperty.value
       }, this.description ) );
     }
 
