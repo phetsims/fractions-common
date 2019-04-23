@@ -61,9 +61,11 @@ define( require => {
       let rightWidth = rightTargetScale * rightPiece.localBounds.width;
       const equalsWidth = this.equalsSignBounds.width;
 
+      const minimumTotalPadding = 4;
+
       let totalPaddingWidth = totalWidth - leftWidth - rightWidth - equalsWidth;
-      if ( totalPaddingWidth < 0 ) {
-        const availableWidth = totalWidth - equalsWidth;
+      if ( totalPaddingWidth < minimumTotalPadding ) {
+        const availableWidth = totalWidth - equalsWidth - minimumTotalPadding;
         const usedWidth = leftWidth + rightWidth;
         const scaleFactor = availableWidth / usedWidth;
 
