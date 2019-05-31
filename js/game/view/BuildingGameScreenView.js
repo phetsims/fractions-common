@@ -59,7 +59,7 @@ define( require => {
   const VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
-  const chooseYourLevelString = require( 'string!FRACTIONS_COMMON/chooseYourLevel' );
+  const chooseYourLevelString = require( 'string!VEGAS/chooseYourLevel' );
   const levelTitlePatternString = require( 'string!FRACTIONS_COMMON/levelTitlePattern' );
 
   // constants
