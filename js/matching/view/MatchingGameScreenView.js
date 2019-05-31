@@ -78,7 +78,7 @@ define( require => {
   };
 
   // strings
-  const chooseYourLevelString = require( 'string!FRACTIONS_COMMON/chooseYourLevel' );
+  const chooseYourLevelString = require( 'string!VEGAS/chooseYourLevel' );
   const fractionsChooseYourLevelString = require( 'string!FRACTIONS_COMMON/fractionsChooseYourLevel' );
   const levelTitlePatternString = require( 'string!FRACTIONS_COMMON/levelTitlePattern' );
   const mixedNumbersChooseYourLevelString = require( 'string!FRACTIONS_COMMON/mixedNumbersChooseYourLevel' );
