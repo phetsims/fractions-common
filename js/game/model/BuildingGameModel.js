@@ -64,9 +64,6 @@ define( require => {
         return new BooleanProperty( false );
       } );
 
-      // @public {Property.<boolean>}
-      this.soundEnabledProperty = new BooleanProperty( true );
-
       // @public {Emitter} - Triggers when all 10 levels are completed
       this.allLevelsCompleteEmitter = new Emitter();
 
@@ -137,7 +134,6 @@ define( require => {
      */
     reset() {
       this.levelProperty.reset();
-      this.soundEnabledProperty.reset();
 
       FractionChallenge.beginFullGeneration();
 

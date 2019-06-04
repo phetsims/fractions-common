@@ -25,7 +25,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonGlobals = require( 'FRACTIONS_COMMON/common/FractionsCommonGlobals' );
-  const GameAudioPlayerOld = require( 'VEGAS/GameAudioPlayerOld' );
+  const GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const LevelSelectionButton = require( 'VEGAS/LevelSelectionButton' );
   const MathSymbols = require( 'SCENERY_PHET/MathSymbols' );
@@ -49,7 +49,6 @@ define( require => {
   const ShapePartition = require( 'FRACTIONS_COMMON/game/model/ShapePartition' );
   const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
   const ShapePieceNode = require( 'FRACTIONS_COMMON/building/view/ShapePieceNode' );
-  const SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   const StarNode = require( 'SCENERY_PHET/StarNode' );
   const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   const Text = require( 'SCENERY/nodes/Text' );
@@ -246,7 +245,7 @@ define( require => {
 
       this.addChild( this.mainTransitionNode );
 
-      const gameAudioPlayer = new GameAudioPlayerOld( model.soundEnabledProperty );
+      const gameAudioPlayer = new GameAudioPlayer();
 
       // No unlinks needed, since the ScreenView/Model are permanent
       model.allLevelsCompleteEmitter.addListener( () => gameAudioPlayer.gameOverPerfectScore() );
@@ -341,14 +340,6 @@ define( require => {
         model.levelProperty.lazyLink( doneListener );
         scoreProperty.lazyLink( doneListener );
       } );
-
-      const soundToggleButton = new SoundToggleButton( model.soundEnabledProperty, {
-        touchAreaXDilation: 10,
-        touchAreaYDilation: 10,
-        bottom: this.layoutBounds.bottom - SIDE_MARGIN,
-        left: this.layoutBounds.left + SIDE_MARGIN
-      } );
-      this.levelSelectionLayer.addChild( soundToggleButton );
 
       const resetAllButton = new ResetAllButton( {
         listener: () => {

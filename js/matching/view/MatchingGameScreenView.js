@@ -9,8 +9,6 @@ define( require => {
   'use strict';
 
   // modules
-  const AlignBox = require( 'SCENERY/nodes/AlignBox' );
-  const AlignGroup = require( 'SCENERY/nodes/AlignGroup' );
   const BackButton = require( 'SCENERY_PHET/buttons/BackButton' );
   const Bounds2 = require( 'DOT/Bounds2' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
@@ -21,7 +19,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
-  const GameAudioPlayerOld = require( 'VEGAS/GameAudioPlayerOld' );
+  const GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const LevelSelectionButton = require( 'VEGAS/LevelSelectionButton' );
   const MatchingChallengeNode = require( 'FRACTIONS_COMMON/matching/view/MatchingChallengeNode' );
@@ -36,7 +34,6 @@ define( require => {
   const Screen = require( 'JOIST/Screen' );
   const ScreenView = require( 'JOIST/ScreenView' );
   const ShapePartition = require( 'FRACTIONS_COMMON/game/model/ShapePartition' );
-  const SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   const Text = require( 'SCENERY/nodes/Text' );
   const TimerToggleButton = require( 'SCENERY_PHET/buttons/TimerToggleButton' );
@@ -93,22 +90,7 @@ define( require => {
       // @private {MatchingGameModel}
       this.model = model;
 
-      const gameAudioPlayer = new GameAudioPlayerOld( model.soundEnabledProperty );
-
-      // We'll vertically center the things along the bottom
-      const bottomAlignGroup = new AlignGroup( {
-        matchHorizontal: false
-      } );
-
-      const soundToggleButton = new AlignBox( new SoundToggleButton( model.soundEnabledProperty, {
-        touchAreaXDilation: 5,
-        touchAreaYDilation: 5
-      } ), { group: bottomAlignGroup } );
-
-      const timerToggleButton = new AlignBox( new TimerToggleButton( model.timeVisibleProperty, {
-        touchAreaXDilation: 5,
-        touchAreaYDilation: 5
-      } ), { group: bottomAlignGroup } );
+      const gameAudioPlayer = new GameAudioPlayer();
 
       const resetAllButton = new ResetAllButton( {
         listener: () => {
@@ -123,11 +105,9 @@ define( require => {
       this.levelSelectionLayer = new Node( {
         children: [
           resetAllButton,
-          new HBox( {
-            children: [
-              timerToggleButton, soundToggleButton
-            ],
-            spacing: 10,
+          new TimerToggleButton( model.timeVisibleProperty, {
+            touchAreaXDilation: 5,
+            touchAreaYDilation: 5,
             bottom: this.layoutBounds.bottom - SIDE_MARGIN,
             left: this.layoutBounds.left + SIDE_MARGIN
           } ),

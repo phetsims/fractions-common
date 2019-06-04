@@ -37,9 +37,6 @@ define( require => {
       // @public {Property.<boolean>}
       this.timeVisibleProperty = new BooleanProperty( false );
 
-      // @public {Property.<boolean>}
-      this.soundEnabledProperty = new BooleanProperty( true );
-
       const descriptions = hasMixedNumbers ? MatchingLevel.getMixedLevelDescriptions() : MatchingLevel.getUnmixedLevelDescriptions();
 
       // @public {Array.<MatchingLevel>}
@@ -65,7 +62,6 @@ define( require => {
     reset() {
       this.levelProperty.reset();
       this.timeVisibleProperty.reset();
-      this.soundEnabledProperty.reset();
       this.levels.forEach( level => level.reset() );
     }
   }
