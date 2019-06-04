@@ -148,7 +148,8 @@ define( require => {
       this.visibleBoundsProperty.link( visibleBounds => {
         topAlignBox.alignBounds = visibleBounds;
         bottomAlignBox.alignBounds = visibleBounds;
-        bottomRightAlignBox.alignBounds = visibleBounds;
+        // Don't compensate for the right side expanding out, see https://github.com/phetsims/fractions-common/issues/51
+        bottomRightAlignBox.alignBounds = visibleBounds.withMaxX( this.layoutBounds.right );
         this.shapePanel.updateModelLocations( this.modelViewTransform );
         this.numberPanel.updateModelLocations( this.modelViewTransform );
 
