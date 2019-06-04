@@ -21,7 +21,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
-  const GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
+  const GameAudioPlayerOld = require( 'VEGAS/GameAudioPlayerOld' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const LevelSelectionButton = require( 'VEGAS/LevelSelectionButton' );
   const MatchingChallengeNode = require( 'FRACTIONS_COMMON/matching/view/MatchingChallengeNode' );
@@ -93,7 +93,7 @@ define( require => {
       // @private {MatchingGameModel}
       this.model = model;
 
-      const gameAudioPlayer = new GameAudioPlayer( model.soundEnabledProperty );
+      const gameAudioPlayer = new GameAudioPlayerOld( model.soundEnabledProperty );
 
       // We'll vertically center the things along the bottom
       const bottomAlignGroup = new AlignGroup( {

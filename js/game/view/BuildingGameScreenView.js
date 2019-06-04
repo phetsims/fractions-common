@@ -27,7 +27,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonGlobals = require( 'FRACTIONS_COMMON/common/FractionsCommonGlobals' );
-  const GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
+  const GameAudioPlayerOld = require( 'VEGAS/GameAudioPlayerOld' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const LevelSelectionButton = require( 'VEGAS/LevelSelectionButton' );
   const MathSymbols = require( 'SCENERY_PHET/MathSymbols' );
@@ -248,7 +248,7 @@ define( require => {
 
       this.addChild( this.mainTransitionNode );
 
-      const gameAudioPlayer = new GameAudioPlayer( model.soundEnabledProperty );
+      const gameAudioPlayer = new GameAudioPlayerOld( model.soundEnabledProperty );
 
       // No unlinks needed, since the ScreenView/Model are permanent
       model.allLevelsCompleteEmitter.addListener( () => gameAudioPlayer.gameOverPerfectScore() );
