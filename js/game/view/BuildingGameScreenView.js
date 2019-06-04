@@ -9,8 +9,6 @@ define( require => {
   'use strict';
 
   // modules
-  const AlignBox = require( 'SCENERY/nodes/AlignBox' );
-  const AlignGroup = require( 'SCENERY/nodes/AlignGroup' );
   const AllLevelsCompletedNode = require( 'VEGAS/AllLevelsCompletedNode' );
   const BackButton = require( 'SCENERY_PHET/buttons/BackButton' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
@@ -284,20 +282,15 @@ define( require => {
       leftButton.touchArea = leftButton.bounds.dilatedXY( levelSelectionButtonSpacing / 2, 10 );
       rightButton.touchArea = rightButton.bounds.dilatedXY( levelSelectionButtonSpacing / 2, 10 );
 
-      // We'll vertically center the things along the bottom
-      const bottomAlignGroup = new AlignGroup( {
-        matchHorizontal: false
-      } );
-
-      const slidingLevelSelectionNode = new AlignBox( new HBox( {
+      const slidingLevelSelectionNode = new HBox( {
         children: [
           leftButton,
           rightButton
         ],
         centerX: this.layoutBounds.centerX,
-        bottom: this.layoutBounds.bottom - 10,
+        bottom: this.layoutBounds.bottom - 30,
         spacing: levelSelectionButtonSpacing
-      } ), { group: bottomAlignGroup } );
+      } );
       this.levelSelectionLayer.addChild( slidingLevelSelectionNode );
 
       const allLevelsCompletedNode = new AllLevelsCompletedNode( () => {
@@ -349,29 +342,24 @@ define( require => {
         scoreProperty.lazyLink( doneListener );
       } );
 
-      const soundToggleButton = new AlignBox( new SoundToggleButton( model.soundEnabledProperty, {
+      const soundToggleButton = new SoundToggleButton( model.soundEnabledProperty, {
         touchAreaXDilation: 10,
         touchAreaYDilation: 10,
-        x: 20,
-        bottom: this.layoutBounds.height - 20
-      } ), { group: bottomAlignGroup } );
+        bottom: this.layoutBounds.bottom - SIDE_MARGIN,
+        left: this.layoutBounds.left + SIDE_MARGIN
+      } );
       this.levelSelectionLayer.addChild( soundToggleButton );
 
-      const resetAllButton = new AlignBox( new ResetAllButton( {
+      const resetAllButton = new ResetAllButton( {
         listener: () => {
           this.interruptSubtreeInput();
           model.reset();
           this.reset();
         },
-        right: this.layoutBounds.maxX - 10,
-        bottom: this.layoutBounds.maxY - 10
-      } ), { group: bottomAlignGroup } );
+        right: this.layoutBounds.right - SIDE_MARGIN,
+        bottom: this.layoutBounds.bottom - SIDE_MARGIN
+      } );
       this.levelSelectionLayer.addChild( resetAllButton );
-
-      slidingLevelSelectionNode.bottom = soundToggleButton.bottom = resetAllButton.bottom = this.layoutBounds.bottom - SIDE_MARGIN;
-      slidingLevelSelectionNode.centerX = this.layoutBounds.centerX;
-      soundToggleButton.left = this.layoutBounds.left + SIDE_MARGIN;
-      resetAllButton.right = this.layoutBounds.right - SIDE_MARGIN;
 
       phet.joist.display.addInputListener( {
         down: event => {

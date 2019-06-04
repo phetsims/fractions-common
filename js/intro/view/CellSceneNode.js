@@ -11,7 +11,6 @@ define( require => {
   // modules
   const arrayRemove = require( 'PHET_CORE/arrayRemove' );
   const BucketNode = require( 'FRACTIONS_COMMON/intro/view/BucketNode' );
-  const DerivedProperty = require( 'AXON/DerivedProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const IntroRepresentation = require( 'FRACTIONS_COMMON/intro/model/IntroRepresentation' );
@@ -51,6 +50,8 @@ define( require => {
 
       super( model );
 
+      const representation = model.representationProperty.value;
+
       // {function} - Creation functions from subtypes (here since we can't use the inherit pattern)
       this.createContainerNode = config.createContainerNode;
       this.createPieceNode = config.createPieceNode;
@@ -58,15 +59,15 @@ define( require => {
       // @private {function}
       this.getBucketLocation = config.getBucketLocation;
 
+      // @private {number}
+      this.horizontalSpacing = CellSceneNode.getHorizontalSpacing( representation );
+      this.verticalSpacing = CellSceneNode.getVerticalSpacing( representation );
+
       // @private {VBox}
       this.containerLayer = new VBox( {
-        align: 'left'
+        align: 'left',
+        spacing: this.verticalSpacing
       } );
-
-      // @private {Property.<number>}
-      this.horizontalSpacingProperty = new DerivedProperty( [ model.representationProperty ], CellSceneNode.getHorizontalSpacing );
-      this.verticalSpacingProperty = new DerivedProperty( [ model.representationProperty ], CellSceneNode.getVerticalSpacing );
-      this.verticalSpacingProperty.linkAttribute( this.containerLayer, 'spacing' );
 
       // @private {Node}
       this.pieceLayer = new Node();
@@ -303,9 +304,9 @@ define( require => {
       // creates new HBox within containerLayer dependent on VBox container
       if ( currentContainerNodesLength % this.maxContainersPerRow === 0 ) {
         const containerHBox = new HBox( {
-          align: 'top'
+          align: 'top',
+          spacing: this.horizontalSpacing
         } );
-        containerHBox.spacingLink = this.horizontalSpacingProperty.linkAttribute( containerHBox, 'spacing' );
         this.containerHBoxes.push( containerHBox );
         this.containerLayer.addChild( containerHBox );
       }
@@ -336,9 +337,7 @@ define( require => {
       if ( currentContainerLength % this.maxContainersPerRow === 0 ) {
 
         // removes the last HBox within containerLayer
-        const containerHBoxRemoved = this.containerHBoxes.pop();
-        this.containerLayer.removeChild( containerHBoxRemoved );
-        this.horizontalSpacingProperty.unlink( containerHBoxRemoved.spacingLink );
+        this.containerLayer.removeChild( this.containerHBoxes.pop() );
       }
 
       containerNode.dispose();
@@ -368,9 +367,6 @@ define( require => {
       this.model.containers.removeItemRemovedListener( this.removeListener );
       this.model.pieces.removeItemAddedListener( this.pieceAddedListener );
       this.model.pieces.removeItemRemovedListener( this.pieceRemovedListener );
-
-      this.horizontalSpacingProperty.dispose();
-      this.verticalSpacingProperty.dispose();
 
       this.bucketNode.dispose();
 
