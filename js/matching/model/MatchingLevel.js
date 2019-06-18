@@ -46,7 +46,6 @@ define( require => {
       this.number = number;
 
       // @public {Property.<number>}
-      this.highScoreProperty = new NumberProperty( 0 );
       this.bestTimeProperty = new NumberProperty( Number.POSITIVE_INFINITY );
 
       // @public {Property.<MatchingChallenge>}
@@ -61,12 +60,21 @@ define( require => {
         derive: 'scoreProperty'
       } );
 
+      // @public {Property.<number>} - Track the score shown on the level selection separately, since it needs to be
+      // independently controlled for https://github.com/phetsims/fraction-matcher/issues/98.
+      this.levelSelectionScoreProperty = new NumberProperty( 0 );
+      this.scoreProperty.link( ( newScore, oldScore ) => {
+        if ( newScore > oldScore ) {
+          this.levelSelectionScoreProperty.value = newScore;
+        }
+      } );
+
       // @private {function}
       this.completedListener = () => {
-        this.highScoreProperty.value = Math.max( this.highScoreProperty.value, this.challengeProperty.value.scoreProperty.value );
+        const score = this.challengeProperty.value.scoreProperty.value;
 
         // Only record the best time for perfect runs, see https://github.com/phetsims/fractions-common/issues/92
-        if ( this.highScoreProperty.value === MAX_SCORE ) {
+        if ( score === MAX_SCORE ) {
           this.bestTimeProperty.value = Util.toFixedNumber( Math.min( this.bestTimeProperty.value, this.challengeProperty.value.elapsedTimeProperty.value ), 0 );
         }
       };
@@ -91,6 +99,14 @@ define( require => {
     }
 
     /**
+     * When a level is selected, switch the icon's score to the current score.
+     * @private
+     */
+    select() {
+      this.levelSelectionScoreProperty.value = this.scoreProperty.value;
+    }
+
+    /**
      * Refreshes the level's challenge, without changing permanent things like the high score.
      * @public
      */
@@ -105,8 +121,8 @@ define( require => {
      * @public
      */
     reset() {
-      this.highScoreProperty.reset();
       this.bestTimeProperty.reset();
+      this.levelSelectionScoreProperty.reset();
       this.refresh();
     }
 
