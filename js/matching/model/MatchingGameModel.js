@@ -29,6 +29,11 @@ define( require => {
       // @public {Property.<MatchingLevel|null>}
       this.levelProperty = new Property( null );
 
+      // Let the level know it's selected
+      this.levelProperty.lazyLink( level => {
+        level && level.select();
+      } );
+
       // @public {Property.<MatchingChallenge|null}
       this.challengeProperty = new DynamicProperty( this.levelProperty, {
         derive: 'challengeProperty'
