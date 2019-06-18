@@ -171,7 +171,11 @@ define( require => {
             xMargin: 9,
             yMargin: 7,
             listener() {
-              model.levelProperty.value && model.levelProperty.value.refresh();
+              const level = model.levelProperty.value;
+              if ( level ) {
+                level.refresh();
+                level.select();
+              }
             }
           }, leftButtonOptions ) ),
           ...( phet.chipper.queryParameters.showAnswers ? [
@@ -323,7 +327,7 @@ define( require => {
     createLevelRow( levels, icons ) {
       return new HBox( {
         children: levels.map( ( level, index ) => {
-          const button = new LevelSelectionButton( icons[ index ], level.highScoreProperty, {
+          const button = new LevelSelectionButton( icons[ index ], level.levelSelectionScoreProperty, {
             buttonWidth: 110,
             buttonHeight: 200,
             scoreDisplayConstructor: ScoreDisplayStars,
@@ -338,7 +342,9 @@ define( require => {
             // Workaround since it expects 0 as the best time if there was no best time. Don't solve levels in
             // under a second!
             bestTimeProperty: new DerivedProperty( [ level.bestTimeProperty ], bestTime => isFinite( bestTime ) ? bestTime : 0 ),
-            bestTimeVisibleProperty: level.timeVisibleProperty,
+            bestTimeVisibleProperty: new DerivedProperty( [ level.timeVisibleProperty, level.levelSelectionScoreProperty ], ( timeVisible, score ) => {
+              return timeVisible && score === 12;
+            } ),
             bestTimeYSpacing: 5
           } );
           return button;
