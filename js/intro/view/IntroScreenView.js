@@ -16,7 +16,6 @@ define( require => {
   const Container = require( 'FRACTIONS_COMMON/intro/model/Container' );
   const ContainerSetScreenView = require( 'FRACTIONS_COMMON/intro/view/ContainerSetScreenView' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
-  const FractionDisplayType = require( 'FRACTIONS_COMMON/common/model/FractionDisplayType' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
@@ -24,12 +23,12 @@ define( require => {
   const HBox = require( 'SCENERY/nodes/HBox' );
   const MathSymbols = require( 'SCENERY_PHET/MathSymbols' );
   const MaxNode = require( 'FRACTIONS_COMMON/intro/view/MaxNode' );
-  const MixedFractionNode = require( 'FRACTIONS_COMMON/common/view/MixedFractionNode' );
+  const MixedFractionNode = require( 'SCENERY_PHET/MixedFractionNode' );
   const NumberLineNode = require( 'FRACTIONS_COMMON/intro/view/numberline/NumberLineNode' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  const PropertyFractionNode = require( 'FRACTIONS_COMMON/common/view/PropertyFractionNode' );
+  const PropertyFractionNode = require( 'SCENERY_PHET/PropertyFractionNode' );
   const Range = require( 'DOT/Range' );
   const Text = require( 'SCENERY/nodes/Text' );
   const VBox = require( 'SCENERY/nodes/VBox' );
@@ -75,7 +74,7 @@ define( require => {
         // Separate options/fraction created since we need to grab the "maximum" bounds to do proper layout. Can't use
         // "starting" bounds, since it's at 0 and would be smaller.
         const fractionNodeOptions = {
-          type: FractionDisplayType.MIXED,
+          type: PropertyFractionNode.DisplayType.MIXED,
           simplify: true,
 
           maxWhole: model.containerCountProperty.range.max,
@@ -118,7 +117,7 @@ define( require => {
         // Options for the "Equation" accordion box (bottom-left)
         const equationScale = 1.5;
         const equationLeftOptions = {
-          type: FractionDisplayType.MIXED,
+          type: PropertyFractionNode.DisplayType.MIXED,
           simplify: true,
           showZeroImproperFraction: false,
 
@@ -134,7 +133,7 @@ define( require => {
           scale: equationScale
         };
         const equationRightOptions = {
-          type: FractionDisplayType.IMPROPER,
+          type: PropertyFractionNode.DisplayType.IMPROPER,
 
           maxNumerator: model.denominatorProperty.range.max * model.containerCountProperty.range.max,
           maxDenominator: model.denominatorProperty.range.max,

@@ -12,10 +12,9 @@ define( require => {
 
   // modules
   const DerivedProperty = require( 'AXON/DerivedProperty' );
-  const FractionDisplayType = require( 'FRACTIONS_COMMON/common/model/FractionDisplayType' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const HBox = require( 'SCENERY/nodes/HBox' );
-  const PropertyFractionNode = require( 'FRACTIONS_COMMON/common/view/PropertyFractionNode' );
+  const PropertyFractionNode = require( 'SCENERY_PHET/PropertyFractionNode' );
   const RoundNumberSpinner = require( 'FRACTIONS_COMMON/intro/view/RoundNumberSpinner' );
   const VBox = require( 'SCENERY/nodes/VBox' );
 
@@ -28,8 +27,8 @@ define( require => {
      */
     constructor( numeratorProperty, denominatorProperty, containerCountProperty, options ) {
       options = _.extend( {
-        // {FractionDisplayType}
-        type: FractionDisplayType.IMPROPER,
+        // {PropertyFractionNode.DisplayType}
+        type: PropertyFractionNode.DisplayType.IMPROPER,
 
         // {boolean} - If false, the spinners will be to the left
         spinnersOnRight: true

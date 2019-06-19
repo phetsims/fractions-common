@@ -17,7 +17,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const HBox = require( 'SCENERY/nodes/HBox' );
-  const MixedFractionNode = require( 'FRACTIONS_COMMON/common/view/MixedFractionNode' );
+  const MixedFractionNode = require( 'SCENERY_PHET/MixedFractionNode' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Vector2 = require( 'DOT/Vector2' );
 
