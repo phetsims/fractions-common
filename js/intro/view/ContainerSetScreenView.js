@@ -167,7 +167,8 @@ define( require => {
 
       // @protected {Node}
       this.resetAllButton = new ResetAllButton( {
-        listener() {
+        listener: () => {
+          this.interruptSubtreeInput();
           model.reset();
         },
         right: this.layoutBounds.right - MARGIN,

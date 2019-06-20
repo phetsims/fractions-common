@@ -15,6 +15,7 @@ define( require => {
   const DragListener = require( 'SCENERY/listeners/DragListener' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   class CellContainerNode extends ContainerNode {
     /**
@@ -60,7 +61,13 @@ define( require => {
      * @returns {Vector2}
      */
     getMidpointByIndex( index ) {
-      return this.cellEntries[ index ].node.translation;
+      const cellEntry = this.cellEntries[ index ];
+      if ( cellEntry ) {
+        return cellEntry.node.translation;
+      }
+      else {
+        return Vector2.ZERO;
+      }
     }
 
     /**
