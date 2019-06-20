@@ -349,7 +349,7 @@ define( require => {
           options.rewardContainer.addChild( this.rewardNode );
         }
 
-        const bestTime = ( isFinite( challenge.previousBestTime ) || challenge.scoreProperty.value === 12 )
+        const bestTime = challenge.scoreProperty.value === 12
           ? Util.toFixed( Math.min( challenge.elapsedTimeProperty.value, challenge.previousBestTime ), 0 )
           : null;
         const levelCompletedNode = new LevelCompletedNode(
