@@ -175,8 +175,15 @@ define( require => {
      */
     getCellMidpoint( cell ) {
       const containerNode = _.find( this.containerNodes, containerNode => containerNode.container === cell.container );
-      const matrix = containerNode.getUniqueTrail().getMatrixTo( this.pieceLayer.getUniqueTrail() );
-      return matrix.timesVector2( containerNode.getMidpointByIndex( cell.index ) );
+      const containerTrail = containerNode.getUniqueTrail();
+      const pieceTrail = this.pieceLayer.getUniqueTrail();
+      if ( containerTrail.nodes[ 0 ] === pieceTrail.nodes[ 0 ] ) {
+        const matrix = containerTrail.getMatrixTo( pieceTrail );
+        return matrix.timesVector2( containerNode.getMidpointByIndex( cell.index ) );
+      }
+      else {
+        return Vector2.ZERO;
+      }
     }
 
     /**
@@ -246,6 +253,7 @@ define( require => {
      */
     onPieceRemoved( piece ) {
       const pieceNode = this.findPieceNode( piece );
+      pieceNode.interruptSubtreeInput();
       arrayRemove( this.pieceNodes, pieceNode );
       this.pieceLayer.removeChild( pieceNode );
     }
