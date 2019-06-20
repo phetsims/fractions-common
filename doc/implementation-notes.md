@@ -54,4 +54,6 @@ one view for the "currently displayed" challenge, so the views need to be fully 
 
 ## Matching-style screens
 
-(This will be filled in when work on this part of the sim is done)
+Locations where pieces can go are called "spots". There are "source" spots (down below, where pieces appear initially),
+"scale" spots (for pieces on scales), and "target" spots (collected and in the target visually). The targets are the
+regions above where completed matches go.
