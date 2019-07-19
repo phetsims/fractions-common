@@ -1,4 +1,4 @@
-// Copyright 2018, University of Colorado Boulder
+// Copyright 2018-2019, University of Colorado Boulder
 
 /**
  * Searches for all combinations of a sum of fractions that sum to a given value, e.g. given the fraction 9/4 and the

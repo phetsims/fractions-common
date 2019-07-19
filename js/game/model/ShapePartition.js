@@ -1,4 +1,4 @@
-// Copyright 2018, University of Colorado Boulder
+// Copyright 2018-2019, University of Colorado Boulder
 
 /**
  * A nonoverlapping partition of a larger "shape" into smaller shapes, that can be rescaled or used to display a
