@@ -105,7 +105,7 @@ define( require => {
     collectionBorder: { default: Color.BLACK },
 
     matchingLevelBackground: { default: new Color( 242, 242, 242 ) },
-    matchingHomeIconBackground: { default: new Color( '#e7e9cc' ) },
+    matchingHomeIconBackground: { default: Color.WHITE },
     matchingNavbarIconBackground: { default: Color.BLACK },
     matchingTargetBackground: { default: new Color( '#C0C0C0' ) },
     matchingSourceBackground: { default: Color.WHITE },
