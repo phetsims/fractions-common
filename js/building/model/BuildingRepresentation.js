@@ -16,18 +16,20 @@ define( require => {
   const BuildingRepresentation = new Enumeration( [
     'PIE',
     'BAR'
-  ], BuildingRepresentation => {
-    /**
-     * Returns the offset for a stack given the index.
-     * @public
-     *
-     * @param {BuildingRepresentation} representation
-     * @param {number} index
-     * @returns {Vector2}
-     */
-    BuildingRepresentation.getOffset = ( representation, index ) => {
-      return new Vector2( ( representation === BuildingRepresentation.PIE ? 1 : -1 ) * 4 * index, -4 * index );
-    };
+  ], {
+    beforeFreeze: BuildingRepresentation => {
+      /**
+       * Returns the offset for a stack given the index.
+       * @public
+       *
+       * @param {BuildingRepresentation} representation
+       * @param {number} index
+       * @returns {Vector2}
+       */
+      BuildingRepresentation.getOffset = ( representation, index ) => {
+        return new Vector2( ( representation === BuildingRepresentation.PIE ? 1 : -1 ) * 4 * index, -4 * index );
+      };
+    }
   } );
 
   return fractionsCommon.register( 'BuildingRepresentation', BuildingRepresentation );

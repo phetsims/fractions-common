@@ -16,18 +16,20 @@ define( require => {
     'WHOLE',
     'NUMERATOR',
     'DENOMINATOR'
-  ], NumberSpotType => {
-    /**
-     * @param {boolean} isMixedNumber
-     * @returns {Array.<NumberSpotType>} - Shows the number spots available for whether mixed numbers are an option.
-     */
-    NumberSpotType.getTypes = isMixedNumber => isMixedNumber ? [
-      NumberSpotType.WHOLE,
-      NumberSpotType.NUMERATOR,
-      NumberSpotType.DENOMINATOR
-    ] : [
-      NumberSpotType.NUMERATOR,
-      NumberSpotType.DENOMINATOR
-    ];
+  ], {
+    beforeFreeze: NumberSpotType => {
+      /**
+       * @param {boolean} isMixedNumber
+       * @returns {Array.<NumberSpotType>} - Shows the number spots available for whether mixed numbers are an option.
+       */
+      NumberSpotType.getTypes = isMixedNumber => isMixedNumber ? [
+        NumberSpotType.WHOLE,
+        NumberSpotType.NUMERATOR,
+        NumberSpotType.DENOMINATOR
+      ] : [
+        NumberSpotType.NUMERATOR,
+        NumberSpotType.DENOMINATOR
+      ];
+    }
   } ) );
 } );
