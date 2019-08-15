@@ -176,7 +176,7 @@ define( require => {
       const timeText = new Text( '', rightTextOptions );
 
       this.addChild( new AlignBox( new VBox( {
-        spacing: 10,
+        spacing: 5,
         align: 'right',
         children: [
           levelText,
