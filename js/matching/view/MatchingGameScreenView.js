@@ -22,6 +22,7 @@ define( require => {
   const GameAudioPlayer = require( 'VEGAS/GameAudioPlayer' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const LevelSelectionButton = require( 'VEGAS/LevelSelectionButton' );
+  const MatchingChallenge = require( 'FRACTIONS_COMMON/matching/model/MatchingChallenge' );
   const MatchingChallengeNode = require( 'FRACTIONS_COMMON/matching/view/MatchingChallengeNode' );
   const MixedFractionNode = require( 'FRACTIONS_COMMON/common/view/MixedFractionNode' );
   const Node = require( 'SCENERY/nodes/Node' );
@@ -161,7 +162,7 @@ define( require => {
               model.levelProperty.value = null;
 
               // Force a refresh on a completed level with the back button
-              if ( challenge.scoreProperty.value === 12 ) {
+              if ( challenge.scoreProperty.value === 12 && challenge.stateProperty.value === MatchingChallenge.State.NO_COMPARISON ) {
                 level.refresh();
               }
             }
