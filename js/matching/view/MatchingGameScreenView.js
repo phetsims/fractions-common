@@ -162,7 +162,7 @@ define( require => {
               model.levelProperty.value = null;
 
               // Force a refresh on a completed level with the back button
-              if ( challenge.scoreProperty.value === 12 && challenge.stateProperty.value === MatchingChallenge.State.NO_COMPARISON ) {
+              if ( challenge.isComplete && challenge.stateProperty.value === MatchingChallenge.State.NO_COMPARISON ) {
                 level.refresh();
               }
             }
