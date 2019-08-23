@@ -112,6 +112,9 @@ define( require => {
       // @public {Emitter} - Fires when the challenge is fully completed
       this.completedEmitter = new Emitter();
 
+      // @public {boolean}
+      this.isComplete = false;
+
       // @public {MatchingChallenge} - Set externally if, when going from this challenge to the specified one, there
       // should instead be a "refresh" animation instead of "next" challenge.
       this.refreshedChallenge = null;
@@ -237,6 +240,7 @@ define( require => {
           this.isNewBestTime = true;
         }
 
+        this.isComplete = true;
         this.completedEmitter.emit();
       }
     }
