@@ -200,9 +200,7 @@ define( require => {
       this.denominatorProperty.link( this.denominatorListener );
 
       // add listener to the bucket and static pieces
-      const bucketListener = DragListener.createForwardingListener( startPieceDrag, {
-        allowTouchSnag: true
-      } );
+      const bucketListener = DragListener.createForwardingListener( startPieceDrag );
       [ bucketHole, staticLayer, bucketFront ].forEach( node => node.addInputListener( bucketListener ) );
     }
 

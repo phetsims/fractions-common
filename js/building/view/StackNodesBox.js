@@ -67,9 +67,7 @@ define( require => {
         const stackTarget = new Node( {
           children: [ stackNode ],
           cursor: 'pointer',
-          inputListeners: [ DragListener.createForwardingListener( event => pressCallback( event, stackNode.stack ), {
-            allowTouchSnag: true
-          } ) ]
+          inputListeners: [ DragListener.createForwardingListener( event => pressCallback( event, stackNode.stack ) ) ]
         } );
         stackTarget.layoutBounds = stackNode.localToParentBounds( stackNode.layoutBounds );
 

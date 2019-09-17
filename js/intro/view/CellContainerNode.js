@@ -82,9 +82,7 @@ define( require => {
       this.addChild( node );
 
       node.cursor = 'pointer';
-      node.addInputListener( DragListener.createForwardingListener( event => this.cellDownCallback( cell, event ), {
-        allowTouchSnag: true
-      } ) );
+      node.addInputListener( DragListener.createForwardingListener( event => this.cellDownCallback( cell, event ) ) );
     }
 
     /**

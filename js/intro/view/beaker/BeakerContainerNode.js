@@ -43,8 +43,6 @@ define( require => {
         if ( container.appearsFilledCellCountProperty.value > 0 ) {
           this.cellDownCallback( container.getNextAppearsFilledCell(), event );
         }
-      }, {
-        allowTouchSnag: true
       } ) );
 
       this.mutate( options );
