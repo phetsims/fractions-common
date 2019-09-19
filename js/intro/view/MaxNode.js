@@ -63,8 +63,8 @@ define( require => {
             } ),
             new RoundNumberSpinner(
               containerCountProperty,
-              new DerivedProperty( [ containerCountProperty ], ( value ) => value < containerCountProperty.range.max ),
-              new DerivedProperty( [ containerCountProperty ], ( value ) => value > containerCountProperty.range.min )
+              new DerivedProperty( [ containerCountProperty ], value => value < containerCountProperty.range.max ),
+              new DerivedProperty( [ containerCountProperty ], value => value > containerCountProperty.range.min )
             )
           ]
         } )
