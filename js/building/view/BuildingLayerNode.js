@@ -226,7 +226,7 @@ define( require => {
      * @param {ShapeGroup} shapeGroup
      */
     addShapeGroup( shapeGroup ) {
-      var shapeGroupNode = new ShapeGroupNode( shapeGroup, {
+      const shapeGroupNode = new ShapeGroupNode( shapeGroup, {
         dragBoundsProperty: this.shapeDragBoundsProperty,
         modelViewTransform: this.modelViewTransform,
         dragListener: this.onShapeGroupDrag.bind( this, shapeGroup ),
@@ -320,7 +320,7 @@ define( require => {
      * @param {ShapePiece} shapePiece
      */
     addShapePiece( shapePiece ) {
-      var shapePieceNode = new ShapePieceNode( shapePiece, {
+      const shapePieceNode = new ShapePieceNode( shapePiece, {
         positioned: true,
         modelViewTransform: this.modelViewTransform,
         dropListener: wasTouch => {
@@ -338,7 +338,7 @@ define( require => {
      * @param {ShapePiece} shapePiece
      */
     removeShapePiece( shapePiece ) {
-      var shapePieceNode = _.find( this.shapePieceNodes, shapePieceNode => shapePieceNode.shapePiece === shapePiece );
+      const shapePieceNode = _.find( this.shapePieceNodes, shapePieceNode => shapePieceNode.shapePiece === shapePiece );
 
       arrayRemove( this.shapePieceNodes, shapePieceNode );
       this.pieceLayer.removeChild( shapePieceNode );
@@ -352,7 +352,7 @@ define( require => {
      * @param {NumberPiece} numberPiece
      */
     addNumberPiece( numberPiece ) {
-      var numberPieceNode = new NumberPieceNode( numberPiece, {
+      const numberPieceNode = new NumberPieceNode( numberPiece, {
         positioned: true,
         modelViewTransform: this.modelViewTransform,
         dropListener: wasTouch => {
@@ -370,7 +370,7 @@ define( require => {
      * @param {NumberPiece} numberPiece
      */
     removeNumberPiece( numberPiece ) {
-      var numberPieceNode = _.find( this.numberPieceNodes, numberPieceNode => numberPieceNode.numberPiece === numberPiece );
+      const numberPieceNode = _.find( this.numberPieceNodes, numberPieceNode => numberPieceNode.numberPiece === numberPiece );
 
       arrayRemove( this.numberPieceNodes, numberPieceNode );
       this.pieceLayer.removeChild( numberPieceNode );

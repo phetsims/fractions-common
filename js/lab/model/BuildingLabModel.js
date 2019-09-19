@@ -48,7 +48,7 @@ define( require => {
         { representation: BuildingRepresentation.BAR, color: FractionsCommonColorProfile.labBarFillProperty }
       ].forEach( ( { representation, color } ) => {
         _.range( 1, 9 ).forEach( denominator => {
-          var stack = new ShapeStack( new Fraction( 1, denominator ), PIECE_LAYOUT_QUANTITY, representation, color, false );
+          const stack = new ShapeStack( new Fraction( 1, denominator ), PIECE_LAYOUT_QUANTITY, representation, color, false );
           stack.shapePieces.push( new ShapePiece( new Fraction( 1, denominator ), representation, color ) );
           stack.shapePieces.push( new ShapePiece( new Fraction( 1, denominator ), representation, color ) );
           this.shapeStacks.push( stack );
@@ -57,7 +57,7 @@ define( require => {
 
       // Number stacks
       _.range( 1, 9 ).map( number => {
-        var stack = new NumberStack( number, PIECE_LAYOUT_QUANTITY, false );
+        const stack = new NumberStack( number, PIECE_LAYOUT_QUANTITY, false );
         stack.numberPieces.push( new NumberPiece( number ) );
         stack.numberPieces.push( new NumberPiece( number ) );
         this.numberStacks.push( stack );
@@ -115,11 +115,11 @@ define( require => {
       super.reset();
 
       // Initial state
-      var shapeGroup = this.addShapeGroup( BuildingRepresentation.PIE );
+      const shapeGroup = this.addShapeGroup( BuildingRepresentation.PIE );
       shapeGroup.positionProperty.value = new Vector2( 170, 0 );
       this.selectedGroupProperty.value = shapeGroup;
 
-      var numberGroup = this.addNumberGroup( this.allowMixedNumbers );
+      const numberGroup = this.addNumberGroup( this.allowMixedNumbers );
       numberGroup.positionProperty.value = new Vector2( -170, 0 );
     }
   }

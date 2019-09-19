@@ -120,7 +120,7 @@ define( require => {
       // layer to hold all the static cell nodes in the bucket
       const staticLayer = new Node();
 
-      var propertyFractionNode = new PropertyFractionNode( new NumberProperty( 1 ), denominatorProperty, {
+      const propertyFractionNode = new PropertyFractionNode( new NumberProperty( 1 ), denominatorProperty, {
         scale: 0.7
       } );
 
