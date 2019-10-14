@@ -42,7 +42,7 @@ define( require => {
         range: new Range( 1, 3 )
       } );
 
-      // @public {ObservableArray.<Container>}
+      // @public {Container[]}
       this.multipliedContainers = this.containers.map( container => new MultipliedContainer( container, this.multiplierProperty ) );
     }
 

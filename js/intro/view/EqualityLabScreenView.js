@@ -197,7 +197,7 @@ define( require => {
           multipliedViewContainer.children.forEach( child => child.dispose() );
           lastRepresentation = representation;
 
-          const containers = model.multipliedContainers.getArray();
+          const containers = model.multipliedContainers;
 
           const colorOverride = FractionsCommonColorProfile.equalityLabColorProperty;
           let containerOffset = 0;
