@@ -15,6 +15,7 @@ define( require => {
   const CellSceneNode = require( 'FRACTIONS_COMMON/intro/view/CellSceneNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Image = require( 'SCENERY/nodes/Image' );
+  const merge = require( 'PHET_CORE/merge' );
 
   // images
   const cakeImage = require( 'image!FRACTIONS_COMMON/cake_1_1.png' );
@@ -25,7 +26,7 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( model, options ) {
-      super( model, _.extend( {
+      super( model, merge( {
         createContainerNode( container, options ) {
           return new CakeContainerNode( container, options );
         },

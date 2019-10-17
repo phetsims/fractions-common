@@ -13,6 +13,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const Matrix3 = require( 'DOT/Matrix3' );
+  const merge = require( 'PHET_CORE/merge' );
   const Property = require( 'AXON/Property' );
   const RoundArrowButton = require( 'FRACTIONS_COMMON/common/view/RoundArrowButton' );
   const Shape = require( 'KITE/Shape' );
@@ -30,7 +31,7 @@ define( require => {
       assert && assert( increaseEnabledProperty instanceof Property );
       assert && assert( decreaseEnabledProperty instanceof Property );
 
-      options = _.extend( {
+      options = merge( {
         baseColor: FractionsCommonColorProfile.yellowRoundArrowButtonProperty,
         rotation: 0,
         spacing: 3,

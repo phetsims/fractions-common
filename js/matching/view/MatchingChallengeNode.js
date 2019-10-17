@@ -19,10 +19,11 @@ define( require => {
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Image = require( 'SCENERY/nodes/Image' );
   const LevelCompletedNode = require( 'VEGAS/LevelCompletedNode' );
-  const MatchingChallenge = require( 'FRACTIONS_COMMON/matching/model/MatchingChallenge' );
   const MatchChartNode = require( 'FRACTIONS_COMMON/matching/view/MatchChartNode' );
+  const MatchingChallenge = require( 'FRACTIONS_COMMON/matching/model/MatchingChallenge' );
   const MatchPieceNode = require( 'FRACTIONS_COMMON/matching/view/MatchPieceNode' );
   const MathSymbols = require( 'SCENERY_PHET/MathSymbols' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
@@ -65,7 +66,7 @@ define( require => {
     constructor( challenge, layoutBounds, gameAudioPlayer, options ) {
       super();
 
-      options = _.extend( {
+      options = merge( {
         // {function} - Called when the "continue" button is pressed on the level-complete node
         onContinue: () => {},
 
@@ -246,7 +247,7 @@ define( require => {
         maxTextWidth: 150
       };
 
-      const checkButton = new TextPushButton( checkString, _.extend( {
+      const checkButton = new TextPushButton( checkString, merge( {
         baseColor: FractionsCommonColorProfile.matchingCheckButtonProperty,
         listener: () => {
           chartCompare();
@@ -256,21 +257,21 @@ define( require => {
       this.addChild( checkButton );
       this.disposeEmitter.addListener( () => checkButton.dispose() );
 
-      const okButton = new TextPushButton( okString, _.extend( {
+      const okButton = new TextPushButton( okString, merge( {
         baseColor: FractionsCommonColorProfile.matchingOkButtonProperty,
         listener: () => challenge.collect()
       }, buttonOptions ) );
       this.addChild( okButton );
       this.disposeEmitter.addListener( () => okButton.dispose() );
 
-      const tryAgainButton = new TextPushButton( tryAgainString, _.extend( {
+      const tryAgainButton = new TextPushButton( tryAgainString, merge( {
         baseColor: FractionsCommonColorProfile.matchingTryAgainButtonProperty,
         listener: () => challenge.tryAgain()
       }, buttonOptions ) );
       this.addChild( tryAgainButton );
       this.disposeEmitter.addListener( () => tryAgainButton.dispose() );
 
-      const showAnswerButton = new TextPushButton( showAnswerString, _.extend( {
+      const showAnswerButton = new TextPushButton( showAnswerString, merge( {
         baseColor: FractionsCommonColorProfile.matchingShowAnswerButtonProperty,
         listener: () => {
           challenge.showAnswer();

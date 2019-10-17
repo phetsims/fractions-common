@@ -15,6 +15,7 @@ define( require => {
   const DragListener = require( 'SCENERY/listeners/DragListener' );
   const Easing = require( 'TWIXT/Easing' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Vector2 = require( 'DOT/Vector2' );
   const Vector2Property = require( 'DOT/Vector2Property' );
@@ -27,7 +28,7 @@ define( require => {
      * @param {Object} [config]
      */
     constructor( piece, finishedAnimatingCallback, droppedCallback, config ) {
-      config = _.extend( {
+      config = merge( {
         // {Node} - required to be provided
         graphic: null
       }, config );

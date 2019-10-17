@@ -12,6 +12,7 @@ define( require => {
   const ColorDef = require( 'SCENERY/util/ColorDef' );
   const Container = require( 'FRACTIONS_COMMON/intro/model/Container' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -23,7 +24,7 @@ define( require => {
     constructor( container, options ) {
       assert && assert( container instanceof Container );
 
-      options = _.extend( {
+      options = merge( {
         // {ColorDef} - If non-null, this will be used instead of the container's usual color
         colorOverride: null,
 

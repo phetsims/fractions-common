@@ -11,6 +11,7 @@ define( require => {
   // modules
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
+  const merge = require( 'PHET_CORE/merge' );
   const Path = require( 'SCENERY/nodes/Path' );
   const RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
   const Shape = require( 'KITE/Shape' );
@@ -32,7 +33,7 @@ define( require => {
         .quadraticCurveTo( ICON_HEIGHT * 1.25, -ICON_HEIGHT * 0.5, ICON_HEIGHT * 0.3, ICON_HEIGHT * 0.3 )
         .close();
 
-      options = _.extend( {
+      options = merge( {
         content: new Path( undoArrowShape, {
           fill: 'black',
           scale: 0.7

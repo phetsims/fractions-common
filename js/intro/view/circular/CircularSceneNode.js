@@ -16,6 +16,7 @@ define( require => {
   const Container = require( 'FRACTIONS_COMMON/intro/model/Container' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
+  const merge = require( 'PHET_CORE/merge' );
 
   class CircularSceneNode extends CellSceneNode {
     /**
@@ -25,7 +26,7 @@ define( require => {
     constructor( model, options ) {
       const maxContainers = model.containerCountProperty.range.max;
 
-      super( model, _.extend( {
+      super( model, merge( {
         createContainerNode( container, options ) {
           return new CircularContainerNode( container, options );
         },

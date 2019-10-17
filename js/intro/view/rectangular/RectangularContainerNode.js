@@ -15,6 +15,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const merge = require( 'PHET_CORE/merge' );
   const Path = require( 'SCENERY/nodes/Path' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const RectangularNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularNode' );
@@ -29,7 +30,7 @@ define( require => {
     constructor( container, options ) {
       assert && assert( container instanceof Container );
 
-      options = _.extend( {
+      options = merge( {
         rectangularOrientation: RectangularOrientation.VERTICAL
       }, options );
 

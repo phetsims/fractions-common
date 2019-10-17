@@ -16,6 +16,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Group = require( 'FRACTIONS_COMMON/building/model/Group' );
+  const merge = require( 'PHET_CORE/merge' );
   const NumberSpot = require( 'FRACTIONS_COMMON/building/model/NumberSpot' );
   const NumberSpotType = require( 'FRACTIONS_COMMON/building/model/NumberSpotType' );
   const Property = require( 'AXON/Property' );
@@ -54,7 +55,7 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( isMixedNumber, options ) {
-      options = _.extend( {
+      options = merge( {
 
         // {Property.<Range|null>}
         activeNumberRangeProperty: new Property( null )

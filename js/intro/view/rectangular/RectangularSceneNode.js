@@ -13,6 +13,7 @@ define( require => {
   const Container = require( 'FRACTIONS_COMMON/intro/model/Container' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
+  const merge = require( 'PHET_CORE/merge' );
   const RectangularContainerNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularContainerNode' );
   const RectangularNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularNode' );
   const RectangularOrientation = require( 'FRACTIONS_COMMON/intro/view/RectangularOrientation' );
@@ -29,9 +30,9 @@ define( require => {
       const rectangularOrientation = options.rectangularOrientation;
       const maxContainers = model.containerCountProperty.range.max;
 
-      super( model, _.extend( {
+      super( model, merge( {
         createContainerNode( container, options ) {
-          return new RectangularContainerNode( container, _.extend( {
+          return new RectangularContainerNode( container, merge( {
             rectangularOrientation: rectangularOrientation
           }, options ) );
         },

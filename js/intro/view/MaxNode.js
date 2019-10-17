@@ -15,6 +15,7 @@ define( require => {
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const HBox = require( 'SCENERY/nodes/HBox' );
+  const merge = require( 'PHET_CORE/merge' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const RoundNumberSpinner = require( 'FRACTIONS_COMMON/intro/view/RoundNumberSpinner' );
   const Text = require( 'SCENERY/nodes/Text' );
@@ -31,7 +32,7 @@ define( require => {
     constructor( containerCountProperty, options ) {
       super();
 
-      options = _.extend( {
+      options = merge( {
         spacing: 5
       }, options );
 

@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const merge = require( 'PHET_CORE/merge' );
   const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
   const Vector2Property = require( 'DOT/Vector2Property' );
@@ -20,7 +21,7 @@ define( require => {
      */
     constructor( options ) {
 
-      options = _.extend( {
+      options = merge( {
         scale: 1,
         isTarget: false,
         isScale: false

@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const merge = require( 'PHET_CORE/merge' );
   const PieceNode = require( 'FRACTIONS_COMMON/intro/view/PieceNode' );
   const RectangularNode = require( 'FRACTIONS_COMMON/intro/view/rectangular/RectangularNode' );
 
@@ -22,7 +23,7 @@ define( require => {
      */
     constructor( piece, finishedAnimatingCallback, droppedCallback, options ) {
       super( piece, finishedAnimatingCallback, droppedCallback, {
-        graphic: new RectangularNode( piece.denominator, _.extend( {
+        graphic: new RectangularNode( piece.denominator, merge( {
           dropShadow: true
         }, options ) )
       } );

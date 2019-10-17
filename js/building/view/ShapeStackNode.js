@@ -12,6 +12,7 @@ define( require => {
   const arrayRemove = require( 'PHET_CORE/arrayRemove' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const merge = require( 'PHET_CORE/merge' );
   const Property = require( 'AXON/Property' );
   const ShapeLayerNode = require( 'FRACTIONS_COMMON/building/view/ShapeLayerNode' );
   const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
@@ -27,7 +28,7 @@ define( require => {
     constructor( shapeStack, options ) {
       assert && assert( shapeStack instanceof ShapeStack );
 
-      options = _.extend( {
+      options = merge( {
         // {number} - Stacks should be a bit smaller than in-play objects in general
         scale: FractionsCommonConstants.SHAPE_BUILD_SCALE
       }, options );

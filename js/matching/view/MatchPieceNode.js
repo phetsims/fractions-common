@@ -17,6 +17,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const HBox = require( 'SCENERY/nodes/HBox' );
+  const merge = require( 'PHET_CORE/merge' );
   const MixedFractionNode = require( 'SCENERY_PHET/MixedFractionNode' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -53,7 +54,7 @@ define( require => {
           numerator: piece.fraction.numerator,
           denominator: piece.fraction.denominator
         };
-        this.addChild( new MixedFractionNode( _.extend( numberOptions, {
+        this.addChild( new MixedFractionNode( merge( numberOptions, {
           center: Vector2.ZERO,
           scale: 1.3
         } ) ) );

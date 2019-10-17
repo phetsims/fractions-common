@@ -16,6 +16,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const Line = require( 'SCENERY/nodes/Line' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberLineOrientation = require( 'FRACTIONS_COMMON/intro/view/NumberLineOrientation' );
   const NumberProperty = require( 'AXON/NumberProperty' );
@@ -38,7 +39,7 @@ define( require => {
       assert && assert( denominatorProperty.range );
       assert && assert( containerCountProperty.range );
 
-      options = _.extend( {
+      options = merge( {
         // {NumberLineOrientation}
         orientation: NumberLineOrientation.HORIZONTAL,
 

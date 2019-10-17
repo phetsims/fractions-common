@@ -12,6 +12,7 @@ define( require => {
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const ContainerSetModel = require( 'FRACTIONS_COMMON/intro/model/ContainerSetModel' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const merge = require( 'PHET_CORE/merge' );
 
   class IntroModel extends ContainerSetModel {
     /**
@@ -19,7 +20,7 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( allowMixedNumbers, options ) {
-      options = _.extend( {
+      options = merge( {
         maxContainers: allowMixedNumbers ? 4 : 6
       }, options );
 

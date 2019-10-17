@@ -24,6 +24,7 @@ define( require => {
   const LevelSelectionButton = require( 'VEGAS/LevelSelectionButton' );
   const MatchingChallenge = require( 'FRACTIONS_COMMON/matching/model/MatchingChallenge' );
   const MatchingChallengeNode = require( 'FRACTIONS_COMMON/matching/view/MatchingChallengeNode' );
+  const merge = require( 'PHET_CORE/merge' );
   const MixedFractionNode = require( 'SCENERY_PHET/MixedFractionNode' );
   const Node = require( 'SCENERY/nodes/Node' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
@@ -155,7 +156,7 @@ define( require => {
         top: this.layoutBounds.top + 160,
         left: this.layoutBounds.left + FractionsCommonConstants.MATCHING_MARGIN,
         children: [
-          new BackButton( _.extend( {
+          new BackButton( merge( {
             listener() {
               const level = model.levelProperty.value;
               const challenge = model.challengeProperty.value;
@@ -167,7 +168,7 @@ define( require => {
               }
             }
           }, leftButtonOptions ) ),
-          new RefreshButton( _.extend( {
+          new RefreshButton( merge( {
             iconScale: 0.7,
             xMargin: 9,
             yMargin: 7,
@@ -180,7 +181,7 @@ define( require => {
             }
           }, leftButtonOptions ) ),
           ...( phet.chipper.queryParameters.showAnswers ? [
-            new RectangularPushButton( _.extend( {
+            new RectangularPushButton( merge( {
               content: new FaceNode( 27 ),
               listener: function() {
                 model.challengeProperty.value.cheat();

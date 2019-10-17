@@ -13,6 +13,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const merge = require( 'PHET_CORE/merge' );
   const Path = require( 'SCENERY/nodes/Path' );
   const RoundPushButton = require( 'SUN/buttons/RoundPushButton' );
   const Shape = require( 'KITE/Shape' );
@@ -22,7 +23,7 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( options ) {
-      options = _.extend( {
+      options = merge( {
         radius: FractionsCommonConstants.ROUND_BUTTON_RADIUS,
         fireOnHold: true,
         arrowRotation: 0,

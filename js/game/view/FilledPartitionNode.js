@@ -11,6 +11,7 @@ define( require => {
   // modules
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Path = require( 'SCENERY/nodes/Path' );
 
@@ -22,7 +23,7 @@ define( require => {
     constructor( filledPartition, options ) {
       super();
 
-      options = _.extend( {
+      options = merge( {
         // {PaintDef} - Fills and strokes
         primaryFill: filledPartition.color,
         backgroundFill: FractionsCommonColorProfile.shapePartitionBackgroundProperty,

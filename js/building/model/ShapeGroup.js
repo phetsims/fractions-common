@@ -16,6 +16,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Group = require( 'FRACTIONS_COMMON/building/model/Group' );
+  const merge = require( 'PHET_CORE/merge' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Range = require( 'DOT/Range' );
@@ -28,7 +29,7 @@ define( require => {
      * @param {Object} [options}]
      */
     constructor( representation, options ) {
-      options = _.extend( {
+      options = merge( {
         returnPieceListener: null,
 
         // {number} - The maximum number of containers. Should be at least 1

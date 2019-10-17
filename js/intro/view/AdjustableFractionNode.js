@@ -14,6 +14,7 @@ define( require => {
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const HBox = require( 'SCENERY/nodes/HBox' );
+  const merge = require( 'PHET_CORE/merge' );
   const PropertyFractionNode = require( 'SCENERY_PHET/PropertyFractionNode' );
   const RoundNumberSpinner = require( 'FRACTIONS_COMMON/intro/view/RoundNumberSpinner' );
   const VBox = require( 'SCENERY/nodes/VBox' );
@@ -26,7 +27,7 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( numeratorProperty, denominatorProperty, containerCountProperty, options ) {
-      options = _.extend( {
+      options = merge( {
         // {PropertyFractionNode.DisplayType}
         type: PropertyFractionNode.DisplayType.IMPROPER,
 
@@ -71,7 +72,7 @@ define( require => {
         ]
       } );
 
-      super( _.extend( {
+      super( merge( {
         spacing: 10,
         children: options.spinnersOnRight ? [
           fractionNode,

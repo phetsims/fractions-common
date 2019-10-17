@@ -13,6 +13,7 @@ define( require => {
   const DragListener = require( 'SCENERY/listeners/DragListener' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const HBox = require( 'SCENERY/nodes/HBox' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberGroupStack = require( 'FRACTIONS_COMMON/building/model/NumberGroupStack' );
   const NumberGroupStackNode = require( 'FRACTIONS_COMMON/building/view/NumberGroupStackNode' );
@@ -31,7 +32,7 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( stacks, pressCallback, options ) {
-      options = _.extend( {
+      options = merge( {
         padding: 20
       }, options );
 

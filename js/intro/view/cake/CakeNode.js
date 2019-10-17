@@ -18,6 +18,7 @@ define( require => {
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const Image = require( 'SCENERY/nodes/Image' );
   const Line = require( 'KITE/segments/Line' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Path = require( 'SCENERY/nodes/Path' );
   const Ray2 = require( 'DOT/Ray2' );
@@ -134,7 +135,7 @@ define( require => {
     constructor( denominator, index, options ) {
       assert && assert( index < denominator );
 
-      options = _.extend( {
+      options = merge( {
         // {boolean} - If true, this node will have a permanent drop shadow added
         dropShadow: false
       }, options );

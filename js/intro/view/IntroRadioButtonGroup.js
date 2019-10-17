@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const merge = require( 'PHET_CORE/merge' );
   const RadioButtonGroup = require( 'SUN/buttons/RadioButtonGroup' );
 
   class IntroRadioButtonGroup extends RadioButtonGroup {
@@ -19,7 +20,7 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( property, array, options ) {
-      super( property, array, _.extend( {
+      super( property, array, merge( {
         orientation: 'horizontal',
         baseColor: 'white',
         spacing: 12,

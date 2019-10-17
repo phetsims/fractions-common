@@ -18,6 +18,7 @@ define( require => {
   const GroupNode = require( 'FRACTIONS_COMMON/building/view/GroupNode' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const Matrix3 = require( 'DOT/Matrix3' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Path = require( 'SCENERY/nodes/Path' );
@@ -43,7 +44,7 @@ define( require => {
     constructor( shapeGroup, options ) {
       assert && assert( shapeGroup instanceof ShapeGroup );
 
-      options = _.extend( {
+      options = merge( {
         hasButtons: true,
         removeLastListener: null,
         dragBoundsProperty: null

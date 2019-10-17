@@ -11,10 +11,11 @@ define( require => {
   // modules
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const DragListener = require( 'SCENERY/listeners/DragListener' );
-  const PressListener = require( 'SCENERY/listeners/PressListener' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Group = require( 'FRACTIONS_COMMON/building/model/Group' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
+  const PressListener = require( 'SCENERY/listeners/PressListener' );
 
   class GroupNode extends Node {
     /**
@@ -24,7 +25,7 @@ define( require => {
     constructor( group, options ) {
       assert && assert( group instanceof Group );
 
-      options = _.extend( {
+      options = merge( {
         // {boolean} - For pieces placed in stacks/containers, we don't care about the positionProperty. In addition,
         // pieces in stacks/containers ALSO care about not showing up when the piece is user-controlled or animating.
         isIcon: false,

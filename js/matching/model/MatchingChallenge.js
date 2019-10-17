@@ -21,6 +21,7 @@ define( require => {
   const MatchPiece = require( 'FRACTIONS_COMMON/matching/model/MatchPiece' );
   const MatchSpot = require( 'FRACTIONS_COMMON/matching/model/MatchSpot' );
   const MatchTarget = require( 'FRACTIONS_COMMON/matching/model/MatchTarget' );
+  const merge = require( 'PHET_CORE/merge' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Property = require( 'AXON/Property' );
   const ShapePartition = require( 'FRACTIONS_COMMON/game/model/ShapePartition' );
@@ -40,7 +41,7 @@ define( require => {
      */
     constructor( levelNumber, config ) {
 
-      config = _.extend( {
+      config = merge( {
         // {Array.<Fraction>}
         fractions: [],
 

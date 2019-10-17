@@ -12,6 +12,7 @@ define( require => {
   const Animator = require( 'FRACTIONS_COMMON/common/model/Animator' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const merge = require( 'PHET_CORE/merge' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Property = require( 'AXON/Property' );
   const Vector2 = require( 'DOT/Vector2' );
@@ -27,7 +28,7 @@ define( require => {
      */
     constructor( fraction, filledPartitions, hasMixedNumbers, hasGreaterThanOne, options ) {
 
-      options = _.extend( {
+      options = merge( {
         // {function} - Callbacks for when the piece is grabbed and/or dropped
         grab: _.identity,
         drop: _.identity
@@ -127,7 +128,7 @@ define( require => {
         }
       }
 
-      options = _.extend( {
+      options = merge( {
         position: position,
         scale: 1,
         animationInvalidationProperty: this.spotProperty

@@ -11,6 +11,7 @@ define( require => {
   // modules
   const Easing = require( 'TWIXT/Easing' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const merge = require( 'PHET_CORE/merge' );
   const Property = require( 'AXON/Property' );
   const Util = require( 'DOT/Util' );
 
@@ -19,7 +20,7 @@ define( require => {
      * @param {Object} config
      */
     constructor( config ) {
-      config = _.extend( {
+      config = merge( {
 
         // {Property.<Vector2>}
         positionProperty: null,
@@ -94,7 +95,7 @@ define( require => {
      * @param {Object} config
      */
     animateTo( config ) {
-      config = _.extend( {
+      config = merge( {
 
         // {Vector2}
         position: null,

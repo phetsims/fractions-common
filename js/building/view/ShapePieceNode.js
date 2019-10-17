@@ -15,6 +15,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Path = require( 'SCENERY/nodes/Path' );
   const Property = require( 'AXON/Property' );
@@ -38,7 +39,7 @@ define( require => {
     constructor( shapePiece, options ) {
       assert && assert( shapePiece instanceof ShapePiece );
 
-      options = _.extend( {
+      options = merge( {
         // {function|null} - Called when it is dropped, with a single argument of whether it was from a touch.
         dropListener: null,
 

@@ -12,6 +12,7 @@ define( require => {
   const Container = require( 'FRACTIONS_COMMON/intro/model/Container' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const IntroRepresentation = require( 'FRACTIONS_COMMON/intro/model/IntroRepresentation' );
+  const merge = require( 'PHET_CORE/merge' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Piece = require( 'FRACTIONS_COMMON/intro/model/Piece' );
@@ -23,7 +24,7 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( options ) {
-      options = _.extend( {
+      options = merge( {
         // {Array.<IntroRepresentation>}
         representations: IntroRepresentation.VALUES,
 

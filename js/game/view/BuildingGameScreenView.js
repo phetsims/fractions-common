@@ -29,6 +29,7 @@ define( require => {
   const HBox = require( 'SCENERY/nodes/HBox' );
   const LevelSelectionButton = require( 'VEGAS/LevelSelectionButton' );
   const MathSymbols = require( 'SCENERY_PHET/MathSymbols' );
+  const merge = require( 'PHET_CORE/merge' );
   const MixedFractionNode = require( 'SCENERY_PHET/MixedFractionNode' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberPiece = require( 'FRACTIONS_COMMON/building/model/NumberPiece' );
@@ -164,12 +165,12 @@ define( require => {
         top: this.layoutBounds.top + SIDE_MARGIN,
         left: this.layoutBounds.left + SIDE_MARGIN,
         children: [
-          new BackButton( _.extend( {
+          new BackButton( merge( {
             listener() {
               model.levelProperty.value = null;
             }
           }, leftButtonOptions ) ),
-          new RefreshButton( _.extend( {
+          new RefreshButton( merge( {
             iconScale: 0.7,
             xMargin: 9,
             yMargin: 7,
@@ -178,7 +179,7 @@ define( require => {
             }
           }, leftButtonOptions ) ),
           ...( phet.chipper.queryParameters.showAnswers ? [
-            new RectangularPushButton( _.extend( {
+            new RectangularPushButton( merge( {
               content: new FaceNode( 27 ),
               listener: function() {
                 model.challengeProperty.value.cheat();

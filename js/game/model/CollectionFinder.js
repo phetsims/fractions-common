@@ -20,6 +20,7 @@ define( require => {
   // modules
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+  const merge = require( 'PHET_CORE/merge' );
   const PrimeFactor = require( 'FRACTIONS_COMMON/common/model/PrimeFactor' );
   const PrimeFactorization = require( 'FRACTIONS_COMMON/common/model/PrimeFactorization' );
   const UnitCollection = require( 'FRACTIONS_COMMON/game/model/UnitCollection' );
@@ -29,7 +30,7 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( options ) {
-      options = _.extend( {
+      options = merge( {
         // {Array.<PrimeFactorization>} - The available denominators that can be used.
         denominators: _.range( 1, 9 ).map( PrimeFactorization.factor )
       }, options );

@@ -24,6 +24,7 @@ define( require => {
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const IntroRepresentation = require( 'FRACTIONS_COMMON/intro/model/IntroRepresentation' );
+  const merge = require( 'PHET_CORE/merge' );
   const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberProperty = require( 'AXON/NumberProperty' );
@@ -45,7 +46,7 @@ define( require => {
      */
     constructor( denominatorProperty, startPieceDrag, createCellNode, representationProperty, options ) {
 
-      options = _.extend( {
+      options = merge( {
         bucketWidth: 355
       }, options );
 

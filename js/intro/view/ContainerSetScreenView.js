@@ -20,6 +20,7 @@ define( require => {
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const IntroRadioButtonGroup = require( 'FRACTIONS_COMMON/intro/view/IntroRadioButtonGroup' );
   const IntroRepresentation = require( 'FRACTIONS_COMMON/intro/model/IntroRepresentation' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberLineSceneNode = require( 'FRACTIONS_COMMON/intro/view/numberline/NumberLineSceneNode' );
   const Panel = require( 'SUN/Panel' );
@@ -41,7 +42,7 @@ define( require => {
         preventFit: true
       } );
 
-      options = _.extend( {
+      options = merge( {
         // {boolean} - Passed to AdjustableFractionNode
         spinnersOnRight: true
       }, options );

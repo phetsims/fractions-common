@@ -12,6 +12,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Path = require( 'SCENERY/nodes/Path' );
   const Shape = require( 'KITE/Shape' );
@@ -28,7 +29,7 @@ define( require => {
       assert && assert( typeof index === 'number' );
       assert && assert( index < denominator );
 
-      options = _.extend( {
+      options = merge( {
         // {boolean} - If true, this node will have a permanent drop shadow added
         dropShadow: false,
 

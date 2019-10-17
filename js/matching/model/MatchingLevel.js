@@ -16,6 +16,7 @@ define( require => {
   const Fraction = require( 'PHETCOMMON/model/Fraction' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const MatchingChallenge = require( 'FRACTIONS_COMMON/matching/model/MatchingChallenge' );
+  const merge = require( 'PHET_CORE/merge' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Property = require( 'AXON/Property' );
   const ShapePartition = require( 'FRACTIONS_COMMON/game/model/ShapePartition' );
@@ -32,7 +33,7 @@ define( require => {
      */
     constructor( description, number, options ) {
 
-      options = _.extend( {
+      options = merge( {
         timeVisibleProperty: new BooleanProperty( true )
       }, options );
 
@@ -92,7 +93,7 @@ define( require => {
      * @returns {MatchingChallenge}
      */
     nextChallenge() {
-      return new MatchingChallenge( this.number, _.extend( {
+      return new MatchingChallenge( this.number, merge( {
         timeVisibleProperty: this.timeVisibleProperty,
         previousBestTime: this.bestTimeProperty.value
       }, this.description ) );

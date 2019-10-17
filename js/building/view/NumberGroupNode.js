@@ -15,6 +15,7 @@ define( require => {
   const FractionsCommonConstants = require( 'FRACTIONS_COMMON/common/FractionsCommonConstants' );
   const GroupNode = require( 'FRACTIONS_COMMON/building/view/GroupNode' );
   const Line = require( 'SCENERY/nodes/Line' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const NumberGroup = require( 'FRACTIONS_COMMON/building/model/NumberGroup' );
   const NumberSpotType = require( 'FRACTIONS_COMMON/building/model/NumberSpotType' );
@@ -34,7 +35,7 @@ define( require => {
     constructor( numberGroup, options ) {
       assert && assert( numberGroup instanceof NumberGroup );
 
-      options = _.extend( {
+      options = merge( {
         hasCardBackground: true,
         dragBoundsProperty: null,
         removeLastListener: null,

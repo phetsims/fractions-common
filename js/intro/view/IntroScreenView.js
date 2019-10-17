@@ -23,6 +23,7 @@ define( require => {
   const HBox = require( 'SCENERY/nodes/HBox' );
   const MathSymbols = require( 'SCENERY_PHET/MathSymbols' );
   const MaxNode = require( 'FRACTIONS_COMMON/intro/view/MaxNode' );
+  const merge = require( 'PHET_CORE/merge' );
   const MixedFractionNode = require( 'SCENERY_PHET/MixedFractionNode' );
   const NumberLineNode = require( 'FRACTIONS_COMMON/intro/view/numberline/NumberLineNode' );
   const NumberProperty = require( 'AXON/NumberProperty' );
@@ -89,7 +90,7 @@ define( require => {
           // Node options
           scale: 2
         };
-        const maxMixedFractionNodeBounds = new MixedFractionNode( _.extend( {}, fractionNodeOptions, {
+        const maxMixedFractionNodeBounds = new MixedFractionNode( merge( {}, fractionNodeOptions, {
           whole: 0,
           numerator: 0,
           denominator: 0,
@@ -145,7 +146,7 @@ define( require => {
           spacing: 10,
           children: [
             new AlignBox( new PropertyFractionNode( model.numeratorProperty, model.denominatorProperty, equationLeftOptions ), {
-              alignBounds: new MixedFractionNode( _.extend( {}, equationLeftOptions, {
+              alignBounds: new MixedFractionNode( merge( {}, equationLeftOptions, {
                 whole: 0,
                 numerator: 0,
                 denominator: 0,

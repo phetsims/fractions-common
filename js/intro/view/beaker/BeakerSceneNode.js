@@ -15,6 +15,7 @@ define( require => {
   const CellSceneNode = require( 'FRACTIONS_COMMON/intro/view/CellSceneNode' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
+  const merge = require( 'PHET_CORE/merge' );
 
   class BeakerSceneNode extends CellSceneNode {
     /**
@@ -22,7 +23,7 @@ define( require => {
      * @param {Object} [options]
      */
     constructor( model, options ) {
-      super( model, _.extend( {
+      super( model, merge( {
         createContainerNode( container, options ) {
           return new BeakerContainerNode( container, options );
         },

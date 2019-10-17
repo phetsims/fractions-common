@@ -18,6 +18,7 @@ define( require => {
   const FractionChallenge = require( 'FRACTIONS_COMMON/game/model/FractionChallenge' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const FractionsCommonColorProfile = require( 'FRACTIONS_COMMON/common/view/FractionsCommonColorProfile' );
+  const merge = require( 'PHET_CORE/merge' );
   const PrimeFactorization = require( 'FRACTIONS_COMMON/common/model/PrimeFactorization' );
   const Property = require( 'AXON/Property' );
   const ShapePartition = require( 'FRACTIONS_COMMON/game/model/ShapePartition' );
@@ -273,7 +274,7 @@ define( require => {
      * @returns {Array.<Fraction>}
      */
     static simpleSplitFractions( fractions, options ) {
-      options = _.extend( {
+      options = merge( {
         // {number} - Up to how many fractions to split
         quantity: Number.POSITIVE_INFINITY,
 

@@ -14,6 +14,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const IntroRepresentation = require( 'FRACTIONS_COMMON/intro/model/IntroRepresentation' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const SceneNode = require( 'FRACTIONS_COMMON/intro/view/SceneNode' );
   const VBox = require( 'SCENERY/nodes/VBox' );
@@ -25,7 +26,7 @@ define( require => {
      * @param {Object} config
      */
     constructor( model, config ) {
-      config = _.extend( {
+      config = merge( {
         // {function} - function( {Node} container, {Object} [options] ): {Node}
         createContainerNode: null,
 
