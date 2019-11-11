@@ -245,7 +245,9 @@ define( require => {
         this.selectedGroupProperty.value = this.previouslySelectedGroupProperty.value;
       }
       else {
-        const firstGroup = this.shapeGroups.get( 0 ) || this.numberGroups.get( 0 );
+        const firstGroup = this.shapeGroups.length > 0 ? this.shapeGroups.get( 0 ) :
+                           this.numberGroups.length > 0 ? this.numberGroups.get( 0 ) :
+                           null;
 
         // If there is no previously-selected group, we'll just select the first one.
         // See https://github.com/phetsims/fractions-common/issues/43#issuecomment-454149966
