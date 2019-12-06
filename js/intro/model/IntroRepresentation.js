@@ -12,7 +12,7 @@ define( require => {
   const Enumeration = require( 'PHET_CORE/Enumeration' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
-  const IntroRepresentation = new Enumeration( [
+  const IntroRepresentation = Enumeration.byKeys( [
     'CIRCLE',
     'HORIZONTAL_BAR',
     'VERTICAL_BAR',

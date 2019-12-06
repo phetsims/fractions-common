@@ -347,7 +347,7 @@ define( require => {
   }
 
   // @public {Enumeration} - The main state values for the model
-  MatchingChallenge.State = new Enumeration( [
+  MatchingChallenge.State = Enumeration.byKeys( [
     'NO_COMPARISON',
     'COMPARISON',
     'MATCHED',

@@ -12,7 +12,7 @@ define( require => {
   const Enumeration = require( 'PHET_CORE/Enumeration' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
-  return fractionsCommon.register( 'BuildingType', new Enumeration( [
+  return fractionsCommon.register( 'BuildingType', Enumeration.byKeys( [
     'SHAPE',
     'NUMBER'
   ] ) );

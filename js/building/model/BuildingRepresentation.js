@@ -13,7 +13,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const Vector2 = require( 'DOT/Vector2' );
 
-  const BuildingRepresentation = new Enumeration( [
+  const BuildingRepresentation = Enumeration.byKeys( [
     'PIE',
     'BAR'
   ], {

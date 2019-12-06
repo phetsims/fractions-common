@@ -12,7 +12,7 @@ define( require => {
   const Enumeration = require( 'PHET_CORE/Enumeration' );
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
 
-  return fractionsCommon.register( 'NumberLineOrientation', new Enumeration( [
+  return fractionsCommon.register( 'NumberLineOrientation', Enumeration.byKeys( [
     'HORIZONTAL',
     'VERTICAL'
   ] ) );
