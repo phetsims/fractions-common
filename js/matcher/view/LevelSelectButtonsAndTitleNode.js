@@ -23,7 +23,7 @@ define( require => {
   var VBox = require( 'SCENERY/nodes/VBox' );
 
   // strings
-  var chooseYourLevelString = require( 'string!FRACTIONS_COMMON/chooseYourLevel' );
+  var chooseYourLevelString = require( 'string!VEGAS/chooseYourLevel' );
   var fractionsChooseYourLevelString = require( 'string!FRACTIONS_COMMON/fractionsChooseYourLevel' );
   var labelLevelString = require( 'string!VEGAS/label.level' );
   var mixedNumbersChooseYourLevelString = require( 'string!FRACTIONS_COMMON/mixedNumbersChooseYourLevel' );
