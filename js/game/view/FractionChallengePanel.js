@@ -16,7 +16,7 @@ define( require => {
   class FractionChallengePanel extends Panel {
     /**
      * @param {FractionChallenge} challenge
-     * @param {function} pressCallback - function( {Event}, {Stack} ) - Called when a press is started.
+     * @param {function} pressCallback - function( {SceneryEvent}, {Stack} ) - Called when a press is started.
      */
     constructor( challenge, pressCallback ) {
       const box = new StackNodesBox( [

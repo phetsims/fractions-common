@@ -16,7 +16,7 @@ define( require => {
   class LabNumberPanel extends Panel {
     /**
      * @param {BuildingLabModel} model
-     * @param {function} pressCallback - function( {Event}, {Stack} ) - Called when a press is started.
+     * @param {function} pressCallback - function( {SceneryEvent}, {Stack} ) - Called when a press is started.
      */
     constructor( model, pressCallback ) {
       const box = new StackNodesBox( [

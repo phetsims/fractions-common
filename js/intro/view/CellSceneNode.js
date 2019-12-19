@@ -263,7 +263,7 @@ define( require => {
      * Called on start event when grabbing piece from bucketNode.
      * @private
      *
-     * @param {Event} event
+     * @param {SceneryEvent} event
      */
     onBucketDragStart( event ) {
       const piece = this.model.grabFromBucket();
@@ -281,7 +281,7 @@ define( require => {
      * Handles when a user drags a cell from a displayed container.
      *
      * @param {Cell} cell
-     * @param {Event} event
+     * @param {SceneryEvent} event
      * @private
      */
     onExistingCellDragStart( cell, event ) {

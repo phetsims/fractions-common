@@ -28,7 +28,7 @@ define( require => {
      * NOTE: Adds permanent listeners, will leak if created many times.
      *
      * @param {BuildingLabModel} model
-     * @param {function} pressCallback - function( {Event}, {Stack} ) - Called when a press is started.
+     * @param {function} pressCallback - function( {SceneryEvent}, {Stack} ) - Called when a press is started.
      */
     constructor( model, pressCallback ) {
       const shapeBox = new HBox( {

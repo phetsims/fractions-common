@@ -28,7 +28,7 @@ define( require => {
         // {ColorDef} - If non-null, this will be used instead of the container's usual color
         colorOverride: null,
 
-        // {function} - If provided, will be called as function( {Cell} cell, {Event} event ) when a cell is
+        // {function} - If provided, will be called as function( {Cell} cell, {SceneryEvent} event ) when a cell is
         // pressed by a pointer.
         cellDownCallback: () => {}
       }, options );

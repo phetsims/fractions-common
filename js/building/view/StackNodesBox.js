@@ -28,7 +28,7 @@ define( require => {
   class StackNodesBox extends HBox {
     /**
      * @param {Array.<Stack>} stacks
-     * @param {function} pressCallback - function( {Event}, {Stack} ) - Called when a press is started.
+     * @param {function} pressCallback - function( {SceneryEvent}, {Stack} ) - Called when a press is started.
      * @param {Object} [options]
      */
     constructor( stacks, pressCallback, options ) {
