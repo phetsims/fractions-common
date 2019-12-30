@@ -12,7 +12,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const PrimeFactor = require( 'FRACTIONS_COMMON/common/model/PrimeFactor' );
   const Primes = require( 'FRACTIONS_COMMON/common/model/Primes' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
 
   class PrimeFactorization {
     /**
@@ -139,7 +139,7 @@ define( require => {
      */
     gcd( factorization ) {
       const result = this.binaryOperation( factorization, Math.min );
-      assert && assert( Util.gcd( this.number, factorization.number ) === result.number );
+      assert && assert( Utils.gcd( this.number, factorization.number ) === result.number );
       return result;
     }
 
@@ -152,7 +152,7 @@ define( require => {
      */
     lcm( factorization ) {
       const result = this.binaryOperation( factorization, Math.max );
-      assert && assert( Util.lcm( this.number, factorization.number ) === result.number );
+      assert && assert( Utils.lcm( this.number, factorization.number ) === result.number );
       return result;
     }
 

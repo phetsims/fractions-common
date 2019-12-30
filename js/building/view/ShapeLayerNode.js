@@ -20,7 +20,7 @@ define( require => {
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const Shape = require( 'KITE/Shape' );
   const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
 
   // constants
   const CIRCLE_RADIUS = FractionsCommonConstants.SHAPE_SIZE / 2;
@@ -129,7 +129,7 @@ define( require => {
       else {
         const separatorShape = new Shape();
         for ( let i = 1; i < denominator; i++ ) {
-          const x = Util.linear( 0, 1, ShapePiece.VERTICAL_BAR_BOUNDS.minX, ShapePiece.VERTICAL_BAR_BOUNDS.maxX, i / denominator );
+          const x = Utils.linear( 0, 1, ShapePiece.VERTICAL_BAR_BOUNDS.minX, ShapePiece.VERTICAL_BAR_BOUNDS.maxX, i / denominator );
           separatorShape.moveTo( x, ShapePiece.VERTICAL_BAR_BOUNDS.minY ).lineTo( x, ShapePiece.VERTICAL_BAR_BOUNDS.maxY );
         }
         this.separatorPath.shape = separatorShape;

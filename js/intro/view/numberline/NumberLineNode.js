@@ -25,7 +25,7 @@ define( require => {
   const Property = require( 'AXON/Property' );
   const Shape = require( 'KITE/Shape' );
   const Text = require( 'SCENERY/nodes/Text' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
 
   class NumberLineNode extends Node {
     /**
@@ -144,7 +144,7 @@ define( require => {
       } );
       if ( options.interactive ) {
         const setApproximateValue = n => {
-          const idealNumerator = Util.roundSymmetric( n * denominatorProperty.value );
+          const idealNumerator = Utils.roundSymmetric( n * denominatorProperty.value );
           const restrictedNumerator = Math.min( idealNumerator, denominatorProperty.value * containerCountProperty.value );
           numeratorProperty.value = numeratorProperty.range.constrainValue( restrictedNumerator );
         };

@@ -13,7 +13,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const merge = require( 'PHET_CORE/merge' );
   const Property = require( 'AXON/Property' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
 
   class Animator {
     /**
@@ -216,7 +216,7 @@ define( require => {
      * @returns {number}
      */
     static modifiedEndAngle( startAngle, endAngle ) {
-      let modifiedEndAngle = Util.moduloBetweenDown( endAngle, startAngle, startAngle + 2 * Math.PI );
+      let modifiedEndAngle = Utils.moduloBetweenDown( endAngle, startAngle, startAngle + 2 * Math.PI );
       if ( modifiedEndAngle > startAngle + Math.PI ) {
         modifiedEndAngle -= 2 * Math.PI;
       }

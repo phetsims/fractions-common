@@ -17,7 +17,7 @@ define( require => {
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Property = require( 'AXON/Property' );
   const ShapePiece = require( 'FRACTIONS_COMMON/building/model/ShapePiece' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
   const Vector2 = require( 'DOT/Vector2' );
 
   const scratchVector = new Vector2( 0, 0 ); // Used as a shared Vector2 so that we can avoid allocating vectors dynamically.
@@ -144,7 +144,7 @@ define( require => {
       }
       else if ( representation === BuildingRepresentation.BAR ) {
         const centralValue = startingRatio + fraction.value / 2;
-        return Matrix3.translation( Util.linear( 0, 1, ShapePiece.VERTICAL_BAR_BOUNDS.minX, ShapePiece.VERTICAL_BAR_BOUNDS.maxX, centralValue ), 0 );
+        return Matrix3.translation( Utils.linear( 0, 1, ShapePiece.VERTICAL_BAR_BOUNDS.minX, ShapePiece.VERTICAL_BAR_BOUNDS.maxX, centralValue ), 0 );
       }
       else {
         throw new Error( `Unsupported representation for getShapeMatrix: ${representation}` );

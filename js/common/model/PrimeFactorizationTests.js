@@ -11,7 +11,7 @@ define( require => {
   // modules
   const PrimeFactorization = require( 'FRACTIONS_COMMON/common/model/PrimeFactorization' );
   const Primes = require( 'FRACTIONS_COMMON/common/model/Primes' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
 
   // constants
   const MAX_NUMBER = 500;
@@ -74,7 +74,7 @@ define( require => {
       for ( let b = 1; b <= 30; b++ ) {
         const bFactorization = PrimeFactorization.factor( b );
 
-        assert.equal( Util.gcd( a, b ), aFactorization.gcd( bFactorization ).number, `GCD of ${a} and ${b}` );
+        assert.equal( Utils.gcd( a, b ), aFactorization.gcd( bFactorization ).number, `GCD of ${a} and ${b}` );
       }
     }
   } );
@@ -85,7 +85,7 @@ define( require => {
       for ( let b = 1; b <= 30; b++ ) {
         const bFactorization = PrimeFactorization.factor( b );
 
-        assert.equal( Util.lcm( a, b ), aFactorization.lcm( bFactorization ).number, `LCM of ${a} and ${b}` );
+        assert.equal( Utils.lcm( a, b ), aFactorization.lcm( bFactorization ).number, `LCM of ${a} and ${b}` );
       }
     }
   } );

@@ -20,7 +20,7 @@ define( require => {
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Property = require( 'AXON/Property' );
   const ShapePartition = require( 'FRACTIONS_COMMON/game/model/ShapePartition' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
 
   // constants
   const MAX_SCORE = 12;
@@ -76,7 +76,7 @@ define( require => {
 
         // Only record the best time for perfect runs, see https://github.com/phetsims/fractions-common/issues/92
         if ( score === MAX_SCORE ) {
-          this.bestTimeProperty.value = Util.toFixedNumber( Math.min( this.bestTimeProperty.value, this.challengeProperty.value.elapsedTimeProperty.value ), 0 );
+          this.bestTimeProperty.value = Utils.toFixedNumber( Math.min( this.bestTimeProperty.value, this.challengeProperty.value.elapsedTimeProperty.value ), 0 );
         }
       };
 

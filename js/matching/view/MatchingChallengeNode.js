@@ -32,7 +32,7 @@ define( require => {
   const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   const Text = require( 'SCENERY/nodes/Text' );
   const TextPushButton = require( 'SUN/buttons/TextPushButton' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
   const VBox = require( 'SCENERY/nodes/VBox' );
   const Vector2 = require( 'DOT/Vector2' );
 
@@ -197,7 +197,7 @@ define( require => {
         scoreText.text = StringUtils.format( labelScoreString, score );
       };
       this.timeListener = time => {
-        timeText.text = StringUtils.format( timeNumberSecString, Util.toFixed( time, 0 ) );
+        timeText.text = StringUtils.format( timeNumberSecString, Utils.toFixed( time, 0 ) );
       };
       this.timeVisibleListener = visible => {
         timeText.visible = visible;
@@ -351,7 +351,7 @@ define( require => {
         }
 
         const bestTime = challenge.scoreProperty.value === 12
-          ? Util.toFixed( Math.min( challenge.elapsedTimeProperty.value, challenge.previousBestTime ), 0 )
+          ? Utils.toFixed( Math.min( challenge.elapsedTimeProperty.value, challenge.previousBestTime ), 0 )
           : null;
         const levelCompletedNode = new LevelCompletedNode(
           challenge.levelNumber,
@@ -359,7 +359,7 @@ define( require => {
           12,
           3,
           challenge.timeVisibleProperty.value,
-          Util.toFixed( challenge.elapsedTimeProperty.value, 0 ),
+          Utils.toFixed( challenge.elapsedTimeProperty.value, 0 ),
           bestTime,
           challenge.isNewBestTime,
           options.onContinue, {
