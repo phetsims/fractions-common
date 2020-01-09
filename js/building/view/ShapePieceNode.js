@@ -139,7 +139,7 @@ define( require => {
       this.dragListener = new DragListener( {
         targetNode: this,
         transform: options.modelViewTransform,
-        locationProperty: shapePiece.positionProperty,
+        positionProperty: shapePiece.positionProperty,
         start: event => {
           wasTouch = event.pointer instanceof Touch;
         },

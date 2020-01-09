@@ -121,7 +121,7 @@ define( require => {
         targetNode: this,
         dragBoundsProperty: dragBoundsProperty,
         transform: this.modelViewTransform,
-        locationProperty: this.group.positionProperty,
+        positionProperty: this.group.positionProperty,
         start: ( event, listener ) => {
           pointer = listener.pointer;
 

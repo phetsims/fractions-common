@@ -90,7 +90,7 @@ define( require => {
       // @private {DragListener}
       this.dragListener = new DragListener( {
         targetNode: this,
-        locationProperty: piece.positionProperty,
+        positionProperty: piece.positionProperty,
         start: () => {
           this.moveToFront();
           piece.grab();

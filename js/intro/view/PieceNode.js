@@ -79,7 +79,7 @@ define( require => {
       // @public {DragListener}
       this.dragListener = new DragListener( {
         targetNode: this,
-        locationProperty: piece.positionProperty,
+        positionProperty: piece.positionProperty,
         end: () => droppedCallback( piece )
       } );
     }
