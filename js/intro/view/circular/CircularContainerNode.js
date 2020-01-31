@@ -36,7 +36,9 @@ define( require => {
         fill: FractionsCommonColorProfile.introContainerBackgroundProperty,
         stroke: this.strokeProperty
       } ) );
-      this.localBounds = this.localBounds;
+
+      // Use current bounds as permanent bounds
+      this.localBounds = this.localBounds; // eslint-disable-line no-self-assign
 
       // @private {Path} creates the path for the dividing lines between cells
       this.cellDividersPath = new Path( null, { stroke: this.strokeProperty } );

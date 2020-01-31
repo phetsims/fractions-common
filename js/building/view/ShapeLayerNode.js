@@ -93,7 +93,7 @@ define( require => {
 
       // Use our current bounds as our permanent bounds (for layout), since no content should be able to be outside this
       // (any pieces will be inside the container).
-      this.localBounds = this.localBounds;
+      this.localBounds = this.localBounds; // eslint-disable-line no-self-assign
     }
 
     /**
