@@ -25,7 +25,7 @@ define( require => {
      * @param {Piece} piece
      * @param {function} finishedAnimatingCallback - Called as function( {Piece} ) with the piece to finish animating.
      * @param {function} droppedCallback - Called as function( {Piece} )
-     * @param {Object} [config]
+     * @param {Object} config
      */
     constructor( piece, finishedAnimatingCallback, droppedCallback, config ) {
       config = merge( {
