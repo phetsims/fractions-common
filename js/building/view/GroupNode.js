@@ -110,7 +110,7 @@ define( require => {
      * @protected
      *
      * @param {Property.<Bounds2>} dragBoundsProperty
-     * @param {Object} options - The main options object
+     * @param {Object} [options] - The main options object
      */
     attachDragListener( dragBoundsProperty, options ) {
 
