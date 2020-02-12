@@ -17,6 +17,7 @@ define( require => {
   const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
   const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
+  const required = require( 'PHET_CORE/required' );
   const Vector2 = require( 'DOT/Vector2' );
   const Vector2Property = require( 'DOT/Vector2Property' );
 
@@ -29,8 +30,8 @@ define( require => {
      */
     constructor( piece, finishedAnimatingCallback, droppedCallback, config ) {
       config = merge( {
-        // {Node} - required to be provided
-        graphic: null
+        // {Node}
+        graphic: required( null )
       }, config );
 
       super( {
