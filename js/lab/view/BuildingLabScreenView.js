@@ -101,7 +101,7 @@ define( require => {
 
       phet.joist.display.addInputListener( {
         down: event => {
-          const screen = phet.joist.sim.currentScreenProperty.value;
+          const screen = phet.joist.sim.screenProperty.value;
           if ( screen && screen.view === this ) {
 
             const isActive = this.layerNode.activePointerProperty.value === event.pointer;
