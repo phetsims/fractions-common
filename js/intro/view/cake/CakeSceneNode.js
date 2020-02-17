@@ -18,7 +18,7 @@ define( require => {
   const merge = require( 'PHET_CORE/merge' );
 
   // images
-  const cakeImage = require( 'image!FRACTIONS_COMMON/cake_1_1.png' );
+  const cakeImage = require( 'mipmap!FRACTIONS_COMMON/cake_1_1.png' );
 
   class CakeSceneNode extends CellSceneNode {
     /**
