@@ -40,7 +40,7 @@ define( require => {
   // strings
   var checkString = require( 'string!VEGAS/check' );
   var labelLevelString = require( 'string!VEGAS/label.level' );
-  var labelScoreString = require( 'string!VEGAS/label.score' );
+  var labelScorePatternString = require( 'string!VEGAS/label.scorePattern' );
   var okString = require( 'string!FRACTIONS_COMMON/ok' );
   var showAnswerString = require( 'string!VEGAS/showAnswer' );
   var timeNumberSecString = require( 'string!FRACTIONS_COMMON/timeNumberSec' );
@@ -79,14 +79,14 @@ define( require => {
       } ),
       maxWidth: 300
     } );
-    var scoreLabel = new Text( StringUtils.format( labelScoreString, 0 ), {
+    var scoreLabel = new Text( StringUtils.format( labelScorePatternString, 0 ), {
       font: new PhetFont( {
         size: 12,
         weight: 'bold'
       } ),
       maxWidth: 300
     } );
-    var timeLabel = new Text( StringUtils.format( labelScoreString, 0 ), {
+    var timeLabel = new Text( StringUtils.format( labelScorePatternString, 0 ), {
       font: new PhetFont( {
         size: 12,
         weight: 'bold'
@@ -315,7 +315,7 @@ define( require => {
     //update score
     // REVIEW: Does this need an unlink?
     model.scoreProperty.link( function( newScore ) {
-      scoreLabel.text = StringUtils.format( labelScoreString, newScore );
+      scoreLabel.text = StringUtils.format( labelScorePatternString, newScore );
       vBox.right = model.gameModel.width - margin;
     } );
 
