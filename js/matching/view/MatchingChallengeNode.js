@@ -38,7 +38,7 @@ define( require => {
   // strings
   const checkString = require( 'string!VEGAS/check' );
   const labelLevelString = require( 'string!VEGAS/label.level' );
-  const labelScoreString = require( 'string!VEGAS/label.score' );
+  const labelScorePatternString = require( 'string!VEGAS/label.scorePattern' );
   const myMatchesString = require( 'string!FRACTIONS_COMMON/myMatches' );
   const okString = require( 'string!FRACTIONS_COMMON/ok' );
   const showAnswerString = require( 'string!VEGAS/showAnswer' );
@@ -193,7 +193,7 @@ define( require => {
 
       // @private {function}
       this.scoreListener = score => {
-        scoreText.text = StringUtils.format( labelScoreString, score );
+        scoreText.text = StringUtils.format( labelScorePatternString, score );
       };
       this.timeListener = time => {
         timeText.text = StringUtils.format( timeNumberSecString, Util.toFixed( time, 0 ) );
