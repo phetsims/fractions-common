@@ -5,14 +5,10 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( require => {
-  'use strict';
 
-  // modules
-  require( 'FRACTIONS_COMMON/game/model/CollectionFinderTests' );
-  require( 'FRACTIONS_COMMON/common/model/PrimeFactorizationTests' );
-  require( 'FRACTIONS_COMMON/common/model/PrimesTests' );
+import './common/model/PrimeFactorizationTests.js';
+import './common/model/PrimesTests.js';
+import './game/model/CollectionFinderTests.js';
 
-  // Since our tests are loaded asynchronously, we must direct QUnit to begin the tests
-  QUnit.start();
-} );
+// Since our tests are loaded asynchronously, we must direct QUnit to begin the tests
+QUnit.start();

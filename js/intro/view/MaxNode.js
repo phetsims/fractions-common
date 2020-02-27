@@ -6,74 +6,70 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-define( require => {
-  'use strict';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import Bounds2 from '../../../../dot/js/Bounds2.js';
+import merge from '../../../../phet-core/js/merge.js';
+import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
+import AlignBox from '../../../../scenery/js/nodes/AlignBox.js';
+import HBox from '../../../../scenery/js/nodes/HBox.js';
+import Text from '../../../../scenery/js/nodes/Text.js';
+import VBox from '../../../../scenery/js/nodes/VBox.js';
+import fractionsCommonStrings from '../../fractions-common-strings.js';
+import fractionsCommon from '../../fractionsCommon.js';
+import RoundNumberSpinner from './RoundNumberSpinner.js';
 
-  // modules
-  const AlignBox = require( 'SCENERY/nodes/AlignBox' );
-  const Bounds2 = require( 'DOT/Bounds2' );
-  const DerivedProperty = require( 'AXON/DerivedProperty' );
-  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const HBox = require( 'SCENERY/nodes/HBox' );
-  const merge = require( 'PHET_CORE/merge' );
-  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  const RoundNumberSpinner = require( 'FRACTIONS_COMMON/intro/view/RoundNumberSpinner' );
-  const Text = require( 'SCENERY/nodes/Text' );
-  const VBox = require( 'SCENERY/nodes/VBox' );
+const representationMaxString = fractionsCommonStrings.representationMax;
 
-  // strings
-  const representationMaxString = require( 'string!FRACTIONS_COMMON/representationMax' );
+class MaxNode extends VBox {
+  /**
+   * @param {Property.<number>} containerCountProperty
+   * @param {Object} [options]
+   */
+  constructor( containerCountProperty, options ) {
+    super();
 
-  class MaxNode extends VBox {
-    /**
-     * @param {Property.<number>} containerCountProperty
-     * @param {Object} [options]
-     */
-    constructor( containerCountProperty, options ) {
-      super();
+    options = merge( {
+      spacing: 5
+    }, options );
 
-      options = merge( {
-        spacing: 5
-      }, options );
+    const maxText = new Text( representationMaxString, {
+      font: new PhetFont( 24 ),
+      maxWidth: 100
+    } );
+    const readoutText = new Text( '', { font: new PhetFont( 34 ) } );
 
-      const maxText = new Text( representationMaxString, {
-        font: new PhetFont( 24 ),
-        maxWidth: 100
-      } );
-      const readoutText = new Text( '', { font: new PhetFont( 34 ) } );
-
-      // Figure out what the largest bounds are for the readout
-      const maxReadoutBounds = Bounds2.NOTHING.copy();
-      for ( let n = 1; n <= containerCountProperty.range.max; n++ ) {
-        readoutText.text = n;
-        maxReadoutBounds.includeBounds( readoutText.bounds );
-      }
-
-      // Now update the readout text
-      containerCountProperty.link( count => {
-        readoutText.text = count;
-      } );
-
-      this.children = [
-        maxText,
-        new HBox( {
-          spacing: 5,
-          children: [
-            new AlignBox( readoutText, {
-              alignBounds: maxReadoutBounds
-            } ),
-            new RoundNumberSpinner(
-              containerCountProperty,
-              new DerivedProperty( [ containerCountProperty ], value => value < containerCountProperty.range.max ),
-              new DerivedProperty( [ containerCountProperty ], value => value > containerCountProperty.range.min )
-            )
-          ]
-        } )
-      ];
-
-      this.mutate( options );
+    // Figure out what the largest bounds are for the readout
+    const maxReadoutBounds = Bounds2.NOTHING.copy();
+    for ( let n = 1; n <= containerCountProperty.range.max; n++ ) {
+      readoutText.text = n;
+      maxReadoutBounds.includeBounds( readoutText.bounds );
     }
-  }
 
-  return fractionsCommon.register( 'MaxNode', MaxNode );
-} );
+    // Now update the readout text
+    containerCountProperty.link( count => {
+      readoutText.text = count;
+    } );
+
+    this.children = [
+      maxText,
+      new HBox( {
+        spacing: 5,
+        children: [
+          new AlignBox( readoutText, {
+            alignBounds: maxReadoutBounds
+          } ),
+          new RoundNumberSpinner(
+            containerCountProperty,
+            new DerivedProperty( [ containerCountProperty ], value => value < containerCountProperty.range.max ),
+            new DerivedProperty( [ containerCountProperty ], value => value > containerCountProperty.range.min )
+          )
+        ]
+      } )
+    ];
+
+    this.mutate( options );
+  }
+}
+
+fractionsCommon.register( 'MaxNode', MaxNode );
+export default MaxNode;

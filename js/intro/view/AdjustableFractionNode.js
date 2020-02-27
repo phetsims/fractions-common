@@ -7,83 +7,80 @@
  * @author Vincent Davis (Berea College)
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const DerivedProperty = require( 'AXON/DerivedProperty' );
-  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const HBox = require( 'SCENERY/nodes/HBox' );
-  const merge = require( 'PHET_CORE/merge' );
-  const PropertyFractionNode = require( 'SCENERY_PHET/PropertyFractionNode' );
-  const RoundNumberSpinner = require( 'FRACTIONS_COMMON/intro/view/RoundNumberSpinner' );
-  const VBox = require( 'SCENERY/nodes/VBox' );
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import merge from '../../../../phet-core/js/merge.js';
+import PropertyFractionNode from '../../../../scenery-phet/js/PropertyFractionNode.js';
+import HBox from '../../../../scenery/js/nodes/HBox.js';
+import VBox from '../../../../scenery/js/nodes/VBox.js';
+import fractionsCommon from '../../fractionsCommon.js';
+import RoundNumberSpinner from './RoundNumberSpinner.js';
 
-  class AdjustableFractionNode extends HBox {
-    /**
-     * @param {NumberProperty} numeratorProperty
-     * @param {NumberProperty} denominatorProperty
-     * @param {NumberProperty} containerCountProperty
-     * @param {Object} [options]
-     */
-    constructor( numeratorProperty, denominatorProperty, containerCountProperty, options ) {
-      options = merge( {
-        // {PropertyFractionNode.DisplayType}
-        type: PropertyFractionNode.DisplayType.IMPROPER,
+class AdjustableFractionNode extends HBox {
+  /**
+   * @param {NumberProperty} numeratorProperty
+   * @param {NumberProperty} denominatorProperty
+   * @param {NumberProperty} containerCountProperty
+   * @param {Object} [options]
+   */
+  constructor( numeratorProperty, denominatorProperty, containerCountProperty, options ) {
+    options = merge( {
+      // {PropertyFractionNode.DisplayType}
+      type: PropertyFractionNode.DisplayType.IMPROPER,
 
-        // {boolean} - If false, the spinners will be to the left
-        spinnersOnRight: true
-      }, options );
+      // {boolean} - If false, the spinners will be to the left
+      spinnersOnRight: true
+    }, options );
 
-      // convenience variable
-      const properties = [ numeratorProperty, denominatorProperty, containerCountProperty ];
+    // convenience variable
+    const properties = [ numeratorProperty, denominatorProperty, containerCountProperty ];
 
-      const fractionNode = new PropertyFractionNode( numeratorProperty, denominatorProperty, {
-        type: options.type,
-        scale: 3,
+    const fractionNode = new PropertyFractionNode( numeratorProperty, denominatorProperty, {
+      type: options.type,
+      scale: 3,
 
-        maxNumerator: numeratorProperty.range.max,
-        maxDenominator: denominatorProperty.range.max
-      } );
+      maxNumerator: numeratorProperty.range.max,
+      maxDenominator: denominatorProperty.range.max
+    } );
 
-      const spinnersNode = new VBox( {
-        spacing: 30,
-        children: [
-          // Numerator
-          new RoundNumberSpinner(
-            numeratorProperty,
-            new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
-              return ( numerator + 1 ) / denominator <= containerCount;
-            } ),
-            new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
-              return ( numerator - 1 ) >= 0;
-            } )
-          ),
-          // Denominator
-          new RoundNumberSpinner(
-            denominatorProperty,
-            new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
-              return ( denominator + 1 ) <= denominatorProperty.range.max;
-            } ),
-            new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
-              return ( denominator - 1 ) >= denominatorProperty.range.min && numerator / ( denominator - 1 ) <= containerCount;
-            } )
-          )
-        ]
-      } );
+    const spinnersNode = new VBox( {
+      spacing: 30,
+      children: [
+        // Numerator
+        new RoundNumberSpinner(
+          numeratorProperty,
+          new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
+            return ( numerator + 1 ) / denominator <= containerCount;
+          } ),
+          new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
+            return ( numerator - 1 ) >= 0;
+          } )
+        ),
+        // Denominator
+        new RoundNumberSpinner(
+          denominatorProperty,
+          new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
+            return ( denominator + 1 ) <= denominatorProperty.range.max;
+          } ),
+          new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
+            return ( denominator - 1 ) >= denominatorProperty.range.min && numerator / ( denominator - 1 ) <= containerCount;
+          } )
+        )
+      ]
+    } );
 
-      super( merge( {
-        spacing: 10,
-        children: options.spinnersOnRight ? [
-          fractionNode,
-          spinnersNode
-        ] : [
-          spinnersNode,
-          fractionNode
-        ]
-      }, options ) );
-    }
+    super( merge( {
+      spacing: 10,
+      children: options.spinnersOnRight ? [
+        fractionNode,
+        spinnersNode
+      ] : [
+        spinnersNode,
+        fractionNode
+      ]
+    }, options ) );
   }
+}
 
-  return fractionsCommon.register( 'AdjustableFractionNode', AdjustableFractionNode );
-} );
+fractionsCommon.register( 'AdjustableFractionNode', AdjustableFractionNode );
+export default AdjustableFractionNode;

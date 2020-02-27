@@ -5,44 +5,41 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const Panel = require( 'SUN/Panel' );
-  const StackNodesBox = require( 'FRACTIONS_COMMON/building/view/StackNodesBox' );
+import Panel from '../../../../sun/js/Panel.js';
+import StackNodesBox from '../../building/view/StackNodesBox.js';
+import fractionsCommon from '../../fractionsCommon.js';
 
-  class LabNumberPanel extends Panel {
-    /**
-     * @param {BuildingLabModel} model
-     * @param {function} pressCallback - function( {SceneryEvent}, {Stack} ) - Called when a press is started.
-     */
-    constructor( model, pressCallback ) {
-      const box = new StackNodesBox( [
-        model.numberGroupStacks[ 0 ],
-        ...model.numberStacks,
-        ...( model.allowMixedNumbers ? [ model.numberGroupStacks[ 1 ] ] : [] )
-      ], pressCallback );
+class LabNumberPanel extends Panel {
+  /**
+   * @param {BuildingLabModel} model
+   * @param {function} pressCallback - function( {SceneryEvent}, {Stack} ) - Called when a press is started.
+   */
+  constructor( model, pressCallback ) {
+    const box = new StackNodesBox( [
+      model.numberGroupStacks[ 0 ],
+      ...model.numberStacks,
+      ...( model.allowMixedNumbers ? [ model.numberGroupStacks[ 1 ] ] : [] )
+    ], pressCallback );
 
-      super( box, {
-        xMargin: 20
-      } );
+    super( box, {
+      xMargin: 20
+    } );
 
-      // @private {StackNodesBox}
-      this.box = box;
-    }
-
-    /**
-     * Sets the model positions of our model objects corresponding to their displayed (view) positions.
-     * @public
-     *
-     * @param {ModelViewTransform2} modelViewTransform
-     */
-    updateModelLocations( modelViewTransform ) {
-      this.box.updateModelLocations( modelViewTransform, this );
-    }
+    // @private {StackNodesBox}
+    this.box = box;
   }
 
-  return fractionsCommon.register( 'LabNumberPanel', LabNumberPanel );
-} );
+  /**
+   * Sets the model positions of our model objects corresponding to their displayed (view) positions.
+   * @public
+   *
+   * @param {ModelViewTransform2} modelViewTransform
+   */
+  updateModelLocations( modelViewTransform ) {
+    this.box.updateModelLocations( modelViewTransform, this );
+  }
+}
+
+fractionsCommon.register( 'LabNumberPanel', LabNumberPanel );
+export default LabNumberPanel;

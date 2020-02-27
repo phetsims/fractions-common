@@ -5,34 +5,31 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const Node = require( 'SCENERY/nodes/Node' );
+import Node from '../../../../scenery/js/nodes/Node.js';
+import fractionsCommon from '../../fractionsCommon.js';
 
-  class SceneNode extends Node {
-    /**
-     * @param {ContainerSetModel} model
-     */
-    constructor( model ) {
-      super();
+class SceneNode extends Node {
+  /**
+   * @param {ContainerSetModel} model
+   */
+  constructor( model ) {
+    super();
 
-      // @protected {ContainerSetModel}
-      this.model = model;
-    }
-
-    /**
-     * Steps forward in time.
-     * @public
-     *
-     * @param {number} dt
-     */
-    step( dt ) {
-      // Behavior will be added in subtypes
-    }
+    // @protected {ContainerSetModel}
+    this.model = model;
   }
 
-  return fractionsCommon.register( 'SceneNode', SceneNode );
-} );
+  /**
+   * Steps forward in time.
+   * @public
+   *
+   * @param {number} dt
+   */
+  step( dt ) {
+    // Behavior will be added in subtypes
+  }
+}
+
+fractionsCommon.register( 'SceneNode', SceneNode );
+export default SceneNode;

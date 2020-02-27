@@ -5,35 +5,32 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const ObservableArray = require( 'AXON/ObservableArray' );
-  const Property = require( 'AXON/Property' );
-  const Vector2 = require( 'DOT/Vector2' );
-  const Vector2Property = require( 'DOT/Vector2Property' );
+import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import Property from '../../../../axon/js/Property.js';
+import Vector2 from '../../../../dot/js/Vector2.js';
+import Vector2Property from '../../../../dot/js/Vector2Property.js';
+import fractionsCommon from '../../fractionsCommon.js';
 
-  class Target {
-    /**
-     * @param {Fraction} fraction
-     */
-    constructor( fraction ) {
+class Target {
+  /**
+   * @param {Fraction} fraction
+   */
+  constructor( fraction ) {
 
-      // @public {Fraction}
-      this.fraction = fraction;
+    // @public {Fraction}
+    this.fraction = fraction;
 
-      // @public {Property.<Group|null>}
-      this.groupProperty = new Property( null );
+    // @public {Property.<Group|null>}
+    this.groupProperty = new Property( null );
 
-      // @public - Position of our target in model units (updated from the view)
-      this.positionProperty = new Vector2Property( Vector2.ZERO );
+    // @public - Position of our target in model units (updated from the view)
+    this.positionProperty = new Vector2Property( Vector2.ZERO );
 
-      // @public {ObservableArray.<Group>}
-      this.hoveringGroups = new ObservableArray();
-    }
+    // @public {ObservableArray.<Group>}
+    this.hoveringGroups = new ObservableArray();
   }
+}
 
-  return fractionsCommon.register( 'Target', Target );
-} );
+fractionsCommon.register( 'Target', Target );
+export default Target;

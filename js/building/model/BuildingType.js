@@ -5,15 +5,11 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const Enumeration = require( 'PHET_CORE/Enumeration' );
-  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import fractionsCommon from '../../fractionsCommon.js';
 
-  return fractionsCommon.register( 'BuildingType', Enumeration.byKeys( [
-    'SHAPE',
-    'NUMBER'
-  ] ) );
-} );
+export default fractionsCommon.register( 'BuildingType', Enumeration.byKeys( [
+  'SHAPE',
+  'NUMBER'
+] ) );

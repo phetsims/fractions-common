@@ -5,42 +5,39 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const BuildingType = require( 'FRACTIONS_COMMON/building/model/BuildingType' );
-  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const Stack = require( 'FRACTIONS_COMMON/building/model/Stack' );
-  const Vector2 = require( 'DOT/Vector2' );
+import Vector2 from '../../../../dot/js/Vector2.js';
+import fractionsCommon from '../../fractionsCommon.js';
+import BuildingType from './BuildingType.js';
+import Stack from './Stack.js';
 
-  class NumberStack extends Stack {
-    /**
-     * @param {number} number
-     * @param {number} layoutQuantity
-     * @param {boolean} [isMutable]
-     */
-    constructor( number, layoutQuantity, isMutable = true ) {
-      super( BuildingType.NUMBER, layoutQuantity, isMutable );
+class NumberStack extends Stack {
+  /**
+   * @param {number} number
+   * @param {number} layoutQuantity
+   * @param {boolean} [isMutable]
+   */
+  constructor( number, layoutQuantity, isMutable = true ) {
+    super( BuildingType.NUMBER, layoutQuantity, isMutable );
 
-      // @public {number}
-      this.number = number;
+    // @public {number}
+    this.number = number;
 
-      // @public {ObservableArray.<NumberPiece>} - NOTE: These should only ever be popped/pushed.
-      this.numberPieces = this.array;
-    }
-
-    /**
-     * Returns the desired visual offset of an item in the stack from the base.
-     * @public
-     *
-     * @param {number} index
-     * @returns {Vector2}
-     */
-    static getOffset( index ) {
-      return new Vector2( 4 * index, 4 * index );
-    }
+    // @public {ObservableArray.<NumberPiece>} - NOTE: These should only ever be popped/pushed.
+    this.numberPieces = this.array;
   }
 
-  return fractionsCommon.register( 'NumberStack', NumberStack );
-} );
+  /**
+   * Returns the desired visual offset of an item in the stack from the base.
+   * @public
+   *
+   * @param {number} index
+   * @returns {Vector2}
+   */
+  static getOffset( index ) {
+    return new Vector2( 4 * index, 4 * index );
+  }
+}
+
+fractionsCommon.register( 'NumberStack', NumberStack );
+export default NumberStack;

@@ -5,53 +5,48 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const CakeContainerNode = require( 'FRACTIONS_COMMON/intro/view/cake/CakeContainerNode' );
-  const CakeNode = require( 'FRACTIONS_COMMON/intro/view/cake/CakeNode' );
-  const CakePieceNode = require( 'FRACTIONS_COMMON/intro/view/cake/CakePieceNode' );
-  const CellSceneNode = require( 'FRACTIONS_COMMON/intro/view/CellSceneNode' );
-  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const Image = require( 'SCENERY/nodes/Image' );
-  const merge = require( 'PHET_CORE/merge' );
+import merge from '../../../../../phet-core/js/merge.js';
+import Image from '../../../../../scenery/js/nodes/Image.js';
+import cakeImage from '../../../../mipmaps/cake_1_1_png.js';
+import fractionsCommon from '../../../fractionsCommon.js';
+import CellSceneNode from '../CellSceneNode.js';
+import CakeContainerNode from './CakeContainerNode.js';
+import CakeNode from './CakeNode.js';
+import CakePieceNode from './CakePieceNode.js';
 
-  // images
-  const cakeImage = require( 'mipmap!FRACTIONS_COMMON/cake_1_1.png' );
-
-  class CakeSceneNode extends CellSceneNode {
-    /**
-     * @param {ContainerSetScreenView} model
-     * @param {Object} [options]
-     */
-    constructor( model, options ) {
-      super( model, merge( {
-        createContainerNode( container, options ) {
-          return new CakeContainerNode( container, options );
-        },
-        createPieceNode( piece, finishedAnimatingCallback, droppedCallback ) {
-          return new CakePieceNode( piece, finishedAnimatingCallback, droppedCallback );
-        },
-        createCellNode( denominator, index, options ) {
-          return new CakeNode( denominator, index, options );
-        }
-      }, options ) );
-    }
-
-    /**
-     * Returns the icon node to be used for this representation.
-     * @public
-     *
-     * @param {boolean} useEqualityLabColor
-     * @returns {Node}
-     */
-    static getIcon() {
-      return new Image( cakeImage, {
-        maxHeight: 75
-      } );
-    }
+class CakeSceneNode extends CellSceneNode {
+  /**
+   * @param {ContainerSetScreenView} model
+   * @param {Object} [options]
+   */
+  constructor( model, options ) {
+    super( model, merge( {
+      createContainerNode( container, options ) {
+        return new CakeContainerNode( container, options );
+      },
+      createPieceNode( piece, finishedAnimatingCallback, droppedCallback ) {
+        return new CakePieceNode( piece, finishedAnimatingCallback, droppedCallback );
+      },
+      createCellNode( denominator, index, options ) {
+        return new CakeNode( denominator, index, options );
+      }
+    }, options ) );
   }
 
-  return fractionsCommon.register( 'CakeSceneNode', CakeSceneNode );
-} );
+  /**
+   * Returns the icon node to be used for this representation.
+   * @public
+   *
+   * @param {boolean} useEqualityLabColor
+   * @returns {Node}
+   */
+  static getIcon() {
+    return new Image( cakeImage, {
+      maxHeight: 75
+    } );
+  }
+}
+
+fractionsCommon.register( 'CakeSceneNode', CakeSceneNode );
+export default CakeSceneNode;

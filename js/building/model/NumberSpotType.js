@@ -5,31 +5,27 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const Enumeration = require( 'PHET_CORE/Enumeration' );
-  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import fractionsCommon from '../../fractionsCommon.js';
 
-  return fractionsCommon.register( 'NumberSpotType', Enumeration.byKeys( [
-    'WHOLE',
-    'NUMERATOR',
-    'DENOMINATOR'
-  ], {
-    beforeFreeze: NumberSpotType => {
-      /**
-       * @param {boolean} isMixedNumber
-       * @returns {Array.<NumberSpotType>} - Shows the number spots available for whether mixed numbers are an option.
-       */
-      NumberSpotType.getTypes = isMixedNumber => isMixedNumber ? [
-        NumberSpotType.WHOLE,
-        NumberSpotType.NUMERATOR,
-        NumberSpotType.DENOMINATOR
-      ] : [
-        NumberSpotType.NUMERATOR,
-        NumberSpotType.DENOMINATOR
-      ];
-    }
-  } ) );
-} );
+export default fractionsCommon.register( 'NumberSpotType', Enumeration.byKeys( [
+  'WHOLE',
+  'NUMERATOR',
+  'DENOMINATOR'
+], {
+  beforeFreeze: NumberSpotType => {
+    /**
+     * @param {boolean} isMixedNumber
+     * @returns {Array.<NumberSpotType>} - Shows the number spots available for whether mixed numbers are an option.
+     */
+    NumberSpotType.getTypes = isMixedNumber => isMixedNumber ? [
+      NumberSpotType.WHOLE,
+      NumberSpotType.NUMERATOR,
+      NumberSpotType.DENOMINATOR
+    ] : [
+      NumberSpotType.NUMERATOR,
+      NumberSpotType.DENOMINATOR
+    ];
+  }
+} ) );

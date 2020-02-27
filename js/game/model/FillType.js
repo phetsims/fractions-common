@@ -5,16 +5,12 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const Enumeration = require( 'PHET_CORE/Enumeration' );
-  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
+import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import fractionsCommon from '../../fractionsCommon.js';
 
-  return fractionsCommon.register( 'FillType', Enumeration.byKeys( [
-    'SEQUENTIAL',
-    'MIXED', // when number of shapes > 1, first shape will be completely filled and the 2nd shape will be random
-    'RANDOM'
-  ] ) );
-} );
+export default fractionsCommon.register( 'FillType', Enumeration.byKeys( [
+  'SEQUENTIAL',
+  'MIXED', // when number of shapes > 1, first shape will be completely filled and the 2nd shape will be random
+  'RANDOM'
+] ) );

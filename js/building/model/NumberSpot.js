@@ -5,39 +5,36 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const BooleanProperty = require( 'AXON/BooleanProperty' );
-  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const Property = require( 'AXON/Property' );
+import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import Property from '../../../../axon/js/Property.js';
+import fractionsCommon from '../../fractionsCommon.js';
 
-  class NumberSpot {
-    /**
-     * @param {NumberGroup} numberGroup
-     * @param {NumberSpotType} type
-     * @param {Bounds2} bounds
-     */
-    constructor( numberGroup, type, bounds ) {
+class NumberSpot {
+  /**
+   * @param {NumberGroup} numberGroup
+   * @param {NumberSpotType} type
+   * @param {Bounds2} bounds
+   */
+  constructor( numberGroup, type, bounds ) {
 
-      // @public {NumberGroup}
-      this.numberGroup = numberGroup;
+    // @public {NumberGroup}
+    this.numberGroup = numberGroup;
 
-      // @public {NumberSpotType}
-      this.type = type;
+    // @public {NumberSpotType}
+    this.type = type;
 
-      // @public {Bounds2} - Model-coordinate area for its zone.
-      this.bounds = bounds;
+    // @public {Bounds2} - Model-coordinate area for its zone.
+    this.bounds = bounds;
 
-      // @public {Property.<NumberPiece|null>} - The piece our spot is "filled" with (if any)
-      this.pieceProperty = new Property( null );
+    // @public {Property.<NumberPiece|null>} - The piece our spot is "filled" with (if any)
+    this.pieceProperty = new Property( null );
 
-      // @public {Property.<boolean>} - Whether it should appear like it cannot be filled with a number piece currently
-      // being dragged.
-      this.showNotAllowedProperty = new BooleanProperty( false );
-    }
+    // @public {Property.<boolean>} - Whether it should appear like it cannot be filled with a number piece currently
+    // being dragged.
+    this.showNotAllowedProperty = new BooleanProperty( false );
   }
+}
 
-  return fractionsCommon.register( 'NumberSpot', NumberSpot );
-} );
+fractionsCommon.register( 'NumberSpot', NumberSpot );
+export default NumberSpot;

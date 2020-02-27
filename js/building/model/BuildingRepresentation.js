@@ -5,32 +5,29 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const Enumeration = require( 'PHET_CORE/Enumeration' );
-  const fractionsCommon = require( 'FRACTIONS_COMMON/fractionsCommon' );
-  const Vector2 = require( 'DOT/Vector2' );
+import Vector2 from '../../../../dot/js/Vector2.js';
+import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import fractionsCommon from '../../fractionsCommon.js';
 
-  const BuildingRepresentation = Enumeration.byKeys( [
-    'PIE',
-    'BAR'
-  ], {
-    beforeFreeze: BuildingRepresentation => {
-      /**
-       * Returns the offset for a stack given the index.
-       * @public
-       *
-       * @param {BuildingRepresentation} representation
-       * @param {number} index
-       * @returns {Vector2}
-       */
-      BuildingRepresentation.getOffset = ( representation, index ) => {
-        return new Vector2( ( representation === BuildingRepresentation.PIE ? 1 : -1 ) * 4 * index, -4 * index );
-      };
-    }
-  } );
-
-  return fractionsCommon.register( 'BuildingRepresentation', BuildingRepresentation );
+const BuildingRepresentation = Enumeration.byKeys( [
+  'PIE',
+  'BAR'
+], {
+  beforeFreeze: BuildingRepresentation => {
+    /**
+     * Returns the offset for a stack given the index.
+     * @public
+     *
+     * @param {BuildingRepresentation} representation
+     * @param {number} index
+     * @returns {Vector2}
+     */
+    BuildingRepresentation.getOffset = ( representation, index ) => {
+      return new Vector2( ( representation === BuildingRepresentation.PIE ? 1 : -1 ) * 4 * index, -4 * index );
+    };
+  }
 } );
+
+fractionsCommon.register( 'BuildingRepresentation', BuildingRepresentation );
+export default BuildingRepresentation;
