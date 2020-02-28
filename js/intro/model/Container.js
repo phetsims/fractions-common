@@ -1,4 +1,4 @@
-// Copyright 2018, University of Colorado Boulder
+// Copyright 2018-2020, University of Colorado Boulder
 
 /**
  * Contains up to N cells, where N is the denominator. Represents up to N/N (N cells of 1/N each).

@@ -1,4 +1,4 @@
-// Copyright 2018, University of Colorado Boulder
+// Copyright 2018-2020, University of Colorado Boulder
 
 /**
  * Represents a sum of unit fractions, where the numerator (for each different denominator) is the quantity of

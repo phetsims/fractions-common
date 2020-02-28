@@ -1,4 +1,4 @@
-// Copyright 2018, University of Colorado Boulder
+// Copyright 2018-2020, University of Colorado Boulder
 
 /**
  * A container that behaves like another (source) container, but with each cell split into X others (the multiplier).

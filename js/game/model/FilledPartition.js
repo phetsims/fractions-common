@@ -1,4 +1,4 @@
-// Copyright 2018-2019, University of Colorado Boulder
+// Copyright 2018-2020, University of Colorado Boulder
 
 /**
  * Represents a ShapePartition with each shape marked as filled or unfilled (all with a particular color).

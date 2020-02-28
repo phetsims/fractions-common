@@ -1,4 +1,4 @@
-// Copyright 2018, University of Colorado Boulder
+// Copyright 2018-2020, University of Colorado Boulder
 
 /**
  * The ideal "target" for a collection box, that shows an additional shape-based representation of the fraction to the
