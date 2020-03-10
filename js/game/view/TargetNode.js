@@ -62,7 +62,7 @@ class TargetNode extends HBox {
     // @private {Target}
     this.target = target;
 
-    // @private {ModelViewTransform|null}
+    // @private {ModelViewTransform2|null}
     this.modelViewTransform = null;
 
     // @private {Node|null}
