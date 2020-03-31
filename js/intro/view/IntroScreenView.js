@@ -24,7 +24,7 @@ import Panel from '../../../../sun/js/Panel.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonGlobals from '../../common/FractionsCommonGlobals.js';
 import FractionsCommonColorProfile from '../../common/view/FractionsCommonColorProfile.js';
-import fractionsCommonStrings from '../../fractions-common-strings.js';
+import fractionsCommonStrings from '../../fractionsCommonStrings.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import Container from '../model/Container.js';
 import CakeContainerNode from './cake/CakeContainerNode.js';
