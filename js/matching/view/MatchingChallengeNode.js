@@ -180,7 +180,8 @@ class MatchingChallengeNode extends Node {
         levelText,
         scoreText,
         timeText
-      ]
+      ],
+      excludeInvisibleChildrenFromBounds: false
     } ), {
       alignBounds: layoutBounds.withMinY( targetBottom ),
       xAlign: 'right',
