@@ -134,6 +134,7 @@ class ShapeGroupNode extends GroupNode {
     this.rightButtonBox = new VBox( {
       spacing: CONTAINER_PADDING,
       children: [ this.addContainerButton, this.removeContainerButton ],
+      resize: false,
       centerY: 0
     } );
     if ( options.hasButtons && shapeGroup.maxContainers > 1 ) {
