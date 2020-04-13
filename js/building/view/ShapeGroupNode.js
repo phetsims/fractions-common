@@ -135,6 +135,7 @@ class ShapeGroupNode extends GroupNode {
       spacing: CONTAINER_PADDING,
       children: [ this.addContainerButton, this.removeContainerButton ],
       resize: false,
+      excludeInvisibleChildrenFromBounds: false,
       centerY: 0
     } );
     if ( options.hasButtons && shapeGroup.maxContainers > 1 ) {
