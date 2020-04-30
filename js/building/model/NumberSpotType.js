@@ -9,7 +9,7 @@
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import fractionsCommon from '../../fractionsCommon.js';
 
-export default fractionsCommon.register( 'NumberSpotType', Enumeration.byKeys( [
+const NumberSpotType = Enumeration.byKeys( [
   'WHOLE',
   'NUMERATOR',
   'DENOMINATOR'
@@ -28,4 +28,6 @@ export default fractionsCommon.register( 'NumberSpotType', Enumeration.byKeys( [
       NumberSpotType.DENOMINATOR
     ];
   }
-} ) );
+} );
+fractionsCommon.register( 'NumberSpotType', NumberSpotType );
+export default NumberSpotType;

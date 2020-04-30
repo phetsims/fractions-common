@@ -9,7 +9,9 @@
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import fractionsCommon from '../../fractionsCommon.js';
 
-export default fractionsCommon.register( 'BuildingType', Enumeration.byKeys( [
+const BuildingType = Enumeration.byKeys( [
   'SHAPE',
   'NUMBER'
-] ) );
+] );
+fractionsCommon.register( 'BuildingType', BuildingType );
+export default BuildingType;

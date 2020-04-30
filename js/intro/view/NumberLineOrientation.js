@@ -9,7 +9,9 @@
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import fractionsCommon from '../../fractionsCommon.js';
 
-export default fractionsCommon.register( 'NumberLineOrientation', Enumeration.byKeys( [
+const NumberLineOrientation = Enumeration.byKeys( [
   'HORIZONTAL',
   'VERTICAL'
-] ) );
+] );
+fractionsCommon.register( 'NumberLineOrientation', NumberLineOrientation );
+export default NumberLineOrientation;

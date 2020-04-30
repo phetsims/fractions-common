@@ -9,7 +9,9 @@
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import fractionsCommon from '../../fractionsCommon.js';
 
-export default fractionsCommon.register( 'RectangularOrientation', Enumeration.byKeys( [
+const RectangularOrientation = Enumeration.byKeys( [
   'HORIZONTAL',
   'VERTICAL'
-] ) );
+] );
+fractionsCommon.register( 'RectangularOrientation', RectangularOrientation );
+export default RectangularOrientation;

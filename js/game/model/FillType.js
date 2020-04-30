@@ -9,8 +9,10 @@
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import fractionsCommon from '../../fractionsCommon.js';
 
-export default fractionsCommon.register( 'FillType', Enumeration.byKeys( [
+const FillType = Enumeration.byKeys( [
   'SEQUENTIAL',
   'MIXED', // when number of shapes > 1, first shape will be completely filled and the 2nd shape will be random
   'RANDOM'
-] ) );
+] );
+fractionsCommon.register( 'FillType', FillType );
+export default FillType;

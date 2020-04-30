@@ -9,8 +9,10 @@
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import fractionsCommon from '../../fractionsCommon.js';
 
-export default fractionsCommon.register( 'ChallengeType', Enumeration.byKeys( [
+const ChallengeType = Enumeration.byKeys( [
   'PIE',
   'BAR',
   'NUMBER'
-] ) );
+] );
+fractionsCommon.register( 'ChallengeType', ChallengeType );
+export default ChallengeType;
