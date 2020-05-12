@@ -269,7 +269,7 @@ class FractionChallenge extends BuildingModel {
     assert && assert( group instanceof Group );
     assert && assert( target.groupProperty.value === null );
 
-    // Setting this should result in a side-effect of updating our target's positionProperty to the correct location.
+    // Setting this should result in a side-effect of updating our target's positionProperty to the correct position.
     target.groupProperty.value = group;
 
     // Try to start moving out another group

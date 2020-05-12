@@ -147,8 +147,8 @@ class BuildingLabScreenView extends ScreenView {
       bottomAlignBox.alignBounds = visibleBounds;
       // Don't compensate for the right side expanding out, see https://github.com/phetsims/fractions-common/issues/51
       bottomRightAlignBox.alignBounds = visibleBounds.withMaxX( this.layoutBounds.right );
-      this.shapePanel.updateModelLocations( this.modelViewTransform );
-      this.numberPanel.updateModelLocations( this.modelViewTransform );
+      this.shapePanel.updateModelPositions( this.modelViewTransform );
+      this.numberPanel.updateModelPositions( this.modelViewTransform );
 
       this.shapeDragBoundsProperty.value = this.modelViewTransform.viewToModelBounds( new Bounds2(
         visibleBounds.left,

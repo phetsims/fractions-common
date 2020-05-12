@@ -24,7 +24,7 @@ class MatchSpot {
       isScale: false
     }, options );
 
-    // @public - To be updated by the view when its location changes (usually just initially)
+    // @public - To be updated by the view when its position changes (usually just initially)
     this.positionProperty = new Vector2Property( Vector2.ZERO, {
       useDeepEquality: true
     } );

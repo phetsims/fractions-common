@@ -37,8 +37,8 @@ class FractionChallengePanel extends Panel {
    *
    * @param {ModelViewTransform2} modelViewTransform
    */
-  updateModelLocations( modelViewTransform ) {
-    this.box.updateModelLocations( modelViewTransform, this );
+  updateModelPositions(modelViewTransform ) {
+    this.box.updateModelPositions( modelViewTransform, this );
   }
 
   /**

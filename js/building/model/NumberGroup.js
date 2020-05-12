@@ -136,7 +136,7 @@ class NumberGroup extends Group {
   }
 
   /**
-   * The center locations of every "container" in the group.
+   * The center positions of every "container" in the group.
    * @public
    * @override
    *

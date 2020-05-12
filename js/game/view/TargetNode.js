@@ -169,7 +169,7 @@ class TargetNode extends HBox {
         this.container.addChild( this.groupNode );
 
         if ( this.modelViewTransform ) {
-          // Whenever we get a group placed, we need to update the target location so that the subsequent animation
+          // Whenever we get a group placed, we need to update the target position so that the subsequent animation
           // goes to the right place.
           target.positionProperty.value = this.modelViewTransform.viewToModelPosition(
             this.groupNode.getUniqueTrailTo( this.parentContainer ).localToGlobalPoint( Vector2.ZERO )
@@ -218,11 +218,11 @@ class TargetNode extends HBox {
    * @param {Node} parentContainer - A parent node that contains this node, and has no transform relative to the
    *                                 screenView.
    */
-  updateModelLocations( modelViewTransform, parentContainer ) {
+  updateModelPositions( modelViewTransform, parentContainer ) {
     this.modelViewTransform = modelViewTransform;
     this.parentContainer = parentContainer;
 
-    // Initialize with an approximate location so we can compute the closest target
+    // Initialize with an approximate position so we can compute the closest target
     this.target.positionProperty.value = modelViewTransform.viewToModelPosition(
       this.container.getUniqueTrailTo( parentContainer ).localToGlobalPoint( this.groupCenter )
     );

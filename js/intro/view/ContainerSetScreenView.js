@@ -93,8 +93,8 @@ class ContainerSetScreenView extends ScreenView {
     // @private {Node|null} the visual representation of the container set
     this.currentView = null;
 
-    // Returns the current bucket location
-    const getBucketLocation = () => {
+    // Returns the current bucket position
+    const getBucketPosition = () => {
       assert && assert( this.currentView.bucketNode );
       return this.currentView.bucketNode.getUniqueTrail().getMatrixTo( this.currentView.getUniqueTrail() ).timesVector2( Vector2.ZERO );
     };
@@ -115,29 +115,29 @@ class ContainerSetScreenView extends ScreenView {
       switch( representation ) {
         case IntroRepresentation.CIRCLE:
           this.currentView = new CircularSceneNode( model, {
-            getBucketLocation: getBucketLocation
+            getBucketPosition: getBucketPosition
           } );
           break;
         case IntroRepresentation.VERTICAL_BAR:
           this.currentView = new RectangularSceneNode( model, {
-            getBucketLocation: getBucketLocation,
+            getBucketPosition: getBucketPosition,
             rectangularOrientation: RectangularOrientation.VERTICAL
           } );
           break;
         case IntroRepresentation.HORIZONTAL_BAR:
           this.currentView = new RectangularSceneNode( model, {
-            getBucketLocation: getBucketLocation,
+            getBucketPosition: getBucketPosition,
             rectangularOrientation: RectangularOrientation.HORIZONTAL
           } );
           break;
         case IntroRepresentation.BEAKER:
           this.currentView = new BeakerSceneNode( model, {
-            getBucketLocation: getBucketLocation
+            getBucketPosition: getBucketPosition
           } );
           break;
         case IntroRepresentation.CAKE:
           this.currentView = new CakeSceneNode( model, {
-            getBucketLocation: getBucketLocation
+            getBucketPosition: getBucketPosition
           } );
           break;
         case IntroRepresentation.NUMBER_LINE:

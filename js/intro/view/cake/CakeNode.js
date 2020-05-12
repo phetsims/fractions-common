@@ -73,7 +73,7 @@ const cakeImageArray = [
   [ cake_8_1Image, cake_8_2Image, cake_8_3Image, cake_8_4Image, cake_8_5Image, cake_8_6Image, cake_8_7Image, cake_8_8Image ]
 ];
 
-// We create a matching mathematical model of the cake's "locations", tuned by hand so that the shapes will match the
+// We create a matching mathematical model of the cake's "positions", tuned by hand so that the shapes will match the
 // given images.
 const CAKE_IMAGE_SIZE = new Dimension2( 219, 166 );
 const CAKE_IMAGE_BOUNDS = new Bounds2( 25, 10, 194, 154 );

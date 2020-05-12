@@ -34,8 +34,8 @@ class CellSceneNode extends SceneNode {
       // Used to create individual cells to be displayed in the bucket.
       createCellNode: null,
 
-      // {function} - function(): {Vector2} - gives the location of the bucket when called
-      getBucketLocation: null,
+      // {function} - function(): {Vector2} - gives the position of the bucket when called
+      getBucketPosition: null,
 
       // {number} - optional
       maxContainersPerRow: model.containerCountProperty.range.max
@@ -44,7 +44,7 @@ class CellSceneNode extends SceneNode {
     assert && assert( typeof config.createContainerNode === 'function' );
     assert && assert( typeof config.createPieceNode === 'function' );
     assert && assert( typeof config.createCellNode === 'function' );
-    assert && assert( typeof config.getBucketLocation === 'function' );
+    assert && assert( typeof config.getBucketPosition === 'function' );
 
     super( model );
 
@@ -55,7 +55,7 @@ class CellSceneNode extends SceneNode {
     this.createPieceNode = config.createPieceNode;
 
     // @private {function}
-    this.getBucketLocation = config.getBucketLocation;
+    this.getBucketPosition = config.getBucketPosition;
 
     // @private {number}
     this.horizontalSpacing = CellSceneNode.getHorizontalSpacing( representation );
@@ -219,7 +219,7 @@ class CellSceneNode extends SceneNode {
           this.model.targetPieceToCell( piece, closestCell );
         }
         else {
-          pieceNode.destinationProperty.value = this.getBucketLocation();
+          pieceNode.destinationProperty.value = this.getBucketPosition();
         }
       } );
 
@@ -228,7 +228,7 @@ class CellSceneNode extends SceneNode {
       pieceNode.originProperty.value = this.getCellMidpoint( originCell );
     }
     else {
-      pieceNode.originProperty.value = this.getBucketLocation();
+      pieceNode.originProperty.value = this.getBucketPosition();
     }
 
     const destinationCell = piece.destinationCell;
@@ -236,7 +236,7 @@ class CellSceneNode extends SceneNode {
       pieceNode.destinationProperty.value = this.getCellMidpoint( destinationCell );
     }
     else {
-      pieceNode.destinationProperty.value = this.getBucketLocation();
+      pieceNode.destinationProperty.value = this.getBucketPosition();
     }
 
     this.pieceNodes.push( pieceNode );

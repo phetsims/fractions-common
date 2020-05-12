@@ -241,7 +241,7 @@ class NumberLineNode extends Node {
       hitTargetNode
     ];
 
-    // @public {Vector2} - The local-bounds location of the true "left" for layout purposes (so we can ignore the
+    // @public {Vector2} - The local-bounds position of the true "left" for layout purposes (so we can ignore the
     // arrow when aligning)
     this.localLayoutPoint = majorTickNodes[ 0 ].leftTop;
 

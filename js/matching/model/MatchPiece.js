@@ -48,7 +48,7 @@ class MatchPiece {
     // @public {Bounds2|null} - Written by view elements so that relative positioning can be done
     this.localBounds = null;
 
-    // @public - To be updated by the view when its location changes (usually just initially)
+    // @public - To be updated by the view when its position changes (usually just initially)
     this.positionProperty = new Vector2Property( Vector2.ZERO );
 
     // @public {Property.<number>]}

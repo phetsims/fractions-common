@@ -21,7 +21,7 @@ class Cell {
     // @public {Container} - Sometimes this is easier to access when stored on the cell
     this.container = container;
 
-    // @public {number} - Which cell is it? (Can determine rotation/location from this)
+    // @public {number} - Which cell is it? (Can determine rotation/position from this)
     this.index = index;
 
     // @public {Piece|null>} - The piece that is on its way to us.

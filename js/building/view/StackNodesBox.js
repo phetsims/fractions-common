@@ -109,7 +109,7 @@ class StackNodesBox extends HBox {
    * @param {ModelViewTransform2} modelViewTransform
    * @param {Node} panel
    */
-  updateModelLocations( modelViewTransform, panel ) {
+  updateModelPositions( modelViewTransform, panel ) {
     this.stackNodes.forEach( stackNode => {
       stackNode.stack.positionProperty.value = modelViewTransform.viewToModelPosition(
         stackNode.getUniqueTrailTo( panel ).localToGlobalPoint( Vector2.ZERO )

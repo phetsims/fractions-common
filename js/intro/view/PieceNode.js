@@ -4,7 +4,7 @@
  * Base type for displaying a piece.
  *
  * NOTE: The graphics of a piece are set up so that its logical "center" (that it may rotate around or corresponds to
- * its best "drag" location) will be at its origin.
+ * its best "drag" position) will be at its origin.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */

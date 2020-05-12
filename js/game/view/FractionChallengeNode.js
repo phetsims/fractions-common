@@ -142,8 +142,8 @@ class FractionChallengeNode extends Node {
     // @public {ModelViewTransform2}
     this.modelViewTransform = new ModelViewTransform2( Matrix3.translationFromVector( center ) );
 
-    this.panel.updateModelLocations( this.modelViewTransform );
-    this.targetNodes.forEach( targetNode => targetNode.updateModelLocations( this.modelViewTransform, this.targetsContainer ) );
+    this.panel.updateModelPositions( this.modelViewTransform );
+    this.targetNodes.forEach( targetNode => targetNode.updateModelPositions( this.modelViewTransform, this.targetsContainer ) );
 
     this.shapeDragBoundsProperty.value = this.modelViewTransform.viewToModelBounds( layoutBounds );
     this.numberDragBoundsProperty.value = this.modelViewTransform.viewToModelBounds( layoutBounds );
