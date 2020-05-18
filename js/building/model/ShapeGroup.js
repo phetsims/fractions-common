@@ -82,7 +82,7 @@ class ShapeGroup extends Group {
    * @returns {Array.<Vector2>}
    */
   get centerPoints() {
-    return this.shapeContainers.getArray().map( shapeContainer => this.positionProperty.value.plus( shapeContainer.offset ) );
+    return this.shapeContainers.map( shapeContainer => this.positionProperty.value.plus( shapeContainer.offset ) );
   }
 
   /**
