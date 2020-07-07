@@ -240,7 +240,7 @@ class FractionChallenge extends BuildingModel {
     }
 
     const previousGroup = this.previouslySelectedGroupProperty.value;
-    if ( previousGroup && ( this.shapeGroups.contains( previousGroup ) || this.numberGroups.contains( previousGroup ) ) ) {
+    if ( previousGroup && ( this.shapeGroups.includes( previousGroup ) || this.numberGroups.includes( previousGroup ) ) ) {
       this.selectedGroupProperty.value = this.previouslySelectedGroupProperty.value;
     }
     else {
@@ -572,7 +572,7 @@ class FractionChallenge extends BuildingModel {
 
       for ( let j = 0; j < possibilities.length; j++ ) {
         const possibility = possibilities[ j ];
-        if ( currentCollection.contains( possibility.total ) ) {
+        if ( currentCollection.includes( possibility.total ) ) {
           currentCollection = currentCollection.minus( possibility.total );
 
           const subsolution = findSolution( i + 1 );
