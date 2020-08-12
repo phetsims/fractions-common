@@ -28,7 +28,7 @@ class PieceNode extends Node {
   constructor( piece, finishedAnimatingCallback, droppedCallback, config ) {
     config = merge( {
       // {Node}
-      graphic: required( null )
+      graphic: required( config.graphic )
     }, config );
 
     super( {
