@@ -378,9 +378,9 @@ class ContainerSetModel {
    * @returns {number}
    */
   getFilledCellCount() {
-    return this.containers.reduce( 0, ( accumulator, container ) => {
+    return this.containers.reduce( ( accumulator, container ) => {
       return accumulator + container.filledCellCountProperty.value;
-    } );
+    }, 0 );
   }
 }
 
