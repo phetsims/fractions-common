@@ -71,7 +71,7 @@ class ShapeGroup extends Group {
    * @returns {Fraction}
    */
   get totalFraction() {
-    return this.shapeContainers.reduce( new Fraction( 0, 1 ), ( fraction, shapeContainer ) => fraction.plus( shapeContainer.totalFractionProperty.value ) );
+    return this.shapeContainers.reduce( ( fraction, shapeContainer ) => fraction.plus( shapeContainer.totalFractionProperty.value ), new Fraction( 0, 1 ) );
   }
 
   /**
