@@ -22,7 +22,7 @@ class NumberGroupStack extends Stack {
     // @public {boolean}
     this.isMixedNumber = isMixedNumber;
 
-    // @public {ObservableArray.<NumberGroup>} - NOTE: These should only ever be popped/pushed.
+    // @public {ObservableArrayDef.<NumberGroup>} - NOTE: These should only ever be popped/pushed.
     this.numberGroups = this.array;
   }
 }

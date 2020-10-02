@@ -41,19 +41,19 @@ class BuildingModel {
     // @public {Array.<NumberGroupStack>}
     this.numberGroupStacks = [];
 
-    // @public {ObservableArray.<ShapeGroup>}
+    // @public {ObservableArrayDef.<ShapeGroup>}
     this.shapeGroups = createObservableArray();
 
-    // @public {ObservableArray.<ShapePiece>} - Shape pieces in the play area (controlled or animating)
+    // @public {ObservableArrayDef.<ShapePiece>} - Shape pieces in the play area (controlled or animating)
     this.activeShapePieces = createObservableArray();
 
-    // @public {ObservableArray.<NumberGroup>}
+    // @public {ObservableArrayDef.<NumberGroup>}
     this.numberGroups = createObservableArray();
 
-    // @public {ObservableArray.<NumberPiece>} - Number pieces in the play area (controlled or animating)
+    // @public {ObservableArrayDef.<NumberPiece>} - Number pieces in the play area (controlled or animating)
     this.activeNumberPieces = createObservableArray();
 
-    // @private {ObservableArray.<NumberPiece>} - Tracking number pieces being dragged, so we can decide whether each
+    // @private {ObservableArrayDef.<NumberPiece>} - Tracking number pieces being dragged, so we can decide whether each
     // number group should show any "do not drop here" symbols on their spots.
     this.draggedNumberPieces = createObservableArray();
 
@@ -80,7 +80,7 @@ class BuildingModel {
       [ BuildingType.NUMBER ]: this.numberGroupStacks
     }[ type ] ) );
 
-    // @public {EnumerationMap.<ObservableArray.<Group>>} - The arrays of groups
+    // @public {EnumerationMap.<ObservableArrayDef.<Group>>} - The arrays of groups
     this.groupsMap = new EnumerationMap( BuildingType, type => ( {
       [ BuildingType.SHAPE ]: this.shapeGroups,
       [ BuildingType.NUMBER ]: this.numberGroups
@@ -92,8 +92,7 @@ class BuildingModel {
       [ BuildingType.NUMBER ]: this.activeNumberPieces
     }[ type ] ) );
 
-    // Check for duplicates (but only when assertions are enabled, don't want to use `allowDuplicates` for
-    // ObservableArray)
+    // Check for duplicates (but only when assertions are enabled)
     assert && this.activePiecesMap.forEach( ( activePieces, type ) => {
       activePieces.addItemAddedListener( () => {
         const array = activePieces.getArray();

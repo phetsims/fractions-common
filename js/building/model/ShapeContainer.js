@@ -44,7 +44,7 @@ class ShapeContainer {
     // @public {Vector2}
     this.offset = offset;
 
-    // @public {ObservableArray.<ShapePiece>}
+    // @public {ObservableArrayDef.<ShapePiece>}
     this.shapePieces = createObservableArray();
 
     // @public {Property.<Fraction>}

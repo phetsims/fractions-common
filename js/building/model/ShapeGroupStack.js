@@ -24,7 +24,7 @@ class ShapeGroupStack extends Stack {
     // @public {BuildingRepresentation}
     this.representation = representation;
 
-    // @public {ObservableArray.<ShapeGroup>} - NOTE: These should only ever be popped/pushed.
+    // @public {ObservableArrayDef.<ShapeGroup>} - NOTE: These should only ever be popped/pushed.
     this.shapeGroups = this.array;
 
     // @public {boolean} - Whether the icons will have the + button to add another container.

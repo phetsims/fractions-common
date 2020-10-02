@@ -68,7 +68,7 @@ class ContainerSetModel {
     // @public {number}
     this.bucketWidth = options.bucketWidth;
 
-    // @public {ObservableArray.<Container>}
+    // @public {ObservableArrayDef.<Container>}
     this.containers = createObservableArray();
 
     // @private {boolean} - Determines if the numerator has been changed indirectly (say, through interaction with a
@@ -76,7 +76,7 @@ class ContainerSetModel {
     // the value associated with numeratorProperty should be done through the method 'changeNumeratorManually'
     this.changingInternally = false;
 
-    // @public {ObservableArray.<Piece>} - Pieces that are not filled cells (animating or user controlled)
+    // @public {ObservableArrayDef.<Piece>} - Pieces that are not filled cells (animating or user controlled)
     this.pieces = createObservableArray();
 
     // initialize the model with the appropriate number of containers and number of filled cells

@@ -37,7 +37,7 @@ class Stack {
     // @public - Position of our stack in model units (updated from the view)
     this.positionProperty = new Vector2Property( Vector2.ZERO );
 
-    // @public {ObservableArray.<*>}
+    // @public {ObservableArrayDef.<*>}
     this.array = createObservableArray();
   }
 

@@ -27,7 +27,7 @@ class Target {
     // @public - Position of our target in model units (updated from the view)
     this.positionProperty = new Vector2Property( Vector2.ZERO );
 
-    // @public {ObservableArray.<Group>}
+    // @public {ObservableArrayDef.<Group>}
     this.hoveringGroups = createObservableArray();
   }
 }

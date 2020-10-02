@@ -13,7 +13,7 @@ import Cell from './Cell.js';
 
 class Container {
   constructor() {
-    // @public {ObservableArray.<Cell>}
+    // @public {ObservableArrayDef.<Cell>}
     this.cells = createObservableArray();
 
     // @public {Property.<boolean>} - How many cells are logically filled?

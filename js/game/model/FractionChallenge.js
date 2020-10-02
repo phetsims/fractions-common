@@ -262,7 +262,7 @@ class FractionChallenge extends BuildingModel {
    *
    * @param {Group} group
    * @param {Target} target
-   * @param {ObservableArray.<Group>} groupArray
+   * @param {ObservableArrayDef.<Group>} groupArray
    * @param {number} scale
    */
   collectGroup( group, target, groupArray, scale ) {

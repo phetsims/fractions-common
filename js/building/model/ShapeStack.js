@@ -33,7 +33,7 @@ class ShapeStack extends Stack {
     // @public {ColorDef} - What color of pieces does it hold
     this.color = color;
 
-    // @public {ObservableArray.<ShapePiece>} - NOTE: These should only ever be popped/pushed.
+    // @public {ObservableArrayDef.<ShapePiece>} - NOTE: These should only ever be popped/pushed.
     this.shapePieces = this.array;
   }
 

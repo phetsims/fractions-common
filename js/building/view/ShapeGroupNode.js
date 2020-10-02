@@ -52,7 +52,7 @@ class ShapeGroupNode extends GroupNode {
     // @public {ShapeGroup}
     this.shapeGroup = shapeGroup;
 
-    // @private {ObservableArray.<ShapeContainerNode>}
+    // @private {ObservableArrayDef.<ShapeContainerNode>}
     this.shapeContainerNodes = createObservableArray();
 
     // @private {Property.<Bounds2>} - Our original drag bounds (which we'll need to map before providing to our

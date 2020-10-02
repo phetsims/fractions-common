@@ -47,7 +47,7 @@ class ShapeGroup extends Group {
     // @private {function}
     this.returnPieceListener = options.returnPieceListener;
 
-    // @public {ObservableArray.<ShapeContainer>} - Should generally only be popped/pushed
+    // @public {ObservableArrayDef.<ShapeContainer>} - Should generally only be popped/pushed
     this.shapeContainers = createObservableArray();
 
     // @public {Property.<number>}

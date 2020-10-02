@@ -23,7 +23,7 @@ class NumberStack extends Stack {
     // @public {number}
     this.number = number;
 
-    // @public {ObservableArray.<NumberPiece>} - NOTE: These should only ever be popped/pushed.
+    // @public {ObservableArrayDef.<NumberPiece>} - NOTE: These should only ever be popped/pushed.
     this.numberPieces = this.array;
   }
 
