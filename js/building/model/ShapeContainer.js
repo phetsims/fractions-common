@@ -6,7 +6,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Property from '../../../../axon/js/Property.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Utils from '../../../../dot/js/Utils.js';
@@ -45,7 +45,7 @@ class ShapeContainer {
     this.offset = offset;
 
     // @public {ObservableArray.<ShapePiece>}
-    this.shapePieces = new ObservableArray();
+    this.shapePieces = createObservableArray();
 
     // @public {Property.<Fraction>}
     this.totalFractionProperty = new Property( new Fraction( 0, 1 ) );

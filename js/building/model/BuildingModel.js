@@ -6,7 +6,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
@@ -42,20 +42,20 @@ class BuildingModel {
     this.numberGroupStacks = [];
 
     // @public {ObservableArray.<ShapeGroup>}
-    this.shapeGroups = new ObservableArray();
+    this.shapeGroups = createObservableArray();
 
     // @public {ObservableArray.<ShapePiece>} - Shape pieces in the play area (controlled or animating)
-    this.activeShapePieces = new ObservableArray();
+    this.activeShapePieces = createObservableArray();
 
     // @public {ObservableArray.<NumberGroup>}
-    this.numberGroups = new ObservableArray();
+    this.numberGroups = createObservableArray();
 
     // @public {ObservableArray.<NumberPiece>} - Number pieces in the play area (controlled or animating)
-    this.activeNumberPieces = new ObservableArray();
+    this.activeNumberPieces = createObservableArray();
 
     // @private {ObservableArray.<NumberPiece>} - Tracking number pieces being dragged, so we can decide whether each
     // number group should show any "do not drop here" symbols on their spots.
-    this.draggedNumberPieces = new ObservableArray();
+    this.draggedNumberPieces = createObservableArray();
 
     // @private {Property.<Range|null>} - null when there are no active numbers, otherwise a range of all values being
     // dragged.

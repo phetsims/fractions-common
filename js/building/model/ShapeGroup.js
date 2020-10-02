@@ -8,7 +8,7 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Range from '../../../../dot/js/Range.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
@@ -48,7 +48,7 @@ class ShapeGroup extends Group {
     this.returnPieceListener = options.returnPieceListener;
 
     // @public {ObservableArray.<ShapeContainer>} - Should generally only be popped/pushed
-    this.shapeContainers = new ObservableArray();
+    this.shapeContainers = createObservableArray();
 
     // @public {Property.<number>}
     this.partitionDenominatorProperty = new NumberProperty( 1, {

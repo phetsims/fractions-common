@@ -10,7 +10,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import fractionsCommon from '../../fractionsCommon.js';
@@ -38,7 +38,7 @@ class Stack {
     this.positionProperty = new Vector2Property( Vector2.ZERO );
 
     // @public {ObservableArray.<*>}
-    this.array = new ObservableArray();
+    this.array = createObservableArray();
   }
 
   /**

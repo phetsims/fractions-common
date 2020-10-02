@@ -7,7 +7,7 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
@@ -53,7 +53,7 @@ class ShapeGroupNode extends GroupNode {
     this.shapeGroup = shapeGroup;
 
     // @private {ObservableArray.<ShapeContainerNode>}
-    this.shapeContainerNodes = new ObservableArray();
+    this.shapeContainerNodes = createObservableArray();
 
     // @private {Property.<Bounds2>} - Our original drag bounds (which we'll need to map before providing to our
     // drag listener)

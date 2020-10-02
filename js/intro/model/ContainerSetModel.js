@@ -7,7 +7,7 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Property from '../../../../axon/js/Property.js';
 import Range from '../../../../dot/js/Range.js';
 import merge from '../../../../phet-core/js/merge.js';
@@ -69,7 +69,7 @@ class ContainerSetModel {
     this.bucketWidth = options.bucketWidth;
 
     // @public {ObservableArray.<Container>}
-    this.containers = new ObservableArray();
+    this.containers = createObservableArray();
 
     // @private {boolean} - Determines if the numerator has been changed indirectly (say, through interaction with a
     // cell/piece) rather than direct interaction (manipulation of  the numerator spinner). All internal changes to
@@ -77,7 +77,7 @@ class ContainerSetModel {
     this.changingInternally = false;
 
     // @public {ObservableArray.<Piece>} - Pieces that are not filled cells (animating or user controlled)
-    this.pieces = new ObservableArray();
+    this.pieces = createObservableArray();
 
     // initialize the model with the appropriate number of containers and number of filled cells
     this.onMaxChange( this.containerCountProperty.value, 0 );

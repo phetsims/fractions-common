@@ -7,14 +7,14 @@
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import ObservableArray from '../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import Cell from './Cell.js';
 
 class Container {
   constructor() {
     // @public {ObservableArray.<Cell>}
-    this.cells = new ObservableArray();
+    this.cells = createObservableArray();
 
     // @public {Property.<boolean>} - How many cells are logically filled?
     this.filledCellCountProperty = new NumberProperty( 0 );
