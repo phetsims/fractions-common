@@ -95,8 +95,7 @@ class BuildingModel {
     // Check for duplicates (but only when assertions are enabled)
     assert && this.activePiecesMap.forEach( ( activePieces, type ) => {
       activePieces.addItemAddedListener( () => {
-        const array = activePieces.getArray();
-        assert( array.length === _.uniq( array ).length, `Duplicate items should not be added to active pieces for ${type}` );
+        assert( activePieces.length === _.uniq( activePieces ).length, `Duplicate items should not be added to active pieces for ${type}` );
       } );
     } );
 
