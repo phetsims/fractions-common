@@ -45,34 +45,6 @@ class RoundArrowButton extends RoundPushButton {
     options.yContentOffset = arrowPath.centerY;
 
     super( options );
-
-    // @private {Property.<boolean>}
-    this.enabledProperty = options.enabledProperty;
-
-    // @private {function}
-    this.enabledListener = this.onEnabledChange.bind( this );
-    this.enabledProperty.link( this.enabledListener );
-  }
-
-  /**
-   * Sets whether this is enabled.
-   * @private
-   *
-   * @param {boolean} enabled
-   */
-  onEnabledChange( enabled ) {
-    this.enabled = this.enabledProperty.value;
-  }
-
-  /**
-   * Releases references.
-   * @public
-   * @override
-   */
-  dispose() {
-    this.enabledProperty.unlink( this.enabledListener );
-
-    super.dispose();
   }
 }
 
