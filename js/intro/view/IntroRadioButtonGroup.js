@@ -7,10 +7,10 @@
  */
 
 import merge from '../../../../phet-core/js/merge.js';
-import RadioButtonGroup from '../../../../sun/js/buttons/RadioButtonGroup.js';
+import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import fractionsCommon from '../../fractionsCommon.js';
 
-class IntroRadioButtonGroup extends RadioButtonGroup {
+class IntroRadioButtonGroup extends RectangularRadioButtonGroup {
   /**
    * @param {Property.<*>} property
    * @param {Array.<*>} array

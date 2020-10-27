@@ -11,7 +11,7 @@ import AlignBox from '../../../../scenery/js/nodes/AlignBox.js';
 import AlignGroup from '../../../../scenery/js/nodes/AlignGroup.js';
 import HBox from '../../../../scenery/js/nodes/HBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
-import RadioButtonGroup from '../../../../sun/js/buttons/RadioButtonGroup.js';
+import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import Panel from '../../../../sun/js/Panel.js';
 import BuildingRepresentation from '../../building/model/BuildingRepresentation.js';
 import ShapePiece from '../../building/model/ShapePiece.js';
@@ -65,7 +65,7 @@ class LabShapePanel extends Panel {
     // @private {Property.<BuildingRepresentation>}
     this.representationProperty = model.topRepresentationProperty;
 
-    const representationSelectionNode = new RadioButtonGroup( this.representationProperty, [
+    const representationRadioButtonGroup = new RectangularRadioButtonGroup( this.representationProperty, [
       {
         value: BuildingRepresentation.PIE,
         node: new ShapePieceNode( new ShapePiece( Fraction.ONE, BuildingRepresentation.PIE, FractionsCommonColorProfile.labPieFillProperty ), {
@@ -91,7 +91,7 @@ class LabShapePanel extends Panel {
     } );
 
     shapeBox.children = [
-      new AlignBox( representationSelectionNode, {
+      new AlignBox( representationRadioButtonGroup, {
         rightMargin: 10
       } ),
       boxContainer
