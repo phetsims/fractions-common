@@ -41,6 +41,7 @@ const FractionsCommonConstants = {
 
   NUMBER_CORNER_RADIUS: 5,
   ROUND_BUTTON_RADIUS: 15,
+  ROUND_BUTTON_MARGIN: 5.4,
   MAX_SHAPE_CONTAINERS: 4,
 
   // {number} - The relative scales of shape/number pieces in panels for the "building" style

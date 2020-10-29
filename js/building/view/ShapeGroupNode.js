@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
+import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
@@ -81,6 +81,8 @@ class ShapeGroupNode extends GroupNode {
         lineWidth: 3.75
       } ),
       radius: FractionsCommonConstants.ROUND_BUTTON_RADIUS,
+      xMargin: FractionsCommonConstants.ROUND_BUTTON_MARGIN,
+      yMargin: FractionsCommonConstants.ROUND_BUTTON_MARGIN,
       listener: shapeGroup.increaseContainerCount.bind( shapeGroup ),
       enabled: !this.isIcon,
       baseColor: FractionsCommonColorProfile.greenRoundArrowButtonProperty
@@ -94,6 +96,8 @@ class ShapeGroupNode extends GroupNode {
         lineWidth: 3.75
       } ),
       radius: FractionsCommonConstants.ROUND_BUTTON_RADIUS,
+      xMargin: FractionsCommonConstants.ROUND_BUTTON_MARGIN,
+      yMargin: FractionsCommonConstants.ROUND_BUTTON_MARGIN,
       listener: shapeGroup.decreaseContainerCount.bind( shapeGroup ),
       enabled: !this.isIcon,
       baseColor: FractionsCommonColorProfile.redRoundArrowButtonProperty

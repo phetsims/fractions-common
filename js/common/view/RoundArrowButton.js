@@ -22,6 +22,8 @@ class RoundArrowButton extends RoundPushButton {
   constructor( options ) {
     options = merge( {
       radius: FractionsCommonConstants.ROUND_BUTTON_RADIUS,
+      xMargin: FractionsCommonConstants.ROUND_BUTTON_MARGIN,
+      yMargin: FractionsCommonConstants.ROUND_BUTTON_MARGIN,
       fireOnHold: true,
       arrowRotation: 0,
       baseColor: FractionsCommonColorProfile.greenRoundArrowButtonProperty,
