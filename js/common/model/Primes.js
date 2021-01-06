@@ -6,7 +6,6 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Utils from '../../../../dot/js/Utils.js';
 import fractionsCommon from '../../fractionsCommon.js';
 
 const Primes = {
@@ -82,7 +81,7 @@ const Primes = {
     assert && assert( typeof n === 'number' );
 
     // All primes are integers >= 2.
-    if ( !Utils.isInteger( n ) || n < 2 ) { return false; }
+    if ( !Number.isInteger( n ) || n < 2 ) { return false; }
 
     Primes.updatePrimesUpTo( n );
     return _.includes( Primes.primes, n );
