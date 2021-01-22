@@ -6,6 +6,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import FillType from './FillType.js';
@@ -61,7 +62,7 @@ class FilledPartition {
         result = result.concat( FilledPartition.sequentialFill( shapePartition, Fraction.ONE, color ) );
         fraction = fraction.minus( Fraction.ONE );
       }
-      return phet.joist.random.shuffle( [
+      return dotRandom.shuffle( [
         ...result,
         ...FilledPartition.randomFill( shapePartition, fraction, color )
       ] );
@@ -104,7 +105,7 @@ class FilledPartition {
     const numFilledSlices = fraction.numerator * ( numSlicesPerPartition / fraction.denominator );
     const numPartitions = Math.ceil( fraction.value );
     const numTotalSlices = numPartitions * numSlicesPerPartition;
-    const fills = phet.joist.random.shuffle( [
+    const fills = dotRandom.shuffle( [
       ..._.times( numFilledSlices, () => true ),
       ..._.times( numTotalSlices - numFilledSlices, () => false )
     ] );

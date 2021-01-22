@@ -11,6 +11,7 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
@@ -133,18 +134,18 @@ class MatchingChallenge {
     this.targets = _.range( 0, NUM_PAIRS ).map( () => new MatchTarget() );
 
     const pieces = [];
-    const fractions = phet.joist.random.shuffle( config.fractions ).slice( 0, NUM_PAIRS );
+    const fractions = dotRandom.shuffle( config.fractions ).slice( 0, NUM_PAIRS );
     const hasGreaterThanOne = _.some( fractions, fraction => Fraction.ONE.isLessThan( fraction ) );
 
     fractions.forEach( ( fraction, index ) => {
-      const scaleFactor = phet.joist.random.sample( config.numericScaleFactors );
+      const scaleFactor = dotRandom.sample( config.numericScaleFactors );
       const scaledFraction = new Fraction( fraction.numerator * scaleFactor, fraction.denominator * scaleFactor );
-      const fillType = phet.joist.random.sample( config.fillTypes );
+      const fillType = dotRandom.sample( config.fillTypes );
       const shapePartitions = ShapePartition.supportsDenominator( config.shapePartitions, fraction.denominator );
 
       [ 0, 1 ].forEach( subIndex => {
         // First (generally 3) fractions should be numbers
-        const shapePartition = ( subIndex === 0 && index < NUM_PAIRS / 2 ) ? null : phet.joist.random.sample( shapePartitions );
+        const shapePartition = ( subIndex === 0 && index < NUM_PAIRS / 2 ) ? null : dotRandom.sample( shapePartitions );
         const color = PIECE_COLORS[ ( index + subIndex ) % 3 ];
 
         const filledPartitions = shapePartition ? FilledPartition.fill( shapePartition, fraction, color, fillType ) : null;
@@ -179,7 +180,7 @@ class MatchingChallenge {
     } );
 
     // @public {Array.<MatchPiece>}
-    this.pieces = phet.joist.random.shuffle( pieces );
+    this.pieces = dotRandom.shuffle( pieces );
 
     // Connect the pieces to the initial source spots
     this.pieces.forEach( ( piece, index ) => {

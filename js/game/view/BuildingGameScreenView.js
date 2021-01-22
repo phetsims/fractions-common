@@ -9,6 +9,7 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
 import merge from '../../../../phet-core/js/merge.js';
 import platform from '../../../../phet-core/js/platform.js';
@@ -308,7 +309,7 @@ class BuildingGameScreenView extends ScreenView {
             ..._.times( 7, () => new StarNode() ),
             ..._.times( 7, () => new FaceNode( 40, { headStroke: 'black' } ) ),
             ..._.range( 1, 10 ).map( n => new NumberPieceNode( new NumberPiece( n ) ) ),
-            ..._.range( 1, 5 ).map( n => new ShapePieceNode( new ShapePiece( new Fraction( 1, n ), BuildingRepresentation.PIE, FractionsCommonColorProfile.labPieFillProperty ), { rotation: phet.joist.random.nextDouble() * 2 * Math.PI } ) ),
+            ..._.range( 1, 5 ).map( n => new ShapePieceNode( new ShapePiece( new Fraction( 1, n ), BuildingRepresentation.PIE, FractionsCommonColorProfile.labPieFillProperty ), { rotation: dotRandom.nextDouble() * 2 * Math.PI } ) ),
             ..._.range( 1, 5 ).map( n => new ShapePieceNode( new ShapePiece( new Fraction( 1, n ), BuildingRepresentation.BAR, FractionsCommonColorProfile.labBarFillProperty ) ) )
           ], 150 )
         } );

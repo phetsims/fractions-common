@@ -8,6 +8,7 @@
 
 import DynamicProperty from '../../../../axon/js/DynamicProperty.js';
 import Property from '../../../../axon/js/Property.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import arrayDifference from '../../../../phet-core/js/arrayDifference.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
@@ -22,10 +23,10 @@ import ShapePartition from './ShapePartition.js';
 import ShapeTarget from './ShapeTarget.js';
 
 // Convenience functions.
-const nextBoolean = () => phet.joist.random.nextBoolean();
-const sample = array => phet.joist.random.sample( array );
-const shuffle = array => phet.joist.random.shuffle( array );
-const nextIntBetween = ( a, b ) => phet.joist.random.nextIntBetween( a, b );
+const nextBoolean = () => dotRandom.nextBoolean();
+const sample = array => dotRandom.sample( array );
+const shuffle = array => dotRandom.shuffle( array );
+const nextIntBetween = ( a, b ) => dotRandom.nextIntBetween( a, b );
 const choose = ( q, i ) => FractionLevel.choose( q, i );
 const inclusive = ( a, b ) => _.range( a, b + 1 );
 const repeat = ( q, i ) => _.times( q, () => i );

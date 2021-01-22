@@ -7,6 +7,7 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
 import ColorDef from '../../../../scenery/js/util/ColorDef.js';
@@ -638,11 +639,11 @@ class FractionChallenge extends BuildingModel {
   static beginFullGeneration() {
     isDoingResetGeneration = true;
     resetTypes = [
-      ...phet.joist.random.shuffle( [
+      ...dotRandom.shuffle( [
         ChallengeType.PIE,
         ChallengeType.BAR
       ] ),
-      ...phet.joist.random.shuffle( [
+      ...dotRandom.shuffle( [
         ChallengeType.PIE,
         ChallengeType.BAR
       ] )
@@ -680,7 +681,7 @@ class FractionChallenge extends BuildingModel {
     // Pseudorandom start for the first 4 levels
     const type = ( levelNumber >= 1 && levelNumber <= 4 && isDoingResetGeneration )
                  ? resetTypes[ levelNumber - 1 ]
-                 : phet.joist.random.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
+                 : dotRandom.nextBoolean() ? ChallengeType.PIE : ChallengeType.BAR;
 
     const representation = type === ChallengeType.PIE ? BuildingRepresentation.PIE : BuildingRepresentation.BAR;
     const targets = targetFractions.map( f => new Target( f ) );
