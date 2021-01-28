@@ -49,7 +49,7 @@ class ShapeGroupStackNode extends StackNode {
     const iconBounds = this.icon.bounds;
     for ( let i = 0; i < this.stack.layoutQuantity; i++ ) {
       const offset = ShapeGroupStack.getOffset( this.representation, i );
-      bounds.includeBounds( iconBounds.shifted( offset.x, offset.y ) );
+      bounds.includeBounds( iconBounds.shiftedXY( offset.x, offset.y ) );
     }
     this.layoutBounds = bounds;
 
