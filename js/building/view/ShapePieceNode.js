@@ -10,7 +10,6 @@ import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Shape from '../../../../kite/js/Shape.js';
 import merge from '../../../../phet-core/js/merge.js';
-import Touch from '../../../../scenery/js/input/Touch.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Circle from '../../../../scenery/js/nodes/Circle.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
@@ -138,7 +137,7 @@ class ShapePieceNode extends Node {
       transform: options.modelViewTransform,
       positionProperty: shapePiece.positionProperty,
       start: event => {
-        wasTouch = event.pointer instanceof Touch;
+        wasTouch = event.pointer.isTouchLike();
       },
       end: () => {
         options.dropListener && options.dropListener( wasTouch );
