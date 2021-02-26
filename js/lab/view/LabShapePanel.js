@@ -110,7 +110,7 @@ class LabShapePanel extends Panel {
    *
    * @param {ModelViewTransform2} modelViewTransform
    */
-  updateModelPositions(modelViewTransform ) {
+  updateModelPositions( modelViewTransform ) {
     this.pieBox.updateModelPositions( modelViewTransform, this );
     this.barBox.updateModelPositions( modelViewTransform, this );
   }

@@ -36,7 +36,7 @@ class LabNumberPanel extends Panel {
    *
    * @param {ModelViewTransform2} modelViewTransform
    */
-  updateModelPositions(modelViewTransform ) {
+  updateModelPositions( modelViewTransform ) {
     this.box.updateModelPositions( modelViewTransform, this );
   }
 }
