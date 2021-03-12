@@ -56,7 +56,7 @@ const Primes = {
         }
 
         // If there was no next prime, then we are done
-        break mainLoop;
+        break;
       }
 
     // Extract the primes into an array
