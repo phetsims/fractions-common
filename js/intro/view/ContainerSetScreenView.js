@@ -101,12 +101,21 @@ class ContainerSetScreenView extends ScreenView {
 
     // present for the lifetime of the simulation
     model.representationProperty.link( representation => {
+      phet.joist.display._input.interruptPointers();
+
       // Finish all animations
       model.completeAllPieces();
 
+
       if ( this.currentView ) {
+        this.currentView.interruptSubtreeInput();
+
+        this.viewContainer.interruptSubtreeInput();
         this.viewContainer.removeAllChildren();
+
+        this.bucketContainer.interruptSubtreeInput();
         this.bucketContainer.removeAllChildren();
+
         this.currentView.dispose();
       }
 

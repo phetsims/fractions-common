@@ -367,6 +367,9 @@ class CellSceneNode extends SceneNode {
    * @override
    */
   dispose() {
+    this.pieceNodes.forEach( pieceNode => {
+      pieceNode.dragListener.interrupt();
+    } );
     this.containerNodes.forEach( containerNode => containerNode.dispose() );
 
     this.model.containers.removeItemAddedListener( this.addListener );
