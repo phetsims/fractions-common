@@ -18,7 +18,7 @@ import StackNode from './StackNode.js';
 
 // constants
 const iconMap = {};
-[ false, true ].map( hasExpansionButtons => {
+[ false, true ].forEach( hasExpansionButtons => {
   iconMap[ hasExpansionButtons ] = new EnumerationMap( BuildingRepresentation, representation => ShapeGroupNode.createIcon( representation, hasExpansionButtons ) );
 } );
 

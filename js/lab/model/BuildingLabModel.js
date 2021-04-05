@@ -53,7 +53,7 @@ class BuildingLabModel extends BuildingModel {
     } );
 
     // Number stacks
-    _.range( 1, 9 ).map( number => {
+    _.range( 1, 9 ).forEach( number => {
       const stack = new NumberStack( number, PIECE_LAYOUT_QUANTITY, false );
       stack.numberPieces.push( new NumberPiece( number ) );
       stack.numberPieces.push( new NumberPiece( number ) );
