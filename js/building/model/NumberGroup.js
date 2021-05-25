@@ -1,4 +1,4 @@
-// Copyright 2018-2020, University of Colorado Boulder
+// Copyright 2018-2021, University of Colorado Boulder
 
 /**
  * Represents a mixed or non-mixed fraction represented by numerator/denominator and optionally a whole number.
