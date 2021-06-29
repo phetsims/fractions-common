@@ -564,7 +564,7 @@ class FractionChallenge extends BuildingModel {
 
     let currentCollection = availableCollection;
 
-    function findSolution( i ) {
+    function findSolution( i ) { // eslint-disable-line consistent-return
       if ( i === fractions.length ) {
         return [];
       }
