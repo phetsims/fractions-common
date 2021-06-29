@@ -40,7 +40,7 @@ const Primes = {
 
     // Run the main sieve procedure
     let currentPrime = 2;
-    mainLoop:
+    mainLoop: // eslint-disable-line no-labels
       while ( true ) { // eslint-disable-line no-constant-condition
         // Mark multiples of the current prime as composite
         for ( let i = 2 * currentPrime; i <= n; i += currentPrime ) {
@@ -51,7 +51,7 @@ const Primes = {
         for ( let i = currentPrime + 1; i <= n; i++ ) {
           if ( primeFlags[ i ] ) {
             currentPrime = i;
-            continue mainLoop;
+            continue mainLoop; // eslint-disable-line no-labels
           }
         }
 
