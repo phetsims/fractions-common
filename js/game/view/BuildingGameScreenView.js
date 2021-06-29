@@ -420,7 +420,8 @@ class BuildingGameScreenView extends ScreenView {
           },
           listener: () => {
             this.model.levelProperty.value = level;
-          }
+          },
+          soundPlayerIndex: level.number - 1
         } );
         button.touchArea = button.localBounds.dilated( LEVEL_SELECTION_SPACING / 2 );
         return button;
