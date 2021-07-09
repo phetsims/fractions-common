@@ -167,7 +167,7 @@ class MatchingGameScreenView extends ScreenView {
           }
         }, leftButtonOptions ) ),
         new RefreshButton( merge( {
-          iconScale: 0.7,
+          iconHeight: 27,
           xMargin: 9,
           yMargin: 7,
           listener() {
