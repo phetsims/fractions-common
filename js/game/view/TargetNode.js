@@ -21,7 +21,7 @@ import NumberGroupNode from '../../building/view/NumberGroupNode.js';
 import ReturnButton from '../../building/view/ReturnButton.js';
 import ShapeGroupNode from '../../building/view/ShapeGroupNode.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
-import FractionsCommonColorProfile from '../../common/view/FractionsCommonColorProfile.js';
+import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import FilledPartition from '../model/FilledPartition.js';
 import ShapePartition from '../model/ShapePartition.js';
@@ -97,8 +97,8 @@ class TargetNode extends HBox {
 
     this.background = new Rectangle( 0, 0, this.placeholder.width + ( challenge.hasShapes ? 20 : challenge.hasMixedTargets ? 60 : 80 ), 100, {
       cornerRadius: CORNER_RADIUS,
-      fill: FractionsCommonColorProfile.collectionBackgroundProperty,
-      stroke: FractionsCommonColorProfile.collectionBorderProperty
+      fill: fractionsCommonColorProfile.collectionBackgroundProperty,
+      stroke: fractionsCommonColorProfile.collectionBorderProperty
     } );
     this.placeholder.dispose();
     this.placeholder = null;

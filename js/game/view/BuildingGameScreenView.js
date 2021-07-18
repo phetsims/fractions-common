@@ -47,7 +47,7 @@ import NumberStackNode from '../../building/view/NumberStackNode.js';
 import ShapeGroupNode from '../../building/view/ShapeGroupNode.js';
 import ShapePieceNode from '../../building/view/ShapePieceNode.js';
 import FractionsCommonGlobals from '../../common/FractionsCommonGlobals.js';
-import FractionsCommonColorProfile from '../../common/view/FractionsCommonColorProfile.js';
+import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
 import RoundArrowButton from '../../common/view/RoundArrowButton.js';
 import fractionsCommonStrings from '../../fractionsCommonStrings.js';
 import fractionsCommon from '../../fractionsCommon.js';
@@ -259,7 +259,7 @@ class BuildingGameScreenView extends ScreenView {
 
     // Buttons to switch between level selection pages
     const leftButton = new RoundArrowButton( {
-      baseColor: FractionsCommonColorProfile.yellowRoundArrowButtonProperty,
+      baseColor: fractionsCommonColorProfile.yellowRoundArrowButtonProperty,
       radius: 20,
       arrowRotation: -Math.PI / 2,
       enabledProperty: new DerivedProperty( [ this.leftLevelSelectionProperty ], value => !value ),
@@ -268,7 +268,7 @@ class BuildingGameScreenView extends ScreenView {
       }
     } );
     const rightButton = new RoundArrowButton( {
-      baseColor: FractionsCommonColorProfile.yellowRoundArrowButtonProperty,
+      baseColor: fractionsCommonColorProfile.yellowRoundArrowButtonProperty,
       radius: 20,
       arrowRotation: Math.PI / 2,
       enabledProperty: this.leftLevelSelectionProperty,
@@ -309,8 +309,8 @@ class BuildingGameScreenView extends ScreenView {
             ..._.times( 7, () => new StarNode() ),
             ..._.times( 7, () => new FaceNode( 40, { headStroke: 'black' } ) ),
             ..._.range( 1, 10 ).map( n => new NumberPieceNode( new NumberPiece( n ) ) ),
-            ..._.range( 1, 5 ).map( n => new ShapePieceNode( new ShapePiece( new Fraction( 1, n ), BuildingRepresentation.PIE, FractionsCommonColorProfile.labPieFillProperty ), { rotation: dotRandom.nextDouble() * 2 * Math.PI } ) ),
-            ..._.range( 1, 5 ).map( n => new ShapePieceNode( new ShapePiece( new Fraction( 1, n ), BuildingRepresentation.BAR, FractionsCommonColorProfile.labBarFillProperty ) ) )
+            ..._.range( 1, 5 ).map( n => new ShapePieceNode( new ShapePiece( new Fraction( 1, n ), BuildingRepresentation.PIE, fractionsCommonColorProfile.labPieFillProperty ), { rotation: dotRandom.nextDouble() * 2 * Math.PI } ) ),
+            ..._.range( 1, 5 ).map( n => new ShapePieceNode( new ShapePiece( new Fraction( 1, n ), BuildingRepresentation.BAR, fractionsCommonColorProfile.labBarFillProperty ) ) )
           ], 150 )
         } );
         challengeBackground.addChild( this.rewardNode );
@@ -543,7 +543,7 @@ class BuildingGameScreenView extends ScreenView {
     const shapeGroup = new ShapeGroup( BuildingRepresentation.BAR );
     shapeGroup.partitionDenominatorProperty.value = 3;
 
-    shapeGroup.shapeContainers.get( 0 ).shapePieces.push( new ShapePiece( new Fraction( 1, 3 ), BuildingRepresentation.BAR, FractionsCommonColorProfile.shapeBlueProperty ) );
+    shapeGroup.shapeContainers.get( 0 ).shapePieces.push( new ShapePiece( new Fraction( 1, 3 ), BuildingRepresentation.BAR, fractionsCommonColorProfile.shapeBlueProperty ) );
 
     const shapeGroupNode = new ShapeGroupNode( shapeGroup, {
       hasButtons: false,
@@ -567,7 +567,7 @@ class BuildingGameScreenView extends ScreenView {
         fractionNode
       ],
       scale: 2.3
-    } ), FractionsCommonColorProfile.otherScreenBackgroundProperty );
+    } ), fractionsCommonColorProfile.otherScreenBackgroundProperty );
   }
 
   /**
@@ -589,8 +589,8 @@ class BuildingGameScreenView extends ScreenView {
     const rightSide = new HBox( {
       spacing: 5,
       children: [
-        new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ true, true, true, true, true, true ], FractionsCommonColorProfile.shapeBlueProperty ) ),
-        new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ true, true, true, true, false, false ], FractionsCommonColorProfile.shapeBlueProperty ) )
+        new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ true, true, true, true, true, true ], fractionsCommonColorProfile.shapeBlueProperty ) ),
+        new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ true, true, true, true, false, false ], fractionsCommonColorProfile.shapeBlueProperty ) )
       ]
     } );
 
@@ -602,7 +602,7 @@ class BuildingGameScreenView extends ScreenView {
         rightSide
       ],
       scale: 1.7
-    } ), FractionsCommonColorProfile.otherScreenBackgroundProperty );
+    } ), fractionsCommonColorProfile.otherScreenBackgroundProperty );
   }
 }
 

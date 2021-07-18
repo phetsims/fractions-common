@@ -9,7 +9,7 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
-import FractionsCommonColorProfile from '../../common/view/FractionsCommonColorProfile.js';
+import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import CellEntry from './CellEntry.js';
 import ContainerNode from './ContainerNode.js';
@@ -32,8 +32,8 @@ class CellContainerNode extends ContainerNode {
     // @private {Property.<Color>}
     this.strokeProperty = new DerivedProperty( [
       container.filledCellCountProperty,
-      FractionsCommonColorProfile.introContainerActiveBorderProperty,
-      FractionsCommonColorProfile.introContainerInactiveBorderProperty
+      fractionsCommonColorProfile.introContainerActiveBorderProperty,
+      fractionsCommonColorProfile.introContainerInactiveBorderProperty
     ], ( count, activeColor, inactiveColor ) => {
       return count > 0 ? activeColor : inactiveColor;
     } );

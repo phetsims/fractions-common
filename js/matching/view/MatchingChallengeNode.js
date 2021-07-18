@@ -29,7 +29,7 @@ import RewardNode from '../../../../vegas/js/RewardNode.js';
 import vegasStrings from '../../../../vegas/js/vegasStrings.js';
 import scaleImage from '../../../images/scale_png.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
-import FractionsCommonColorProfile from '../../common/view/FractionsCommonColorProfile.js';
+import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
 import fractionsCommonStrings from '../../fractionsCommonStrings.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import MatchingChallenge from '../model/MatchingChallenge.js';
@@ -90,7 +90,7 @@ class MatchingChallengeNode extends Node {
     challenge.targets.forEach( ( target, index ) => {
       const targetBackground = new Rectangle( 0, 0, targetWidth, 100, {
         cornerRadius: 10,
-        fill: FractionsCommonColorProfile.matchingTargetBackgroundProperty,
+        fill: fractionsCommonColorProfile.matchingTargetBackgroundProperty,
         x: layoutBounds.left + PADDING + ( targetWidth + PADDING ) * index,
         y: layoutBounds.top + PADDING
       } );
@@ -148,8 +148,8 @@ class MatchingChallengeNode extends Node {
       const x = layoutBounds.centerX + TARGET_WIDTH * ( col - NUM_TARGETS / 2 );
       const y = TARGETS_TOP + TARGET_HEIGHT * row;
       const sourceNode = new Rectangle( x, y, TARGET_WIDTH, TARGET_HEIGHT, {
-        fill: FractionsCommonColorProfile.matchingSourceBackgroundProperty,
-        stroke: FractionsCommonColorProfile.matchingSourceBorderProperty,
+        fill: fractionsCommonColorProfile.matchingSourceBackgroundProperty,
+        stroke: fractionsCommonColorProfile.matchingSourceBorderProperty,
         lineWidth: 1.5
       } );
       this.addChild( sourceNode );
@@ -246,7 +246,7 @@ class MatchingChallengeNode extends Node {
     };
 
     const checkButton = new TextPushButton( checkString, merge( {
-      baseColor: FractionsCommonColorProfile.matchingCheckButtonProperty,
+      baseColor: fractionsCommonColorProfile.matchingCheckButtonProperty,
       listener: () => {
         chartCompare();
         challenge.compare();
@@ -256,21 +256,21 @@ class MatchingChallengeNode extends Node {
     this.disposeEmitter.addListener( () => checkButton.dispose() );
 
     const okButton = new TextPushButton( okString, merge( {
-      baseColor: FractionsCommonColorProfile.matchingOkButtonProperty,
+      baseColor: fractionsCommonColorProfile.matchingOkButtonProperty,
       listener: () => challenge.collect()
     }, buttonOptions ) );
     this.addChild( okButton );
     this.disposeEmitter.addListener( () => okButton.dispose() );
 
     const tryAgainButton = new TextPushButton( tryAgainString, merge( {
-      baseColor: FractionsCommonColorProfile.matchingTryAgainButtonProperty,
+      baseColor: fractionsCommonColorProfile.matchingTryAgainButtonProperty,
       listener: () => challenge.tryAgain()
     }, buttonOptions ) );
     this.addChild( tryAgainButton );
     this.disposeEmitter.addListener( () => tryAgainButton.dispose() );
 
     const showAnswerButton = new TextPushButton( showAnswerString, merge( {
-      baseColor: FractionsCommonColorProfile.matchingShowAnswerButtonProperty,
+      baseColor: fractionsCommonColorProfile.matchingShowAnswerButtonProperty,
       listener: () => {
         challenge.showAnswer();
         chartCompare();

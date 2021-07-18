@@ -19,7 +19,7 @@ import PropertyFractionNode from '../../../../scenery-phet/js/PropertyFractionNo
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import HBox from '../../../../scenery/js/nodes/HBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
-import FractionsCommonColorProfile from '../../common/view/FractionsCommonColorProfile.js';
+import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import Container from '../model/Container.js';
 import IntroRepresentation from '../model/IntroRepresentation.js';
@@ -48,7 +48,7 @@ class BucketNode extends Node {
 
     // model of the bucket
     const bucket = new Bucket( {
-      baseColor: FractionsCommonColorProfile.introBucketBackgroundProperty,
+      baseColor: fractionsCommonColorProfile.introBucketBackgroundProperty,
       size: new Dimension2( options.bucketWidth, 125 ),
       invertY: true
     } );

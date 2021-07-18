@@ -13,7 +13,7 @@ import Path from '../../../../scenery/js/nodes/Path.js';
 import RoundPushButton from '../../../../sun/js/buttons/RoundPushButton.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import FractionsCommonConstants from '../FractionsCommonConstants.js';
-import FractionsCommonColorProfile from './FractionsCommonColorProfile.js';
+import fractionsCommonColorProfile from './fractionsCommonColorProfile.js';
 
 class RoundArrowButton extends RoundPushButton {
   /**
@@ -26,7 +26,7 @@ class RoundArrowButton extends RoundPushButton {
       yMargin: FractionsCommonConstants.ROUND_BUTTON_MARGIN,
       fireOnHold: true,
       arrowRotation: 0,
-      baseColor: FractionsCommonColorProfile.greenRoundArrowButtonProperty,
+      baseColor: fractionsCommonColorProfile.greenRoundArrowButtonProperty,
       enabledProperty: new BooleanProperty( true )
     }, options );
 

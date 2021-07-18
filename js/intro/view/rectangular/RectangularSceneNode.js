@@ -7,7 +7,7 @@
  */
 
 import merge from '../../../../../phet-core/js/merge.js';
-import FractionsCommonColorProfile from '../../../common/view/FractionsCommonColorProfile.js';
+import fractionsCommonColorProfile from '../../../common/view/fractionsCommonColorProfile.js';
 import fractionsCommon from '../../../fractionsCommon.js';
 import Container from '../../model/Container.js';
 import CellSceneNode from '../CellSceneNode.js';
@@ -74,7 +74,7 @@ class RectangularSceneNode extends CellSceneNode {
     return new RectangularContainerNode( iconContainer, {
       rectangularOrientation: rectangularOrientation,
       scale: 0.32,
-      colorOverride: useEqualityLabColor ? FractionsCommonColorProfile.equalityLabColorProperty : null
+      colorOverride: useEqualityLabColor ? fractionsCommonColorProfile.equalityLabColorProperty : null
     } );
   }
 }

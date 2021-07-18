@@ -15,7 +15,7 @@ import dotRandom from '../../../../dot/js/dotRandom.js';
 import Enumeration from '../../../../phet-core/js/Enumeration.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
-import FractionsCommonColorProfile from '../../common/view/FractionsCommonColorProfile.js';
+import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import FilledPartition from '../../game/model/FilledPartition.js';
 import FillType from '../../game/model/FillType.js';
@@ -27,9 +27,9 @@ import MatchTarget from './MatchTarget.js';
 // constants
 const NUM_PAIRS = 6;
 const PIECE_COLORS = [
-  FractionsCommonColorProfile.shapeBlueProperty,
-  FractionsCommonColorProfile.shapeGreenProperty,
-  FractionsCommonColorProfile.shapeRedProperty
+  fractionsCommonColorProfile.shapeBlueProperty,
+  fractionsCommonColorProfile.shapeGreenProperty,
+  fractionsCommonColorProfile.shapeRedProperty
 ];
 
 class MatchingChallenge {

@@ -23,7 +23,7 @@ import Checkbox from '../../../../sun/js/Checkbox.js';
 import Panel from '../../../../sun/js/Panel.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonGlobals from '../../common/FractionsCommonGlobals.js';
-import FractionsCommonColorProfile from '../../common/view/FractionsCommonColorProfile.js';
+import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
 import fractionsCommonStrings from '../../fractionsCommonStrings.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import Container from '../model/Container.js';
@@ -49,7 +49,7 @@ class IntroScreenView extends ContainerSetScreenView {
     const maxPanel = new Panel( new AlignBox( new MaxNode( model.containerCountProperty ), {
       group: this.topAlignGroup
     } ), {
-      fill: FractionsCommonColorProfile.introPanelBackgroundProperty,
+      fill: fractionsCommonColorProfile.introPanelBackgroundProperty,
       xMargin: 16,
       yMargin: 10,
       right: this.layoutBounds.right - MARGIN,
@@ -63,8 +63,8 @@ class IntroScreenView extends ContainerSetScreenView {
       const partialFractionColorProperty = new DerivedProperty( [
         model.numeratorProperty,
         model.denominatorProperty,
-        FractionsCommonColorProfile.mixedFractionStrongProperty,
-        FractionsCommonColorProfile.mixedFractionWeakProperty
+        fractionsCommonColorProfile.mixedFractionStrongProperty,
+        fractionsCommonColorProfile.mixedFractionWeakProperty
       ], ( numerator, denominator, strongColor, weakColor ) => {
         return numerator % denominator === 0 ? weakColor : strongColor;
       } );
@@ -79,7 +79,7 @@ class IntroScreenView extends ContainerSetScreenView {
         maxNumerator: model.denominatorProperty.range.max - 1,
         maxDenominator: model.denominatorProperty.range.max,
 
-        wholeFill: FractionsCommonColorProfile.mixedFractionStrongProperty,
+        wholeFill: fractionsCommonColorProfile.mixedFractionStrongProperty,
         numeratorFill: partialFractionColorProperty,
         denominatorFill: partialFractionColorProperty,
         separatorFill: partialFractionColorProperty,
@@ -123,10 +123,10 @@ class IntroScreenView extends ContainerSetScreenView {
         maxNumerator: model.denominatorProperty.range.max - 1,
         maxDenominator: model.denominatorProperty.range.max,
 
-        wholeFill: FractionsCommonColorProfile.mixedFractionStrongProperty,
-        numeratorFill: FractionsCommonColorProfile.mixedFractionStrongProperty,
-        denominatorFill: FractionsCommonColorProfile.mixedFractionStrongProperty,
-        separatorFill: FractionsCommonColorProfile.mixedFractionStrongProperty,
+        wholeFill: fractionsCommonColorProfile.mixedFractionStrongProperty,
+        numeratorFill: fractionsCommonColorProfile.mixedFractionStrongProperty,
+        denominatorFill: fractionsCommonColorProfile.mixedFractionStrongProperty,
+        separatorFill: fractionsCommonColorProfile.mixedFractionStrongProperty,
 
         scale: equationScale
       };
@@ -243,7 +243,7 @@ class IntroScreenView extends ContainerSetScreenView {
         numberLineNode
       ],
       scale: 1.3
-    } ), FractionsCommonColorProfile.introScreenBackgroundProperty );
+    } ), fractionsCommonColorProfile.introScreenBackgroundProperty );
   }
 
   /**
@@ -264,7 +264,7 @@ class IntroScreenView extends ContainerSetScreenView {
       scale: 2.5
     } );
 
-    return FractionsCommonGlobals.wrapIcon( cakeNode, FractionsCommonColorProfile.introScreenBackgroundProperty );
+    return FractionsCommonGlobals.wrapIcon( cakeNode, fractionsCommonColorProfile.introScreenBackgroundProperty );
   }
 
   /**
@@ -290,7 +290,7 @@ class IntroScreenView extends ContainerSetScreenView {
         numberLineNode
       ],
       scale: 1
-    } ), FractionsCommonColorProfile.introScreenBackgroundProperty );
+    } ), fractionsCommonColorProfile.introScreenBackgroundProperty );
   }
 
   /**
@@ -303,7 +303,7 @@ class IntroScreenView extends ContainerSetScreenView {
     const numberLineNode = IntroScreenView.createStaticNumberLine( 3, 2, 2 );
     numberLineNode.scale( 1.5 );
 
-    return FractionsCommonGlobals.wrapIcon( numberLineNode, FractionsCommonColorProfile.introScreenBackgroundProperty );
+    return FractionsCommonGlobals.wrapIcon( numberLineNode, fractionsCommonColorProfile.introScreenBackgroundProperty );
   }
 
 }

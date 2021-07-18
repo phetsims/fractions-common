@@ -20,7 +20,7 @@ const LIGHT_PINK = new Color( 255, 112, 213 );
 
 // Initial colors for each profile, by string key. Only profile currently is default (still helpful for making color
 // tweaks with the top-level files)
-const FractionsCommonColorProfile = new ColorProfile( [ 'default' ], {
+const fractionsCommonColorProfile = new ColorProfile( [ 'default' ], {
   introScreenBackground: { default: Color.WHITE },
   otherScreenBackground: { default: new Color( 235, 251, 251 ) },
 
@@ -114,6 +114,6 @@ const FractionsCommonColorProfile = new ColorProfile( [ 'default' ], {
   matchingShowAnswerButton: { default: new Color( '#FF7C3B' ) }
 } );
 
-fractionsCommon.register( 'FractionsCommonColorProfile', FractionsCommonColorProfile );
+fractionsCommon.register( 'fractionsCommonColorProfile', fractionsCommonColorProfile );
 
-export default FractionsCommonColorProfile;
+export default fractionsCommonColorProfile;

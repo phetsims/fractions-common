@@ -15,7 +15,7 @@ import AlignGroup from '../../../../scenery/js/nodes/AlignGroup.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Panel from '../../../../sun/js/Panel.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
-import FractionsCommonColorProfile from '../../common/view/FractionsCommonColorProfile.js';
+import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import IntroRepresentation from '../model/IntroRepresentation.js';
 import AdjustableFractionNode from './AdjustableFractionNode.js';
@@ -81,7 +81,7 @@ class ContainerSetScreenView extends ScreenView {
     this.representationPanel = new Panel( new AlignBox( representationRadioButtonGroup, {
       group: this.topAlignGroup
     } ), {
-      fill: FractionsCommonColorProfile.introPanelBackgroundProperty,
+      fill: fractionsCommonColorProfile.introPanelBackgroundProperty,
       xMargin: FractionsCommonConstants.PANEL_MARGIN,
       yMargin: FractionsCommonConstants.PANEL_MARGIN
     } );

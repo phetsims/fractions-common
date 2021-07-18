@@ -7,7 +7,7 @@
  */
 
 import merge from '../../../../../phet-core/js/merge.js';
-import FractionsCommonColorProfile from '../../../common/view/FractionsCommonColorProfile.js';
+import fractionsCommonColorProfile from '../../../common/view/fractionsCommonColorProfile.js';
 import fractionsCommon from '../../../fractionsCommon.js';
 import Container from '../../model/Container.js';
 import CellSceneNode from '../CellSceneNode.js';
@@ -53,7 +53,7 @@ class CircularSceneNode extends CellSceneNode {
 
     return new CircularContainerNode( iconContainer, {
       scale: 30 / 63,
-      colorOverride: useEqualityLabColor ? FractionsCommonColorProfile.equalityLabColorProperty : null
+      colorOverride: useEqualityLabColor ? fractionsCommonColorProfile.equalityLabColorProperty : null
     } );
   }
 }

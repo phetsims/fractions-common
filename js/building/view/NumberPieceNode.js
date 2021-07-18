@@ -14,7 +14,7 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
-import FractionsCommonColorProfile from '../../common/view/FractionsCommonColorProfile.js';
+import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import NumberPiece from '../model/NumberPiece.js';
 
@@ -52,14 +52,14 @@ class NumberPieceNode extends Node {
     assert && assert( !this.positioned || this.modelViewTransform, 'Positioned NumberPieceNodes need a MVT' );
 
     this.addChild( Rectangle.bounds( numberPiece.bounds, {
-      fill: FractionsCommonColorProfile.numberFillProperty,
-      stroke: FractionsCommonColorProfile.numberStrokeProperty,
+      fill: fractionsCommonColorProfile.numberFillProperty,
+      stroke: fractionsCommonColorProfile.numberStrokeProperty,
       cornerRadius: FractionsCommonConstants.NUMBER_CORNER_RADIUS
     } ) );
 
     this.addChild( new Text( numberPiece.number, {
       font: FractionsCommonConstants.NUMBER_FRACTIONAL_FONT,
-      fill: FractionsCommonColorProfile.numberTextFillProperty,
+      fill: fractionsCommonColorProfile.numberTextFillProperty,
       center: Vector2.ZERO
     } ) );
 

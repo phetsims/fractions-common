@@ -28,7 +28,7 @@ import NumberGroupNode from '../../building/view/NumberGroupNode.js';
 import ShapeGroupNode from '../../building/view/ShapeGroupNode.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonGlobals from '../../common/FractionsCommonGlobals.js';
-import FractionsCommonColorProfile from '../../common/view/FractionsCommonColorProfile.js';
+import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import BuildingLabLayerNode from './BuildingLabLayerNode.js';
 import LabNumberPanel from './LabNumberPanel.js';
@@ -199,7 +199,7 @@ class BuildingLabScreenView extends ScreenView {
       new Fraction( 1, 4 ),
       new Fraction( 1, 8 )
     ].forEach( fraction => {
-      shapeGroup.shapeContainers.get( 0 ).shapePieces.push( new ShapePiece( fraction, BuildingRepresentation.PIE, FractionsCommonColorProfile.shapeRedProperty ) );
+      shapeGroup.shapeContainers.get( 0 ).shapePieces.push( new ShapePiece( fraction, BuildingRepresentation.PIE, fractionsCommonColorProfile.shapeRedProperty ) );
     } );
 
     const shapeGroupNode = new ShapeGroupNode( shapeGroup, {
@@ -215,7 +215,7 @@ class BuildingLabScreenView extends ScreenView {
         shapeGroupNode
       ],
       scale: 2.3
-    } ), FractionsCommonColorProfile.otherScreenBackgroundProperty );
+    } ), fractionsCommonColorProfile.otherScreenBackgroundProperty );
   }
 
   /**
@@ -228,13 +228,13 @@ class BuildingLabScreenView extends ScreenView {
 
     const shapeGroup = new ShapeGroup( BuildingRepresentation.PIE );
     shapeGroup.increaseContainerCount();
-    shapeGroup.shapeContainers.get( 0 ).shapePieces.push( new ShapePiece( Fraction.ONE, BuildingRepresentation.PIE, FractionsCommonColorProfile.shapeRedProperty ) );
+    shapeGroup.shapeContainers.get( 0 ).shapePieces.push( new ShapePiece( Fraction.ONE, BuildingRepresentation.PIE, fractionsCommonColorProfile.shapeRedProperty ) );
     [
       new Fraction( 1, 2 ),
       new Fraction( 1, 4 ),
       new Fraction( 1, 8 )
     ].forEach( fraction => {
-      shapeGroup.shapeContainers.get( 1 ).shapePieces.push( new ShapePiece( fraction, BuildingRepresentation.PIE, FractionsCommonColorProfile.shapeRedProperty ) );
+      shapeGroup.shapeContainers.get( 1 ).shapePieces.push( new ShapePiece( fraction, BuildingRepresentation.PIE, fractionsCommonColorProfile.shapeRedProperty ) );
     } );
 
     const shapeGroupNode = new ShapeGroupNode( shapeGroup, {
@@ -244,7 +244,7 @@ class BuildingLabScreenView extends ScreenView {
       scale: 2.1
     } );
 
-    return FractionsCommonGlobals.wrapIcon( shapeGroupNode, FractionsCommonColorProfile.otherScreenBackgroundProperty );
+    return FractionsCommonGlobals.wrapIcon( shapeGroupNode, fractionsCommonColorProfile.otherScreenBackgroundProperty );
   }
 }
 

@@ -17,7 +17,7 @@ import Path from '../../../../scenery/js/nodes/Path.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
-import FractionsCommonColorProfile from '../../common/view/FractionsCommonColorProfile.js';
+import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import NumberGroup from '../model/NumberGroup.js';
 import NumberSpotType from '../model/NumberSpotType.js';
@@ -48,13 +48,13 @@ class NumberGroupNode extends GroupNode {
 
     const createSpot = spot => {
       const outline = Rectangle.bounds( spot.bounds, {
-        stroke: FractionsCommonColorProfile.numberOutlineProperty,
+        stroke: fractionsCommonColorProfile.numberOutlineProperty,
         lineDash: [ 10, 5 ],
         lineWidth: 2,
         lineJoin: 'round'
       } );
       const text = new Text( ' ', {
-        fill: FractionsCommonColorProfile.numberTextFillProperty,
+        fill: fractionsCommonColorProfile.numberTextFillProperty,
         font: spot.type === NumberSpotType.WHOLE ? FractionsCommonConstants.NUMBER_WHOLE_FONT : FractionsCommonConstants.NUMBER_FRACTIONAL_FONT,
         center: outline.center
       } );
@@ -63,7 +63,7 @@ class NumberGroupNode extends GroupNode {
         .moveToPoint( Vector2.createPolar( notAllowedSize, -0.25 * Math.PI ) )
         .lineToPoint( Vector2.createPolar( notAllowedSize, 0.75 * Math.PI ) );
       const notAllowedNode = new Path( notAllowedShape, {
-        stroke: FractionsCommonColorProfile.numberNotAllowedProperty,
+        stroke: fractionsCommonColorProfile.numberNotAllowedProperty,
         lineWidth: 3,
         center: outline.center
       } );
@@ -87,8 +87,8 @@ class NumberGroupNode extends GroupNode {
     }
 
     const cardBackground = new Rectangle( {
-      fill: FractionsCommonColorProfile.numberFillProperty,
-      stroke: FractionsCommonColorProfile.numberStrokeProperty,
+      fill: fractionsCommonColorProfile.numberFillProperty,
+      stroke: fractionsCommonColorProfile.numberStrokeProperty,
       cornerRadius: FractionsCommonConstants.NUMBER_CORNER_RADIUS
     } );
 
@@ -101,7 +101,7 @@ class NumberGroupNode extends GroupNode {
     const fractionLine = new Line( {
       lineCap: 'round',
       lineWidth: 4,
-      stroke: FractionsCommonColorProfile.numberFractionLineProperty
+      stroke: fractionsCommonColorProfile.numberFractionLineProperty
     } );
 
     // @private {Node}

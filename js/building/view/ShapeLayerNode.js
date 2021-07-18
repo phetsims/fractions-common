@@ -14,7 +14,7 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
-import FractionsCommonColorProfile from '../../common/view/FractionsCommonColorProfile.js';
+import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import BuildingRepresentation from '../model/BuildingRepresentation.js';
 import ShapePiece from '../model/ShapePiece.js';
@@ -43,12 +43,12 @@ class ShapeLayerNode extends Node {
 
     // @private {Path}
     this.separatorPath = new Path( null, {
-      stroke: FractionsCommonColorProfile.shapeContainerPartitionProperty,
+      stroke: fractionsCommonColorProfile.shapeContainerPartitionProperty,
       lineDash: [ 5, 5 ],
       pickable: false
     } );
     this.separatorOffsetPath = new Path( null, {
-      stroke: FractionsCommonColorProfile.shapeContainerPartitionOffsetProperty,
+      stroke: fractionsCommonColorProfile.shapeContainerPartitionOffsetProperty,
       lineDash: [ 5, 5 ],
       lineDashOffset: 5,
       pickable: false
@@ -62,25 +62,25 @@ class ShapeLayerNode extends Node {
     // Background
     if ( representation === BuildingRepresentation.PIE ) {
       this.addChild( new Circle( CIRCLE_RADIUS, {
-        fill: FractionsCommonColorProfile.shapeContainerFillProperty
+        fill: fractionsCommonColorProfile.shapeContainerFillProperty
       } ) );
       this.addChild( this.shapePieceLayer );
       this.addChild( this.separatorPath );
       this.addChild( this.separatorOffsetPath );
       this.addChild( new Circle( CIRCLE_RADIUS, {
-        stroke: FractionsCommonColorProfile.shapeContainerStrokeProperty,
+        stroke: fractionsCommonColorProfile.shapeContainerStrokeProperty,
         pickable: false
       } ) );
     }
     else if ( representation === BuildingRepresentation.BAR ) {
       this.addChild( Rectangle.bounds( ShapePiece.VERTICAL_BAR_BOUNDS, {
-        fill: FractionsCommonColorProfile.shapeContainerFillProperty
+        fill: fractionsCommonColorProfile.shapeContainerFillProperty
       } ) );
       this.addChild( this.shapePieceLayer );
       this.addChild( this.separatorPath );
       this.addChild( this.separatorOffsetPath );
       this.addChild( Rectangle.bounds( ShapePiece.VERTICAL_BAR_BOUNDS, {
-        stroke: FractionsCommonColorProfile.shapeContainerStrokeProperty,
+        stroke: fractionsCommonColorProfile.shapeContainerStrokeProperty,
         pickable: false
       } ) );
     }

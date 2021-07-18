@@ -16,7 +16,7 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
-import FractionsCommonColorProfile from '../../common/view/FractionsCommonColorProfile.js';
+import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import BuildingRepresentation from '../model/BuildingRepresentation.js';
 import ShapePiece from '../model/ShapePiece.js';
@@ -69,10 +69,10 @@ class ShapePieceNode extends Node {
 
     const nodeOptions = {
       fill: shapePiece.color,
-      stroke: FractionsCommonColorProfile.shapePieceStrokeProperty
+      stroke: fractionsCommonColorProfile.shapePieceStrokeProperty
     };
     const shadowOptions = {
-      fill: FractionsCommonColorProfile.shapeShadowProperty
+      fill: fractionsCommonColorProfile.shapeShadowProperty
     };
     if ( shapePiece.representation === BuildingRepresentation.PIE ) {
       if ( fractionValue === 1 ) {
