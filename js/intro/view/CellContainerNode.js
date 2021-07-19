@@ -1,4 +1,4 @@
-// Copyright 2018-2020, University of Colorado Boulder
+// Copyright 2018-2021, University of Colorado Boulder
 
 /**
  * Supertype for container nodes that show and track individual cell nodes (i.e. NOT the beaker container).
