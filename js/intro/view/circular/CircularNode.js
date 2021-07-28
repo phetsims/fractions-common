@@ -12,7 +12,7 @@ import merge from '../../../../../phet-core/js/merge.js';
 import Node from '../../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../../scenery/js/nodes/Path.js';
 import FractionsCommonConstants from '../../../common/FractionsCommonConstants.js';
-import fractionsCommonColorProfile from '../../../common/view/fractionsCommonColorProfile.js';
+import FractionsCommonColors from '../../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../../fractionsCommon.js';
 
 class CircularNode extends Node {
@@ -57,12 +57,12 @@ class CircularNode extends Node {
 
     // @private {Node}
     this.primaryPath = new Path( shape, {
-      fill: options.colorOverride ? options.colorOverride : fractionsCommonColorProfile.introCircleFillProperty,
+      fill: options.colorOverride ? options.colorOverride : FractionsCommonColors.introCircleFillProperty,
       stroke: 'black'
     } );
     if ( options.dropShadow ) {
       // @private {Node}
-      this.shadowPath = new Path( shape, { fill: fractionsCommonColorProfile.introShapeShadowProperty } );
+      this.shadowPath = new Path( shape, { fill: FractionsCommonColors.introShapeShadowProperty } );
       this.shadowPath.center = this.primaryPath.center.plusScalar( FractionsCommonConstants.INTRO_DROP_SHADOW_OFFSET );
       this.container.addChild( this.shadowPath );
     }

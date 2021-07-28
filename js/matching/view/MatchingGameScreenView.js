@@ -32,7 +32,7 @@ import LevelSelectionButton from '../../../../vegas/js/LevelSelectionButton.js';
 import ScoreDisplayStars from '../../../../vegas/js/ScoreDisplayStars.js';
 import vegasStrings from '../../../../vegas/js/vegasStrings.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
-import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
+import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import fractionsCommonStrings from '../../fractionsCommonStrings.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import FilledPartition from '../../game/model/FilledPartition.js';
@@ -59,14 +59,14 @@ const LEVEL_SHAPE_PARTITIONS = [
   ShapePartition.NINJA_STAR
 ];
 const LEVEL_COLORS = [
-  fractionsCommonColorProfile.shapeRedProperty,
-  fractionsCommonColorProfile.shapeGreenProperty,
-  fractionsCommonColorProfile.shapeBlueProperty,
-  fractionsCommonColorProfile.shapeOrangeProperty,
-  fractionsCommonColorProfile.shapeMagentaProperty,
-  fractionsCommonColorProfile.shapeYellowProperty,
-  fractionsCommonColorProfile.shapeLighterPinkProperty,
-  fractionsCommonColorProfile.shapeStrongGreenProperty
+  FractionsCommonColors.shapeRedProperty,
+  FractionsCommonColors.shapeGreenProperty,
+  FractionsCommonColors.shapeBlueProperty,
+  FractionsCommonColors.shapeOrangeProperty,
+  FractionsCommonColors.shapeMagentaProperty,
+  FractionsCommonColors.shapeYellowProperty,
+  FractionsCommonColors.shapeLighterPinkProperty,
+  FractionsCommonColors.shapeStrongGreenProperty
 ];
 const QUADRATIC_TRANSITION_OPTIONS = {
   duration: 0.4,
@@ -338,7 +338,7 @@ class MatchingGameScreenView extends ScreenView {
           listener: () => {
             this.model.levelProperty.value = level;
           },
-          baseColor: fractionsCommonColorProfile.matchingLevelBackgroundProperty,
+          baseColor: FractionsCommonColors.matchingLevelBackgroundProperty,
           // Workaround since it expects 0 as the best time if there was no best time. Don't solve levels in
           // under a second!
           bestTimeProperty: new DerivedProperty( [ level.bestTimeProperty ], bestTime => isFinite( bestTime ) ? bestTime : 0 ),
@@ -361,13 +361,13 @@ class MatchingGameScreenView extends ScreenView {
    */
   static createIntroHomeIcon() {
     const rectangle = new Rectangle( 0, 0, Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.width, Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.height, {
-      fill: fractionsCommonColorProfile.matchingHomeIconBackgroundProperty
+      fill: FractionsCommonColors.matchingHomeIconBackgroundProperty
     } );
 
     rectangle.addChild( new HBox( {
       spacing: 20,
       children: [
-        new FilledPartitionNode( new FilledPartition( select( ShapePartition.PIES, 2 ), [ false, true ], fractionsCommonColorProfile.shapeBlueProperty ), {
+        new FilledPartitionNode( new FilledPartition( select( ShapePartition.PIES, 2 ), [ false, true ], FractionsCommonColors.shapeBlueProperty ), {
           scale: 2.5,
           borderLineWidth: FractionsCommonConstants.MATCHING_BORDER
         } ),
@@ -393,11 +393,11 @@ class MatchingGameScreenView extends ScreenView {
    */
   static createIntroNavbarIcon() {
     const rectangle = new Rectangle( 0, 0, Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.width, Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.height, {
-      fill: fractionsCommonColorProfile.matchingNavbarIconBackgroundProperty,
+      fill: FractionsCommonColors.matchingNavbarIconBackgroundProperty,
       borderLineWidth: FractionsCommonConstants.MATCHING_BORDER
     } );
 
-    rectangle.addChild( new FilledPartitionNode( new FilledPartition( select( ShapePartition.PIES, 2 ), [ false, true ], fractionsCommonColorProfile.shapeBlueProperty ), {
+    rectangle.addChild( new FilledPartitionNode( new FilledPartition( select( ShapePartition.PIES, 2 ), [ false, true ], FractionsCommonColors.shapeBlueProperty ), {
       center: rectangle.center,
       scale: 4
     } ) );
@@ -413,7 +413,7 @@ class MatchingGameScreenView extends ScreenView {
    */
   static createMixedHomeIcon() {
     const rectangle = new Rectangle( 0, 0, Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.width, Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.height, {
-      fill: fractionsCommonColorProfile.matchingHomeIconBackgroundProperty
+      fill: FractionsCommonColors.matchingHomeIconBackgroundProperty
     } );
 
     rectangle.addChild( new HBox( {
@@ -422,10 +422,10 @@ class MatchingGameScreenView extends ScreenView {
         new HBox( {
           spacing: 10,
           children: [
-            new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ true, true, true, true, true, true ], fractionsCommonColorProfile.shapeRedProperty ), {
+            new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ true, true, true, true, true, true ], FractionsCommonColors.shapeRedProperty ), {
               borderLineWidth: FractionsCommonConstants.MATCHING_BORDER
             } ),
-            new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ false, true, true, true, false, false ], fractionsCommonColorProfile.shapeRedProperty ), {
+            new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ false, true, true, true, false, false ], FractionsCommonColors.shapeRedProperty ), {
               borderLineWidth: FractionsCommonConstants.MATCHING_BORDER
             } )
           ],
@@ -454,16 +454,16 @@ class MatchingGameScreenView extends ScreenView {
    */
   static createMixedNavbarIcon() {
     const rectangle = new Rectangle( 0, 0, Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.width, Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.height, {
-      fill: fractionsCommonColorProfile.matchingNavbarIconBackgroundProperty
+      fill: FractionsCommonColors.matchingNavbarIconBackgroundProperty
     } );
 
     rectangle.addChild( new HBox( {
       spacing: 5,
       children: [
-        new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ true, true, true, true, true, true ], fractionsCommonColorProfile.shapeRedProperty ), {
+        new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ true, true, true, true, true, true ], FractionsCommonColors.shapeRedProperty ), {
           borderLineWidth: FractionsCommonConstants.MATCHING_BORDER
         } ),
-        new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ false, true, true, true, false, false ], fractionsCommonColorProfile.shapeRedProperty ), {
+        new FilledPartitionNode( new FilledPartition( ShapePartition.SIX_FLOWER, [ false, true, true, true, false, false ], FractionsCommonColors.shapeRedProperty ), {
           borderLineWidth: FractionsCommonConstants.MATCHING_BORDER
         } )
       ],

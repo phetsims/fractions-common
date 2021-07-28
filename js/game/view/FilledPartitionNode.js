@@ -9,7 +9,7 @@
 import merge from '../../../../phet-core/js/merge.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
-import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
+import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../fractionsCommon.js';
 
 class FilledPartitionNode extends Node {
@@ -23,9 +23,9 @@ class FilledPartitionNode extends Node {
     options = merge( {
       // {PaintDef} - Fills and strokes
       primaryFill: filledPartition.color,
-      backgroundFill: fractionsCommonColorProfile.shapePartitionBackgroundProperty,
-      interiorStroke: fractionsCommonColorProfile.shapePartitionBorderProperty,
-      borderStroke: fractionsCommonColorProfile.shapePartitionBorderProperty,
+      backgroundFill: FractionsCommonColors.shapePartitionBackgroundProperty,
+      interiorStroke: FractionsCommonColors.shapePartitionBorderProperty,
+      borderStroke: FractionsCommonColors.shapePartitionBorderProperty,
 
       interiorLineWidth: 0.7,
       borderLineWidth: 2 * 0.7,

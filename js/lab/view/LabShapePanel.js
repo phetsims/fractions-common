@@ -17,7 +17,7 @@ import BuildingRepresentation from '../../building/model/BuildingRepresentation.
 import ShapePiece from '../../building/model/ShapePiece.js';
 import ShapePieceNode from '../../building/view/ShapePieceNode.js';
 import StackNodesBox from '../../building/view/StackNodesBox.js';
-import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
+import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../fractionsCommon.js';
 
 class LabShapePanel extends Panel {
@@ -68,13 +68,13 @@ class LabShapePanel extends Panel {
     const representationRadioButtonGroup = new RectangularRadioButtonGroup( this.representationProperty, [
       {
         value: BuildingRepresentation.PIE,
-        node: new ShapePieceNode( new ShapePiece( Fraction.ONE, BuildingRepresentation.PIE, fractionsCommonColorProfile.labPieFillProperty ), {
+        node: new ShapePieceNode( new ShapePiece( Fraction.ONE, BuildingRepresentation.PIE, FractionsCommonColors.labPieFillProperty ), {
           scale: 0.3
         } )
       },
       {
         value: BuildingRepresentation.BAR,
-        node: new ShapePieceNode( new ShapePiece( Fraction.ONE, BuildingRepresentation.BAR, fractionsCommonColorProfile.labBarFillProperty ), {
+        node: new ShapePieceNode( new ShapePiece( Fraction.ONE, BuildingRepresentation.BAR, FractionsCommonColors.labBarFillProperty ), {
           scale: 0.3
         } )
       }
@@ -86,8 +86,8 @@ class LabShapePanel extends Panel {
       touchAreaXDilation: 5,
       touchAreaYDilation: 2.5,
       spacing: 5,
-      selectedStroke: fractionsCommonColorProfile.radioStrokeProperty,
-      baseColor: fractionsCommonColorProfile.radioBaseProperty
+      selectedStroke: FractionsCommonColors.radioStrokeProperty,
+      baseColor: FractionsCommonColors.radioBaseProperty
     } );
 
     shapeBox.children = [

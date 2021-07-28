@@ -12,7 +12,7 @@ import merge from '../../../../../phet-core/js/merge.js';
 import Path from '../../../../../scenery/js/nodes/Path.js';
 import Rectangle from '../../../../../scenery/js/nodes/Rectangle.js';
 import FractionsCommonConstants from '../../../common/FractionsCommonConstants.js';
-import fractionsCommonColorProfile from '../../../common/view/fractionsCommonColorProfile.js';
+import FractionsCommonColors from '../../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../../fractionsCommon.js';
 import Container from '../../model/Container.js';
 import CellContainerNode from '../CellContainerNode.js';
@@ -45,7 +45,7 @@ class RectangularContainerNode extends CellContainerNode {
 
     // @private {Rectangle}
     this.backgroundRectangle = new Rectangle( {
-      fill: fractionsCommonColorProfile.introContainerBackgroundProperty,
+      fill: FractionsCommonColors.introContainerBackgroundProperty,
       rectBounds: rectBounds
     } );
     this.addChild( this.backgroundRectangle );

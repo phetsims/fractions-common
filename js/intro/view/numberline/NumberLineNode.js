@@ -20,7 +20,7 @@ import Line from '../../../../../scenery/js/nodes/Line.js';
 import Node from '../../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../../scenery/js/nodes/Path.js';
 import Text from '../../../../../scenery/js/nodes/Text.js';
-import fractionsCommonColorProfile from '../../../common/view/fractionsCommonColorProfile.js';
+import FractionsCommonColors from '../../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../../fractionsCommon.js';
 import NumberLineOrientation from '../NumberLineOrientation.js';
 
@@ -66,8 +66,8 @@ class NumberLineNode extends Node {
       highlightExtension: 8,
 
       // {ColorDef}
-      markerFill: fractionsCommonColorProfile.introCircleFillProperty,
-      arrowFill: fractionsCommonColorProfile.introCircleFillProperty,
+      markerFill: FractionsCommonColors.introCircleFillProperty,
+      arrowFill: FractionsCommonColors.introCircleFillProperty,
 
       // NOTE: Should we add an isUserControlledProperty so we can properly handle lock-out with other
       // controls? AP noted that multitouch handling was not a priority based on current deadlines.
@@ -132,7 +132,7 @@ class NumberLineNode extends Node {
     }
 
     const highlightNode = new Line( {
-      stroke: fractionsCommonColorProfile.introNumberLineHighlightProperty,
+      stroke: FractionsCommonColors.introNumberLineHighlightProperty,
       lineWidth: options.highlightLineWidth
     } );
 

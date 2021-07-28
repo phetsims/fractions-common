@@ -20,7 +20,7 @@ import Path from '../../../../scenery/js/nodes/Path.js';
 import VBox from '../../../../scenery/js/nodes/VBox.js';
 import RoundPushButton from '../../../../sun/js/buttons/RoundPushButton.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
-import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
+import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import RoundArrowButton from '../../common/view/RoundArrowButton.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import BuildingRepresentation from '../model/BuildingRepresentation.js';
@@ -85,7 +85,7 @@ class ShapeGroupNode extends GroupNode {
       yMargin: FractionsCommonConstants.ROUND_BUTTON_MARGIN,
       listener: shapeGroup.increaseContainerCount.bind( shapeGroup ),
       enabled: !this.isIcon,
-      baseColor: fractionsCommonColorProfile.greenRoundArrowButtonProperty
+      baseColor: FractionsCommonColors.greenRoundArrowButtonProperty
     } );
 
     // @private {Node}
@@ -100,7 +100,7 @@ class ShapeGroupNode extends GroupNode {
       yMargin: FractionsCommonConstants.ROUND_BUTTON_MARGIN,
       listener: shapeGroup.decreaseContainerCount.bind( shapeGroup ),
       enabled: !this.isIcon,
-      baseColor: fractionsCommonColorProfile.redRoundArrowButtonProperty
+      baseColor: FractionsCommonColors.redRoundArrowButtonProperty
     } );
 
     // Touch areas for add/remove buttons

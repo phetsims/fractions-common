@@ -20,7 +20,7 @@ import VBox from '../../../../scenery/js/nodes/VBox.js';
 import Panel from '../../../../sun/js/Panel.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonGlobals from '../../common/FractionsCommonGlobals.js';
-import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
+import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import Container from '../model/Container.js';
 import IntroRepresentation from '../model/IntroRepresentation.js';
@@ -71,7 +71,7 @@ class EqualityLabScreenView extends ContainerSetScreenView {
       model.multiplierProperty,
       new DerivedProperty( [ model.multiplierProperty ], multiplier => multiplier < model.multiplierProperty.range.max ),
       new DerivedProperty( [ model.multiplierProperty ], multiplier => multiplier > model.multiplierProperty.range.min ), {
-        baseColor: fractionsCommonColorProfile.greenRoundArrowButtonProperty,
+        baseColor: FractionsCommonColors.greenRoundArrowButtonProperty,
         rotation: Math.PI / 2
       } );
 
@@ -109,7 +109,7 @@ class EqualityLabScreenView extends ContainerSetScreenView {
     const showNumberLinePanel = new Panel( new AlignBox( showNumberLineNode, {
       group: this.topAlignGroup
     } ), {
-      fill: fractionsCommonColorProfile.introPanelBackgroundProperty,
+      fill: FractionsCommonColors.introPanelBackgroundProperty,
       xMargin: FractionsCommonConstants.PANEL_MARGIN,
       yMargin: FractionsCommonConstants.PANEL_MARGIN
     } );
@@ -183,7 +183,7 @@ class EqualityLabScreenView extends ContainerSetScreenView {
     }
 
     const semitransparentColorOverride = new DerivedProperty( [
-      fractionsCommonColorProfile.equalityLabColorProperty
+      FractionsCommonColors.equalityLabColorProperty
     ], color => color.withAlpha( 0.8 ) );
 
     Property.multilink( [ model.representationProperty, model.showNumberLineProperty ], ( representation, showNumberLine ) => {
@@ -196,7 +196,7 @@ class EqualityLabScreenView extends ContainerSetScreenView {
 
         const containers = model.multipliedContainers;
 
-        const colorOverride = fractionsCommonColorProfile.equalityLabColorProperty;
+        const colorOverride = FractionsCommonColors.equalityLabColorProperty;
         let containerOffset = 0;
 
         if ( representation === IntroRepresentation.CIRCLE ) {
@@ -221,7 +221,7 @@ class EqualityLabScreenView extends ContainerSetScreenView {
         }
         else if ( representation === IntroRepresentation.BEAKER ) {
           containerNodes = containers.map( container => new BeakerContainerNode( container, {
-            colorOverride: fractionsCommonColorProfile.equalityLabWaterProperty
+            colorOverride: FractionsCommonColors.equalityLabWaterProperty
           } ) );
           multipliedViewContainer.addChild( spacedBox( 4, containerNodes, representation ) );
         }
@@ -275,7 +275,7 @@ class EqualityLabScreenView extends ContainerSetScreenView {
 
     const leftContainerNode = new RectangularContainerNode( leftContainer );
     const rightContainerNode = new RectangularContainerNode( rightContainer, {
-      colorOverride: fractionsCommonColorProfile.equalityLabColorProperty
+      colorOverride: FractionsCommonColors.equalityLabColorProperty
     } );
 
     return FractionsCommonGlobals.wrapIcon( new HBox( {
@@ -286,7 +286,7 @@ class EqualityLabScreenView extends ContainerSetScreenView {
         rightContainerNode
       ],
       scale: 1.5
-    } ), fractionsCommonColorProfile.introScreenBackgroundProperty );
+    } ), FractionsCommonColors.introScreenBackgroundProperty );
   }
 
 }

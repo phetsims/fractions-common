@@ -11,7 +11,7 @@ import Shape from '../../../../../kite/js/Shape.js';
 import Circle from '../../../../../scenery/js/nodes/Circle.js';
 import Path from '../../../../../scenery/js/nodes/Path.js';
 import FractionsCommonConstants from '../../../common/FractionsCommonConstants.js';
-import fractionsCommonColorProfile from '../../../common/view/fractionsCommonColorProfile.js';
+import FractionsCommonColors from '../../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../../fractionsCommon.js';
 import CellContainerNode from '../CellContainerNode.js';
 import CircularNode from './CircularNode.js';
@@ -30,7 +30,7 @@ class CircularContainerNode extends CellContainerNode {
     // Extend by 0.5 so that our cell fills don't overlap our border
     this.addChild( new Circle( this.circleRadius + 0.5, {
       lineWidth: FractionsCommonConstants.INTRO_CONTAINER_LINE_WIDTH,
-      fill: fractionsCommonColorProfile.introContainerBackgroundProperty,
+      fill: FractionsCommonColors.introContainerBackgroundProperty,
       stroke: this.strokeProperty
     } ) );
 

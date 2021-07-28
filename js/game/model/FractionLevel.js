@@ -13,7 +13,7 @@ import arrayDifference from '../../../../phet-core/js/arrayDifference.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
 import PrimeFactorization from '../../common/model/PrimeFactorization.js';
-import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
+import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import CollectionFinder from './CollectionFinder.js';
 import FilledPartition from './FilledPartition.js';
@@ -44,13 +44,13 @@ const collectionFinder9 = new CollectionFinder( {
   denominators: inclusive( 1, 9 ).map( PrimeFactorization.factor )
 } );
 const COLORS_3 = [
-  fractionsCommonColorProfile.level1Property,
-  fractionsCommonColorProfile.level2Property,
-  fractionsCommonColorProfile.level3Property
+  FractionsCommonColors.level1Property,
+  FractionsCommonColors.level2Property,
+  FractionsCommonColors.level3Property
 ];
 const COLORS_4 = [
   ...COLORS_3,
-  fractionsCommonColorProfile.level4Property
+  FractionsCommonColors.level4Property
 ];
 
 // common lists of fractions needed

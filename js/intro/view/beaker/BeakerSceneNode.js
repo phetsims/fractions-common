@@ -7,7 +7,7 @@
  */
 
 import merge from '../../../../../phet-core/js/merge.js';
-import fractionsCommonColorProfile from '../../../common/view/fractionsCommonColorProfile.js';
+import FractionsCommonColors from '../../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../../fractionsCommon.js';
 import CellSceneNode from '../CellSceneNode.js';
 import BeakerContainerNode from './BeakerContainerNode.js';
@@ -45,7 +45,7 @@ class BeakerSceneNode extends CellSceneNode {
       yRadius: 4.5,
       xRadius: 15,
       fullHeight: 55,
-      colorOverride: useEqualityLabColor ? fractionsCommonColorProfile.equalityLabWaterProperty : null
+      colorOverride: useEqualityLabColor ? FractionsCommonColors.equalityLabWaterProperty : null
     } );
   }
 }

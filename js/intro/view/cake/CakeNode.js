@@ -55,7 +55,7 @@ import cake_8_6Image from '../../../../mipmaps/cake_8_6_png.js';
 import cake_8_7Image from '../../../../mipmaps/cake_8_7_png.js';
 import cake_8_8Image from '../../../../mipmaps/cake_8_8_png.js';
 import FractionsCommonConstants from '../../../common/FractionsCommonConstants.js';
-import fractionsCommonColorProfile from '../../../common/view/fractionsCommonColorProfile.js';
+import FractionsCommonColors from '../../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../../fractionsCommon.js';
 
 // constants
@@ -142,7 +142,7 @@ class CakeNode extends Node {
     if ( options.dropShadow ) {
       // @private {Node}
       this.shadowPath = new Path( null, {
-        fill: fractionsCommonColorProfile.introShapeShadowProperty,
+        fill: FractionsCommonColors.introShapeShadowProperty,
         scale: CAKE_DEFAULT_SCALE
       } );
       this.addChild( this.shadowPath );

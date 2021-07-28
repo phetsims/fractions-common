@@ -19,7 +19,7 @@ import ShapeGroup from '../../building/model/ShapeGroup.js';
 import ShapeGroupStack from '../../building/model/ShapeGroupStack.js';
 import ShapePiece from '../../building/model/ShapePiece.js';
 import ShapeStack from '../../building/model/ShapeStack.js';
-import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
+import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../fractionsCommon.js';
 
 // constants
@@ -41,8 +41,8 @@ class BuildingLabModel extends BuildingModel {
 
     // Shape stacks
     [
-      { representation: BuildingRepresentation.PIE, color: fractionsCommonColorProfile.labPieFillProperty },
-      { representation: BuildingRepresentation.BAR, color: fractionsCommonColorProfile.labBarFillProperty }
+      { representation: BuildingRepresentation.PIE, color: FractionsCommonColors.labPieFillProperty },
+      { representation: BuildingRepresentation.BAR, color: FractionsCommonColors.labBarFillProperty }
     ].forEach( ( { representation, color } ) => {
       _.range( 1, 9 ).forEach( denominator => {
         const stack = new ShapeStack( new Fraction( 1, denominator ), PIECE_LAYOUT_QUANTITY, representation, color, false );

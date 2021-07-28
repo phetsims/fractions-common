@@ -23,7 +23,7 @@ import Checkbox from '../../../../sun/js/Checkbox.js';
 import Panel from '../../../../sun/js/Panel.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonGlobals from '../../common/FractionsCommonGlobals.js';
-import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
+import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import fractionsCommonStrings from '../../fractionsCommonStrings.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import Container from '../model/Container.js';
@@ -49,7 +49,7 @@ class IntroScreenView extends ContainerSetScreenView {
     const maxPanel = new Panel( new AlignBox( new MaxNode( model.containerCountProperty ), {
       group: this.topAlignGroup
     } ), {
-      fill: fractionsCommonColorProfile.introPanelBackgroundProperty,
+      fill: FractionsCommonColors.introPanelBackgroundProperty,
       xMargin: 16,
       yMargin: 10,
       right: this.layoutBounds.right - MARGIN,
@@ -63,8 +63,8 @@ class IntroScreenView extends ContainerSetScreenView {
       const partialFractionColorProperty = new DerivedProperty( [
         model.numeratorProperty,
         model.denominatorProperty,
-        fractionsCommonColorProfile.mixedFractionStrongProperty,
-        fractionsCommonColorProfile.mixedFractionWeakProperty
+        FractionsCommonColors.mixedFractionStrongProperty,
+        FractionsCommonColors.mixedFractionWeakProperty
       ], ( numerator, denominator, strongColor, weakColor ) => {
         return numerator % denominator === 0 ? weakColor : strongColor;
       } );
@@ -79,7 +79,7 @@ class IntroScreenView extends ContainerSetScreenView {
         maxNumerator: model.denominatorProperty.range.max - 1,
         maxDenominator: model.denominatorProperty.range.max,
 
-        wholeFill: fractionsCommonColorProfile.mixedFractionStrongProperty,
+        wholeFill: FractionsCommonColors.mixedFractionStrongProperty,
         numeratorFill: partialFractionColorProperty,
         denominatorFill: partialFractionColorProperty,
         separatorFill: partialFractionColorProperty,
@@ -123,10 +123,10 @@ class IntroScreenView extends ContainerSetScreenView {
         maxNumerator: model.denominatorProperty.range.max - 1,
         maxDenominator: model.denominatorProperty.range.max,
 
-        wholeFill: fractionsCommonColorProfile.mixedFractionStrongProperty,
-        numeratorFill: fractionsCommonColorProfile.mixedFractionStrongProperty,
-        denominatorFill: fractionsCommonColorProfile.mixedFractionStrongProperty,
-        separatorFill: fractionsCommonColorProfile.mixedFractionStrongProperty,
+        wholeFill: FractionsCommonColors.mixedFractionStrongProperty,
+        numeratorFill: FractionsCommonColors.mixedFractionStrongProperty,
+        denominatorFill: FractionsCommonColors.mixedFractionStrongProperty,
+        separatorFill: FractionsCommonColors.mixedFractionStrongProperty,
 
         scale: equationScale
       };
@@ -243,7 +243,7 @@ class IntroScreenView extends ContainerSetScreenView {
         numberLineNode
       ],
       scale: 1.3
-    } ), fractionsCommonColorProfile.introScreenBackgroundProperty );
+    } ), FractionsCommonColors.introScreenBackgroundProperty );
   }
 
   /**
@@ -264,7 +264,7 @@ class IntroScreenView extends ContainerSetScreenView {
       scale: 2.5
     } );
 
-    return FractionsCommonGlobals.wrapIcon( cakeNode, fractionsCommonColorProfile.introScreenBackgroundProperty );
+    return FractionsCommonGlobals.wrapIcon( cakeNode, FractionsCommonColors.introScreenBackgroundProperty );
   }
 
   /**
@@ -290,7 +290,7 @@ class IntroScreenView extends ContainerSetScreenView {
         numberLineNode
       ],
       scale: 1
-    } ), fractionsCommonColorProfile.introScreenBackgroundProperty );
+    } ), FractionsCommonColors.introScreenBackgroundProperty );
   }
 
   /**
@@ -303,7 +303,7 @@ class IntroScreenView extends ContainerSetScreenView {
     const numberLineNode = IntroScreenView.createStaticNumberLine( 3, 2, 2 );
     numberLineNode.scale( 1.5 );
 
-    return FractionsCommonGlobals.wrapIcon( numberLineNode, fractionsCommonColorProfile.introScreenBackgroundProperty );
+    return FractionsCommonGlobals.wrapIcon( numberLineNode, FractionsCommonColors.introScreenBackgroundProperty );
   }
 
 }

@@ -11,7 +11,7 @@ import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Shape from '../../../../kite/js/Shape.js';
 import merge from '../../../../phet-core/js/merge.js';
 import VBox from '../../../../scenery/js/nodes/VBox.js';
-import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
+import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import RoundArrowButton from '../../common/view/RoundArrowButton.js';
 import fractionsCommon from '../../fractionsCommon.js';
 
@@ -28,7 +28,7 @@ class RoundNumberSpinner extends VBox {
     assert && assert( decreaseEnabledProperty instanceof Property );
 
     options = merge( {
-      baseColor: fractionsCommonColorProfile.yellowRoundArrowButtonProperty,
+      baseColor: FractionsCommonColors.yellowRoundArrowButtonProperty,
       rotation: 0,
       spacing: 3,
       longTouchDilation: 12,

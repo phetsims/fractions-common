@@ -10,7 +10,7 @@ import Shape from '../../../../kite/js/Shape.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import RectangularPushButton from '../../../../sun/js/buttons/RectangularPushButton.js';
-import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
+import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../fractionsCommon.js';
 
 const ICON_HEIGHT = 17;
@@ -37,7 +37,7 @@ class ReturnButton extends RectangularPushButton {
       } ),
       xMargin: 5,
       yMargin: 5,
-      baseColor: fractionsCommonColorProfile.undoButtonProperty,
+      baseColor: FractionsCommonColors.undoButtonProperty,
       listener: listener
     }, options );
 

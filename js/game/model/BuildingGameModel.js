@@ -13,7 +13,7 @@ import Property from '../../../../axon/js/Property.js';
 import EnumerationMap from '../../../../phet-core/js/EnumerationMap.js';
 import BuildingType from '../../building/model/BuildingType.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
-import fractionsCommonColorProfile from '../../common/view/fractionsCommonColorProfile.js';
+import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import FractionChallenge from './FractionChallenge.js';
 import FractionLevel from './FractionLevel.js';
@@ -150,46 +150,46 @@ class BuildingGameModel {
   static getShapeLevels( hasMixedNumbers ) {
     return hasMixedNumbers ? [
       // "Mixed Numbers" Shapes level 1
-      new FractionLevel( 1, 3, BuildingType.SHAPE, fractionsCommonColorProfile.level1Property, FractionLevel.level1ShapesMixed ),
+      new FractionLevel( 1, 3, BuildingType.SHAPE, FractionsCommonColors.level1Property, FractionLevel.level1ShapesMixed ),
       // "Mixed Numbers" Shapes level 2
-      new FractionLevel( 2, 3, BuildingType.SHAPE, fractionsCommonColorProfile.level2Property, FractionLevel.level2ShapesMixed ),
+      new FractionLevel( 2, 3, BuildingType.SHAPE, FractionsCommonColors.level2Property, FractionLevel.level2ShapesMixed ),
       // "Mixed Numbers" Shapes level 3
-      new FractionLevel( 3, 3, BuildingType.SHAPE, fractionsCommonColorProfile.level3Property, FractionLevel.level3ShapesMixed ),
+      new FractionLevel( 3, 3, BuildingType.SHAPE, FractionsCommonColors.level3Property, FractionLevel.level3ShapesMixed ),
       // "Mixed Numbers" Shapes level 4
-      new FractionLevel( 4, 3, BuildingType.SHAPE, fractionsCommonColorProfile.level4Property, FractionLevel.level4ShapesMixed ),
+      new FractionLevel( 4, 3, BuildingType.SHAPE, FractionsCommonColors.level4Property, FractionLevel.level4ShapesMixed ),
       // "Mixed Numbers" Shapes level 5
-      new FractionLevel( 5, 3, BuildingType.SHAPE, fractionsCommonColorProfile.level5Property, FractionLevel.level5ShapesMixed ),
+      new FractionLevel( 5, 3, BuildingType.SHAPE, FractionsCommonColors.level5Property, FractionLevel.level5ShapesMixed ),
       // "Mixed Numbers" Shapes level 6
-      new FractionLevel( 6, 4, BuildingType.SHAPE, fractionsCommonColorProfile.level6Property, FractionLevel.level6ShapesMixed ),
+      new FractionLevel( 6, 4, BuildingType.SHAPE, FractionsCommonColors.level6Property, FractionLevel.level6ShapesMixed ),
       // "Mixed Numbers" Shapes level 7
-      new FractionLevel( 7, 4, BuildingType.SHAPE, fractionsCommonColorProfile.level7Property, FractionLevel.level7ShapesMixed ),
+      new FractionLevel( 7, 4, BuildingType.SHAPE, FractionsCommonColors.level7Property, FractionLevel.level7ShapesMixed ),
       // "Mixed Numbers" Shapes level 8
-      new FractionLevel( 8, 4, BuildingType.SHAPE, fractionsCommonColorProfile.level8Property, FractionLevel.level8ShapesMixed ),
+      new FractionLevel( 8, 4, BuildingType.SHAPE, FractionsCommonColors.level8Property, FractionLevel.level8ShapesMixed ),
       // "Mixed Numbers" Shapes level 9
-      new FractionLevel( 9, 4, BuildingType.SHAPE, fractionsCommonColorProfile.level9Property, FractionLevel.level9ShapesMixed ),
+      new FractionLevel( 9, 4, BuildingType.SHAPE, FractionsCommonColors.level9Property, FractionLevel.level9ShapesMixed ),
       // "Mixed Numbers" Shapes level 10
-      new FractionLevel( 10, 4, BuildingType.SHAPE, fractionsCommonColorProfile.level10Property, FractionLevel.level10ShapesMixed )
+      new FractionLevel( 10, 4, BuildingType.SHAPE, FractionsCommonColors.level10Property, FractionLevel.level10ShapesMixed )
     ] : [
       // "Build a Fraction" Shapes level 1
-      new FractionLevel( 1, 3, BuildingType.SHAPE, fractionsCommonColorProfile.level1Property, FractionLevel.level1Shapes ),
+      new FractionLevel( 1, 3, BuildingType.SHAPE, FractionsCommonColors.level1Property, FractionLevel.level1Shapes ),
       // "Build a Fraction" Shapes level 2
-      new FractionLevel( 2, 3, BuildingType.SHAPE, fractionsCommonColorProfile.level2Property, FractionLevel.level2Shapes ),
+      new FractionLevel( 2, 3, BuildingType.SHAPE, FractionsCommonColors.level2Property, FractionLevel.level2Shapes ),
       // "Build a Fraction" Shapes level 3
-      new FractionLevel( 3, 3, BuildingType.SHAPE, fractionsCommonColorProfile.level3Property, FractionLevel.level3Shapes ),
+      new FractionLevel( 3, 3, BuildingType.SHAPE, FractionsCommonColors.level3Property, FractionLevel.level3Shapes ),
       // "Build a Fraction" Shapes level 4
-      new FractionLevel( 4, 3, BuildingType.SHAPE, fractionsCommonColorProfile.level4Property, FractionLevel.level4Shapes ),
+      new FractionLevel( 4, 3, BuildingType.SHAPE, FractionsCommonColors.level4Property, FractionLevel.level4Shapes ),
       // "Build a Fraction" Shapes level 5
-      new FractionLevel( 5, 3, BuildingType.SHAPE, fractionsCommonColorProfile.level5Property, FractionLevel.level5Shapes ),
+      new FractionLevel( 5, 3, BuildingType.SHAPE, FractionsCommonColors.level5Property, FractionLevel.level5Shapes ),
       // "Build a Fraction" Shapes level 6
-      new FractionLevel( 6, 4, BuildingType.SHAPE, fractionsCommonColorProfile.level6Property, FractionLevel.level6Shapes ),
+      new FractionLevel( 6, 4, BuildingType.SHAPE, FractionsCommonColors.level6Property, FractionLevel.level6Shapes ),
       // "Build a Fraction" Shapes level 7
-      new FractionLevel( 7, 4, BuildingType.SHAPE, fractionsCommonColorProfile.level7Property, FractionLevel.level7Shapes ),
+      new FractionLevel( 7, 4, BuildingType.SHAPE, FractionsCommonColors.level7Property, FractionLevel.level7Shapes ),
       // "Build a Fraction" Shapes level 8
-      new FractionLevel( 8, 4, BuildingType.SHAPE, fractionsCommonColorProfile.level8Property, FractionLevel.level8Shapes ),
+      new FractionLevel( 8, 4, BuildingType.SHAPE, FractionsCommonColors.level8Property, FractionLevel.level8Shapes ),
       // "Build a Fraction" Shapes level 9
-      new FractionLevel( 9, 4, BuildingType.SHAPE, fractionsCommonColorProfile.level9Property, FractionLevel.level9Shapes ),
+      new FractionLevel( 9, 4, BuildingType.SHAPE, FractionsCommonColors.level9Property, FractionLevel.level9Shapes ),
       // "Build a Fraction" Shapes level 10
-      new FractionLevel( 10, 4, BuildingType.SHAPE, fractionsCommonColorProfile.level10Property, FractionLevel.level10Shapes )
+      new FractionLevel( 10, 4, BuildingType.SHAPE, FractionsCommonColors.level10Property, FractionLevel.level10Shapes )
     ];
   }
 
@@ -203,46 +203,46 @@ class BuildingGameModel {
   static getNumberLevels( hasMixedNumbers ) {
     return hasMixedNumbers ? [
       // "Mixed Numbers" Numbers level 1
-      new FractionLevel( 1, 3, BuildingType.NUMBER, fractionsCommonColorProfile.level1Property, FractionLevel.level1NumbersMixed ),
+      new FractionLevel( 1, 3, BuildingType.NUMBER, FractionsCommonColors.level1Property, FractionLevel.level1NumbersMixed ),
       // "Mixed Numbers" Numbers level 2
-      new FractionLevel( 2, 3, BuildingType.NUMBER, fractionsCommonColorProfile.level2Property, FractionLevel.level2NumbersMixed ),
+      new FractionLevel( 2, 3, BuildingType.NUMBER, FractionsCommonColors.level2Property, FractionLevel.level2NumbersMixed ),
       // "Mixed Numbers" Numbers level 3
-      new FractionLevel( 3, 3, BuildingType.NUMBER, fractionsCommonColorProfile.level3Property, FractionLevel.level3NumbersMixed ),
+      new FractionLevel( 3, 3, BuildingType.NUMBER, FractionsCommonColors.level3Property, FractionLevel.level3NumbersMixed ),
       // "Mixed Numbers" Numbers level 4
-      new FractionLevel( 4, 3, BuildingType.NUMBER, fractionsCommonColorProfile.level4Property, FractionLevel.level4NumbersMixed ),
+      new FractionLevel( 4, 3, BuildingType.NUMBER, FractionsCommonColors.level4Property, FractionLevel.level4NumbersMixed ),
       // "Mixed Numbers" Numbers level 5
-      new FractionLevel( 5, 3, BuildingType.NUMBER, fractionsCommonColorProfile.level5Property, FractionLevel.level5NumbersMixed ),
+      new FractionLevel( 5, 3, BuildingType.NUMBER, FractionsCommonColors.level5Property, FractionLevel.level5NumbersMixed ),
       // "Mixed Numbers" Numbers level 6
-      new FractionLevel( 6, 4, BuildingType.NUMBER, fractionsCommonColorProfile.level6Property, FractionLevel.level6NumbersMixed ),
+      new FractionLevel( 6, 4, BuildingType.NUMBER, FractionsCommonColors.level6Property, FractionLevel.level6NumbersMixed ),
       // "Mixed Numbers" Numbers level 7
-      new FractionLevel( 7, 4, BuildingType.NUMBER, fractionsCommonColorProfile.level7Property, FractionLevel.level7NumbersMixed ),
+      new FractionLevel( 7, 4, BuildingType.NUMBER, FractionsCommonColors.level7Property, FractionLevel.level7NumbersMixed ),
       // "Mixed Numbers" Numbers level 8
-      new FractionLevel( 8, 4, BuildingType.NUMBER, fractionsCommonColorProfile.level8Property, FractionLevel.level8NumbersMixed ),
+      new FractionLevel( 8, 4, BuildingType.NUMBER, FractionsCommonColors.level8Property, FractionLevel.level8NumbersMixed ),
       // "Mixed Numbers" Numbers level 9
-      new FractionLevel( 9, 4, BuildingType.NUMBER, fractionsCommonColorProfile.level9Property, FractionLevel.level9NumbersMixed ),
+      new FractionLevel( 9, 4, BuildingType.NUMBER, FractionsCommonColors.level9Property, FractionLevel.level9NumbersMixed ),
       // "Mixed Numbers" Numbers level 10
-      new FractionLevel( 10, 4, BuildingType.NUMBER, fractionsCommonColorProfile.level10Property, FractionLevel.level10NumbersMixed )
+      new FractionLevel( 10, 4, BuildingType.NUMBER, FractionsCommonColors.level10Property, FractionLevel.level10NumbersMixed )
     ] : [
       // "Build a Fraction" Numbers level 1
-      new FractionLevel( 1, 3, BuildingType.NUMBER, fractionsCommonColorProfile.level1Property, FractionLevel.level1Numbers ),
+      new FractionLevel( 1, 3, BuildingType.NUMBER, FractionsCommonColors.level1Property, FractionLevel.level1Numbers ),
       // "Build a Fraction" Numbers level 2
-      new FractionLevel( 2, 3, BuildingType.NUMBER, fractionsCommonColorProfile.level2Property, FractionLevel.level2Numbers ),
+      new FractionLevel( 2, 3, BuildingType.NUMBER, FractionsCommonColors.level2Property, FractionLevel.level2Numbers ),
       // "Build a Fraction" Numbers level 3
-      new FractionLevel( 3, 3, BuildingType.NUMBER, fractionsCommonColorProfile.level3Property, FractionLevel.level3Numbers ),
+      new FractionLevel( 3, 3, BuildingType.NUMBER, FractionsCommonColors.level3Property, FractionLevel.level3Numbers ),
       // "Build a Fraction" Numbers level 4
-      new FractionLevel( 4, 3, BuildingType.NUMBER, fractionsCommonColorProfile.level4Property, FractionLevel.level4Numbers ),
+      new FractionLevel( 4, 3, BuildingType.NUMBER, FractionsCommonColors.level4Property, FractionLevel.level4Numbers ),
       // "Build a Fraction" Numbers level 5
-      new FractionLevel( 5, 3, BuildingType.NUMBER, fractionsCommonColorProfile.level5Property, FractionLevel.level5Numbers ),
+      new FractionLevel( 5, 3, BuildingType.NUMBER, FractionsCommonColors.level5Property, FractionLevel.level5Numbers ),
       // "Build a Fraction" Numbers level 6
-      new FractionLevel( 6, 4, BuildingType.NUMBER, fractionsCommonColorProfile.level6Property, FractionLevel.level6Numbers ),
+      new FractionLevel( 6, 4, BuildingType.NUMBER, FractionsCommonColors.level6Property, FractionLevel.level6Numbers ),
       // "Build a Fraction" Numbers level 7
-      new FractionLevel( 7, 4, BuildingType.NUMBER, fractionsCommonColorProfile.level7Property, FractionLevel.level7Numbers ),
+      new FractionLevel( 7, 4, BuildingType.NUMBER, FractionsCommonColors.level7Property, FractionLevel.level7Numbers ),
       // "Build a Fraction" Numbers level 8
-      new FractionLevel( 8, 4, BuildingType.NUMBER, fractionsCommonColorProfile.level8Property, FractionLevel.level8Numbers ),
+      new FractionLevel( 8, 4, BuildingType.NUMBER, FractionsCommonColors.level8Property, FractionLevel.level8Numbers ),
       // "Build a Fraction" Numbers level 9
-      new FractionLevel( 9, 4, BuildingType.NUMBER, fractionsCommonColorProfile.level9Property, FractionLevel.level9Numbers ),
+      new FractionLevel( 9, 4, BuildingType.NUMBER, FractionsCommonColors.level9Property, FractionLevel.level9Numbers ),
       // "Build a Fraction" Numbers level 10
-      new FractionLevel( 10, 4, BuildingType.NUMBER, fractionsCommonColorProfile.level10Property, FractionLevel.level10Numbers )
+      new FractionLevel( 10, 4, BuildingType.NUMBER, FractionsCommonColors.level10Property, FractionLevel.level10Numbers )
     ];
   }
 }

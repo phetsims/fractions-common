@@ -12,7 +12,7 @@ import Node from '../../../../../scenery/js/nodes/Node.js';
 import Rectangle from '../../../../../scenery/js/nodes/Rectangle.js';
 import ColorDef from '../../../../../scenery/js/util/ColorDef.js';
 import FractionsCommonConstants from '../../../common/FractionsCommonConstants.js';
-import fractionsCommonColorProfile from '../../../common/view/fractionsCommonColorProfile.js';
+import FractionsCommonColors from '../../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../../fractionsCommon.js';
 import RectangularOrientation from '../RectangularOrientation.js';
 
@@ -56,8 +56,8 @@ class RectangularNode extends Node {
     }
 
     const defaultColor = options.rectangularOrientation === RectangularOrientation.HORIZONTAL
-                         ? fractionsCommonColorProfile.introHorizontalBarProperty
-                         : fractionsCommonColorProfile.introVerticalBarProperty;
+                         ? FractionsCommonColors.introHorizontalBarProperty
+                         : FractionsCommonColors.introVerticalBarProperty;
 
     const mainRectangle = new Rectangle( {
       rectX: -rectWidth / 2,
@@ -72,7 +72,7 @@ class RectangularNode extends Node {
       center: mainRectangle.center.plusScalar( FractionsCommonConstants.INTRO_DROP_SHADOW_OFFSET ),
       rectWidth: rectWidth,
       rectHeight: rectHeight,
-      fill: fractionsCommonColorProfile.introShapeShadowProperty
+      fill: FractionsCommonColors.introShapeShadowProperty
     } );
 
     this.children = [
