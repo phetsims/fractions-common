@@ -8,8 +8,8 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
-import ColorDef from '../../../../scenery/js/util/ColorDef.js';
+import { Node } from '../../../../scenery/js/imports.js';
+import { ColorDef } from '../../../../scenery/js/imports.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import Container from '../model/Container.js';
 

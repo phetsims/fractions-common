@@ -7,7 +7,7 @@
  */
 
 import Property from '../../../../../axon/js/Property.js';
-import DragListener from '../../../../../scenery/js/listeners/DragListener.js';
+import { DragListener } from '../../../../../scenery/js/imports.js';
 import fractionsCommon from '../../../fractionsCommon.js';
 import ContainerNode from '../ContainerNode.js';
 import BeakerNode from './BeakerNode.js';

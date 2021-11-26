@@ -9,9 +9,9 @@
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
-import DragListener from '../../../../scenery/js/listeners/DragListener.js';
-import HBox from '../../../../scenery/js/nodes/HBox.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import { DragListener } from '../../../../scenery/js/imports.js';
+import { HBox } from '../../../../scenery/js/imports.js';
+import { Node } from '../../../../scenery/js/imports.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import NumberGroupStack from '../model/NumberGroupStack.js';
 import NumberStack from '../model/NumberStack.js';

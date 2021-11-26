@@ -10,9 +10,9 @@
 
 import Shape from '../../../../../kite/js/Shape.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
-import Node from '../../../../../scenery/js/nodes/Node.js';
-import Path from '../../../../../scenery/js/nodes/Path.js';
-import Text from '../../../../../scenery/js/nodes/Text.js';
+import { Node } from '../../../../../scenery/js/imports.js';
+import { Path } from '../../../../../scenery/js/imports.js';
+import { Text } from '../../../../../scenery/js/imports.js';
 import fractionsCommon from '../../../fractionsCommon.js';
 import SceneNode from '../SceneNode.js';
 import NumberLineNode from './NumberLineNode.js';

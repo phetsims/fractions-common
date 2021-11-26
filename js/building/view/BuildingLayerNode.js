@@ -9,7 +9,7 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
-import Node from '../../../../scenery/js/nodes/Node.js';
+import { Node } from '../../../../scenery/js/imports.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import NumberGroupNode from './NumberGroupNode.js';
 import NumberPieceNode from './NumberPieceNode.js';

@@ -10,7 +10,7 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
-import ColorDef from '../../../../scenery/js/util/ColorDef.js';
+import { ColorDef } from '../../../../scenery/js/imports.js';
 import BuildingModel from '../../building/model/BuildingModel.js';
 import BuildingRepresentation from '../../building/model/BuildingRepresentation.js';
 import Group from '../../building/model/Group.js';

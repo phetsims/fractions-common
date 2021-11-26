@@ -7,7 +7,7 @@
  */
 
 import Shape from '../../../../../kite/js/Shape.js';
-import Path from '../../../../../scenery/js/nodes/Path.js';
+import { Path } from '../../../../../scenery/js/imports.js';
 import fractionsCommon from '../../../fractionsCommon.js';
 import CellContainerNode from '../CellContainerNode.js';
 import CakeNode from './CakeNode.js';
