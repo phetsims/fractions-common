@@ -6,10 +6,10 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import fractionsCommon from '../../fractionsCommon.js';
 
-const NumberLineOrientation = Enumeration.byKeys( [
+const NumberLineOrientation = EnumerationDeprecated.byKeys( [
   'HORIZONTAL',
   'VERTICAL'
 ] );

@@ -6,10 +6,10 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import fractionsCommon from '../../fractionsCommon.js';
 
-const FillType = Enumeration.byKeys( [
+const FillType = EnumerationDeprecated.byKeys( [
   'SEQUENTIAL',
   'MIXED', // when number of shapes > 1, first shape will be completely filled and the 2nd shape will be random
   'RANDOM'

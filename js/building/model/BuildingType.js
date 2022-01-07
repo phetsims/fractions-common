@@ -6,10 +6,10 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import fractionsCommon from '../../fractionsCommon.js';
 
-const BuildingType = Enumeration.byKeys( [
+const BuildingType = EnumerationDeprecated.byKeys( [
   'SHAPE',
   'NUMBER'
 ] );

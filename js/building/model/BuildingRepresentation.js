@@ -7,10 +7,10 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import fractionsCommon from '../../fractionsCommon.js';
 
-const BuildingRepresentation = Enumeration.byKeys( [
+const BuildingRepresentation = EnumerationDeprecated.byKeys( [
   'PIE',
   'BAR'
 ], {

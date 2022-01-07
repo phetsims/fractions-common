@@ -12,7 +12,7 @@ import Emitter from '../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
-import Enumeration from '../../../../phet-core/js/Enumeration.js';
+import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
@@ -344,8 +344,8 @@ class MatchingChallenge {
   }
 }
 
-// @public {Enumeration} - The main state values for the model
-MatchingChallenge.State = Enumeration.byKeys( [
+// @public {EnumerationDeprecated} - The main state values for the model
+MatchingChallenge.State = EnumerationDeprecated.byKeys( [
   'NO_COMPARISON',
   'COMPARISON',
   'MATCHED',
