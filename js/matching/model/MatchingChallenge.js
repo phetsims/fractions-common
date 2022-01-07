@@ -1,4 +1,4 @@
-// Copyright 2019-2021, University of Colorado Boulder
+// Copyright 2019-2022, University of Colorado Boulder
 
 /**
  * Represents a specific challenge (set of fractions/pieces/targets and the given state of its solution).

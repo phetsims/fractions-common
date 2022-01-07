@@ -1,4 +1,4 @@
-// Copyright 2018-2020, University of Colorado Boulder
+// Copyright 2018-2022, University of Colorado Boulder
 
 /**
  * Represents the three main different styles of game challenges.
