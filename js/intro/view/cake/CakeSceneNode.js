@@ -8,7 +8,7 @@
 
 import merge from '../../../../../phet-core/js/merge.js';
 import { Image } from '../../../../../scenery/js/imports.js';
-import cakeImage from '../../../../mipmaps/cake_1_1_png.js';
+import cake_1_1_png from '../../../../mipmaps/cake_1_1_png.js';
 import fractionsCommon from '../../../fractionsCommon.js';
 import CellSceneNode from '../CellSceneNode.js';
 import CakeContainerNode from './CakeContainerNode.js';
@@ -42,7 +42,7 @@ class CakeSceneNode extends CellSceneNode {
    * @returns {Node}
    */
   static getIcon() {
-    return new Image( cakeImage, {
+    return new Image( cake_1_1_png, {
       maxHeight: 75
     } );
   }

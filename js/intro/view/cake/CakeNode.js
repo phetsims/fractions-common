@@ -18,42 +18,42 @@ import merge from '../../../../../phet-core/js/merge.js';
 import { Image } from '../../../../../scenery/js/imports.js';
 import { Node } from '../../../../../scenery/js/imports.js';
 import { Path } from '../../../../../scenery/js/imports.js';
-import cake_1_1Image from '../../../../mipmaps/cake_1_1_png.js';
-import cake_2_1Image from '../../../../mipmaps/cake_2_1_png.js';
-import cake_2_2Image from '../../../../mipmaps/cake_2_2_png.js';
-import cake_3_1Image from '../../../../mipmaps/cake_3_1_png.js';
-import cake_3_2Image from '../../../../mipmaps/cake_3_2_png.js';
-import cake_3_3Image from '../../../../mipmaps/cake_3_3_png.js';
-import cake_4_1Image from '../../../../mipmaps/cake_4_1_png.js';
-import cake_4_2Image from '../../../../mipmaps/cake_4_2_png.js';
-import cake_4_3Image from '../../../../mipmaps/cake_4_3_png.js';
-import cake_4_4Image from '../../../../mipmaps/cake_4_4_png.js';
-import cake_5_1Image from '../../../../mipmaps/cake_5_1_png.js';
-import cake_5_2Image from '../../../../mipmaps/cake_5_2_png.js';
-import cake_5_3Image from '../../../../mipmaps/cake_5_3_png.js';
-import cake_5_4Image from '../../../../mipmaps/cake_5_4_png.js';
-import cake_5_5Image from '../../../../mipmaps/cake_5_5_png.js';
-import cake_6_1Image from '../../../../mipmaps/cake_6_1_png.js';
-import cake_6_2Image from '../../../../mipmaps/cake_6_2_png.js';
-import cake_6_3Image from '../../../../mipmaps/cake_6_3_png.js';
-import cake_6_4Image from '../../../../mipmaps/cake_6_4_png.js';
-import cake_6_5Image from '../../../../mipmaps/cake_6_5_png.js';
-import cake_6_6Image from '../../../../mipmaps/cake_6_6_png.js';
-import cake_7_1Image from '../../../../mipmaps/cake_7_1_png.js';
-import cake_7_2Image from '../../../../mipmaps/cake_7_2_png.js';
-import cake_7_3Image from '../../../../mipmaps/cake_7_3_png.js';
-import cake_7_4Image from '../../../../mipmaps/cake_7_4_png.js';
-import cake_7_5Image from '../../../../mipmaps/cake_7_5_png.js';
-import cake_7_6Image from '../../../../mipmaps/cake_7_6_png.js';
-import cake_7_7Image from '../../../../mipmaps/cake_7_7_png.js';
-import cake_8_1Image from '../../../../mipmaps/cake_8_1_png.js';
-import cake_8_2Image from '../../../../mipmaps/cake_8_2_png.js';
-import cake_8_3Image from '../../../../mipmaps/cake_8_3_png.js';
-import cake_8_4Image from '../../../../mipmaps/cake_8_4_png.js';
-import cake_8_5Image from '../../../../mipmaps/cake_8_5_png.js';
-import cake_8_6Image from '../../../../mipmaps/cake_8_6_png.js';
-import cake_8_7Image from '../../../../mipmaps/cake_8_7_png.js';
-import cake_8_8Image from '../../../../mipmaps/cake_8_8_png.js';
+import cake_1_1_png from '../../../../mipmaps/cake_1_1_png.js';
+import cake_2_1_png from '../../../../mipmaps/cake_2_1_png.js';
+import cake_2_2_png from '../../../../mipmaps/cake_2_2_png.js';
+import cake_3_1_png from '../../../../mipmaps/cake_3_1_png.js';
+import cake_3_2_png from '../../../../mipmaps/cake_3_2_png.js';
+import cake_3_3_png from '../../../../mipmaps/cake_3_3_png.js';
+import cake_4_1_png from '../../../../mipmaps/cake_4_1_png.js';
+import cake_4_2_png from '../../../../mipmaps/cake_4_2_png.js';
+import cake_4_3_png from '../../../../mipmaps/cake_4_3_png.js';
+import cake_4_4_png from '../../../../mipmaps/cake_4_4_png.js';
+import cake_5_1_png from '../../../../mipmaps/cake_5_1_png.js';
+import cake_5_2_png from '../../../../mipmaps/cake_5_2_png.js';
+import cake_5_3_png from '../../../../mipmaps/cake_5_3_png.js';
+import cake_5_4_png from '../../../../mipmaps/cake_5_4_png.js';
+import cake_5_5_png from '../../../../mipmaps/cake_5_5_png.js';
+import cake_6_1_png from '../../../../mipmaps/cake_6_1_png.js';
+import cake_6_2_png from '../../../../mipmaps/cake_6_2_png.js';
+import cake_6_3_png from '../../../../mipmaps/cake_6_3_png.js';
+import cake_6_4_png from '../../../../mipmaps/cake_6_4_png.js';
+import cake_6_5_png from '../../../../mipmaps/cake_6_5_png.js';
+import cake_6_6_png from '../../../../mipmaps/cake_6_6_png.js';
+import cake_7_1_png from '../../../../mipmaps/cake_7_1_png.js';
+import cake_7_2_png from '../../../../mipmaps/cake_7_2_png.js';
+import cake_7_3_png from '../../../../mipmaps/cake_7_3_png.js';
+import cake_7_4_png from '../../../../mipmaps/cake_7_4_png.js';
+import cake_7_5_png from '../../../../mipmaps/cake_7_5_png.js';
+import cake_7_6_png from '../../../../mipmaps/cake_7_6_png.js';
+import cake_7_7_png from '../../../../mipmaps/cake_7_7_png.js';
+import cake_8_1_png from '../../../../mipmaps/cake_8_1_png.js';
+import cake_8_2_png from '../../../../mipmaps/cake_8_2_png.js';
+import cake_8_3_png from '../../../../mipmaps/cake_8_3_png.js';
+import cake_8_4_png from '../../../../mipmaps/cake_8_4_png.js';
+import cake_8_5_png from '../../../../mipmaps/cake_8_5_png.js';
+import cake_8_6_png from '../../../../mipmaps/cake_8_6_png.js';
+import cake_8_7_png from '../../../../mipmaps/cake_8_7_png.js';
+import cake_8_8_png from '../../../../mipmaps/cake_8_8_png.js';
 import FractionsCommonConstants from '../../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../../fractionsCommon.js';
@@ -63,14 +63,14 @@ import fractionsCommon from '../../../fractionsCommon.js';
 // {Array.<Array.<Array.<*>>>} - cakeImageArray[ denominator + 1 ][ rotationalIndex ] will be something that can be
 // passed to scenery Images.
 const cakeImageArray = [
-  [ cake_1_1Image ],
-  [ cake_2_2Image, cake_2_1Image ],
-  [ cake_3_1Image, cake_3_2Image, cake_3_3Image ],
-  [ cake_4_1Image, cake_4_2Image, cake_4_3Image, cake_4_4Image ],
-  [ cake_5_1Image, cake_5_2Image, cake_5_3Image, cake_5_4Image, cake_5_5Image ],
-  [ cake_6_1Image, cake_6_2Image, cake_6_3Image, cake_6_4Image, cake_6_5Image, cake_6_6Image ],
-  [ cake_7_1Image, cake_7_2Image, cake_7_3Image, cake_7_4Image, cake_7_5Image, cake_7_6Image, cake_7_7Image ],
-  [ cake_8_1Image, cake_8_2Image, cake_8_3Image, cake_8_4Image, cake_8_5Image, cake_8_6Image, cake_8_7Image, cake_8_8Image ]
+  [ cake_1_1_png ],
+  [ cake_2_2_png, cake_2_1_png ],
+  [ cake_3_1_png, cake_3_2_png, cake_3_3_png ],
+  [ cake_4_1_png, cake_4_2_png, cake_4_3_png, cake_4_4_png ],
+  [ cake_5_1_png, cake_5_2_png, cake_5_3_png, cake_5_4_png, cake_5_5_png ],
+  [ cake_6_1_png, cake_6_2_png, cake_6_3_png, cake_6_4_png, cake_6_5_png, cake_6_6_png ],
+  [ cake_7_1_png, cake_7_2_png, cake_7_3_png, cake_7_4_png, cake_7_5_png, cake_7_6_png, cake_7_7_png ],
+  [ cake_8_1_png, cake_8_2_png, cake_8_3_png, cake_8_4_png, cake_8_5_png, cake_8_6_png, cake_8_7_png, cake_8_8_png ]
 ];
 
 // We create a matching mathematical model of the cake's "positions", tuned by hand so that the shapes will match the

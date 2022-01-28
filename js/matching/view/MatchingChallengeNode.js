@@ -27,7 +27,7 @@ import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import LevelCompletedNode from '../../../../vegas/js/LevelCompletedNode.js';
 import RewardNode from '../../../../vegas/js/RewardNode.js';
 import vegasStrings from '../../../../vegas/js/vegasStrings.js';
-import scaleImage from '../../../images/scale_png.js';
+import scale_png from '../../../images/scale_png.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import fractionsCommonStrings from '../../fractionsCommonStrings.js';
@@ -133,7 +133,7 @@ class MatchingChallengeNode extends Node {
 
     // Scales
     _.range( 0, 2 ).forEach( index => {
-      const scaleNode = new Image( scaleImage, {
+      const scaleNode = new Image( scale_png, {
         centerX: layoutBounds.centerX + ( index - 0.5 ) * 380,
         y: 260,
         scale: 0.52
