@@ -125,10 +125,10 @@ class GroupNode extends Node {
         options.selectListener && options.selectListener( pointer );
         this.moveToFront();
       },
-      drag: ( event, listener ) => {
+      drag: () => {
         options.dragListener && options.dragListener( pointer );
       },
-      end: listener => {
+      end: () => {
         options.dropListener && options.dropListener( pointer );
       }
     } );
