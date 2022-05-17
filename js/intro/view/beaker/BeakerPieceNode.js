@@ -20,10 +20,11 @@ class BeakerPieceNode extends PieceNode {
    */
   constructor( piece, finishedAnimatingCallback, droppedCallback ) {
     super( piece, finishedAnimatingCallback, droppedCallback, {
-      graphic: new BeakerNode( new NumberProperty( 1 / piece.denominator, {
-        showTicks: true,
-        numTicks: piece.denominator
-      } ) )
+      graphic: new BeakerNode( new NumberProperty( 1 / piece.denominator ), {
+          showTicks: true,
+          numTicks: piece.denominator
+        }
+      )
     } );
   }
 }
