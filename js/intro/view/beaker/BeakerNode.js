@@ -31,7 +31,7 @@ class FractionsCommonBeakerNode extends BeakerNode {
       emptyBeakerFill: EMPTY_BEAKER_COLOR,
       solutionFill: WATER_COLOR,
       beakerGlareFill: BEAKER_SHINE_COLOR,
-      fullHeight: FractionsCommonBeakerNode.DEFAULT_BEAKER_HEIGHT,
+      beakerHeight: FractionsCommonBeakerNode.DEFAULT_BEAKER_HEIGHT,
       xRadius: 40,
       yRadius: 12,
       numTicks: denominator,

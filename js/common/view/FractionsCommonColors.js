@@ -35,7 +35,7 @@ const FractionsCommonColors = {
   introShapeShadowProperty: new ProfileColorProperty( fractionsCommon, 'introShapeShadow', { default: new Color( 0, 0, 0, 0.5 ) } ),
   emptyBeakerProperty: new ProfileColorProperty( fractionsCommon, 'emptyBeaker', { default: new Color( 150, 150, 150, 0.1 ) } ),
   waterProperty: new ProfileColorProperty( fractionsCommon, 'water', { default: new Color( 30, 163, 255, 0.8 ) } ),
-  beakerShineProperty: new ProfileColorProperty( fractionsCommon, 'beakerShine', { default: new Color( 255, 255, 255, 0.7 ) } ),
+  beakerShineProperty: new ProfileColorProperty( fractionsCommon, 'beakerShine', { default: new Color( 255, 255, 255, 0.4 ) } ),
 
   mixedFractionStrongProperty: new ProfileColorProperty( fractionsCommon, 'mixedFractionStrong', { default: Color.BLACK } ),
   mixedFractionWeakProperty: new ProfileColorProperty( fractionsCommon, 'mixedFractionWeak', { default: new Color( 170, 170, 170 ) } ),
