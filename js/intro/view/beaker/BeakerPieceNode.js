@@ -8,9 +8,7 @@
 
 import fractionsCommon from '../../../fractionsCommon.js';
 import PieceNode from '../PieceNode.js';
-// import BeakerNode from './BeakerNode.js';
-import BeakerNode from '../../../../../scenery-phet/js/BeakerNode.js';
-import NumberProperty from '../../../../../axon/js/NumberProperty.js';
+import BeakerNode from './BeakerNode.js';
 
 class BeakerPieceNode extends PieceNode {
   /**
@@ -20,11 +18,7 @@ class BeakerPieceNode extends PieceNode {
    */
   constructor( piece, finishedAnimatingCallback, droppedCallback ) {
     super( piece, finishedAnimatingCallback, droppedCallback, {
-      graphic: new BeakerNode( new NumberProperty( 1 / piece.denominator ), {
-          showTicks: true,
-          numTicks: piece.denominator
-        }
-      )
+      graphic: new BeakerNode( 1, piece.denominator )
     } );
   }
 }

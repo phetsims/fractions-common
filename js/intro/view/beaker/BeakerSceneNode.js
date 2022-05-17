@@ -11,10 +11,8 @@ import FractionsCommonColors from '../../../common/view/FractionsCommonColors.js
 import fractionsCommon from '../../../fractionsCommon.js';
 import CellSceneNode from '../CellSceneNode.js';
 import BeakerContainerNode from './BeakerContainerNode.js';
-// import BeakerNode from './BeakerNode.js';
-import BeakerNode from '../../../../../scenery-phet/js/BeakerNode.js';
+import BeakerNode from './BeakerNode.js';
 import BeakerPieceNode from './BeakerPieceNode.js';
-import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 
 class BeakerSceneNode extends CellSceneNode {
   /**
@@ -30,8 +28,7 @@ class BeakerSceneNode extends CellSceneNode {
         return new BeakerPieceNode( piece, finishedAnimatingCallback, droppedCallback );
       },
       createCellNode( denominator, index, options ) {
-        const waterHeightProperty = new NumberProperty( 1 / denominator );
-        return new BeakerNode( waterHeightProperty, options );
+        return new BeakerNode( 1, denominator, options );
       }
     }, options ) );
   }
@@ -44,11 +41,11 @@ class BeakerSceneNode extends CellSceneNode {
    * @returns {Node}
    */
   static getIcon( useEqualityLabColor ) {
-    return new BeakerNode( new NumberProperty( 1 ), {
+    return new BeakerNode( 1, 1, {
       yRadius: 4.5,
       xRadius: 15,
       beakerHeight: 55,
-      fill: useEqualityLabColor ? FractionsCommonColors.equalityLabWaterProperty : FractionsCommonColors.waterProperty
+      solutionFill: useEqualityLabColor ? FractionsCommonColors.equalityLabWaterProperty : FractionsCommonColors.waterProperty
     } );
   }
 }
