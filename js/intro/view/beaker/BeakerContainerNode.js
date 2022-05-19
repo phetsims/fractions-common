@@ -10,7 +10,7 @@ import Multilink from '../../../../../axon/js/Multilink.js';
 import { DragListener } from '../../../../../scenery/js/imports.js';
 import fractionsCommon from '../../../fractionsCommon.js';
 import ContainerNode from '../ContainerNode.js';
-import BeakerNode from './BeakerNode.js';
+import FractionsCommonBeakerNode from './FractionsCommonBeakerNode.js';
 
 class BeakerContainerNode extends ContainerNode {
   /**
@@ -25,7 +25,7 @@ class BeakerContainerNode extends ContainerNode {
       // Sanity, if these get modified out of order (very possible)
       numerator = Math.min( numerator, denominator );
       this.children = [
-        new BeakerNode( numerator, denominator )
+        new FractionsCommonBeakerNode( numerator, denominator )
       ];
     } );
 

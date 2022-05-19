@@ -8,7 +8,7 @@
 
 import fractionsCommon from '../../../fractionsCommon.js';
 import PieceNode from '../PieceNode.js';
-import BeakerNode from './BeakerNode.js';
+import FractionsCommonBeakerNode from './FractionsCommonBeakerNode.js';
 
 class BeakerPieceNode extends PieceNode {
   /**
@@ -18,7 +18,7 @@ class BeakerPieceNode extends PieceNode {
    */
   constructor( piece, finishedAnimatingCallback, droppedCallback ) {
     super( piece, finishedAnimatingCallback, droppedCallback, {
-      graphic: new BeakerNode( 1, piece.denominator )
+      graphic: new FractionsCommonBeakerNode( 1, piece.denominator )
     } );
   }
 }
