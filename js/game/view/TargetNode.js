@@ -192,10 +192,12 @@ class TargetNode extends HBox {
           adaptiveScale: true
         } ) )
       } );
-      this.addChild( box );
       const quantity = target.filledPartitions.length;
       const combinedMaxWidth = maxWidth * quantity + padding * ( quantity - 1 );
-      box.localBounds = box.localBounds.withMaxX( box.localBounds.minX + combinedMaxWidth );
+      this.addChild( new Node( {
+        children: [ box ],
+        localBounds: box.localBounds.withMaxX( box.localBounds.minX + combinedMaxWidth )
+      } ) );
     }
     else {
       const whole = challenge.hasMixedTargets ? Math.floor( target.fraction.value ) : null;
