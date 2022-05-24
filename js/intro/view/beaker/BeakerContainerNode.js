@@ -6,7 +6,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Property from '../../../../../axon/js/Property.js';
+import Multilink from '../../../../../axon/js/Multilink.js';
 import { DragListener } from '../../../../../scenery/js/imports.js';
 import fractionsCommon from '../../../fractionsCommon.js';
 import ContainerNode from '../ContainerNode.js';
@@ -21,7 +21,7 @@ class BeakerContainerNode extends ContainerNode {
     super( container, options );
 
     // @private {Multilink}
-    this.multilink = Property.multilink( [ container.appearsFilledCellCountProperty, container.cells.lengthProperty ], ( numerator, denominator ) => {
+    this.multilink = Multilink.multilink( [ container.appearsFilledCellCountProperty, container.cells.lengthProperty ], ( numerator, denominator ) => {
       // Sanity, if these get modified out of order (very possible)
       numerator = Math.min( numerator, denominator );
 

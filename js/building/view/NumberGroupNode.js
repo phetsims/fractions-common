@@ -7,15 +7,11 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import Property from '../../../../axon/js/Property.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import merge from '../../../../phet-core/js/merge.js';
-import { Line } from '../../../../scenery/js/imports.js';
-import { Node } from '../../../../scenery/js/imports.js';
-import { Path } from '../../../../scenery/js/imports.js';
-import { Rectangle } from '../../../../scenery/js/imports.js';
-import { Text } from '../../../../scenery/js/imports.js';
+import { Line, Node, Path, Rectangle, Text } from '../../../../scenery/js/imports.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../fractionsCommon.js';
@@ -67,7 +63,7 @@ class NumberGroupNode extends GroupNode {
         lineWidth: 3,
         center: outline.center
       } );
-      this.itemsToDispose.push( Property.multilink( [ spot.pieceProperty, spot.showNotAllowedProperty ], ( piece, notAllowed ) => {
+      this.itemsToDispose.push( Multilink.multilink( [ spot.pieceProperty, spot.showNotAllowedProperty ], ( piece, notAllowed ) => {
         if ( piece !== null ) {
           text.text = piece.number;
           text.center = outline.center;
@@ -128,7 +124,7 @@ class NumberGroupNode extends GroupNode {
     this.numberGroup.hasDoubleDigitsProperty.link( this.fractionLineLengthListener );
 
     // @private {function}
-    this.undoVisibilityListener = Property.multilink( [ numberGroup.hasPiecesProperty, this.isSelectedProperty ], ( hasPieces, isSelected ) => {
+    this.undoVisibilityListener = Multilink.multilink( [ numberGroup.hasPiecesProperty, this.isSelectedProperty ], ( hasPieces, isSelected ) => {
       this.returnButton.visible = hasPieces && isSelected;
     } );
     this.itemsToDispose.push( this.undoVisibilityListener );

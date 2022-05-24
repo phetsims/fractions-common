@@ -9,6 +9,7 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
@@ -96,7 +97,7 @@ class ShapePiece {
 
     // Handle rotational animation towards a target (if any)
     // No need to unlink, as we own the given Properties
-    Property.multilink( [ this.isUserControlledProperty, this.targetRotationProperty ], ( isUserControlled, targetRotation ) => {
+    Multilink.multilink( [ this.isUserControlledProperty, this.targetRotationProperty ], ( isUserControlled, targetRotation ) => {
       if ( isUserControlled ) {
         const currentRotation = this.rotationProperty.value;
         this.trueTargetRotation = Animator.modifiedEndAngle( currentRotation, this.targetRotationProperty.value );

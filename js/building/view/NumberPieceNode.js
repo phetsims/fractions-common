@@ -6,7 +6,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Property from '../../../../axon/js/Property.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import { DragListener } from '../../../../scenery/js/imports.js';
@@ -74,7 +74,7 @@ class NumberPieceNode extends Node {
     }
 
     // @private {function}
-    this.visibilityListener = Property.multilink( [
+    this.visibilityListener = Multilink.multilink( [
       numberPiece.isUserControlledProperty,
       numberPiece.isAnimatingProperty
     ], ( isUserControlled, isAnimating ) => {

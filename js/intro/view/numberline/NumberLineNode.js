@@ -7,7 +7,7 @@
  */
 
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
-import Property from '../../../../../axon/js/Property.js';
+import Multilink from '../../../../../axon/js/Multilink.js';
 import Bounds2 from '../../../../../dot/js/Bounds2.js';
 import Utils from '../../../../../dot/js/Utils.js';
 import { Shape } from '../../../../../kite/js/imports.js';
@@ -174,7 +174,7 @@ class NumberLineNode extends Node {
     this.containerCountProperty.link( this.containerCountListener );
 
     // @private {Multilink}
-    this.minorTickMultilink = Property.multilink( [
+    this.minorTickMultilink = Multilink.multilink( [
       denominatorProperty,
       containerCountProperty
     ], ( denominator, containerCount ) => {
@@ -194,7 +194,7 @@ class NumberLineNode extends Node {
     } );
 
     // @private {Multilink}
-    this.multipliedTickMultilink = Property.multilink( [
+    this.multipliedTickMultilink = Multilink.multilink( [
       denominatorProperty,
       containerCountProperty,
       options.multiplierProperty
@@ -216,7 +216,7 @@ class NumberLineNode extends Node {
     } );
 
     // @private {Multilink}
-    this.markerMultilink = Property.multilink( [
+    this.markerMultilink = Multilink.multilink( [
       numeratorProperty,
       denominatorProperty
     ], ( numerator, denominator ) => {

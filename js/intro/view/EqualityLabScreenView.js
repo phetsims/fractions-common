@@ -7,7 +7,7 @@
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import Property from '../../../../axon/js/Property.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import MathSymbols from '../../../../scenery-phet/js/MathSymbols.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
@@ -186,7 +186,7 @@ class EqualityLabScreenView extends ContainerSetScreenView {
       FractionsCommonColors.equalityLabColorProperty
     ], color => color.withAlpha( 0.8 ) );
 
-    Property.multilink( [ model.representationProperty, model.showNumberLineProperty ], ( representation, showNumberLine ) => {
+    Multilink.multilink( [ model.representationProperty, model.showNumberLineProperty ], ( representation, showNumberLine ) => {
       representation = showNumberLine ? IntroRepresentation.NUMBER_LINE : representation;
       if ( representation !== lastRepresentation ) {
         containerNodes.forEach( containerNode => containerNode.dispose() );

@@ -9,6 +9,7 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Emitter from '../../../../axon/js/Emitter.js';
+import Multilink from '../../../../axon/js/Multilink.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import dotRandom from '../../../../dot/js/dotRandom.js';
@@ -192,7 +193,7 @@ class MatchingChallenge {
 
     // @private {Array.<MatchPiece>}
     this.lastFailedPair = [];
-    Property.multilink( this.scaleSpots.map( scaleSpot => scaleSpot.pieceProperty ), ( leftPiece, rightPiece ) => {
+    Multilink.multilink( this.scaleSpots.map( scaleSpot => scaleSpot.pieceProperty ), ( leftPiece, rightPiece ) => {
       if ( !leftPiece || !rightPiece ) {
         this.stateProperty.value = MatchingChallenge.State.NO_COMPARISON;
       }
