@@ -6,7 +6,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Property, { AbstractProperty } from '../../../../axon/js/Property.js';
+import Property, { ReadOnlyProperty } from '../../../../axon/js/Property.js';
 import Matrix3 from '../../../../dot/js/Matrix3.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import merge from '../../../../phet-core/js/merge.js';
@@ -18,14 +18,14 @@ import fractionsCommon from '../../fractionsCommon.js';
 class RoundNumberSpinner extends VBox {
   /**
    * @param {Property.<number>} numberProperty
-   * @param {AbstractProperty.<boolean>} increaseEnabledProperty
-   * @param {AbstractProperty.<boolean>} decreaseEnabledProperty
+   * @param {ReadOnlyProperty.<boolean>} increaseEnabledProperty
+   * @param {ReadOnlyProperty.<boolean>} decreaseEnabledProperty
    * @param {Object} [options]
    */
   constructor( numberProperty, increaseEnabledProperty, decreaseEnabledProperty, options ) {
     assert && assert( numberProperty instanceof Property );
-    assert && assert( increaseEnabledProperty instanceof AbstractProperty );
-    assert && assert( decreaseEnabledProperty instanceof AbstractProperty );
+    assert && assert( increaseEnabledProperty instanceof ReadOnlyProperty );
+    assert && assert( decreaseEnabledProperty instanceof ReadOnlyProperty );
 
     options = merge( {
       baseColor: FractionsCommonColors.yellowRoundArrowButtonProperty,
