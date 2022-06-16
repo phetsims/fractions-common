@@ -34,7 +34,7 @@ class FractionsCommonBeakerNode extends BeakerNode {
       beakerHeight: FractionsCommonBeakerNode.DEFAULT_BEAKER_HEIGHT,
       xRadius: 40,
       yRadius: 12,
-      numTicks: denominator,
+      numberOfTicks: denominator,
       showTicks: true,
       stroke: 'grey'
     }, options );
