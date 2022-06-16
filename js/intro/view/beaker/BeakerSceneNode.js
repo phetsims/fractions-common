@@ -42,9 +42,9 @@ class BeakerSceneNode extends CellSceneNode {
    */
   static getIcon( useEqualityLabColor ) {
     return new FractionsCommonBeakerNode( 1, 1, {
-      yRadius: 4.5,
-      xRadius: 15,
+      beakerWidth: 30,
       beakerHeight: 55,
+      yRadiusOfEnds: 4.5,
       solutionFill: useEqualityLabColor ? FractionsCommonColors.equalityLabWaterProperty : FractionsCommonColors.waterProperty
     } );
   }
