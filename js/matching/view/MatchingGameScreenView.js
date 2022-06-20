@@ -330,11 +330,10 @@ class MatchingGameScreenView extends ScreenView {
         const button = new LevelSelectionButton( icons[ index ], level.levelSelectionScoreProperty, {
           buttonWidth: 110,
           buttonHeight: 200,
-          scoreDisplayConstructor: ScoreDisplayStars,
-          scoreDisplayOptions: {
+          createScoreDisplay: scoreProperty => new ScoreDisplayStars( scoreProperty, {
             numberOfStars: 3,
             perfectScore: 12
-          },
+          } ),
           listener: () => {
             this.model.levelProperty.value = level;
           },
