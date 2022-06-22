@@ -39,7 +39,7 @@ class FractionsCommonBeakerNode extends BeakerNode {
       stroke: 'grey'
     }, options );
     const waterLevelProperty = new NumberProperty( numerator / denominator );
-    super( waterLevelProperty, options );
+    super( waterLevelProperty.asRanged(), options );
   }
 }
 
