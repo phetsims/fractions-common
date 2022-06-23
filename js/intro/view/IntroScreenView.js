@@ -105,7 +105,7 @@ class IntroScreenView extends ContainerSetScreenView {
         font: new PhetFont( 26 ),
         maxWidth: 270
       } );
-      const showMixedCheckbox = new Checkbox( label, model.showMixedNumbersProperty, {
+      const showMixedCheckbox = new Checkbox( model.showMixedNumbersProperty, label, {
         boxWidth: 30,
         right: this.layoutBounds.right - MARGIN,
         bottom: this.resetAllButton.top - 40
