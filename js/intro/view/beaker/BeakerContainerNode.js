@@ -25,7 +25,7 @@ class BeakerContainerNode extends ContainerNode {
       // Sanity, if these get modified out of order (very possible)
       numerator = Math.min( numerator, denominator );
       this.children = [
-        new FractionsCommonBeakerNode( numerator, denominator )
+        new FractionsCommonBeakerNode( numerator, denominator, options )
       ];
     } );
 

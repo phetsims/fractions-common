@@ -30,12 +30,12 @@ class FractionsCommonBeakerNode extends BeakerNode {
     options = merge( {
       // {number}
       emptyBeakerFill: EMPTY_BEAKER_COLOR,
-      solutionFill: WATER_COLOR,
+      solutionFill: options?.colorOverride ? options.colorOverride : WATER_COLOR,
       beakerGlareFill: BEAKER_SHINE_COLOR,
       beakerWidth: 80,
       beakerHeight: FractionsCommonBeakerNode.DEFAULT_BEAKER_HEIGHT,
       yRadiusOfEnds: 12,
-      numberOfTicks: denominator,
+      numberOfTicks: denominator - 1,
       ticksVisible: true,
       stroke: 'grey'
     }, options );
