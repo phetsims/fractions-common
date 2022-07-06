@@ -80,14 +80,16 @@ class LabShapePanel extends Panel {
       }
     ], {
       orientation: 'vertical',
-      buttonContentXMargin: 6,
-      buttonContentYMargin: 6,
-      selectedLineWidth: 2,
+      spacing: 5,
       touchAreaXDilation: 5,
       touchAreaYDilation: 2.5,
-      spacing: 5,
-      selectedStroke: FractionsCommonColors.radioStrokeProperty,
-      baseColor: FractionsCommonColors.radioBaseProperty
+      radioButtonOptions: {
+        xMargin: 6,
+        yMargin: 6,
+        selectedLineWidth: 2,
+        selectedStroke: FractionsCommonColors.radioStrokeProperty,
+        baseColor: FractionsCommonColors.radioBaseProperty
+      }
     } );
 
     shapeBox.children = [

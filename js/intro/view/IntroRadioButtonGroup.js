@@ -19,12 +19,14 @@ class IntroRadioButtonGroup extends RectangularRadioButtonGroup {
   constructor( property, array, options ) {
     super( property, array, merge( {
       orientation: 'horizontal',
-      baseColor: 'white',
       spacing: 12,
-      buttonContentXMargin: 5,
-      buttonContentYMargin: 10,
       touchAreaXDilation: 6,
-      touchAreaYDilation: 6
+      touchAreaYDilation: 6,
+      radioButtonOptions: {
+        baseColor: 'white',
+        xMargin: 5,
+        yMargin: 10
+      }
     }, options ) );
   }
 }
