@@ -72,7 +72,6 @@ const FractionsCommonColors = {
   yellowRoundArrowButtonProperty: new ProfileColorProperty( fractionsCommon, 'yellowRoundArrowButton', { default: new Color( '#fefd53' ) } ),
   greenRoundArrowButtonProperty: new ProfileColorProperty( fractionsCommon, 'greenRoundArrowButton', { default: new Color( 134, 194, 51 ) } ),
   redRoundArrowButtonProperty: new ProfileColorProperty( fractionsCommon, 'redRoundArrowButton', { default: new Color( 195, 71, 26 ) } ),
-  undoButtonProperty: new ProfileColorProperty( fractionsCommon, 'undoButton', { default: Color.YELLOW } ),
 
   shapePartitionBackgroundProperty: new ProfileColorProperty( fractionsCommon, 'shapePartitionBackground', { default: Color.WHITE } ),
   shapePartitionBorderProperty: new ProfileColorProperty( fractionsCommon, 'shapePartitionBorder', { default: Color.BLACK } ),
