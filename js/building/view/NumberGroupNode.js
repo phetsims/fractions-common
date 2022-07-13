@@ -18,7 +18,7 @@ import fractionsCommon from '../../fractionsCommon.js';
 import NumberGroup from '../model/NumberGroup.js';
 import NumberSpotType from '../model/NumberSpotType.js';
 import GroupNode from './GroupNode.js';
-import ReturnButton from './ReturnButton.js';
+import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 
 class NumberGroupNode extends GroupNode {
   /**

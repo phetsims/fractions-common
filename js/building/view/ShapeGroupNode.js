@@ -27,7 +27,7 @@ import BuildingRepresentation from '../model/BuildingRepresentation.js';
 import ShapeGroup from '../model/ShapeGroup.js';
 import ShapePiece from '../model/ShapePiece.js';
 import GroupNode from './GroupNode.js';
-import ReturnButton from './ReturnButton.js';
+import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import ShapeContainerNode from './ShapeContainerNode.js';
 
 // constants

@@ -18,7 +18,7 @@ import NumberGroup from '../../building/model/NumberGroup.js';
 import NumberPiece from '../../building/model/NumberPiece.js';
 import ShapeGroup from '../../building/model/ShapeGroup.js';
 import NumberGroupNode from '../../building/view/NumberGroupNode.js';
-import ReturnButton from '../../building/view/ReturnButton.js';
+import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import ShapeGroupNode from '../../building/view/ShapeGroupNode.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
