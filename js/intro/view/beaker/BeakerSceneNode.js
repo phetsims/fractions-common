@@ -11,8 +11,8 @@ import FractionsCommonColors from '../../../common/view/FractionsCommonColors.js
 import fractionsCommon from '../../../fractionsCommon.js';
 import CellSceneNode from '../CellSceneNode.js';
 import BeakerContainerNode from './BeakerContainerNode.js';
-import FractionsCommonBeakerNode from './FractionsCommonBeakerNode.js';
 import BeakerPieceNode from './BeakerPieceNode.js';
+import FractionsCommonBeakerNode from './FractionsCommonBeakerNode.js';
 
 class BeakerSceneNode extends CellSceneNode {
   /**

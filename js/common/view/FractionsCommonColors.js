@@ -7,8 +7,7 @@
  */
 
 import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
-import { Color } from '../../../../scenery/js/imports.js';
-import { ProfileColorProperty } from '../../../../scenery/js/imports.js';
+import { Color, ProfileColorProperty } from '../../../../scenery/js/imports.js';
 import fractionsCommon from '../../fractionsCommon.js';
 
 // Colors from the Java version

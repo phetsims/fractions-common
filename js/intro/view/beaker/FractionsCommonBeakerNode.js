@@ -6,10 +6,10 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import NumberProperty from '../../../../../axon/js/NumberProperty.js';
+import Range from '../../../../../dot/js/Range.js';
 import merge from '../../../../../phet-core/js/merge.js';
 import BeakerNode from '../../../../../scenery-phet/js/BeakerNode.js';
-import Range from '../../../../../dot/js/Range.js';
-import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import FractionsCommonColors from '../../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../../fractionsCommon.js';
 

@@ -14,10 +14,8 @@ import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import merge from '../../../../phet-core/js/merge.js';
-import { HBox } from '../../../../scenery/js/imports.js';
-import { Node } from '../../../../scenery/js/imports.js';
-import { Path } from '../../../../scenery/js/imports.js';
-import { VBox } from '../../../../scenery/js/imports.js';
+import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
+import { HBox, Node, Path, VBox } from '../../../../scenery/js/imports.js';
 import RoundPushButton from '../../../../sun/js/buttons/RoundPushButton.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
@@ -27,7 +25,6 @@ import BuildingRepresentation from '../model/BuildingRepresentation.js';
 import ShapeGroup from '../model/ShapeGroup.js';
 import ShapePiece from '../model/ShapePiece.js';
 import GroupNode from './GroupNode.js';
-import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import ShapeContainerNode from './ShapeContainerNode.js';
 
 // constants

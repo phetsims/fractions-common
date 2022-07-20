@@ -8,17 +8,14 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
+import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import GradientRectangle from '../../../../scenery-phet/js/GradientRectangle.js';
 import MixedFractionNode from '../../../../scenery-phet/js/MixedFractionNode.js';
-import { HBox } from '../../../../scenery/js/imports.js';
-import { Node } from '../../../../scenery/js/imports.js';
-import { Rectangle } from '../../../../scenery/js/imports.js';
-import { Color } from '../../../../scenery/js/imports.js';
+import { Color, HBox, Node, Rectangle } from '../../../../scenery/js/imports.js';
 import NumberGroup from '../../building/model/NumberGroup.js';
 import NumberPiece from '../../building/model/NumberPiece.js';
 import ShapeGroup from '../../building/model/ShapeGroup.js';
 import NumberGroupNode from '../../building/view/NumberGroupNode.js';
-import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import ShapeGroupNode from '../../building/view/ShapeGroupNode.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';

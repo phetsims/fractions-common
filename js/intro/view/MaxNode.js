@@ -10,12 +10,9 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { AlignBox } from '../../../../scenery/js/imports.js';
-import { HBox } from '../../../../scenery/js/imports.js';
-import { Text } from '../../../../scenery/js/imports.js';
-import { VBox } from '../../../../scenery/js/imports.js';
-import fractionsCommonStrings from '../../fractionsCommonStrings.js';
+import { AlignBox, HBox, Text, VBox } from '../../../../scenery/js/imports.js';
 import fractionsCommon from '../../fractionsCommon.js';
+import fractionsCommonStrings from '../../fractionsCommonStrings.js';
 import RoundNumberSpinner from './RoundNumberSpinner.js';
 
 const representationMaxString = fractionsCommonStrings.representationMax;

@@ -6,20 +6,15 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import Multilink from '../../../../../axon/js/Multilink.js';
+import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import Bounds2 from '../../../../../dot/js/Bounds2.js';
 import Utils from '../../../../../dot/js/Utils.js';
 import { Shape } from '../../../../../kite/js/imports.js';
 import merge from '../../../../../phet-core/js/merge.js';
 import ArrowNode from '../../../../../scenery-phet/js/ArrowNode.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
-import { DragListener } from '../../../../../scenery/js/imports.js';
-import { Circle } from '../../../../../scenery/js/imports.js';
-import { Line } from '../../../../../scenery/js/imports.js';
-import { Node } from '../../../../../scenery/js/imports.js';
-import { Path } from '../../../../../scenery/js/imports.js';
-import { Text } from '../../../../../scenery/js/imports.js';
+import { Circle, DragListener, Line, Node, Path, Text } from '../../../../../scenery/js/imports.js';
 import FractionsCommonColors from '../../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../../fractionsCommon.js';
 import NumberLineOrientation from '../NumberLineOrientation.js';

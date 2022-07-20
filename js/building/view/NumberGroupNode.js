@@ -11,6 +11,7 @@ import Multilink from '../../../../axon/js/Multilink.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import merge from '../../../../phet-core/js/merge.js';
+import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import { Line, Node, Path, Rectangle, Text } from '../../../../scenery/js/imports.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
@@ -18,7 +19,6 @@ import fractionsCommon from '../../fractionsCommon.js';
 import NumberGroup from '../model/NumberGroup.js';
 import NumberSpotType from '../model/NumberSpotType.js';
 import GroupNode from './GroupNode.js';
-import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 
 class NumberGroupNode extends GroupNode {
   /**
