@@ -81,11 +81,13 @@ class LabShapePanel extends Panel {
       touchAreaXDilation: 5,
       touchAreaYDilation: 2.5,
       radioButtonOptions: {
+        baseColor: FractionsCommonColors.radioBaseProperty,
         xMargin: 6,
         yMargin: 6,
-        selectedLineWidth: 2,
-        selectedStroke: FractionsCommonColors.radioStrokeProperty,
-        baseColor: FractionsCommonColors.radioBaseProperty
+        buttonAppearanceStrategyOptions: {
+          selectedLineWidth: 2,
+          selectedStroke: FractionsCommonColors.radioStrokeProperty
+        }
       }
     } );
 
