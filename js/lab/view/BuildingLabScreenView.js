@@ -97,7 +97,7 @@ class BuildingLabScreenView extends ScreenView {
 
     phet.joist.display.addInputListener( {
       down: event => {
-        const screen = phet.joist.sim.screenProperty.value;
+        const screen = phet.joist.sim.selectedScreenProperty.value;
         if ( screen && screen.view === this ) {
 
           const isActive = this.layerNode.activePointerProperty.value === event.pointer;
