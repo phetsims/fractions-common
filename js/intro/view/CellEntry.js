@@ -21,7 +21,9 @@ class CellEntry {
     this.node = node;
 
     // @private {function}
-    this.visibilityListener = this.cell.appearsFilledProperty.linkAttribute( node, 'visible' );
+
+    this.visibilityListener = visible => {node.visible = visible;};
+    this.cell.appearsFilledProperty.link( this.visibilityListener );
   }
 
   /**
