@@ -5,18 +5,28 @@
  */
 /* eslint-disable */
 import getStringModule from '../../chipper/js/getStringModule.js';
+import TReadOnlyProperty from '../../axon/js/TReadOnlyProperty.js';
 import fractionsCommon from './fractionsCommon.js';
 
 type StringsType = {
   'representationMax': string;
+  'representationMaxStringProperty': TReadOnlyProperty<string>;
   'mixedNumber': string;
+  'mixedNumberStringProperty': TReadOnlyProperty<string>;
   'levelTitlePattern': string;
+  'levelTitlePatternStringProperty': TReadOnlyProperty<string>;
   'myMatches': string;
+  'myMatchesStringProperty': TReadOnlyProperty<string>;
   'ok': string;
+  'okStringProperty': TReadOnlyProperty<string>;
   'timeNumberSec': string;
+  'timeNumberSecStringProperty': TReadOnlyProperty<string>;
   'mixedNumbersChooseYourLevel': string;
+  'mixedNumbersChooseYourLevelStringProperty': TReadOnlyProperty<string>;
   'fractionsChooseYourLevel': string;
+  'fractionsChooseYourLevelStringProperty': TReadOnlyProperty<string>;
   'equation': string;
+  'equationStringProperty': TReadOnlyProperty<string>;
 };
 
 const fractionsCommonStrings = getStringModule( 'FRACTIONS_COMMON' ) as StringsType;
