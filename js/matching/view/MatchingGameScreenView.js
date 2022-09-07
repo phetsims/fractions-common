@@ -30,7 +30,7 @@ import VegasStrings from '../../../../vegas/js/VegasStrings.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../fractionsCommon.js';
-import fractionsCommonStrings from '../../fractionsCommonStrings.js';
+import FractionsCommonStrings from '../../FractionsCommonStrings.js';
 import FilledPartition from '../../game/model/FilledPartition.js';
 import ShapePartition from '../../game/model/ShapePartition.js';
 import FilledPartitionNode from '../../game/view/FilledPartitionNode.js';
@@ -72,9 +72,9 @@ const QUADRATIC_TRANSITION_OPTIONS = {
 };
 
 const chooseYourLevelString = VegasStrings.chooseYourLevel;
-const fractionsChooseYourLevelString = fractionsCommonStrings.fractionsChooseYourLevel;
-const levelTitlePatternString = fractionsCommonStrings.levelTitlePattern;
-const mixedNumbersChooseYourLevelString = fractionsCommonStrings.mixedNumbersChooseYourLevel;
+const fractionsChooseYourLevelString = FractionsCommonStrings.fractionsChooseYourLevel;
+const levelTitlePatternString = FractionsCommonStrings.levelTitlePattern;
+const mixedNumbersChooseYourLevelString = FractionsCommonStrings.mixedNumbersChooseYourLevel;
 
 class MatchingGameScreenView extends ScreenView {
   /**

@@ -22,15 +22,15 @@ import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonGlobals from '../../common/FractionsCommonGlobals.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../fractionsCommon.js';
-import fractionsCommonStrings from '../../fractionsCommonStrings.js';
+import FractionsCommonStrings from '../../FractionsCommonStrings.js';
 import Container from '../model/Container.js';
 import CakeContainerNode from './cake/CakeContainerNode.js';
 import ContainerSetScreenView from './ContainerSetScreenView.js';
 import MaxNode from './MaxNode.js';
 import NumberLineNode from './numberline/NumberLineNode.js';
 
-const equationString = fractionsCommonStrings.equation;
-const mixedNumberString = fractionsCommonStrings.mixedNumber;
+const equationString = FractionsCommonStrings.equation;
+const mixedNumberString = FractionsCommonStrings.mixedNumber;
 
 // constants
 const MARGIN = FractionsCommonConstants.PANEL_MARGIN;

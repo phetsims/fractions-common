@@ -47,14 +47,14 @@ import FractionsCommonGlobals from '../../common/FractionsCommonGlobals.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import RoundArrowButton from '../../common/view/RoundArrowButton.js';
 import fractionsCommon from '../../fractionsCommon.js';
-import fractionsCommonStrings from '../../fractionsCommonStrings.js';
+import FractionsCommonStrings from '../../FractionsCommonStrings.js';
 import FilledPartition from '../model/FilledPartition.js';
 import ShapePartition from '../model/ShapePartition.js';
 import FilledPartitionNode from './FilledPartitionNode.js';
 import FractionChallengeNode from './FractionChallengeNode.js';
 
 const chooseYourLevelString = VegasStrings.chooseYourLevel;
-const levelTitlePatternString = fractionsCommonStrings.levelTitlePattern;
+const levelTitlePatternString = FractionsCommonStrings.levelTitlePattern;
 
 // constants
 const LEVEL_SELECTION_SPACING = 20;

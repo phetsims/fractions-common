@@ -23,12 +23,12 @@ import ShapeGroupStack from '../../building/model/ShapeGroupStack.js';
 import ShapeStack from '../../building/model/ShapeStack.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import fractionsCommon from '../../fractionsCommon.js';
-import fractionsCommonStrings from '../../fractionsCommonStrings.js';
+import FractionsCommonStrings from '../../FractionsCommonStrings.js';
 import FractionChallengePanel from './FractionChallengePanel.js';
 import GameLayerNode from './GameLayerNode.js';
 import TargetNode from './TargetNode.js';
 
-const levelTitlePatternString = fractionsCommonStrings.levelTitlePattern;
+const levelTitlePatternString = FractionsCommonStrings.levelTitlePattern;
 const nextString = VegasStrings.next;
 
 // constants

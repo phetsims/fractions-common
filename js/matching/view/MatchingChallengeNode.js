@@ -26,7 +26,7 @@ import scale_png from '../../../images/scale_png.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../fractionsCommon.js';
-import fractionsCommonStrings from '../../fractionsCommonStrings.js';
+import FractionsCommonStrings from '../../FractionsCommonStrings.js';
 import MatchingChallenge from '../model/MatchingChallenge.js';
 import MatchChartNode from './MatchChartNode.js';
 import MatchPieceNode from './MatchPieceNode.js';
@@ -34,10 +34,10 @@ import MatchPieceNode from './MatchPieceNode.js';
 const checkString = VegasStrings.check;
 const labelLevelString = VegasStrings.label.level;
 const labelScorePatternString = VegasStrings.label.scorePattern;
-const myMatchesString = fractionsCommonStrings.myMatches;
-const okString = fractionsCommonStrings.ok;
+const myMatchesString = FractionsCommonStrings.myMatches;
+const okString = FractionsCommonStrings.ok;
 const showAnswerString = VegasStrings.showAnswer;
-const timeNumberSecString = fractionsCommonStrings.timeNumberSec;
+const timeNumberSecString = FractionsCommonStrings.timeNumberSec;
 const tryAgainString = VegasStrings.tryAgain;
 
 

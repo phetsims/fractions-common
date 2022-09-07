@@ -12,10 +12,10 @@ import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { AlignBox, HBox, Text, VBox } from '../../../../scenery/js/imports.js';
 import fractionsCommon from '../../fractionsCommon.js';
-import fractionsCommonStrings from '../../fractionsCommonStrings.js';
+import FractionsCommonStrings from '../../FractionsCommonStrings.js';
 import RoundNumberSpinner from './RoundNumberSpinner.js';
 
-const representationMaxString = fractionsCommonStrings.representationMax;
+const representationMaxString = FractionsCommonStrings.representationMax;
 
 class MaxNode extends VBox {
   /**

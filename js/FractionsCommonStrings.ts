@@ -29,8 +29,8 @@ type StringsType = {
   'equationStringProperty': TReadOnlyProperty<string>;
 };
 
-const fractionsCommonStrings = getStringModule( 'FRACTIONS_COMMON' ) as StringsType;
+const FractionsCommonStrings = getStringModule( 'FRACTIONS_COMMON' ) as StringsType;
 
-fractionsCommon.register( 'fractionsCommonStrings', fractionsCommonStrings );
+fractionsCommon.register( 'FractionsCommonStrings', FractionsCommonStrings );
 
-export default fractionsCommonStrings;
+export default FractionsCommonStrings;
