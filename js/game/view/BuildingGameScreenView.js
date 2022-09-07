@@ -32,7 +32,7 @@ import GameAudioPlayer from '../../../../vegas/js/GameAudioPlayer.js';
 import LevelSelectionButton from '../../../../vegas/js/LevelSelectionButton.js';
 import RewardNode from '../../../../vegas/js/RewardNode.js';
 import ScoreDisplayStars from '../../../../vegas/js/ScoreDisplayStars.js';
-import vegasStrings from '../../../../vegas/js/vegasStrings.js';
+import VegasStrings from '../../../../vegas/js/VegasStrings.js';
 import BuildingRepresentation from '../../building/model/BuildingRepresentation.js';
 import BuildingType from '../../building/model/BuildingType.js';
 import NumberPiece from '../../building/model/NumberPiece.js';
@@ -53,7 +53,7 @@ import ShapePartition from '../model/ShapePartition.js';
 import FilledPartitionNode from './FilledPartitionNode.js';
 import FractionChallengeNode from './FractionChallengeNode.js';
 
-const chooseYourLevelString = vegasStrings.chooseYourLevel;
+const chooseYourLevelString = VegasStrings.chooseYourLevel;
 const levelTitlePatternString = fractionsCommonStrings.levelTitlePattern;
 
 // constants

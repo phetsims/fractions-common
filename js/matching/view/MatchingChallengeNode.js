@@ -21,7 +21,7 @@ import { AlignBox, Image, Node, Rectangle, Text, VBox } from '../../../../scener
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
 import LevelCompletedNode from '../../../../vegas/js/LevelCompletedNode.js';
 import RewardNode from '../../../../vegas/js/RewardNode.js';
-import vegasStrings from '../../../../vegas/js/vegasStrings.js';
+import VegasStrings from '../../../../vegas/js/VegasStrings.js';
 import scale_png from '../../../images/scale_png.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
@@ -31,14 +31,14 @@ import MatchingChallenge from '../model/MatchingChallenge.js';
 import MatchChartNode from './MatchChartNode.js';
 import MatchPieceNode from './MatchPieceNode.js';
 
-const checkString = vegasStrings.check;
-const labelLevelString = vegasStrings.label.level;
-const labelScorePatternString = vegasStrings.label.scorePattern;
+const checkString = VegasStrings.check;
+const labelLevelString = VegasStrings.label.level;
+const labelScorePatternString = VegasStrings.label.scorePattern;
 const myMatchesString = fractionsCommonStrings.myMatches;
 const okString = fractionsCommonStrings.ok;
-const showAnswerString = vegasStrings.showAnswer;
+const showAnswerString = VegasStrings.showAnswer;
 const timeNumberSecString = fractionsCommonStrings.timeNumberSec;
-const tryAgainString = vegasStrings.tryAgain;
+const tryAgainString = VegasStrings.tryAgain;
 
 
 // constants

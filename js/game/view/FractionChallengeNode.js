@@ -16,7 +16,7 @@ import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
 import { Node, Text, VBox } from '../../../../scenery/js/imports.js';
 import TextPushButton from '../../../../sun/js/buttons/TextPushButton.js';
-import vegasStrings from '../../../../vegas/js/vegasStrings.js';
+import VegasStrings from '../../../../vegas/js/VegasStrings.js';
 import NumberGroupStack from '../../building/model/NumberGroupStack.js';
 import NumberStack from '../../building/model/NumberStack.js';
 import ShapeGroupStack from '../../building/model/ShapeGroupStack.js';
@@ -29,7 +29,7 @@ import GameLayerNode from './GameLayerNode.js';
 import TargetNode from './TargetNode.js';
 
 const levelTitlePatternString = fractionsCommonStrings.levelTitlePattern;
-const nextString = vegasStrings.next;
+const nextString = VegasStrings.next;
 
 // constants
 const PANEL_MARGIN = FractionsCommonConstants.PANEL_MARGIN;

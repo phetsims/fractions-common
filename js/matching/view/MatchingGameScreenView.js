@@ -26,7 +26,7 @@ import TransitionNode from '../../../../twixt/js/TransitionNode.js';
 import GameAudioPlayer from '../../../../vegas/js/GameAudioPlayer.js';
 import LevelSelectionButton from '../../../../vegas/js/LevelSelectionButton.js';
 import ScoreDisplayStars from '../../../../vegas/js/ScoreDisplayStars.js';
-import vegasStrings from '../../../../vegas/js/vegasStrings.js';
+import VegasStrings from '../../../../vegas/js/VegasStrings.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../fractionsCommon.js';
@@ -71,7 +71,7 @@ const QUADRATIC_TRANSITION_OPTIONS = {
   }
 };
 
-const chooseYourLevelString = vegasStrings.chooseYourLevel;
+const chooseYourLevelString = VegasStrings.chooseYourLevel;
 const fractionsChooseYourLevelString = fractionsCommonStrings.fractionsChooseYourLevel;
 const levelTitlePatternString = fractionsCommonStrings.levelTitlePattern;
 const mixedNumbersChooseYourLevelString = fractionsCommonStrings.mixedNumbersChooseYourLevel;
