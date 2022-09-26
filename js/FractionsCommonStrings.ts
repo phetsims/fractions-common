@@ -5,28 +5,28 @@
  */
 /* eslint-disable */
 import getStringModule from '../../chipper/js/getStringModule.js';
-import TReadOnlyProperty from '../../axon/js/TReadOnlyProperty.js';
+import LinkableProperty from '../../axon/js/LinkableProperty.js';
 import fractionsCommon from './fractionsCommon.js';
 
 type StringsType = {
   'representationMax': string;
-  'representationMaxStringProperty': TReadOnlyProperty<string>;
+  'representationMaxStringProperty': LinkableProperty<string>;
   'mixedNumber': string;
-  'mixedNumberStringProperty': TReadOnlyProperty<string>;
+  'mixedNumberStringProperty': LinkableProperty<string>;
   'levelTitlePattern': string;
-  'levelTitlePatternStringProperty': TReadOnlyProperty<string>;
+  'levelTitlePatternStringProperty': LinkableProperty<string>;
   'myMatches': string;
-  'myMatchesStringProperty': TReadOnlyProperty<string>;
+  'myMatchesStringProperty': LinkableProperty<string>;
   'ok': string;
-  'okStringProperty': TReadOnlyProperty<string>;
+  'okStringProperty': LinkableProperty<string>;
   'timeNumberSec': string;
-  'timeNumberSecStringProperty': TReadOnlyProperty<string>;
+  'timeNumberSecStringProperty': LinkableProperty<string>;
   'mixedNumbersChooseYourLevel': string;
-  'mixedNumbersChooseYourLevelStringProperty': TReadOnlyProperty<string>;
+  'mixedNumbersChooseYourLevelStringProperty': LinkableProperty<string>;
   'fractionsChooseYourLevel': string;
-  'fractionsChooseYourLevelStringProperty': TReadOnlyProperty<string>;
+  'fractionsChooseYourLevelStringProperty': LinkableProperty<string>;
   'equation': string;
-  'equationStringProperty': TReadOnlyProperty<string>;
+  'equationStringProperty': LinkableProperty<string>;
 };
 
 const FractionsCommonStrings = getStringModule( 'FRACTIONS_COMMON' ) as StringsType;
