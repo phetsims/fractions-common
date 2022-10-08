@@ -94,11 +94,11 @@ class EqualityLabScreenView extends ContainerSetScreenView {
     const showNumberLineNode = new IntroRadioButtonGroup( model.showNumberLineProperty, [
       {
         value: false,
-        node: variableIcon
+        createNode: tandem => variableIcon
       },
       {
         value: true,
-        node: NumberLineSceneNode.getIcon()
+        createNode: tandem => NumberLineSceneNode.getIcon()
       }
     ] );
 

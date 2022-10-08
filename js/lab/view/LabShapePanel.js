@@ -65,13 +65,13 @@ class LabShapePanel extends Panel {
     const representationRadioButtonGroup = new RectangularRadioButtonGroup( this.representationProperty, [
       {
         value: BuildingRepresentation.PIE,
-        node: new ShapePieceNode( new ShapePiece( Fraction.ONE, BuildingRepresentation.PIE, FractionsCommonColors.labPieFillProperty ), {
+        createNode: tandem => new ShapePieceNode( new ShapePiece( Fraction.ONE, BuildingRepresentation.PIE, FractionsCommonColors.labPieFillProperty ), {
           scale: 0.3
         } )
       },
       {
         value: BuildingRepresentation.BAR,
-        node: new ShapePieceNode( new ShapePiece( Fraction.ONE, BuildingRepresentation.BAR, FractionsCommonColors.labBarFillProperty ), {
+        createNode: tandem => new ShapePieceNode( new ShapePiece( Fraction.ONE, BuildingRepresentation.BAR, FractionsCommonColors.labBarFillProperty ), {
           scale: 0.3
         } )
       }
