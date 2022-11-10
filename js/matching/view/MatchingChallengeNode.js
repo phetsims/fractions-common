@@ -69,9 +69,6 @@ class MatchingChallengeNode extends Node {
     // @private {MatchingChallenge}
     this.challenge = challenge;
 
-    // @private {Emitter}
-    this.disposeEmitter = new Emitter();
-
     // Will fire once we have piece nodes initialized, so the equals signs can be properly positioned in targets.
     const layoutCompleteEmitter = new Emitter();
 
@@ -386,17 +383,6 @@ class MatchingChallengeNode extends Node {
   step( dt ) {
     this.rewardNode && this.rewardNode.step( dt );
     this.chartNode.step( dt );
-  }
-
-  /**
-   * Releases references.
-   * @public
-   * @override
-   */
-  dispose() {
-    this.disposeEmitter.emit();
-
-    super.dispose();
   }
 }
 
