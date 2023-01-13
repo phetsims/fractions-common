@@ -51,27 +51,27 @@ class ContainerSetScreenView extends ScreenView {
     const representationRadioButtonGroup = new IntroRadioButtonGroup( model.representationProperty, [
       {
         value: IntroRepresentation.CIRCLE,
-        createNode: tandem => CircularSceneNode.getIcon()
+        createNode: () => CircularSceneNode.getIcon()
       },
       {
         value: IntroRepresentation.HORIZONTAL_BAR,
-        createNode: tandem => RectangularSceneNode.getIcon( RectangularOrientation.HORIZONTAL )
+        createNode: () => RectangularSceneNode.getIcon( RectangularOrientation.HORIZONTAL )
       },
       {
         value: IntroRepresentation.VERTICAL_BAR,
-        createNode: tandem => RectangularSceneNode.getIcon( RectangularOrientation.VERTICAL )
+        createNode: () => RectangularSceneNode.getIcon( RectangularOrientation.VERTICAL )
       },
       {
         value: IntroRepresentation.BEAKER,
-        createNode: tandem => BeakerSceneNode.getIcon()
+        createNode: () => BeakerSceneNode.getIcon()
       },
       {
         value: IntroRepresentation.CAKE,
-        createNode: tandem => CakeSceneNode.getIcon()
+        createNode: () => CakeSceneNode.getIcon()
       },
       {
         value: IntroRepresentation.NUMBER_LINE,
-        createNode: tandem => NumberLineSceneNode.getIcon()
+        createNode: () => NumberLineSceneNode.getIcon()
       }
     ].filter( item => _.includes( model.representations, item.value ) ) );
 
