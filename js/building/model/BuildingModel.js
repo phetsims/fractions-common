@@ -60,7 +60,7 @@ class BuildingModel {
     // @private {Property.<Range|null>} - null when there are no active numbers, otherwise a range of all values being
     // dragged.
     this.activeNumberRangeProperty = new Property( null, {
-      useDeepEquality: true
+      valueComparisonStrategy: 'equalsFunction'
     } );
 
     // @public {Property.<Group|null>} - We'll only show controls for this group (and track the previous value)

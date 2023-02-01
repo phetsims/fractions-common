@@ -26,7 +26,7 @@ class MatchSpot {
 
     // @public - To be updated by the view when its position changes (usually just initially)
     this.positionProperty = new Vector2Property( Vector2.ZERO, {
-      useDeepEquality: true
+      valueComparisonStrategy: 'equalsFunction'
     } );
 
     // @public {number} - How piece nodes should be scaled when placed in this spot
