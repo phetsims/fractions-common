@@ -1,4 +1,4 @@
-// Copyright 2019-2020, University of Colorado Boulder
+// Copyright 2019-2023, University of Colorado Boulder
 
 /**
  * A specific place a piece can be "stored" (either a target, a scale, or a source spot near the bottom).
