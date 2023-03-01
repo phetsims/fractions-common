@@ -184,10 +184,10 @@ class MatchingChallengeNode extends Node {
 
     // @private {function}
     this.scoreListener = score => {
-      scoreText.text = StringUtils.format( labelScorePatternString, score );
+      scoreText.string = StringUtils.format( labelScorePatternString, score );
     };
     this.timeListener = time => {
-      timeText.text = StringUtils.format( timeNumberSecString, Utils.toFixed( time, 0 ) );
+      timeText.string = StringUtils.format( timeNumberSecString, Utils.toFixed( time, 0 ) );
     };
     this.timeVisibleListener = visible => {
       timeText.visible = visible;

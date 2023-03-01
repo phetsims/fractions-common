@@ -65,7 +65,7 @@ class NumberGroupNode extends GroupNode {
       } );
       this.itemsToDispose.push( Multilink.multilink( [ spot.pieceProperty, spot.showNotAllowedProperty ], ( piece, notAllowed ) => {
         if ( piece !== null ) {
-          text.text = piece.number;
+          text.string = piece.number;
           text.center = outline.center;
         }
         text.visible = piece !== null;

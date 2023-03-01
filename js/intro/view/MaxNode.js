@@ -38,13 +38,13 @@ class MaxNode extends VBox {
     // Figure out what the largest bounds are for the readout
     const maxReadoutBounds = Bounds2.NOTHING.copy();
     for ( let n = 1; n <= containerCountProperty.range.max; n++ ) {
-      readoutText.text = n;
+      readoutText.string = n;
       maxReadoutBounds.includeBounds( readoutText.bounds );
     }
 
     // Now update the readout text
     containerCountProperty.link( count => {
-      readoutText.text = count;
+      readoutText.string = count;
     } );
 
     this.children = [
