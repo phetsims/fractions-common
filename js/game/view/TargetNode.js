@@ -8,7 +8,7 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
-import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
+import UndoButton from '../../../../scenery-phet/js/buttons/UndoButton.js';
 import GradientRectangle from '../../../../scenery-phet/js/GradientRectangle.js';
 import MixedFractionNode from '../../../../scenery-phet/js/MixedFractionNode.js';
 import { Color, HBox, Node, Rectangle } from '../../../../scenery/js/imports.js';
@@ -127,12 +127,14 @@ class TargetNode extends HBox {
     this.groupNode = null;
 
     // @private {Node}
-    this.returnButton = new ReturnButton( () => {
-      if ( this.groupNode ) {
-        challenge.returnTarget( target );
-      }
-    }, {
-      cornerRadius: CORNER_RADIUS - CORNER_OFFSET,
+    this.returnButton = new UndoButton( {
+        listener: () => {
+            if ( this.groupNode ) {
+                challenge.returnTarget( target );
+            }
+        },
+        iconOptions: { scale: 0.7 },
+        cornerRadius: CORNER_RADIUS - CORNER_OFFSET,
       leftTop: this.background.leftTop.plus( new Vector2( CORNER_OFFSET, CORNER_OFFSET ) )
     } );
     this.returnButton.touchArea = this.returnButton.localBounds.dilated( 12 );
