@@ -8,7 +8,7 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
-import UndoButton from '../../../../scenery-phet/js/buttons/UndoButton.js';
+import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import GradientRectangle from '../../../../scenery-phet/js/GradientRectangle.js';
 import MixedFractionNode from '../../../../scenery-phet/js/MixedFractionNode.js';
 import { Color, HBox, Node, Rectangle } from '../../../../scenery/js/imports.js';
@@ -127,7 +127,7 @@ class TargetNode extends HBox {
     this.groupNode = null;
 
     // @private {Node}
-    this.returnButton = new UndoButton( {
+    this.returnButton = new ReturnButton( {
         listener: () => {
             if ( this.groupNode ) {
                 challenge.returnTarget( target );

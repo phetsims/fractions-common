@@ -11,7 +11,7 @@ import Multilink from '../../../../axon/js/Multilink.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import merge from '../../../../phet-core/js/merge.js';
-import UndoButton from '../../../../scenery-phet/js/buttons/UndoButton.js';
+import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import { Line, Node, Path, Rectangle, Text } from '../../../../scenery/js/imports.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
@@ -101,7 +101,7 @@ class NumberGroupNode extends GroupNode {
     } );
 
     // @private {Node}
-    this.returnButton = new UndoButton( {
+    this.returnButton = new ReturnButton( {
       iconOptions: { scale: 0.7 },
       listener: options.removeLastListener
     } );

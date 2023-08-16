@@ -14,7 +14,7 @@ import Matrix3 from '../../../../dot/js/Matrix3.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../kite/js/imports.js';
 import merge from '../../../../phet-core/js/merge.js';
-import UndoButton from '../../../../scenery-phet/js/buttons/UndoButton.js';
+import ReturnButton from '../../../../scenery-phet/js/buttons/ReturnButton.js';
 import { HBox, Node, Path, VBox } from '../../../../scenery/js/imports.js';
 import RoundPushButton from '../../../../sun/js/buttons/RoundPushButton.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
@@ -202,7 +202,7 @@ class ShapeGroupNode extends GroupNode {
     }
 
     // @private {Node}
-    this.returnButton = new UndoButton( {
+    this.returnButton = new ReturnButton( {
       listener: options.removeLastListener,
       iconOptions: { scale: 0.7 },
 
