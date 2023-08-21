@@ -53,4 +53,5 @@ For numbers, the mixed-fraction group (where there is a spot for whole numbers t
 numerator must be less than the denominator (including disallowing 1 as a denominator).
 
 For the games, it may be necessary to return some fractions and rearrange the pieces. While all levels are solvable, it
-is possible to get "stuck" with the remaining pieces (where returning fractions and rearranging can result in a solution).
+is possible to get "stuck" with the remaining pieces (where returning fractions and rearranging can result in a
+solution).
