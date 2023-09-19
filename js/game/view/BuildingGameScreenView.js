@@ -520,8 +520,8 @@ class BuildingGameScreenView extends ScreenView {
     iconContainer.centerX = ICON_DESIGN_BOUNDS.centerX;
     iconContainer.centerY = ( label.bottom + ICON_DESIGN_BOUNDS.bottom ) / 2;
 
-    assert && assert( ICON_DESIGN_BOUNDS.containsBounds( label.bounds ), 'Sanity check for level icon layout' );
-    assert && assert( ICON_DESIGN_BOUNDS.containsBounds( iconContainer.bounds ), 'Sanity check for level icon layout' );
+    assert && assert( ICON_DESIGN_BOUNDS.containsBounds( label.bounds ), 'Sanity check for level icon layout: - BuildingGame:label.bounds', ICON_DESIGN_BOUNDS.toString(), label.bounds.toString() );
+    assert && assert( ICON_DESIGN_BOUNDS.containsBounds( iconContainer.bounds ), 'Sanity check for level icon layout - BuildingGame:iconContainer.bounds', ICON_DESIGN_BOUNDS.toString(), iconContainer.bounds.toString() );
 
     return new Node( {
       children: [ label, iconContainer ],
