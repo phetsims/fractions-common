@@ -303,8 +303,8 @@ class MatchingGameScreenView extends ScreenView {
     iconContainer.centerX = ICON_DESIGN_BOUNDS.centerX;
     iconContainer.centerY = ( label.bottom + ICON_DESIGN_BOUNDS.bottom ) / 2;
 
-    assert && assert( ICON_DESIGN_BOUNDS.containsBounds( label.bounds ), 'Sanity check for level icon layout - MatchingGame:label.bounds', ICON_DESIGN_BOUNDS.toString(), label.bounds.toString() );
-    assert && assert( ICON_DESIGN_BOUNDS.containsBounds( iconContainer.bounds ), 'Sanity check for level icon layout - MatchingGame:iconContainer.bounds', ICON_DESIGN_BOUNDS.toString(), iconContainer.bounds.toString() );
+    assert && assert( ICON_DESIGN_BOUNDS.dilated( 1E-6 ).containsBounds( label.bounds ), 'Sanity check for level icon layout - MatchingGame:label.bounds', ICON_DESIGN_BOUNDS.toString(), label.bounds.toString() );
+    assert && assert( ICON_DESIGN_BOUNDS.dilated( 1E-6 ).containsBounds( iconContainer.bounds ), 'Sanity check for level icon layout - MatchingGame:iconContainer.bounds', ICON_DESIGN_BOUNDS.toString(), iconContainer.bounds.toString() );
 
     return new Node( {
       children: [ label, iconContainer ],
