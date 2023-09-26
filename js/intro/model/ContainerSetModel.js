@@ -157,9 +157,7 @@ class ContainerSetModel {
     if ( destinationCell ) {
       destinationCell.fillWithPiece( piece );
     }
-    if ( this.pieces.indexOf( piece ) >= 0 ) {
-      this.pieces.remove( piece );
-    }
+    this.pieces.remove( piece );
   }
 
   /**
