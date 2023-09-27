@@ -29,8 +29,10 @@ import RectangularOrientation from './RectangularOrientation.js';
 const MARGIN = FractionsCommonConstants.PANEL_MARGIN;
 
 class ContainerSetScreenView extends ScreenView {
+
   /**
    * @param {ContainerSetModel} model
+   * @param {Object} [options]
    */
   constructor( model, options ) {
     super( {
@@ -104,7 +106,6 @@ class ContainerSetScreenView extends ScreenView {
       // Finish all animations
       model.completeAllPieces();
 
-
       if ( this.currentView ) {
         this.currentView.interruptSubtreeInput();
 
@@ -153,7 +154,9 @@ class ContainerSetScreenView extends ScreenView {
         default:
         // Don't have a current view. May happen on startup
       }
+
       if ( this.currentView ) {
+
         // add the chosen visual representation to the scene graph
         this.viewContainer.addChild( this.currentView );
         if ( this.currentView.pieceLayer ) {
@@ -187,14 +190,6 @@ class ContainerSetScreenView extends ScreenView {
       this.bucketContainer,
       this.viewContainer
     ];
-  }
-
-  /**
-   * Sets up the initial layout of the screen view. Should be done once all initialization is complete.
-   * @protected
-   */
-  initializeLayout() {
-
   }
 
   /**
