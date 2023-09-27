@@ -205,21 +205,27 @@ class CellSceneNode extends SceneNode {
         this.model.completePiece( piece );
       },
       () => {
-        const currentMidpoint = pieceNode.getMidpoint();
 
-        const closestCell = this.getClosestCell( currentMidpoint, 100 );
+        // Make sure the piece is still part of the model before doing anything with it.  This is necessary due to
+        // some multitouch race conditions that can occur, see https://github.com/phetsims/sun/issues/412.
+        if ( this.model.pieces.includes( piece ) ) {
+          const currentMidpoint = pieceNode.getMidpoint();
 
-        pieceNode.isUserControlled = false;
-        pieceNode.originProperty.value = currentMidpoint;
+          const closestCell = this.getClosestCell( currentMidpoint, 100 );
 
-        if ( closestCell ) {
-          pieceNode.destinationProperty.value = this.getCellMidpoint( closestCell );
-          this.model.targetPieceToCell( piece, closestCell );
+          pieceNode.isUserControlled = false;
+          pieceNode.originProperty.value = currentMidpoint;
+
+          if ( closestCell ) {
+            pieceNode.destinationProperty.value = this.getCellMidpoint( closestCell );
+            this.model.targetPieceToCell( piece, closestCell );
+          }
+          else {
+            pieceNode.destinationProperty.value = this.getBucketPosition();
+          }
         }
-        else {
-          pieceNode.destinationProperty.value = this.getBucketPosition();
-        }
-      } );
+      }
+    );
 
     const originCell = piece.originCell;
     if ( originCell ) {
