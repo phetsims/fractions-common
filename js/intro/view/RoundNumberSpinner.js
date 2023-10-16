@@ -34,13 +34,15 @@ class RoundNumberSpinner extends VBox {
       spacing: 3,
       longTouchDilation: 12,
       sideTouchDilation: 12,
-      touchRadius: 10
+      touchRadius: 10,
+      increaseButtonOptions: {},
+      decreaseButtonOptions: {}
     }, options );
 
     super( options );
 
     // @private {RoundArrowButton}
-    this.increaseButton = new RoundArrowButton( {
+    this.increaseButton = new RoundArrowButton( merge( {
       rotation: -options.rotation,
       baseColor: options.baseColor,
       arrowRotation: options.rotation,
@@ -50,10 +52,10 @@ class RoundNumberSpinner extends VBox {
           numberProperty.value++;
         }
       }
-    } );
+    }, options.increaseButtonOptions ) );
 
     // @private {RoundArrowButton}
-    this.decreaseButton = new RoundArrowButton( {
+    this.decreaseButton = new RoundArrowButton( merge( {
       rotation: -options.rotation,
       baseColor: options.baseColor,
       arrowRotation: Math.PI + options.rotation,
@@ -63,7 +65,7 @@ class RoundNumberSpinner extends VBox {
           numberProperty.value--;
         }
       }
-    } );
+    }, options.decreaseButtonOptions ) );
 
     const rotationMatrix = Matrix3.rotation2( options.rotation );
 

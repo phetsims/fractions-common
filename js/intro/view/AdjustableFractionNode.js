@@ -42,9 +42,15 @@ class AdjustableFractionNode extends HBox {
       maxDenominator: denominatorProperty.range.max
     } );
 
+    // listener to interrupt all pointers, useful for preventing multitouch problems
+    const buttonInterruptListener = () => {
+      phet.joist.display.interruptPointers();
+    };
+
     const spinnersNode = new VBox( {
       spacing: 30,
       children: [
+
         // Numerator
         new RoundNumberSpinner(
           numeratorProperty,
@@ -55,6 +61,7 @@ class AdjustableFractionNode extends HBox {
             return ( numerator - 1 ) >= 0;
           } )
         ),
+        
         // Denominator
         new RoundNumberSpinner(
           denominatorProperty,
@@ -63,7 +70,15 @@ class AdjustableFractionNode extends HBox {
           } ),
           new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
             return ( denominator - 1 ) >= denominatorProperty.range.min && numerator / ( denominator - 1 ) <= containerCount;
-          } )
+          } ),
+          {
+            increaseButtonOptions: {
+              interruptListener: buttonInterruptListener
+            },
+            decreaseButtonOptions: {
+              interruptListener: buttonInterruptListener
+            }
+          }
         )
       ]
     } );
