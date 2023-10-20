@@ -10,7 +10,7 @@ import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../scenery-phet/js/PhetFont.js';
-import { AlignBox, HBox, Text, VBox } from '../../../../scenery/js/imports.js';
+import { AlignBox, Display, HBox, Text, VBox } from '../../../../scenery/js/imports.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import FractionsCommonStrings from '../../FractionsCommonStrings.js';
 import RoundNumberSpinner from './RoundNumberSpinner.js';
@@ -58,7 +58,15 @@ class MaxNode extends VBox {
           new RoundNumberSpinner(
             containerCountProperty,
             new DerivedProperty( [ containerCountProperty ], value => value < containerCountProperty.range.max ),
-            new DerivedProperty( [ containerCountProperty ], value => value > containerCountProperty.range.min )
+            new DerivedProperty( [ containerCountProperty ], value => value > containerCountProperty.range.min ),
+            {
+              increaseButtonOptions: {
+                interruptListener: Display.INTERRUPT_OTHER_POINTERS
+              },
+              decreaseButtonOptions: {
+                interruptListener: Display.INTERRUPT_OTHER_POINTERS
+              }
+            }
           )
         ]
       } )
