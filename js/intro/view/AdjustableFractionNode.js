@@ -11,7 +11,7 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PropertyFractionNode from '../../../../scenery-phet/js/PropertyFractionNode.js';
-import { HBox, VBox } from '../../../../scenery/js/imports.js';
+import { HBox, VBox, Display } from '../../../../scenery/js/imports.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import RoundNumberSpinner from './RoundNumberSpinner.js';
 
@@ -42,11 +42,6 @@ class AdjustableFractionNode extends HBox {
       maxDenominator: denominatorProperty.range.max
     } );
 
-    // listener to interrupt all pointers, useful for preventing multitouch problems
-    const buttonInterruptListener = () => {
-      phet.joist.display.interruptPointers();
-    };
-
     const spinnersNode = new VBox( {
       spacing: 30,
       children: [
@@ -73,10 +68,10 @@ class AdjustableFractionNode extends HBox {
           } ),
           {
             increaseButtonOptions: {
-              interruptListener: buttonInterruptListener
+              interruptListener: Display.INTERRUPT_OTHER_POINTERS
             },
             decreaseButtonOptions: {
-              interruptListener: buttonInterruptListener
+              interruptListener: Display.INTERRUPT_OTHER_POINTERS
             }
           }
         )
