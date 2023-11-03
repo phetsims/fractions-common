@@ -468,12 +468,20 @@ class BuildingModel {
       scale: FractionsCommonConstants.SHAPE_BUILD_SCALE,
       animationInvalidationProperty: positionProperty,
       endAnimationCallback: () => {
-        this.shapeGroups.remove( shapeGroup );
-        if ( shapeGroupStack.isMutable ) {
-          shapeGroupStack.shapeGroups.push( shapeGroup );
-        }
-        else {
-          shapeGroup.dispose();
+
+        // Make sure the shape group is still around before trying to remove it.  This 'if' clause was added to fix a
+        // multitouch CT issue and feels like a bit of a cop out, but digging deeper was taking too much time.  See
+        // https://github.com/phetsims/fractions-common/issues/121.
+        if ( this.shapeGroups.includes( shapeGroup ) ) {
+
+          // Remove this shape group.
+          this.shapeGroups.remove( shapeGroup );
+          if ( shapeGroupStack.isMutable ) {
+            shapeGroupStack.shapeGroups.push( shapeGroup );
+          }
+          else {
+            shapeGroup.dispose();
+          }
         }
       }
     } );
