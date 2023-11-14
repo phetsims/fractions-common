@@ -57,8 +57,12 @@ class MaxNode extends VBox {
           } ),
           new RoundNumberSpinner(
             containerCountProperty,
-            new DerivedProperty( [ containerCountProperty ], value => value < containerCountProperty.range.max ),
-            new DerivedProperty( [ containerCountProperty ], value => value > containerCountProperty.range.min ),
+            new DerivedProperty( [ containerCountProperty ], value => value < containerCountProperty.range.max, {
+              accessNonDependencies: true
+            } ),
+            new DerivedProperty( [ containerCountProperty ], value => value > containerCountProperty.range.min, {
+              accessNonDependencies: true
+            } ),
             {
               increaseButtonOptions: {
                 interruptListener: Display.INTERRUPT_OTHER_POINTERS

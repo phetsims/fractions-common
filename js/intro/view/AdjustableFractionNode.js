@@ -56,15 +56,19 @@ class AdjustableFractionNode extends HBox {
             return ( numerator - 1 ) >= 0;
           } )
         ),
-        
+
         // Denominator
         new RoundNumberSpinner(
           denominatorProperty,
           new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
             return ( denominator + 1 ) <= denominatorProperty.range.max;
+          }, {
+            accessNonDependencies: true
           } ),
           new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
             return ( denominator - 1 ) >= denominatorProperty.range.min && numerator / ( denominator - 1 ) <= containerCount;
+          }, {
+            accessNonDependencies: true
           } ),
           {
             increaseButtonOptions: {

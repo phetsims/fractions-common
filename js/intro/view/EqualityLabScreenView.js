@@ -65,8 +65,12 @@ class EqualityLabScreenView extends ContainerSetScreenView {
 
     const multiplierSpinner = new RoundNumberSpinner(
       model.multiplierProperty,
-      new DerivedProperty( [ model.multiplierProperty ], multiplier => multiplier < model.multiplierProperty.range.max ),
-      new DerivedProperty( [ model.multiplierProperty ], multiplier => multiplier > model.multiplierProperty.range.min ), {
+      new DerivedProperty( [ model.multiplierProperty ], multiplier => multiplier < model.multiplierProperty.range.max, {
+        accessNonDependencies: true
+      } ),
+      new DerivedProperty( [ model.multiplierProperty ], multiplier => multiplier > model.multiplierProperty.range.min, {
+        accessNonDependencies: true
+      } ), {
         baseColor: FractionsCommonColors.greenRoundArrowButtonProperty,
         rotation: Math.PI / 2
       } );
