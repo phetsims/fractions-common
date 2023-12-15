@@ -6,7 +6,6 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Screen from '../../../../joist/js/Screen.js';
 import ScreenView from '../../../../joist/js/ScreenView.js';
@@ -333,14 +332,7 @@ class MatchingGameScreenView extends ScreenView {
           listener: () => {
             this.model.levelProperty.value = level;
           },
-          baseColor: FractionsCommonColors.matchingLevelBackgroundProperty,
-          // Workaround since it expects 0 as the best time if there was no best time. Don't solve levels in
-          // under a second!
-          bestTimeProperty: new DerivedProperty( [ level.bestTimeProperty ], bestTime => isFinite( bestTime ) ? bestTime : 0 ),
-          bestTimeVisibleProperty: new DerivedProperty( [ level.timeVisibleProperty, level.levelSelectionScoreProperty ], ( timeVisible, score ) => {
-            return timeVisible && score === 12;
-          } ),
-          bestTimeYSpacing: 5
+          baseColor: FractionsCommonColors.matchingLevelBackgroundProperty
         } );
         return button;
       } ),
