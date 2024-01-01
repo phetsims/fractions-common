@@ -63,12 +63,12 @@ class AdjustableFractionNode extends HBox {
           new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
             return ( denominator + 1 ) <= denominatorProperty.range.max;
           }, {
-            accessNonDependencies: true
+            strictAxonDependencies: false
           } ),
           new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
             return ( denominator - 1 ) >= denominatorProperty.range.min && numerator / ( denominator - 1 ) <= containerCount;
           }, {
-            accessNonDependencies: true
+            strictAxonDependencies: false
           } ),
           {
             increaseButtonOptions: {

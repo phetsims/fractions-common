@@ -147,12 +147,12 @@ class ShapeGroupNode extends GroupNode {
     this.decreaseEnabledProperty = new DerivedProperty( [ shapeGroup.partitionDenominatorProperty ], denominator => {
       return !this.isIcon && ( denominator > shapeGroup.partitionDenominatorProperty.range.min );
     }, {
-      accessNonDependencies: true
+      strictAxonDependencies: false
     } );
     this.increaseEnabledProperty = new DerivedProperty( [ shapeGroup.partitionDenominatorProperty ], denominator => {
       return !this.isIcon && ( denominator < shapeGroup.partitionDenominatorProperty.range.max );
     }, {
-      accessNonDependencies: true
+      strictAxonDependencies: false
     } );
 
     // @private {Node}

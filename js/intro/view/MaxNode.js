@@ -58,10 +58,10 @@ class MaxNode extends VBox {
           new RoundNumberSpinner(
             containerCountProperty,
             new DerivedProperty( [ containerCountProperty ], value => value < containerCountProperty.range.max, {
-              accessNonDependencies: true
+              strictAxonDependencies: false
             } ),
             new DerivedProperty( [ containerCountProperty ], value => value > containerCountProperty.range.min, {
-              accessNonDependencies: true
+              strictAxonDependencies: false
             } ),
             {
               increaseButtonOptions: {
