@@ -63,12 +63,12 @@ class AdjustableFractionNode extends HBox {
           new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
             return ( denominator + 1 ) <= denominatorProperty.range.max;
           }, {
-            strictAxonDependencies: false
+            strictAxonDependencies: false //TODO https://github.com/phetsims/fractions-common/issues/122
           } ),
           new DerivedProperty( properties, ( numerator, denominator, containerCount ) => {
             return ( denominator - 1 ) >= denominatorProperty.range.min && numerator / ( denominator - 1 ) <= containerCount;
           }, {
-            strictAxonDependencies: false
+            strictAxonDependencies: false //TODO https://github.com/phetsims/fractions-common/issues/122
           } ),
           {
             increaseButtonOptions: {
