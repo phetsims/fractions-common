@@ -1,4 +1,4 @@
-// Copyright 2018-2022, University of Colorado Boulder
+// Copyright 2018-2024, University of Colorado Boulder
 
 /**
  * Represents a (growing/shrinking) set of ShapeContainers, so that it can hold arbitrary mixed fraction

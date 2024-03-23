@@ -1,4 +1,4 @@
-// Copyright 2018-2023, University of Colorado Boulder
+// Copyright 2018-2024, University of Colorado Boulder
 
 /**
  * The top panel on the Lab screen which is two StackNodesBoxes and a toggle on the left to switch between them.
