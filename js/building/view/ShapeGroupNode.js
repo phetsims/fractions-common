@@ -146,13 +146,9 @@ class ShapeGroupNode extends GroupNode {
     // @private {Property.<boolean>}
     this.decreaseEnabledProperty = new DerivedProperty( [ shapeGroup.partitionDenominatorProperty ], denominator => {
       return !this.isIcon && ( denominator > shapeGroup.partitionDenominatorProperty.range.min );
-    }, {
-      strictAxonDependencies: false //TODO https://github.com/phetsims/fractions-common/issues/122
     } );
     this.increaseEnabledProperty = new DerivedProperty( [ shapeGroup.partitionDenominatorProperty ], denominator => {
       return !this.isIcon && ( denominator < shapeGroup.partitionDenominatorProperty.range.max );
-    }, {
-      strictAxonDependencies: false //TODO https://github.com/phetsims/fractions-common/issues/122
     } );
 
     // @private {Node}

@@ -57,12 +57,8 @@ class MaxNode extends VBox {
           } ),
           new RoundNumberSpinner(
             containerCountProperty,
-            new DerivedProperty( [ containerCountProperty ], value => value < containerCountProperty.range.max, {
-              strictAxonDependencies: false //TODO https://github.com/phetsims/fractions-common/issues/122
-            } ),
-            new DerivedProperty( [ containerCountProperty ], value => value > containerCountProperty.range.min, {
-              strictAxonDependencies: false //TODO https://github.com/phetsims/fractions-common/issues/122
-            } ),
+            new DerivedProperty( [ containerCountProperty ], value => value < containerCountProperty.range.max ),
+            new DerivedProperty( [ containerCountProperty ], value => value > containerCountProperty.range.min ),
             {
               increaseButtonOptions: {
                 interruptListener: Display.INTERRUPT_OTHER_POINTERS

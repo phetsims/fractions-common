@@ -65,12 +65,8 @@ class EqualityLabScreenView extends ContainerSetScreenView {
 
     const multiplierSpinner = new RoundNumberSpinner(
       model.multiplierProperty,
-      new DerivedProperty( [ model.multiplierProperty ], multiplier => multiplier < model.multiplierProperty.range.max, {
-        strictAxonDependencies: false //TODO https://github.com/phetsims/fractions-common/issues/122
-      } ),
-      new DerivedProperty( [ model.multiplierProperty ], multiplier => multiplier > model.multiplierProperty.range.min, {
-        strictAxonDependencies: false //TODO https://github.com/phetsims/fractions-common/issues/122
-      } ), {
+      new DerivedProperty( [ model.multiplierProperty ], multiplier => multiplier < model.multiplierProperty.range.max ),
+      new DerivedProperty( [ model.multiplierProperty ], multiplier => multiplier > model.multiplierProperty.range.min ), {
         baseColor: FractionsCommonColors.greenRoundArrowButtonProperty,
         rotation: Math.PI / 2
       } );
