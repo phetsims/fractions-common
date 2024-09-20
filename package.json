@@ -23,7 +23,7 @@
         ],
         "parserOptions": {
           "project": [
-            "../fractions-common/tsconfig.json"
+            "../chipper/tsconfig/eslint-all/tsconfig.json"
           ]
         }
       }
