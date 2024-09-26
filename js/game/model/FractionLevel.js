@@ -782,7 +782,6 @@ class FractionLevel {
    */
   static level6Shapes( levelNumber, color ) {
 
-    // TODO https://github.com/phetsims/chipper/issues/1451
     while ( true ) {
 
       // Java doc:
