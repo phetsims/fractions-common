@@ -41,7 +41,9 @@ const Primes = {
     // Run the main sieve procedure
     let currentPrime = 2;
     mainLoop: // eslint-disable-line no-labels
-      while ( true ) { // eslint-disable-line no-constant-condition
+
+    // TODO: What happened to no-constant-condition? See https://github.com/phetsims/chipper/issues/1451
+      while ( true ) {
         // Mark multiples of the current prime as composite
         for ( let i = 2 * currentPrime; i <= n; i += currentPrime ) {
           primeFlags[ i ] = false;

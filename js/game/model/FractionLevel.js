@@ -781,7 +781,9 @@ class FractionLevel {
    * @returns {FractionChallenge}
    */
   static level6Shapes( levelNumber, color ) {
-    while ( true ) { // eslint-disable-line no-constant-condition
+
+    // TODO https://github.com/phetsims/chipper/issues/1451
+    while ( true ) {
 
       // Java doc:
       //let's implement this my making each solution as na + mb, where a and b are the fractions from pairs above
