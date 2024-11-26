@@ -117,7 +117,6 @@ class BuildingLabScreenView extends ScreenView {
     // @private {Node}
     const resetAllButton = new ResetAllButton( {
       listener: () => {
-        this.interruptSubtreeInput();
         model.reset();
       }
     } );

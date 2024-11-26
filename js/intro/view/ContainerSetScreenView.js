@@ -176,7 +176,6 @@ class ContainerSetScreenView extends ScreenView {
     // @protected {Node}
     this.resetAllButton = new ResetAllButton( {
       listener: () => {
-        this.interruptSubtreeInput();
         model.reset();
       },
       right: this.layoutBounds.right - MARGIN,
