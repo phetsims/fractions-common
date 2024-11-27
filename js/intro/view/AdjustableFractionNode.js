@@ -11,7 +11,7 @@
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
 import merge from '../../../../phet-core/js/merge.js';
 import PropertyFractionNode from '../../../../scenery-phet/js/PropertyFractionNode.js';
-import { HBox, VBox, Display } from '../../../../scenery/js/imports.js';
+import { Display, HBox, VBox } from '../../../../scenery/js/imports.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import RoundNumberSpinner from './RoundNumberSpinner.js';
 
