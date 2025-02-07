@@ -7,7 +7,7 @@
  */
 
 import merge from '../../../../../phet-core/js/merge.js';
-import { Image } from '../../../../../scenery/js/imports.js';
+import Image from '../../../../../scenery/js/nodes/Image.js';
 import cake_1_1_png from '../../../../mipmaps/cake_1_1_png.js';
 import fractionsCommon from '../../../fractionsCommon.js';
 import CellSceneNode from '../CellSceneNode.js';

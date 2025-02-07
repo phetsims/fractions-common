@@ -9,7 +9,9 @@
 import Vector2 from '../../../../dot/js/Vector2.js';
 import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
 import merge from '../../../../phet-core/js/merge.js';
-import { HBox, Node, VBox } from '../../../../scenery/js/imports.js';
+import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
+import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import IntroRepresentation from '../model/IntroRepresentation.js';
 import BucketNode from './BucketNode.js';

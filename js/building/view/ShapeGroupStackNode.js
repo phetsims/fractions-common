@@ -8,7 +8,7 @@
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import EnumerationMap from '../../../../phet-core/js/EnumerationMap.js';
-import { Node } from '../../../../scenery/js/imports.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import BuildingRepresentation from '../model/BuildingRepresentation.js';

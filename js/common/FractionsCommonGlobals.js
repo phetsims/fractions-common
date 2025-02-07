@@ -7,7 +7,9 @@
  */
 
 import Screen from '../../../joist/js/Screen.js';
-import { AlignBox, Node, Rectangle } from '../../../scenery/js/imports.js';
+import AlignBox from '../../../scenery/js/layout/nodes/AlignBox.js';
+import Node from '../../../scenery/js/nodes/Node.js';
+import Rectangle from '../../../scenery/js/nodes/Rectangle.js';
 import fractionsCommon from '../fractionsCommon.js';
 
 const FractionsCommonGlobals = {

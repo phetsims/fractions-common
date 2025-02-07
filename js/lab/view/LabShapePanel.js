@@ -7,7 +7,10 @@
  */
 
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
-import { AlignBox, AlignGroup, HBox, Node } from '../../../../scenery/js/imports.js';
+import AlignGroup from '../../../../scenery/js/layout/constraints/AlignGroup.js';
+import AlignBox from '../../../../scenery/js/layout/nodes/AlignBox.js';
+import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
+import Node from '../../../../scenery/js/nodes/Node.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
 import Panel from '../../../../sun/js/Panel.js';
 import BuildingRepresentation from '../../building/model/BuildingRepresentation.js';

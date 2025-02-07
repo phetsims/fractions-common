@@ -7,7 +7,7 @@
  */
 
 import Multilink from '../../../../../axon/js/Multilink.js';
-import { DragListener } from '../../../../../scenery/js/imports.js';
+import DragListener from '../../../../../scenery/js/listeners/DragListener.js';
 import fractionsCommon from '../../../fractionsCommon.js';
 import ContainerNode from '../ContainerNode.js';
 import FractionsCommonBeakerNode from './FractionsCommonBeakerNode.js';

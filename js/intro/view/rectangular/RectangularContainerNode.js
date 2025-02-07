@@ -7,9 +7,10 @@
  */
 
 import Bounds2 from '../../../../../dot/js/Bounds2.js';
-import { Shape } from '../../../../../kite/js/imports.js';
+import Shape from '../../../../../kite/js/Shape.js';
 import merge from '../../../../../phet-core/js/merge.js';
-import { Path, Rectangle } from '../../../../../scenery/js/imports.js';
+import Path from '../../../../../scenery/js/nodes/Path.js';
+import Rectangle from '../../../../../scenery/js/nodes/Rectangle.js';
 import FractionsCommonConstants from '../../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../../common/view/FractionsCommonColors.js';
 import fractionsCommon from '../../../fractionsCommon.js';
