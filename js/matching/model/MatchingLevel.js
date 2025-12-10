@@ -11,16 +11,13 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DynamicProperty from '../../../../axon/js/DynamicProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Property from '../../../../axon/js/Property.js';
-import Utils from '../../../../dot/js/Utils.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
+import LevelSelectionButton from '../../../../vegas/js/LevelSelectionButton.js';
 import fractionsCommon from '../../fractionsCommon.js';
 import FillType from '../../game/model/FillType.js';
 import ShapePartition from '../../game/model/ShapePartition.js';
 import MatchingChallenge from './MatchingChallenge.js';
-
-// constants
-const MAX_SCORE = 12;
 
 class MatchingLevel {
   /**
@@ -44,7 +41,7 @@ class MatchingLevel {
     this.number = number;
 
     // @public {Property.<number>}
-    this.bestTimeProperty = new NumberProperty( Number.POSITIVE_INFINITY );
+    this.bestTimeProperty = new NumberProperty( 0 );
 
     // @public {Property.<MatchingChallenge>}
     this.challengeProperty = new Property( this.nextChallenge() );
@@ -61,20 +58,12 @@ class MatchingLevel {
     // @public {Property.<number>} - Track the score shown on the level selection separately, since it needs to be
     // independently controlled for https://github.com/phetsims/fraction-matcher/issues/98.
     this.levelSelectionScoreProperty = new NumberProperty( 0 );
-    this.scoreProperty.link( ( newScore, oldScore ) => {
-      if ( newScore > oldScore ) {
-        this.levelSelectionScoreProperty.value = newScore;
-      }
-    } );
 
     // @private {function}
     this.completedListener = () => {
       const score = this.challengeProperty.value.scoreProperty.value;
-
-      // Only record the best time for perfect runs, see https://github.com/phetsims/fractions-common/issues/92
-      if ( score === MAX_SCORE ) {
-        this.bestTimeProperty.value = Utils.toFixedNumber( Math.min( this.bestTimeProperty.value, this.challengeProperty.value.elapsedTimeProperty.value ), 0 );
-      }
+      const time = this.challengeProperty.value.elapsedTimeProperty.value;
+      LevelSelectionButton.tryUpdateScoreAndBestTime( score, time, this.levelSelectionScoreProperty, this.bestTimeProperty );
     };
 
     this.challengeProperty.link( ( newChallenge, oldChallenge ) => {
@@ -136,8 +125,9 @@ class MatchingLevel {
       /**
        * Level 1
        * No mixed numbers
-       * Only “exact” matches will be present. So for instance if there is a 3/6  and a pie with 6 divisions and 3 shaded slices, there will not be a ½  present .  In other words, the numerical representation on this level will exactly match the virtual manipulative.
-       * Only numbers/representations ≦ 1 possible on this level
+       * Only “exact” matches will be present. So for instance if there is a 3/6  and a pie with 6 divisions and 3 shaded slices, there will not be a ½
+       * present. In other words, the numerical representation on this level will exactly match the virtual manipulative. Only numbers/representations ≦ 1
+       * possible on this level
        * “Easy” shapes on this level (not some of the more abstract representations)
        */
       {
@@ -157,9 +147,8 @@ class MatchingLevel {
       },
       /**
        * Level 2
-       * Reduced fractions possible on this level. So, for instance 3/6 and ½  could both be present.  Or a virtual representation of 3/6 could have the numerical of ½ be its only possible match
-       * Still only numbers/representations ≦ 1 possible
-       * More shapes can be introduced
+       * Reduced fractions possible on this level. So, for instance 3/6 and ½  could both be present.  Or a virtual representation of 3/6 could have the
+       * numerical of ½ be its only possible match Still only numbers/representations ≦ 1 possible More shapes can be introduced
        */
       {
         fractions: [
@@ -174,9 +163,8 @@ class MatchingLevel {
       },
       /**
        * Level 3:
-       * Reduced fractions possible on this level. So, for instance 3/6 and ½  could both be present.  Or a virtual representation of 3/6 could have the numerical of ½ be its only possible match
-       * Still only numbers/representations ≦ 1 possible
-       * More shapes can be introduced
+       * Reduced fractions possible on this level. So, for instance 3/6 and ½  could both be present.  Or a virtual representation of 3/6 could have the
+       * numerical of ½ be its only possible match Still only numbers/representations ≦ 1 possible More shapes can be introduced
        */
       {
         fractions: [

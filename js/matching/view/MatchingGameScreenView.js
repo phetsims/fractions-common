@@ -325,19 +325,19 @@ class MatchingGameScreenView extends ScreenView {
   createLevelRow( levels, icons ) {
     return new HBox( {
       children: levels.map( ( level, index ) => {
-        const button = new LevelSelectionButton( icons[ index ], level.levelSelectionScoreProperty, {
+        return new LevelSelectionButton( icons[ index ], level.levelSelectionScoreProperty, {
           buttonWidth: 110,
           buttonHeight: 200,
           createScoreDisplay: scoreProperty => new ScoreDisplayStars( scoreProperty, {
             numberOfStars: 3,
             perfectScore: 12
           } ),
+          bestTimeForScoreProperty: level.bestTimeProperty,
           listener: () => {
             this.model.levelProperty.value = level;
           },
           baseColor: FractionsCommonColors.matchingLevelBackgroundProperty
         } );
-        return button;
       } ),
       spacing: LEVEL_SELECTION_SPACING
     } );
