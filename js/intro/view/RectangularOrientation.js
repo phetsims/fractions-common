@@ -1,4 +1,4 @@
-// Copyright 2018, University of Colorado Boulder
+// Copyright 2018-2019, University of Colorado Boulder
 
 /**
  * Represents the orientation of the rectangular view (one representation is more vertical, one is more horizontal).
