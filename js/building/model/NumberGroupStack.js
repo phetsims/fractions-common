@@ -3,7 +3,7 @@
 /**
  * A stack of number groups (either mixed or non-mixed)
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import fractionsCommon from '../../fractionsCommon.js';

@@ -3,7 +3,7 @@
 /**
  * Provides a wrapper for handling animation logic for an assorted number of different properties.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import Property from '../../../../axon/js/Property.js';

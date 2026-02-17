@@ -3,7 +3,7 @@
 /**
  * Represents and handles generation of the levels for the "building" style fractions sims.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import DynamicProperty from '../../../../axon/js/DynamicProperty.js';

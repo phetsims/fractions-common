@@ -3,7 +3,7 @@
 /**
  * Represents a filled cell (of 1/N, for whatever denominator).
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

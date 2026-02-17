@@ -3,7 +3,7 @@
 /**
  * Model for intro-like screens that use a set of containers.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import createObservableArray from '../../../../axon/js/createObservableArray.js';

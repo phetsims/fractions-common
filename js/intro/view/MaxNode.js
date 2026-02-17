@@ -3,7 +3,7 @@
 /**
  * Displays an up/down control for handling the maximum number of "containers"
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';

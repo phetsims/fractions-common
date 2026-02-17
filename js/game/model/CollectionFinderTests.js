@@ -3,7 +3,7 @@
 /**
  * Tests for CollectionFinder
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';

@@ -3,7 +3,7 @@
 /**
  * ScreenView for game screens where the objective is to build specific fractions.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

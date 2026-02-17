@@ -3,7 +3,7 @@
 /**
  * The bottom panel with number pieces/groups for the Lab screen.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import Panel from '../../../../sun/js/Panel.js';

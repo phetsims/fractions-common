@@ -5,7 +5,7 @@
  *
  * NOTE: These are kept around for the life of the source container, so they won't need to be disposed.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import fractionsCommon from '../../fractionsCommon.js';

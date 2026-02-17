@@ -3,7 +3,7 @@
 /**
  * Supertype for container nodes that show and track individual cell nodes (i.e. NOT the beaker container).
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import DerivedProperty from '../../../../axon/js/DerivedProperty.js';

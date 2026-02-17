@@ -3,7 +3,7 @@
 /**
  * View for a single MatchingChallenge.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  * @author Anton Ulyanov (Mlearner)
  */
 

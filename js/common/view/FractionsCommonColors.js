@@ -3,7 +3,7 @@
 /**
  * Colors for the fractions simulations.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';

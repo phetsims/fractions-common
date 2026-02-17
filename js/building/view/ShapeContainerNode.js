@@ -5,7 +5,7 @@
  *
  * Its layout should be based around this node being centered (locally) around the proper origin
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import arrayRemove from '../../../../phet-core/js/arrayRemove.js';

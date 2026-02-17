@@ -3,7 +3,7 @@
 /**
  * Holds common settings to RadioButtonGroups for the intro-style screens.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import merge from '../../../../phet-core/js/merge.js';

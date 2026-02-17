@@ -3,7 +3,7 @@
 /**
  * The beaker variant of a piece node.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import fractionsCommon from '../../../fractionsCommon.js';

@@ -3,7 +3,7 @@
 /**
  * Utilities or references used for all of the fractions sims
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import Screen from '../../../joist/js/Screen.js';

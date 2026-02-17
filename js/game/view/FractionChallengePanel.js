@@ -3,7 +3,7 @@
 /**
  * Bottom panel for fraction challenges that holds the pieces.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import Panel from '../../../../sun/js/Panel.js';

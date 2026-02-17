@@ -3,7 +3,7 @@
 /**
  * A stack of ShapeGroups of a particular representation.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import fractionsCommon from '../../fractionsCommon.js';

@@ -3,7 +3,7 @@
 /**
  * Scene for the circular representation
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import merge from '../../../../../phet-core/js/merge.js';

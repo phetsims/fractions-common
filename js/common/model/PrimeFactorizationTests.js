@@ -3,7 +3,7 @@
 /**
  * Unit tests for PrimeFactorization
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import Utils from '../../../../dot/js/Utils.js';

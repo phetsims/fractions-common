@@ -3,7 +3,7 @@
 /**
  * Enumerates strategies for turning ShapePartition + Fraction => FilledPartition
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';

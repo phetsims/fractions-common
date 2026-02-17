@@ -3,7 +3,7 @@
 /**
  * Layer implementation for the game screens (contains views for groups and pieces)
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import BuildingType from '../../building/model/BuildingType.js';

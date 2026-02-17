@@ -4,7 +4,7 @@
  * Represents a (growing/shrinking) set of ShapeContainers, so that it can hold arbitrary mixed fraction
  * representations. Each container can hold shape pieces, and can add up to at most 1.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import createObservableArray from '../../../../axon/js/createObservableArray.js';

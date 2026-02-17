@@ -3,7 +3,7 @@
 /**
  * Layer implementation for the lab screens (contains views for groups and pieces)
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import BuildingLayerNode from '../../building/view/BuildingLayerNode.js';

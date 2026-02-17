@@ -3,7 +3,7 @@
 /**
  * Displays a filled partition (shapes) visually.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import merge from '../../../../phet-core/js/merge.js';

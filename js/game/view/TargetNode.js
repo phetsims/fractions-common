@@ -3,7 +3,7 @@
 /**
  * Shows a container with a given visual representation of the target (what should go in it).
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';

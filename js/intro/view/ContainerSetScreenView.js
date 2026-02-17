@@ -3,7 +3,7 @@
 /**
  * ScreenView for all intro-based screens that use sets of containers.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';

@@ -3,7 +3,7 @@
 /**
  * Represents a specific challenge (set of fractions/pieces/targets and the given state of its solution).
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  * @author Anton Ulyanov, Andrey Zelenkov (Mlearner)
  */
 

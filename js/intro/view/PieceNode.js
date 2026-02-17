@@ -6,7 +6,7 @@
  * NOTE: The graphics of a piece are set up so that its logical "center" (that it may rotate around or corresponds to
  * its best "drag" position) will be at its origin.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';

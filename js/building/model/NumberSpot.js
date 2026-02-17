@@ -3,7 +3,7 @@
 /**
  * Represents a place in a mixed fraction where a natural number can be potentially placed.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

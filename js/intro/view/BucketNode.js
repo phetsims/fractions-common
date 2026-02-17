@@ -4,7 +4,7 @@
  * Displays a bucket of pieces.
  *
  * @author Vincent Davis (Berea College)
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import NumberProperty from '../../../../axon/js/NumberProperty.js';

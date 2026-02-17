@@ -3,7 +3,7 @@
 /**
  * Represents the goal "target" fraction along with its associated collection area values.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import createObservableArray from '../../../../axon/js/createObservableArray.js';

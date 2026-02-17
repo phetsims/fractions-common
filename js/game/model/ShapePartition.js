@@ -4,7 +4,7 @@
  * A nonoverlapping partition of a larger "shape" into smaller shapes, that can be rescaled or used to display a
  * fractional representation.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import Matrix3 from '../../../../dot/js/Matrix3.js';

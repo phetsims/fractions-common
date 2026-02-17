@@ -12,7 +12,7 @@
  * denominator is NOT a multiple of 5, so if (X/Y - e/5)'s denominator is a multiple of 5, it can be excluded. In this
  * case, it excludes 4/5ths of the values of e.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import merge from '../../../../phet-core/js/merge.js';

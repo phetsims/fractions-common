@@ -3,7 +3,7 @@
 /**
  * Unit tests. Please run once in phet brand.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import qunitStart from '../../chipper/js/browser/sim-tests/qunitStart.js';

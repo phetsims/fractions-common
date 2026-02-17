@@ -4,7 +4,7 @@
  * The ideal "target" for a collection box, that shows an additional shape-based representation of the fraction to the
  * side.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import fractionsCommon from '../../fractionsCommon.js';

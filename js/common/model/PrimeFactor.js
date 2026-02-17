@@ -3,7 +3,7 @@
 /**
  * Represents a power of a prime number.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import fractionsCommon from '../../fractionsCommon.js';

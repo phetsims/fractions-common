@@ -4,7 +4,7 @@
  * Displays a background and foreground strokes for a given representation and denominator, and provides a layer
  * in-between where shapes can be placed.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import Utils from '../../../../dot/js/Utils.js';

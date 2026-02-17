@@ -3,7 +3,7 @@
 /**
  * Model representation for the pieces/stacks/groups for numbers/pies/bars.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import createObservableArray from '../../../../axon/js/createObservableArray.js';

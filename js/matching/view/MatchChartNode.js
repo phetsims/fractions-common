@@ -5,7 +5,7 @@
  * Contains signs shapes (more, equal, less), scale, indicators.
  *
  * @author Anton Ulyanov (Mlearner)
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import Shape from '../../../../kite/js/Shape.js';

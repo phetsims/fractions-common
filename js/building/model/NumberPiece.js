@@ -5,7 +5,7 @@
  *
  * NOTE: The coordinate frame of pieces are always where the origin of this piece is at its centroid.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';

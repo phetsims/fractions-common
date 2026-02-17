@@ -7,7 +7,7 @@
  *
  * Usually the items in a stack are shown (offset by a certain amount).
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import createObservableArray from '../../../../axon/js/createObservableArray.js';

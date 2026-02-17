@@ -3,7 +3,7 @@
 /**
  * The top panel on the Lab screen which is two StackNodesBoxes and a toggle on the left to switch between them.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';

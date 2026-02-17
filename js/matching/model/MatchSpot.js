@@ -3,7 +3,7 @@
 /**
  * A specific place a piece can be "stored" (either a target, a scale, or a source spot near the bottom).
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import Property from '../../../../axon/js/Property.js';

@@ -3,7 +3,7 @@
 /**
  * Contains up to N cells, where N is the denominator. Represents up to N/N (N cells of 1/N each).
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import createObservableArray from '../../../../axon/js/createObservableArray.js';

@@ -3,7 +3,7 @@
 /**
  * Represents an area of value 1 that can hold shape pieces that in total can sum up to 1.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import createObservableArray from '../../../../axon/js/createObservableArray.js';

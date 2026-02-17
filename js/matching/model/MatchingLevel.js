@@ -3,7 +3,7 @@
 /**
  * A specific level for the matching game, that can have multiple challenges over time.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  * @author Anton Ulyanov, Andrey Zelenkov (Mlearner)
  */
 

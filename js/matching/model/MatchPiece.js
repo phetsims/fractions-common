@@ -3,7 +3,7 @@
 /**
  * A draggable piece (with an associated fraction). May be a fractional representation or a shape representation.
  *
- * @author Jonathan Olson <jonathan.olson@colorado.edu>
+ * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
