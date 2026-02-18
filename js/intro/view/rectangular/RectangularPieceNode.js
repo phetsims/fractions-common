@@ -1,4 +1,4 @@
-// Copyright 2018-2020, University of Colorado Boulder
+// Copyright 2018-2026, University of Colorado Boulder
 
 /**
  * The rectangular variant of a piece node.
