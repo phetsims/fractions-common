@@ -8,7 +8,6 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import merge from '../../../../phet-core/js/merge.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import ContainerSetModel from './ContainerSetModel.js';
 
 class IntroModel extends ContainerSetModel {
@@ -46,5 +45,4 @@ class IntroModel extends ContainerSetModel {
   }
 }
 
-fractionsCommon.register( 'IntroModel', IntroModel );
 export default IntroModel;

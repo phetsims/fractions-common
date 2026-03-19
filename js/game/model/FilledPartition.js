@@ -8,7 +8,6 @@
 
 import dotRandom from '../../../../dot/js/dotRandom.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import FillType from './FillType.js';
 import ShapePartition from './ShapePartition.js';
 
@@ -114,7 +113,5 @@ class FilledPartition {
     } );
   }
 }
-
-fractionsCommon.register( 'FilledPartition', FilledPartition );
 
 export default FilledPartition;

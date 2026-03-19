@@ -7,7 +7,6 @@
  */
 
 import merge from '../../../../../phet-core/js/merge.js';
-import fractionsCommon from '../../../fractionsCommon.js';
 import PieceNode from '../PieceNode.js';
 import RectangularNode from './RectangularNode.js';
 
@@ -40,5 +39,4 @@ class RectangularPieceNode extends PieceNode {
   }
 }
 
-fractionsCommon.register( 'RectangularPieceNode', RectangularPieceNode );
 export default RectangularPieceNode;

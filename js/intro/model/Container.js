@@ -8,7 +8,6 @@
 
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import Cell from './Cell.js';
 
 class Container {
@@ -149,5 +148,4 @@ class Container {
   }
 }
 
-fractionsCommon.register( 'Container', Container );
 export default Container;

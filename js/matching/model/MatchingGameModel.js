@@ -9,7 +9,6 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import DynamicProperty from '../../../../axon/js/DynamicProperty.js';
 import Property from '../../../../axon/js/Property.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import MatchingLevel from './MatchingLevel.js';
 
 class MatchingGameModel {
@@ -68,5 +67,4 @@ class MatchingGameModel {
   }
 }
 
-fractionsCommon.register( 'MatchingGameModel', MatchingGameModel );
 export default MatchingGameModel;

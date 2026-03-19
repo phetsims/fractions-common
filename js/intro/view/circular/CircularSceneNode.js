@@ -8,7 +8,6 @@
 
 import merge from '../../../../../phet-core/js/merge.js';
 import FractionsCommonColors from '../../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../../fractionsCommon.js';
 import Container from '../../model/Container.js';
 import CellSceneNode from '../CellSceneNode.js';
 import CircularContainerNode from './CircularContainerNode.js';
@@ -58,5 +57,4 @@ class CircularSceneNode extends CellSceneNode {
   }
 }
 
-fractionsCommon.register( 'CircularSceneNode', CircularSceneNode );
 export default CircularSceneNode;

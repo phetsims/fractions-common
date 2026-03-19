@@ -10,7 +10,6 @@ import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Property from '../../../../axon/js/Property.js';
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import MatchSpot from './MatchSpot.js';
 
 class MatchTarget {
@@ -89,5 +88,4 @@ class MatchTarget {
   }
 }
 
-fractionsCommon.register( 'MatchTarget', MatchTarget );
 export default MatchTarget;

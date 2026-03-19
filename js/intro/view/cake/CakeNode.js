@@ -55,7 +55,6 @@ import cake_8_7_png from '../../../../mipmaps/cake_8_7_png.js';
 import cake_8_8_png from '../../../../mipmaps/cake_8_8_png.js';
 import FractionsCommonConstants from '../../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../../fractionsCommon.js';
 
 // constants
 
@@ -289,8 +288,6 @@ class CakeNode extends Node {
     return CakeNode.ellipseIntersect( angle, TOP_ELLIPSE, TOP_ELLIPSE_OFFSET_CENTER, TOP_ASPECT );
   }
 }
-
-fractionsCommon.register( 'CakeNode', CakeNode );
 
 // @public {Dimension2}
 CakeNode.CAKE_IMAGE_SIZE = CAKE_IMAGE_SIZE;

@@ -49,7 +49,6 @@ import ShapePieceNode from '../../building/view/ShapePieceNode.js';
 import FractionsCommonGlobals from '../../common/FractionsCommonGlobals.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import RoundArrowButton from '../../common/view/RoundArrowButton.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import FractionsCommonStrings from '../../FractionsCommonStrings.js';
 import FilledPartition from '../model/FilledPartition.js';
 import ShapePartition from '../model/ShapePartition.js';
@@ -605,5 +604,4 @@ class BuildingGameScreenView extends ScreenView {
   }
 }
 
-fractionsCommon.register( 'BuildingGameScreenView', BuildingGameScreenView );
 export default BuildingGameScreenView;

@@ -13,7 +13,6 @@ import Node from '../../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../../scenery/js/nodes/Path.js';
 import FractionsCommonConstants from '../../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../../fractionsCommon.js';
 
 class CircularNode extends Node {
   /**
@@ -121,5 +120,4 @@ class CircularNode extends Node {
 // @public {number} - The normal radius
 CircularNode.RADIUS = 63;
 
-fractionsCommon.register( 'CircularNode', CircularNode );
 export default CircularNode;

@@ -7,7 +7,6 @@
  */
 
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
-import fractionsCommon from '../fractionsCommon.js';
 
 // constants
 const WHOLE_FRACTIONAL_SIZE_RATIO = 2;
@@ -60,7 +59,5 @@ const FractionsCommonConstants = {
   // {number} - We have a number of things that rely on a certain fixed number of levels for the game
   NUM_LEVELS: 10
 };
-
-fractionsCommon.register( 'FractionsCommonConstants', FractionsCommonConstants );
 
 export default FractionsCommonConstants;

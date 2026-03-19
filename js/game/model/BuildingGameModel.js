@@ -14,7 +14,6 @@ import EnumerationMap from '../../../../phet-core/js/EnumerationMap.js';
 import BuildingType from '../../building/model/BuildingType.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import FractionChallenge from './FractionChallenge.js';
 import FractionLevel from './FractionLevel.js';
 
@@ -247,5 +246,4 @@ class BuildingGameModel {
   }
 }
 
-fractionsCommon.register( 'BuildingGameModel', BuildingGameModel );
 export default BuildingGameModel;

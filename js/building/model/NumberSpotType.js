@@ -7,7 +7,6 @@
  */
 
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 const NumberSpotType = EnumerationDeprecated.byKeys( [
   'WHOLE',
@@ -29,5 +28,4 @@ const NumberSpotType = EnumerationDeprecated.byKeys( [
     ];
   }
 } );
-fractionsCommon.register( 'NumberSpotType', NumberSpotType );
 export default NumberSpotType;

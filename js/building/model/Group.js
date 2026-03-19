@@ -13,7 +13,6 @@ import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import Animator from '../../common/model/Animator.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 class Group {
   /**
@@ -116,5 +115,4 @@ class Group {
   }
 }
 
-fractionsCommon.register( 'Group', Group );
 export default Group;

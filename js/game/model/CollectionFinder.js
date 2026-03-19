@@ -19,7 +19,6 @@ import merge from '../../../../phet-core/js/merge.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
 import PrimeFactor from '../../common/model/PrimeFactor.js';
 import PrimeFactorization from '../../common/model/PrimeFactorization.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import UnitCollection from './UnitCollection.js';
 
 class CollectionFinder {
@@ -394,5 +393,4 @@ class Constraint {
   }
 }
 
-fractionsCommon.register( 'CollectionFinder', CollectionFinder );
 export default CollectionFinder;

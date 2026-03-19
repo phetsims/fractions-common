@@ -7,7 +7,6 @@
  * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
-import fractionsCommon from '../../fractionsCommon.js';
 import FilledPartition from './FilledPartition.js';
 import Target from './Target.js';
 
@@ -64,5 +63,4 @@ class ShapeTarget extends Target {
   }
 }
 
-fractionsCommon.register( 'ShapeTarget', ShapeTarget );
 export default ShapeTarget;

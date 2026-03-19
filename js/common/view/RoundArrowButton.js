@@ -11,7 +11,6 @@ import Shape from '../../../../kite/js/Shape.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import RoundPushButton from '../../../../sun/js/buttons/RoundPushButton.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import FractionsCommonConstants from '../FractionsCommonConstants.js';
 import FractionsCommonColors from './FractionsCommonColors.js';
 
@@ -50,5 +49,4 @@ class RoundArrowButton extends RoundPushButton {
   }
 }
 
-fractionsCommon.register( 'RoundArrowButton', RoundArrowButton );
 export default RoundArrowButton;

@@ -6,7 +6,6 @@
  * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
-import fractionsCommon from '../../fractionsCommon.js';
 import BuildingType from './BuildingType.js';
 import Stack from './Stack.js';
 
@@ -27,5 +26,4 @@ class NumberGroupStack extends Stack {
   }
 }
 
-fractionsCommon.register( 'NumberGroupStack', NumberGroupStack );
 export default NumberGroupStack;

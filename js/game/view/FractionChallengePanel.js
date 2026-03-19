@@ -8,7 +8,6 @@
 
 import Panel from '../../../../sun/js/Panel.js';
 import StackNodesBox from '../../building/view/StackNodesBox.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 class FractionChallengePanel extends Panel {
   /**
@@ -53,5 +52,4 @@ class FractionChallengePanel extends Panel {
   }
 }
 
-fractionsCommon.register( 'FractionChallengePanel', FractionChallengePanel );
 export default FractionChallengePanel;

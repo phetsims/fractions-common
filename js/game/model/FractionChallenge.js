@@ -24,7 +24,6 @@ import ShapePiece from '../../building/model/ShapePiece.js';
 import ShapeStack from '../../building/model/ShapeStack.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import PrimeFactorization from '../../common/model/PrimeFactorization.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import ChallengeType from './ChallengeType.js';
 import CollectionFinder from './CollectionFinder.js';
 import ShapeTarget from './ShapeTarget.js';
@@ -712,5 +711,4 @@ class FractionChallenge extends BuildingModel {
   }
 }
 
-fractionsCommon.register( 'FractionChallenge', FractionChallenge );
 export default FractionChallenge;

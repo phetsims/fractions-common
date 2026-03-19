@@ -15,7 +15,6 @@ import Path from '../../../../scenery/js/nodes/Path.js';
 import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import BuildingRepresentation from '../model/BuildingRepresentation.js';
 import ShapePiece from '../model/ShapePiece.js';
 
@@ -146,5 +145,4 @@ class ShapeLayerNode extends Node {
   }
 }
 
-fractionsCommon.register( 'ShapeLayerNode', ShapeLayerNode );
 export default ShapeLayerNode;

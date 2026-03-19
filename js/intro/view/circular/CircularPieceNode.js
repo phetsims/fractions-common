@@ -6,7 +6,6 @@
  * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
-import fractionsCommon from '../../../fractionsCommon.js';
 import PieceNode from '../PieceNode.js';
 import CircularNode from './CircularNode.js';
 
@@ -92,5 +91,4 @@ class CircularPieceNode extends PieceNode {
   }
 }
 
-fractionsCommon.register( 'CircularPieceNode', CircularPieceNode );
 export default CircularPieceNode;

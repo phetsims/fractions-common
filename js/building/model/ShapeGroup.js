@@ -14,7 +14,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import BuildingRepresentation from './BuildingRepresentation.js';
 import BuildingType from './BuildingType.js';
 import Group from './Group.js';
@@ -134,5 +133,4 @@ class ShapeGroup extends Group {
   }
 }
 
-fractionsCommon.register( 'ShapeGroup', ShapeGroup );
 export default ShapeGroup;

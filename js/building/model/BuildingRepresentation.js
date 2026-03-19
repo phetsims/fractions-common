@@ -8,7 +8,6 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 const BuildingRepresentation = EnumerationDeprecated.byKeys( [
   'PIE',
@@ -29,5 +28,4 @@ const BuildingRepresentation = EnumerationDeprecated.byKeys( [
   }
 } );
 
-fractionsCommon.register( 'BuildingRepresentation', BuildingRepresentation );
 export default BuildingRepresentation;

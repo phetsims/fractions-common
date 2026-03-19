@@ -16,7 +16,6 @@ import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import Animation from '../../../../twixt/js/Animation.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 // constants
 const symbolFill = '#FFFF00';
@@ -228,5 +227,4 @@ class MatchChartNode extends Node {
   }
 }
 
-fractionsCommon.register( 'MatchChartNode', MatchChartNode );
 export default MatchChartNode;

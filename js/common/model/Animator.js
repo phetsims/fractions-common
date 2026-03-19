@@ -10,7 +10,6 @@ import Property from '../../../../axon/js/Property.js';
 import Utils from '../../../../dot/js/Utils.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 class Animator {
   /**
@@ -237,5 +236,4 @@ class Animator {
   }
 }
 
-fractionsCommon.register( 'Animator', Animator );
 export default Animator;

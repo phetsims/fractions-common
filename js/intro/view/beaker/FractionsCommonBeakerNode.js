@@ -11,7 +11,6 @@ import Range from '../../../../../dot/js/Range.js';
 import merge from '../../../../../phet-core/js/merge.js';
 import BeakerNode from '../../../../../scenery-phet/js/BeakerNode.js';
 import FractionsCommonColors from '../../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../../fractionsCommon.js';
 
 // constants
 const EMPTY_BEAKER_COLOR = FractionsCommonColors.emptyBeakerProperty;
@@ -49,5 +48,4 @@ class FractionsCommonBeakerNode extends BeakerNode {
 // @public {number} - The normal height of a beaker
 FractionsCommonBeakerNode.DEFAULT_BEAKER_HEIGHT = 150;
 
-fractionsCommon.register( 'FractionsCommonBeakerNode', FractionsCommonBeakerNode );
 export default FractionsCommonBeakerNode;

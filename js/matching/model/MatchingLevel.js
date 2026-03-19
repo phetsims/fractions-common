@@ -14,7 +14,6 @@ import Property from '../../../../axon/js/Property.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
 import LevelSelectionButton from '../../../../vegas/js/LevelSelectionButton.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import FillType from '../../game/model/FillType.js';
 import ShapePartition from '../../game/model/ShapePartition.js';
 import MatchingChallenge from './MatchingChallenge.js';
@@ -477,5 +476,4 @@ class MatchingLevel {
   }
 }
 
-fractionsCommon.register( 'MatchingLevel', MatchingLevel );
 export default MatchingLevel;

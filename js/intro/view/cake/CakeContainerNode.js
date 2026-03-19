@@ -8,7 +8,6 @@
 
 import Shape from '../../../../../kite/js/Shape.js';
 import Path from '../../../../../scenery/js/nodes/Path.js';
-import fractionsCommon from '../../../fractionsCommon.js';
 import CellContainerNode from '../CellContainerNode.js';
 import CakeNode from './CakeNode.js';
 
@@ -96,5 +95,4 @@ class CakeContainerNode extends CellContainerNode {
   }
 }
 
-fractionsCommon.register( 'CakeContainerNode', CakeContainerNode );
 export default CakeContainerNode;

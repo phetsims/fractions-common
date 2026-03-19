@@ -17,7 +17,6 @@ import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecate
 import merge from '../../../../phet-core/js/merge.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import FilledPartition from '../../game/model/FilledPartition.js';
 import FillType from '../../game/model/FillType.js';
 import ShapePartition from '../../game/model/ShapePartition.js';
@@ -354,5 +353,4 @@ MatchingChallenge.State = EnumerationDeprecated.byKeys( [
   'SHOW_ANSWER'
 ] );
 
-fractionsCommon.register( 'MatchingChallenge', MatchingChallenge );
 export default MatchingChallenge;

@@ -14,7 +14,6 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import Animator from '../../common/model/Animator.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 // constants
 const NUMBER_HEIGHT = 75;
@@ -73,5 +72,4 @@ class NumberPiece {
   }
 }
 
-fractionsCommon.register( 'NumberPiece', NumberPiece );
 export default NumberPiece;

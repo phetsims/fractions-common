@@ -10,7 +10,6 @@
 
 import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import ShapeContainer from '../model/ShapeContainer.js';
 import ShapeLayerNode from './ShapeLayerNode.js';
 import ShapePieceNode from './ShapePieceNode.js';
@@ -101,5 +100,4 @@ class ShapeContainerNode extends Node {
   }
 }
 
-fractionsCommon.register( 'ShapeContainerNode', ShapeContainerNode );
 export default ShapeContainerNode;

@@ -16,7 +16,6 @@ import Node from '../../../../scenery/js/nodes/Node.js';
 import Panel from '../../../../sun/js/Panel.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import IntroRepresentation from '../model/IntroRepresentation.js';
 import AdjustableFractionNode from './AdjustableFractionNode.js';
 import BeakerSceneNode from './beaker/BeakerSceneNode.js';
@@ -204,5 +203,4 @@ class ContainerSetScreenView extends ScreenView {
   }
 }
 
-fractionsCommon.register( 'ContainerSetScreenView', ContainerSetScreenView );
 export default ContainerSetScreenView;

@@ -7,7 +7,6 @@
  */
 
 import Vector2 from '../../../../dot/js/Vector2.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import BuildingType from './BuildingType.js';
 import Stack from './Stack.js';
 
@@ -39,5 +38,4 @@ class NumberStack extends Stack {
   }
 }
 
-fractionsCommon.register( 'NumberStack', NumberStack );
 export default NumberStack;

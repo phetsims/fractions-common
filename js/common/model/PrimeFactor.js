@@ -6,7 +6,6 @@
  * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
-import fractionsCommon from '../../fractionsCommon.js';
 import Primes from './Primes.js';
 
 class PrimeFactor {
@@ -65,5 +64,4 @@ class PrimeFactor {
   }
 }
 
-fractionsCommon.register( 'PrimeFactor', PrimeFactor );
 export default PrimeFactor;

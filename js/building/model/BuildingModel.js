@@ -13,7 +13,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import EnumerationMap from '../../../../phet-core/js/EnumerationMap.js';
 import Easing from '../../../../twixt/js/Easing.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import BuildingRepresentation from './BuildingRepresentation.js';
 import BuildingType from './BuildingType.js';
 import NumberGroup from './NumberGroup.js';
@@ -621,5 +620,4 @@ class BuildingModel {
   }
 }
 
-fractionsCommon.register( 'BuildingModel', BuildingModel );
 export default BuildingModel;

@@ -14,7 +14,6 @@ import merge from '../../../../phet-core/js/merge.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
 import PrimeFactorization from '../../common/model/PrimeFactorization.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import CollectionFinder from './CollectionFinder.js';
 import FilledPartition from './FilledPartition.js';
 import FillType from './FillType.js';
@@ -1981,5 +1980,4 @@ class FractionLevel {
   }
 }
 
-fractionsCommon.register( 'FractionLevel', FractionLevel );
 export default FractionLevel;

@@ -24,7 +24,6 @@ import NumberStack from '../../building/model/NumberStack.js';
 import ShapeGroupStack from '../../building/model/ShapeGroupStack.js';
 import ShapeStack from '../../building/model/ShapeStack.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import FractionsCommonStrings from '../../FractionsCommonStrings.js';
 import FractionChallengePanel from './FractionChallengePanel.js';
 import GameLayerNode from './GameLayerNode.js';
@@ -187,5 +186,4 @@ class FractionChallengeNode extends Node {
   }
 }
 
-fractionsCommon.register( 'FractionChallengeNode', FractionChallengeNode );
 export default FractionChallengeNode;

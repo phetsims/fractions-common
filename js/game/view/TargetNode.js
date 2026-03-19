@@ -22,7 +22,6 @@ import NumberGroupNode from '../../building/view/NumberGroupNode.js';
 import ShapeGroupNode from '../../building/view/ShapeGroupNode.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import FilledPartition from '../model/FilledPartition.js';
 import ShapePartition from '../model/ShapePartition.js';
 import ShapeTarget from '../model/ShapeTarget.js';
@@ -249,5 +248,4 @@ class TargetNode extends HBox {
   }
 }
 
-fractionsCommon.register( 'TargetNode', TargetNode );
 export default TargetNode;

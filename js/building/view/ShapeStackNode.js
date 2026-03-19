@@ -10,7 +10,6 @@ import Property from '../../../../axon/js/Property.js';
 import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
 import merge from '../../../../phet-core/js/merge.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import ShapePiece from '../model/ShapePiece.js';
 import ShapeStack from '../model/ShapeStack.js';
 import ShapeLayerNode from './ShapeLayerNode.js';
@@ -113,5 +112,4 @@ class ShapeStackNode extends StackNode {
   }
 }
 
-fractionsCommon.register( 'ShapeStackNode', ShapeStackNode );
 export default ShapeStackNode;

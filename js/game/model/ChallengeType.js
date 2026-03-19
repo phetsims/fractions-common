@@ -7,12 +7,10 @@
  */
 
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 const ChallengeType = EnumerationDeprecated.byKeys( [
   'PIE',
   'BAR',
   'NUMBER'
 ] );
-fractionsCommon.register( 'ChallengeType', ChallengeType );
 export default ChallengeType;

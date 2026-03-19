@@ -7,7 +7,6 @@
  */
 
 import Node from '../../../../scenery/js/nodes/Node.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 class SceneNode extends Node {
   /**
@@ -31,5 +30,4 @@ class SceneNode extends Node {
   }
 }
 
-fractionsCommon.register( 'SceneNode', SceneNode );
 export default SceneNode;

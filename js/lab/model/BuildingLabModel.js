@@ -20,7 +20,6 @@ import ShapeGroupStack from '../../building/model/ShapeGroupStack.js';
 import ShapePiece from '../../building/model/ShapePiece.js';
 import ShapeStack from '../../building/model/ShapeStack.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 // constants
 const PIECE_LAYOUT_QUANTITY = 2;
@@ -121,5 +120,4 @@ class BuildingLabModel extends BuildingModel {
   }
 }
 
-fractionsCommon.register( 'BuildingLabModel', BuildingLabModel );
 export default BuildingLabModel;

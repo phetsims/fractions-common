@@ -8,7 +8,6 @@
 
 import Panel from '../../../../sun/js/Panel.js';
 import StackNodesBox from '../../building/view/StackNodesBox.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 class LabNumberPanel extends Panel {
   /**
@@ -41,5 +40,4 @@ class LabNumberPanel extends Panel {
   }
 }
 
-fractionsCommon.register( 'LabNumberPanel', LabNumberPanel );
 export default LabNumberPanel;

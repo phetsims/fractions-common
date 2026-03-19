@@ -10,7 +10,6 @@ import createObservableArray from '../../../../axon/js/createObservableArray.js'
 import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 class Target {
   /**
@@ -32,5 +31,4 @@ class Target {
   }
 }
 
-fractionsCommon.register( 'Target', Target );
 export default Target;

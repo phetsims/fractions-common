@@ -24,7 +24,6 @@ import Panel from '../../../../sun/js/Panel.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonGlobals from '../../common/FractionsCommonGlobals.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import FractionsCommonStrings from '../../FractionsCommonStrings.js';
 import Container from '../model/Container.js';
 import CakeContainerNode from './cake/CakeContainerNode.js';
@@ -308,5 +307,4 @@ class IntroScreenView extends ContainerSetScreenView {
 
 }
 
-fractionsCommon.register( 'IntroScreenView', IntroScreenView );
 export default IntroScreenView;

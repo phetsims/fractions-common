@@ -7,7 +7,6 @@
  * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
-import fractionsCommon from '../../../fractionsCommon.js';
 import PieceNode from '../PieceNode.js';
 import CakeNode from './CakeNode.js';
 
@@ -51,5 +50,4 @@ class CakePieceNode extends PieceNode {
   }
 }
 
-fractionsCommon.register( 'CakePieceNode', CakePieceNode );
 export default CakePieceNode;

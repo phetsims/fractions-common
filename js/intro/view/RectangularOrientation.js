@@ -7,11 +7,9 @@
  */
 
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 const RectangularOrientation = EnumerationDeprecated.byKeys( [
   'HORIZONTAL',
   'VERTICAL'
 ] );
-fractionsCommon.register( 'RectangularOrientation', RectangularOrientation );
 export default RectangularOrientation;

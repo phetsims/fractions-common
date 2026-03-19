@@ -9,7 +9,6 @@
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../axon/js/NumberProperty.js';
 import Range from '../../../../dot/js/Range.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import ContainerSetModel from './ContainerSetModel.js';
 import IntroRepresentation from './IntroRepresentation.js';
 import MultipliedContainer from './MultipliedContainer.js';
@@ -56,5 +55,4 @@ class EqualityLabModel extends ContainerSetModel {
   }
 }
 
-fractionsCommon.register( 'EqualityLabModel', EqualityLabModel );
 export default EqualityLabModel;

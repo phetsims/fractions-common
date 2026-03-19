@@ -8,7 +8,6 @@
 
 import merge from '../../../../phet-core/js/merge.js';
 import RectangularRadioButtonGroup from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 class IntroRadioButtonGroup extends RectangularRadioButtonGroup {
   /**
@@ -31,5 +30,4 @@ class IntroRadioButtonGroup extends RectangularRadioButtonGroup {
   }
 }
 
-fractionsCommon.register( 'IntroRadioButtonGroup', IntroRadioButtonGroup );
 export default IntroRadioButtonGroup;

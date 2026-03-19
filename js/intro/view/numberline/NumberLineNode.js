@@ -21,7 +21,6 @@ import Node from '../../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../../scenery/js/nodes/Path.js';
 import Text from '../../../../../scenery/js/nodes/Text.js';
 import FractionsCommonColors from '../../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../../fractionsCommon.js';
 import NumberLineOrientation from '../NumberLineOrientation.js';
 
 class NumberLineNode extends Node {
@@ -272,5 +271,4 @@ class NumberLineNode extends Node {
   }
 }
 
-fractionsCommon.register( 'NumberLineNode', NumberLineNode );
 export default NumberLineNode;

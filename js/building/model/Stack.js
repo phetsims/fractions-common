@@ -13,7 +13,6 @@
 import createObservableArray from '../../../../axon/js/createObservableArray.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 class Stack {
   /**
@@ -52,5 +51,4 @@ class Stack {
   }
 }
 
-fractionsCommon.register( 'Stack', Stack );
 export default Stack;

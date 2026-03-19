@@ -7,7 +7,6 @@
  */
 
 import Utils from '../../../../dot/js/Utils.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import PrimeFactor from './PrimeFactor.js';
 import Primes from './Primes.js';
 
@@ -263,8 +262,6 @@ class PrimeFactorization {
     return new PrimeFactorization( factors );
   }
 }
-
-fractionsCommon.register( 'PrimeFactorization', PrimeFactorization );
 
 // @public {PrimeFactorization}
 PrimeFactorization.ONE = new PrimeFactorization( [] );

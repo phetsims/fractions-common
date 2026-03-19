@@ -6,7 +6,6 @@
  * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
-import fractionsCommon from '../../../fractionsCommon.js';
 import PieceNode from '../PieceNode.js';
 import FractionsCommonBeakerNode from './FractionsCommonBeakerNode.js';
 
@@ -23,5 +22,4 @@ class BeakerPieceNode extends PieceNode {
   }
 }
 
-fractionsCommon.register( 'BeakerPieceNode', BeakerPieceNode );
 export default BeakerPieceNode;

@@ -7,7 +7,6 @@
  */
 
 import BuildingLayerNode from '../../building/view/BuildingLayerNode.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 class BuildingLabLayerNode extends BuildingLayerNode {
   /**
@@ -63,5 +62,4 @@ class BuildingLabLayerNode extends BuildingLayerNode {
   }
 }
 
-fractionsCommon.register( 'BuildingLabLayerNode', BuildingLabLayerNode );
 export default BuildingLabLayerNode;

@@ -8,7 +8,6 @@
  * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
-import fractionsCommon from '../../fractionsCommon.js';
 import Container from './Container.js';
 
 class MultipliedContainer extends Container {
@@ -70,5 +69,4 @@ class MultipliedContainer extends Container {
   }
 }
 
-fractionsCommon.register( 'MultipliedContainer', MultipliedContainer );
 export default MultipliedContainer;

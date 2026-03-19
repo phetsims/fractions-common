@@ -15,7 +15,6 @@ import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import NumberPiece from '../model/NumberPiece.js';
 
 class NumberPieceNode extends Node {
@@ -154,5 +153,4 @@ class NumberPieceNode extends Node {
   }
 }
 
-fractionsCommon.register( 'NumberPieceNode', NumberPieceNode );
 export default NumberPieceNode;

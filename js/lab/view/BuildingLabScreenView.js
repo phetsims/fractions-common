@@ -29,7 +29,6 @@ import ShapeGroupNode from '../../building/view/ShapeGroupNode.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonGlobals from '../../common/FractionsCommonGlobals.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import BuildingLabLayerNode from './BuildingLabLayerNode.js';
 import LabNumberPanel from './LabNumberPanel.js';
 import LabShapePanel from './LabShapePanel.js';
@@ -247,5 +246,4 @@ class BuildingLabScreenView extends ScreenView {
   }
 }
 
-fractionsCommon.register( 'BuildingLabScreenView', BuildingLabScreenView );
 export default BuildingLabScreenView;

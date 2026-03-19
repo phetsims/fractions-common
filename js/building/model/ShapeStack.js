@@ -7,7 +7,6 @@
  */
 
 import Matrix3 from '../../../../dot/js/Matrix3.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import BuildingRepresentation from './BuildingRepresentation.js';
 import BuildingType from './BuildingType.js';
 import ShapeContainer from './ShapeContainer.js';
@@ -53,5 +52,4 @@ class ShapeStack extends Stack {
   }
 }
 
-fractionsCommon.register( 'ShapeStack', ShapeStack );
 export default ShapeStack;

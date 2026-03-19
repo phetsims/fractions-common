@@ -19,7 +19,6 @@ import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import Animator from '../../common/model/Animator.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import BuildingRepresentation from './BuildingRepresentation.js';
 
 // globals
@@ -170,8 +169,6 @@ class ShapePiece {
     }
   }
 }
-
-fractionsCommon.register( 'ShapePiece', ShapePiece );
 
 // @public {Bounds2}
 ShapePiece.VERTICAL_BAR_BOUNDS = Bounds2.point( 0, 0 ).dilatedXY(

@@ -21,7 +21,6 @@ import Panel from '../../../../sun/js/Panel.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonGlobals from '../../common/FractionsCommonGlobals.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import Container from '../model/Container.js';
 import IntroRepresentation from '../model/IntroRepresentation.js';
 import BeakerContainerNode from './beaker/BeakerContainerNode.js';
@@ -291,5 +290,4 @@ class EqualityLabScreenView extends ContainerSetScreenView {
 
 }
 
-fractionsCommon.register( 'EqualityLabScreenView', EqualityLabScreenView );
 export default EqualityLabScreenView;

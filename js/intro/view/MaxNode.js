@@ -15,7 +15,6 @@ import AlignBox from '../../../../scenery/js/layout/nodes/AlignBox.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import FractionsCommonStrings from '../../FractionsCommonStrings.js';
 import RoundNumberSpinner from './RoundNumberSpinner.js';
 
@@ -80,5 +79,4 @@ class MaxNode extends VBox {
   }
 }
 
-fractionsCommon.register( 'MaxNode', MaxNode );
 export default MaxNode;

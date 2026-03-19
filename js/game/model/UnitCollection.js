@@ -13,7 +13,6 @@
  */
 
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 class UnitCollection {
   /**
@@ -273,5 +272,4 @@ class UnitCollection {
   }
 }
 
-fractionsCommon.register( 'UnitCollection', UnitCollection );
 export default UnitCollection;

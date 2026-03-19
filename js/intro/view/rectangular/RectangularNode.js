@@ -13,7 +13,6 @@ import Rectangle from '../../../../../scenery/js/nodes/Rectangle.js';
 import ColorDef from '../../../../../scenery/js/util/ColorDef.js';
 import FractionsCommonConstants from '../../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../../fractionsCommon.js';
 import RectangularOrientation from '../RectangularOrientation.js';
 
 // constants
@@ -104,5 +103,4 @@ class RectangularNode extends Node {
   }
 }
 
-fractionsCommon.register( 'RectangularNode', RectangularNode );
 export default RectangularNode;

@@ -6,8 +6,6 @@
  * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
-import fractionsCommon from '../../fractionsCommon.js';
-
 class CellEntry {
   /**
    * @param {Cell} cell
@@ -35,5 +33,4 @@ class CellEntry {
   }
 }
 
-fractionsCommon.register( 'CellEntry', CellEntry );
 export default CellEntry;

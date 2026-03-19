@@ -12,7 +12,6 @@ import merge from '../../../../phet-core/js/merge.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import IntroRepresentation from '../model/IntroRepresentation.js';
 import BucketNode from './BucketNode.js';
 import SceneNode from './SceneNode.js';
@@ -411,5 +410,4 @@ class CellSceneNode extends SceneNode {
   }
 }
 
-fractionsCommon.register( 'CellSceneNode', CellSceneNode );
 export default CellSceneNode;

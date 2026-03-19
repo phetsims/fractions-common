@@ -8,7 +8,6 @@
 
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 class Piece {
   /**
@@ -31,5 +30,4 @@ class Piece {
   }
 }
 
-fractionsCommon.register( 'Piece', Piece );
 export default Piece;

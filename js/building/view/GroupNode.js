@@ -11,7 +11,6 @@ import merge from '../../../../phet-core/js/merge.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import PressListener from '../../../../scenery/js/listeners/PressListener.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import Group from '../model/Group.js';
 
 class GroupNode extends Node {
@@ -168,5 +167,4 @@ class GroupNode extends Node {
   }
 }
 
-fractionsCommon.register( 'GroupNode', GroupNode );
 export default GroupNode;

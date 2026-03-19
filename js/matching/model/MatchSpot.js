@@ -10,7 +10,6 @@ import Property from '../../../../axon/js/Property.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import merge from '../../../../phet-core/js/merge.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 class MatchSpot {
   /**
@@ -70,5 +69,4 @@ class MatchSpot {
   }
 }
 
-fractionsCommon.register( 'MatchSpot', MatchSpot );
 export default MatchSpot;

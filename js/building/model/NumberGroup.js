@@ -12,7 +12,6 @@ import Bounds2 from '../../../../dot/js/Bounds2.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import BuildingType from './BuildingType.js';
 import Group from './Group.js';
 import NumberSpot from './NumberSpot.js';
@@ -222,5 +221,4 @@ class NumberGroup extends Group {
   }
 }
 
-fractionsCommon.register( 'NumberGroup', NumberGroup );
 export default NumberGroup;

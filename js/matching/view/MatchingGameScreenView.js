@@ -32,7 +32,6 @@ import ScoreDisplayStars from '../../../../vegas/js/ScoreDisplayStars.js';
 import VegasStrings from '../../../../vegas/js/VegasStrings.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import FractionsCommonStrings from '../../FractionsCommonStrings.js';
 import FilledPartition from '../../game/model/FilledPartition.js';
 import ShapePartition from '../../game/model/ShapePartition.js';
@@ -465,5 +464,4 @@ class MatchingGameScreenView extends ScreenView {
   }
 }
 
-fractionsCommon.register( 'MatchingGameScreenView', MatchingGameScreenView );
 export default MatchingGameScreenView;

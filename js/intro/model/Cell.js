@@ -7,7 +7,6 @@
  */
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import Piece from './Piece.js';
 
 class Cell {
@@ -119,5 +118,4 @@ class Cell {
   }
 }
 
-fractionsCommon.register( 'Cell', Cell );
 export default Cell;

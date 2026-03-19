@@ -6,7 +6,6 @@
  * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
-import fractionsCommon from '../../fractionsCommon.js';
 import BuildingRepresentation from './BuildingRepresentation.js';
 import BuildingType from './BuildingType.js';
 import Stack from './Stack.js';
@@ -47,5 +46,4 @@ class ShapeGroupStack extends Stack {
   }
 }
 
-fractionsCommon.register( 'ShapeGroupStack', ShapeGroupStack );
 export default ShapeGroupStack;

@@ -18,7 +18,6 @@ import ShapePiece from '../../building/model/ShapePiece.js';
 import ShapePieceNode from '../../building/view/ShapePieceNode.js';
 import StackNodesBox from '../../building/view/StackNodesBox.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 class LabShapePanel extends Panel {
   /**
@@ -120,5 +119,4 @@ class LabShapePanel extends Panel {
   }
 }
 
-fractionsCommon.register( 'LabShapePanel', LabShapePanel );
 export default LabShapePanel;

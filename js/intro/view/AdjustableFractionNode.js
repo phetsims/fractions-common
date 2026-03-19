@@ -14,7 +14,6 @@ import PropertyFractionNode from '../../../../scenery-phet/js/PropertyFractionNo
 import Display from '../../../../scenery/js/display/Display.js';
 import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import RoundNumberSpinner from './RoundNumberSpinner.js';
 
 class AdjustableFractionNode extends HBox {
@@ -93,5 +92,4 @@ class AdjustableFractionNode extends HBox {
   }
 }
 
-fractionsCommon.register( 'AdjustableFractionNode', AdjustableFractionNode );
 export default AdjustableFractionNode;

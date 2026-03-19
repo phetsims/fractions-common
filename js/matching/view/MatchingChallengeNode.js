@@ -30,7 +30,6 @@ import VegasStrings from '../../../../vegas/js/VegasStrings.js';
 import scale_png from '../../../images/scale_png.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import FractionsCommonStrings from '../../FractionsCommonStrings.js';
 import MatchingChallenge from '../model/MatchingChallenge.js';
 import MatchChartNode from './MatchChartNode.js';
@@ -391,5 +390,4 @@ class MatchingChallengeNode extends Node {
   }
 }
 
-fractionsCommon.register( 'MatchingChallengeNode', MatchingChallengeNode );
 export default MatchingChallengeNode;

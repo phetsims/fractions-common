@@ -16,7 +16,6 @@ import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import FilledPartitionNode from '../../game/view/FilledPartitionNode.js';
 
 class MatchPieceNode extends Node {
@@ -119,5 +118,4 @@ class MatchPieceNode extends Node {
 // @public {Dimension2}
 MatchPieceNode.DIMENSION = new Dimension2( 150, 120 );
 
-fractionsCommon.register( 'MatchPieceNode', MatchPieceNode );
 export default MatchPieceNode;

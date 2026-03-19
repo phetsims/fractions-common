@@ -7,7 +7,6 @@
  */
 
 import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 const IntroRepresentation = EnumerationDeprecated.byKeys( [
   'CIRCLE',
@@ -18,5 +17,4 @@ const IntroRepresentation = EnumerationDeprecated.byKeys( [
   'NUMBER_LINE'
 ] );
 
-fractionsCommon.register( 'IntroRepresentation', IntroRepresentation );
 export default IntroRepresentation;

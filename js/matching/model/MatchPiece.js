@@ -13,7 +13,6 @@ import Vector2 from '../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../dot/js/Vector2Property.js';
 import merge from '../../../../phet-core/js/merge.js';
 import Animator from '../../common/model/Animator.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 class MatchPiece {
   /**
@@ -145,5 +144,4 @@ class MatchPiece {
   }
 }
 
-fractionsCommon.register( 'MatchPiece', MatchPiece );
 export default MatchPiece;

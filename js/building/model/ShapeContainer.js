@@ -13,7 +13,6 @@ import Utils from '../../../../dot/js/Utils.js';
 import Vector2 from '../../../../dot/js/Vector2.js';
 import Fraction from '../../../../phetcommon/js/model/Fraction.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import BuildingRepresentation from './BuildingRepresentation.js';
 import ShapePiece from './ShapePiece.js';
 
@@ -149,5 +148,4 @@ class ShapeContainer {
   }
 }
 
-fractionsCommon.register( 'ShapeContainer', ShapeContainer );
 export default ShapeContainer;

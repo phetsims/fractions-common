@@ -113,6 +113,4 @@ const FractionsCommonColors = {
   matchingShowAnswerButtonProperty: new ProfileColorProperty( fractionsCommon, 'matchingShowAnswerButton', { default: new Color( '#FF7C3B' ) } )
 };
 
-fractionsCommon.register( 'FractionsCommonColors', FractionsCommonColors );
-
 export default FractionsCommonColors;

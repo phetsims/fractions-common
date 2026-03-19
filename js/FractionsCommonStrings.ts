@@ -34,6 +34,4 @@ type StringsType = {
 
 const FractionsCommonStrings = getStringModule( 'FRACTIONS_COMMON' ) as StringsType;
 
-fractionsCommon.register( 'FractionsCommonStrings', FractionsCommonStrings );
-
 export default FractionsCommonStrings;

@@ -8,7 +8,6 @@
 
 import BuildingType from '../../building/model/BuildingType.js';
 import BuildingLayerNode from '../../building/view/BuildingLayerNode.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 class GameLayerNode extends BuildingLayerNode {
   /**
@@ -153,5 +152,4 @@ class GameLayerNode extends BuildingLayerNode {
   }
 }
 
-fractionsCommon.register( 'GameLayerNode', GameLayerNode );
 export default GameLayerNode;

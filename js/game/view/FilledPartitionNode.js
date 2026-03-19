@@ -10,7 +10,6 @@ import merge from '../../../../phet-core/js/merge.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Path from '../../../../scenery/js/nodes/Path.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 class FilledPartitionNode extends Node {
   /**
@@ -65,7 +64,5 @@ class FilledPartitionNode extends Node {
     this.mutate( options );
   }
 }
-
-fractionsCommon.register( 'FilledPartitionNode', FilledPartitionNode );
 
 export default FilledPartitionNode;

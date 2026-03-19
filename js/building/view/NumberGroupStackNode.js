@@ -6,7 +6,6 @@
  * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
-import fractionsCommon from '../../fractionsCommon.js';
 import NumberGroupNode from './NumberGroupNode.js';
 import StackNode from './StackNode.js';
 
@@ -59,5 +58,4 @@ class NumberGroupStackNode extends StackNode {
   }
 }
 
-fractionsCommon.register( 'NumberGroupStackNode', NumberGroupStackNode );
 export default NumberGroupStackNode;

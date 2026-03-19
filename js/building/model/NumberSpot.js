@@ -8,7 +8,6 @@
 
 import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
 import Property from '../../../../axon/js/Property.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 class NumberSpot {
   /**
@@ -36,5 +35,4 @@ class NumberSpot {
   }
 }
 
-fractionsCommon.register( 'NumberSpot', NumberSpot );
 export default NumberSpot;

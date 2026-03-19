@@ -16,7 +16,6 @@ import required from '../../../../phet-core/js/required.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import Easing from '../../../../twixt/js/Easing.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 class PieceNode extends Node {
   /**
@@ -159,5 +158,4 @@ class PieceNode extends Node {
   }
 }
 
-fractionsCommon.register( 'PieceNode', PieceNode );
 export default PieceNode;

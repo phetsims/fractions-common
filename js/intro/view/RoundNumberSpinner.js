@@ -14,7 +14,6 @@ import merge from '../../../../phet-core/js/merge.js';
 import VBox from '../../../../scenery/js/layout/nodes/VBox.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import RoundArrowButton from '../../common/view/RoundArrowButton.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 class RoundNumberSpinner extends VBox {
   /**
@@ -108,5 +107,4 @@ class RoundNumberSpinner extends VBox {
   }
 }
 
-fractionsCommon.register( 'RoundNumberSpinner', RoundNumberSpinner );
 export default RoundNumberSpinner;

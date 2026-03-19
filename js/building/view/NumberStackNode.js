@@ -8,7 +8,6 @@
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import arrayRemove from '../../../../phet-core/js/arrayRemove.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import NumberPiece from '../model/NumberPiece.js';
 import NumberStack from '../model/NumberStack.js';
 import NumberPieceNode from './NumberPieceNode.js';
@@ -100,5 +99,4 @@ class NumberStackNode extends StackNode {
   }
 }
 
-fractionsCommon.register( 'NumberStackNode', NumberStackNode );
 export default NumberStackNode;

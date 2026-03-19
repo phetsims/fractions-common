@@ -23,7 +23,6 @@ import RoundPushButton from '../../../../sun/js/buttons/RoundPushButton.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
 import RoundArrowButton from '../../common/view/RoundArrowButton.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import BuildingRepresentation from '../model/BuildingRepresentation.js';
 import ShapeGroup from '../model/ShapeGroup.js';
 import ShapePiece from '../model/ShapePiece.js';
@@ -371,5 +370,4 @@ class ShapeGroupNode extends GroupNode {
   }
 }
 
-fractionsCommon.register( 'ShapeGroupNode', ShapeGroupNode );
 export default ShapeGroupNode;

@@ -19,7 +19,6 @@ import Rectangle from '../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../scenery/js/nodes/Text.js';
 import FractionsCommonConstants from '../../common/FractionsCommonConstants.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import NumberGroup from '../model/NumberGroup.js';
 import NumberSpotType from '../model/NumberSpotType.js';
 import GroupNode from './GroupNode.js';
@@ -196,5 +195,4 @@ class NumberGroupNode extends GroupNode {
   }
 }
 
-fractionsCommon.register( 'NumberGroupNode', NumberGroupNode );
 export default NumberGroupNode;

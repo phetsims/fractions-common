@@ -6,8 +6,6 @@
  * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
-import fractionsCommon from '../../fractionsCommon.js';
-
 const Primes = {
   // @public {Array.<number>} - The currently computed primes
   primes: [ 2 ],
@@ -89,5 +87,4 @@ const Primes = {
   }
 };
 
-fractionsCommon.register( 'Primes', Primes );
 export default Primes;

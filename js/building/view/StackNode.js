@@ -8,7 +8,6 @@
 
 import Bounds2 from '../../../../dot/js/Bounds2.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
-import fractionsCommon from '../../fractionsCommon.js';
 
 class StackNode extends Node {
   /**
@@ -29,5 +28,4 @@ class StackNode extends Node {
   }
 }
 
-fractionsCommon.register( 'StackNode', StackNode );
 export default StackNode;

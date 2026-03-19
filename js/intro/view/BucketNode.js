@@ -20,7 +20,6 @@ import HBox from '../../../../scenery/js/layout/nodes/HBox.js';
 import DragListener from '../../../../scenery/js/listeners/DragListener.js';
 import Node from '../../../../scenery/js/nodes/Node.js';
 import FractionsCommonColors from '../../common/view/FractionsCommonColors.js';
-import fractionsCommon from '../../fractionsCommon.js';
 import Container from '../model/Container.js';
 import IntroRepresentation from '../model/IntroRepresentation.js';
 import BeakerContainerNode from './beaker/BeakerContainerNode.js';
@@ -216,5 +215,4 @@ class BucketNode extends Node {
   }
 }
 
-fractionsCommon.register( 'BucketNode', BucketNode );
 export default BucketNode;
