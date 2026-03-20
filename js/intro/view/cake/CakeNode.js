@@ -318,8 +318,8 @@ CakeNode.CAKE_SHADOW_SHAPES = [];
 
 // @public {Array.<Array.<Shape>>} - 2D areas that cover the entire cake (for accurate touch/mouse areas)
 // PERFORMANCE NOTE: These could be precomputed in the future, with
-// copy( JSON.stringify( phet.fractionsCommon.CakeNode.CAKE_SHADOW_SHAPES.map( arr => arr.map( s => s.getSVGPath() ) ) , null, 2 ) );
-// copy( JSON.stringify( phet.fractionsCommon.CakeNode.CAKE_SHAPES.map( arr => arr.map( s => s.getSVGPath() ) ) , null, 2 ) );
+// copy( JSON.stringify( CakeNode.CAKE_SHADOW_SHAPES.map( arr => arr.map( s => s.getSVGPath() ) ) , null, 2 ) );
+// copy( JSON.stringify( CakeNode.CAKE_SHAPES.map( arr => arr.map( s => s.getSVGPath() ) ) , null, 2 ) );
 // And then data.map( arr => arr.map( svg => new Shape( svg ) ) ) them.
 // It's simpler to leave as-is for now.
 CakeNode.CAKE_SHAPES = _.range( 1, 9 ).map( denominator => {
