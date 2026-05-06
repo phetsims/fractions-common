@@ -416,7 +416,13 @@ class BuildingGameScreenView extends ScreenView {
             perfectScore: level.numTargets
           } ),
           listener: () => {
-            this.model.levelProperty.value = level;
+
+            // Level selection buttons are only valid while the level-selection screen is active. Multitouch can release
+            // another stale level button after the first selection has synchronously begun notifying levelProperty
+            // listeners, so ignore releases once a level is active.
+            if ( this.model.levelProperty.value === null ) {
+              this.model.levelProperty.value = level;
+            }
           },
           soundPlayerIndex: level.number - 1
         } );
